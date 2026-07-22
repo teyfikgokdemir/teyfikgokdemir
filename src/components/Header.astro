@@ -5,11 +5,14 @@ import type { SiteContent } from '../i18n/content';
 interface Props {
   locale: Locale;
   copy: SiteContent;
+  homePath?: string;
 }
 
-const { locale, copy } = Astro.props;
+const { locale, copy, homePath } = Astro.props;
 
 const localeUrl = (item: Locale) => item === 'en' ? '/' : `/${item}/`;
+const currentHomePath = homePath ?? localeUrl(locale);
+const sectionUrl = (section: string) => `${currentHomePath}#${section}`;
 ---
 <header class="site-header">
   <a class="brand" href={localeUrl(locale)} aria-label="Teyfik Gökdemir">
@@ -31,10 +34,10 @@ const localeUrl = (item: Locale) => item === 'en' ? '/' : `/${item}/`;
 
   <div class="header-panel" id="site-navigation">
     <nav aria-label={copy.nav.ventures}>
-      <a href="#ventures">{copy.nav.ventures}</a>
-      <a href="#expertise">{copy.nav.expertise}</a>
-      <a href="#journey">{copy.nav.journey}</a>
-      <a href="#contact">{copy.nav.contact}</a>
+      <a href={sectionUrl('ventures')}>{copy.nav.ventures}</a>
+      <a href={sectionUrl('expertise')}>{copy.nav.expertise}</a>
+      <a href={sectionUrl('journey')}>{copy.nav.journey}</a>
+      <a href={sectionUrl('contact')}>{copy.nav.contact}</a>
     </nav>
 
     <div class="language-switcher" aria-label={copy.a11y.language}>

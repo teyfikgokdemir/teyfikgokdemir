@@ -6,12 +6,40 @@ import { site } from '../data/site';
 interface Props {
   locale: Locale;
   copy: SiteContent;
+  title?: string;
+  description?: string;
+  pathname?: string;
+  alternates?: Partial<Record<Locale | 'x-default', string>>;
+  ogType?: 'website' | 'article';
+  pageSchema?: Record<string, unknown>;
 }
 
-const { locale, copy } = Astro.props;
+const {
+  locale,
+  copy,
+  title = copy.seo.title,
+  description = copy.seo.description,
+  pathname,
+  alternates,
+  ogType = 'website',
+  pageSchema,
+} = Astro.props;
+
 const localeUrl = (item: Locale) => item === 'en' ? '/' : '/' + item + '/';
-const canonical = site.origin + localeUrl(locale);
+const pagePath = pathname ?? localeUrl(locale);
+const canonical = new URL(pagePath, site.origin).toString();
 const profileImage = site.origin + site.images.profile.path;
+
+const defaultAlternates: Partial<Record<Locale | 'x-default', string>> =
+  Object.fromEntries([
+    ...locales.map((item) => [
+      item,
+      new URL(localeUrl(item), site.origin).toString(),
+    ]),
+    ['x-default', new URL('/', site.origin).toString()],
+  ]);
+
+const alternateLinks = alternates ?? defaultAlternates;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -83,12 +111,12 @@ const jsonLd = {
       url: site.origin,
       author: { '@id': site.origin + '/#person' },
     },
-    {
+    pageSchema ?? {
       '@type': 'WebPage',
       '@id': canonical + '#webpage',
       url: canonical,
-      name: copy.seo.title,
-      description: copy.seo.description,
+      name: title,
+      description,
       inLanguage: locale,
       isPartOf: { '@id': site.origin + '/#website' },
       about: { '@id': site.origin + '/#person' },
@@ -117,20 +145,19 @@ const jsonLd = {
       gtag('config', 'G-52GXBGWHFJ');
     </script>
     <meta name="robots" content="index,follow" />
-    <title>{copy.seo.title}</title>
-    <meta name="description" content={copy.seo.description} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    {locales.map((item) => (
-      <link rel="alternate" hreflang={item} href={site.origin + localeUrl(item)} />
+    {Object.entries(alternateLinks).map(([language, href]) => (
+      <link rel="alternate" hreflang={language} href={href} />
     ))}
-    <link rel="alternate" hreflang="x-default" href={site.origin + '/'} />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={site.name} />
-    <meta property="og:title" content={copy.seo.title} />
-    <meta property="og:description" content={copy.seo.description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={profileImage} />
     <meta property="og:image:width" content={String(site.images.profile.width)} />
@@ -139,8 +166,8 @@ const jsonLd = {
     <meta property="og:locale" content={locale} />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={copy.seo.title} />
-    <meta name="twitter:description" content={copy.seo.description} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={profileImage} />
     <meta name="twitter:image:alt" content={copy.images.profile} />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>

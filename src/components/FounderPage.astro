@@ -13,7 +13,7 @@ interface Props {
 const { locale } = Astro.props;
 const copy = content[locale];
 ---
-<Header locale={locale} copy={copy} />
+<Header locale={locale} copy={copy} homePath={locale === 'en' ? '/' : `/${locale}/`} />
 
 <main id="main-content">
   <section class="hero shell" id="top" aria-labelledby="hero-title">
