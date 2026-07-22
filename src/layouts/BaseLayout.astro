@@ -9,7 +9,8 @@ interface Props {
 }
 
 const { locale, copy } = Astro.props;
-const canonical = site.origin + '/' + locale + '/';
+const localeUrl = (item: Locale) => item === 'en' ? '/' : //;
+const canonical = site.origin + localeUrl(locale);
 const profileImage = site.origin + site.images.profile.path;
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -57,7 +58,7 @@ const jsonLd = {
         'Sales Intelligence',
         'Digital Operations',
       ],
-      sameAs: [site.links.github, site.links.linkedin],
+      sameAs: [site.links.github, site.links.linkedin, site.links.instagram],
     },
     {
       '@type': 'Organization',
@@ -114,7 +115,7 @@ const jsonLd = {
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     {locales.map((item) => (
-      <link rel="alternate" hreflang={item} href={site.origin + '/' + item + '/'} />
+      <link rel="alternate" hreflang={item} href={site.origin + localeUrl(item)} />
     ))}
     <link rel="alternate" hreflang="x-default" href={site.origin + '/'} />
 
@@ -1086,6 +1087,73 @@ const jsonLd = {
       padding: .8rem 1rem;
       font-size: .76rem;
       line-height: 1.55;
+    }
+  }
+
+  .floating-actions {
+    position: fixed;
+    z-index: 45;
+    right: clamp(1rem, 2.5vw, 2rem);
+    bottom: clamp(1rem, 2.5vw, 2rem);
+    display: grid;
+    gap: .7rem;
+  }
+
+  .floating-action {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 1px solid rgba(242, 170, 143, .42);
+    border-radius: 50%;
+    background: rgba(9, 17, 29, .92);
+    color: var(--text);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, .28);
+    backdrop-filter: blur(14px);
+    cursor: pointer;
+    transition:
+      transform .2s ease,
+      border-color .2s ease,
+      background-color .2s ease,
+      opacity .2s ease;
+  }
+
+  .floating-action:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-soft);
+    background: var(--panel-soft);
+  }
+
+  .whatsapp-action {
+    font-size: .7rem;
+    font-weight: 900;
+    letter-spacing: .08em;
+  }
+
+  .back-to-top {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(8px);
+  }
+
+  .back-to-top.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 640px) {
+    .floating-actions {
+      right: .9rem;
+      bottom: .9rem;
+    }
+
+    .floating-action {
+      width: 44px;
+      height: 44px;
     }
   }
   @media (prefers-reduced-motion: reduce) {

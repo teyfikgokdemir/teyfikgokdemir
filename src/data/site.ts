@@ -3,6 +3,8 @@ export const site = {
   origin: 'https://teyfikgokdemir.com',
   email: 'info@teyfikgokdemir.com',
   directEmail: 'teyfik@teyfikgokdemir.com',
+  phone: '+90 545 678 26 55',
+  whatsapp: '905456782655',
   images: {
     hero: { path: '/images/teyfik-gokdemir-founder.webp', width: 1086, height: 1448 },
     executive: { path: '/images/teyfik-gokdemir-executive.webp', width: 1023, height: 1537 },
@@ -14,6 +16,7 @@ export const site = {
   links: {
     linkedin: 'https://www.linkedin.com/in/teyfikg%C3%B6kdemir',
     github: 'https://github.com/teyfikgokdemir',
+    instagram: 'https://www.instagram.com/teyfikgokdemir/',
     qctStudio: 'https://qctstudio.com',
     qctCommerce: 'https://qctcommerce.com',
     mythborn: 'https://mythborn.co',

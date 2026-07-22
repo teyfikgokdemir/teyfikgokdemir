@@ -8,9 +8,11 @@ interface Props {
 }
 
 const { locale, copy } = Astro.props;
+
+const localeUrl = (item: Locale) => item === 'en' ? '/' : `/${item}/`;
 ---
 <header class="site-header">
-  <a class="brand" href={'/' + locale + '/'} aria-label="Teyfik Gökdemir">
+  <a class="brand" href={localeUrl(locale)} aria-label="Teyfik Gökdemir">
     <span aria-hidden="true">TG</span>
     <strong>Teyfik Gökdemir</strong>
   </a>
@@ -34,10 +36,11 @@ const { locale, copy } = Astro.props;
       <a href="#journey">{copy.nav.journey}</a>
       <a href="#contact">{copy.nav.contact}</a>
     </nav>
+
     <div class="language-switcher" aria-label={copy.a11y.language}>
       {locales.map((item) => (
         <a
-          href={'/' + item + '/'}
+          href={localeUrl(item)}
           lang={item}
           hreflang={item}
           aria-current={item === locale ? 'page' : undefined}
@@ -53,21 +56,33 @@ const { locale, copy } = Astro.props;
 <script is:inline>
   const toggle = document.querySelector('.menu-toggle');
   const panel = document.querySelector('.header-panel');
+
   if (toggle && panel) {
     const closeMenu = () => {
       toggle.setAttribute('aria-expanded', 'false');
       toggle.setAttribute('aria-label', toggle.dataset.openLabel);
       panel.classList.remove('is-open');
     };
+
     toggle.addEventListener('click', () => {
       const expanded = toggle.getAttribute('aria-expanded') === 'true';
       toggle.setAttribute('aria-expanded', String(!expanded));
-      toggle.setAttribute('aria-label', expanded ? toggle.dataset.openLabel : toggle.dataset.closeLabel);
+      toggle.setAttribute(
+        'aria-label',
+        expanded ? toggle.dataset.openLabel : toggle.dataset.closeLabel
+      );
       panel.classList.toggle('is-open', !expanded);
     });
-    panel.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+
+    panel.querySelectorAll('a').forEach((link) =>
+      link.addEventListener('click', closeMenu)
+    );
+
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+      if (
+        event.key === 'Escape' &&
+        toggle.getAttribute('aria-expanded') === 'true'
+      ) {
         closeMenu();
         toggle.focus();
       }

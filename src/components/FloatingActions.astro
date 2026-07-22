@@ -1,0 +1,74 @@
+---
+import type { Locale } from '../i18n/locales';
+import { site } from '../data/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const messages: Record<Locale, string> = {
+  en: 'Hello Teyfik, I am contacting you through your website.',
+  tr: 'Merhaba Teyfik Bey, web siteniz üzerinden iletişime geçiyorum.',
+  sq: 'Përshëndetje Teyfik, po ju kontaktoj përmes faqes suaj.',
+  mk: 'Здраво Тејфик, ве контактирам преку вашата веб-страница.',
+  sr: 'Zdravo Teyfik, kontaktiram vas putem vašeg sajta.',
+};
+
+const labels: Record<Locale, { whatsapp: string; top: string }> = {
+  en: { whatsapp: 'Contact Teyfik on WhatsApp', top: 'Back to top' },
+  tr: { whatsapp: 'Teyfik Gökdemir ile WhatsApp üzerinden iletişime geç', top: 'Sayfa başına dön' },
+  sq: { whatsapp: 'Kontaktoni Teyfik në WhatsApp', top: 'Kthehu në krye' },
+  mk: { whatsapp: 'Контактирајте со Тејфик на WhatsApp', top: 'Назад на врвот' },
+  sr: { whatsapp: 'Kontaktirajte Teyfika putem WhatsApp-a', top: 'Nazad na vrh' },
+};
+
+const whatsappUrl =
+  `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(messages[locale])}`;
+---
+<div class="floating-actions" aria-label="Quick actions">
+  <button
+    class="floating-action back-to-top"
+    type="button"
+    aria-label={labels[locale].top}
+    title={labels[locale].top}
+  >
+    <span aria-hidden="true">↑</span>
+  </button>
+
+  <a
+    class="floating-action whatsapp-action"
+    href={whatsappUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label={labels[locale].whatsapp}
+    title={labels[locale].whatsapp}
+  >
+    <span aria-hidden="true">WA</span>
+  </a>
+</div>
+
+<script is:inline>
+  const backToTop = document.querySelector('.back-to-top');
+
+  if (backToTop) {
+    const updateVisibility = () => {
+      backToTop.classList.toggle('is-visible', window.scrollY > 600);
+    };
+
+    updateVisibility();
+    window.addEventListener('scroll', updateVisibility, { passive: true });
+
+    backToTop.addEventListener('click', () => {
+      const reducedMotion = window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      ).matches;
+
+      window.scrollTo({
+        top: 0,
+        behavior: reducedMotion ? 'auto' : 'smooth',
+      });
+    });
+  }
+</script>

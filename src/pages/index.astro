@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FounderPage from '../components/FounderPage.astro';
+import { content } from '../i18n/content';
+
+const locale = 'en';
+const copy = content.en;
+---
+<BaseLayout locale={locale} copy={copy}>
+  <FounderPage locale={locale} />
+</BaseLayout>

@@ -1,6 +1,7 @@
 ---
 import Header from './Header.astro';
 import Footer from './Footer.astro';
+import FloatingActions from './FloatingActions.astro';
 import type { Locale } from '../i18n/locales';
 import { content } from '../i18n/content';
 import { site } from '../data/site';
@@ -200,3 +201,4 @@ const copy = content[locale];
 </main>
 
 <Footer copy={copy} />
+<FloatingActions locale={locale} />

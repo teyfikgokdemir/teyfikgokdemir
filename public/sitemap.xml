@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://teyfikgokdemir.com/</loc></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://teyfikgokdemir.com/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://teyfikgokdemir.com/" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://teyfikgokdemir.com/tr/" />
+    <xhtml:link rel="alternate" hreflang="mk" href="https://teyfikgokdemir.com/mk/" />
+    <xhtml:link rel="alternate" hreflang="sr" href="https://teyfikgokdemir.com/sr/" />
+    <xhtml:link rel="alternate" hreflang="sq" href="https://teyfikgokdemir.com/sq/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://teyfikgokdemir.com/" />
+  </url>
   <url><loc>https://teyfikgokdemir.com/tr/</loc></url>
-  <url><loc>https://teyfikgokdemir.com/en/</loc></url>
   <url><loc>https://teyfikgokdemir.com/mk/</loc></url>
   <url><loc>https://teyfikgokdemir.com/sr/</loc></url>
   <url><loc>https://teyfikgokdemir.com/sq/</loc></url>
