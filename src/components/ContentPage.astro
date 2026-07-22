@@ -52,7 +52,7 @@ const homePath = locale === 'en' ? '/' : `/${locale}/`;
   ogType={ogType}
   pageSchema={pageSchema}
 >
-  <Header locale={locale} copy={copy} homePath={homePath} />
+  <Header locale={locale} copy={copy} homePath={homePath} languageUrls={alternates} />
 
   <main id="main-content" class="content-page">
     <header class="content-hero" id="top">

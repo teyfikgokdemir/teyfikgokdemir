@@ -1,0 +1,46 @@
+---
+import ContentPage from '../../../components/ContentPage.astro';
+import { site } from '../../../data/site';
+
+const title = 'Дигитална Трговија, SEO и AI Системи | Teyfik Gökdemir';
+const description = 'Практични статии за дигитална трговија, SEO, GEO, AEO, операции и системи со вештачка интелигенција.';
+const pathname = '/mk/blog/';
+const canonical = site.origin + pathname;
+
+const alternates = {
+  en: site.origin + '/blog/',
+  tr: site.origin + '/tr/blog/',
+  sq: site.origin + '/sq/blog/',
+  mk: canonical,
+  sr: site.origin + '/blog/',
+  'x-default': site.origin + '/blog/',
+};
+
+const pageSchema = {
+  '@type': 'CollectionPage',
+  '@id': canonical + '#webpage',
+  url: canonical,
+  name: title,
+  description,
+  inLanguage: 'mk',
+  isPartOf: { '@id': site.origin + '/#website' },
+};
+---
+<ContentPage
+  locale="mk"
+  title={title}
+  description={description}
+  pathname={pathname}
+  alternates={alternates}
+  pageSchema={pageSchema}
+  eyebrow="Блог"
+  heading="Практични идеи за поврзани комерцијални системи."
+  lead="Водичи што ги поврзуваат дигиталната трговија, видливоста во пребарувањето, операциите и AI имплементацијата."
+>
+  <article class="content-card">
+    <p class="section-label">Видливост во пребарување</p>
+    <h2><a href="/mk/blog/razliki-seo-geo-aeo-aio/">Разлики помеѓу SEO, GEO, AEO и AIO</a></h2>
+    <p>Практичен водич за улогата на секоја дисциплина и начинот на кој тие треба да работат заедно.</p>
+    <p><a href="/mk/blog/razliki-seo-geo-aeo-aio/">Прочитај го водичот →</a></p>
+  </article>
+</ContentPage>

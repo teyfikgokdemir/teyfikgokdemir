@@ -6,23 +6,33 @@ interface Props {
   locale: Locale;
   copy: SiteContent;
   homePath?: string;
+  languageUrls?: Partial<Record<Locale, string>>;
 }
 
-const { locale, copy, homePath } = Astro.props;
+const { locale, copy, homePath, languageUrls } = Astro.props;
 
 const localeUrl = (item: Locale) => item === 'en' ? '/' : `/${item}/`;
 const currentHomePath = homePath ?? localeUrl(locale);
 const sectionUrl = (section: string) => `${currentHomePath}#${section}`;
 
-const aiVisibilityUrl =
-  locale === 'tr'
-    ? '/tr/yapay-zeka-arama-gorunurlugu/'
-    : '/ai-search-visibility/';
+const aiVisibilityUrls: Record<Locale, string> = {
+  en: '/ai-search-visibility/',
+  tr: '/tr/yapay-zeka-arama-gorunurlugu/',
+  sq: '/sq/dukshmeria-ne-kerkimin-ai/',
+  mk: '/mk/vidlivost-vo-ai-prebaruvanje/',
+  sr: '/ai-search-visibility/',
+};
 
-const blogUrl =
-  locale === 'tr'
-    ? '/tr/blog/'
-    : '/blog/';
+const blogUrls: Record<Locale, string> = {
+  en: '/blog/',
+  tr: '/tr/blog/',
+  sq: '/sq/blog/',
+  mk: '/mk/blog/',
+  sr: '/blog/',
+};
+
+const aiVisibilityUrl = aiVisibilityUrls[locale];
+const blogUrl = blogUrls[locale];
 
 const aiVisibilityLabels: Record<Locale, string> = {
   en: 'AI Visibility',
@@ -74,7 +84,7 @@ const blogLabel = blogLabels[locale];
     <div class="language-switcher" aria-label={copy.a11y.language}>
       {locales.map((item) => (
         <a
-          href={localeUrl(item)}
+          href={languageUrls?.[item] ?? localeUrl(item)}
           lang={item}
           hreflang={item}
           aria-current={item === locale ? 'page' : undefined}

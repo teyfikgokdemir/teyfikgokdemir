@@ -1,0 +1,46 @@
+---
+import ContentPage from '../../../components/ContentPage.astro';
+import { site } from '../../../data/site';
+
+const title = 'Tregtia Digjitale, SEO dhe Sistemet AI | Teyfik Gökdemir';
+const description = 'Artikuj praktikë mbi tregtinë digjitale, SEO, GEO, AEO, operacionet dhe sistemet e inteligjencës artificiale.';
+const pathname = '/sq/blog/';
+const canonical = site.origin + pathname;
+
+const alternates = {
+  en: site.origin + '/blog/',
+  tr: site.origin + '/tr/blog/',
+  sq: canonical,
+  mk: site.origin + '/mk/blog/',
+  sr: site.origin + '/blog/',
+  'x-default': site.origin + '/blog/',
+};
+
+const pageSchema = {
+  '@type': 'CollectionPage',
+  '@id': canonical + '#webpage',
+  url: canonical,
+  name: title,
+  description,
+  inLanguage: 'sq',
+  isPartOf: { '@id': site.origin + '/#website' },
+};
+---
+<ContentPage
+  locale="sq"
+  title={title}
+  description={description}
+  pathname={pathname}
+  alternates={alternates}
+  pageSchema={pageSchema}
+  eyebrow="Artikuj"
+  heading="Mendim praktik për sisteme tregtare të ndërlidhura."
+  lead="Udhëzues që lidhin tregtinë digjitale, dukshmërinë në kërkim, operacionet dhe ekzekutimin e asistuar nga AI."
+>
+  <article class="content-card">
+    <p class="section-label">Dukshmëria në kërkim</p>
+    <h2><a href="/sq/blog/dallimet-seo-geo-aeo-aio/">Dallimet mes SEO, GEO, AEO dhe AIO</a></h2>
+    <p>Një udhëzues praktik për të kuptuar rolin e secilës disiplinë dhe mënyrën se si ato duhet të punojnë së bashku.</p>
+    <p><a href="/sq/blog/dallimet-seo-geo-aeo-aio/">Lexoni udhëzuesin →</a></p>
+  </article>
+</ContentPage>

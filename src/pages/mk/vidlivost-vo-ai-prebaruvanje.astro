@@ -1,0 +1,121 @@
+---
+import ContentPage from '../../components/ContentPage.astro';
+import { site } from '../../data/site';
+
+const title = 'Видливост во AI Пребарување: SEO, GEO, AEO и AIO | Teyfik Gökdemir';
+const description = 'Практичен систем што им помага на бизнисите да бидат пронајдени, разбрани и правилно претставени од пребарувачите и AI системите.';
+const pathname = '/mk/vidlivost-vo-ai-prebaruvanje/';
+const canonical = site.origin + pathname;
+
+const faq = [
+  {
+    question: 'Што е видливост во AI пребарување?',
+    answer: 'Тоа е способноста на лице, компанија или бренд да биде пронајден, разбран и правилно претставен од пребарувачите, системите за одговори и AI платформите.',
+  },
+  {
+    question: 'Дали GEO е исто што и SEO?',
+    answer: 'Не. SEO е насочено кон традиционалните резултати од пребарување, додека GEO ја подобрува разбирливоста и употребливоста на информациите за генеративните системи.',
+  },
+  {
+    question: 'Дали llms.txt гарантира AI цитирање?',
+    answer: 'Не. llms.txt може да обезбеди дополнителен контекст, но не гарантира индексирање, рангирање или цитирање.',
+  },
+];
+
+const alternates = {
+  en: site.origin + '/ai-search-visibility/',
+  tr: site.origin + '/tr/yapay-zeka-arama-gorunurlugu/',
+  sq: site.origin + '/sq/dukshmeria-ne-kerkimin-ai/',
+  mk: canonical,
+  sr: site.origin + '/ai-search-visibility/',
+  'x-default': site.origin + '/ai-search-visibility/',
+};
+
+const pageSchema = {
+  '@type': ['WebPage', 'FAQPage'],
+  '@id': canonical + '#webpage',
+  url: canonical,
+  name: title,
+  description,
+  inLanguage: 'mk',
+  isPartOf: { '@id': site.origin + '/#website' },
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+---
+<ContentPage
+  locale="mk"
+  title={title}
+  description={description}
+  pathname={pathname}
+  alternates={alternates}
+  pageSchema={pageSchema}
+  eyebrow="Видливост во AI Пребарување"
+  heading="Направете го вашиот бизнис разбирлив за пребарувачите и AI системите."
+  lead="Поврзан систем што комбинира техничко SEO, јасен идентитет, содржина насочена кон одговори и машински читливи информации."
+>
+  <div class="answer-block">
+    <p><strong>Видливоста во AI пребарувањето</strong> не е еден трик или еден документ. Таа е резултат на јасно дефинирано, технички достапно и со докази поддржано дигитално присуство.</p>
+  </div>
+
+  <h2>Што опфаќа системот?</h2>
+
+  <div class="content-grid">
+    <article class="content-card">
+      <h3>Техничка откриливост</h3>
+      <p>Canonical URL, sitemap, пристап за crawler-и, перформанси и структурирани податоци.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>Јасност на идентитетот</h3>
+      <p>Доследно дефинирање на личноста, брендот, експертизата, пазарите и деловните односи.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>Содржина со јасни одговори</h3>
+      <p>Директни дефиниции, видливи прашања и разбирлива информациска архитектура.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>Докази и авторитет</h3>
+      <p>Тврдења поддржани со реални проекти, сигурни извори и доследни јавни информации.</p>
+    </article>
+  </div>
+
+  <h2>SEO, GEO, AEO и AIO работат заедно</h2>
+
+  <p><strong>SEO</strong> ја создава техничката и содржинската основа. <strong>GEO</strong> ја подобрува разбирливоста на информациите за генеративните системи. <strong>AEO</strong> ја организира содржината околу јасни одговори. <strong>AIO</strong> ги поврзува веб-страницата, идентитетот и содржината за AI откривање.</p>
+
+  <h2>Процес на имплементација</h2>
+
+  <ol>
+    <li>Анализа на crawl, индексирање, canonical и јазичната структура.</li>
+    <li>Јасно дефинирање на личноста, компанијата, услугите и пазарите.</li>
+    <li>Мапирање на комерцијалните и информативните прашања.</li>
+    <li>Создавање детални страници што можат да служат како сигурни извори.</li>
+    <li>Примена на структурирани податоци само врз видливи информации.</li>
+    <li>Градење докази и надворешни референци.</li>
+  </ol>
+
+  <h2>Често поставувани прашања</h2>
+
+  <div class="faq-list">
+    {faq.map((item) => (
+      <details>
+        <summary>{item.question}</summary>
+        <p>{item.answer}</p>
+      </details>
+    ))}
+  </div>
+
+  <section class="content-cta">
+    <h2>Изградете посилен систем за пребарување и AI откривање.</h2>
+    <p>Прочитајте го <a href="/mk/blog/razliki-seo-geo-aeo-aio/">водичот за SEO, GEO, AEO и AIO</a> или контактирајте преку <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+  </section>
+</ContentPage>

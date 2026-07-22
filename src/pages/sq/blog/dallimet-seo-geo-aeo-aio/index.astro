@@ -1,0 +1,87 @@
+---
+import ContentPage from '../../../../components/ContentPage.astro';
+import { site } from '../../../../data/site';
+
+const title = 'Dallimet mes SEO, GEO, AEO dhe AIO | Teyfik Gökdemir';
+const description = 'Kuptoni dallimet mes SEO, GEO, AEO dhe AIO dhe mënyrën se si ato ndërtojnë një sistem të përbashkët kërkimi dhe dukshmërie me AI.';
+const pathname = '/sq/blog/dallimet-seo-geo-aeo-aio/';
+const canonical = site.origin + pathname;
+const published = '2026-07-23';
+
+const alternates = {
+  en: site.origin + '/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  tr: site.origin + '/tr/blog/seo-geo-aeo-aio-farklari/',
+  sq: canonical,
+  mk: site.origin + '/mk/blog/razliki-seo-geo-aeo-aio/',
+  sr: site.origin + '/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  'x-default': site.origin + '/blog/seo-vs-geo-vs-aeo-vs-aio/',
+};
+
+const pageSchema = {
+  '@type': 'Article',
+  '@id': canonical + '#article',
+  headline: 'Dallimet mes SEO, GEO, AEO dhe AIO',
+  description,
+  url: canonical,
+  mainEntityOfPage: canonical,
+  datePublished: published,
+  dateModified: published,
+  inLanguage: 'sq',
+  author: { '@id': site.origin + '/#person' },
+  publisher: { '@id': site.origin + '/#person' },
+};
+---
+<ContentPage
+  locale="sq"
+  title={title}
+  description={description}
+  pathname={pathname}
+  alternates={alternates}
+  ogType="article"
+  pageSchema={pageSchema}
+  eyebrow="Udhëzues për Dukshmërinë"
+  heading="SEO, GEO, AEO dhe AIO: cili është ndryshimi?"
+  lead="Termat lidhen me njëri-tjetrin, por nuk janë të njëjtë. Vlera reale vjen kur zbatohen si pjesë e një sistemi të vetëm."
+  articleMeta={{
+    published,
+    modified: published,
+    readingTime: '6 minuta lexim',
+    label: 'Teyfik Gökdemir',
+  }}
+>
+  <div class="answer-block">
+    <p><strong>SEO</strong> përmirëson zbulimin në motorët e kërkimit. <strong>GEO</strong> e bën përmbajtjen më të kuptueshme dhe më të referueshme për sistemet gjenerative. <strong>AEO</strong> e strukturon përmbajtjen për përgjigje të drejtpërdrejta. <strong>AIO</strong> i lidh këto pjesë në një sistem të përbashkët.</p>
+  </div>
+
+  <h2>SEO mbetet baza</h2>
+
+  <p>Faqet duhet të jenë të aksesueshme, të shpejta, të indeksueshme dhe të organizuara sipas qëllimit real të kërkimit. AI nuk e eliminon këtë nevojë.</p>
+
+  <h2>Roli i GEO</h2>
+
+  <p>GEO fokusohet te qartësia e burimeve, marrëdhëniet mes entiteteve, provat dhe informacioni që sistemet gjenerative mund ta kuptojnë dhe ta përdorin.</p>
+
+  <h2>Roli i AEO</h2>
+
+  <p>AEO e bën përgjigjen më të qartë. Pyetjet kryesore duhet të marrin përgjigje të drejtpërdrejta, të mbështetura me kontekst dhe shpjegim.</p>
+
+  <h2>Roli i AIO</h2>
+
+  <p>AIO është shtresa koordinuese që lidh SEO-n teknike, identitetin, përmbajtjen, të dhënat e strukturuara dhe matjen.</p>
+
+  <h2>Rendi praktik i zbatimit</h2>
+
+  <ol>
+    <li>Rregulloni crawl, indeksimin, canonical dhe gjuhët.</li>
+    <li>Përcaktoni qartë personin, kompaninë dhe shërbimet.</li>
+    <li>Hartëzoni pyetjet që ndikojnë në vendimet tregtare.</li>
+    <li>Krijoni faqe burimore të thelluara.</li>
+    <li>Shtoni përgjigje të drejtpërdrejta dhe structured data të sakta.</li>
+    <li>Ndërtoni prova dhe referenca të jashtme.</li>
+  </ol>
+
+  <section class="content-cta">
+    <h2>Kthejeni këtë kornizë në një sistem real.</h2>
+    <p>Shikoni <a href="/sq/dukshmeria-ne-kerkimin-ai/">faqen për dukshmërinë në kërkimin me AI</a>.</p>
+  </section>
+</ContentPage>

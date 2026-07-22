@@ -1,0 +1,121 @@
+---
+import ContentPage from '../../components/ContentPage.astro';
+import { site } from '../../data/site';
+
+const title = 'Dukshmëria në Kërkimin me AI: SEO, GEO, AEO dhe AIO | Teyfik Gökdemir';
+const description = 'Një sistem praktik që ndihmon bizneset të gjenden, kuptohen dhe përfaqësohen saktë nga motorët e kërkimit dhe sistemet e inteligjencës artificiale.';
+const pathname = '/sq/dukshmeria-ne-kerkimin-ai/';
+const canonical = site.origin + pathname;
+
+const faq = [
+  {
+    question: 'Çfarë është dukshmëria në kërkimin me AI?',
+    answer: 'Është aftësia e një personi, biznesi ose marke për t’u gjetur, kuptuar dhe përfaqësuar saktë nga motorët e kërkimit, motorët e përgjigjeve dhe sistemet e inteligjencës artificiale.',
+  },
+  {
+    question: 'A është GEO e njëjtë me SEO?',
+    answer: 'Jo. SEO fokusohet te zbulimi dhe performanca në rezultatet tradicionale të kërkimit, ndërsa GEO ndihmon sistemet gjenerative të kuptojnë dhe përdorin informacionin si burim.',
+  },
+  {
+    question: 'A garanton llms.txt citime nga AI?',
+    answer: 'Jo. llms.txt mund të ofrojë kontekst shtesë, por nuk garanton indeksim, renditje ose citim.',
+  },
+];
+
+const alternates = {
+  en: site.origin + '/ai-search-visibility/',
+  tr: site.origin + '/tr/yapay-zeka-arama-gorunurlugu/',
+  sq: canonical,
+  mk: site.origin + '/mk/vidlivost-vo-ai-prebaruvanje/',
+  sr: site.origin + '/ai-search-visibility/',
+  'x-default': site.origin + '/ai-search-visibility/',
+};
+
+const pageSchema = {
+  '@type': ['WebPage', 'FAQPage'],
+  '@id': canonical + '#webpage',
+  url: canonical,
+  name: title,
+  description,
+  inLanguage: 'sq',
+  isPartOf: { '@id': site.origin + '/#website' },
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+---
+<ContentPage
+  locale="sq"
+  title={title}
+  description={description}
+  pathname={pathname}
+  alternates={alternates}
+  pageSchema={pageSchema}
+  eyebrow="Dukshmëria në Kërkimin me AI"
+  heading="Bëjeni biznesin tuaj të kuptueshëm për motorët e kërkimit dhe sistemet e AI."
+  lead="Një sistem i integruar që lidh SEO-n teknike, qartësinë e identitetit, përmbajtjen e orientuar drejt përgjigjeve dhe informacionin e lexueshëm nga makinat."
+>
+  <div class="answer-block">
+    <p><strong>Dukshmëria në kërkimin me AI</strong> nuk është një truk ose një skedar i vetëm. Ajo ndërtohet përmes një pranie digjitale të qartë, të aksesueshme dhe të mbështetur me prova.</p>
+  </div>
+
+  <h2>Çfarë përfshin sistemi?</h2>
+
+  <div class="content-grid">
+    <article class="content-card">
+      <h3>Zbulueshmëria teknike</h3>
+      <p>URL canonical, sitemap, akses për crawler-at, performancë dhe të dhëna të strukturuara.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>Qartësia e identitetit</h3>
+      <p>Përkufizim i qëndrueshëm i personit, markës, ekspertizës, tregjeve dhe marrëdhënieve.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>Përmbajtje me përgjigje të qarta</h3>
+      <p>Përkufizime të drejtpërdrejta, pyetje të dukshme dhe arkitekturë e kuptueshme e informacionit.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>Prova dhe autoritet</h3>
+      <p>Pretendime të mbështetura nga projekte reale, burime të besueshme dhe informacion publik konsistent.</p>
+    </article>
+  </div>
+
+  <h2>SEO, GEO, AEO dhe AIO punojnë së bashku</h2>
+
+  <p><strong>SEO</strong> krijon bazën teknike dhe të përmbajtjes për kërkimin. <strong>GEO</strong> përmirëson mënyrën se si sistemet gjenerative e kuptojnë dhe e referojnë informacionin. <strong>AEO</strong> organizon përmbajtjen rreth përgjigjeve të qarta. <strong>AIO</strong> lidh faqen, identitetin dhe sistemin e përmbajtjes për zbulim me AI.</p>
+
+  <h2>Procesi i zbatimit</h2>
+
+  <ol>
+    <li>Auditimi i crawl, indeksimit, canonical dhe strukturës gjuhësore.</li>
+    <li>Përcaktimi i qartë i personit, biznesit, shërbimeve dhe tregjeve.</li>
+    <li>Hartëzimi i pyetjeve komerciale dhe informative.</li>
+    <li>Krijimi i faqeve të thelluara që mund të shërbejnë si burime.</li>
+    <li>Aplikimi i të dhënave të strukturuara vetëm mbi informacionin e dukshëm.</li>
+    <li>Ndërtimi i provave dhe referencave të jashtme.</li>
+  </ol>
+
+  <h2>Pyetje të shpeshta</h2>
+
+  <div class="faq-list">
+    {faq.map((item) => (
+      <details>
+        <summary>{item.question}</summary>
+        <p>{item.answer}</p>
+      </details>
+    ))}
+  </div>
+
+  <section class="content-cta">
+    <h2>Ndërtoni një sistem më të fortë kërkimi dhe zbulimi me AI.</h2>
+    <p>Lexoni <a href="/sq/blog/dallimet-seo-geo-aeo-aio/">udhëzuesin SEO, GEO, AEO dhe AIO</a> ose kontaktoni <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+  </section>
+</ContentPage>
