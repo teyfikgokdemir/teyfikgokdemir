@@ -179,8 +179,35 @@ const jsonLd = {
   .skip-link:focus { transform: translateY(0); }
   .shell { width: min(var(--max), calc(100% - 3rem)); margin-inline: auto; }
   #main-content, section[id] { scroll-margin-top: calc(var(--header-height) + 1rem); }
-  .section { padding: clamp(4rem, 6vw, 6.5rem) 0; border-top: 1px solid var(--line); }
-  .section-heading { max-width: 820px; margin-bottom: 2.25rem; }
+  .section {
+    position: relative;
+    min-height: calc(100svh - var(--header-height));
+    display: grid;
+    align-items: center;
+    padding: clamp(4.5rem, 7vw, 7rem) 0;
+    border-top: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 88% 16%, rgba(40, 75, 114, .09), transparent 28rem),
+      linear-gradient(180deg, rgba(255, 255, 255, .012), transparent 18%);
+  }
+
+  .section > .shell {
+    position: relative;
+    z-index: 1;
+    width: min(var(--max), calc(100% - 3rem));
+  }
+  .section-heading {
+    max-width: 900px;
+    margin-bottom: clamp(2rem, 4vw, 3.25rem);
+  }
   .section-label {
     margin: 0 0 .9rem;
     color: var(--accent-soft);
@@ -349,7 +376,12 @@ const jsonLd = {
     border-radius: var(--radius);
     background: var(--panel);
   }
-  .editorial-image img { width: 100%; height: clamp(400px, 38vw, 500px); object-fit: cover; object-position: 50% 22%; }
+  .editorial-image img {
+    width: 100%;
+    height: clamp(460px, 48vw, 620px);
+    object-fit: cover;
+    object-position: 50% 22%;
+  }
   .focus-list { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-top: 1.5rem; }
   .focus-list span {
     padding: 1rem;
@@ -528,27 +560,27 @@ const jsonLd = {
 
   .expertise-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: clamp(.9rem, 1.8vw, 1.25rem);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.15rem;
   }
 
   .expertise-card {
     position: relative;
     min-width: 0;
-    min-height: 270px;
-    padding: clamp(1.4rem, 2.4vw, 1.8rem);
+    min-height: 260px;
+    padding: clamp(1.6rem, 3vw, 2.1rem);
     overflow: hidden;
     border: 1px solid rgba(58, 80, 107, .72);
-    border-radius: calc(var(--radius) - 2px);
+    border-radius: var(--radius);
     background:
-      linear-gradient(150deg, rgba(22, 38, 58, .92), rgba(10, 19, 31, .96));
+      radial-gradient(circle at 100% 0%, rgba(226, 118, 98, .09), transparent 12rem),
+      linear-gradient(145deg, rgba(20, 36, 55, .96), rgba(10, 20, 32, .98));
     box-shadow:
-      0 1px 0 rgba(255, 255, 255, .045) inset,
-      0 16px 40px rgba(0, 0, 0, .15);
+      0 1px 0 rgba(255, 255, 255, .04) inset,
+      0 18px 42px rgba(0, 0, 0, .17);
     transition:
-      transform .3s cubic-bezier(.2, .8, .2, 1),
+      transform .3s ease,
       border-color .3s ease,
-      background-color .3s ease,
       box-shadow .3s ease;
   }
 
@@ -556,23 +588,10 @@ const jsonLd = {
     content: "";
     position: absolute;
     top: 0;
-    left: 1.5rem;
-    right: 1.5rem;
+    left: 1.8rem;
+    right: 1.8rem;
     height: 2px;
-    background: linear-gradient(90deg, var(--accent), rgba(242, 170, 143, .18));
-  }
-
-  .expertise-card::after {
-    content: "";
-    position: absolute;
-    right: -3.5rem;
-    top: -3.5rem;
-    width: 8rem;
-    height: 8rem;
-    border-radius: 50%;
-    background: rgba(226, 118, 98, .055);
-    filter: blur(2px);
-    pointer-events: none;
+    background: linear-gradient(90deg, var(--accent), transparent);
   }
 
   .expertise-card:hover {
@@ -580,31 +599,20 @@ const jsonLd = {
     border-color: rgba(242, 170, 143, .55);
     box-shadow:
       0 1px 0 rgba(255, 255, 255, .06) inset,
-      0 24px 55px rgba(0, 0, 0, .26);
+      0 26px 58px rgba(0, 0, 0, .28);
   }
 
   .expertise-card h3 {
-    position: relative;
-    margin: .25rem 0 1.35rem;
-    padding-bottom: 1rem;
-    font-size: clamp(1.18rem, 1.7vw, 1.38rem);
-    line-height: 1.15;
+    margin: .25rem 0 1.5rem;
+    font-size: clamp(1.35rem, 2vw, 1.65rem);
+    line-height: 1.12;
     letter-spacing: -.025em;
-  }
-
-  .expertise-card h3::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 2.25rem;
-    height: 1px;
-    background: rgba(242, 170, 143, .42);
   }
 
   .expertise-card ul {
     display: grid;
-    gap: .78rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .85rem 1.25rem;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -612,10 +620,10 @@ const jsonLd = {
 
   .expertise-card li {
     position: relative;
-    padding-left: 1.05rem;
-    color: #b5c0ce;
-    font-size: .91rem;
-    line-height: 1.5;
+    padding-left: 1rem;
+    color: #b8c3d1;
+    font-size: .92rem;
+    line-height: 1.55;
   }
 
   .expertise-card li::before {
@@ -623,25 +631,30 @@ const jsonLd = {
     position: absolute;
     left: 0;
     top: .62em;
-    width: .34rem;
-    height: .34rem;
+    width: .32rem;
+    height: .32rem;
     border-radius: 50%;
     background: var(--accent);
     box-shadow: 0 0 0 4px rgba(226, 118, 98, .08);
   }
 
   .definitions {
-    margin: 1.75rem 0 0;
-    padding: 1rem 1.15rem;
-    border: 1px solid rgba(58, 80, 107, .5);
+    margin: 1.5rem 0 0;
+    padding: 1rem 1.2rem;
+    border: 1px solid rgba(58, 80, 107, .48);
     border-radius: .9rem;
-    background: rgba(8, 16, 27, .5);
+    background: rgba(8, 16, 27, .48);
     color: var(--muted);
     font-size: .82rem;
-    line-height: 1.75;
+    line-height: 1.7;
   }
 
-  .journey-layout { display: grid; grid-template-columns: minmax(280px, .7fr) minmax(0, 1.3fr); gap: clamp(2rem, 6vw, 5rem); align-items: start; }
+  .journey-layout {
+    display: grid;
+    grid-template-columns: minmax(320px, .72fr) minmax(0, 1.28fr);
+    gap: clamp(3rem, 7vw, 6rem);
+    align-items: center;
+  }
   .journey-image { position: sticky; top: 100px; }
   .journey-image img { width: 100%; max-height: 600px; object-fit: cover; object-position: 50% 20%; border: 1px solid var(--line); border-radius: var(--radius); }
   .timeline { margin: 0; padding: 0; list-style: none; }
@@ -652,15 +665,41 @@ const jsonLd = {
   .timeline h3 { margin: 0 0 .5rem; font-size: 1.25rem; }
   .timeline p { margin: 0; color: var(--muted); }
 
-  .method-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; counter-reset: method; }
-  .method-card { min-height: 210px; padding: 1.5rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); counter-increment: method; }
+  .method-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.15rem;
+    counter-reset: method;
+  }
+  .method-card {
+    min-height: 240px;
+    padding: 1.75rem;
+    border: 1px solid rgba(58, 80, 107, .68);
+    border-radius: var(--radius);
+    background:
+      linear-gradient(145deg, rgba(18, 33, 51, .94), rgba(10, 20, 32, .97));
+    box-shadow: 0 16px 38px rgba(0, 0, 0, .14);
+    counter-increment: method;
+  }
   .method-card::before { content: "0" counter(method); color: var(--accent-soft); font-size: .75rem; font-weight: 850; letter-spacing: .12em; }
   .method-card h3 { margin: 2rem 0 .7rem; font-size: 1.35rem; }
   .method-card p { margin: 0; color: var(--muted); line-height: 1.7; }
 
   .regional-grid .editorial-image img { object-position: 50% 28%; }
   .contact-section { text-align: center; }
-  .contact-card { max-width: 980px; margin-inline: auto; padding: clamp(2rem, 5vw, 4rem); border: 1px solid var(--line-strong); border-radius: var(--radius); background: linear-gradient(135deg, #13243a, #0d1826); }
+  .contact-card {
+    max-width: 980px;
+    margin-inline: auto;
+    padding: clamp(3rem, 7vw, 5rem);
+    border: 1px solid rgba(74, 101, 136, .72);
+    border-radius: calc(var(--radius) + 4px);
+    background:
+      radial-gradient(circle at 50% 0%, rgba(226, 118, 98, .12), transparent 20rem),
+      linear-gradient(135deg, #142740, #0c1928);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, .05) inset,
+      0 28px 70px rgba(0, 0, 0, .25);
+  }
   .contact-card .section-lead { margin-inline: auto; }
   .contact-card .button { margin-top: 1.5rem; }
 
@@ -682,7 +721,19 @@ const jsonLd = {
   .button, .venture-card, .header-panel a, .skip-link { transition: color .2s ease, background-color .2s ease, border-color .2s ease, transform .2s ease; }
 
   @media (min-width: 1200px) {
-    .venture-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .venture-grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+
+    .venture-card {
+      grid-column: span 2;
+    }
+
+    .venture-card:nth-last-child(2),
+    .venture-card:last-child {
+      grid-column: span 3;
+    }
   }
 
   @media (min-width: 1025px) {
@@ -703,6 +754,15 @@ const jsonLd = {
   }
 
   @media (max-width: 800px) {
+    .section {
+      min-height: auto;
+      display: block;
+      padding-block: clamp(4rem, 12vw, 6rem);
+    }
+
+    .section > .shell {
+      width: min(100% - 2rem, var(--max));
+    }
     .shell { width: min(100% - 2rem, var(--max)); }
     .menu-toggle { display: block; }
     .header-panel {
@@ -746,7 +806,16 @@ const jsonLd = {
     .hero-media::before { inset-inline: 3%; }
     .hero-actions { display: grid; }
     .button { width: 100%; }
-    .focus-list, .venture-grid, .expertise-grid, .method-grid { grid-template-columns: 1fr; }
+    .focus-list,
+    .venture-grid,
+    .expertise-grid,
+    .method-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .expertise-card ul {
+      grid-template-columns: 1fr;
+    }
     .venture-card { min-height: 0; }
     .venture-card.has-image > img { height: 210px; }
     .timeline li { grid-template-columns: 62px minmax(0, 1fr); gap: .5rem; }
