@@ -108,6 +108,14 @@ const jsonLd = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#09111d" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-52GXBGWHFJ"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-52GXBGWHFJ');
+    </script>
     <meta name="robots" content="index,follow" />
     <title>{copy.seo.title}</title>
     <meta name="description" content={copy.seo.description} />
