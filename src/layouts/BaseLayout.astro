@@ -762,6 +762,54 @@ const jsonLd = {
     .language-switcher a { min-width: 42px; }
   }
 
+
+  /* Venture layout correction: natural card heights, balanced 3 + 2 grid */
+  .venture-grid {
+    align-items: start;
+  }
+
+  .venture-card,
+  .venture-card.has-image {
+    min-height: 0;
+    height: auto;
+    align-self: start;
+  }
+
+  .venture-card.has-image {
+    justify-content: flex-start;
+  }
+
+  .venture-card.has-image > img {
+    height: 190px;
+  }
+
+  @media (min-width: 1200px) {
+    .venture-grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    .venture-card {
+      grid-column: span 2;
+    }
+
+    .venture-card:nth-last-child(2),
+    .venture-card:last-child {
+      grid-column: span 3;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .venture-card,
+    .venture-card.has-image {
+      grid-column: auto;
+      width: 100%;
+    }
+
+    .venture-card.has-image > img {
+      height: 210px;
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
   }
