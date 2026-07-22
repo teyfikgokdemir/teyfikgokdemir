@@ -6,7 +6,6 @@
   <url>
     <loc>https://teyfikgokdemir.com/</loc>
     <lastmod>2026-07-23</lastmod>
-    <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://teyfikgokdemir.com/" />
     <xhtml:link rel="alternate" hreflang="tr" href="https://teyfikgokdemir.com/tr/" />
@@ -16,56 +15,63 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://teyfikgokdemir.com/" />
   </url>
 
+  <url><loc>https://teyfikgokdemir.com/tr/</loc><lastmod>2026-07-23</lastmod><priority>0.9</priority></url>
+  <url><loc>https://teyfikgokdemir.com/sq/</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+  <url><loc>https://teyfikgokdemir.com/mk/</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+  <url><loc>https://teyfikgokdemir.com/sr/</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+
   <url>
-    <loc>https://teyfikgokdemir.com/tr/</loc>
+    <loc>https://teyfikgokdemir.com/ai-search-visibility/</loc>
     <lastmod>2026-07-23</lastmod>
-    <changefreq>monthly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://teyfikgokdemir.com/" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://teyfikgokdemir.com/tr/" />
-    <xhtml:link rel="alternate" hreflang="sq" href="https://teyfikgokdemir.com/sq/" />
-    <xhtml:link rel="alternate" hreflang="mk" href="https://teyfikgokdemir.com/mk/" />
-    <xhtml:link rel="alternate" hreflang="sr" href="https://teyfikgokdemir.com/sr/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://teyfikgokdemir.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://teyfikgokdemir.com/ai-search-visibility/" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://teyfikgokdemir.com/tr/yapay-zeka-arama-gorunurlugu/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://teyfikgokdemir.com/ai-search-visibility/" />
   </url>
 
   <url>
-    <loc>https://teyfikgokdemir.com/sq/</loc>
+    <loc>https://teyfikgokdemir.com/tr/yapay-zeka-arama-gorunurlugu/</loc>
     <lastmod>2026-07-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://teyfikgokdemir.com/" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://teyfikgokdemir.com/tr/" />
-    <xhtml:link rel="alternate" hreflang="sq" href="https://teyfikgokdemir.com/sq/" />
-    <xhtml:link rel="alternate" hreflang="mk" href="https://teyfikgokdemir.com/mk/" />
-    <xhtml:link rel="alternate" hreflang="sr" href="https://teyfikgokdemir.com/sr/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://teyfikgokdemir.com/" />
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://teyfikgokdemir.com/ai-search-visibility/" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://teyfikgokdemir.com/tr/yapay-zeka-arama-gorunurlugu/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://teyfikgokdemir.com/ai-search-visibility/" />
   </url>
 
   <url>
-    <loc>https://teyfikgokdemir.com/mk/</loc>
+    <loc>https://teyfikgokdemir.com/blog/</loc>
     <lastmod>2026-07-23</lastmod>
-    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://teyfikgokdemir.com/" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://teyfikgokdemir.com/tr/" />
-    <xhtml:link rel="alternate" hreflang="sq" href="https://teyfikgokdemir.com/sq/" />
-    <xhtml:link rel="alternate" hreflang="mk" href="https://teyfikgokdemir.com/mk/" />
-    <xhtml:link rel="alternate" hreflang="sr" href="https://teyfikgokdemir.com/sr/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://teyfikgokdemir.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://teyfikgokdemir.com/blog/" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://teyfikgokdemir.com/tr/blog/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://teyfikgokdemir.com/blog/" />
   </url>
 
   <url>
-    <loc>https://teyfikgokdemir.com/sr/</loc>
+    <loc>https://teyfikgokdemir.com/tr/blog/</loc>
     <lastmod>2026-07-23</lastmod>
-    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://teyfikgokdemir.com/" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://teyfikgokdemir.com/tr/" />
-    <xhtml:link rel="alternate" hreflang="sq" href="https://teyfikgokdemir.com/sq/" />
-    <xhtml:link rel="alternate" hreflang="mk" href="https://teyfikgokdemir.com/mk/" />
-    <xhtml:link rel="alternate" hreflang="sr" href="https://teyfikgokdemir.com/sr/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://teyfikgokdemir.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://teyfikgokdemir.com/blog/" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://teyfikgokdemir.com/tr/blog/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://teyfikgokdemir.com/blog/" />
+  </url>
+
+  <url>
+    <loc>https://teyfikgokdemir.com/blog/seo-vs-geo-vs-aeo-vs-aio/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://teyfikgokdemir.com/blog/seo-vs-geo-vs-aeo-vs-aio/" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://teyfikgokdemir.com/tr/blog/seo-geo-aeo-aio-farklari/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://teyfikgokdemir.com/blog/seo-vs-geo-vs-aeo-vs-aio/" />
+  </url>
+
+  <url>
+    <loc>https://teyfikgokdemir.com/tr/blog/seo-geo-aeo-aio-farklari/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://teyfikgokdemir.com/blog/seo-vs-geo-vs-aeo-vs-aio/" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://teyfikgokdemir.com/tr/blog/seo-geo-aeo-aio-farklari/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://teyfikgokdemir.com/blog/seo-vs-geo-vs-aeo-vs-aio/" />
   </url>
 
 </urlset>

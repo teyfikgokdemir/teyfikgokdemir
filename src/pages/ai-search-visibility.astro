@@ -1,0 +1,138 @@
+---
+import ContentPage from '../components/ContentPage.astro';
+import { site } from '../data/site';
+import { content } from '../i18n/content';
+
+const title = 'AI Search Visibility: GEO, AEO and AIO Systems | Teyfik Gökdemir';
+const description = 'A practical system for making businesses understandable, discoverable and reference-ready across search engines, answer engines and AI-assisted discovery.';
+const pathname = '/ai-search-visibility/';
+const canonical = site.origin + pathname;
+
+const faq = [
+  {
+    question: 'What is AI search visibility?',
+    answer: 'AI search visibility is the ability of a person, business or brand to be discovered, understood and accurately represented by search engines, answer engines and AI-assisted research systems.',
+  },
+  {
+    question: 'Is GEO different from SEO?',
+    answer: 'Yes. SEO focuses primarily on discoverability and ranking in traditional search results. GEO focuses on making information clear, attributable and useful for generative systems that synthesise answers.',
+  },
+  {
+    question: 'Does llms.txt guarantee AI citations?',
+    answer: 'No. An llms.txt file may provide useful machine-readable context, but it does not guarantee indexing, citations or rankings. Strong public content, clear entities, technical accessibility and reliable evidence remain more important.',
+  },
+  {
+    question: 'How long does AI visibility work take?',
+    answer: 'Technical corrections can be implemented quickly, but recognition and citation depend on crawling, indexing, content quality, external references and the consistency of the entity over time.',
+  },
+];
+
+const pageSchema = {
+  '@type': ['WebPage', 'FAQPage'],
+  '@id': canonical + '#webpage',
+  url: canonical,
+  name: title,
+  description,
+  inLanguage: 'en',
+  isPartOf: { '@id': site.origin + '/#website' },
+  about: [
+    'Generative Engine Optimization',
+    'Answer Engine Optimization',
+    'AI Optimization',
+    'Search Engine Optimization',
+  ],
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+
+const alternates = {
+  en: canonical,
+  tr: site.origin + '/tr/yapay-zeka-arama-gorunurlugu/',
+  'x-default': canonical,
+};
+---
+<ContentPage
+  locale="en"
+  title={title}
+  description={description}
+  pathname={pathname}
+  alternates={alternates}
+  pageSchema={pageSchema}
+  eyebrow="AI Search Visibility"
+  heading="Make your business understandable to search engines and AI systems."
+  lead="A structured visibility system connecting technical SEO, entity clarity, answer-ready content, evidence and machine-readable information."
+>
+  <div class="answer-block">
+    <p><strong>AI search visibility</strong> is not a separate trick or a single file. It is the result of building a technically accessible, clearly defined and evidence-supported digital presence that both people and machines can understand.</p>
+  </div>
+
+  <h2>What the system covers</h2>
+
+  <div class="content-grid">
+    <article class="content-card">
+      <h3>Technical discovery</h3>
+      <p>Canonical URLs, crawl access, sitemaps, language targeting, performance and structured data.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>Entity clarity</h3>
+      <p>Consistent identity, expertise, ventures, profiles, relationships and authoritative source pages.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>Answer-ready content</h3>
+      <p>Direct explanations, useful definitions, visible questions and structured information architecture.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>Evidence and attribution</h3>
+      <p>Claims supported by observable work, reliable references, case studies and consistent public information.</p>
+    </article>
+  </div>
+
+  <h2>SEO, GEO, AEO and AIO work together</h2>
+
+  <p><strong>SEO</strong> creates the technical and content foundation for search discovery. <strong>GEO</strong> improves how information can be interpreted and referenced by generative systems. <strong>AEO</strong> structures content around clear answers. <strong>AIO</strong> connects the wider website, entity and content system for AI-assisted discovery.</p>
+
+  <p>These disciplines should not be treated as four unrelated services. The strongest implementation begins with one coherent information architecture and applies each discipline where it creates measurable value.</p>
+
+  <h2>How I approach AI search visibility</h2>
+
+  <ol>
+    <li><strong>Audit discovery:</strong> crawl access, canonical signals, indexing, language structure and technical conflicts.</li>
+    <li><strong>Define the entity:</strong> establish who the business is, what it does, where it operates and how its properties relate.</li>
+    <li><strong>Map commercial questions:</strong> identify the questions prospects, search engines and research systems need answered.</li>
+    <li><strong>Create source pages:</strong> publish deep, focused pages that can function as reliable reference points.</li>
+    <li><strong>Add structured data:</strong> represent visible information accurately without manufacturing claims.</li>
+    <li><strong>Strengthen evidence:</strong> connect expertise to projects, outcomes, public profiles and trusted external mentions.</li>
+    <li><strong>Measure discovery:</strong> monitor search impressions, branded queries, referrals and observable citation patterns.</li>
+  </ol>
+
+  <h2>What this work does not promise</h2>
+
+  <p>No responsible consultant can guarantee that ChatGPT, Google, Perplexity, Claude or another system will cite a specific page. Each system controls its own crawling, indexing, retrieval and answer-generation processes.</p>
+
+  <p>The goal is to remove technical barriers, increase clarity, create useful source material and improve the probability that the business is discovered and represented accurately.</p>
+
+  <h2>Frequently asked questions</h2>
+
+  <div class="faq-list">
+    {faq.map((item) => (
+      <details>
+        <summary>{item.question}</summary>
+        <p>{item.answer}</p>
+      </details>
+    ))}
+  </div>
+
+  <section class="content-cta">
+    <h2>Build a stronger search and AI discovery system.</h2>
+    <p>For an audit or implementation project, contact <a href={`mailto:${site.email}`}>{site.email}</a> or review the <a href="/blog/seo-vs-geo-vs-aeo-vs-aio/">SEO, GEO, AEO and AIO guide</a>.</p>
+  </section>
+</ContentPage>

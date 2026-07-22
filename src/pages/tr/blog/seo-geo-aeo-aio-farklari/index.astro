@@ -1,0 +1,140 @@
+---
+import ContentPage from '../../../../components/ContentPage.astro';
+import { site } from '../../../../data/site';
+
+const title = 'SEO, GEO, AEO ve AIO Arasındaki Farklar | Teyfik Gökdemir';
+const description = 'SEO, GEO, AEO ve AIO kavramlarının farklarını, kesiştikleri alanları ve tek bir arama ve yapay zekâ görünürlük sistemi içinde nasıl uygulanacağını öğrenin.';
+const pathname = '/tr/blog/seo-geo-aeo-aio-farklari/';
+const canonical = site.origin + pathname;
+const published = '2026-07-23';
+const modified = '2026-07-23';
+
+const articleSchema = {
+  '@type': 'Article',
+  '@id': canonical + '#article',
+  headline: 'SEO, GEO, AEO ve AIO Arasındaki Farklar',
+  description,
+  url: canonical,
+  mainEntityOfPage: canonical,
+  datePublished: published,
+  dateModified: modified,
+  inLanguage: 'tr',
+  author: { '@id': site.origin + '/#person' },
+  publisher: { '@id': site.origin + '/#person' },
+  isPartOf: { '@id': site.origin + '/#website' },
+  about: [
+    'Search Engine Optimization',
+    'Generative Engine Optimization',
+    'Answer Engine Optimization',
+    'AI Optimization',
+  ],
+};
+
+const alternates = {
+  en: site.origin + '/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  tr: canonical,
+  'x-default': site.origin + '/blog/seo-vs-geo-vs-aeo-vs-aio/',
+};
+---
+<ContentPage
+  locale="tr"
+  title={title}
+  description={description}
+  pathname={pathname}
+  alternates={alternates}
+  ogType="article"
+  pageSchema={articleSchema}
+  eyebrow="Arama Görünürlüğü Rehberi"
+  heading="SEO, GEO, AEO ve AIO arasındaki farklar."
+  lead="Kavramlar kesişir ancak aynı anlama gelmez. Doğru soru hangisinin SEO’nun yerini alacağı değil, her birinin tek bir keşfedilme sistemine nasıl katkı sağladığıdır."
+  articleMeta={{
+    published,
+    modified,
+    readingTime: '8 dakikalık okuma',
+    label: 'Teyfik Gökdemir',
+  }}
+>
+  <div class="answer-block">
+    <p><strong>SEO</strong> arama motorlarında keşfedilmeyi geliştirir. <strong>GEO</strong> içeriğin üretken sistemler tarafından yorumlanmasını ve kaynak olarak kullanılabilmesini güçlendirir. <strong>AEO</strong> içeriği doğrudan cevap vermeye uygun hâle getirir. <strong>AIO</strong> ise web sitesi, varlık ve içerik sistemini yapay zekâ destekli keşif için koordine eder.</p>
+  </div>
+
+  <h2>Temel fark nedir?</h2>
+
+  <p>Dört disiplin aynı ticari problemin farklı parçalarına odaklanır: Bir işletme bilgi arayan kişi tarafından nasıl bulunur, anlaşılır ve güvenilir görülür?</p>
+
+  <div class="content-grid">
+    <article class="content-card">
+      <h3>SEO</h3>
+      <p>Teknik erişilebilirlik, arama niyeti, içerik uygunluğu, iç bağlantılar, otorite ve klasik arama performansı.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>GEO</h3>
+      <p>Üretken sistemlerin yorumlayabileceği açık kaynak içerikler, varlık ilişkileri, kanıtlar ve atıf gücü.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>AEO</h3>
+      <p>Doğrudan cevaplar, görünür sorular, kısa açıklamalar ve cevap çıkarımına uygun içerik yapısı.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>AIO</h3>
+      <p>Teknik SEO, varlık bilgisi, içerik tasarımı, ölçüm ve yapay zekâ keşfini bağlayan operasyon katmanı.</p>
+    </article>
+  </div>
+
+  <h2>SEO temel olmaya devam eder</h2>
+
+  <p>Yapay zekâ görünürlüğü; taranabilir sayfalara, canonical URL’lere, hızlı performansa, güçlü iç bağlantılara ve gerçek arama niyetine cevap veren içeriklere duyulan ihtiyacı ortadan kaldırmaz.</p>
+
+  <p>Bu nedenle SEO’yu yeni bir kısaltmayla değiştirmeye çalışmak yanlış yaklaşımdır. GEO ve AEO keşfedilme sistemini genişletir; teknik temeli ortadan kaldırmaz.</p>
+
+  <h2>GEO nerede değer sağlar?</h2>
+
+  <p>GEO, kullanıcıların yalnızca bağlantı listesi yerine sentezlenmiş cevaplar aldığı ortamlarda önem kazanır. İçerik; gerçekleri, ilişkileri ve uzmanlığı açık biçimde aktarmalıdır.</p>
+
+  <ul>
+    <li>dağınık iddialar yerine odaklı kaynak sayfalar oluşturmak;</li>
+    <li>isim, açıklama ve ilişkileri tutarlı kullanmak;</li>
+    <li>önemli iddiaları kanıtlarla desteklemek;</li>
+    <li>yazarlığı ve kurumsal sahipliği açıkça göstermek;</li>
+    <li>özgün analiz, deneyim ve faydalı çerçeveler yayınlamak.</li>
+  </ul>
+
+  <h2>AEO nerede değer sağlar?</h2>
+
+  <p>AEO cevabın biçimine odaklanır. Sayfalar kapsamlı olmaya devam etmeli ancak temel sorular birkaç paragrafın içinden anlam çıkarılmasını gerektirmeden doğrudan cevaplanmalıdır.</p>
+
+  <p>Bu, zayıf ve kısa SSS sayfaları hazırlamak anlamına gelmez. Güçlü cevap optimizasyonu; kısa cevabı yeterli bağlam, kanıt ve açıklamayla destekler.</p>
+
+  <h2>AIO uygulamada ne anlama gelmeli?</h2>
+
+  <p>AIO sektörde farklı anlamlarda kullanılmaktadır. Faydalı tanım; teknik erişim, varlık netliği, içerik sistemi, yapılandırılmış veri, kanıt ve ölçümü bir araya getiren koordinasyon katmanıdır.</p>
+
+  <p>Bu tanımla AIO, SEO, GEO veya AEO’nun yerine geçmez. Bunları bağlayan çalışma modelidir.</p>
+
+  <h2>Uygulama sırası</h2>
+
+  <ol>
+    <li>Tarama, indeksleme, canonical ve dil sorunlarını düzeltin.</li>
+    <li>Kişi, kurum, hizmet ve marka ilişkilerini tutarlı tanımlayın.</li>
+    <li>Ticari arama sorularını ve müşteri kararlarını haritalayın.</li>
+    <li>Temel konular için güçlü kaynak sayfalar oluşturun.</li>
+    <li>Faydalı yerlerde doğrudan cevap blokları ve görünür SSS kullanın.</li>
+    <li>Görünen bilgilere doğru yapılandırılmış veri uygulayın.</li>
+    <li>Dış kanıt ve güvenilir referans ağı oluşturun.</li>
+    <li>Gösterimleri, dönüşümleri ve yönlendirme kaynaklarını ölçün.</li>
+  </ol>
+
+  <h2>Kaçınılması gereken temel hata</h2>
+
+  <p>En büyük hata, alttaki bilgiyi geliştirmeden bağımsız teknik sinyaller eklemektir. robots.txt kuralı, schema bloğu veya llms.txt dosyası; belirsiz konumlandırmayı, tekrarlanan içeriği veya kanıtsız iddiaları telafi edemez.</p>
+
+  <p>En güçlü görünürlük sistemleri önce insanlar için faydalı, ardından makinelerin açıkça yorumlayabileceği kadar düzenlidir.</p>
+
+  <section class="content-cta">
+    <h2>Bu çerçeveyi uygulanabilir bir sisteme dönüştürün.</h2>
+    <p><a href="/tr/yapay-zeka-arama-gorunurlugu/">Yapay Zekâ Arama Görünürlüğü sayfasını</a> inceleyebilir veya <a href={`mailto:${site.email}`}>{site.email}</a> adresinden iletişime geçebilirsiniz.</p>
+  </section>
+</ContentPage>

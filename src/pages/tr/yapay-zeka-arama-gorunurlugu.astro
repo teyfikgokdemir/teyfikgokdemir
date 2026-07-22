@@ -1,0 +1,137 @@
+---
+import ContentPage from '../../components/ContentPage.astro';
+import { site } from '../../data/site';
+
+const title = 'Yapay Zekâ Arama Görünürlüğü: GEO, AEO ve AIO | Teyfik Gökdemir';
+const description = 'İşletmelerin arama motorları, cevap motorları ve yapay zekâ destekli araştırma sistemleri tarafından bulunmasını ve doğru anlaşılmasını sağlayan görünürlük sistemi.';
+const pathname = '/tr/yapay-zeka-arama-gorunurlugu/';
+const canonical = site.origin + pathname;
+
+const faq = [
+  {
+    question: 'Yapay zekâ arama görünürlüğü nedir?',
+    answer: 'Bir kişi, işletme veya markanın arama motorları, cevap motorları ve yapay zekâ destekli araştırma sistemleri tarafından bulunabilmesi, anlaşılabilmesi ve doğru temsil edilebilmesidir.',
+  },
+  {
+    question: 'GEO ile SEO aynı şey midir?',
+    answer: 'Hayır. SEO ağırlıklı olarak klasik arama sonuçlarında bulunma ve sıralama temeline odaklanır. GEO ise bilgilerin üretken yapay zekâ sistemleri tarafından anlaşılabilir, ilişkilendirilebilir ve referans verilebilir olmasını güçlendirir.',
+  },
+  {
+    question: 'llms.txt yapay zekâ sonuçlarında görünmeyi garanti eder mi?',
+    answer: 'Hayır. llms.txt makine tarafından okunabilir ek bağlam sağlayabilir ancak indekslenme, sıralama veya kaynak gösterilme garantisi vermez.',
+  },
+  {
+    question: 'Sonuç almak ne kadar sürer?',
+    answer: 'Teknik iyileştirmeler hızlı uygulanabilir. Ancak taranma, indekslenme, güven oluşumu ve kaynak gösterilme; içerik kalitesi, dış referanslar ve zaman içindeki tutarlılığa bağlıdır.',
+  },
+];
+
+const pageSchema = {
+  '@type': ['WebPage', 'FAQPage'],
+  '@id': canonical + '#webpage',
+  url: canonical,
+  name: title,
+  description,
+  inLanguage: 'tr',
+  isPartOf: { '@id': site.origin + '/#website' },
+  about: [
+    'Generative Engine Optimization',
+    'Answer Engine Optimization',
+    'AI Optimization',
+    'Search Engine Optimization',
+  ],
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+
+const alternates = {
+  en: site.origin + '/ai-search-visibility/',
+  tr: canonical,
+  'x-default': site.origin + '/ai-search-visibility/',
+};
+---
+<ContentPage
+  locale="tr"
+  title={title}
+  description={description}
+  pathname={pathname}
+  alternates={alternates}
+  pageSchema={pageSchema}
+  eyebrow="Yapay Zekâ Arama Görünürlüğü"
+  heading="İşletmenizi arama motorları ve yapay zekâ sistemleri için anlaşılır hâle getirin."
+  lead="Teknik SEO, varlık tanımı, cevap odaklı içerik, güvenilir kanıtlar ve makine tarafından okunabilir bilgileri birleştiren görünürlük sistemi."
+>
+  <div class="answer-block">
+    <p><strong>Yapay zekâ arama görünürlüğü</strong> tek bir dosya veya kısa yol değildir. İnsanların ve makinelerin anlayabileceği teknik olarak erişilebilir, açıkça tanımlanmış ve kanıtlarla desteklenmiş bir dijital varlık oluşturma sürecidir.</p>
+  </div>
+
+  <h2>Sistem hangi alanları kapsar?</h2>
+
+  <div class="content-grid">
+    <article class="content-card">
+      <h3>Teknik keşfedilebilirlik</h3>
+      <p>Canonical URL’ler, tarama izinleri, site haritası, dil hedefleme, performans ve yapılandırılmış veri.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>Varlık ve kimlik netliği</h3>
+      <p>Kişi, marka, uzmanlık, girişim, profil ve kurumsal ilişkilerin tutarlı biçimde tanımlanması.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>Cevap odaklı içerik</h3>
+      <p>Doğrudan açıklamalar, faydalı tanımlar, görünür sorular ve anlaşılır bilgi mimarisi.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>Kanıt ve kaynak gücü</h3>
+      <p>İddiaların gerçek çalışmalar, vakalar, güvenilir referanslar ve tutarlı açık bilgilerle desteklenmesi.</p>
+    </article>
+  </div>
+
+  <h2>SEO, GEO, AEO ve AIO birlikte çalışır</h2>
+
+  <p><strong>SEO</strong> arama motorlarında keşfedilmenin teknik ve içerik temelini kurar. <strong>GEO</strong> bilgilerin üretken sistemlerce yorumlanmasını ve referans alınmasını güçlendirir. <strong>AEO</strong> içeriği net cevaplar çevresinde yapılandırır. <strong>AIO</strong> ise web sitesi, varlık bilgisi ve içerik sistemini yapay zekâ destekli keşif için bir araya getirir.</p>
+
+  <p>Bunları birbirinden kopuk dört hizmet olarak görmek doğru değildir. En güçlü yapı tek bir bilgi mimarisiyle başlar.</p>
+
+  <h2>Uygulama yaklaşımım</h2>
+
+  <ol>
+    <li><strong>Keşif denetimi:</strong> tarama, canonical, indeksleme, dil yapısı ve teknik çakışmalar incelenir.</li>
+    <li><strong>Varlık tanımı:</strong> işletmenin kim olduğu, ne yaptığı, nerede çalıştığı ve markalarıyla ilişkisi netleştirilir.</li>
+    <li><strong>Ticari sorular:</strong> potansiyel müşterilerin ve araştırma sistemlerinin cevap aradığı sorular belirlenir.</li>
+    <li><strong>Kaynak sayfalar:</strong> güçlü, derin ve odaklı içerikler hazırlanır.</li>
+    <li><strong>Yapılandırılmış veri:</strong> yalnızca sayfada görünen ve doğrulanabilir bilgiler işaretlenir.</li>
+    <li><strong>Kanıt ağı:</strong> uzmanlık; projeler, sonuçlar, profiller ve dış referanslarla bağlanır.</li>
+    <li><strong>Ölçüm:</strong> gösterimler, marka aramaları, yönlendirmeler ve gözlenebilir kaynak gösterimleri izlenir.</li>
+  </ol>
+
+  <h2>Bu çalışma neyi garanti etmez?</h2>
+
+  <p>ChatGPT, Google, Perplexity, Claude veya başka bir sistemin belirli bir sayfayı kaynak göstereceği garanti edilemez. Her sistem kendi tarama, indeksleme, erişim ve cevap üretme süreçlerini yönetir.</p>
+
+  <p>Amaç teknik engelleri kaldırmak, bilgiyi netleştirmek, güvenilir kaynak içerikler oluşturmak ve doğru temsil edilme ihtimalini artırmaktır.</p>
+
+  <h2>Sık sorulan sorular</h2>
+
+  <div class="faq-list">
+    {faq.map((item) => (
+      <details>
+        <summary>{item.question}</summary>
+        <p>{item.answer}</p>
+      </details>
+    ))}
+  </div>
+
+  <section class="content-cta">
+    <h2>Arama ve yapay zekâ görünürlüğünüzü güçlendirin.</h2>
+    <p>Denetim veya uygulama projesi için <a href={`mailto:${site.email}`}>{site.email}</a> adresinden iletişime geçebilir veya <a href="/tr/blog/seo-geo-aeo-aio-farklari/">SEO, GEO, AEO ve AIO rehberini</a> inceleyebilirsiniz.</p>
+  </section>
+</ContentPage>
