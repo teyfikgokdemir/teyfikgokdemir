@@ -24,15 +24,24 @@ const blogUrl =
     ? '/tr/blog/'
     : '/blog/';
 
-const aiVisibilityLabel =
-  locale === 'tr'
-    ? 'AI Görünürlüğü'
-    : 'AI Visibility';
+const aiVisibilityLabels: Record<Locale, string> = {
+  en: 'AI Visibility',
+  tr: 'AI Görünürlüğü',
+  sq: 'Dukshmëri AI',
+  mk: 'АИ Видливост',
+  sr: 'AI Vidljivost',
+};
 
-const blogLabel =
-  locale === 'tr'
-    ? 'Blog'
-    : 'Insights';
+const blogLabels: Record<Locale, string> = {
+  en: 'Insights',
+  tr: 'Blog',
+  sq: 'Artikuj',
+  mk: 'Блог',
+  sr: 'Blog',
+};
+
+const aiVisibilityLabel = aiVisibilityLabels[locale];
+const blogLabel = blogLabels[locale];
 ---
 <header class="site-header">
   <a class="brand" href={localeUrl(locale)} aria-label="Teyfik Gökdemir">
