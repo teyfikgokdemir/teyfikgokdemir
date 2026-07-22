@@ -21,6 +21,18 @@ const jsonLd = {
       url: site.origin,
       jobTitle: 'Founder, Digital Commerce & Growth Operator',
       email: 'mailto:' + site.email,
+      contactPoint: [
+        {
+          '@type': 'ContactPoint',
+          contactType: 'general inquiries',
+          email: site.email,
+        },
+        {
+          '@type': 'ContactPoint',
+          contactType: 'direct contact',
+          email: site.directEmail,
+        },
+      ],
       image: profileImage,
       address: {
         '@type': 'PostalAddress',

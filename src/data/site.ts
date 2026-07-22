@@ -1,7 +1,8 @@
 export const site = {
   name: 'Teyfik Gökdemir',
   origin: 'https://teyfikgokdemir.com',
-  email: 'info@qctstudio.com',
+  email: 'info@teyfikgokdemir.com',
+  directEmail: 'teyfik@teyfikgokdemir.com',
   images: {
     hero: { path: '/images/teyfik-gokdemir-founder.webp', width: 1086, height: 1448 },
     executive: { path: '/images/teyfik-gokdemir-executive.webp', width: 1023, height: 1537 },
