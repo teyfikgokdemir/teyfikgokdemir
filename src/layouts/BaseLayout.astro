@@ -763,51 +763,111 @@ const jsonLd = {
   }
 
 
-  /* Venture layout correction: natural card heights, balanced 3 + 2 grid */
+  /* Venture layout: featured founder card with balanced supporting cards */
   .venture-grid {
-    align-items: start;
+    align-items: stretch;
   }
 
   .venture-card,
   .venture-card.has-image {
     min-height: 0;
     height: auto;
-    align-self: start;
-  }
-
-  .venture-card.has-image {
-    justify-content: flex-start;
-  }
-
-  .venture-card.has-image > img {
-    height: 190px;
   }
 
   @media (min-width: 1200px) {
     .venture-grid {
-      grid-template-columns: repeat(6, minmax(0, 1fr));
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+      grid-template-rows: auto auto auto;
+      gap: 1.25rem;
+      align-items: stretch;
+    }
+
+    /* QCT Studio */
+    .venture-card:nth-child(1) {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    /* QCT Commerce — featured visual card */
+    .venture-card:nth-child(2) {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+      align-self: stretch;
+    }
+
+    /* Mythborn */
+    .venture-card:nth-child(3) {
+      grid-column: 2;
+      grid-row: 2;
+    }
+
+    /* Sales Intelligence */
+    .venture-card:nth-child(4) {
+      grid-column: 1;
+      grid-row: 3;
+    }
+
+    /* AI Operations */
+    .venture-card:nth-child(5) {
+      grid-column: 2;
+      grid-row: 3;
+    }
+
+    .venture-card.has-image {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .venture-card.has-image > img {
+      height: clamp(260px, 25vw, 350px);
+      object-position: 50% 38%;
+    }
+
+    .venture-card:nth-child(1),
+    .venture-card:nth-child(3) {
+      padding: 1.65rem 1.8rem;
+    }
+
+    .venture-card:nth-child(1) h3,
+    .venture-card:nth-child(3) h3 {
+      margin-top: 1.45rem;
+      font-size: clamp(1.65rem, 2.2vw, 2.05rem);
+    }
+
+    .venture-card:nth-child(1) p,
+    .venture-card:nth-child(3) p {
+      line-height: 1.65;
+    }
+  }
+
+  @media (max-width: 1199px) {
+    .venture-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       align-items: start;
     }
 
     .venture-card {
-      grid-column: span 2;
-    }
-
-    .venture-card:nth-last-child(2),
-    .venture-card:last-child {
-      grid-column: span 3;
-    }
-  }
-
-  @media (max-width: 560px) {
-    .venture-card,
-    .venture-card.has-image {
       grid-column: auto;
-      width: 100%;
+      grid-row: auto;
+      align-self: start;
     }
 
     .venture-card.has-image > img {
       height: 210px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .venture-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .venture-card,
+    .venture-card.has-image {
+      width: 100%;
+      grid-column: auto;
+      grid-row: auto;
     }
   }
   @media (prefers-reduced-motion: reduce) {
