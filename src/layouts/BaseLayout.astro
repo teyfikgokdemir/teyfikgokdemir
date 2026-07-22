@@ -888,6 +888,183 @@ const jsonLd = {
       max-width: 860px;
     }
   }
+
+  /* Balanced desktop sizing for Ventures and Expertise */
+  @media (min-width: 1200px) {
+    #ventures,
+    #expertise {
+      padding-block: clamp(3rem, 4vw, 4.25rem);
+    }
+
+    #ventures .section-heading,
+    #expertise .section-heading {
+      margin-bottom: 1.5rem;
+    }
+
+    /* Ventures */
+    #ventures h2 {
+      max-width: 900px;
+      margin-bottom: .9rem;
+      font-size: clamp(3rem, 4vw, 3.75rem);
+      line-height: .98;
+    }
+
+    #ventures .section-lead {
+      max-width: 780px;
+      font-size: 1.03rem;
+      line-height: 1.55;
+    }
+
+    #ventures .venture-grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+      grid-template-rows: 180px 180px 165px;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    #ventures .venture-card {
+      min-height: 0;
+      height: 100%;
+      border-radius: 20px;
+    }
+
+    #ventures .venture-card:nth-child(1) {
+      grid-column: 2;
+      grid-row: 1;
+      padding: 1.2rem 1.45rem;
+    }
+
+    #ventures .venture-card:nth-child(2) {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+
+    #ventures .venture-card:nth-child(3) {
+      grid-column: 2;
+      grid-row: 2;
+      padding: 1.2rem 1.45rem;
+    }
+
+    #ventures .venture-card:nth-child(4) {
+      grid-column: 1;
+      grid-row: 3;
+      padding: 1.2rem 1.45rem;
+    }
+
+    #ventures .venture-card:nth-child(5) {
+      grid-column: 2;
+      grid-row: 3;
+      padding: 1.2rem 1.45rem;
+    }
+
+    #ventures .venture-card.has-image > img {
+      height: 175px;
+      object-position: 50% 38%;
+    }
+
+    #ventures .venture-card.has-image .venture-meta {
+      margin: .85rem 1.25rem 0;
+    }
+
+    #ventures .venture-card.has-image h3 {
+      margin: .8rem 1.25rem .4rem;
+      font-size: 1.65rem;
+    }
+
+    #ventures .venture-card.has-image p {
+      margin-inline: 1.25rem;
+      font-size: .9rem;
+      line-height: 1.45;
+    }
+
+    #ventures .venture-card.has-image .venture-arrow {
+      margin-inline: 1.25rem;
+      padding-top: .45rem;
+      padding-bottom: .85rem;
+    }
+
+    #ventures .venture-card:nth-child(1) h3,
+    #ventures .venture-card:nth-child(3) h3 {
+      margin: .75rem 0 .35rem;
+      font-size: 1.55rem;
+    }
+
+    #ventures .venture-card:nth-child(1) p,
+    #ventures .venture-card:nth-child(3) p {
+      font-size: .88rem;
+      line-height: 1.42;
+    }
+
+    #ventures .venture-card:nth-child(4) h3,
+    #ventures .venture-card:nth-child(5) h3 {
+      margin: .7rem 0 .35rem;
+      font-size: 1.45rem;
+    }
+
+    #ventures .venture-card:nth-child(4) p,
+    #ventures .venture-card:nth-child(5) p {
+      font-size: .86rem;
+      line-height: 1.4;
+    }
+
+    #ventures .venture-card:nth-child(4) .venture-arrow,
+    #ventures .venture-card:nth-child(5) .venture-arrow {
+      padding-top: .45rem;
+    }
+
+    /* Expertise */
+    #expertise .section-heading {
+      max-width: none;
+    }
+
+    #expertise h2 {
+      max-width: none;
+      margin-bottom: .75rem;
+      white-space: nowrap;
+      font-size: clamp(2.9rem, 3.45vw, 3.55rem);
+      line-height: 1;
+      letter-spacing: -.045em;
+    }
+
+    #expertise .section-lead {
+      max-width: 900px;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    #expertise .expertise-grid {
+      gap: 1rem;
+    }
+
+    #expertise .expertise-card {
+      min-height: 0;
+      padding: 1.35rem 1.5rem;
+      border-radius: 19px;
+    }
+
+    #expertise .expertise-card h3 {
+      margin: .15rem 0 1rem;
+      padding-bottom: .75rem;
+      font-size: 1.28rem;
+    }
+
+    #expertise .expertise-card ul {
+      gap: .58rem;
+    }
+
+    #expertise .expertise-card li {
+      padding-left: .95rem;
+      font-size: .88rem;
+      line-height: 1.4;
+    }
+
+    #expertise .definitions {
+      margin-top: 1rem;
+      padding: .8rem 1rem;
+      font-size: .76rem;
+      line-height: 1.55;
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
   }
