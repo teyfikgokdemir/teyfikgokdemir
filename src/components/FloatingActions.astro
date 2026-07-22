@@ -45,11 +45,23 @@ const whatsappUrl =
     aria-label={labels[locale].whatsapp}
     title={labels[locale].whatsapp}
   >
-    <span aria-hidden="true">WA</span>
+    <svg
+      viewBox="0 0 32 32"
+      width="23"
+      height="23"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        fill="currentColor"
+        d="M16.03 3.2A12.63 12.63 0 0 0 5.1 22.15L3.2 28.8l6.84-1.8a12.65 12.65 0 1 0 5.99-23.8Zm0 22.96a10.25 10.25 0 0 1-5.22-1.43l-.37-.22-4.06 1.07 1.09-3.96-.24-.4a10.28 10.28 0 1 1 8.8 4.94Zm5.64-7.68c-.31-.16-1.84-.91-2.13-1.01-.28-.1-.49-.16-.69.16-.21.31-.8 1.01-.98 1.22-.18.21-.36.23-.67.08-.31-.16-1.31-.48-2.49-1.54-.92-.82-1.54-1.83-1.72-2.14-.18-.31-.02-.48.14-.63.14-.14.31-.36.47-.54.16-.18.21-.31.31-.52.1-.21.05-.39-.03-.54-.08-.16-.69-1.67-.95-2.29-.25-.6-.51-.52-.69-.53h-.59c-.21 0-.54.08-.82.39-.28.31-1.08 1.06-1.08 2.58s1.11 2.99 1.26 3.2c.16.21 2.18 3.33 5.28 4.67.74.32 1.31.51 1.76.65.74.24 1.42.2 1.95.12.6-.09 1.84-.75 2.1-1.48.26-.73.26-1.36.18-1.49-.08-.13-.28-.21-.59-.36Z"
+      />
+    </svg>
   </a>
 </div>
 
 <script is:inline>
+  const floatingActions = document.querySelector('.floating-actions');
   const backToTop = document.querySelector('.back-to-top');
 
   if (backToTop) {
@@ -70,5 +82,23 @@ const whatsappUrl =
         behavior: reducedMotion ? 'auto' : 'smooth',
       });
     });
+  }
+
+  if (floatingActions) {
+    let scrollTimer;
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        floatingActions.classList.add('is-scrolling');
+
+        window.clearTimeout(scrollTimer);
+
+        scrollTimer = window.setTimeout(() => {
+          floatingActions.classList.remove('is-scrolling');
+        }, 240);
+      },
+      { passive: true }
+    );
   }
 </script>
