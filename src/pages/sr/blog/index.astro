@@ -1,0 +1,51 @@
+---
+import ContentPage from '../../../components/ContentPage.astro';
+import { site } from '../../../data/site';
+
+const title = 'Digitalna Trgovina, SEO i AI Sistemi | Teyfik Gökdemir';
+const description = 'Praktični tekstovi o digitalnoj trgovini, SEO-u, GEO-u, AEO-u, operacijama i sistemima veštačke inteligencije.';
+const pathname = '/sr/blog/';
+const canonical = site.origin + pathname;
+
+const alternates = {
+  en: site.origin + '/blog/',
+  tr: site.origin + '/tr/blog/',
+  sq: site.origin + '/sq/blog/',
+  mk: site.origin + '/mk/blog/',
+  sr: site.origin + '/sr/blog/',
+  'x-default': site.origin + '/blog/',
+};
+
+const pageSchema = {
+  '@type': 'CollectionPage',
+  '@id': canonical + '#webpage',
+  url: canonical,
+  name: title,
+  description,
+  inLanguage: 'sr',
+  isPartOf: { '@id': site.origin + '/#website' },
+};
+---
+<ContentPage
+  locale="sr"
+  title={title}
+  description={description}
+  pathname={pathname}
+  alternates={alternates}
+  pageSchema={pageSchema}
+  eyebrow="Blog"
+  heading="Praktične ideje za povezane komercijalne sisteme."
+  lead="Vodiči koji povezuju digitalnu trgovinu, vidljivost u pretrazi, operacije i implementaciju veštačke inteligencije."
+>
+  <article class="content-card">
+    <p class="section-label">Vidljivost u pretrazi</p>
+    <h2><a href="/sr/blog/razlike-seo-geo-aeo-aio/">Razlike između SEO, GEO, AEO i AIO</a></h2>
+    <p>Praktičan vodič kroz ulogu svake discipline i način na koji treba da rade zajedno kao jedan sistem.</p>
+    <p><a href="/sr/blog/razlike-seo-geo-aeo-aio/">Pročitajte vodič →</a></p>
+  </article>
+
+  <section class="content-cta">
+    <h2>Potreban vam je strukturiran sistem vidljivosti?</h2>
+    <p>Pogledajte <a href="/sr/vidljivost-u-ai-pretrazi/">stranicu o AI vidljivosti</a> ili pišite na <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+  </section>
+</ContentPage>

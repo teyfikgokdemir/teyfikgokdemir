@@ -1,0 +1,129 @@
+---
+import ContentPage from '../../components/ContentPage.astro';
+import { site } from '../../data/site';
+
+const title = 'Vidljivost u AI Pretrazi: SEO, GEO, AEO i AIO | Teyfik Gökdemir';
+const description = 'Praktičan sistem koji pomaže kompanijama da budu pronađene, razumljive i tačno predstavljene u pretraživačima i AI sistemima.';
+const pathname = '/sr/vidljivost-u-ai-pretrazi/';
+const canonical = site.origin + pathname;
+
+const faq = [
+  {
+    question: 'Šta je vidljivost u AI pretrazi?',
+    answer: 'To je sposobnost osobe, kompanije ili brenda da bude pronađen, razumljen i tačno predstavljen u pretraživačima, sistemima za odgovore i AI platformama.',
+  },
+  {
+    question: 'Da li je GEO isto što i SEO?',
+    answer: 'Ne. SEO se prvenstveno bavi klasičnim rezultatima pretrage, dok GEO poboljšava način na koji generativni sistemi razumeju i koriste informacije.',
+  },
+  {
+    question: 'Da li llms.txt garantuje AI citiranje?',
+    answer: 'Ne. llms.txt može ponuditi dodatni kontekst, ali ne garantuje indeksiranje, rangiranje ili citiranje.',
+  },
+  {
+    question: 'Koliko traje izgradnja AI vidljivosti?',
+    answer: 'Tehničke izmene mogu biti brze, ali indeksiranje, poverenje i citiranje zavise od kvaliteta sadržaja, dokaza, spoljnih referenci i doslednosti tokom vremena.',
+  },
+];
+
+const alternates = {
+  en: site.origin + '/ai-search-visibility/',
+  tr: site.origin + '/tr/yapay-zeka-arama-gorunurlugu/',
+  sq: site.origin + '/sq/dukshmeria-ne-kerkimin-ai/',
+  mk: site.origin + '/mk/vidlivost-vo-ai-prebaruvanje/',
+  sr: site.origin + '/sr/vidljivost-u-ai-pretrazi/',
+  'x-default': site.origin + '/ai-search-visibility/',
+};
+
+const pageSchema = {
+  '@type': ['WebPage', 'FAQPage'],
+  '@id': canonical + '#webpage',
+  url: canonical,
+  name: title,
+  description,
+  inLanguage: 'sr',
+  isPartOf: { '@id': site.origin + '/#website' },
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+---
+<ContentPage
+  locale="sr"
+  title={title}
+  description={description}
+  pathname={pathname}
+  alternates={alternates}
+  pageSchema={pageSchema}
+  eyebrow="Vidljivost u AI Pretrazi"
+  heading="Učinite svoj biznis razumljivim pretraživačima i AI sistemima."
+  lead="Povezan sistem koji kombinuje tehnički SEO, jasno definisan identitet, sadržaj usmeren na odgovore i mašinski čitljive informacije."
+>
+  <div class="answer-block">
+    <p><strong>Vidljivost u AI pretrazi</strong> nije jedan trik ili jedna datoteka. Ona nastaje iz jasno definisanog, tehnički dostupnog i dokazima podržanog digitalnog prisustva.</p>
+  </div>
+
+  <h2>Šta sistem obuhvata?</h2>
+
+  <div class="content-grid">
+    <article class="content-card">
+      <h3>Tehnička dostupnost</h3>
+      <p>Canonical URL adrese, sitemap, pristup crawlerima, performanse i strukturirani podaci.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>Jasan identitet</h3>
+      <p>Dosledno definisanje osobe, brenda, stručnosti, tržišta i poslovnih odnosa.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>Sadržaj usmeren na odgovore</h3>
+      <p>Direktne definicije, vidljiva pitanja i razumljiva informaciona arhitektura.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>Dokazi i autoritet</h3>
+      <p>Tvrdnje podržane stvarnim projektima, pouzdanim izvorima i doslednim javnim informacijama.</p>
+    </article>
+  </div>
+
+  <h2>SEO, GEO, AEO i AIO rade zajedno</h2>
+
+  <p><strong>SEO</strong> postavlja tehničku i sadržajnu osnovu. <strong>GEO</strong> poboljšava razumljivost informacija za generativne sisteme. <strong>AEO</strong> organizuje sadržaj oko jasnih odgovora. <strong>AIO</strong> povezuje sajt, identitet, sadržaj i merenje u jedan sistem.</p>
+
+  <h2>Proces implementacije</h2>
+
+  <ol>
+    <li>Analiza crawla, indeksiranja, canonical signala i jezičke strukture.</li>
+    <li>Jasno definisanje osobe, kompanije, usluga i tržišta.</li>
+    <li>Mapiranje komercijalnih i informativnih pitanja.</li>
+    <li>Kreiranje detaljnih stranica koje mogu služiti kao pouzdani izvori.</li>
+    <li>Primena strukturiranih podataka samo na vidljive i proverljive informacije.</li>
+    <li>Izgradnja dokaza, autoriteta i spoljnih referenci.</li>
+  </ol>
+
+  <h2>Šta ovaj rad ne garantuje?</h2>
+
+  <p>Niko ne može odgovorno garantovati da će ChatGPT, Google, Perplexity, Claude ili drugi sistem citirati određenu stranicu. Cilj je uklanjanje tehničkih prepreka, povećanje jasnoće i stvaranje kvalitetnih izvora.</p>
+
+  <h2>Često postavljana pitanja</h2>
+
+  <div class="faq-list">
+    {faq.map((item) => (
+      <details>
+        <summary>{item.question}</summary>
+        <p>{item.answer}</p>
+      </details>
+    ))}
+  </div>
+
+  <section class="content-cta">
+    <h2>Izgradite jači sistem za pretragu i AI otkrivanje.</h2>
+    <p>Pročitajte <a href="/sr/blog/razlike-seo-geo-aeo-aio/">vodič kroz SEO, GEO, AEO i AIO</a> ili pišite na <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+  </section>
+</ContentPage>

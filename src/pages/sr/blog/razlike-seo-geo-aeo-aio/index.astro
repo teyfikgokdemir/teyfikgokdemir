@@ -1,0 +1,92 @@
+---
+import ContentPage from '../../../../components/ContentPage.astro';
+import { site } from '../../../../data/site';
+
+const title = 'Razlike između SEO, GEO, AEO i AIO | Teyfik Gökdemir';
+const description = 'Razumite razlike između SEO, GEO, AEO i AIO i način na koji zajedno grade sistem vidljivosti u pretrazi i AI okruženju.';
+const pathname = '/sr/blog/razlike-seo-geo-aeo-aio/';
+const canonical = site.origin + pathname;
+const published = '2026-07-23';
+
+const alternates = {
+  en: site.origin + '/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  tr: site.origin + '/tr/blog/seo-geo-aeo-aio-farklari/',
+  sq: site.origin + '/sq/blog/dallimet-seo-geo-aeo-aio/',
+  mk: site.origin + '/mk/blog/razliki-seo-geo-aeo-aio/',
+  sr: site.origin + '/sr/blog/razlike-seo-geo-aeo-aio/',
+  'x-default': site.origin + '/blog/seo-vs-geo-vs-aeo-vs-aio/',
+};
+
+const pageSchema = {
+  '@type': 'Article',
+  '@id': canonical + '#article',
+  headline: 'Razlike između SEO, GEO, AEO i AIO',
+  description,
+  url: canonical,
+  mainEntityOfPage: canonical,
+  datePublished: published,
+  dateModified: published,
+  inLanguage: 'sr',
+  author: { '@id': site.origin + '/#person' },
+  publisher: { '@id': site.origin + '/#person' },
+  isPartOf: { '@id': site.origin + '/#website' },
+};
+---
+<ContentPage
+  locale="sr"
+  title={title}
+  description={description}
+  pathname={pathname}
+  alternates={alternates}
+  ogType="article"
+  pageSchema={pageSchema}
+  eyebrow="Vodič za Vidljivost"
+  heading="SEO, GEO, AEO i AIO: u čemu je razlika?"
+  lead="Pojmovi su povezani, ali nisu isti. Prava vrednost nastaje kada funkcionišu kao delovi jednog sistema."
+  articleMeta={{
+    published,
+    modified: published,
+    readingTime: '6 minuta čitanja',
+    label: 'Teyfik Gökdemir',
+  }}
+>
+  <div class="answer-block">
+    <p><strong>SEO</strong> poboljšava pronalaženje u pretraživačima. <strong>GEO</strong> čini sadržaj razumljivijim i korisnijim generativnim sistemima. <strong>AEO</strong> organizuje sadržaj za direktne odgovore. <strong>AIO</strong> povezuje tehničke, sadržajne i podatkovne elemente u jedan sistem.</p>
+  </div>
+
+  <h2>SEO ostaje osnova</h2>
+
+  <p>Stranice moraju biti dostupne, brze, indeksibilne i organizovane prema stvarnoj nameri korisnika. AI ne uklanja potrebu za kvalitetnim SEO temeljima.</p>
+
+  <h2>Uloga GEO-a</h2>
+
+  <p>GEO se fokusira na jasne izvore, odnose između entiteta, dokaze i informacije koje generativni sistemi mogu razumeti i potencijalno koristiti.</p>
+
+  <h2>Uloga AEO-a</h2>
+
+  <p>AEO poboljšava oblik odgovora. Najvažnija pitanja treba da dobiju direktne odgovore, podržane dovoljnim kontekstom i objašnjenjem.</p>
+
+  <h2>Uloga AIO-a</h2>
+
+  <p>AIO je koordinacioni sloj koji povezuje tehnički SEO, identitet, sadržaj, strukturirane podatke, dokaze i merenje.</p>
+
+  <h2>Praktičan redosled implementacije</h2>
+
+  <ol>
+    <li>Popravite crawl, indeksiranje, canonical i jezičku strukturu.</li>
+    <li>Jasno definišite osobu, kompaniju, usluge i tržišta.</li>
+    <li>Mapirajte pitanja koja utiču na poslovne odluke.</li>
+    <li>Kreirajte detaljne i pouzdane izvorne stranice.</li>
+    <li>Dodajte direktne odgovore i tačne strukturirane podatke.</li>
+    <li>Izgradite dokaze i spoljne reference.</li>
+  </ol>
+
+  <h2>Najčešća greška</h2>
+
+  <p>Tehnički signali ne mogu nadoknaditi nejasno pozicioniranje, slab sadržaj ili tvrdnje bez dokaza. Najjači sistem je prvo koristan ljudima, a zatim dovoljno jasan mašinama.</p>
+
+  <section class="content-cta">
+    <h2>Pretvorite ovaj okvir u stvaran sistem.</h2>
+    <p>Pogledajte <a href="/sr/vidljivost-u-ai-pretrazi/">stranicu o vidljivosti u AI pretrazi</a>.</p>
+  </section>
+</ContentPage>
