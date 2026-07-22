@@ -452,6 +452,14 @@ const jsonLd = {
     .venture-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 
+  @media (min-width: 1025px) {
+    .section { padding-block: clamp(3.5rem, 5vw, 5.5rem); }
+    .section-heading { max-width: 900px; margin-bottom: 2rem; }
+    h2 { font-size: clamp(2.15rem, 4.25vw, 4rem); line-height: 1.02; }
+    .editorial-image img { max-height: 560px; }
+    .regional-grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); }
+  }
+
   @media (max-width: 1024px) {
     .site-header { padding-inline: 1.5rem; }
     .header-panel nav { gap: .75rem; }
