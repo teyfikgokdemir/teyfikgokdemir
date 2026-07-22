@@ -8,10 +8,13 @@ interface Props {
 
 const { copy } = Astro.props;
 
-const links = [
+const socialLinks = [
   ['LinkedIn', site.links.linkedin],
   ['Instagram', site.links.instagram],
   ['GitHub', site.links.github],
+] as const;
+
+const ventureLinks = [
   ['QCT Studio', site.links.qctStudio],
   ['QCT Commerce', site.links.qctCommerce],
   ['Mythborn', site.links.mythborn],
@@ -23,34 +26,70 @@ const whatsappUrl =
     'Hello Teyfik, I am contacting you through teyfikgokdemir.com.'
   );
 ---
-<footer class="site-footer">
-  <div>
-    <a class="footer-brand" href="#top">Teyfik Gökdemir</a>
-    <p>{copy.footer.rights}</p>
+<footer class="site-footer premium-footer">
+  <div class="premium-footer__inner">
+    <div class="premium-footer__intro">
+      <a class="footer-brand" href="#top">Teyfik Gökdemir</a>
+
+      <p class="premium-footer__position">
+        Digital commerce, AI operations and growth systems.
+      </p>
+
+      <p class="premium-footer__rights">{copy.footer.rights}</p>
+    </div>
+
+    <div class="premium-footer__groups">
+      <div class="premium-footer__group">
+        <span class="premium-footer__label">Connect</span>
+
+        <nav aria-label="Social links">
+          {socialLinks.map(([label, href]) => (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label + ', ' + copy.a11y.external}
+            >
+              {label}<span aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      <div class="premium-footer__group">
+        <span class="premium-footer__label">Ventures</span>
+
+        <nav aria-label="Venture links">
+          {ventureLinks.map(([label, href]) => (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label + ', ' + copy.a11y.external}
+            >
+              {label}<span aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      <div class="premium-footer__group">
+        <span class="premium-footer__label">Contact</span>
+
+        <nav aria-label="Contact links">
+          <a href={'mailto:' + site.email}>{site.email}</a>
+          <a href={'mailto:' + site.directEmail}>{site.directEmail}</a>
+
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={'WhatsApp, ' + copy.a11y.external}
+          >
+            WhatsApp<span aria-hidden="true">↗</span>
+          </a>
+        </nav>
+      </div>
+    </div>
   </div>
-
-  <nav aria-label={copy.footer.links}>
-    {links.map(([label, href]) => (
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={label + ', ' + copy.a11y.external}
-      >
-        {label}<span aria-hidden="true">↗</span>
-      </a>
-    ))}
-
-    <a
-      href={whatsappUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={'WhatsApp, ' + copy.a11y.external}
-    >
-      WhatsApp<span aria-hidden="true">↗</span>
-    </a>
-
-    <a href={'mailto:' + site.email}>{site.email}</a>
-    <a href={'mailto:' + site.directEmail}>{site.directEmail}</a>
-  </nav>
 </footer>
