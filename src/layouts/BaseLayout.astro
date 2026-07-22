@@ -870,6 +870,24 @@ const jsonLd = {
       grid-row: auto;
     }
   }
+
+  /* Expertise heading: single-line desktop composition */
+  @media (min-width: 1400px) {
+    #expertise .section-heading {
+      max-width: none;
+    }
+
+    #expertise h2 {
+      max-width: none;
+      white-space: nowrap;
+      font-size: clamp(2.9rem, 3.65vw, 4rem);
+      letter-spacing: -.05em;
+    }
+
+    #expertise .section-lead {
+      max-width: 860px;
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
   }
