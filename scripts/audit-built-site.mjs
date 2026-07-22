@@ -360,6 +360,7 @@ if (!fs.existsSync(llmsPath)) {
   );
 
   const requiredLlmsUrls = [
+    '/',
     '/ai-search-visibility/',
     '/tr/yapay-zeka-arama-gorunurlugu/',
     '/sq/dukshmeria-ne-kerkimin-ai/',
@@ -370,6 +371,14 @@ if (!fs.existsSync(llmsPath)) {
     '/sq/blog/',
     '/mk/blog/',
     '/sr/blog/',
+    '/blog/seo-vs-geo-vs-aeo-vs-aio/',
+    '/tr/blog/seo-geo-aeo-aio-farklari/',
+    '/sq/blog/dallimet-seo-geo-aeo-aio/',
+    '/mk/blog/razliki-seo-geo-aeo-aio/',
+    '/sr/blog/razlike-seo-geo-aeo-aio/',
+    '/sitemap.xml',
+    '/robots.txt',
+    '/llms.txt',
   ];
 
   for (const route of requiredLlmsUrls) {
