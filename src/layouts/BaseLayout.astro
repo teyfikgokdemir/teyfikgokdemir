@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { locale, copy } = Astro.props;
-const localeUrl = (item: Locale) => item === 'en' ? '/' : //;
+const localeUrl = (item: Locale) => item === 'en' ? '/' : '/' + item + '/';
 const canonical = site.origin + localeUrl(locale);
 const profileImage = site.origin + site.images.profile.path;
 const jsonLd = {
