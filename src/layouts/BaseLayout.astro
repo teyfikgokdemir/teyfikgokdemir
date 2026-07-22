@@ -678,82 +678,416 @@ const jsonLd = {
   .contact-card .button { margin-top: 1.5rem; }
 
   .site-footer {
-    border-top: 1px solid var(--line);
-    padding: 3rem 0;
-  }
-
-  .footer-inner {
     width: min(var(--max), calc(100% - 3rem));
     margin-inline: auto;
-    display: grid;
-    grid-template-columns: minmax(220px, .8fr) minmax(0, 1.8fr);
-    gap: 3rem;
-    align-items: start;
-  }
-
-  .footer-intro {
-    max-width: 320px;
-  }
-
-  .footer-brand {
-    display: inline-block;
-    margin-bottom: .65rem;
-    font-size: 1.05rem;
-    font-weight: 850;
-    letter-spacing: -.02em;
-  }
-
-  .footer-position {
-    margin: 0 0 1rem;
-    color: var(--muted);
-    font-size: .88rem;
-    line-height: 1.55;
-  }
-
-  .footer-rights {
-    margin: 0;
-    color: var(--muted);
-    font-size: .76rem;
-    line-height: 1.5;
-  }
-
-  .footer-links {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    display: flex;
+    justify-content: space-between;
     gap: 2rem;
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .footer-brand { font-size: 1.05rem; font-weight: 850; }
+  .site-footer p { margin: .5rem 0 0; color: var(--muted); font-size: .82rem; }
+  .site-footer nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .3rem .8rem; }
+  .site-footer nav a { display: inline-flex; align-items: center; gap: .3rem; min-height: 44px; color: var(--muted); font-size: .85rem; }
+  .site-footer nav a:hover { color: var(--text); }
+
+  .button, .venture-card, .header-panel a, .skip-link { transition: color .2s ease, background-color .2s ease, border-color .2s ease, transform .2s ease; }
+
+  @media (min-width: 1200px) {
+    .venture-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 
-  .footer-label {
-    display: block;
-    margin-bottom: .8rem;
-    color: var(--accent-soft);
-    font-size: .68rem;
-    font-weight: 850;
-    letter-spacing: .14em;
-    text-transform: uppercase;
+  @media (min-width: 1025px) {
+    .section { padding-block: clamp(3.5rem, 5vw, 5.5rem); }
+    .section-heading { max-width: 900px; margin-bottom: 2rem; }
+    h2 { font-size: clamp(2.15rem, 4.25vw, 4rem); line-height: 1.02; }
+    .editorial-image img { max-height: 560px; }
+    .regional-grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); }
   }
 
-  .footer-link-group nav {
-    display: grid;
-    gap: .55rem;
+  @media (max-width: 1024px) {
+    .site-header { padding-inline: 1.5rem; }
+    .header-panel nav { gap: .75rem; }
+    .header-panel nav a { font-size: .82rem; }
+    .language-switcher a { min-width: 38px; }
+    .hero { grid-template-columns: minmax(0, 1fr) minmax(280px, .62fr); gap: 2rem; }
+    .expertise-grid, .method-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 
-  .footer-link-group a {
-    width: fit-content;
-    max-width: 100%;
-    color: var(--muted);
-    font-size: .85rem;
-    overflow-wrap: anywhere;
-    transition: color .2s ease;
+  @media (max-width: 800px) {
+    .shell { width: min(100% - 2rem, var(--max)); }
+    .menu-toggle { display: block; }
+    .header-panel {
+      position: absolute;
+      top: calc(100% + 1px);
+      left: 1rem;
+      right: 1rem;
+      display: none;
+      align-items: stretch;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 0 0 var(--radius) var(--radius);
+      background: rgba(9, 17, 29, .98);
+      box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, .35);
+    }
+    .header-panel.is-open { display: grid; }
+    .header-panel nav { display: grid; }
+    .header-panel nav a { min-height: 48px; padding-inline: .5rem; }
+    .language-switcher { width: 100%; justify-content: space-between; }
+    .language-switcher a { min-width: 44px; min-height: 44px; }
+    .hero { min-height: auto; grid-template-columns: 1fr; padding-top: 3.5rem; }
+    .hero-media { min-height: 480px; order: -1; }
+    .hero-media::before { inset-inline: 3%; }
+    .hero-media img { inset-inline: 0; margin: auto; }
+    .intro-grid, .regional-grid, .journey-layout { grid-template-columns: 1fr; }
+    .journey-image { position: static; }
+    .journey-image img { max-height: 520px; }
+    .site-footer { width: min(100% - 2rem, var(--max)); display: grid; }
+    .site-footer nav { justify-content: flex-start; }
   }
 
-  .footer-link-group a:hover {
-    color: var(--text);
+  @media (max-width: 560px) {
+    .site-header { min-height: 70px; padding: .65rem 1rem; }
+    .brand strong { max-width: 9.5rem; font-size: .7rem; }
+    .brand span { width: 40px; height: 40px; }
+    .section { padding-block: clamp(3.5rem, 10vw, 5rem); }
+    .hero { padding-top: 1.5rem; }
+    .hero h1 { font-size: clamp(2.2rem, 11.5vw, 3.6rem); }
+    .hero-media { min-height: 390px; }
+    .hero-media img { width: 100%; }
+    .hero-media::before { inset-inline: 3%; }
+    .hero-actions { display: grid; }
+    .button { width: 100%; }
+    .focus-list, .venture-grid, .expertise-grid, .method-grid { grid-template-columns: 1fr; }
+    .venture-card { min-height: 0; }
+    .venture-card.has-image > img { height: 210px; }
+    .timeline li { grid-template-columns: 62px minmax(0, 1fr); gap: .5rem; }
+    .timeline-content { padding-left: 1rem; }
+    .editorial-image img { height: clamp(360px, 100vw, 420px); }
+    .method-card { min-height: 0; }
+    .contact-card { padding-inline: 1.25rem; }
   }
 
-  .footer-link-group a span {
-    margin-left: .3rem;
-    color: var(--accent-soft);
+  @media (max-width: 360px) {
+    .brand strong { display: none; }
+    .hero-media { min-height: 350px; }
+    .language-switcher a { min-width: 42px; }
+  }
+
+
+  /* Venture layout: featured founder card with balanced supporting cards */
+  .venture-grid {
+    align-items: stretch;
+  }
+
+  .venture-card,
+  .venture-card.has-image {
+    min-height: 0;
+    height: auto;
+  }
+
+  @media (min-width: 1200px) {
+    .venture-grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+      grid-template-rows: auto auto auto;
+      gap: 1.25rem;
+      align-items: stretch;
+    }
+
+    /* QCT Studio */
+    .venture-card:nth-child(1) {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    /* QCT Commerce — featured visual card */
+    .venture-card:nth-child(2) {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+      align-self: stretch;
+    }
+
+    /* Mythborn */
+    .venture-card:nth-child(3) {
+      grid-column: 2;
+      grid-row: 2;
+    }
+
+    /* Sales Intelligence */
+    .venture-card:nth-child(4) {
+      grid-column: 1;
+      grid-row: 3;
+    }
+
+    /* AI Operations */
+    .venture-card:nth-child(5) {
+      grid-column: 2;
+      grid-row: 3;
+    }
+
+    .venture-card.has-image {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .venture-card.has-image > img {
+      height: clamp(260px, 25vw, 350px);
+      object-position: 50% 28%;
+    }
+
+    .venture-card:nth-child(1),
+    .venture-card:nth-child(3) {
+      padding: 1.65rem 1.8rem;
+    }
+
+    .venture-card:nth-child(1) h3,
+    .venture-card:nth-child(3) h3 {
+      margin-top: 1.45rem;
+      font-size: clamp(1.65rem, 2.2vw, 2.05rem);
+    }
+
+    .venture-card:nth-child(1) p,
+    .venture-card:nth-child(3) p {
+      line-height: 1.65;
+    }
+  }
+
+  @media (max-width: 1199px) {
+    .venture-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    .venture-card {
+      grid-column: auto;
+      grid-row: auto;
+      align-self: start;
+    }
+
+    .venture-card.has-image > img {
+      height: 210px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .venture-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .venture-card,
+    .venture-card.has-image {
+      width: 100%;
+      grid-column: auto;
+      grid-row: auto;
+    }
+  }
+
+  /* Expertise heading: single-line desktop composition */
+  @media (min-width: 1400px) {
+    #expertise .section-heading {
+      max-width: none;
+    }
+
+    #expertise h2 {
+      max-width: none;
+      white-space: nowrap;
+      font-size: clamp(2.9rem, 3.65vw, 4rem);
+      letter-spacing: -.05em;
+    }
+
+    #expertise .section-lead {
+      max-width: 860px;
+    }
+  }
+
+  /* Balanced desktop sizing for Ventures and Expertise */
+  @media (min-width: 1200px) {
+    #ventures,
+    #expertise {
+      padding-block: clamp(3rem, 4vw, 4.25rem);
+    }
+
+    #ventures .section-heading,
+    #expertise .section-heading {
+      margin-bottom: 1.5rem;
+    }
+
+    /* Ventures */
+    #ventures {
+      padding-block: clamp(2.5rem, 3.2vw, 3.5rem);
+    }
+
+    #ventures .section-heading {
+      margin-bottom: 1.1rem;
+    }
+
+    #ventures h2 {
+      max-width: 900px;
+      margin-bottom: .65rem;
+      font-size: clamp(2.8rem, 3.7vw, 3.45rem);
+      line-height: .98;
+    }
+
+    #ventures .section-lead {
+      max-width: 800px;
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    #ventures .venture-grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+      grid-template-rows:
+        clamp(136px, 16.5vh, 158px)
+        clamp(136px, 16.5vh, 158px)
+        clamp(124px, 14.5vh, 142px);
+      gap: .72rem;
+      align-items: stretch;
+    }
+
+    #ventures .venture-card {
+      min-height: 0;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 18px;
+    }
+
+    #ventures .venture-card:nth-child(1) {
+      grid-column: 2;
+      grid-row: 1;
+      padding: .9rem 1.2rem;
+    }
+
+    #ventures .venture-card:nth-child(2) {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+
+    #ventures .venture-card:nth-child(3) {
+      grid-column: 2;
+      grid-row: 2;
+      padding: .9rem 1.2rem;
+    }
+
+    #ventures .venture-card:nth-child(4) {
+      grid-column: 1;
+      grid-row: 3;
+      padding: .9rem 1.2rem;
+    }
+
+    #ventures .venture-card:nth-child(5) {
+      grid-column: 2;
+      grid-row: 3;
+      padding: .9rem 1.2rem;
+    }
+
+    #ventures .venture-card.has-image > img {
+      height: clamp(132px, 14.5vh, 152px);
+      object-position: 50% 28%;
+    }
+
+    #ventures .venture-card.has-image .venture-meta {
+      margin: .6rem 1rem 0;
+    }
+
+    #ventures .venture-card.has-image h3 {
+      margin: .55rem 1rem .25rem;
+      font-size: 1.45rem;
+    }
+
+    #ventures .venture-card.has-image p {
+      margin-inline: 1rem;
+      font-size: .84rem;
+      line-height: 1.34;
+    }
+
+    #ventures .venture-card.has-image .venture-arrow {
+      margin-inline: 1rem;
+      padding-top: .2rem;
+      padding-bottom: .5rem;
+    }
+
+    #ventures .venture-card:nth-child(1) h3,
+    #ventures .venture-card:nth-child(3) h3 {
+      margin: .45rem 0 .2rem;
+      font-size: 1.36rem;
+    }
+
+    #ventures .venture-card:nth-child(1) p,
+    #ventures .venture-card:nth-child(3) p {
+      font-size: .82rem;
+      line-height: 1.3;
+    }
+
+    #ventures .venture-card:nth-child(4) h3,
+    #ventures .venture-card:nth-child(5) h3 {
+      margin: .4rem 0 .2rem;
+      font-size: 1.28rem;
+    }
+
+    #ventures .venture-card:nth-child(4) p,
+    #ventures .venture-card:nth-child(5) p {
+      font-size: .8rem;
+      line-height: 1.3;
+    }
+
+    #ventures .venture-card:nth-child(4) .venture-arrow,
+    #ventures .venture-card:nth-child(5) .venture-arrow {
+      padding-top: .15rem;
+    }
+    /* Expertise */
+    #expertise .section-heading {
+      max-width: none;
+    }
+
+    #expertise h2 {
+      max-width: none;
+      margin-bottom: .75rem;
+      white-space: nowrap;
+      font-size: clamp(2.9rem, 3.45vw, 3.55rem);
+      line-height: 1;
+      letter-spacing: -.045em;
+    }
+
+    #expertise .section-lead {
+      max-width: 900px;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    #expertise .expertise-grid {
+      gap: 1rem;
+    }
+
+    #expertise .expertise-card {
+      min-height: 0;
+      padding: 1.35rem 1.5rem;
+      border-radius: 19px;
+    }
+
+    #expertise .expertise-card h3 {
+      margin: .15rem 0 1rem;
+      padding-bottom: .75rem;
+      font-size: 1.28rem;
+    }
+
+    #expertise .expertise-card ul {
+      gap: .58rem;
+    }
+
+    #expertise .expertise-card li {
+      padding-left: .95rem;
+      font-size: .88rem;
+      line-height: 1.4;
+    }
+
+    #expertise .definitions {
+      margin-top: 1rem;
+      padding: .8rem 1rem;
+      font-size: .76rem;
+      line-height: 1.55;
+    }
   }
 
   .floating-actions {
@@ -763,17 +1097,6 @@ const jsonLd = {
     bottom: clamp(1rem, 2.5vw, 2rem);
     display: grid;
     gap: .7rem;
-    opacity: 1;
-    transition: opacity .2s ease;
-  }
-
-  .floating-actions.is-scrolling {
-    opacity: .28;
-  }
-
-  .floating-actions:hover,
-  .floating-actions:focus-within {
-    opacity: 1;
   }
 
   .floating-action {
@@ -803,18 +1126,9 @@ const jsonLd = {
   }
 
   .whatsapp-action {
-    background: #25d366;
-    border-color: #25d366;
-    color: #fff;
-  }
-
-  .whatsapp-action:hover {
-    background: #20bd5a;
-    border-color: #20bd5a;
-  }
-
-  .whatsapp-action svg {
-    display: block;
+    font-size: .7rem;
+    font-weight: 900;
+    letter-spacing: .08em;
   }
 
   .back-to-top {
@@ -831,31 +1145,7 @@ const jsonLd = {
     transform: translateY(0);
   }
 
-  @media (max-width: 900px) {
-    .footer-inner {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-    }
-
-    .footer-links {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 560px) {
-    .site-footer {
-      padding: 2.4rem 0;
-    }
-
-    .footer-inner {
-      width: min(var(--max), calc(100% - 2rem));
-    }
-
-    .footer-links {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
-
+  @media (max-width: 640px) {
     .floating-actions {
       right: .9rem;
       bottom: .9rem;
