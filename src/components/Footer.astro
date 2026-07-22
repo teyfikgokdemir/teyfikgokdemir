@@ -1,0 +1,31 @@
+---
+import type { SiteContent } from '../i18n/content';
+import { site } from '../data/site';
+
+interface Props {
+  copy: SiteContent;
+}
+
+const { copy } = Astro.props;
+const links = [
+  ['LinkedIn', site.links.linkedin],
+  ['GitHub', site.links.github],
+  ['QCT Studio', site.links.qctStudio],
+  ['QCT Commerce', site.links.qctCommerce],
+  ['Mythborn', site.links.mythborn],
+] as const;
+---
+<footer class="site-footer">
+  <div>
+    <a class="footer-brand" href="#top">Teyfik Gökdemir</a>
+    <p>{copy.footer.rights}</p>
+  </div>
+  <nav aria-label={copy.footer.links}>
+    {links.map(([label, href]) => (
+      <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label + ', ' + copy.a11y.external}>
+        {label}<span aria-hidden="true">↗</span>
+      </a>
+    ))}
+    <a href={'mailto:' + site.email}>Email</a>
+  </nav>
+</footer>

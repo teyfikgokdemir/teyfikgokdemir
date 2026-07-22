@@ -1,0 +1,76 @@
+---
+import { localeNames, locales, type Locale } from '../i18n/locales';
+import type { SiteContent } from '../i18n/content';
+
+interface Props {
+  locale: Locale;
+  copy: SiteContent;
+}
+
+const { locale, copy } = Astro.props;
+---
+<header class="site-header">
+  <a class="brand" href={'/' + locale + '/'} aria-label="Teyfik Gökdemir">
+    <span aria-hidden="true">TG</span>
+    <strong>Teyfik Gökdemir</strong>
+  </a>
+
+  <button
+    class="menu-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="site-navigation"
+    data-open-label={copy.a11y.menuOpen}
+    data-close-label={copy.a11y.menuClose}
+    aria-label={copy.a11y.menuOpen}
+  >
+    <span></span><span></span><span></span>
+  </button>
+
+  <div class="header-panel" id="site-navigation">
+    <nav aria-label={copy.nav.ventures}>
+      <a href="#ventures">{copy.nav.ventures}</a>
+      <a href="#expertise">{copy.nav.expertise}</a>
+      <a href="#journey">{copy.nav.journey}</a>
+      <a href="#contact">{copy.nav.contact}</a>
+    </nav>
+    <div class="language-switcher" aria-label={copy.a11y.language}>
+      {locales.map((item) => (
+        <a
+          href={'/' + item + '/'}
+          lang={item}
+          hreflang={item}
+          aria-current={item === locale ? 'page' : undefined}
+          title={localeNames[item]}
+        >
+          {item.toUpperCase()}
+        </a>
+      ))}
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  const toggle = document.querySelector('.menu-toggle');
+  const panel = document.querySelector('.header-panel');
+  if (toggle && panel) {
+    const closeMenu = () => {
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', toggle.dataset.openLabel);
+      panel.classList.remove('is-open');
+    };
+    toggle.addEventListener('click', () => {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!expanded));
+      toggle.setAttribute('aria-label', expanded ? toggle.dataset.openLabel : toggle.dataset.closeLabel);
+      panel.classList.toggle('is-open', !expanded);
+    });
+    panel.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        closeMenu();
+        toggle.focus();
+      }
+    });
+  }
+</script>
