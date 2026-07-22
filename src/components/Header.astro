@@ -13,6 +13,26 @@ const { locale, copy, homePath } = Astro.props;
 const localeUrl = (item: Locale) => item === 'en' ? '/' : `/${item}/`;
 const currentHomePath = homePath ?? localeUrl(locale);
 const sectionUrl = (section: string) => `${currentHomePath}#${section}`;
+
+const aiVisibilityUrl =
+  locale === 'tr'
+    ? '/tr/yapay-zeka-arama-gorunurlugu/'
+    : '/ai-search-visibility/';
+
+const blogUrl =
+  locale === 'tr'
+    ? '/tr/blog/'
+    : '/blog/';
+
+const aiVisibilityLabel =
+  locale === 'tr'
+    ? 'AI Görünürlüğü'
+    : 'AI Visibility';
+
+const blogLabel =
+  locale === 'tr'
+    ? 'Blog'
+    : 'Insights';
 ---
 <header class="site-header">
   <a class="brand" href={localeUrl(locale)} aria-label="Teyfik Gökdemir">
@@ -36,6 +56,8 @@ const sectionUrl = (section: string) => `${currentHomePath}#${section}`;
     <nav aria-label={copy.nav.ventures}>
       <a href={sectionUrl('ventures')}>{copy.nav.ventures}</a>
       <a href={sectionUrl('expertise')}>{copy.nav.expertise}</a>
+      <a href={aiVisibilityUrl}>{aiVisibilityLabel}</a>
+      <a href={blogUrl}>{blogLabel}</a>
       <a href={sectionUrl('journey')}>{copy.nav.journey}</a>
       <a href={sectionUrl('contact')}>{copy.nav.contact}</a>
     </nav>
