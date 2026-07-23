@@ -66,11 +66,13 @@ const copy = messages[locale] ?? messages.en;
     const banner = document.querySelector('[data-cookie-banner]');
     if (!(banner instanceof HTMLElement)) return;
 
-    const setAnalytics = (enabled) => {
-      window['ga-disable-' + measurementId] = !enabled;
+    let analyticsLoaded = false;
+
+    const denyAnalytics = () => {
+      window['ga-disable-' + measurementId] = true;
       if (typeof window.gtag === 'function') {
         window.gtag('consent', 'update', {
-          analytics_storage: enabled ? 'granted' : 'denied',
+          analytics_storage: 'denied',
           ad_storage: 'denied',
           ad_user_data: 'denied',
           ad_personalization: 'denied'
@@ -78,28 +80,49 @@ const copy = messages[locale] ?? messages.en;
       }
     };
 
+    const loadAnalytics = () => {
+      if (analyticsLoaded) return;
+      analyticsLoaded = true;
+      window['ga-disable-' + measurementId] = false;
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+      window.gtag('consent', 'default', {
+        analytics_storage: 'granted',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied'
+      });
+      window.gtag('js', new Date());
+      window.gtag('config', measurementId, { anonymize_ip: true });
+
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+      document.head.appendChild(script);
+    };
+
     const stored = localStorage.getItem(key);
     if (stored === 'accepted') {
-      setAnalytics(true);
+      loadAnalytics();
       return;
     }
     if (stored === 'rejected') {
-      setAnalytics(false);
+      denyAnalytics();
       return;
     }
 
-    setAnalytics(false);
+    denyAnalytics();
     banner.hidden = false;
 
     banner.querySelector('[data-cookie-accept]')?.addEventListener('click', () => {
       localStorage.setItem(key, 'accepted');
-      setAnalytics(true);
+      loadAnalytics();
       banner.hidden = true;
     });
 
     banner.querySelector('[data-cookie-reject]')?.addEventListener('click', () => {
       localStorage.setItem(key, 'rejected');
-      setAnalytics(false);
+      denyAnalytics();
       banner.hidden = true;
     });
   })();
