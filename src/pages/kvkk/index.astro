@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import CookieBanner from '../../components/CookieBanner.astro';
+import { content } from '../../i18n/content';
+import { site } from '../../data/site';
+
+const locale = 'tr';
+const copy = content.tr;
+---
+<BaseLayout locale={locale} copy={copy} title="KVKK Aydınlatma Metni | Teyfik Gökdemir" description="TeyfikGokdemir.com üzerinden işlenen kişisel veriler hakkında KVKK aydınlatma metni." pathname="/kvkk/">
+  <Header locale={locale} copy={copy} homePath="/" />
+  <main id="main-content" class="legal-page">
+    <article class="shell legal-card">
+      <p class="section-label">Yasal bilgiler</p>
+      <h1>KVKK Aydınlatma Metni</h1>
+      <p class="legal-updated">Son güncelleme: 23 Temmuz 2026</p>
+      <section><h2>1. Veri sorumlusu</h2><p>6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında bu internet sitesi üzerinden işlenen kişisel veriler bakımından veri sorumlusu Teyfik Gökdemir’dir. Talepleriniz için <a href={`mailto:${site.email}`}>{site.email}</a> adresinden iletişime geçebilirsiniz.</p></section>
+      <section><h2>2. İşlenen veriler</h2><p>E-posta veya WhatsApp üzerinden paylaştığınız ad, iletişim bilgileri, şirket bilgileri ve mesaj içerikleri işlenebilir. Site kullanımına ilişkin analitik veriler yalnızca açık çerez onayı verilmesi halinde işlenir.</p></section>
+      <section><h2>3. Amaç ve hukuki sebepler</h2><ul><li>İletişim ve iş birliği taleplerini yanıtlamak,</li><li>Hizmet veya proje görüşmelerini yürütmek,</li><li>Bilgi güvenliği ve teknik sürekliliği sağlamak,</li><li>Yasal yükümlülükleri yerine getirmek,</li><li>Açık rıza verilmişse site kullanımını analiz etmek.</li></ul><p>Veriler; sözleşmenin kurulması veya ifası, hukuki yükümlülük, meşru menfaat ve gerektiğinde açık rıza hukuki sebeplerine dayanılarak işlenebilir.</p></section>
+      <section><h2>4. Aktarım ve saklama</h2><p>Kişisel veriler satılmaz. Veriler yalnızca teknik hizmet sağlayıcılarıyla hizmetin gerektirdiği ölçüde veya hukuka uygun yetkili kurum talepleri üzerine paylaşılabilir. İşleme amacı sona erdiğinde veriler silinir, yok edilir veya anonim hale getirilir.</p></section>
+      <section><h2>5. Haklarınız</h2><p>KVKK’nın 11. maddesi kapsamında verilerinizin işlenip işlenmediğini öğrenme, bilgi talep etme, düzeltme, silme veya yok etme isteme, aktarım yapılan üçüncü kişilere bildirim talep etme, otomatik analiz sonucuna itiraz etme ve zararın giderilmesini isteme haklarına sahipsiniz.</p></section>
+      <section><h2>6. Başvuru</h2><p>Başvurunuzu kimliğinizi ve talebinizi açıklayan bir mesajla <a href={`mailto:${site.email}`}>{site.email}</a> adresine gönderebilirsiniz.</p></section>
+      <nav class="legal-nav" aria-label="Diğer yasal sayfalar"><a href="/privacy-policy/">Gizlilik ve Çerez Politikası</a><a href="/terms/">Kullanım Koşulları</a></nav>
+    </article>
+  </main>
+  <Footer copy={copy} />
+  <CookieBanner locale={locale} />
+</BaseLayout>
+<style>
+  .legal-page{padding:clamp(3rem,7vw,6rem) 0}.legal-card{max-width:860px}.legal-card h1{margin:0 0 1rem;font-size:clamp(2.5rem,7vw,5.5rem);line-height:.98;letter-spacing:-.05em}.legal-updated{margin-bottom:3rem;color:var(--muted)}.legal-card section{padding:1.5rem 0;border-top:1px solid var(--line)}.legal-card h2{margin:0 0 .85rem;font-size:clamp(1.45rem,3vw,2rem)}.legal-card p,.legal-card li{color:var(--muted);line-height:1.75}.legal-card a{color:var(--accent-soft);text-decoration:underline;text-underline-offset:3px}.legal-nav{display:flex;flex-wrap:wrap;gap:1rem;padding-top:2rem;border-top:1px solid var(--line)}
+</style>
