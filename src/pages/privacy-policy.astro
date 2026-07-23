@@ -1,0 +1,88 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CookieBanner from '../components/CookieBanner.astro';
+import { content } from '../i18n/content';
+import { site } from '../data/site';
+
+const locale = 'tr';
+const copy = content.tr;
+const title = 'Gizlilik ve Çerez Politikası | Teyfik Gökdemir';
+const description = 'TeyfikGokdemir.com üzerinde kişisel verilerin, zorunlu ve analitik çerezlerin nasıl kullanıldığını açıklayan gizlilik ve çerez politikası.';
+---
+
+<BaseLayout locale={locale} copy={copy} title={title} description={description} pathname="/privacy-policy/">
+  <Header locale={locale} copy={copy} homePath="/" />
+  <main id="main-content" class="legal-page">
+    <article class="shell legal-card">
+      <p class="section-label">Yasal bilgiler</p>
+      <h1>Gizlilik ve Çerez Politikası</h1>
+      <p class="legal-updated">Son güncelleme: 23 Temmuz 2026</p>
+
+      <section>
+        <h2>1. Veri sorumlusu</h2>
+        <p>Bu internet sitesi Teyfik Gökdemir tarafından işletilmektedir. Gizlilikle ilgili sorularınız için <a href={`mailto:${site.email}`}>{site.email}</a> adresinden iletişime geçebilirsiniz.</p>
+      </section>
+
+      <section>
+        <h2>2. Toplanan bilgiler</h2>
+        <p>Siteyi ziyaret ettiğinizde tarayıcı ve cihaz türü, ziyaret edilen sayfalar, yaklaşık konum, yönlendiren kaynak ve kullanım süresi gibi sınırlı teknik veriler, yalnızca analitik çerezlere onay vermeniz halinde işlenebilir.</p>
+        <p>E-posta veya WhatsApp üzerinden bizimle iletişime geçtiğinizde, kendi isteğinizle paylaştığınız ad, iletişim bilgileri ve mesaj içeriği talebinizi yanıtlamak amacıyla işlenir.</p>
+      </section>
+
+      <section>
+        <h2>3. Çerezler</h2>
+        <p><strong>Zorunlu çerezler</strong>, sitenin güvenli ve temel işlevlerinin çalışması için kullanılabilir ve onay gerektirmez.</p>
+        <p><strong>Analitik çerezler</strong>, site kullanımını anlamaya yardımcı olur. Bu çerezler yalnızca “Onayla” seçeneğine bastığınızda etkinleştirilir. “Reddet” seçeneğini kullandığınızda analitik depolama devre dışı bırakılır.</p>
+      </section>
+
+      <section>
+        <h2>4. Google Analytics</h2>
+        <p>Onay vermeniz halinde Google Analytics, ziyaretlerin ve sayfa kullanımının toplu olarak analiz edilmesi amacıyla kullanılabilir. Reklam kişiselleştirmesi, reklam depolaması ve reklam kullanıcı verisi bu site üzerinde varsayılan olarak reddedilir.</p>
+      </section>
+
+      <section>
+        <h2>5. Verilerin kullanım amaçları</h2>
+        <ul>
+          <li>İletişim taleplerini yanıtlamak,</li>
+          <li>Sitenin güvenliğini ve teknik sürekliliğini sağlamak,</li>
+          <li>Onay verilmişse site performansını ve içerik kullanımını analiz etmek,</li>
+          <li>Yasal yükümlülükleri yerine getirmek.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>6. Veri paylaşımı ve saklama</h2>
+        <p>Kişisel veriler satılmaz. Veriler yalnızca teknik hizmet sağlayıcılarla, hizmetin gerektirdiği ölçüde veya yasal bir zorunluluk bulunduğunda paylaşılabilir. Veriler işleme amacı için gerekli olan süre boyunca saklanır.</p>
+      </section>
+
+      <section>
+        <h2>7. Haklarınız</h2>
+        <p>KVKK ve uygulanabildiği ölçüde GDPR kapsamında kişisel verilerinize erişme, düzeltilmesini veya silinmesini isteme, işlemeye itiraz etme ve verdiğiniz onayı geri çekme haklarına sahip olabilirsiniz.</p>
+      </section>
+
+      <section>
+        <h2>8. Çerez tercihinizi değiştirme</h2>
+        <p>Çerez tercihi tarayıcınızın yerel depolama alanında tutulur. Tercihinizi sıfırlamak için tarayıcıdaki site verilerini silebilir ve siteyi yeniden ziyaret edebilirsiniz.</p>
+      </section>
+
+      <a class="button" href="/">Ana sayfaya dön</a>
+    </article>
+  </main>
+  <Footer copy={copy} />
+  <CookieBanner locale={locale} />
+</BaseLayout>
+
+<style>
+  .legal-page { padding: clamp(3rem, 7vw, 6rem) 0; }
+  .legal-card { max-width: 860px; }
+  .legal-card h1 { margin: 0 0 1rem; font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: .98; letter-spacing: -.05em; }
+  .legal-updated { margin-bottom: 3rem; color: var(--muted); }
+  .legal-card section { padding: 1.5rem 0; border-top: 1px solid var(--line); }
+  .legal-card h2 { margin: 0 0 .85rem; font-size: clamp(1.45rem, 3vw, 2rem); letter-spacing: -.02em; }
+  .legal-card p, .legal-card li { color: var(--muted); line-height: 1.75; }
+  .legal-card a:not(.button) { color: var(--accent-soft); text-decoration: underline; text-underline-offset: 3px; }
+  .legal-card ul { padding-left: 1.25rem; }
+  .legal-card .button { display: inline-flex; margin-top: 1.5rem; }
+</style>
