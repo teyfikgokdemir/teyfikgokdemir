@@ -35,6 +35,42 @@ const whatsappUrl =
         Digital commerce, AI operations and growth systems.
       </p>
 
+      <span class="footer-ladybug" aria-hidden="true">
+        <svg
+          viewBox="0 0 48 48"
+          width="28"
+          height="28"
+          focusable="false"
+        >
+          <path
+            class="footer-ladybug__antenna"
+            d="M18 13c-3-4-6-5-9-4M30 13c3-4 6-5 9-4"
+          />
+          <circle
+            class="footer-ladybug__head"
+            cx="24"
+            cy="15"
+            r="7"
+          />
+          <path
+            class="footer-ladybug__wing"
+            d="M24 19C15 13 7 20 8 31c1 9 8 12 16 8V19Z"
+          />
+          <path
+            class="footer-ladybug__wing"
+            d="M24 19c9-6 17 1 16 12-1 9-8 12-16 8V19Z"
+          />
+          <path
+            class="footer-ladybug__divider"
+            d="M24 19v20"
+          />
+          <circle class="footer-ladybug__spot" cx="16" cy="25" r="2.2" />
+          <circle class="footer-ladybug__spot" cx="16" cy="33" r="2.2" />
+          <circle class="footer-ladybug__spot" cx="32" cy="25" r="2.2" />
+          <circle class="footer-ladybug__spot" cx="32" cy="33" r="2.2" />
+        </svg>
+      </span>
+
       <p class="premium-footer__rights">{copy.footer.rights}</p>
     </div>
 
@@ -115,6 +151,65 @@ const whatsappUrl =
     text-align: center;
   }
 
+  .footer-ladybug {
+    display: inline-flex;
+    width: 36px;
+    height: 36px;
+    margin: 2px 0 8px;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.78;
+    transform: rotate(-8deg);
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease;
+  }
+
+  .footer-ladybug svg {
+    display: block;
+    overflow: visible;
+  }
+
+  .footer-ladybug__antenna {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    opacity: 0.75;
+  }
+
+  .footer-ladybug__head,
+  .footer-ladybug__spot {
+    fill: currentColor;
+  }
+
+  .footer-ladybug__wing {
+    fill: #c84f3d;
+    stroke: currentColor;
+    stroke-width: 1.6;
+  }
+
+  .footer-ladybug__divider {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+  }
+
+  .premium-footer__intro:hover .footer-ladybug {
+    opacity: 1;
+    transform: rotate(0deg) translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-ladybug {
+      transition: none;
+    }
+
+    .premium-footer__intro:hover .footer-ladybug {
+      transform: rotate(-8deg);
+    }
+  }
   @media (max-width: 760px) {
     .premium-footer__group {
       align-items: flex-start;
