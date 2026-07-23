@@ -29,13 +29,34 @@ const whatsappUrl =
 <footer class="site-footer premium-footer">
   <div class="premium-footer__inner">
     <div class="premium-footer__intro">
-      <a class="footer-brand" href="#top">Teyfik Gökdemir</a>
+      <a
+        class="footer-brand"
+        href="#top"
+        aria-label="Teyfik Gökdemir"
+      >
+        <img
+          class="footer-brand__logo"
+          src="/images/teyfik-gokdemir-logo.webp"
+          width="64"
+          height="64"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+        />
+
+        <span>Teyfik Gökdemir</span>
+      </a>
 
       <p class="premium-footer__position">
         Digital commerce, AI operations and growth systems.
       </p>
 
-      <span class="footer-ladybug" aria-hidden="true">
+      <span
+        class="footer-ladybug"
+        aria-hidden="true"
+        title="Uğur böceğim"
+      >
         <svg
           viewBox="0 0 48 48"
           width="28"
@@ -70,7 +91,6 @@ const whatsappUrl =
           <circle class="footer-ladybug__spot" cx="32" cy="33" r="2.2" />
         </svg>
       </span>
-
     </div>
 
     <div class="premium-footer__groups">
@@ -85,7 +105,8 @@ const whatsappUrl =
               rel="noopener noreferrer"
               aria-label={label + ', ' + copy.a11y.external}
             >
-              {label}<span aria-hidden="true">↗</span>
+              <span>{label}</span>
+              <span aria-hidden="true">↗</span>
             </a>
           ))}
         </nav>
@@ -102,18 +123,24 @@ const whatsappUrl =
               rel="noopener noreferrer"
               aria-label={label + ', ' + copy.a11y.external}
             >
-              {label}<span aria-hidden="true">↗</span>
+              <span>{label}</span>
+              <span aria-hidden="true">↗</span>
             </a>
           ))}
         </nav>
       </div>
 
-      <div class="premium-footer__group">
+      <div class="premium-footer__group premium-footer__group--contact">
         <span class="premium-footer__label">Contact</span>
 
         <nav aria-label="Contact links">
-          <a href={'mailto:' + site.email}>{site.email}</a>
-          <a href={'mailto:' + site.directEmail}>{site.directEmail}</a>
+          <a href={'mailto:' + site.email}>
+            <span>{site.email}</span>
+          </a>
+
+          <a href={'mailto:' + site.directEmail}>
+            <span>{site.directEmail}</span>
+          </a>
 
           <a
             href={whatsappUrl}
@@ -121,7 +148,8 @@ const whatsappUrl =
             rel="noopener noreferrer"
             aria-label={'WhatsApp, ' + copy.a11y.external}
           >
-            WhatsApp<span aria-hidden="true">↗</span>
+            <span>WhatsApp</span>
+            <span aria-hidden="true">↗</span>
           </a>
         </nav>
       </div>
@@ -134,34 +162,96 @@ const whatsappUrl =
 </footer>
 
 <style>
+  .premium-footer {
+    overflow: hidden;
+  }
+
+  .premium-footer__inner {
+    width: min(1470px, calc(100% - 64px));
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns:
+      minmax(260px, 0.9fr)
+      minmax(680px, 1.8fr);
+    gap: clamp(64px, 8vw, 150px);
+    align-items: start;
+  }
+
+  .premium-footer__intro {
+    min-width: 0;
+  }
+
+  .footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    white-space: nowrap;
+  }
+
+  .footer-brand__logo {
+    display: block;
+    width: 54px;
+    height: 54px;
+    flex: 0 0 54px;
+    object-fit: contain;
+  }
+
+  .premium-footer__position {
+    max-width: 310px;
+    margin-top: 18px;
+  }
+
+  .premium-footer__groups {
+    display: grid;
+    grid-template-columns:
+      minmax(130px, 0.75fr)
+      minmax(150px, 0.9fr)
+      minmax(280px, 1.55fr);
+    gap: clamp(32px, 4vw, 74px);
+    min-width: 0;
+  }
+
   .premium-footer__group {
     display: flex;
+    min-width: 0;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
   }
 
   .premium-footer__group nav {
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    gap: 8px;
   }
 
   .premium-footer__group nav a {
-    width: fit-content;
-    justify-content: center;
-    text-align: center;
+    display: inline-flex;
+    width: auto;
+    max-width: 100%;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    text-align: left;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .premium-footer__group--contact nav a {
+    font-size: clamp(0.88rem, 1vw, 1rem);
   }
 
   .footer-ladybug {
     display: inline-flex;
     width: 36px;
     height: 36px;
-    margin: 2px 0 8px;
+    margin-top: 14px;
     align-items: center;
     justify-content: center;
-    opacity: 0.78;
+    opacity: 0.82;
     transform: rotate(-8deg);
     transition:
       opacity 180ms ease,
@@ -204,20 +294,11 @@ const whatsappUrl =
     transform: rotate(0deg) translateY(-2px);
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .footer-ladybug {
-      transition: none;
-    }
-
-    .premium-footer__intro:hover .footer-ladybug {
-      transform: rotate(-8deg);
-    }
-  }
   .premium-footer__bottom {
-    width: min(1180px, calc(100% - 40px));
-    margin: 38px auto 0;
-    padding-top: 22px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    width: min(1470px, calc(100% - 64px));
+    margin: 48px auto 0;
+    padding-top: 26px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
     text-align: center;
   }
 
@@ -225,19 +306,57 @@ const whatsappUrl =
     margin: 0;
     text-align: center;
   }
-  @media (max-width: 760px) {
-    .premium-footer__group {
-      align-items: flex-start;
-      text-align: left;
+
+  @media (max-width: 1100px) {
+    .premium-footer__inner {
+      grid-template-columns: 1fr;
+      gap: 52px;
     }
 
+    .premium-footer__groups {
+      grid-template-columns:
+        minmax(140px, 0.8fr)
+        minmax(160px, 0.9fr)
+        minmax(290px, 1.4fr);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .premium-footer__inner,
+    .premium-footer__bottom {
+      width: min(100% - 40px, 1470px);
+    }
+
+    .premium-footer__groups {
+      grid-template-columns: 1fr;
+      gap: 34px;
+    }
+
+    .premium-footer__group,
     .premium-footer__group nav {
       align-items: flex-start;
+      text-align: left;
     }
 
     .premium-footer__group nav a {
-      justify-content: flex-start;
-      text-align: left;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .footer-brand__logo {
+      width: 46px;
+      height: 46px;
+      flex-basis: 46px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-ladybug {
+      transition: none;
+    }
+
+    .premium-footer__intro:hover .footer-ladybug {
+      transform: rotate(-8deg);
     }
   }
 </style>

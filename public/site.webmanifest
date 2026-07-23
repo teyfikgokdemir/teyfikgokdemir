@@ -1,0 +1,21 @@
+{
+  "name": "Teyfik Gökdemir",
+  "short_name": "Teyfik Gökdemir",
+  "description": "Digital commerce, AI operations and growth systems.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09111d",
+  "theme_color": "#09111d",
+  "icons": [
+    {
+      "src": "/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

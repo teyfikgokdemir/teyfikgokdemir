@@ -55,7 +55,15 @@ const blogLabel = blogLabels[locale];
 ---
 <header class="site-header">
   <a class="brand" href={localeUrl(locale)} aria-label="Teyfik Gökdemir">
-    <span aria-hidden="true">TG</span>
+    <img
+      class="brand__logo"
+      src="/images/teyfik-gokdemir-logo.webp"
+      width="48"
+      height="48"
+      alt=""
+      aria-hidden="true"
+      decoding="async"
+    />
     <strong>Teyfik Gökdemir</strong>
   </a>
 
@@ -133,3 +141,21 @@ const blogLabel = blogLabels[locale];
     });
   }
 </script>
+
+<style>
+  .brand__logo {
+    display: block;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    object-fit: contain;
+  }
+
+  @media (max-width: 760px) {
+    .brand__logo {
+      width: 36px;
+      height: 36px;
+      flex-basis: 36px;
+    }
+  }
+</style>
