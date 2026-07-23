@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import CookieBanner from '../../components/CookieBanner.astro';
+import { content } from '../../i18n/content';
+import { site } from '../../data/site';
+
+const locale = 'tr';
+const copy = content.tr;
+---
+<BaseLayout locale={locale} copy={copy} title="Kullanım Koşulları | Teyfik Gökdemir" description="TeyfikGokdemir.com internet sitesinin kullanım koşulları, fikri mülkiyet ve sorumluluk esasları." pathname="/terms/">
+  <Header locale={locale} copy={copy} homePath="/" />
+  <main id="main-content" class="legal-page">
+    <article class="shell legal-card">
+      <p class="section-label">Yasal bilgiler</p>
+      <h1>Kullanım Koşulları</h1>
+      <p class="legal-updated">Son güncelleme: 23 Temmuz 2026</p>
+      <section><h2>1. Kapsam</h2><p>Bu koşullar teyfikgokdemir.com internet sitesinin kullanımını düzenler. Siteyi kullanarak bu koşulları kabul etmiş sayılırsınız.</p></section>
+      <section><h2>2. Bilgilendirme amacı</h2><p>Sitedeki içerikler genel bilgilendirme ve profesyonel portföy sunumu amacı taşır. İçerikler hukuki, mali veya yatırım danışmanlığı niteliğinde değildir ve tek başına ticari karar dayanağı olarak kullanılmamalıdır.</p></section>
+      <section><h2>3. Fikri mülkiyet</h2><p>Sitedeki metinler, tasarım, görseller, marka unsurları ve özgün içerikler aksi belirtilmedikçe Teyfik Gökdemir’e veya ilgili hak sahiplerine aittir. Yazılı izin olmadan ticari amaçla kopyalanamaz, çoğaltılamaz veya yeniden yayımlanamaz.</p></section>
+      <section><h2>4. Üçüncü taraf bağlantıları</h2><p>Site QCT Studio, QCT Commerce, Mythborn ve sosyal platformlar gibi üçüncü taraf sitelere bağlantı verebilir. Bu sitelerin içeriği, güvenliği ve veri uygulamalarından ilgili site sahipleri sorumludur.</p></section>
+      <section><h2>5. Sorumluluğun sınırı</h2><p>İçeriklerin doğru ve güncel tutulması hedeflenir; ancak kesintisiz erişim, tamlık veya belirli bir amaca uygunluk konusunda garanti verilmez. Site kullanımından doğan dolaylı zararlardan, yürürlükteki mevzuatın izin verdiği ölçüde sorumluluk kabul edilmez.</p></section>
+      <section><h2>6. Yasak kullanım</h2><p>Siteyi güvenliği ihlal edecek, kötü amaçlı kod dağıtacak, yetkisiz erişim sağlayacak, içerikleri yanıltıcı biçimde kullanacak veya üçüncü kişilerin haklarını ihlal edecek şekilde kullanamazsınız.</p></section>
+      <section><h2>7. Değişiklikler ve iletişim</h2><p>Bu koşullar gerektiğinde güncellenebilir. Sorularınız için <a href={`mailto:${site.email}`}>{site.email}</a> adresinden iletişime geçebilirsiniz.</p></section>
+      <nav class="legal-nav" aria-label="Diğer yasal sayfalar"><a href="/privacy-policy/">Gizlilik ve Çerez Politikası</a><a href="/kvkk/">KVKK Aydınlatma Metni</a></nav>
+    </article>
+  </main>
+  <Footer copy={copy} />
+  <CookieBanner locale={locale} />
+</BaseLayout>
+<style>
+  .legal-page{padding:clamp(3rem,7vw,6rem) 0}.legal-card{max-width:860px}.legal-card h1{margin:0 0 1rem;font-size:clamp(2.5rem,7vw,5.5rem);line-height:.98;letter-spacing:-.05em}.legal-updated{margin-bottom:3rem;color:var(--muted)}.legal-card section{padding:1.5rem 0;border-top:1px solid var(--line)}.legal-card h2{margin:0 0 .85rem;font-size:clamp(1.45rem,3vw,2rem)}.legal-card p{color:var(--muted);line-height:1.75}.legal-card a{color:var(--accent-soft);text-decoration:underline;text-underline-offset:3px}.legal-nav{display:flex;flex-wrap:wrap;gap:1rem;padding-top:2rem;border-top:1px solid var(--line)}
+</style>
