@@ -1,0 +1,47 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 512 512"
+  role="img"
+  aria-labelledby="logo-title"
+>
+  <title id="logo-title">Teyfik Gökdemir TG monogram</title>
+
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3d18a"/>
+      <stop offset="0.45" stop-color="#d9a957"/>
+      <stop offset="1" stop-color="#a96f26"/>
+    </linearGradient>
+  </defs>
+
+  <g
+    fill="none"
+    stroke="url(#gold)"
+    stroke-linecap="square"
+    stroke-linejoin="miter"
+  >
+    <path
+      d="M112 106H400"
+      stroke-width="34"
+    />
+
+    <path
+      d="M256 106V388"
+      stroke-width="32"
+    />
+
+    <path
+      d="M350 184
+         C324 148 286 130 239 130
+         C154 130 96 193 96 272
+         C96 354 155 410 241 410
+         C300 410 350 388 382 350"
+      stroke-width="28"
+    />
+
+    <path
+      d="M382 350V274H300"
+      stroke-width="28"
+    />
+  </g>
+</svg>

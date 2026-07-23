@@ -4,16 +4,16 @@
   "description": "Digital commerce, AI operations and growth systems.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#09111d",
-  "theme_color": "#09111d",
+  "background_color": "#06111f",
+  "theme_color": "#06111f",
   "icons": [
     {
-      "src": "/favicon-192x192.png",
+      "src": "/favicon-192x192.png?v=3",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/favicon-512x512.png",
+      "src": "/favicon-512x512.png?v=3",
       "sizes": "512x512",
       "type": "image/png"
     }

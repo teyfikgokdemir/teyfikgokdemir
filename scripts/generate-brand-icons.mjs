@@ -1,52 +1,60 @@
 import path from "node:path";
 import sharp from "sharp";
 
-const source = process.argv[2];
-
-if (!source) {
-  throw new Error("Logo kaynak dosyası verilmedi.");
-}
-
 const root = process.cwd();
+
+const source = path.join(
+  root,
+  "public",
+  "images",
+  "teyfik-gokdemir-monogram.svg"
+);
+
 const background = {
-  r: 9,
-  g: 17,
+  r: 5,
+  g: 16,
   b: 29,
   alpha: 1,
 };
 
 const targets = [
   {
-    path: "public/favicon-32x32.png",
+    output: "public/favicon-32x32.png",
     size: 32,
-    padding: 4,
+    padding: 3,
   },
   {
-    path: "public/favicon-192x192.png",
+    output: "public/favicon-48x48.png",
+    size: 48,
+    padding: 5,
+  },
+  {
+    output: "public/favicon-192x192.png",
     size: 192,
-    padding: 24,
-  },
-  {
-    path: "public/favicon-512x512.png",
-    size: 512,
-    padding: 64,
-  },
-  {
-    path: "public/apple-touch-icon.png",
-    size: 180,
     padding: 22,
+  },
+  {
+    output: "public/favicon-512x512.png",
+    size: 512,
+    padding: 56,
+  },
+  {
+    output: "public/apple-touch-icon.png",
+    size: 180,
+    padding: 20,
   },
 ];
 
 for (const target of targets) {
-  const innerSize = target.size - target.padding * 2;
+  const inner = target.size - target.padding * 2;
 
-  const logo = await sharp(source)
+  const logo = await sharp(source, {
+    density: 600,
+  })
     .resize({
-      width: innerSize,
-      height: innerSize,
+      width: inner,
+      height: inner,
       fit: "contain",
-      withoutEnlargement: false,
     })
     .png()
     .toBuffer();
@@ -69,7 +77,9 @@ for (const target of targets) {
       compressionLevel: 9,
       adaptiveFiltering: true,
     })
-    .toFile(path.join(root, target.path));
+    .toFile(path.join(root, target.output));
 
-  console.log(`${target.path}: ${target.size}x${target.size}`);
+  console.log(
+    `${target.output}: ${target.size}x${target.size}`
+  );
 }
