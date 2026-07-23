@@ -58,8 +58,8 @@ const blogLabel = blogLabels[locale];
     <img
       class="brand__logo"
       src="/images/teyfik-gokdemir-monogram.svg"
-      width="54"
-      height="54"
+      width="64"
+      height="64"
       alt=""
       aria-hidden="true"
       decoding="async"
@@ -145,17 +145,29 @@ const blogLabel = blogLabels[locale];
 <style>
   .brand__logo {
     display: block;
-    width: 42px;
-    height: 42px;
-    flex: 0 0 42px;
+    width: 58px;
+    height: 58px;
+    flex: 0 0 58px;
     object-fit: contain;
+  }
+
+  .brand strong {
+    font-size: clamp(0.9rem, 1.1vw, 1.05rem);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
   @media (max-width: 760px) {
     .brand__logo {
-      width: 36px;
-      height: 36px;
-      flex-basis: 36px;
+      width: 44px;
+      height: 44px;
+      flex-basis: 44px;
+    }
+
+    .brand strong {
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
     }
   }
 </style>

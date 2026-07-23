@@ -18,42 +18,22 @@ const background = {
 };
 
 const targets = [
-  {
-    output: "public/favicon-32x32.png",
-    size: 32,
-    padding: 3,
-  },
-  {
-    output: "public/favicon-48x48.png",
-    size: 48,
-    padding: 5,
-  },
-  {
-    output: "public/favicon-192x192.png",
-    size: 192,
-    padding: 22,
-  },
-  {
-    output: "public/favicon-512x512.png",
-    size: 512,
-    padding: 56,
-  },
-  {
-    output: "public/apple-touch-icon.png",
-    size: 180,
-    padding: 20,
-  },
+  ["public/favicon-32x32.png", 32, 3],
+  ["public/favicon-48x48.png", 48, 5],
+  ["public/favicon-192x192.png", 192, 20],
+  ["public/favicon-512x512.png", 512, 54],
+  ["public/apple-touch-icon.png", 180, 19],
 ];
 
-for (const target of targets) {
-  const inner = target.size - target.padding * 2;
+for (const [output, size, padding] of targets) {
+  const innerSize = size - padding * 2;
 
   const logo = await sharp(source, {
-    density: 600,
+    density: 900,
   })
     .resize({
-      width: inner,
-      height: inner,
+      width: innerSize,
+      height: innerSize,
       fit: "contain",
     })
     .png()
@@ -61,8 +41,8 @@ for (const target of targets) {
 
   await sharp({
     create: {
-      width: target.size,
-      height: target.size,
+      width: size,
+      height: size,
       channels: 4,
       background,
     },
@@ -77,9 +57,7 @@ for (const target of targets) {
       compressionLevel: 9,
       adaptiveFiltering: true,
     })
-    .toFile(path.join(root, target.output));
+    .toFile(path.join(root, output));
 
-  console.log(
-    `${target.output}: ${target.size}x${target.size}`
-  );
+  console.log(`${output}: ${size}x${size}`);
 }
