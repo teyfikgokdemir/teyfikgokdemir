@@ -1,0 +1,151 @@
+---
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const messages = {
+  tr: {
+    title: 'Çerez tercihleri',
+    text: 'Zorunlu çerezler sitenin çalışması için kullanılır. Analitik çerezler yalnızca onay verirseniz etkinleştirilir.',
+    privacy: 'Gizlilik Politikası',
+    reject: 'Reddet',
+    accept: 'Onayla',
+  },
+  en: {
+    title: 'Cookie preferences',
+    text: 'Essential cookies keep the site working. Analytics cookies are enabled only after you give consent.',
+    privacy: 'Privacy Policy',
+    reject: 'Reject',
+    accept: 'Accept',
+  },
+  mk: {
+    title: 'Поставки за колачиња',
+    text: 'Неопходните колачиња овозможуваат работа на страницата. Аналитичките колачиња се активираат само со ваша согласност.',
+    privacy: 'Политика за приватност',
+    reject: 'Одбиј',
+    accept: 'Прифати',
+  },
+  sr: {
+    title: 'Podešavanja kolačića',
+    text: 'Neophodni kolačići omogućavaju rad sajta. Analitički kolačići se aktiviraju samo uz vašu saglasnost.',
+    privacy: 'Politika privatnosti',
+    reject: 'Odbij',
+    accept: 'Prihvati',
+  },
+  sq: {
+    title: 'Preferencat e cookies',
+    text: 'Cookies thelbësore mundësojnë funksionimin e faqes. Cookies analitike aktivizohen vetëm pasi të jepni pëlqimin.',
+    privacy: 'Politika e Privatësisë',
+    reject: 'Refuzo',
+    accept: 'Prano',
+  },
+} as const;
+
+const copy = messages[locale] ?? messages.en;
+---
+
+<aside class="cookie-banner" data-cookie-banner hidden aria-labelledby="cookie-title" aria-live="polite">
+  <div class="cookie-copy">
+    <strong id="cookie-title">{copy.title}</strong>
+    <p>{copy.text} <a href="/privacy-policy/">{copy.privacy}</a></p>
+  </div>
+  <div class="cookie-actions">
+    <button type="button" class="cookie-button secondary" data-cookie-reject>{copy.reject}</button>
+    <button type="button" class="cookie-button primary" data-cookie-accept>{copy.accept}</button>
+  </div>
+</aside>
+
+<script is:inline>
+  (() => {
+    const key = 'tg-cookie-consent';
+    const measurementId = 'G-52GXBGWHFJ';
+    const banner = document.querySelector('[data-cookie-banner]');
+    if (!(banner instanceof HTMLElement)) return;
+
+    const setAnalytics = (enabled) => {
+      window['ga-disable-' + measurementId] = !enabled;
+      if (typeof window.gtag === 'function') {
+        window.gtag('consent', 'update', {
+          analytics_storage: enabled ? 'granted' : 'denied',
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied'
+        });
+      }
+    };
+
+    const stored = localStorage.getItem(key);
+    if (stored === 'accepted') {
+      setAnalytics(true);
+      return;
+    }
+    if (stored === 'rejected') {
+      setAnalytics(false);
+      return;
+    }
+
+    setAnalytics(false);
+    banner.hidden = false;
+
+    banner.querySelector('[data-cookie-accept]')?.addEventListener('click', () => {
+      localStorage.setItem(key, 'accepted');
+      setAnalytics(true);
+      banner.hidden = true;
+    });
+
+    banner.querySelector('[data-cookie-reject]')?.addEventListener('click', () => {
+      localStorage.setItem(key, 'rejected');
+      setAnalytics(false);
+      banner.hidden = true;
+    });
+  })();
+</script>
+
+<style>
+  .cookie-banner {
+    position: fixed;
+    z-index: 120;
+    right: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    width: min(920px, calc(100% - 2rem));
+    margin-inline: auto;
+    padding: 1.1rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 18px;
+    background: rgba(9, 17, 29, .97);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, .38);
+    backdrop-filter: blur(18px);
+  }
+  .cookie-banner[hidden] { display: none; }
+  .cookie-copy { max-width: 650px; }
+  .cookie-copy strong { display: block; margin-bottom: .35rem; font-size: 1rem; }
+  .cookie-copy p { margin: 0; color: var(--muted); font-size: .92rem; line-height: 1.55; }
+  .cookie-copy a { color: var(--accent-soft); text-decoration: underline; text-underline-offset: 3px; }
+  .cookie-actions { display: flex; flex: 0 0 auto; gap: .65rem; }
+  .cookie-button {
+    min-height: 44px;
+    padding: .68rem 1rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    color: var(--text);
+    background: transparent;
+    cursor: pointer;
+    font-weight: 800;
+  }
+  .cookie-button.primary { border-color: var(--accent); background: var(--accent); }
+  .cookie-button:hover { transform: translateY(-1px); }
+  @media (max-width: 720px) {
+    .cookie-banner { align-items: stretch; flex-direction: column; }
+    .cookie-actions { width: 100%; }
+    .cookie-button { flex: 1; }
+  }
+</style>
