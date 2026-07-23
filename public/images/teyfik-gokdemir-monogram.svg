@@ -7,63 +7,53 @@
   <title id="title">Teyfik Gökdemir TG monogram</title>
 
   <defs>
-    <linearGradient id="tg-gold" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#f2d48d"/>
-      <stop offset="0.48" stop-color="#dda955"/>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4d790"/>
+      <stop offset="0.48" stop-color="#dca852"/>
       <stop offset="1" stop-color="#a86b25"/>
     </linearGradient>
   </defs>
 
-  <!-- G -->
+  <!-- G body -->
   <path
     d="
-      M91 35
-      C83 22 69 15 53 15
-      C29 15 12 34 12 59
-      C12 86 30 105 57 105
-      C73 105 87 99 98 88
-      L98 62
-      L70 62
+      M92 32
+      C83 20 69 14 53 14
+      C28 14 10 34 10 60
+      C10 88 30 107 58 107
+      C75 107 90 100 101 88
+      V61
+      H72
     "
     fill="none"
-    stroke="url(#tg-gold)"
-    stroke-width="9"
+    stroke="url(#gold)"
+    stroke-width="10"
     stroke-linecap="square"
     stroke-linejoin="miter"
   />
 
-  <!-- G horizontal terminal -->
+  <!-- unmistakable T -->
   <path
-    d="M70 62H98"
+    d="M28 18H98"
     fill="none"
-    stroke="url(#tg-gold)"
-    stroke-width="9"
+    stroke="url(#gold)"
+    stroke-width="11"
     stroke-linecap="square"
   />
 
-  <!-- T -->
   <path
-    d="M31 20H96"
+    d="M63 18V94"
     fill="none"
-    stroke="url(#tg-gold)"
+    stroke="url(#gold)"
     stroke-width="10"
     stroke-linecap="square"
   />
 
   <path
-    d="M63.5 20V91"
+    d="M49 94H77"
     fill="none"
-    stroke="url(#tg-gold)"
-    stroke-width="9"
-    stroke-linecap="square"
-  />
-
-  <!-- subtle serif terminals -->
-  <path
-    d="M51 91H76"
-    fill="none"
-    stroke="url(#tg-gold)"
-    stroke-width="7"
+    stroke="url(#gold)"
+    stroke-width="8"
     stroke-linecap="square"
   />
 </svg>
