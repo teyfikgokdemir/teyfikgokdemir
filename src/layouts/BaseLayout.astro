@@ -139,22 +139,22 @@ const jsonLd = {
     <meta name="theme-color" content="#09111d" />
     <link
       rel="icon"
-      href="/favicon-32x32.png"
+      href="/favicon-32x32.png?v=2"
       type="image/png"
       sizes="32x32"
     />
     <link
       rel="icon"
-      href="/favicon-192x192.png"
+      href="/favicon-192x192.png?v=2"
       type="image/png"
       sizes="192x192"
     />
     <link
       rel="apple-touch-icon"
-      href="/apple-touch-icon.png"
+      href="/apple-touch-icon.png?v=2"
       sizes="180x180"
     />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="manifest" href="/site.webmanifest?v=2" />
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-52GXBGWHFJ"></script>
     <script is:inline>
@@ -167,8 +167,6 @@ const jsonLd = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     {Object.entries(alternateLinks).map(([language, href]) => (
       <link rel="alternate" hreflang={language} href={href} />
     ))}
