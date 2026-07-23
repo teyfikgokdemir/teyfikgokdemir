@@ -6,9 +6,31 @@ export const site = {
   phone: '+90 545 678 26 55',
   whatsapp: '905456782655',
   images: {
-    hero: { path: '/images/teyfik-gokdemir-founder.webp', width: 1086, height: 1448 },
+    hero: {
+      path: '/images/teyfik-gokdemir-founder-720.webp',
+      width: 720,
+      height: 960,
+      srcset: [
+        '/images/teyfik-gokdemir-founder-480.webp 480w',
+        '/images/teyfik-gokdemir-founder-720.webp 720w',
+        '/images/teyfik-gokdemir-founder.webp 1086w',
+      ].join(', '),
+    },
     executive: { path: '/images/teyfik-gokdemir-executive.webp', width: 1023, height: 1537 },
-    profile: { path: '/images/teyfik-gokdemir-profile.webp', width: 1440, height: 2560 },
+    profile: {
+      path: '/images/teyfik-gokdemir-profile-720.webp',
+      width: 720,
+      height: 1280,
+      originalPath: '/images/teyfik-gokdemir-profile.webp',
+      originalWidth: 1440,
+      originalHeight: 2560,
+      srcset: [
+        '/images/teyfik-gokdemir-profile-480.webp 480w',
+        '/images/teyfik-gokdemir-profile-720.webp 720w',
+        '/images/teyfik-gokdemir-profile-960.webp 960w',
+        '/images/teyfik-gokdemir-profile.webp 1440w',
+      ].join(', '),
+    },
     global: { path: '/images/teyfik-gokdemir-global-operator.webp', width: 1440, height: 2560 },
     commerce: { path: '/images/qct-commerce-founder-event.webp', width: 640, height: 1136 },
     legacy: { path: '/images/teyfik-gokdemir.webp', width: 900, height: 1213 },

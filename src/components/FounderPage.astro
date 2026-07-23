@@ -30,10 +30,13 @@ const copy = content[locale];
     <div class="hero-media">
       <img
         src={site.images.hero.path}
+        srcset={site.images.hero.srcset}
+        sizes="(max-width: 760px) 92vw, (max-width: 1180px) 48vw, 665px"
         width={site.images.hero.width}
         height={site.images.hero.height}
         alt={copy.images.hero}
         loading="eager"
+        decoding="async"
         fetchpriority="high"
       />
     </div>
@@ -44,6 +47,8 @@ const copy = content[locale];
       <div class="editorial-image">
         <img
           src={site.images.profile.path}
+          srcset={site.images.profile.srcset}
+          sizes="(max-width: 760px) 92vw, (max-width: 1180px) 48vw, 662px"
           width={site.images.profile.width}
           height={site.images.profile.height}
           alt={copy.images.profile}

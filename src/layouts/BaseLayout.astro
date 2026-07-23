@@ -28,7 +28,8 @@ const {
 const localeUrl = (item: Locale) => item === 'en' ? '/' : '/' + item + '/';
 const pagePath = pathname ?? localeUrl(locale);
 const canonical = new URL(pagePath, site.origin).toString();
-const profileImage = site.origin + site.images.profile.path;
+const profileImage =
+  site.origin + site.images.profile.originalPath;
 
 const defaultAlternates: Partial<Record<Locale | 'x-default', string>> =
   Object.fromEntries([
@@ -123,8 +124,8 @@ const jsonLd = {
       primaryImageOfPage: {
         '@type': 'ImageObject',
         url: profileImage,
-        width: site.images.profile.width,
-        height: site.images.profile.height,
+        width: site.images.profile.originalWidth,
+        height: site.images.profile.originalHeight,
       },
     },
   ],
