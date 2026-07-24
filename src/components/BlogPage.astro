@@ -1,0 +1,89 @@
+---
+import { blogLocales, localeMeta, posts, blogPath, postPath, localePrefix, type BlogLocale, type BlogPost } from '../data/blog';
+
+interface Props { locale: BlogLocale; post?: BlogPost }
+const { locale, post } = Astro.props;
+const meta = localeMeta[locale];
+const origin = 'https://teyfikgokdemir.com';
+const canonicalPath = post ? postPath(locale, post.slug) : blogPath(locale);
+const canonical = origin + canonicalPath;
+const title = post ? `${post.title[locale]} | Teyfik Gökdemir` : `${meta.blog} | Teyfik Gökdemir`;
+const description = post ? post.description[locale] : posts.map((item) => item.title[locale]).join(' · ');
+const alternates = Object.fromEntries(blogLocales.map((item) => [item, origin + (post ? postPath(item, post.slug) : blogPath(item))]));
+const graph = post ? [
+  {
+    '@type': 'BlogPosting', '@id': canonical + '#article', headline: post.title[locale], description: post.description[locale],
+    datePublished: post.date, dateModified: post.updated, inLanguage: locale, mainEntityOfPage: canonical,
+    author: { '@type': 'Person', '@id': origin + '/#person', name: 'Teyfik Gökdemir', url: origin },
+    publisher: { '@type': 'Person', '@id': origin + '/#person', name: 'Teyfik Gökdemir' },
+    isPartOf: { '@type': 'Blog', '@id': origin + blogPath(locale) + '#blog', name: meta.blog, url: origin + blogPath(locale) },
+  },
+  {
+    '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: meta.home, item: origin + localePrefix(locale) + '/' },
+      { '@type': 'ListItem', position: 2, name: meta.blog, item: origin + blogPath(locale) },
+      { '@type': 'ListItem', position: 3, name: post.title[locale], item: canonical },
+    ],
+  },
+] : [
+  {
+    '@type': 'Blog', '@id': canonical + '#blog', name: meta.blog, url: canonical, inLanguage: locale,
+    author: { '@type': 'Person', '@id': origin + '/#person', name: 'Teyfik Gökdemir', url: origin },
+    blogPost: posts.map((item) => ({ '@type': 'BlogPosting', headline: item.title[locale], url: origin + postPath(locale, item.slug), datePublished: item.date })),
+  },
+  {
+    '@type': 'ItemList', itemListElement: posts.map((item, index) => ({ '@type': 'ListItem', position: index + 1, url: origin + postPath(locale, item.slug), name: item.title[locale] })),
+  },
+];
+const schema = { '@context': 'https://schema.org', '@graph': graph };
+const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
+---
+<!doctype html>
+<html lang={locale} dir={meta.dir}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#09111d" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <link rel="canonical" href={canonical} />
+  {Object.entries(alternates).map(([lang, href]) => <link rel="alternate" hreflang={lang} href={href} />)}
+  <link rel="alternate" hreflang="x-default" href={alternates.en} />
+  <meta property="og:type" content={post ? 'article' : 'website'} />
+  <meta property="og:site_name" content="Teyfik Gökdemir" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={`${origin}/images/teyfik-gokdemir.webp`} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
+  <link rel="icon" href="/favicon-32x32.png?v=7" type="image/png" sizes="32x32" />
+</head>
+<body>
+  <header>
+    <a class="brand" href={`${localePrefix(locale)}/`}><img src="/images/teyfik-gokdemir-tg-logo-transparent.png?v=7" alt="" /><strong>Teyfik Gökdemir</strong></a>
+    <nav aria-label="Blog navigation"><a href={`${localePrefix(locale)}/`}>{meta.home}</a><a class="active" href={blogPath(locale)}>{meta.blog}</a></nav>
+    <div class="langs">{blogLocales.map((item) => <a class={item === locale ? 'active' : ''} href={post ? postPath(item, post.slug) : blogPath(item)} aria-current={item === locale ? 'page' : undefined}>{item.toUpperCase()}</a>)}</div>
+  </header>
+  <main>
+    {!post ? (
+      <>
+        <section class="hero shell"><p class="eyebrow">Teyfik Gökdemir · International Trade & Strategic Sourcing</p><h1>{meta.blog}</h1><p>{description}</p></section>
+        <section class="shell cards">{posts.map((item) => <article><time datetime={item.date}>{item.date}</time><h2><a href={postPath(locale, item.slug)}>{item.title[locale]}</a></h2><p>{item.description[locale]}</p><a class="read" href={postPath(locale, item.slug)}>{meta.read} →</a></article>)}</section>
+      </>
+    ) : (
+      <article class="article shell">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href={`${localePrefix(locale)}/`}>{meta.home}</a><span>/</span><a href={blogPath(locale)}>{meta.blog}</a></nav>
+        <header class="article-head"><p class="eyebrow">Strategic Sourcing · International Trade</p><h1>{post.title[locale]}</h1><p class="lead">{post.intro[locale]}</p><p class="date">{meta.published}: <time datetime={post.date}>{post.date}</time> · {post.readingMinutes} min</p></header>
+        <div class="content">{post.sections[locale].map((section) => <section><h2>{section.heading}</h2>{section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}{section.bullets && <ul>{section.bullets.map((bullet) => <li>{bullet}</li>)}</ul>}</section>)}</div>
+        <aside class="context"><h2>{meta.related}</h2><div class="related">{related.map((item) => <a href={postPath(locale, item.slug)}><strong>{item.title[locale]}</strong><span>{item.description[locale]}</span></a>)}</div><p><a href={`${localePrefix(locale)}/#focus`}>← {meta.home}: International Trade & Strategic Sourcing</a></p></aside>
+      </article>
+    )}
+  </main>
+  <footer><span>© 2026 Teyfik Gökdemir</span><a href="mailto:info@teyfikgokdemir.com">info@teyfikgokdemir.com</a></footer>
+</body>
+</html>
+<style>
+:root{color-scheme:dark;--bg:#09111d;--deep:#070d16;--panel:#101c2b;--text:#f4f1e9;--muted:#aab7c9;--accent:#f2aa8f;--line:#26374d;--max:1120px}*{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 78% 4%,rgba(35,67,103,.34),transparent 30rem),linear-gradient(180deg,var(--bg),var(--deep) 58%,var(--bg));color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.65}a{color:inherit;text-decoration:none}.shell{width:min(var(--max),calc(100% - 3rem));margin-inline:auto}header{position:sticky;top:0;z-index:20;min-height:76px;display:flex;align-items:center;gap:1.2rem;padding:.65rem max(1.2rem,calc((100vw - var(--max))/2));border-bottom:1px solid var(--line);background:rgba(9,17,29,.92);backdrop-filter:blur(18px)}.brand{display:flex;align-items:center;gap:.65rem;margin-inline-end:auto}.brand img{width:52px;height:52px;object-fit:contain}.brand strong{font-size:.85rem;letter-spacing:.08em;text-transform:uppercase}nav{display:flex;gap:1rem}nav a{color:var(--muted)}nav .active{color:var(--text)}.langs{display:flex;gap:.1rem;border:1px solid var(--line);border-radius:999px;padding:.15rem;direction:ltr}.langs a{display:grid;place-items:center;min-width:34px;min-height:34px;border-radius:999px;color:var(--muted);font-size:.68rem;font-weight:800}.langs .active{background:var(--text);color:var(--bg)}.hero{padding:clamp(5rem,10vw,9rem) 0 4rem}.eyebrow{color:var(--accent);font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.hero h1,.article-head h1{font-size:clamp(2.6rem,6vw,5.5rem);line-height:1.05;letter-spacing:-.04em;margin:.5rem 0 1.4rem}.hero>p:last-child,.lead{max-width:850px;color:var(--muted);font-size:clamp(1rem,1.6vw,1.25rem)}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding-bottom:7rem}.cards article{display:flex;flex-direction:column;min-height:340px;padding:1.5rem;border:1px solid var(--line);border-radius:22px;background:var(--panel)}time{color:var(--accent);font-size:.8rem}.cards h2{font-size:1.45rem;line-height:1.25}.cards p{color:var(--muted)}.read{margin-top:auto;font-weight:800}.article{padding:2.5rem 0 7rem}.crumbs{font-size:.85rem;margin-bottom:4rem}.crumbs span{color:var(--muted)}.article-head{max-width:950px;padding-bottom:3.5rem;border-bottom:1px solid var(--line)}.date{color:var(--muted)}.content{max-width:780px;margin:3rem auto}.content section{padding:1rem 0 2.2rem}.content h2{font-size:clamp(1.65rem,3vw,2.4rem);line-height:1.2}.content p,.content li{color:#c7d0dc;font-size:1.06rem}.content li+li{margin-top:.55rem}.context{margin-top:4rem;padding-top:3rem;border-top:1px solid var(--line)}.related{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin:1.5rem 0}.related a{display:grid;gap:.6rem;padding:1.4rem;border:1px solid var(--line);border-radius:18px;background:var(--panel)}.related span{color:var(--muted);font-size:.92rem}footer{display:flex;justify-content:space-between;gap:1rem;padding:2rem max(1.5rem,calc((100vw - var(--max))/2));border-top:1px solid var(--line);color:var(--muted)}@media(max-width:900px){header nav{display:none}.cards{grid-template-columns:1fr}.related{grid-template-columns:1fr}}@media(max-width:620px){.shell{width:min(var(--max),calc(100% - 1.5rem))}.brand strong{display:none}.langs a{min-width:29px;font-size:.6rem}header{gap:.5rem}.hero h1,.article-head h1{font-size:2.45rem}footer{flex-direction:column}}
+</style>
