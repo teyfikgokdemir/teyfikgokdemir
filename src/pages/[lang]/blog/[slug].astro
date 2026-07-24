@@ -10,3 +10,13 @@ export function getStaticPaths() {
 const { locale, post } = Astro.props;
 ---
 <BlogPage locale={locale} post={post} />
+
+<style is:global>
+  .article-head {
+    position: static !important;
+    inset: auto !important;
+    transform: none !important;
+    z-index: auto !important;
+    width: auto !important;
+  }
+</style>
