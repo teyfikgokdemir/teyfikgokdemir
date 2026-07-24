@@ -8,41 +8,99 @@ import type { Locale } from '../i18n/locales';
 import { content } from '../i18n/content';
 import { site } from '../data/site';
 
-interface Props {
-  locale: Locale;
-}
+interface Props { locale: Locale; }
 
 const { locale } = Astro.props;
-const copy = content[locale];
+const baseCopy = content[locale];
 
-const ecosystemCopy = {
+const positioning = {
   tr: {
-    label: 'QCT ekosistemi',
-    title: 'Farklı pazarlar için geliştirilen bağlantılı girişimler.',
-    text: 'Teyfik Gökdemir, 2025 yılında başlayan QCT yapılanması kapsamında Türkiye’de QCT Commerce’i, Balkanlar’da QCT Studio’yu ve uluslararası pazara yönelik Mythborn girişimini geliştirmektedir.',
+    hero: {
+      eyebrow: 'Türkiye merkezli · Sınır ötesi ticaret · Uluslararası pazarlar',
+      title: 'Uluslararası ticaret, tedarik ve iş geliştirme süreçlerini çalışan sistemlere dönüştürüyorum.',
+      description: 'Üretici, ürün, pazar ve operasyon arasındaki bağlantıyı kuruyor; tedarikten satış kanalına, lojistikten dijital altyapıya kadar ticari süreci bütün olarak yapılandırıyorum.',
+      primary: 'Çalışma alanlarını incele',
+      secondary: 'İletişime geç',
+      summary: 'Teyfik Gökdemir; uluslararası ticaret, stratejik tedarik, iş geliştirme, dijital ticaret ve operasyon sistemleri üzerine çalışan Türkiye merkezli bir girişimcidir.',
+    },
+    intro: {
+      label: 'Ticari yaklaşım',
+      title: 'Fırsatı yalnızca bulmuyor, uygulanabilir bir ticari yapıya dönüştürüyorum.',
+      body: 'Üretici araştırması, ürün ve fiyat doğrulaması, alıcı-satıcı koordinasyonu, ihracata uygunluk, lojistik, satış kanalları ve dijital altyapıyı birbirinden kopuk işler olarak görmüyorum. Amacım, taraflar arasında güvenilir ve sürdürülebilir bir ticaret modeli kurmak.',
+      areas: ['Uluslararası ticaret', 'Stratejik tedarik', 'İş geliştirme', 'Dijital ticaret ve operasyon'],
+    },
+    expertise: {
+      title: 'Ticari fırsatı uçtan uca yöneten çalışma alanları.',
+      lead: 'Tedarik, pazar, operasyon ve teknoloji aynı ticari hedef doğrultusunda birlikte ele alınır.',
+      groups: [
+        { title: 'Uluslararası ticaret', items: ['İhracat ve ithalat fırsatları', 'Pazar ve ürün eşleştirme', 'Üretici ve alıcı koordinasyonu', 'Ticari teklif süreçleri', 'Sınır ötesi iş geliştirme', 'İş ortaklığı yapılanmaları'] },
+        { title: 'Tedarik ve operasyon', items: ['Üretici araştırması', 'Fiyat ve kapasite doğrulama', 'Ürün spesifikasyonu', 'Kalite ve belge koordinasyonu', 'Lojistik planlama', 'Tedarik zinciri', 'Sipariş süreci takibi'] },
+        { title: 'Dijital ticaret ve büyüme', items: ['B2B dijital ticaret', 'E-ticaret stratejisi', 'Pazaryeri operasyonları', 'Doğrudan satış sistemleri', 'SEO ve görünürlük', 'Dijital büyüme planlaması', 'Müşteri yolculuğu'] },
+        { title: 'AI ve ticari sistemler', items: ['Tedarikçi araştırma akışları', 'Satış istihbaratı', 'Fırsat ve şirket analizi', 'Süreç otomasyonu', 'Teklif ve bilgi sistemleri', 'Operasyon standardizasyonu'] },
+      ],
+    },
+    regional: {
+      label: 'Sınır ötesi bakış',
+      title: 'Türkiye, Balkanlar ve çevre pazarlarda yeni ticaret bağlantıları.',
+      body: 'Türkiye’deki üretim ve tedarik gücünü bölgesel talep ile buluşturan; aynı zamanda çevre pazarlardaki ürün ve iş fırsatlarını Türkiye’ye bağlayan ticari yapılar geliştiriyorum. Her fırsatı ürün, taraflar, mevzuat, ödeme ve lojistik gerçekleriyle birlikte değerlendiriyorum.',
+    },
+    contact: {
+      label: 'Ticari iş birlikleri için',
+      title: 'Bir ürün, pazar veya tedarik fırsatını birlikte değerlendirelim.',
+      body: 'Uluslararası alım-satım, üretici veya tedarikçi bulma, yeni pazar geliştirme, ticari iş ortaklığı ya da dijital satış yapılanması üzerinde çalışıyorsanız doğrudan iletişime geçebilirsiniz.',
+      action: 'E-posta gönder',
+    },
   },
   en: {
-    label: 'QCT ecosystem',
-    title: 'Connected ventures built for different markets.',
-    text: 'Teyfik Gökdemir develops QCT Commerce for Türkiye, QCT Studio for the Balkans and Mythborn for international markets within the QCT structure established in 2025.',
-  },
-  mk: {
-    label: 'QCT екосистем',
-    title: 'Поврзани потфати создадени за различни пазари.',
-    text: 'Тејфик Ѓокдемир ги развива QCT Commerce за Турција, QCT Studio за Балканот и Mythborn за меѓународните пазари во рамките на QCT структурата започната во 2025 година.',
-  },
-  sr: {
-    label: 'QCT ekosistem',
-    title: 'Povezani poduhvati razvijeni za različita tržišta.',
-    text: 'Teyfik Gökdemir razvija QCT Commerce za Tursku, QCT Studio za Balkan i Mythborn za međunarodna tržišta u okviru QCT strukture pokrenute 2025. godine.',
-  },
-  sq: {
-    label: 'Ekosistemi QCT',
-    title: 'Sipërmarrje të lidhura, të ndërtuara për tregje të ndryshme.',
-    text: 'Teyfik Gökdemir zhvillon QCT Commerce për Turqinë, QCT Studio për Ballkanin dhe Mythborn për tregjet ndërkombëtare brenda strukturës QCT të nisur në vitin 2025.',
+    hero: {
+      eyebrow: 'Based in Türkiye · Cross-border commerce · International markets',
+      title: 'Turning international trade, sourcing and business development into working systems.',
+      description: 'I connect manufacturers, products, markets and operations—structuring the commercial process from sourcing and logistics to sales channels and digital infrastructure.',
+      primary: 'Explore focus areas', secondary: 'Get in touch',
+      summary: 'Teyfik Gökdemir is a Türkiye-based entrepreneur working across international trade, strategic sourcing, business development, digital commerce and operational systems.',
+    },
+    intro: {
+      label: 'Commercial approach', title: 'Finding an opportunity is only the beginning. I turn it into an executable commercial structure.',
+      body: 'Supplier research, product and price validation, buyer-seller coordination, export readiness, logistics, sales channels and digital infrastructure are managed as one connected commercial system.',
+      areas: ['International trade', 'Strategic sourcing', 'Business development', 'Digital commerce & operations'],
+    },
+    expertise: {
+      title: 'Working across the full commercial opportunity.', lead: 'Sourcing, market access, operations and technology remain connected to the same commercial objective.',
+      groups: [
+        { title: 'International trade', items: ['Import and export opportunities', 'Product-market matching', 'Manufacturer and buyer coordination', 'Commercial quotations', 'Cross-border business development', 'Partnership structures'] },
+        { title: 'Sourcing & operations', items: ['Supplier research', 'Price and capacity validation', 'Product specifications', 'Quality and documentation coordination', 'Logistics planning', 'Supply chain', 'Order process tracking'] },
+        { title: 'Digital commerce & growth', items: ['B2B digital commerce', 'E-commerce strategy', 'Marketplace operations', 'Direct sales systems', 'SEO and visibility', 'Digital growth planning', 'Customer journey'] },
+        { title: 'AI & commercial systems', items: ['Supplier research workflows', 'Sales intelligence', 'Opportunity and company analysis', 'Process automation', 'Proposal and knowledge systems', 'Operational standardisation'] },
+      ],
+    },
+    regional: {
+      label: 'Cross-border perspective', title: 'Building new commercial links across Türkiye, the Balkans and neighbouring markets.',
+      body: 'I develop structures that connect Türkiye’s production and sourcing capabilities with regional demand, while linking product and partnership opportunities in neighbouring markets back to Türkiye. Each opportunity is assessed through product, counterpart, compliance, payment and logistics realities.',
+    },
+    contact: {
+      label: 'For commercial partnerships', title: 'Let’s evaluate a product, market or sourcing opportunity.',
+      body: 'Get in touch for international buying and selling, manufacturer or supplier sourcing, market development, commercial partnerships or digital sales structures.', action: 'Send an email',
+    },
   },
 } as const;
 
+const localPositioning = locale === 'tr' || locale === 'en' ? positioning[locale] : positioning.en;
+const copy = {
+  ...baseCopy,
+  hero: { ...baseCopy.hero, ...localPositioning.hero },
+  intro: { ...baseCopy.intro, ...localPositioning.intro },
+  expertise: { ...baseCopy.expertise, ...localPositioning.expertise, definitions: baseCopy.expertise.definitions },
+  regional: { ...baseCopy.regional, ...localPositioning.regional },
+  contact: { ...baseCopy.contact, ...localPositioning.contact },
+};
+
+const ecosystemCopy = {
+  tr: { label: 'QCT ekosistemi', title: 'Ticaret, teknoloji ve pazar geliştirme için bağlantılı girişimler.', text: 'Teyfik Gökdemir, 2025 yılında başlayan QCT yapılanması kapsamında Türkiye’de QCT Commerce’i, Balkanlar’da QCT Studio’yu ve uluslararası pazara yönelik Mythborn girişimini geliştirmektedir.' },
+  en: { label: 'QCT ecosystem', title: 'Connected ventures for commerce, technology and market development.', text: 'Teyfik Gökdemir develops QCT Commerce for Türkiye, QCT Studio for the Balkans and Mythborn for international markets within the QCT structure established in 2025.' },
+  mk: { label: 'QCT екосистем', title: 'Поврзани потфати создадени за различни пазари.', text: 'Тејфик Ѓокдемир ги развива QCT Commerce за Турција, QCT Studio за Балканот и Mythborn за меѓународните пазари во рамките на QCT структурата започната во 2025 година.' },
+  sr: { label: 'QCT ekosistem', title: 'Povezani poduhvati razvijeni za različita tržišta.', text: 'Teyfik Gökdemir razvija QCT Commerce za Tursku, QCT Studio za Balkan i Mythborn za međunarodna tržišta u okviru QCT strukture pokrenute 2025. godine.' },
+  sq: { label: 'Ekosistemi QCT', title: 'Sipërmarrje të lidhura, të ndërtuara për tregje të ndryshme.', text: 'Teyfik Gökdemir zhvillon QCT Commerce për Turqinë, QCT Studio për Ballkanin dhe Mythborn për tregjet ndërkombëtare brenda strukturës QCT të nisur në vitin 2025.' },
+} as const;
 const legalCopy = {
   tr: { privacy: 'Gizlilik ve Çerez Politikası', kvkk: 'KVKK Aydınlatma Metni', terms: 'Kullanım Koşulları' },
   en: { privacy: 'Privacy & Cookie Policy', kvkk: 'Data Protection Notice', terms: 'Terms of Use' },
@@ -50,129 +108,28 @@ const legalCopy = {
   sr: { privacy: 'Politika privatnosti i kolačića', kvkk: 'Obaveštenje o zaštiti podataka', terms: 'Uslovi korišćenja' },
   sq: { privacy: 'Politika e Privatësisë dhe Cookies', kvkk: 'Njoftim për Mbrojtjen e të Dhënave', terms: 'Kushtet e Përdorimit' },
 } as const;
-
 const ecosystem = ecosystemCopy[locale] ?? ecosystemCopy.en;
 const legal = legalCopy[locale] ?? legalCopy.en;
-const displayedYear = (title: string, year: string) =>
-  title === 'QCT Studio' || title === 'QCT Commerce' ? '2025' : year;
+const displayedYear = (title: string, year: string) => title === 'QCT Studio' || title === 'QCT Commerce' ? '2025' : year;
 ---
 <Header locale={locale} copy={copy} homePath={locale === 'en' ? '/' : `/${locale}/`} />
-
 <main id="main-content">
   <section class="hero shell" id="top" aria-labelledby="hero-title">
-    <div class="hero-copy">
-      <p class="section-label">{copy.hero.eyebrow}</p>
-      <h1 id="hero-title">{copy.hero.title}</h1>
-      <p class="hero-description">{copy.hero.description}</p>
-      <div class="hero-actions">
-        <a class="button primary" href="#ventures">{copy.hero.primary}</a>
-        <a class="button" href="#contact">{copy.hero.secondary}</a>
-      </div>
-      <p class="hero-summary">{copy.hero.summary}</p>
-    </div>
-    <div class="hero-media">
-      <img src={site.images.hero.path} srcset={site.images.hero.srcset} sizes="(max-width: 760px) 92vw, (max-width: 1180px) 48vw, 665px" width={site.images.hero.width} height={site.images.hero.height} alt={copy.images.hero} loading="eager" decoding="async" fetchpriority="high" />
-    </div>
+    <div class="hero-copy"><p class="section-label">{copy.hero.eyebrow}</p><h1 id="hero-title">{copy.hero.title}</h1><p class="hero-description">{copy.hero.description}</p><div class="hero-actions"><a class="button primary" href="#expertise">{copy.hero.primary}</a><a class="button" href="#contact">{copy.hero.secondary}</a></div><p class="hero-summary">{copy.hero.summary}</p></div>
+    <div class="hero-media"><img src={site.images.hero.path} srcset={site.images.hero.srcset} sizes="(max-width: 760px) 92vw, (max-width: 1180px) 48vw, 665px" width={site.images.hero.width} height={site.images.hero.height} alt={copy.images.hero} loading="eager" decoding="async" fetchpriority="high" /></div>
   </section>
-
-  <section class="section" aria-labelledby="intro-title">
-    <div class="shell intro-grid">
-      <div class="editorial-image">
-        <img src={site.images.profile.path} srcset={site.images.profile.srcset} sizes="(max-width: 760px) 92vw, (max-width: 1180px) 48vw, 662px" width={site.images.profile.width} height={site.images.profile.height} alt={copy.images.profile} loading="lazy" decoding="async" />
-      </div>
-      <div>
-        <p class="section-label">{copy.intro.label}</p>
-        <h2 id="intro-title">{copy.intro.title}</h2>
-        <p class="section-lead">{copy.intro.body}</p>
-        <div class="focus-list">{copy.intro.areas.map((area) => <span>{area}</span>)}</div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="ventures" aria-labelledby="ventures-title">
-    <div class="shell">
-      <div class="section-heading">
-        <p class="section-label">{copy.ventures.label}</p>
-        <h2 id="ventures-title">{copy.ventures.title}</h2>
-        <p class="section-lead">{copy.ventures.lead}</p>
-      </div>
-      <div class="venture-grid">
-        {copy.ventures.items.map((item) => item.url ? (
-          <a class:list={['venture-card', { 'has-image': item.image === 'commerce' }]} href={item.url} target="_blank" rel="noopener noreferrer" aria-label={item.aria + ', ' + copy.a11y.external}>
-            {item.image === 'commerce' && <img src={site.images.commerce.path} width={site.images.commerce.width} height={site.images.commerce.height} alt={copy.images.commerce} loading="lazy" decoding="async" />}
-            <div class="venture-meta"><span class="tag">{item.status}</span><span class="tag">{item.region}</span></div>
-            <h3>{item.name}</h3><p>{item.description}</p><span class="venture-arrow" aria-hidden="true">↗</span>
-          </a>
-        ) : (
-          <article class="venture-card" aria-label={item.aria}>
-            <div class="venture-meta"><span class="tag">{item.status}</span><span class="tag">{item.region}</span></div>
-            <h3>{item.name}</h3><p>{item.description}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="expertise" aria-labelledby="expertise-title">
-    <div class="shell">
-      <div class="section-heading"><p class="section-label">{copy.expertise.label}</p><h2 id="expertise-title">{copy.expertise.title}</h2><p class="section-lead">{copy.expertise.lead}</p></div>
-      <div class="expertise-grid">{copy.expertise.groups.map((group) => <article class="expertise-card"><h3>{group.title}</h3><ul>{group.items.map((item) => <li>{item}</li>)}</ul></article>)}</div>
-      <p class="definitions">{copy.expertise.definitions}</p>
-    </div>
-  </section>
-
-  <section class="section" id="journey" aria-labelledby="journey-title">
-    <div class="shell journey-layout">
-      <div class="journey-image"><img src={site.images.executive.path} width={site.images.executive.width} height={site.images.executive.height} alt={copy.images.executive} loading="lazy" decoding="async" /></div>
-      <div>
-        <div class="section-heading"><p class="section-label">{copy.journey.label}</p><h2 id="journey-title">{copy.journey.title}</h2><p class="section-lead">{copy.journey.lead}</p></div>
-        <ol class="timeline">{copy.journey.items.map((item) => <li><time datetime={displayedYear(item.title, item.year)}>{displayedYear(item.title, item.year)}</time><div class="timeline-content"><h3>{item.title}</h3><p>{item.description}</p></div></li>)}</ol>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" aria-labelledby="method-title">
-    <div class="shell">
-      <div class="section-heading"><p class="section-label">{copy.method.label}</p><h2 id="method-title">{copy.method.title}</h2><p class="section-lead">{copy.method.lead}</p></div>
-      <div class="method-grid">{copy.method.steps.map((step) => <article class="method-card"><h3>{step.title}</h3><p>{step.description}</p></article>)}</div>
-    </div>
-  </section>
-
-  <section class="section" aria-labelledby="regional-title">
-    <div class="shell regional-grid">
-      <div><p class="section-label">{copy.regional.label}</p><h2 id="regional-title">{copy.regional.title}</h2><p class="section-lead">{copy.regional.body}</p></div>
-      <div class="editorial-image"><img src={site.images.global.path} width={site.images.global.width} height={site.images.global.height} alt={copy.images.regional} loading="lazy" decoding="async" /></div>
-    </div>
-  </section>
-
-  <section class="section ecosystem-section" aria-labelledby="ecosystem-title">
-    <div class="shell ecosystem-card">
-      <p class="section-label">{ecosystem.label}</p>
-      <h2 id="ecosystem-title">{ecosystem.title}</h2>
-      <p class="section-lead">{ecosystem.text}</p>
-      <div class="ecosystem-links">
-        <a href="https://qctcommerce.com" target="_blank" rel="noopener noreferrer">QCT Commerce ↗</a>
-        <a href="https://qctstudio.com" target="_blank" rel="noopener noreferrer">QCT Studio ↗</a>
-        <a href="https://mythborn.co" target="_blank" rel="noopener noreferrer">Mythborn ↗</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section contact-section" id="contact" aria-labelledby="contact-title">
-    <div class="shell"><div class="contact-card"><p class="section-label">{copy.contact.label}</p><h2 id="contact-title">{copy.contact.title}</h2><p class="section-lead">{copy.contact.body}</p><a class="button primary" href={'mailto:' + site.email} aria-label={copy.contact.action + ': ' + site.email}>{site.email}</a></div></div>
-  </section>
+  <section class="section" aria-labelledby="intro-title"><div class="shell intro-grid"><div class="editorial-image"><img src={site.images.profile.path} srcset={site.images.profile.srcset} sizes="(max-width: 760px) 92vw, (max-width: 1180px) 48vw, 662px" width={site.images.profile.width} height={site.images.profile.height} alt={copy.images.profile} loading="lazy" decoding="async" /></div><div><p class="section-label">{copy.intro.label}</p><h2 id="intro-title">{copy.intro.title}</h2><p class="section-lead">{copy.intro.body}</p><div class="focus-list">{copy.intro.areas.map((area) => <span>{area}</span>)}</div></div></div></section>
+  <section class="section" id="ventures" aria-labelledby="ventures-title"><div class="shell"><div class="section-heading"><p class="section-label">{copy.ventures.label}</p><h2 id="ventures-title">{copy.ventures.title}</h2><p class="section-lead">{copy.ventures.lead}</p></div><div class="venture-grid">{copy.ventures.items.map((item) => item.url ? (<a class:list={['venture-card', { 'has-image': item.image === 'commerce' }]} href={item.url} target="_blank" rel="noopener noreferrer" aria-label={item.aria + ', ' + copy.a11y.external}>{item.image === 'commerce' && <img src={site.images.commerce.path} width={site.images.commerce.width} height={site.images.commerce.height} alt={copy.images.commerce} loading="lazy" decoding="async" />}<div class="venture-meta"><span class="tag">{item.status}</span><span class="tag">{item.region}</span></div><h3>{item.name}</h3><p>{item.description}</p><span class="venture-arrow" aria-hidden="true">↗</span></a>) : (<article class="venture-card" aria-label={item.aria}><div class="venture-meta"><span class="tag">{item.status}</span><span class="tag">{item.region}</span></div><h3>{item.name}</h3><p>{item.description}</p></article>))}</div></div></section>
+  <section class="section" id="expertise" aria-labelledby="expertise-title"><div class="shell"><div class="section-heading"><p class="section-label">{copy.expertise.label}</p><h2 id="expertise-title">{copy.expertise.title}</h2><p class="section-lead">{copy.expertise.lead}</p></div><div class="expertise-grid">{copy.expertise.groups.map((group) => <article class="expertise-card"><h3>{group.title}</h3><ul>{group.items.map((item) => <li>{item}</li>)}</ul></article>)}</div><p class="definitions">{copy.expertise.definitions}</p></div></section>
+  <section class="section" id="journey" aria-labelledby="journey-title"><div class="shell journey-layout"><div class="journey-image"><img src={site.images.executive.path} width={site.images.executive.width} height={site.images.executive.height} alt={copy.images.executive} loading="lazy" decoding="async" /></div><div><div class="section-heading"><p class="section-label">{copy.journey.label}</p><h2 id="journey-title">{copy.journey.title}</h2><p class="section-lead">{copy.journey.lead}</p></div><ol class="timeline">{copy.journey.items.map((item) => <li><time datetime={displayedYear(item.title, item.year)}>{displayedYear(item.title, item.year)}</time><div class="timeline-content"><h3>{item.title}</h3><p>{item.description}</p></div></li>)}</ol></div></div></section>
+  <section class="section" aria-labelledby="method-title"><div class="shell"><div class="section-heading"><p class="section-label">{copy.method.label}</p><h2 id="method-title">{copy.method.title}</h2><p class="section-lead">{copy.method.lead}</p></div><div class="method-grid">{copy.method.steps.map((step) => <article class="method-card"><h3>{step.title}</h3><p>{step.description}</p></article>)}</div></div></section>
+  <section class="section" aria-labelledby="regional-title"><div class="shell regional-grid"><div><p class="section-label">{copy.regional.label}</p><h2 id="regional-title">{copy.regional.title}</h2><p class="section-lead">{copy.regional.body}</p></div><div class="editorial-image"><img src={site.images.global.path} width={site.images.global.width} height={site.images.global.height} alt={copy.images.regional} loading="lazy" decoding="async" /></div></div></section>
+  <section class="section ecosystem-section" aria-labelledby="ecosystem-title"><div class="shell ecosystem-card"><p class="section-label">{ecosystem.label}</p><h2 id="ecosystem-title">{ecosystem.title}</h2><p class="section-lead">{ecosystem.text}</p><div class="ecosystem-links"><a href="https://qctcommerce.com" target="_blank" rel="noopener noreferrer">QCT Commerce ↗</a><a href="https://qctstudio.com" target="_blank" rel="noopener noreferrer">QCT Studio ↗</a><a href="https://mythborn.co" target="_blank" rel="noopener noreferrer">Mythborn ↗</a></div></div></section>
+  <section class="section contact-section" id="contact" aria-labelledby="contact-title"><div class="shell"><div class="contact-card"><p class="section-label">{copy.contact.label}</p><h2 id="contact-title">{copy.contact.title}</h2><p class="section-lead">{copy.contact.body}</p><a class="button primary" href={'mailto:' + site.email} aria-label={copy.contact.action + ': ' + site.email}>{site.email}</a></div></div></section>
 </main>
-
-<VentureMarquee />
-<Footer copy={copy} />
-<nav class="legal-links" aria-label="Legal">
-  <a href="/privacy-policy/">{legal.privacy}</a>
-  <a href="/kvkk/">{legal.kvkk}</a>
-  <a href="/terms/">{legal.terms}</a>
-</nav>
-<FloatingActions locale={locale} />
-<CookieBanner locale={locale} />
-
+<VentureMarquee /><Footer copy={copy} />
+<nav class="legal-links" aria-label="Legal"><a href="/privacy-policy/">{legal.privacy}</a><a href="/kvkk/">{legal.kvkk}</a><a href="/terms/">{legal.terms}</a></nav>
+<FloatingActions locale={locale} /><CookieBanner locale={locale} />
 <style>
   .ecosystem-card { padding: clamp(2rem, 5vw, 4rem); border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); }
   .ecosystem-links { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
