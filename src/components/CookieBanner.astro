@@ -164,7 +164,15 @@ const copy = messages[locale] ?? messages.en;
     cursor: pointer;
     font-weight: 800;
   }
-  .cookie-button.primary { border-color: var(--accent); background: var(--accent); }
+  .cookie-button.primary {
+    border-color: #f2b244;
+    background: #f2b244;
+    color: #07111f;
+  }
+  .cookie-button:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 3px;
+  }
   .cookie-button:hover { transform: translateY(-1px); }
   @media (max-width: 720px) {
     .cookie-banner { align-items: stretch; flex-direction: column; }
