@@ -1,0 +1,114 @@
+---
+const ventures = [
+  { name: 'QCT Studio', href: 'https://qctstudio.com', tone: 'studio' },
+  { name: 'QCT Commerce', href: 'https://qctcommerce.com', tone: 'commerce' },
+  { name: 'Mythborn', href: 'https://mythborn.co', tone: 'mythborn' },
+] as const;
+
+const repeatedVentures = [...ventures, ...ventures];
+---
+
+<div class="venture-marquee" aria-label="Teyfik Gökdemir venture ecosystem">
+  <div class="venture-marquee__track">
+    {repeatedVentures.map((venture, index) => (
+      <a
+        class:list={['venture-marquee__item', `venture-marquee__item--${venture.tone}`]}
+        href={venture.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-hidden={index >= ventures.length ? 'true' : undefined}
+        tabindex={index >= ventures.length ? '-1' : undefined}
+      >
+        <span class="venture-marquee__mark" aria-hidden="true"></span>
+        <span>{venture.name}</span>
+      </a>
+    ))}
+  </div>
+</div>
+
+<style>
+  .venture-marquee {
+    width: 100%;
+    overflow: hidden;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(2, 9, 17, 0.76);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  }
+
+  .venture-marquee__track {
+    display: flex;
+    width: max-content;
+    align-items: center;
+    animation: venture-marquee 34s linear infinite;
+    will-change: transform;
+  }
+
+  .venture-marquee__item {
+    min-height: 104px;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 18px;
+    padding: 0 clamp(34px, 5vw, 76px);
+    color: rgba(244, 241, 233, 0.46);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(2rem, 4.2vw, 4.6rem);
+    font-weight: 400;
+    letter-spacing: -0.035em;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 180ms ease, opacity 180ms ease;
+  }
+
+  .venture-marquee__item:hover,
+  .venture-marquee__item:focus-visible {
+    color: rgba(244, 241, 233, 0.9);
+  }
+
+  .venture-marquee__mark {
+    width: clamp(14px, 1.6vw, 24px);
+    height: clamp(14px, 1.6vw, 24px);
+    flex: 0 0 auto;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    box-shadow: 0 0 20px color-mix(in srgb, currentColor 32%, transparent);
+  }
+
+  .venture-marquee__item--studio {
+    color: rgba(90, 210, 196, 0.42);
+  }
+
+  .venture-marquee__item--commerce {
+    color: rgba(230, 107, 95, 0.42);
+  }
+
+  .venture-marquee__item--mythborn {
+    color: rgba(166, 137, 255, 0.42);
+  }
+
+  @keyframes venture-marquee {
+    to { transform: translateX(-50%); }
+  }
+
+  @media (max-width: 760px) {
+    .venture-marquee__item {
+      min-height: 82px;
+      padding-inline: 28px;
+      font-size: clamp(1.7rem, 9vw, 3rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .venture-marquee {
+      overflow-x: auto;
+      -webkit-mask-image: none;
+      mask-image: none;
+      scrollbar-width: none;
+    }
+
+    .venture-marquee::-webkit-scrollbar { display: none; }
+    .venture-marquee__track { animation: none; }
+  }
+</style>
