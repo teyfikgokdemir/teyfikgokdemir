@@ -1,6 +1,7 @@
 ---
 import Header from './Header.astro';
 import Footer from './Footer.astro';
+import VentureMarquee from './VentureMarquee.astro';
 import FloatingActions from './FloatingActions.astro';
 import CookieBanner from './CookieBanner.astro';
 import type { Locale } from '../i18n/locales';
@@ -162,6 +163,7 @@ const displayedYear = (title: string, year: string) =>
   </section>
 </main>
 
+<VentureMarquee />
 <Footer copy={copy} />
 <nav class="legal-links" aria-label="Legal">
   <a href="/privacy-policy/">{legal.privacy}</a>
