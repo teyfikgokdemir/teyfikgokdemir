@@ -14,7 +14,7 @@
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     grid-auto-rows: 190px !important;
     column-gap: 28px !important;
-    row-gap: 30px !important;
+    row-gap: 34px !important;
     align-items: stretch !important;
   }
 
