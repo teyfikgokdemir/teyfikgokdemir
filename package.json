@@ -6,13 +6,14 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "node scripts/apply-ctseg-integration.mjs && astro dev",
-    "build": "node scripts/apply-consent-fix.mjs && node scripts/remove-footer-marquee.mjs && node scripts/apply-ctseg-integration.mjs && astro build",
+    "dev": "node scripts/fix-blog-dates.mjs && node scripts/apply-ctseg-integration.mjs && astro dev",
+    "build": "node scripts/fix-blog-dates.mjs && node scripts/apply-consent-fix.mjs && node scripts/remove-footer-marquee.mjs && node scripts/apply-ctseg-integration.mjs && astro build",
     "audit": "node scripts/audit-built-site.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.6.0",
     "astro": "^7.1.3"
   },
   "devDependencies": {
