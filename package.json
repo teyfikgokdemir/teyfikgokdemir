@@ -6,8 +6,8 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro dev",
-    "build": "node scripts/apply-consent-fix.mjs && node scripts/remove-footer-marquee.mjs && astro build",
+    "dev": "node scripts/apply-ctseg-integration.mjs && astro dev",
+    "build": "node scripts/apply-consent-fix.mjs && node scripts/remove-footer-marquee.mjs && node scripts/apply-ctseg-integration.mjs && astro build",
     "audit": "node scripts/audit-built-site.mjs",
     "preview": "astro preview",
     "astro": "astro"
