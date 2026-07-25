@@ -56,4 +56,11 @@ await patch('src/components/FounderPage.astro', (source) => {
   return next;
 });
 
+await patch('src/layouts/BaseLayout.astro', (source) =>
+  source.replace(
+    "const localeUrl = (item: Locale) => item === 'en' ? '/' : '/' + item + '/';",
+    "const localeUrl = (item: Locale) => '/' + item + '/';"
+  )
+);
+
 console.log('CTSEG integration applied.');
