@@ -1,128 +1,87 @@
 @media (min-width: 1120px) {
-  #ventures.section {
-    padding-block: 42px !important;
-  }
-
-  #ventures .section-heading {
-    max-width: 920px !important;
-    margin-bottom: 22px !important;
-  }
-
+  #ventures.section { padding-block: 34px !important; }
+  #ventures .section-heading { max-width: 980px !important; margin-bottom: 18px !important; }
   #ventures .section-heading h2 {
-    font-size: clamp(2.45rem, 4vw, 4.5rem) !important;
+    max-width: 980px !important;
+    margin-bottom: .45rem !important;
+    font-size: clamp(2.25rem, 3.5vw, 3.8rem) !important;
     line-height: .98 !important;
-    margin-bottom: .65rem !important;
   }
-
-  #ventures .section-lead {
-    font-size: 1rem !important;
-    line-height: 1.5 !important;
-  }
+  #ventures .section-lead { font-size: .92rem !important; line-height: 1.42 !important; }
 
   #ventures .venture-grid {
     display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 14px !important;
+    grid-auto-rows: 190px !important;
+    gap: 12px !important;
+    align-items: stretch !important;
   }
 
   #ventures .venture-card,
-  #ventures .venture-card--ctseg {
+  #ventures .venture-card--ctseg,
+  #ventures .venture-card.has-image {
     grid-column: auto !important;
+    grid-row: auto !important;
     display: flex !important;
     flex-direction: column !important;
-    min-height: 218px !important;
-    padding: 18px !important;
-    border-radius: 20px !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: 190px !important;
+    padding: 15px !important;
+    border-radius: 18px !important;
     overflow: hidden !important;
   }
 
   #ventures .venture-card.has-image > img:not(.venture-card__ctseg-logo) {
-    width: calc(100% + 36px) !important;
+    width: calc(100% + 30px) !important;
     max-width: none !important;
-    height: 76px !important;
-    margin: -18px -18px 14px !important;
+    height: 54px !important;
+    margin: -15px -15px 10px !important;
     object-fit: cover !important;
-    object-position: center 34% !important;
+    object-position: center 32% !important;
+    flex: 0 0 auto !important;
   }
 
   #ventures .venture-card__ctseg-logo {
-    order: -2 !important;
+    order: -3 !important;
     display: block !important;
-    width: min(78%, 210px) !important;
-    height: 58px !important;
-    margin: 0 0 14px !important;
+    width: 145px !important;
+    height: 42px !important;
+    margin: 0 0 8px !important;
     object-fit: contain !important;
     object-position: left center !important;
+    flex: 0 0 auto !important;
   }
 
-  #ventures .venture-meta {
-    gap: 7px !important;
-    margin: 0 0 9px !important;
-  }
-
-  #ventures .tag {
-    padding: 6px 10px !important;
-    font-size: .68rem !important;
-  }
-
-  #ventures .venture-card h3 {
-    margin: 0 0 7px !important;
-    font-size: clamp(1.18rem, 1.5vw, 1.45rem) !important;
-    line-height: 1.05 !important;
-  }
-
+  #ventures .venture-meta { gap: 6px !important; margin: 0 0 7px !important; flex-wrap: wrap !important; }
+  #ventures .tag { padding: 5px 9px !important; font-size: .61rem !important; line-height: 1 !important; }
+  #ventures .venture-card h3 { margin: 0 0 5px !important; font-size: 1.08rem !important; line-height: 1.05 !important; }
   #ventures .venture-card p {
     margin: 0 !important;
-    font-size: .82rem !important;
-    line-height: 1.42 !important;
+    font-size: .72rem !important;
+    line-height: 1.34 !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 3 !important;
+    overflow: hidden !important;
   }
-
-  #ventures .venture-arrow {
-    margin-top: auto !important;
-    padding-top: 10px !important;
-  }
+  #ventures .venture-arrow { margin-top: auto !important; padding-top: 6px !important; font-size: .95rem !important; }
 }
 
 @media (min-width: 720px) and (max-width: 1119px) {
   #ventures .venture-grid {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 14px !important;
+    gap: 12px !important;
   }
-
   #ventures .venture-card,
-  #ventures .venture-card--ctseg {
-    grid-column: auto !important;
-    min-height: 220px !important;
-  }
-
-  #ventures .venture-card__ctseg-logo {
-    display: block !important;
-    width: min(72%, 220px) !important;
-    height: auto !important;
-    margin: 0 0 1rem !important;
-    object-fit: contain !important;
-    object-position: left center !important;
-  }
+  #ventures .venture-card--ctseg { grid-column: auto !important; min-height: 210px !important; }
+  #ventures .venture-card__ctseg-logo { display: block !important; width: 180px !important; height: auto !important; margin-bottom: .8rem !important; }
 }
 
 @media (max-width: 719px) {
-  #ventures .venture-grid {
-    grid-template-columns: 1fr !important;
-  }
-
+  #ventures .venture-grid { grid-template-columns: 1fr !important; }
   #ventures .venture-card,
-  #ventures .venture-card--ctseg {
-    grid-column: auto !important;
-    min-height: auto !important;
-  }
-
-  #ventures .venture-card__ctseg-logo {
-    display: block !important;
-    width: min(72vw, 220px) !important;
-    height: auto !important;
-    margin: 0 0 1rem !important;
-    object-fit: contain !important;
-    object-position: left center !important;
-  }
+  #ventures .venture-card--ctseg { grid-column: auto !important; min-height: auto !important; }
+  #ventures .venture-card__ctseg-logo { display: block !important; width: min(68vw, 190px) !important; height: auto !important; margin-bottom: .8rem !important; }
 }
