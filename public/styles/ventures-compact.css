@@ -13,8 +13,8 @@
     display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     grid-auto-rows: 190px !important;
-    column-gap: 18px !important;
-    row-gap: 16px !important;
+    column-gap: 22px !important;
+    row-gap: 20px !important;
     align-items: stretch !important;
   }
 
@@ -29,18 +29,14 @@
     min-height: 0 !important;
     height: 190px !important;
     padding: 15px !important;
+    border: 1px solid rgba(58, 80, 107, .52) !important;
     border-radius: 18px !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .12) !important;
     overflow: hidden !important;
   }
 
   #ventures .venture-card.has-image > img:not(.venture-card__ctseg-logo) {
-    width: calc(100% + 30px) !important;
-    max-width: none !important;
-    height: 54px !important;
-    margin: -15px -15px 10px !important;
-    object-fit: cover !important;
-    object-position: center 32% !important;
-    flex: 0 0 auto !important;
+    display: none !important;
   }
 
   #ventures .venture-card__ctseg-logo {
@@ -73,16 +69,18 @@
   #ventures .venture-grid {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 16px !important;
+    gap: 18px !important;
   }
   #ventures .venture-card,
   #ventures .venture-card--ctseg { grid-column: auto !important; min-height: 210px !important; }
+  #ventures .venture-card.has-image > img:not(.venture-card__ctseg-logo) { display: none !important; }
   #ventures .venture-card__ctseg-logo { display: block !important; width: 180px !important; height: auto !important; margin-bottom: .8rem !important; }
 }
 
 @media (max-width: 719px) {
-  #ventures .venture-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+  #ventures .venture-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
   #ventures .venture-card,
   #ventures .venture-card--ctseg { grid-column: auto !important; min-height: auto !important; }
+  #ventures .venture-card.has-image > img:not(.venture-card__ctseg-logo) { display: none !important; }
   #ventures .venture-card__ctseg-logo { display: block !important; width: min(68vw, 190px) !important; height: auto !important; margin-bottom: .8rem !important; }
 }
