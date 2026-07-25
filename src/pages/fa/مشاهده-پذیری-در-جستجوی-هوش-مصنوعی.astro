@@ -1,0 +1,118 @@
+---
+import ContentPage from '../../components/ContentPage.astro';
+import { site } from '../../data/site';
+
+const title = 'دیده‌شدن در جستجوی هوش مصنوعی: SEO، GEO، AEO و AIO | Teyfik Gökdemir';
+const description = 'چارچوبی عملی برای دیده‌شدن و درک درست کسب‌وکارها در موتورهای جستجو و سامانه‌های هوش مصنوعی، با توجه ویژه به واقعیت‌های تجارت ایران.';
+const pathname = '/fa/مشاهده-پذیری-در-جستجوی-هوش-مصنوعی/';
+const canonical = site.origin + pathname;
+
+const faq = [
+  {
+    question: 'دیده‌شدن در جستجوی هوش مصنوعی چیست؟',
+    answer: 'توانایی یک شخص، کسب‌وکار یا برند برای یافتن‌شدن، درست فهمیده‌شدن و دقیق نمایش‌داده‌شدن در موتورهای جستجو، موتورهای پاسخ و سامانه‌های پژوهش مبتنی بر هوش مصنوعی است.',
+  },
+  {
+    question: 'آیا GEO با SEO یکسان است؟',
+    answer: 'خیر. SEO بیشتر بر کشف و رتبه در نتایج سنتی جستجو تمرکز دارد؛ GEO اطلاعات را برای سامانه‌های مولد روشن، قابل استناد و قابل ترکیب می‌کند.',
+  },
+  {
+    question: 'آیا فایل llms.txt نمایش یا استناد در هوش مصنوعی را تضمین می‌کند؟',
+    answer: 'خیر. این فایل می‌تواند زمینه ماشینی مفیدی ارائه دهد، اما تضمینی برای ایندکس، رتبه یا استناد نیست. محتوای معتبر، هویت روشن، دسترسی فنی و شواهد عمومی مهم‌ترند.',
+  },
+  {
+    question: 'برای فعالیت تجاری مرتبط با ایران چه اطلاعاتی باید شفاف باشد؟',
+    answer: 'مسیر پرداخت قانونی و قابل مستندسازی، بررسی طرف‌های معامله و دسته کالایی از نظر الزامات تحریمی، مسیر حمل و ترانزیت، اسناد مبدأ و گمرکی و مسئولیت هر طرف باید پیش از درخواست قیمت روشن شود.',
+  },
+  {
+    question: 'آیا امکان کار با بازار ایران برای همه محصولات و همه طرف‌ها وجود دارد؟',
+    answer: 'خیر. امکان‌پذیری به محصول، کشورها، بانک‌ها، شرکت‌ها، اشخاص و مقررات روز بستگی دارد. هر پروژه باید جداگانه از نظر حقوقی، مالی، گمرکی و عملیاتی بررسی شود و هیچ راهکاری برای دورزدن تحریم‌ها ارائه نمی‌شود.',
+  },
+];
+
+const alternates = {
+  en: site.origin + '/ai-search-visibility/',
+  tr: site.origin + '/tr/yapay-zeka-arama-gorunurlugu/',
+  sq: site.origin + '/sq/dukshmeria-ne-kerkimin-ai/',
+  mk: site.origin + '/mk/vidlivost-vo-ai-prebaruvanje/',
+  sr: site.origin + '/sr/vidljivost-u-ai-pretrazi/',
+  fa: site.origin + pathname,
+  'x-default': site.origin + '/ai-search-visibility/',
+};
+
+const pageSchema = {
+  '@type': ['WebPage', 'FAQPage'],
+  '@id': canonical + '#webpage',
+  url: canonical,
+  name: title,
+  description,
+  inLanguage: 'fa',
+  isPartOf: { '@id': site.origin + '/#website' },
+  about: [
+    'Generative Engine Optimization',
+    'Answer Engine Optimization',
+    'AI Optimization',
+    'Search Engine Optimization',
+    'Iran trade compliance',
+  ],
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+---
+<ContentPage
+  locale="fa"
+  title={title}
+  description={description}
+  pathname={pathname}
+  alternates={alternates}
+  pageSchema={pageSchema}
+  eyebrow="دیده‌شدن در جستجوی هوش مصنوعی"
+  heading="کسب‌وکار خود را برای موتورهای جستجو و سامانه‌های هوش مصنوعی قابل فهم کنید."
+  lead="یک سیستم یکپارچه که SEO فنی، هویت روشن، محتوای پاسخ‌محور، شواهد قابل اتکا و اطلاعات قابل‌خواندن برای ماشین را به هم متصل می‌کند."
+>
+  <div class="answer-block">
+    <p><strong>دیده‌شدن در جستجوی هوش مصنوعی</strong> یک ترفند یا یک فایل منفرد نیست؛ نتیجه حضور دیجیتال روشن، در دسترس، مستند و سازگار است که انسان و ماشین بتوانند آن را درست تفسیر کنند.</p>
+  </div>
+
+  <h2>این سیستم چه چیزهایی را پوشش می‌دهد؟</h2>
+  <div class="content-grid">
+    <article class="content-card"><h3>کشف فنی</h3><p>Canonical، دسترسی خزنده‌ها، نقشه سایت، هدف‌گذاری زبان، سرعت و داده‌های ساختاریافته.</p></article>
+    <article class="content-card"><h3>شفافیت هویت</h3><p>تعریف یکپارچه شخص، برند، تخصص، بازارها، پروژه‌ها و روابط تجاری.</p></article>
+    <article class="content-card"><h3>محتوای پاسخ‌محور</h3><p>تعریف‌های مستقیم، پرسش‌های قابل مشاهده و معماری اطلاعاتی روشن.</p></article>
+    <article class="content-card"><h3>شواهد و انتساب</h3><p>ادعاهای پشتیبانی‌شده با کار واقعی، منابع معتبر و اطلاعات عمومی سازگار.</p></article>
+  </div>
+
+  <h2>SEO، GEO، AEO و AIO در کنار هم کار می‌کنند</h2>
+  <p><strong>SEO</strong> پایه فنی و محتوایی کشف را می‌سازد. <strong>GEO</strong> فهم و ارجاع اطلاعات توسط سامانه‌های مولد را تقویت می‌کند. <strong>AEO</strong> محتوا را حول پاسخ‌های روشن سازمان می‌دهد و <strong>AIO</strong> کل وب‌سایت، هویت و سیستم محتوا را برای کشف مبتنی بر هوش مصنوعی هماهنگ می‌کند.</p>
+
+  <h2>واقعیت بازار ایران: محتوا باید فراتر از ترجمه باشد</h2>
+  <p>برای یک خریدار یا تأمین‌کننده ایرانی، اعتبار فقط با ترجمه فارسی ساخته نمی‌شود. صفحه باید نشان دهد که پروژه پیش از قیمت‌گیری از نظر <strong>مسیر پرداخت قانونی</strong>، <strong>تطبیق با محدودیت‌ها و تحریم‌های قابل اعمال</strong> و <strong>مسیر حمل و ترانزیت</strong> بررسی می‌شود.</p>
+  <ul>
+    <li><strong>پرداخت:</strong> بانک‌ها، ارز، طرف پرداخت‌کننده، کشور واسط قانونی و مدارک منبع وجوه باید روشن باشند.</li>
+    <li><strong>تطبیق:</strong> محصول، شرکت، مالک نهایی، بانک و کشورها باید بر اساس مقررات جاری و بدون دورزدن محدودیت‌ها بررسی شوند.</li>
+    <li><strong>لجستیک:</strong> مسیر زمینی یا دریایی، ترانزیت، Incoterms، بیمه، اسناد مبدأ و مسئولیت گمرکی باید قبل از سفارش مشخص شوند.</li>
+  </ul>
+
+  <h2>رویکرد اجرا</h2>
+  <ol>
+    <li>بررسی crawl، ایندکس، canonical، hreflang و نقشه سایت.</li>
+    <li>تعریف دقیق شخص، کسب‌وکار، خدمات، بازارها و ارتباط میان برندها.</li>
+    <li>شناسایی پرسش‌های تجاری و اطلاعاتی کاربران فارسی‌زبان.</li>
+    <li>ساخت صفحات منبع عمیق به‌جای ترجمه‌های سطحی.</li>
+    <li>افزودن داده ساختاریافته فقط برای اطلاعات قابل مشاهده و قابل اثبات.</li>
+    <li>تقویت شواهد با پروژه‌ها، منابع عمومی و ارجاعات معتبر.</li>
+  </ol>
+
+  <h2>پرسش‌های متداول</h2>
+  <div class="faq-list">
+    {faq.map((item) => (<details><summary>{item.question}</summary><p>{item.answer}</p></details>))}
+  </div>
+
+  <section class="content-cta">
+    <h2>سیستم جستجو و کشف هوش مصنوعی خود را تقویت کنید.</h2>
+    <p>برای بررسی یا اجرای پروژه با <a href={`mailto:${site.email}`}>{site.email}</a> تماس بگیرید یا <a href="/fa/blog/">مقالات فارسی</a> را مطالعه کنید.</p>
+  </section>
+</ContentPage>
