@@ -2,26 +2,30 @@
 import type { Locale } from '../i18n/locales';
 import { site } from '../data/site';
 
+type SupportedLocale = Locale | 'fa';
+
 interface Props {
-  locale: Locale;
+  locale: SupportedLocale;
 }
 
 const { locale } = Astro.props;
 
-const messages: Record<Locale, string> = {
+const messages: Record<SupportedLocale, string> = {
   en: 'Hello Teyfik, I am contacting you through your website.',
   tr: 'Merhaba Teyfik Bey, web siteniz üzerinden iletişime geçiyorum.',
   sq: 'Përshëndetje Teyfik, po ju kontaktoj përmes faqes suaj.',
   mk: 'Здраво Тејфик, ве контактирам преку вашата веб-страница.',
   sr: 'Zdravo Teyfik, kontaktiram vas putem vašeg sajta.',
+  fa: 'سلام آقای تیفیک، از طریق وب‌سایت شما تماس می‌گیرم.',
 };
 
-const labels: Record<Locale, { whatsapp: string; top: string }> = {
+const labels: Record<SupportedLocale, { whatsapp: string; top: string }> = {
   en: { whatsapp: 'Contact Teyfik on WhatsApp', top: 'Back to top' },
   tr: { whatsapp: 'WhatsApp üzerinden iletişime geç', top: 'Sayfa başına dön' },
   sq: { whatsapp: 'Kontaktoni në WhatsApp', top: 'Kthehu në krye' },
   mk: { whatsapp: 'Контактирајте преку WhatsApp', top: 'Назад на врвот' },
   sr: { whatsapp: 'Kontakt putem WhatsApp-a', top: 'Nazad na vrh' },
+  fa: { whatsapp: 'تماس با تیفیک در واتس‌اپ', top: 'بازگشت به بالای صفحه' },
 };
 
 const whatsappUrl =
