@@ -13,7 +13,8 @@
     display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     grid-auto-rows: 190px !important;
-    gap: 12px !important;
+    column-gap: 18px !important;
+    row-gap: 16px !important;
     align-items: stretch !important;
   }
 
@@ -72,7 +73,7 @@
   #ventures .venture-grid {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 12px !important;
+    gap: 16px !important;
   }
   #ventures .venture-card,
   #ventures .venture-card--ctseg { grid-column: auto !important; min-height: 210px !important; }
@@ -80,7 +81,7 @@
 }
 
 @media (max-width: 719px) {
-  #ventures .venture-grid { grid-template-columns: 1fr !important; }
+  #ventures .venture-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
   #ventures .venture-card,
   #ventures .venture-card--ctseg { grid-column: auto !important; min-height: auto !important; }
   #ventures .venture-card__ctseg-logo { display: block !important; width: min(68vw, 190px) !important; height: auto !important; margin-bottom: .8rem !important; }
