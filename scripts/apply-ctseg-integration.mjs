@@ -26,14 +26,8 @@ await patch('src/components/Footer.astro', (source) => {
     next = next.replace("  ['Mythborn', site.links.mythborn],", "  ['Mythborn', site.links.mythborn],\n  ['CTSEG', site.links.ctseg],");
   }
   if (!next.includes('premium-footer__venture-logo')) {
-    next = next.replace(
-      '<span>{label}</span>\n              <span aria-hidden="true">↗</span>',
-      `{label === 'CTSEG' ? (\n                <img class="premium-footer__venture-logo" src="/images/ctseg-logo-transparent.png" width="1063" height="342" alt="CTSEG" loading="lazy" decoding="async" />\n              ) : (\n                <span>{label}</span>\n              )}\n              <span aria-hidden="true">↗</span>`
-    );
-    next = next.replace(
-      '  .premium-footer__group nav a:hover {',
-      `  .premium-footer__venture-logo { display: block; width: 92px; height: auto; }\n\n  .premium-footer__group nav a:hover {`
-    );
+    next = next.replace('<span>{label}</span>\n              <span aria-hidden="true">↗</span>', `{label === 'CTSEG' ? (\n                <img class="premium-footer__venture-logo" src="/images/ctseg-logo-transparent.png" width="1063" height="342" alt="CTSEG" loading="lazy" decoding="async" />\n              ) : (\n                <span>{label}</span>\n              )}\n              <span aria-hidden="true">↗</span>`);
+    next = next.replace('  .premium-footer__group nav a:hover {', `  .premium-footer__venture-logo { display: block; width: 92px; height: auto; }\n\n  .premium-footer__group nav a:hover {`);
   }
   return next;
 });
@@ -41,10 +35,7 @@ await patch('src/components/Footer.astro', (source) => {
 await patch('src/components/VentureMarquee.astro', (source) => {
   let next = source;
   if (!next.includes("{ name: 'CTSEG'")) {
-    next = next.replace(
-      "  { name: 'Mythborn', href: 'https://mythborn.co', tone: 'mythborn' },",
-      "  { name: 'Mythborn', href: 'https://mythborn.co', tone: 'mythborn' },\n  { name: 'CTSEG', href: 'https://ctseg.com.tr', tone: 'ctseg', logo: '/images/ctseg-logo-transparent.png' },"
-    );
+    next = next.replace("  { name: 'Mythborn', href: 'https://mythborn.co', tone: 'mythborn' },", "  { name: 'Mythborn', href: 'https://mythborn.co', tone: 'mythborn' },\n  { name: 'CTSEG', href: 'https://ctseg.com.tr', tone: 'ctseg', logo: '/images/ctseg-logo-transparent.png' },");
   } else if (!next.includes("logo: '/images/ctseg-logo-transparent.png'")) {
     next = next.replace("{ name: 'CTSEG', href: 'https://ctseg.com.tr', tone: 'ctseg' }", "{ name: 'CTSEG', href: 'https://ctseg.com.tr', tone: 'ctseg', logo: '/images/ctseg-logo-transparent.png' }");
   }
@@ -73,12 +64,12 @@ await patch('src/components/FounderPage.astro', (source) => {
   if (!next.includes('CTSEG ↗</a>')) {
     next = next.replace('<a href="https://mythborn.co" target="_blank" rel="noopener noreferrer">Mythborn ↗</a>', '<a href="https://mythborn.co" target="_blank" rel="noopener noreferrer">Mythborn ↗</a><a href="https://ctseg.com.tr" target="_blank" rel="noopener noreferrer">CTSEG ↗</a>');
   }
+  next = next.replace("{ 'has-image': item.image === 'commerce' }", "{ 'has-image': item.image === 'commerce', 'venture-card--ctseg': item.image === 'ctseg' }");
   if (!next.includes("item.image === 'ctseg'")) {
-    next = next.replace(
-      `{item.image === 'commerce' && <img src={site.images.commerce.path} width={site.images.commerce.width} height={site.images.commerce.height} alt={copy.images.commerce} loading="lazy" decoding="async" />}`,
-      `{item.image === 'commerce' && <img src={site.images.commerce.path} width={site.images.commerce.width} height={site.images.commerce.height} alt={copy.images.commerce} loading="lazy" decoding="async" />}\n{item.image === 'ctseg' && <img class="venture-card__ctseg-logo" src={site.images.ctseg.path} width={site.images.ctseg.width} height={site.images.ctseg.height} alt="CTSEG" loading="lazy" decoding="async" />}`
-    );
-    next = next.replace('</style>', '  .venture-card__ctseg-logo { width: min(72%, 280px); height: auto; margin: 0 0 1.25rem; object-fit: contain; }\n</style>');
+    next = next.replace(`{item.image === 'commerce' && <img src={site.images.commerce.path} width={site.images.commerce.width} height={site.images.commerce.height} alt={copy.images.commerce} loading="lazy" decoding="async" />}`, `{item.image === 'commerce' && <img src={site.images.commerce.path} width={site.images.commerce.width} height={site.images.commerce.height} alt={copy.images.commerce} loading="lazy" decoding="async" />}\n{item.image === 'ctseg' && <img class="venture-card__ctseg-logo" src={site.images.ctseg.path} width={site.images.ctseg.width} height={site.images.ctseg.height} alt="CTSEG" loading="lazy" decoding="async" />}`);
+  }
+  if (!next.includes('.venture-card--ctseg {')) {
+    next = next.replace('</style>', `  .venture-card--ctseg { grid-column: 1 / -1; min-height: 260px; display: grid; grid-template-columns: minmax(180px, 300px) 1fr; grid-template-areas: "logo meta" "logo title" "logo text" "logo arrow"; column-gap: clamp(2rem, 5vw, 5rem); align-items: center; }\n  .venture-card--ctseg .venture-card__ctseg-logo { grid-area: logo; width: 100%; max-width: 280px; height: auto; margin: 0; object-fit: contain; justify-self: center; }\n  .venture-card--ctseg .venture-meta { grid-area: meta; align-self: end; }\n  .venture-card--ctseg h3 { grid-area: title; margin: .65rem 0 .35rem; }\n  .venture-card--ctseg p { grid-area: text; max-width: 720px; }\n  .venture-card--ctseg .venture-arrow { grid-area: arrow; }\n  @media (max-width: 720px) { .venture-card--ctseg { grid-template-columns: 1fr; grid-template-areas: "logo" "meta" "title" "text" "arrow"; row-gap: .75rem; } .venture-card--ctseg .venture-card__ctseg-logo { width: min(72%, 240px); justify-self: start; margin-bottom: .75rem; } }\n</style>`);
   }
   return next;
 });
