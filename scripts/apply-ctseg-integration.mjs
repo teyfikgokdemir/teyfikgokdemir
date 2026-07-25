@@ -49,6 +49,22 @@ await patch('src/components/FounderPage.astro', (source) => {
     );
   }
 
+  const ecosystemTexts = [
+    ["Türkiye’de QCT Commerce’i, Balkanlar’da QCT Studio’yu ve uluslararası pazara yönelik Mythborn girişimini geliştirmektedir.", "Türkiye’de QCT Commerce’i, Balkanlar’da QCT Studio’yu, uluslararası pazara yönelik Mythborn’u ve stratejik tedarik ile uluslararası ticaret odağındaki CTSEG’i geliştirmektedir."],
+    ["develops QCT Commerce for Türkiye, QCT Studio for the Balkans and Mythborn for international markets", "develops QCT Commerce for Türkiye, QCT Studio for the Balkans, Mythborn for international markets and CTSEG for strategic sourcing and international trade"],
+    ["ги развива QCT Commerce за Турција, QCT Studio за Балканот и Mythborn за меѓународните пазари", "ги развива QCT Commerce за Турција, QCT Studio за Балканот, Mythborn за меѓународните пазари и CTSEG за стратешко снабдување и меѓународна трговија"],
+    ["razvija QCT Commerce za Tursku, QCT Studio za Balkan i Mythborn za međunarodna tržišta", "razvija QCT Commerce za Tursku, QCT Studio za Balkan, Mythborn za međunarodna tržišta i CTSEG za strateški sourcing i međunarodnu trgovinu"],
+    ["zhvillon QCT Commerce për Turqinë, QCT Studio për Ballkanin dhe Mythborn për tregjet ndërkombëtare", "zhvillon QCT Commerce për Turqinë, QCT Studio për Ballkanin, Mythborn për tregjet ndërkombëtare dhe CTSEG për furnizim strategjik dhe tregti ndërkombëtare"],
+  ];
+  for (const [before, after] of ecosystemTexts) next = next.replace(before, after);
+
+  if (!next.includes('>CTSEG ↗</a>')) {
+    next = next.replace(
+      '<a href="https://mythborn.co" target="_blank" rel="noopener noreferrer">Mythborn ↗</a>',
+      '<a href="https://mythborn.co" target="_blank" rel="noopener noreferrer">Mythborn ↗</a><a href="https://ctseg.com.tr" target="_blank" rel="noopener noreferrer">CTSEG ↗</a>'
+    );
+  }
+
   if (!next.includes('/styles/ventures-compact.css')) {
     next = next.replace('<Header locale={locale}', '<link rel="stylesheet" href="/styles/ventures-compact.css" />\n<Header locale={locale}');
   }
