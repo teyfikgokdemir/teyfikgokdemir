@@ -33,7 +33,10 @@ await patch('src/components/Footer.astro', (source) => {
 
   if (!next.includes("['CTSEG', site.links.ctseg]")) next = next.replace("  ['Mythborn', site.links.mythborn],", "  ['Mythborn', site.links.mythborn],\n  ['CTSEG', site.links.ctseg],");
 
-  next = next.replace('Digital commerce, AI operations and growth systems.', '{footer.position}');
+  next = next.replace(
+    `<p class="premium-footer__position">\n        Digital commerce, AI operations and growth systems.\n      </p>`,
+    `<p class="premium-footer__position">\n        {footer.position}\n      </p>`
+  );
   next = next.replace('<span class="premium-footer__label">Connect</span>', '<span class="premium-footer__label">{footer.connect}</span>');
   next = next.replace('<span class="premium-footer__label">Ventures</span>', '<span class="premium-footer__label">{footer.ventures}</span>');
   next = next.replace('<span class="premium-footer__label">Contact</span>', '<span class="premium-footer__label">{footer.contact}</span>');
