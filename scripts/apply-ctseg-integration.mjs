@@ -18,7 +18,25 @@ await patch('src/i18n/content.ts', (source) => source.replace("image?: 'commerce
 
 await patch('src/components/Footer.astro', (source) => {
   let next = source;
+  if (!next.includes("import type { Locale } from '../i18n/locales';")) {
+    next = next.replace("import type { SiteContent } from '../i18n/content';", "import type { SiteContent } from '../i18n/content';\nimport type { Locale } from '../i18n/locales';");
+  }
+  next = next.replace('  copy: SiteContent;\n}', '  copy: SiteContent;\n  locale: Locale;\n}');
+  next = next.replace('const { copy } = Astro.props;', 'const { copy, locale } = Astro.props;');
+
+  if (!next.includes('const footerText = {')) {
+    next = next.replace(
+      'const socialLinks = [',
+      `const footerText = {\n  tr: { connect: 'Bağlantılar', ventures: 'Girişimler', contact: 'İletişim', position: 'Dijital ticaret, yapay zekâ operasyonları ve büyüme sistemleri.' },\n  en: { connect: 'Connect', ventures: 'Ventures', contact: 'Contact', position: 'Digital commerce, AI operations and growth systems.' },\n  mk: { connect: 'Поврзување', ventures: 'Потфати', contact: 'Контакт', position: 'Дигитална трговија, AI операции и системи за раст.' },\n  sr: { connect: 'Povezivanje', ventures: 'Poduhvati', contact: 'Kontakt', position: 'Digitalna trgovina, AI operacije i sistemi rasta.' },\n  sq: { connect: 'Lidhje', ventures: 'Sipërmarrje', contact: 'Kontakt', position: 'Tregti digjitale, operacione me AI dhe sisteme rritjeje.' },\n  fa: { connect: 'ارتباطات', ventures: 'کسب‌وکارها', contact: 'تماس', position: 'تجارت دیجیتال، عملیات هوش مصنوعی و سیستم‌های رشد.' },\n} as const;\n\nconst footer = footerText[locale] ?? footerText.en;\n\nconst socialLinks = [`
+    );
+  }
+
   if (!next.includes("['CTSEG', site.links.ctseg]")) next = next.replace("  ['Mythborn', site.links.mythborn],", "  ['Mythborn', site.links.mythborn],\n  ['CTSEG', site.links.ctseg],");
+
+  next = next.replace('Digital commerce, AI operations and growth systems.', '{footer.position}');
+  next = next.replace('<span class="premium-footer__label">Connect</span>', '<span class="premium-footer__label">{footer.connect}</span>');
+  next = next.replace('<span class="premium-footer__label">Ventures</span>', '<span class="premium-footer__label">{footer.ventures}</span>');
+  next = next.replace('<span class="premium-footer__label">Contact</span>', '<span class="premium-footer__label">{footer.contact}</span>');
   return next;
 });
 
@@ -64,6 +82,8 @@ await patch('src/components/FounderPage.astro', (source) => {
       '<a href="https://mythborn.co" target="_blank" rel="noopener noreferrer">Mythborn ↗</a><a href="https://ctseg.com.tr" target="_blank" rel="noopener noreferrer">CTSEG ↗</a>'
     );
   }
+
+  next = next.replace('<VentureMarquee /><Footer copy={copy} />', '<VentureMarquee /><Footer copy={copy} locale={locale} />');
 
   if (!next.includes('/styles/ventures-compact.css')) {
     next = next.replace('<Header locale={locale}', '<link rel="stylesheet" href="/styles/ventures-compact.css" />\n<Header locale={locale}');
