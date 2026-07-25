@@ -11,8 +11,8 @@ interface Props {
 
 const { locale, copy, homePath, languageUrls } = Astro.props;
 
-const localeUrl = (item: Locale) => `/${item}/`;
-const currentHomePath = locale === 'en' ? '/en/' : (homePath ?? localeUrl(locale));
+const localeUrl = (item: Locale) => item === 'tr' ? '/' : `/${item}/`;
+const currentHomePath = homePath ?? localeUrl(locale);
 const sectionUrl = (section: string) => `${currentHomePath}#${section}`;
 
 const aiVisibilityUrls: Record<Locale, string> = {
