@@ -51,7 +51,9 @@ const jsonLd = {
       '@id': site.origin + '/#person',
       name: site.name,
       url: site.origin,
-      jobTitle: 'Founder, Digital Commerce & Growth Operator',
+      jobTitle: 'Founder, International Trade & Strategic Sourcing Operator',
+      description:
+        'Founder of CTSEG, building evidence-led international trade, strategic sourcing and commercial operating systems across Türkiye, the Balkans and international markets.',
       email: 'mailto:' + site.email,
       contactPoint: [
         {
@@ -72,24 +74,32 @@ const jsonLd = {
         addressCountry: 'TR',
       },
       knowsAbout: [
-        'E-commerce Strategy',
-        'Digital Commerce',
-        'Digital Growth',
-        'Operations Management',
-        'Shopify',
-        'WooCommerce',
-        'Search Engine Optimization',
-        'Generative Engine Optimization',
-        'Answer Engine Optimization',
-        'AI Optimization',
-        'Conversion Rate Optimization',
+        'International Trade',
+        'Strategic Sourcing',
+        'Supplier Research',
+        'Supplier Verification',
+        'Request for Quotation',
+        'Commercial Negotiation',
+        'Market Development',
+        'Cross-Border Commercial Operations',
         'Supply Chain',
-        'Logistics',
-        'AI Automation',
-        'Sales Intelligence',
-        'Digital Operations',
+        'Digital Commerce',
+        'Search Visibility',
+        'AI-Assisted Research',
+        'AI-Assisted Operations',
       ],
       sameAs: [site.links.github, site.links.linkedin, site.links.instagram],
+    },
+    {
+      '@type': 'Organization',
+      '@id': 'https://ctseg.com.tr/#organization',
+      name: 'CTSEG',
+      legalName: 'CTSEG Sanayi ve Ticaret Limited Şirketi',
+      url: 'https://ctseg.com.tr/',
+      founder: { '@id': site.origin + '/#person' },
+      description:
+        'International trade and strategic sourcing company focused on supplier research, verification, RFQ coordination and cross-border commercial operations.',
+      areaServed: ['Türkiye', 'Balkans', 'Europe', 'Middle East', 'International'],
     },
     {
       '@type': 'Organization',
@@ -193,27 +203,38 @@ const jsonLd = {
 <style is:global>
   :root {
     color-scheme: dark;
-    --bg: #09111d;
-    --bg-deep: #070d16;
-    --panel: #101c2b;
-    --panel-soft: #142235;
-    --text: #f4f1e9;
-    --muted: #aab7c9;
-    --accent: #c84f3d;
-    --accent-soft: #f2aa8f;
-    --line: #26374d;
-    --line-strong: #3a506b;
+    --page-background: #081118;
+    --surface-elevated: #111d24;
+    --muted-background: #16242c;
+    --text-primary: #f2eee6;
+    --text-secondary: #aab8c0;
+    --border: #293b44;
+    --primary-accent: #ad6840;
+    --accent-hover: #c17b4d;
+    --accent-muted: rgba(173, 104, 64, .14);
+    --trust: #88a18d;
+    --bg: var(--page-background);
+    --bg-deep: #050b10;
+    --panel: var(--surface-elevated);
+    --panel-soft: var(--muted-background);
+    --text: var(--text-primary);
+    --muted: var(--text-secondary);
+    --accent: var(--primary-accent);
+    --accent-soft: #d9a475;
+    --line: var(--border);
+    --line-strong: #465b64;
     --max: 1180px;
     --radius: 22px;
     --header-height: 76px;
   }
 
   * { box-sizing: border-box; }
-  html { background: var(--bg); }
+  html { overflow-x: clip; background: var(--bg); }
   body {
     margin: 0;
+    overflow-x: clip;
     background:
-      radial-gradient(circle at 78% 4%, rgba(35, 67, 103, .34), transparent 30rem),
+      radial-gradient(circle at 78% 4%, rgba(56, 78, 87, .24), transparent 30rem),
       linear-gradient(180deg, var(--bg), var(--bg-deep) 58%, var(--bg));
     color: var(--text);
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -250,7 +271,12 @@ const jsonLd = {
     text-transform: uppercase;
   }
   p { overflow-wrap: anywhere; }
-  h1, h2, h3 { overflow-wrap: normal; text-wrap: balance; }
+  h1, h2, h3 {
+    overflow-wrap: normal;
+    text-wrap: balance;
+    font-family: "Iowan Old Style", Baskerville, Georgia, "Times New Roman", serif;
+    font-weight: 600;
+  }
   h2 {
     margin: 0 0 1.25rem;
     font-size: clamp(2.15rem, 5vw, 4.65rem);
@@ -368,6 +394,7 @@ const jsonLd = {
     font-weight: 800;
   }
   .button.primary { border-color: var(--accent); background: var(--accent); color: #fff; }
+  .button.primary:hover { border-color: var(--accent-hover); background: var(--accent-hover); }
   .button:hover { transform: translateY(-2px); border-color: var(--accent-soft); }
   .hero-summary {
     max-width: 700px;
@@ -784,7 +811,7 @@ const jsonLd = {
     .language-switcher { width: 100%; justify-content: space-between; }
     .language-switcher a { min-width: 44px; min-height: 44px; }
     .hero { min-height: auto; grid-template-columns: 1fr; padding-top: 3.5rem; }
-    .hero-media { min-height: 480px; order: -1; }
+    .hero-media { min-height: 480px; order: 2; }
     .hero-media::before { inset-inline: 3%; }
     .hero-media img { inset-inline: 0; margin: auto; }
     .intro-grid, .regional-grid, .journey-layout { grid-template-columns: 1fr; }

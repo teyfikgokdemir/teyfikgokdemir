@@ -1,24 +1,22 @@
 ---
 const ventures = [
+  { name: 'CTSEG', href: 'https://ctseg.com.tr', tone: 'ctseg', logo: '/images/ctseg-logo-transparent.png' },
   { name: 'QCT Studio', href: 'https://qctstudio.com', tone: 'studio' },
   { name: 'QCT Commerce', href: 'https://qctcommerce.com', tone: 'commerce' },
   { name: 'Mythborn', href: 'https://mythborn.co', tone: 'mythborn' },
-  { name: 'CTSEG', href: 'https://ctseg.com.tr', tone: 'ctseg', logo: '/images/ctseg-logo-transparent.png' },
 ] as const;
 
-const repeatedVentures = [...ventures, ...ventures];
+const repeatedVentures = ventures;
 ---
 
 <div class="venture-marquee" aria-label="Teyfik Gökdemir venture ecosystem">
   <div class="venture-marquee__track">
-    {repeatedVentures.map((venture, index) => (
+    {repeatedVentures.map((venture) => (
       <a
         class:list={['venture-marquee__item', `venture-marquee__item--${venture.tone}`]}
         href={venture.href}
         target="_blank"
         rel="noopener noreferrer"
-        aria-hidden={index >= ventures.length ? 'true' : undefined}
-        tabindex={index >= ventures.length ? '-1' : undefined}
       >
         <span class="venture-marquee__mark" aria-hidden="true"></span>
         <span>{venture.name}</span>
@@ -30,7 +28,9 @@ const repeatedVentures = [...ventures, ...ventures];
 <style>
   .venture-marquee {
     width: 100%;
+    max-width: 100vw;
     overflow: hidden;
+    contain: inline-size;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(2, 9, 17, 0.76);
@@ -40,22 +40,22 @@ const repeatedVentures = [...ventures, ...ventures];
 
   .venture-marquee__track {
     display: flex;
-    width: max-content;
+    width: 100%;
+    flex-wrap: wrap;
     align-items: center;
-    animation: venture-marquee 34s linear infinite;
-    will-change: transform;
+    justify-content: center;
   }
 
   .venture-marquee__item {
-    min-height: 104px;
+    min-height: 86px;
     display: inline-flex;
     flex: 0 0 auto;
     align-items: center;
     gap: 18px;
-    padding: 0 clamp(34px, 5vw, 76px);
+    padding: 0 clamp(24px, 3.5vw, 52px);
     color: rgba(244, 241, 233, 0.46);
     font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(2rem, 4.2vw, 4.6rem);
+    font-size: clamp(1.45rem, 2.6vw, 2.7rem);
     font-weight: 400;
     letter-spacing: -0.035em;
     text-decoration: none;
@@ -77,39 +77,25 @@ const repeatedVentures = [...ventures, ...ventures];
     box-shadow: 0 0 20px color-mix(in srgb, currentColor 32%, transparent);
   }
 
-  .venture-marquee__item--studio {
-    color: rgba(90, 210, 196, 0.42);
-  }
-
-  .venture-marquee__item--commerce {
-    color: rgba(230, 107, 95, 0.42);
-  }
-
-  .venture-marquee__item--mythborn {
-    color: rgba(166, 137, 255, 0.42);
-  }
-
-  @keyframes venture-marquee {
-    to { transform: translateX(-50%); }
-  }
+  .venture-marquee__item--ctseg { color: var(--accent-soft); }
+  .venture-marquee__item--studio,
+  .venture-marquee__item--commerce,
+  .venture-marquee__item--mythborn { color: rgba(170, 184, 192, .58); }
 
   @media (max-width: 760px) {
     .venture-marquee__item {
-      min-height: 82px;
-      padding-inline: 28px;
-      font-size: clamp(1.7rem, 9vw, 3rem);
+      min-height: 64px;
+      padding-inline: 18px;
+      font-size: clamp(1.25rem, 6vw, 2rem);
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .venture-marquee {
-      overflow-x: auto;
-      -webkit-mask-image: none;
-      mask-image: none;
-      scrollbar-width: none;
+  @media (max-width: 460px) {
+    .venture-marquee__item {
+      width: 50%;
+      justify-content: center;
+      padding-inline: 10px;
+      font-size: 1.12rem;
     }
-
-    .venture-marquee::-webkit-scrollbar { display: none; }
-    .venture-marquee__track { animation: none; }
   }
 </style>

@@ -11,12 +11,12 @@ interface Props {
 const { copy, locale } = Astro.props;
 
 const footerText = {
-  tr: { connect: 'Bağlantılar', ventures: 'Girişimler', contact: 'İletişim', position: 'Dijital ticaret, yapay zekâ operasyonları ve büyüme sistemleri.' },
-  en: { connect: 'Connect', ventures: 'Ventures', contact: 'Contact', position: 'Digital commerce, AI operations and growth systems.' },
-  mk: { connect: 'Поврзување', ventures: 'Потфати', contact: 'Контакт', position: 'Дигитална трговија, AI операции и системи за раст.' },
-  sr: { connect: 'Povezivanje', ventures: 'Poduhvati', contact: 'Kontakt', position: 'Digitalna trgovina, AI operacije i sistemi rasta.' },
-  sq: { connect: 'Lidhje', ventures: 'Sipërmarrje', contact: 'Kontakt', position: 'Tregti digjitale, operacione me AI dhe sisteme rritjeje.' },
-  fa: { connect: 'ارتباطات', ventures: 'کسب‌وکارها', contact: 'تماس', position: 'تجارت دیجیتال، عملیات هوش مصنوعی و سیستم‌های رشد.' },
+  tr: { connect: 'Bağlantılar', ventures: 'Yapılar', contact: 'İletişim', position: 'CTSEG kurucusu · Uluslararası ticaret ve stratejik tedarik sistemleri.' },
+  en: { connect: 'Connect', ventures: 'Organizations', contact: 'Contact', position: 'Founder of CTSEG · International trade and strategic sourcing systems.' },
+  mk: { connect: 'Поврзување', ventures: 'Организации', contact: 'Контакт', position: 'Основач на CTSEG · Меѓународна трговија и стратешко снабдување.' },
+  sr: { connect: 'Povezivanje', ventures: 'Organizacije', contact: 'Kontakt', position: 'Osnivač CTSEG-a · Međunarodna trgovina i strateška nabavka.' },
+  sq: { connect: 'Lidhje', ventures: 'Organizata', contact: 'Kontakt', position: 'Themelues i CTSEG · Tregti ndërkombëtare dhe furnizim strategjik.' },
+  fa: { connect: 'ارتباطات', ventures: 'سازمان‌ها', contact: 'تماس', position: 'بنیان‌گذار CTSEG · تجارت بین‌المللی و تأمین راهبردی.' },
 } as const;
 
 const footer = footerText[locale] ?? footerText.en;
@@ -27,11 +27,17 @@ const socialLinks = [
   ['GitHub', site.links.github],
 ] as const;
 
+const ctsegUrl = locale === 'tr'
+  ? 'https://ctseg.com.tr/'
+  : locale === 'fa'
+    ? 'https://ctseg.com.tr/fa/tamin-beynolmelali-iran/'
+    : 'https://ctseg.com.tr/en/';
+
 const ventureLinks = [
+  ['CTSEG', ctsegUrl],
   ['QCT Studio', site.links.qctStudio],
   ['QCT Commerce', site.links.qctCommerce],
   ['Mythborn', site.links.mythborn],
-  ['CTSEG', site.links.ctseg],
 ] as const;
 
 const whatsappUrl =
@@ -196,7 +202,7 @@ const whatsappUrl =
     display: grid;
     grid-template-columns:
       minmax(390px, 1.2fr)
-      minmax(720px, 2fr);
+      minmax(0, 2fr);
     gap: clamp(80px, 8vw, 150px);
     align-items: start;
   }
@@ -240,10 +246,10 @@ const whatsappUrl =
   .premium-footer__groups {
     display: grid;
     grid-template-columns:
-      minmax(150px, 0.8fr)
-      minmax(210px, 1fr)
-      minmax(330px, 1.55fr);
-    gap: clamp(52px, 5.5vw, 96px);
+      minmax(120px, 0.8fr)
+      minmax(150px, 1fr)
+      minmax(250px, 1.55fr);
+    gap: clamp(28px, 3.5vw, 56px);
     min-width: 0;
   }
 

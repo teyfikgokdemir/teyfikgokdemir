@@ -1,23 +1,42 @@
 ---
 const email = 'info@teyfikgokdemir.com';
+const ctsegUrl = 'https://ctseg.com.tr/fa/tamin-beynolmelali-iran/';
 const ventures = [
-  { name: 'QCT Commerce', region: 'ترکیه', href: 'https://qctcommerce.com', text: 'ساختارهای تجارت دیجیتال و فروش مستقیم برای تولیدکنندگان، عمده‌فروشان و کسب‌وکارهای در حال رشد در ترکیه.' },
-  { name: 'QCT Studio', region: 'بالکان', href: 'https://qctstudio.com', text: 'راهکارهای چندزبانه وب، تجارت الکترونیک، SEO، GEO، AEO، AIO و اتوماسیون برای کسب‌وکارهای منطقه بالکان.' },
-  { name: 'Mythborn', region: 'بین‌المللی', href: 'https://mythborn.co', text: 'برند و اکوسیستم محصول و تجارت بین‌المللی در حال توسعه.' },
-  { name: 'CTSEG', region: 'تأمین و تجارت', href: 'https://ctseg.com.tr', text: 'ساختار تخصصی برای تأمین راهبردی، پژوهش و اعتبارسنجی تأمین‌کننده، RFQ، مذاکره تجاری و هماهنگی تجارت بین‌المللی.' },
+  { name: 'CTSEG', region: 'ساختار اصلی تجاری', href: ctsegUrl, featured: true, text: 'شرکت تخصصی تجارت بین‌المللی و تأمین راهبردی برای پژوهش و اعتبارسنجی تأمین‌کننده، فرایند RFQ، مذاکره و هماهنگی عملیات فرامرزی.' },
+  { name: 'QCT Studio', region: 'ساختار پشتیبان · بالکان', href: 'https://qctstudio.com', text: 'زیرساخت‌های چندزبانه وب، دیده‌شدن در جستجو و اتوماسیون برای پشتیبانی از توسعه تجاری منطقه‌ای.' },
+  { name: 'QCT Commerce', region: 'ساختار پشتیبان · ترکیه', href: 'https://qctcommerce.com', text: 'سیستم‌های تجارت دیجیتال و فروش مستقیم که از اجرای تجاری و توسعه کانال پشتیبانی می‌کنند.' },
+  { name: 'Mythborn', region: 'برند مستقل', href: 'https://mythborn.co', text: 'یک برند مستقل با هویت و مسیر توسعه جداگانه.' },
 ];
 const expertise = [
-  { title: 'تجارت بین‌المللی', items: ['فرصت‌های واردات و صادرات', 'تطبیق محصول و بازار', 'هماهنگی خریدار و تولیدکننده', 'فرایندهای RFQ و پیشنهاد قیمت', 'مذاکره تجاری', 'توسعه کسب‌وکار فرامرزی'] },
-  { title: 'تأمین راهبردی', items: ['پژوهش تولیدکننده و تأمین‌کننده', 'اعتبارسنجی تأمین‌کننده', 'تحلیل قیمت و ظرفیت', 'مشخصات محصول', 'هماهنگی کیفیت و مدارک', 'لجستیک و پیگیری سفارش'] },
-  { title: 'توسعه بازار و دیده‌شدن', items: ['استراتژی ورود به بازار', 'تجارت دیجیتال B2B', 'سیستم‌های فروش مستقیم', 'SEO', 'GEO', 'AEO', 'AIO', 'ساخت محتوا و اعتبار'] },
-  { title: 'سیستم‌های تجاری مبتنی بر AI', items: ['جریان‌های پژوهش تأمین‌کننده', 'هوشمندی فروش', 'تحلیل شرکت و فرصت', 'اتوماسیون پیشنهادها', 'مدیریت دانش', 'استانداردسازی عملیات'] },
+  { title: 'تجارت بین‌المللی', items: ['تطبیق محصول و بازار', 'هماهنگی خریدار و تولیدکننده', 'فرایند RFQ و پیشنهاد قیمت', 'مذاکره و توسعه فرامرزی'] },
+  { title: 'تأمین راهبردی و اعتبارسنجی', items: ['پژوهش تولیدکننده و تأمین‌کننده', 'بررسی هویت، ظرفیت و قیمت', 'مشخصات، کیفیت و مدارک', 'لجستیک و پیگیری سفارش'] },
+  { title: 'توسعه بازار و عملیات تجاری', items: ['استراتژی ورود به بازار', 'مدل‌های B2B و فروش مستقیم', 'طراحی فرایند و کانال', 'هماهنگی اجرای تجاری'] },
+  { title: 'پژوهش و زیرساخت مبتنی بر AI', items: ['پژوهش تأمین‌کننده', 'هوشمندی فروش و فرصت', 'مدیریت دانش', 'استانداردسازی عملیات'] },
 ];
 const schema = {
   '@context': 'https://schema.org',
   '@graph': [
-    { '@type': 'Person', '@id': 'https://teyfikgokdemir.com/#person', name: 'Teyfik Gökdemir', url: 'https://teyfikgokdemir.com/fa/', jobTitle: 'مشاور تجارت بین‌المللی و تأمین راهبردی', email, knowsAbout: ['تجارت بین‌المللی', 'تأمین راهبردی', 'پژوهش تأمین‌کننده', 'توسعه کسب‌وکار', 'ورود به بازار', 'SEO', 'GEO', 'AEO', 'AIO', 'هوش مصنوعی در عملیات تجاری'] },
+    {
+      '@type': 'Person',
+      '@id': 'https://teyfikgokdemir.com/#person',
+      name: 'Teyfik Gökdemir',
+      url: 'https://teyfikgokdemir.com/',
+      jobTitle: 'بنیان‌گذار CTSEG و متخصص تجارت بین‌المللی و تأمین راهبردی',
+      description: 'بنیان‌گذار CTSEG که سیستم‌های مبتنی بر شواهد برای تأمین راهبردی، اعتبارسنجی تأمین‌کننده و عملیات تجاری فرامرزی ایجاد می‌کند.',
+      email,
+      knowsAbout: ['تجارت بین‌المللی', 'تأمین راهبردی', 'پژوهش تأمین‌کننده', 'اعتبارسنجی تأمین‌کننده', 'RFQ', 'مذاکره تجاری', 'توسعه بازار', 'عملیات فرامرزی', 'پژوهش مبتنی بر هوش مصنوعی'],
+    },
+    {
+      '@type': 'Organization',
+      '@id': 'https://ctseg.com.tr/#organization',
+      name: 'CTSEG',
+      legalName: 'CTSEG Sanayi ve Ticaret Limited Şirketi',
+      url: 'https://ctseg.com.tr/',
+      founder: { '@id': 'https://teyfikgokdemir.com/#person' },
+      description: 'شرکت تجارت بین‌المللی و تأمین راهبردی.',
+    },
     { '@type': 'WebSite', '@id': 'https://teyfikgokdemir.com/#website', name: 'Teyfik Gökdemir', url: 'https://teyfikgokdemir.com/', author: { '@id': 'https://teyfikgokdemir.com/#person' } },
-    { '@type': 'WebPage', '@id': 'https://teyfikgokdemir.com/fa/#webpage', url: 'https://teyfikgokdemir.com/fa/', name: 'تیفیک گوکدمیر | تجارت بین‌المللی و تأمین راهبردی', inLanguage: 'fa', isPartOf: { '@id': 'https://teyfikgokdemir.com/#website' }, about: { '@id': 'https://teyfikgokdemir.com/#person' } },
+    { '@type': 'WebPage', '@id': 'https://teyfikgokdemir.com/fa/#webpage', url: 'https://teyfikgokdemir.com/fa/', name: 'تیفیک گوکدمیر | بنیان‌گذار CTSEG، تجارت بین‌المللی و تأمین راهبردی', description: 'هویت حرفه‌ای بنیان‌گذار CTSEG و رویکرد او به تجارت بین‌المللی و تأمین راهبردی.', inLanguage: 'fa', isPartOf: { '@id': 'https://teyfikgokdemir.com/#website' }, about: { '@id': 'https://teyfikgokdemir.com/#person' } },
   ],
 };
 ---
@@ -26,8 +45,8 @@ const schema = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>تیفیک گوکدمیر | تجارت بین‌المللی و تأمین راهبردی</title>
-  <meta name="description" content="تیفیک گوکدمیر در زمینه تجارت بین‌المللی، تأمین راهبردی، پژوهش و اعتبارسنجی تأمین‌کننده، توسعه بازار و عملیات تجاری مبتنی بر هوش مصنوعی فعالیت می‌کند." />
+  <title>تیفیک گوکدمیر | بنیان‌گذار CTSEG، تجارت بین‌المللی و تأمین راهبردی</title>
+  <meta name="description" content="بنیان‌گذار CTSEG؛ ایجاد سیستم‌های مبتنی بر شواهد برای تجارت بین‌المللی، تأمین راهبردی، اعتبارسنجی تأمین‌کننده و عملیات فرامرزی." />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="https://teyfikgokdemir.com/fa/" />
   <link rel="alternate" hreflang="fa" href="https://teyfikgokdemir.com/fa/" />
@@ -37,8 +56,8 @@ const schema = {
   <link rel="alternate" hreflang="sr" href="https://teyfikgokdemir.com/sr/" />
   <link rel="alternate" hreflang="sq" href="https://teyfikgokdemir.com/sq/" />
   <link rel="alternate" hreflang="x-default" href="https://teyfikgokdemir.com/tr/" />
-  <meta property="og:title" content="تیفیک گوکدمیر | تجارت بین‌المللی و تأمین راهبردی" />
-  <meta property="og:description" content="تجارت بین‌المللی، تأمین راهبردی، توسعه بازار و عملیات تجاری مبتنی بر هوش مصنوعی." />
+  <meta property="og:title" content="تیفیک گوکدمیر | بنیان‌گذار CTSEG" />
+  <meta property="og:description" content="تجارت بین‌المللی، تأمین راهبردی و عملیات تجاری مبتنی بر شواهد." />
   <meta property="og:url" content="https://teyfikgokdemir.com/fa/" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://teyfikgokdemir.com/images/teyfik-gokdemir.webp" />
@@ -48,29 +67,45 @@ const schema = {
 <body>
   <header>
     <a class="brand" href="/fa/"><img src="/images/teyfik-gokdemir-tg-logo-transparent.png?v=7" alt="" /><strong>Teyfik Gökdemir</strong></a>
-    <nav aria-label="ناوبری اصلی"><a href="#focus">حوزه‌های فعالیت</a><a href="#ventures">کسب‌وکارها</a><a href="/fa/blog/">بینش‌ها</a><a href="/fa/مشاهده-پذیری-در-جستجوی-هوش-مصنوعی/">دیده‌شدن در AI</a><a href="#contact">تماس</a></nav>
+    <nav aria-label="ناوبری اصلی"><a href="#ctseg">CTSEG</a><a href="#focus">حوزه فعالیت</a><a href="#ventures">ساختارها</a><a href="/fa/blog/">بینش‌ها</a><a href="#contact">تماس</a></nav>
     <div class="langs"><a href="/tr/">TR</a><a href="/en/">EN</a><a href="/mk/">MK</a><a href="/sr/">SR</a><a href="/sq/">SQ</a><a class="active" href="/fa/" aria-current="page">FA</a></div>
   </header>
   <main>
     <section class="hero shell">
       <div>
-        <p class="label">تجارت بین‌المللی · تأمین راهبردی · توسعه کسب‌وکار</p>
-        <h1>سیستم‌های تجارت بین‌المللی و تأمین راهبردی ایجاد می‌کنم.</h1>
-        <p class="lead">فرایند تجاری را از پژوهش تولیدکننده، بررسی قیمت و ظرفیت و اعتبارسنجی تأمین‌کننده تا هماهنگی خریدار و فروشنده، لجستیک و برنامه ورود به بازار، به‌صورت یکپارچه ساختاربندی می‌کنم.</p>
-        <div class="actions"><a class="primary" href="#focus">مشاهده حوزه‌های فعالیت</a><a href="#contact">تماس مستقیم</a></div>
-        <p class="summary">تیفیک گوکدمیر، کارآفرین مستقر در ترکیه است که در حوزه تجارت بین‌المللی، تأمین راهبردی، پژوهش تأمین‌کننده، توسعه کسب‌وکار و عملیات تجاری مبتنی بر هوش مصنوعی فعالیت می‌کند.</p>
+        <p class="label">بنیان‌گذار CTSEG · تجارت بین‌المللی · تأمین راهبردی</p>
+        <h1>برای تجارت بین‌المللی و تأمین راهبردی، سیستم‌های قابل اعتماد ایجاد می‌کنم.</h1>
+        <p class="lead">من تیفیک گوکدمیر، بنیان‌گذار CTSEG هستم. پژوهش تأمین‌کننده، اعتبارسنجی، RFQ، مذاکره، هماهنگی خریدار و تولیدکننده و اجرای فرامرزی را در یک فرایند مبتنی بر شواهد به هم متصل می‌کنم.</p>
+        <div class="actions"><a class="primary" href={ctsegUrl}>مشاهده CTSEG</a><a href="#contact">تماس مستقیم</a></div>
+        <p class="summary">این سایت مرجع هویت حرفه‌ای و دیدگاه بنیان‌گذار است؛ CTSEG ساختار اصلی تجاری برای اجرای خدمات تجارت بین‌المللی و تأمین راهبردی است.</p>
       </div>
-      <img class="portrait" src="/images/teyfik-gokdemir.webp" alt="پرتره تیفیک گوکدمیر" />
+      <img class="portrait" src="/images/teyfik-gokdemir.webp" alt="پرتره تیفیک گوکدمیر، بنیان‌گذار CTSEG" />
     </section>
-    <section class="section" id="focus"><div class="shell"><p class="label">رویکرد تجاری</p><h2>فرصت‌های تجاری را به ساختارهای قابل اجرا تبدیل می‌کنم.</h2><p class="lead">پژوهش محصول و تولیدکننده، اعتبارسنجی تأمین‌کننده، مدیریت پیشنهاد قیمت، مذاکره تجاری، آمادگی صادرات، پرداخت، لجستیک و کانال‌های فروش به‌عنوان یک سیستم تجاری واحد مدیریت می‌شوند.</p><div class="grid">{expertise.map(group => <article><h3>{group.title}</h3><ul>{group.items.map(item => <li>{item}</li>)}</ul></article>)}</div></div></section>
-    <section class="section" id="ventures"><div class="shell"><p class="label">کسب‌وکارها و سیستم‌ها</p><h2>ساختارهای مرتبط برای تجارت، فناوری و توسعه بازار.</h2><div class="ventures">{ventures.map(v => <a href={v.href} target="_blank" rel="noopener noreferrer"><span>{v.region}</span><h3>{v.name}</h3><p>{v.text}</p><b>↗</b></a>)}</div></div></section>
-    <section class="section"><div class="shell split"><div><p class="label">نگاه فرامرزی</p><h2>ایجاد ارتباطات تجاری میان ترکیه، ایران، بالکان و بازارهای منطقه.</h2><p class="lead">ظرفیت تولید و تأمین ترکیه را به تقاضای منطقه‌ای متصل می‌کنم و فرصت‌های محصول، خریدار و همکاری را با درنظرگرفتن مقررات، پرداخت، ریسک و لجستیک ارزیابی می‌کنم.</p></div><div class="note"><h3>زمینه‌های همکاری</h3><p>خرید و فروش بین‌المللی، یافتن و اعتبارسنجی تولیدکننده یا تأمین‌کننده، توسعه بازار، مذاکره تجاری و عملیات مبتنی بر هوش مصنوعی.</p></div></div></section>
-    <section class="section" id="contact"><div class="shell contact"><p class="label">برای همکاری تجاری</p><h2>بیایید یک محصول، بازار یا فرصت تأمین را بررسی کنیم.</h2><p class="lead">برای واردات و صادرات، تأمین کالا، توسعه بازار، همکاری تجاری یا سیستم‌های عملیاتی مبتنی بر AI مستقیماً تماس بگیرید.</p><a class="primary" href={`mailto:${email}`}>{email}</a></div></section>
+
+    <section class="section ctseg-feature" id="ctseg">
+      <div class="shell ctseg-panel">
+        <div>
+          <img class="ctseg-logo" src="/images/ctseg-logo-transparent.png" alt="CTSEG" />
+          <p class="label">ساختار اصلی تجاری</p>
+          <h2>CTSEG، مرکز اجرای تجارت بین‌المللی و تأمین راهبردی.</h2>
+          <p class="lead">خدمات CTSEG برای تصمیم‌گیری قابل دفاع و اجرای منظم طراحی شده‌اند: از شناخت بازار و تأمین‌کننده تا اعتبارسنجی، مقایسه پیشنهادها و هماهنگی عملیات.</p>
+          <div class="actions"><a class="primary" href={ctsegUrl}>صفحه فارسی CTSEG</a><a href="https://ctseg.com.tr/en/contact/">تماس با CTSEG</a></div>
+        </div>
+        <ul class="service-list"><li>پژوهش تأمین‌کننده و تولیدکننده</li><li>اعتبارسنجی هویت و ظرفیت</li><li>مدیریت RFQ و مقایسه پیشنهادها</li><li>مذاکره و هماهنگی تجاری</li><li>آمادگی صادرات و ورود به بازار</li><li>پیگیری عملیات فرامرزی</li></ul>
+      </div>
+    </section>
+
+    <section class="section" id="focus"><div class="shell"><p class="label">حوزه فعالیت</p><h2>از فرضیه تجاری تا تصمیم قابل اجرا.</h2><p class="lead">روش کار بر شواهد، بررسی متقابل منابع، مستندسازی و نقاط کنترل روشن تکیه دارد. ابزارهای دیجیتال و AI سرعت پژوهش را بالا می‌برند؛ مسئولیت قضاوت تجاری همچنان انسانی می‌ماند.</p><div class="grid">{expertise.map(group => <article><h3>{group.title}</h3><ul>{group.items.map(item => <li>{item}</li>)}</ul></article>)}</div></div></section>
+
+    <section class="section" id="ventures"><div class="shell"><p class="label">ساختار تجاری و اکوسیستم پشتیبان</p><h2>CTSEG در مرکز؛ سایر ساختارها در نقش پشتیبان یا مستقل.</h2><div class="ventures">{ventures.map(v => <a class:list={{ featured: v.featured }} href={v.href} target="_blank" rel="noopener noreferrer"><span>{v.region}</span><h3>{v.name}</h3><p>{v.text}</p><b>↗</b></a>)}</div></div></section>
+
+    <section class="section"><div class="shell split"><div><p class="label">دیدگاه بنیان‌گذار</p><h2>اعتماد از شفافیت فرایند و کیفیت شواهد به دست می‌آید.</h2><p class="lead">من فرصت‌های میان ترکیه، ایران، بالکان و بازارهای بین‌المللی را با توجه به محصول، طرف تجاری، مقررات، پرداخت، ریسک و لجستیک بررسی می‌کنم؛ بدون ادعاهای تضمینی و اغراق‌آمیز.</p></div><div class="note"><h3>زمینه‌های همکاری</h3><p>تأمین بین‌المللی، یافتن و اعتبارسنجی تولیدکننده، توسعه بازار، مذاکره تجاری و طراحی عملیات پژوهشی مبتنی بر AI.</p></div></div></section>
+
+    <section class="section" id="contact"><div class="shell contact"><p class="label">برای همکاری تجاری</p><h2>بیایید محصول، بازار یا فرصت تأمین را با شواهد بررسی کنیم.</h2><p class="lead">برای پروژه‌های اجرایی CTSEG را ببینید؛ برای گفت‌وگو با بنیان‌گذار مستقیماً ایمیل بزنید.</p><div class="actions centered"><a class="primary" href={ctsegUrl}>خدمات CTSEG</a><a href={`mailto:${email}`}>{email}</a></div></div></section>
   </main>
-  <footer><span>© 2026 Teyfik Gökdemir</span><div><a href="/privacy-policy/">حریم خصوصی</a><a href="/terms/">شرایط استفاده</a></div></footer>
+  <footer><span>© 2026 Teyfik Gökdemir · بنیان‌گذار CTSEG</span><div><a href="/privacy-policy/">حریم خصوصی</a><a href="/terms/">شرایط استفاده</a></div></footer>
 </body>
 </html>
 <style>
-:root{color-scheme:dark;--bg:#09111d;--deep:#070d16;--panel:#101c2b;--text:#f4f1e9;--muted:#aab7c9;--accent:#f2aa8f;--line:#26374d;--max:1180px}*{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--bg)}body{margin:0;background:radial-gradient(circle at 20% 4%,rgba(35,67,103,.34),transparent 30rem),linear-gradient(180deg,var(--bg),var(--deep) 58%,var(--bg));color:var(--text);font-family:Tahoma,"Segoe UI",Arial,sans-serif;line-height:1.8}a{color:inherit;text-decoration:none}.shell{width:min(var(--max),calc(100% - 3rem));margin-inline:auto}header{position:sticky;top:0;z-index:10;min-height:76px;display:flex;align-items:center;gap:1.25rem;padding:.7rem max(1.25rem,calc((100vw - var(--max))/2));border-bottom:1px solid var(--line);background:rgba(9,17,29,.92);backdrop-filter:blur(18px)}.brand{margin-left:auto;display:flex;align-items:center;gap:.7rem;direction:ltr}.brand img{width:54px;height:54px;object-fit:contain}.brand strong{font:700 .95rem/1.2 Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase}nav{display:flex;gap:1.2rem}nav a,.langs a{min-height:42px;display:inline-flex;align-items:center;color:var(--muted);font-size:.88rem}.langs{display:flex;border:1px solid var(--line);border-radius:999px;padding:.15rem;direction:ltr}.langs a{justify-content:center;min-width:40px;border-radius:50%;font:800 .72rem Arial}.langs .active{background:var(--text);color:var(--bg)}.hero{min-height:calc(100svh - 76px);display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:clamp(2rem,5vw,5rem);padding-block:4rem}.portrait{width:100%;max-height:720px;object-fit:cover;border:1px solid var(--line);border-radius:24px}.label{margin:0 0 1rem;color:var(--accent);font-size:.78rem;font-weight:800}h1,h2,h3{margin-top:0;text-wrap:balance}h1{font-size:clamp(2.7rem,6vw,5.8rem);line-height:1.08;margin-bottom:1.5rem}h2{font-size:clamp(2.1rem,4.5vw,4.5rem);line-height:1.15;margin-bottom:1.25rem}.lead{max-width:800px;color:var(--muted);font-size:clamp(1rem,1.5vw,1.22rem)}.summary{max-width:760px;color:var(--muted);font-size:.9rem}.actions{display:flex;flex-wrap:wrap;gap:.8rem;margin:2rem 0}.actions a,.primary{min-height:48px;display:inline-flex;align-items:center;padding:.75rem 1.15rem;border:1px solid var(--line);border-radius:999px}.primary{background:var(--text);color:var(--bg);font-weight:800}.section{padding:clamp(4rem,7vw,7rem) 0;border-top:1px solid var(--line)}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2.5rem}.grid article,.note{padding:1.5rem;border:1px solid var(--line);border-radius:20px;background:var(--panel)}h3{font-size:1.25rem}ul{margin:0;padding-right:1.2rem;color:var(--muted)}.ventures{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.5rem}.ventures a{position:relative;min-height:270px;padding:1.6rem;border:1px solid var(--line);border-radius:20px;background:var(--panel)}.ventures span{color:var(--accent);font-size:.8rem}.ventures b{position:absolute;left:1.5rem;bottom:1.2rem}.split{display:grid;grid-template-columns:1.3fr .7fr;gap:2rem;align-items:start}.contact{text-align:center}.contact .lead{margin-inline:auto}footer{display:flex;justify-content:space-between;gap:1rem;padding:2rem max(1.5rem,calc((100vw - var(--max))/2));border-top:1px solid var(--line);color:var(--muted)}footer div{display:flex;gap:1rem}@media(max-width:900px){header nav{display:none}.hero,.split{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.ventures{grid-template-columns:1fr}.portrait{max-height:560px}}@media(max-width:560px){.shell{width:min(var(--max),calc(100% - 1.5rem))}.grid{grid-template-columns:1fr}header{gap:.5rem}.brand strong{font-size:.72rem}footer{flex-direction:column}}
-.ventures{grid-template-columns:repeat(4,minmax(0,1fr))}@media(max-width:980px){.ventures{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:620px){.ventures{grid-template-columns:1fr}}
+:root{color-scheme:dark;--bg:#081118;--deep:#050b10;--panel:#111d24;--muted-bg:#16242c;--text:#f2eee6;--muted:#aab8c0;--border:#293b44;--accent:#ad6840;--accent-hover:#c17b4d;--accent-muted:rgba(173,104,64,.14);--trust:#88a18d;--max:1180px}*{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--bg)}body{margin:0;overflow-x:hidden;background:radial-gradient(circle at 20% 4%,rgba(56,78,87,.24),transparent 30rem),linear-gradient(180deg,var(--bg),var(--deep) 58%,var(--bg));color:var(--text);font-family:Tahoma,"Segoe UI",Arial,sans-serif;line-height:1.8}a{color:inherit;text-decoration:none}.shell{width:min(var(--max),calc(100% - 3rem));margin-inline:auto}header{position:sticky;top:0;z-index:10;min-height:76px;display:flex;align-items:center;gap:1.25rem;padding:.7rem max(1.25rem,calc((100vw - var(--max))/2));border-bottom:1px solid var(--border);background:rgba(8,17,24,.92);backdrop-filter:blur(18px)}.brand{margin-left:auto;display:flex;align-items:center;gap:.7rem;direction:ltr}.brand img{width:54px;height:54px;object-fit:contain}.brand strong{font:700 .95rem/1.2 Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase}nav{display:flex;gap:1.2rem}nav a,.langs a{min-height:42px;display:inline-flex;align-items:center;color:var(--muted);font-size:.88rem}.langs{display:flex;border:1px solid var(--border);border-radius:999px;padding:.15rem;direction:ltr}.langs a{justify-content:center;min-width:40px;border-radius:50%;font:800 .72rem Arial}.langs .active{background:var(--text);color:var(--bg)}.hero{min-height:calc(100svh - 76px);display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:clamp(2rem,5vw,5rem);padding-block:4rem}.portrait{width:100%;max-height:720px;object-fit:cover;border:1px solid var(--border);border-radius:24px}.label{margin:0 0 1rem;color:#d9a475;font-size:.78rem;font-weight:800}h1,h2,h3{margin-top:0;text-wrap:balance;font-family:"Noto Naskh Arabic",Tahoma,serif;font-weight:700}h1{font-size:clamp(2.7rem,6vw,5.6rem);line-height:1.25;margin-bottom:1.5rem}h2{font-size:clamp(2.1rem,4.5vw,4.4rem);line-height:1.25;margin-bottom:1.25rem}.lead{max-width:800px;color:var(--muted);font-size:clamp(1rem,1.5vw,1.22rem)}.summary{max-width:760px;padding-right:1rem;border-right:2px solid var(--accent);color:var(--muted);font-size:.9rem}.actions{display:flex;flex-wrap:wrap;gap:.8rem;margin:2rem 0}.actions a,.primary{min-height:48px;display:inline-flex;align-items:center;padding:.75rem 1.15rem;border:1px solid var(--border);border-radius:999px}.primary{border-color:var(--accent);background:var(--accent);color:#fff;font-weight:800}.primary:hover{background:var(--accent-hover)}.section{padding:clamp(4rem,7vw,7rem) 0;border-top:1px solid var(--border)}.ctseg-feature{padding-top:2rem}.ctseg-panel{display:grid;grid-template-columns:1.2fr .8fr;gap:clamp(2rem,5vw,5rem);padding:clamp(2rem,5vw,4rem);border:1px solid color-mix(in srgb,var(--accent) 54%,var(--border));border-radius:26px;background:linear-gradient(145deg,var(--accent-muted),transparent 56%),var(--panel);box-shadow:0 28px 70px rgba(0,0,0,.25)}.ctseg-logo{width:min(240px,60%);height:auto;margin-bottom:1.4rem}.service-list{display:grid;align-content:center;gap:.7rem;margin:0;padding:0;list-style:none}.service-list li{padding:1rem 1.1rem;border:1px solid var(--border);border-radius:12px;background:var(--muted-bg);color:var(--text)}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;margin-top:2.5rem}.grid article,.note{padding:1.5rem;border:1px solid var(--border);border-radius:20px;background:var(--panel)}h3{font-size:1.25rem}ul{margin:0;padding-right:1.2rem;color:var(--muted)}.ventures{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:2.5rem}.ventures a{position:relative;min-height:245px;padding:1.6rem 1.6rem 3.5rem;border:1px solid var(--border);border-radius:20px;background:var(--panel)}.ventures .featured{grid-column:span 2;min-height:310px;padding:2.2rem;border-color:color-mix(in srgb,var(--accent) 54%,var(--border));background:linear-gradient(145deg,var(--accent-muted),transparent 58%),var(--panel);box-shadow:0 24px 60px rgba(0,0,0,.24)}.ventures .featured h3{font-size:clamp(1.8rem,3vw,3rem)}.ventures span{color:#d9a475;font-size:.8rem}.ventures b{position:absolute;left:1.5rem;bottom:1.2rem}.split{display:grid;grid-template-columns:1.3fr .7fr;gap:2rem;align-items:start}.contact{text-align:center}.contact .lead{margin-inline:auto}.centered{justify-content:center}footer{display:flex;justify-content:space-between;gap:1rem;padding:2rem max(1.5rem,calc((100vw - var(--max))/2));border-top:1px solid var(--border);color:var(--muted)}footer div{display:flex;gap:1rem}@media(max-width:1000px){header nav{display:none}.hero,.split,.ctseg-panel{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ventures{grid-template-columns:repeat(2,minmax(0,1fr))}.ventures .featured{grid-column:1/-1}.portrait{max-height:560px}}@media(max-width:620px){.shell{width:min(var(--max),calc(100% - 1.5rem))}.grid,.ventures{grid-template-columns:1fr}.ventures .featured{grid-column:auto;min-height:auto}.langs a{min-width:34px}.brand strong{display:none}header{gap:.4rem;padding-inline:.75rem}.hero{padding-block:2.75rem}h1{font-size:clamp(2.35rem,12vw,3.5rem)}footer{flex-direction:column}.ctseg-panel{padding:1.4rem}.actions a{width:100%;justify-content:center}}
 </style>
