@@ -34,6 +34,7 @@ export const site = {
     global: { path: '/images/teyfik-gokdemir-global-operator.webp', width: 1440, height: 2560 },
     commerce: { path: '/images/qct-commerce-founder-event.webp', width: 640, height: 1136 },
     legacy: { path: '/images/teyfik-gokdemir.webp', width: 900, height: 1213 },
+    ctseg: { path: '/images/ctseg-logo-transparent.png', width: 1063, height: 342 },
   },
   links: {
     linkedin: 'https://www.linkedin.com/in/teyfikg%C3%B6kdemir',
@@ -42,5 +43,6 @@ export const site = {
     qctStudio: 'https://qctstudio.com',
     qctCommerce: 'https://qctcommerce.com',
     mythborn: 'https://mythborn.co',
+    ctseg: 'https://ctseg.com.tr',
   },
 } as const;

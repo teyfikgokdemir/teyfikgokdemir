@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import CookieBanner from '../components/CookieBanner.astro';
 import { content } from '../i18n/content';
 import { site } from '../data/site';
 
@@ -13,7 +12,7 @@ const description = 'TeyfikGokdemir.com üzerinde kişisel verilerin, zorunlu ve
 ---
 
 <BaseLayout locale={locale} copy={copy} title={title} description={description} pathname="/privacy-policy/">
-  <Header locale={locale} copy={copy} homePath="/" />
+  <Header locale={locale} copy={copy} homePath="/tr/" />
   <main id="main-content" class="legal-page">
     <article class="shell legal-card">
       <p class="section-label">Yasal bilgiler</p>
@@ -71,11 +70,10 @@ const description = 'TeyfikGokdemir.com üzerinde kişisel verilerin, zorunlu ve
         <a href="/kvkk/">KVKK Aydınlatma Metni</a>
         <a href="/terms/">Kullanım Koşulları</a>
       </nav>
-      <a class="button" href="/">Ana sayfaya dön</a>
+      <a class="button" href="/tr/">Ana sayfaya dön</a>
     </article>
   </main>
   <Footer copy={copy} />
-  <CookieBanner locale={locale} />
 </BaseLayout>
 
 <style>

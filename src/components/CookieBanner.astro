@@ -2,7 +2,7 @@
 import type { Locale } from '../i18n/locales';
 
 interface Props {
-  locale: Locale;
+  locale: Locale | 'fa';
 }
 
 const { locale } = Astro.props;
@@ -42,6 +42,13 @@ const messages = {
     privacy: 'Politika e Privatësisë',
     reject: 'Refuzo',
     accept: 'Prano',
+  },
+  fa: {
+    title: 'تنظیمات کوکی',
+    text: 'کوکی‌های ضروری برای کارکرد سایت استفاده می‌شوند. کوکی‌های تحلیلی فقط پس از رضایت شما فعال می‌شوند.',
+    privacy: 'سیاست حفظ حریم خصوصی',
+    reject: 'رد',
+    accept: 'پذیرش',
   },
 } as const;
 

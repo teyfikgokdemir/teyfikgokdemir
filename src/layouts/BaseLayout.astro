@@ -2,6 +2,7 @@
 import { locales, type Locale } from '../i18n/locales';
 import type { SiteContent } from '../i18n/content';
 import { site } from '../data/site';
+import CookieBanner from '../components/CookieBanner.astro';
 
 interface Props {
   locale: Locale;
@@ -9,7 +10,7 @@ interface Props {
   title?: string;
   description?: string;
   pathname?: string;
-  alternates?: Partial<Record<Locale | 'x-default', string>>;
+  alternates?: Partial<Record<Locale | 'fa' | 'x-default', string>>;
   ogType?: 'website' | 'article';
   pageSchema?: Record<string, unknown>;
 }
@@ -25,22 +26,23 @@ const {
   pageSchema,
 } = Astro.props;
 
-const localeUrl = (item: Locale) => item === 'en' ? '/' : '/' + item + '/';
+const localeUrl = (item: Locale) => '/' + item + '/';
 const pagePath = pathname ?? localeUrl(locale);
 const canonical = new URL(pagePath, site.origin).toString();
 const profileImage =
   site.origin + site.images.profile.originalPath;
 
-const defaultAlternates: Partial<Record<Locale | 'x-default', string>> =
+const defaultAlternates: Partial<Record<Locale | 'fa' | 'x-default', string>> =
   Object.fromEntries([
     ...locales.map((item) => [
       item,
       new URL(localeUrl(item), site.origin).toString(),
     ]),
-    ['x-default', new URL('/', site.origin).toString()],
+    ['fa', new URL('/fa/', site.origin).toString()],
+    ['x-default', new URL('/tr/', site.origin).toString()],
   ]);
 
-const alternateLinks = alternates ?? defaultAlternates;
+const alternateLinks = alternates ?? (pathname ? {} : defaultAlternates);
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -155,14 +157,6 @@ const jsonLd = {
       sizes="180x180"
     />
     <link rel="manifest" href="/site.webmanifest?v=7" />
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-52GXBGWHFJ"></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-52GXBGWHFJ');
-    </script>
     <meta name="robots" content="index,follow" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -192,6 +186,7 @@ const jsonLd = {
   <body>
     <a class="skip-link" href="#main-content">{copy.a11y.skip}</a>
     <slot />
+    <CookieBanner locale={locale} />
   </body>
 </html>
 

@@ -1,13 +1,13 @@
 export const blogLocales = ['en', 'tr', 'mk', 'sr', 'sq', 'fa'] as const;
 export type BlogLocale = (typeof blogLocales)[number];
 
-export const localeMeta: Record<BlogLocale, { name: string; dir: 'ltr' | 'rtl'; blog: string; home: string; read: string; related: string; published: string }> = {
-  en: { name: 'English', dir: 'ltr', blog: 'Insights', home: 'Home', read: 'Read article', related: 'Related insights', published: 'Published' },
-  tr: { name: 'Türkçe', dir: 'ltr', blog: 'İçgörüler', home: 'Ana Sayfa', read: 'Yazıyı oku', related: 'İlgili içgörüler', published: 'Yayın tarihi' },
-  mk: { name: 'Македонски', dir: 'ltr', blog: 'Увиди', home: 'Почетна', read: 'Прочитај', related: 'Поврзани увиди', published: 'Објавено' },
-  sr: { name: 'Srpski', dir: 'ltr', blog: 'Uvidi', home: 'Početna', read: 'Pročitaj', related: 'Povezani uvidi', published: 'Objavljeno' },
-  sq: { name: 'Shqip', dir: 'ltr', blog: 'Analiza', home: 'Kryefaqja', read: 'Lexo artikullin', related: 'Analiza të lidhura', published: 'Publikuar' },
-  fa: { name: 'فارسی', dir: 'rtl', blog: 'بینش‌ها', home: 'خانه', read: 'مطالعه مقاله', related: 'مطالب مرتبط', published: 'تاریخ انتشار' },
+export const localeMeta: Record<BlogLocale, { name: string; dir: 'ltr' | 'rtl'; blog: string; home: string; read: string; related: string; published: string; description: string; eyebrow: string; expertise: string }> = {
+  en: { name: 'English', dir: 'ltr', blog: 'Insights', home: 'Home', read: 'Read article', related: 'Related insights', published: 'Published', description: 'Practical insights on strategic sourcing, procurement, supplier validation and international trade operations.', eyebrow: 'International Trade & Strategic Sourcing', expertise: 'Explore international trade and strategic sourcing expertise' },
+  tr: { name: 'Türkçe', dir: 'ltr', blog: 'İçgörüler', home: 'Ana Sayfa', read: 'Yazıyı oku', related: 'İlgili içgörüler', published: 'Yayın tarihi', description: 'Stratejik tedarik, satın alma, tedarikçi doğrulama ve uluslararası ticaret operasyonları üzerine pratik içgörüler.', eyebrow: 'Uluslararası Ticaret ve Stratejik Tedarik', expertise: 'Uluslararası ticaret ve stratejik tedarik uzmanlığını inceleyin' },
+  mk: { name: 'Македонски', dir: 'ltr', blog: 'Увиди', home: 'Почетна', read: 'Прочитај', related: 'Поврзани увиди', published: 'Објавено', description: 'Практични увиди за стратешко снабдување, набавка, проверка на добавувачи и меѓународна трговија.', eyebrow: 'Меѓународна трговија и стратешко снабдување', expertise: 'Истражете ја експертизата за меѓународна трговија и снабдување' },
+  sr: { name: 'Srpski', dir: 'ltr', blog: 'Uvidi', home: 'Početna', read: 'Pročitaj', related: 'Povezani uvidi', published: 'Objavljeno', description: 'Praktični uvidi o strateškom snabdevanju, nabavci, proveri dobavljača i međunarodnoj trgovini.', eyebrow: 'Međunarodna trgovina i strateško snabdevanje', expertise: 'Istražite stručnost u međunarodnoj trgovini i snabdevanju' },
+  sq: { name: 'Shqip', dir: 'ltr', blog: 'Analiza', home: 'Kryefaqja', read: 'Lexo artikullin', related: 'Analiza të lidhura', published: 'Publikuar', description: 'Analiza praktike për furnizimin strategjik, prokurimin, verifikimin e furnitorëve dhe tregtinë ndërkombëtare.', eyebrow: 'Tregti Ndërkombëtare dhe Furnizim Strategjik', expertise: 'Eksploroni ekspertizën në tregti dhe furnizim strategjik' },
+  fa: { name: 'فارسی', dir: 'rtl', blog: 'بینش‌ها', home: 'خانه', read: 'مطالعه مقاله', related: 'مطالب مرتبط', published: 'تاریخ انتشار', description: 'بینش‌های عملی درباره تأمین راهبردی، خرید، اعتبارسنجی تأمین‌کننده و عملیات تجارت بین‌المللی.', eyebrow: 'تجارت بین‌المللی و تأمین راهبردی', expertise: 'تخصص تجارت بین‌المللی و تأمین راهبردی را بررسی کنید' },
 };
 
 export interface BlogSection { heading: string; paragraphs: string[]; bullets?: string[] }
@@ -89,7 +89,7 @@ export const posts: BlogPost[] = [
     },
   },
   {
-    slug: 'how-to-evaluate-an-international-supplier', date: '2026-07-26', updated: '2026-07-26', readingMinutes: 8,
+    slug: 'how-to-evaluate-an-international-supplier', date: '2026-07-23', updated: '2026-07-23', readingMinutes: 8,
     title: { en: 'How to Evaluate an International Supplier', tr: 'Uluslararası Bir Tedarikçi Nasıl Değerlendirilir?', mk: 'Како да оцените меѓународен добавувач', sr: 'Kako proceniti međunarodnog dobavljača', sq: 'Si të vlerësoni një furnitor ndërkombëtar', fa: 'چگونه یک تأمین‌کننده بین‌المللی را ارزیابی کنیم؟' },
     description: { en: 'A practical supplier evaluation framework covering legal identity, capability, quality, capacity, commercial terms and delivery risk.', tr: 'Hukuki kimlik, yetkinlik, kalite, kapasite, ticari koşullar ve teslimat riskini kapsayan pratik tedarikçi değerlendirme çerçevesi.', mk: 'Практична рамка за правен идентитет, способност, квалитет, капацитет и ризик.', sr: 'Praktičan okvir za pravni identitet, sposobnost, kvalitet, kapacitet i rizik.', sq: 'Kornizë praktike për identitetin ligjor, aftësinë, cilësinë, kapacitetin dhe rrezikun.', fa: 'چارچوبی عملی برای هویت حقوقی، توانمندی، کیفیت، ظرفیت، شرایط تجاری و ریسک تحویل.' },
     intro: { en: 'A polished website and a competitive quotation do not prove that a supplier can deliver consistently. International supplier evaluation must combine documentary checks, operational evidence and a controlled commercial test.', tr: 'Profesyonel bir web sitesi ve rekabetçi teklif, tedarikçinin sürekli ve güvenilir teslimat yapabildiğini kanıtlamaz. Uluslararası tedarikçi değerlendirmesi; belge kontrolünü, operasyonel kanıtı ve kontrollü ticari testi birlikte yürütmelidir.', mk: 'Професионална веб-страница и конкурентна понуда не докажуваат сигурна испорака. Потребни се документи, оперативни докази и контролиран тест.', sr: 'Profesionalan sajt i konkurentna ponuda ne dokazuju pouzdanu isporuku. Potrebni su dokumenti, operativni dokazi i kontrolisani test.', sq: 'Një faqe profesionale dhe një ofertë konkurruese nuk provojnë furnizim të qëndrueshëm. Duhen dokumente, prova operative dhe test i kontrolluar.', fa: 'وب‌سایت حرفه‌ای و قیمت رقابتی، توان تحویل پایدار را ثابت نمی‌کند. ارزیابی باید اسناد، شواهد عملیاتی و آزمون تجاری کنترل‌شده را ترکیب کند.' },
@@ -102,7 +102,7 @@ export const posts: BlogPost[] = [
     ]])) as Record<BlogLocale, BlogSection[]>,
   },
   {
-    slug: 'rfq-process-comparable-supplier-quotes', date: '2026-07-27', updated: '2026-07-27', readingMinutes: 6,
+    slug: 'rfq-process-comparable-supplier-quotes', date: '2026-07-24', updated: '2026-07-24', readingMinutes: 6,
     title: { en: 'The RFQ Process: How to Get Comparable Supplier Quotes', tr: 'RFQ Süreci: Karşılaştırılabilir Tedarikçi Teklifleri Nasıl Alınır?', mk: 'RFQ процес: Како да добиете споредливи понуди', sr: 'RFQ proces: Kako dobiti uporedive ponude', sq: 'Procesi RFQ: Si të merrni oferta të krahasueshme', fa: 'فرایند RFQ: چگونه پیشنهادهای قابل مقایسه دریافت کنیم؟' },
     description: { en: 'A clear RFQ framework for specifications, volumes, Incoterms, quality, payment, timing and quote comparison.', tr: 'Şartname, hacim, Incoterms, kalite, ödeme, zamanlama ve teklif karşılaştırması için net RFQ çerçevesi.', mk: 'Јасна RFQ рамка за спецификации, количини, Incoterms, квалитет, плаќање и споредба.', sr: 'Jasan RFQ okvir za specifikacije, količine, Incoterms, kvalitet, plaćanje i poređenje.', sq: 'Kornizë e qartë RFQ për specifikime, sasi, Incoterms, cilësi, pagesë dhe krahasim.', fa: 'چارچوبی روشن برای مشخصات، حجم، اینکوترمز، کیفیت، پرداخت، زمان‌بندی و مقایسه پیشنهادها.' },
     intro: { en: 'An RFQ is not a message asking “best price?”. It is a controlled information package that forces suppliers to quote the same commercial scenario.', tr: 'RFQ, “en iyi fiyatınız nedir?” mesajı değildir. Tedarikçilerin aynı ticari senaryoya göre teklif vermesini sağlayan kontrollü bir bilgi paketidir.', mk: 'RFQ не е порака со прашање за „најдобра цена“, туку контролиран пакет што создава исти услови за понуда.', sr: 'RFQ nije poruka sa pitanjem za „najbolju cenu“, već kontrolisan paket koji stvara iste uslove za ponudu.', sq: 'RFQ nuk është mesazh për “çmimin më të mirë”, por paketë e kontrolluar që krijon të njëjtat kushte oferte.', fa: 'RFQ پیام «بهترین قیمت چیست؟» نیست؛ بسته اطلاعاتی کنترل‌شده‌ای است که همه تأمین‌کنندگان را وادار می‌کند یک سناریوی یکسان را قیمت‌گذاری کنند.' },
@@ -118,4 +118,12 @@ export const posts: BlogPost[] = [
 export const getPost = (slug: string) => posts.find((post) => post.slug === slug);
 export const localePrefix = (locale: BlogLocale) => locale === 'en' ? '' : `/${locale}`;
 export const blogPath = (locale: BlogLocale) => `${localePrefix(locale)}/blog/`;
+export const homePath = (locale: BlogLocale) => `/${locale}/`;
+export const legacySeoArticle: Partial<Record<BlogLocale, { path: string; title: string; description: string }>> = {
+  en: { path: '/blog/seo-vs-geo-vs-aeo-vs-aio/', title: 'SEO vs GEO vs AEO vs AIO: What Is the Difference?', description: 'A practical guide to the role of each search and AI visibility discipline.' },
+  tr: { path: '/tr/blog/seo-geo-aeo-aio-farklari/', title: 'SEO, GEO, AEO ve AIO Arasındaki Farklar', description: 'Arama ve yapay zekâ görünürlüğü disiplinlerinin rolünü açıklayan pratik rehber.' },
+  mk: { path: '/mk/blog/razliki-seo-geo-aeo-aio/', title: 'Разлики помеѓу SEO, GEO, AEO и AIO', description: 'Практичен водич за улогата на секоја дисциплина за пребарување и AI видливост.' },
+  sr: { path: '/sr/blog/razlike-seo-geo-aeo-aio/', title: 'Razlike između SEO, GEO, AEO i AIO', description: 'Praktičan vodič kroz discipline vidljivosti u pretrazi i AI sistemima.' },
+  sq: { path: '/sq/blog/dallimet-seo-geo-aeo-aio/', title: 'Dallimet mes SEO, GEO, AEO dhe AIO', description: 'Udhëzues praktik për disiplinat e dukshmërisë në kërkim dhe sistemet AI.' },
+};
 export const postPath = (locale: BlogLocale, slug: string) => `${blogPath(locale)}${slug}/`;
