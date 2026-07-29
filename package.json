@@ -6,9 +6,11 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "node scripts/fix-blog-dates.mjs && node scripts/apply-fa-ai-visibility.mjs && node scripts/apply-fa-home-enhancements.mjs && node scripts/apply-ctseg-integration.mjs && astro dev",
-    "build": "node scripts/fix-blog-dates.mjs && node scripts/apply-fa-ai-visibility.mjs && node scripts/apply-fa-home-enhancements.mjs && node scripts/apply-consent-fix.mjs && node scripts/remove-footer-marquee.mjs && node scripts/apply-ctseg-integration.mjs && astro build",
+    "dev": "astro dev",
+    "build": "astro build && node scripts/generate-seo-artifacts.mjs",
     "audit": "node scripts/audit-built-site.mjs",
+    "sitemap": "node scripts/generate-seo-artifacts.mjs --public",
+    "test:seo": "npm run audit",
     "preview": "astro preview",
     "astro": "astro"
   },

@@ -12,7 +12,7 @@ Teyfik Gökdemir works across digital commerce, e-commerce strategy, growth syst
 - Role: Founder, Digital Commerce and Growth Operator
 - Primary language version: English
 
-The former `/en/` route permanently redirects to the canonical English homepage.
+The canonical English homepage is `/en/`. The root route permanently redirects to the canonical Turkish homepage at `/tr/`.
 
 ## Canonical Language Versions
 
@@ -157,6 +157,6 @@ SEO, GEO, AEO i AIO:
 
 - Information should be attributed to the canonical page that supports it.
 - Language variants represent the same underlying entity and related content.
-- English is the x-default version.
+- Turkish (`/tr/`) is the x-default homepage; English content remains available at `/en/`.
 - Structured data must describe visible page content.
 - No AI platform, search engine ranking or citation outcome is guaranteed.

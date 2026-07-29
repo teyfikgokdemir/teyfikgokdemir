@@ -1,427 +1,153 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const root = process.cwd();
-const distDir = path.join(root, 'dist');
-const expectedPageCount = 20;
-const expectedLanguages = [
-  'en',
-  'tr',
-  'sq',
-  'mk',
-  'sr',
-  'x-default',
-];
-
+const dist = path.resolve('dist');
+const origin = 'https://teyfikgokdemir.com';
 const errors = [];
 const warnings = [];
+const htmlFiles = [];
 
-const normalizeSlashes = (value) =>
-  value.replaceAll('\\', '/');
-
-const decodeHtml = (value) =>
-  value
-    .replaceAll('&amp;', '&')
-    .replaceAll('&quot;', '"')
-    .replaceAll('&#39;', "'")
-    .replaceAll('&lt;', '<')
-    .replaceAll('&gt;', '>');
-
-const stripTags = (value) =>
-  decodeHtml(value.replace(/<[^>]*>/g, ' '))
-    .replace(/\s+/g, ' ')
-    .trim();
-
-const collectFiles = (directory, filename) => {
-  const files = [];
-
-  if (!fs.existsSync(directory)) {
-    return files;
+const walk = (directory) => {
+  for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    const target = path.join(directory, entry.name);
+    if (entry.isDirectory()) walk(target);
+    else if (entry.name === 'index.html') htmlFiles.push(target);
   }
-
-  for (const entry of fs.readdirSync(directory, {
-    withFileTypes: true,
-  })) {
-    const absolutePath = path.join(directory, entry.name);
-
-    if (entry.isDirectory()) {
-      files.push(...collectFiles(absolutePath, filename));
-    } else if (entry.name === filename) {
-      files.push(absolutePath);
-    }
-  }
-
-  return files;
+};
+const routeFor = (file) => {
+  const relative = path.relative(dist, path.dirname(file)).split(path.sep).join('/');
+  return relative ? `/${relative}/` : '/';
+};
+const tags = (html, name) => html.match(new RegExp(`<${name}\\b[^>]*>`, 'gi')) ?? [];
+const attribute = (tag, name) => tag?.match(new RegExp(`\\b${name}=["']([^"']*)["']`, 'i'))?.[1];
+const selectedTag = (html, name, attrName, attrValue) =>
+  tags(html, name).find((tag) => attribute(tag, attrName)?.toLowerCase() === attrValue.toLowerCase());
+const titleText = (html) => html.match(/<title>([\s\S]*?)<\/title>/i)?.[1].replace(/<[^>]+>/g, '').trim();
+const routeFromUrl = (value) => {
+  try { return decodeURI(new URL(value, origin).pathname); } catch { return undefined; }
+};
+const normalizedUrl = (value) => {
+  try { return new URL(value, origin).href; } catch { return value; }
 };
 
-const htmlFiles = collectFiles(distDir, 'index.html');
+if (!fs.existsSync(dist)) throw new Error('dist/ bulunamadı. Önce npm run build çalıştırın.');
+walk(dist);
 
-if (htmlFiles.length !== expectedPageCount) {
-  errors.push(
-    `Beklenen ${expectedPageCount} sayfa yerine ` +
-    `${htmlFiles.length} sayfa bulundu.`
-  );
+const redirectFile = path.join(dist, '_redirects');
+const redirectLines = fs.existsSync(redirectFile)
+  ? fs.readFileSync(redirectFile, 'utf8').split(/\r?\n/).map((line) => line.trim()).filter((line) => line && !line.startsWith('#'))
+  : [];
+const redirects = new Map();
+for (const line of redirectLines) {
+  const [source, target, status] = line.split(/\s+/);
+  if (!source || !target || !['301', '308'].includes(status)) errors.push(`Geçersiz redirect kuralı: ${line}`);
+  else redirects.set(decodeURI(source), decodeURI(target));
+}
+for (const [source, target] of redirects) {
+  if (redirects.has(target)) errors.push(`Redirect zinciri: ${source} -> ${target}`);
+  if (source === target) errors.push(`Redirect döngüsü: ${source}`);
 }
 
-const routeFromFile = (filePath) => {
-  const relative = normalizeSlashes(
-    path.relative(distDir, filePath)
-  );
+const pageByRoute = new Map();
+const canonicalOwners = new Map();
+const titleOwners = new Map();
+const descriptionOwners = new Map();
+for (const file of htmlFiles) {
+  const route = routeFor(file);
+  const html = fs.readFileSync(file, 'utf8');
+  const robots = attribute(selectedTag(html, 'meta', 'name', 'robots'), 'content') ?? '';
+  const redirected = redirects.has(route);
+  const indexable = !redirected && !/noindex/i.test(robots);
+  const canonicalTags = tags(html, 'link').filter((tag) => attribute(tag, 'rel')?.toLowerCase() === 'canonical');
+  const canonical = attribute(canonicalTags[0], 'href');
+  const title = titleText(html);
+  const description = attribute(selectedTag(html, 'meta', 'name', 'description'), 'content');
+  const lang = attribute(tags(html, 'html')[0], 'lang');
+  const alternates = new Map(tags(html, 'link')
+    .filter((tag) => attribute(tag, 'rel')?.toLowerCase() === 'alternate' && attribute(tag, 'hreflang'))
+    .map((tag) => [attribute(tag, 'hreflang'), attribute(tag, 'href')]));
+  pageByRoute.set(route, { route, html, indexable, canonical, alternates, lang });
 
-  if (relative === 'index.html') {
-    return '/';
+  if (!indexable) continue;
+  if (!/^index,follow(?:,|$)/i.test(robots)) errors.push(`${route}: index,follow robots meta eksik.`);
+  if (!title) errors.push(`${route}: title eksik.`);
+  if (!description) errors.push(`${route}: meta description eksik.`);
+  if (!canonical || !canonical.startsWith(`${origin}/`) || canonical.includes('www.')) errors.push(`${route}: canonical HTTPS/non-www değil.`);
+  if (canonical && routeFromUrl(canonical) !== route) errors.push(`${route}: self-canonical değil (${canonical}).`);
+  if (canonicalOwners.has(canonical)) errors.push(`${route}: canonical tekrar ediyor (${canonical}).`);
+  else canonicalOwners.set(canonical, route);
+  if (titleOwners.has(title)) errors.push(`${route}: title tekrar ediyor (${title}).`);
+  else titleOwners.set(title, route);
+  if (descriptionOwners.has(description)) errors.push(`${route}: description tekrar ediyor.`);
+  else descriptionOwners.set(description, route);
+  if (!['tr', 'en', 'mk', 'sr', 'sq', 'fa'].includes(lang)) errors.push(`${route}: geçersiz html lang (${lang}).`);
+  if ((html.match(/<h1\b/gi) ?? []).length !== 1) errors.push(`${route}: tam bir H1 bekleniyor.`);
+  for (const block of html.matchAll(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
+    try { JSON.parse(block[1]); } catch { errors.push(`${route}: geçersiz JSON-LD.`); }
   }
-
-  return `/${relative.replace(/\/index\.html$/, '/')}`;
-};
-
-const routeToFile = (route) => {
-  let pathname = route;
-
-  try {
-    pathname = new URL(
-      route,
-      'https://teyfikgokdemir.com'
-    ).pathname;
-  } catch {
-    return null;
+  if (!/application\/ld\+json/i.test(html)) errors.push(`${route}: JSON-LD eksik.`);
+  if (/<script\b[^>]*src=["'][^"']*googletagmanager\.com\/gtag/i.test(html)) {
+    errors.push(`${route}: analitik scripti izin alınmadan HTML içinde yükleniyor.`);
   }
+  if (title && (title.length < 15 || title.length > 90)) warnings.push(`${route}: title uzunluğu ${title.length}.`);
+}
 
-  if (pathname === '/') {
-    return path.join(distDir, 'index.html');
-  }
-
-  const cleanPath = pathname
-    .replace(/^\/+/, '')
-    .replace(/\/+$/, '');
-
-  return path.join(distDir, cleanPath, 'index.html');
-};
-
-const canonicalValues = new Map();
-
-for (const filePath of htmlFiles) {
-  const route = routeFromFile(filePath);
-  const html = fs.readFileSync(filePath, 'utf8');
-
-  const titleMatches = [
-    ...html.matchAll(/<title>([\s\S]*?)<\/title>/gi),
-  ];
-
-  if (titleMatches.length !== 1) {
-    errors.push(
-      `${route}: ${titleMatches.length} adet title bulundu.`
-    );
-  } else {
-    const title = stripTags(titleMatches[0][1]);
-
-    if (title.length < 20 || title.length > 70) {
-      warnings.push(
-        `${route}: title uzunluğu ${title.length} karakter.`
-      );
-    }
-  }
-
-  const descriptionMatches = [
-    ...html.matchAll(
-      /<meta\s+name=["']description["']\s+content=["']([^"']*)["'][^>]*>/gi
-    ),
-  ];
-
-  if (descriptionMatches.length !== 1) {
-    errors.push(
-      `${route}: ${descriptionMatches.length} adet ` +
-      `meta description bulundu.`
-    );
-  } else {
-    const description = decodeHtml(
-      descriptionMatches[0][1]
-    ).trim();
-
-    if (
-      description.length < 70 ||
-      description.length > 180
-    ) {
-      warnings.push(
-        `${route}: description uzunluğu ` +
-        `${description.length} karakter.`
-      );
-    }
-  }
-
-  const canonicalMatches = [
-    ...html.matchAll(
-      /<link\s+rel=["']canonical["']\s+href=["']([^"']+)["'][^>]*>/gi
-    ),
-  ];
-
-  if (canonicalMatches.length !== 1) {
-    errors.push(
-      `${route}: ${canonicalMatches.length} adet canonical bulundu.`
-    );
-  } else {
-    const canonical = canonicalMatches[0][1];
-
-    if (!canonical.startsWith(
-      'https://teyfikgokdemir.com/'
-    )) {
-      errors.push(
-        `${route}: geçersiz canonical: ${canonical}`
-      );
-    }
-
-    if (canonicalValues.has(canonical)) {
-      errors.push(
-        `${route}: canonical başka sayfada da kullanılıyor: ` +
-        `${canonical}`
-      );
-    }
-
-    canonicalValues.set(canonical, route);
-  }
-
-  const h1Matches = [
-    ...html.matchAll(/<h1(?:\s[^>]*)?>[\s\S]*?<\/h1>/gi),
-  ];
-
-  if (h1Matches.length !== 1) {
-    errors.push(
-      `${route}: ${h1Matches.length} adet H1 bulundu.`
-    );
-  }
-
-  const htmlLangMatch = html.match(
-    /<html\s+[^>]*lang=["']([^"']+)["']/i
-  );
-
-  if (!htmlLangMatch) {
-    errors.push(`${route}: html lang bulunamadı.`);
-  }
-
-  const alternateMatches = [
-    ...html.matchAll(
-      /<link\s+rel=["']alternate["']\s+hreflang=["']([^"']+)["']\s+href=["']([^"']+)["'][^>]*>/gi
-    ),
-  ];
-
-  const alternateMap = new Map(
-    alternateMatches.map((match) => [
-      match[1],
-      match[2],
-    ])
-  );
-
-  for (const language of expectedLanguages) {
-    if (!alternateMap.has(language)) {
-      errors.push(
-        `${route}: hreflang eksik: ${language}`
-      );
-    }
-  }
-
-  const jsonLdMatches = [
-    ...html.matchAll(
-      /<script\s+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi
-    ),
-  ];
-
-  if (jsonLdMatches.length === 0) {
-    errors.push(`${route}: JSON-LD bulunamadı.`);
-  }
-
-  jsonLdMatches.forEach((match, index) => {
-    try {
-      JSON.parse(match[1]);
-    } catch (error) {
-      errors.push(
-        `${route}: JSON-LD ${index + 1} geçersiz JSON: ` +
-        `${error.message}`
-      );
-    }
-  });
-
-  const hrefMatches = [
-    ...html.matchAll(
-      /<a\s+[^>]*href=["']([^"'#][^"']*)["'][^>]*>/gi
-    ),
-  ];
-
-  for (const match of hrefMatches) {
-    const href = decodeHtml(match[1]).trim();
-
-    if (
-      href.startsWith('mailto:') ||
-      href.startsWith('tel:') ||
-      href.startsWith('https://wa.me/') ||
-      href.startsWith('http://') ||
-      href.startsWith('https://')
-    ) {
-      continue;
-    }
-
-    if (!href.startsWith('/')) {
-      continue;
-    }
-
-    const internalFile = routeToFile(href);
-
-    if (!internalFile || !fs.existsSync(internalFile)) {
-      errors.push(
-        `${route}: kırık iç bağlantı: ${href}`
-      );
+for (const page of pageByRoute.values()) {
+  if (!page.indexable || page.alternates.size === 0) continue;
+  if (!page.alternates.has(page.lang)) errors.push(`${page.route}: self hreflang (${page.lang}) eksik.`);
+  if (!page.alternates.has('x-default')) errors.push(`${page.route}: x-default eksik.`);
+  for (const [language, href] of page.alternates) {
+    const targetRoute = routeFromUrl(href);
+    const target = pageByRoute.get(targetRoute);
+    if (!target?.indexable) errors.push(`${page.route}: hreflang hedefi indexlenebilir değil (${language}: ${href}).`);
+    if (language !== 'x-default' && target && normalizedUrl(target.alternates.get(page.lang)) !== normalizedUrl(page.canonical)) {
+      errors.push(`${page.route}: hreflang karşılığı yok (${language}: ${targetRoute}).`);
     }
   }
 }
 
-const sitemapPath = path.join(
-  distDir,
-  'sitemap.xml'
-);
-
-if (!fs.existsSync(sitemapPath)) {
-  errors.push('dist/sitemap.xml bulunamadı.');
-} else {
-  const sitemap = fs.readFileSync(
-    sitemapPath,
-    'utf8'
-  );
-
-  const locations = [
-    ...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g),
-  ].map((match) => match[1].trim());
-
-  if (locations.length !== expectedPageCount) {
-    errors.push(
-      `Sitemap içinde ${locations.length} URL var; ` +
-      `${expectedPageCount} bekleniyordu.`
-    );
-  }
-
-  const uniqueLocations = new Set(locations);
-
-  if (uniqueLocations.size !== locations.length) {
-    errors.push(
-      'Sitemap içinde yinelenen URL bulundu.'
-    );
-  }
-
-  for (const location of locations) {
-    const builtFile = routeToFile(location);
-
-    if (!builtFile || !fs.existsSync(builtFile)) {
-      errors.push(
-        `Sitemap URL'sinin build çıktısı yok: ${location}`
-      );
-    }
-  }
-
-  for (const canonical of canonicalValues.keys()) {
-    if (!uniqueLocations.has(canonical)) {
-      errors.push(
-        `Canonical sitemap içinde bulunmuyor: ${canonical}`
-      );
-    }
+const internalAssetPrefixes = ['/images/', '/_astro/', '/favicon-', '/apple-touch-icon', '/site.webmanifest'];
+for (const page of pageByRoute.values()) {
+  if (!page.indexable) continue;
+  for (const tag of tags(page.html, 'a')) {
+    const href = attribute(tag, 'href');
+    if (!href || /^(?:mailto:|tel:|https?:\/\/|#)/i.test(href) || internalAssetPrefixes.some((prefix) => href.startsWith(prefix))) continue;
+    const targetRoute = routeFromUrl(href);
+    if (redirects.has(targetRoute)) errors.push(`${page.route}: iç bağlantı redirect kaynağına gidiyor (${href}).`);
+    else if (!pageByRoute.has(targetRoute)) errors.push(`${page.route}: kırık iç bağlantı (${href}).`);
   }
 }
 
-const robotsPath = path.join(
-  distDir,
-  'robots.txt'
-);
-
-if (!fs.existsSync(robotsPath)) {
-  errors.push('dist/robots.txt bulunamadı.');
-} else {
-  const robots = fs.readFileSync(
-    robotsPath,
-    'utf8'
-  );
-
-  if (!robots.includes(
-    'Sitemap: https://teyfikgokdemir.com/sitemap.xml'
-  )) {
-    errors.push(
-      'robots.txt içinde doğru sitemap adresi yok.'
-    );
-  }
+const sitemapPath = path.join(dist, 'sitemap.xml');
+const sitemap = fs.existsSync(sitemapPath) ? fs.readFileSync(sitemapPath, 'utf8') : '';
+const locations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1].replaceAll('&amp;', '&'));
+const expected = [...pageByRoute.values()].filter((page) => page.indexable).map((page) => page.canonical).sort();
+const actual = [...new Set(locations)].sort();
+if (locations.length !== actual.length) errors.push('Sitemap içinde yinelenen URL var.');
+if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+  for (const url of expected.filter((url) => !actual.includes(url))) errors.push(`Sitemap URL eksik: ${url}`);
+  for (const url of actual.filter((url) => !expected.includes(url))) errors.push(`Sitemap URL fazlalığı: ${url}`);
+}
+for (const url of actual) {
+  if (!url.startsWith(`${origin}/`) || url.includes('www.') || !url.endsWith('/')) errors.push(`Sitemap URL standardı hatalı: ${url}`);
 }
 
-const llmsPath = path.join(
-  distDir,
-  'llms.txt'
-);
-
-if (!fs.existsSync(llmsPath)) {
-  errors.push('dist/llms.txt bulunamadı.');
-} else {
-  const llms = fs.readFileSync(
-    llmsPath,
-    'utf8'
-  );
-
-  const requiredLlmsUrls = [
-    '/',
-    '/ai-search-visibility/',
-    '/tr/yapay-zeka-arama-gorunurlugu/',
-    '/sq/dukshmeria-ne-kerkimin-ai/',
-    '/mk/vidlivost-vo-ai-prebaruvanje/',
-    '/sr/vidljivost-u-ai-pretrazi/',
-    '/blog/',
-    '/tr/blog/',
-    '/sq/blog/',
-    '/mk/blog/',
-    '/sr/blog/',
-    '/blog/seo-vs-geo-vs-aeo-vs-aio/',
-    '/tr/blog/seo-geo-aeo-aio-farklari/',
-    '/sq/blog/dallimet-seo-geo-aeo-aio/',
-    '/mk/blog/razliki-seo-geo-aeo-aio/',
-    '/sr/blog/razlike-seo-geo-aeo-aio/',
-    '/sitemap.xml',
-    '/robots.txt',
-    '/llms.txt',
-  ];
-
-  for (const route of requiredLlmsUrls) {
-    if (!llms.includes(
-      `https://teyfikgokdemir.com${route}`
-    )) {
-      errors.push(
-        `llms.txt içinde URL eksik: ${route}`
-      );
-    }
-  }
+const robotsPath = path.join(dist, 'robots.txt');
+const robotsText = fs.existsSync(robotsPath) ? fs.readFileSync(robotsPath, 'utf8') : '';
+if (!/^User-agent:\s*\*$/mi.test(robotsText) || !/^Allow:\s*\/$/mi.test(robotsText)) errors.push('robots.txt genel taramaya izin vermiyor.');
+if (!robotsText.includes(`Sitemap: ${origin}/sitemap.xml`)) errors.push('robots.txt canonical sitemap adresini göstermiyor.');
+const headersText = fs.existsSync(path.join(dist, '_headers')) ? fs.readFileSync(path.join(dist, '_headers'), 'utf8') : '';
+if (/X-Robots-Tag:\s*noindex/i.test(headersText)) errors.push('_headers içinde genel noindex X-Robots-Tag bulundu.');
+const cloudflareDoc = fs.existsSync(path.resolve('docs/cloudflare-canonical-host.md')) ? fs.readFileSync(path.resolve('docs/cloudflare-canonical-host.md'), 'utf8') : '';
+if (!/www\.teyfikgokdemir\.com/i.test(cloudflareDoc) || !/301|308/.test(cloudflareDoc) || !/query/i.test(cloudflareDoc)) {
+  errors.push('Cloudflare www/HTTPS redirect beklentileri belgelenmemiş.');
 }
 
-console.log('');
-console.log('QCT / Teyfik Gökdemir Build Audit');
-console.log('----------------------------------');
-console.log(`Sayfa sayısı: ${htmlFiles.length}`);
-console.log(`Canonical sayısı: ${canonicalValues.size}`);
-console.log(`Uyarı sayısı: ${warnings.length}`);
-console.log(`Hata sayısı: ${errors.length}`);
-
-if (warnings.length > 0) {
-  console.log('');
-  console.log('Uyarılar:');
-
-  for (const warning of warnings) {
-    console.log(`- ${warning}`);
-  }
-}
-
-if (errors.length > 0) {
-  console.error('');
-  console.error('Hatalar:');
-
-  for (const error of errors) {
-    console.error(`- ${error}`);
-  }
-
+console.log(`Sayfalar: ${pageByRoute.size}; indexlenebilir: ${expected.length}; sitemap: ${actual.length}; redirect: ${redirects.size}`);
+for (const warning of warnings) console.warn(`WARN ${warning}`);
+if (errors.length) {
+  for (const error of errors) console.error(`ERROR ${error}`);
+  console.error(`BAŞARISIZ: ${errors.length} hata, ${warnings.length} uyarı.`);
   process.exit(1);
 }
-
-console.log('');
-console.log(
-  'BAŞARILI: 20 sayfa, sitemap, hreflang, schema, ' +
-  'canonical ve iç bağlantılar doğrulandı.'
-);
+console.log(`BAŞARILI: canonical, hreflang, schema, sitemap, robots, redirect ve iç bağlantılar doğrulandı (${warnings.length} uyarı).`);

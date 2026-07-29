@@ -11,7 +11,7 @@ interface Props {
 
 const { locale, copy, homePath, languageUrls } = Astro.props;
 
-const localeUrl = (item: Locale) => item === 'tr' ? '/' : `/${item}/`;
+const localeUrl = (item: Locale) => `/${item}/`;
 const currentHomePath = homePath ?? localeUrl(locale);
 const sectionUrl = (section: string) => `${currentHomePath}#${section}`;
 

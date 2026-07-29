@@ -7,7 +7,7 @@ export type Venture = {
   region: string;
   url?: string;
   aria: string;
-  image?: 'commerce';
+  image?: 'commerce' | 'ctseg';
 };
 
 export type SiteContent = {

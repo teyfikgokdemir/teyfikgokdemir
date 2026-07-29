@@ -1,12 +1,25 @@
 ---
 import type { SiteContent } from '../i18n/content';
+import type { Locale } from '../i18n/locales';
 import { site } from '../data/site';
 
 interface Props {
   copy: SiteContent;
+  locale: Locale;
 }
 
-const { copy } = Astro.props;
+const { copy, locale } = Astro.props;
+
+const footerText = {
+  tr: { connect: 'Bağlantılar', ventures: 'Girişimler', contact: 'İletişim', position: 'Dijital ticaret, yapay zekâ operasyonları ve büyüme sistemleri.' },
+  en: { connect: 'Connect', ventures: 'Ventures', contact: 'Contact', position: 'Digital commerce, AI operations and growth systems.' },
+  mk: { connect: 'Поврзување', ventures: 'Потфати', contact: 'Контакт', position: 'Дигитална трговија, AI операции и системи за раст.' },
+  sr: { connect: 'Povezivanje', ventures: 'Poduhvati', contact: 'Kontakt', position: 'Digitalna trgovina, AI operacije i sistemi rasta.' },
+  sq: { connect: 'Lidhje', ventures: 'Sipërmarrje', contact: 'Kontakt', position: 'Tregti digjitale, operacione me AI dhe sisteme rritjeje.' },
+  fa: { connect: 'ارتباطات', ventures: 'کسب‌وکارها', contact: 'تماس', position: 'تجارت دیجیتال، عملیات هوش مصنوعی و سیستم‌های رشد.' },
+} as const;
+
+const footer = footerText[locale] ?? footerText.en;
 
 const socialLinks = [
   ['LinkedIn', site.links.linkedin],
@@ -18,6 +31,7 @@ const ventureLinks = [
   ['QCT Studio', site.links.qctStudio],
   ['QCT Commerce', site.links.qctCommerce],
   ['Mythborn', site.links.mythborn],
+  ['CTSEG', site.links.ctseg],
 ] as const;
 
 const whatsappUrl =
@@ -49,7 +63,7 @@ const whatsappUrl =
       </a>
 
       <p class="premium-footer__position">
-        Digital commerce, AI operations and growth systems.
+        {footer.position}
       </p>
 
       <span
@@ -95,7 +109,7 @@ const whatsappUrl =
 
     <div class="premium-footer__groups">
       <div class="premium-footer__group">
-        <span class="premium-footer__label">Connect</span>
+        <span class="premium-footer__label">{footer.connect}</span>
 
         <nav aria-label="Social links">
           {socialLinks.map(([label, href]) => (
@@ -113,7 +127,7 @@ const whatsappUrl =
       </div>
 
       <div class="premium-footer__group">
-        <span class="premium-footer__label">Ventures</span>
+        <span class="premium-footer__label">{footer.ventures}</span>
 
         <nav aria-label="Venture links">
           {ventureLinks.map(([label, href]) => (
@@ -131,7 +145,7 @@ const whatsappUrl =
       </div>
 
       <div class="premium-footer__group premium-footer__group--contact">
-        <span class="premium-footer__label">Contact</span>
+        <span class="premium-footer__label">{footer.contact}</span>
 
         <nav aria-label="Contact links">
           <a href={'mailto:' + site.email}>

@@ -4,6 +4,7 @@ const ventures = [
   { name: 'QCT Commerce', region: 'ترکیه', href: 'https://qctcommerce.com', text: 'ساختارهای تجارت دیجیتال و فروش مستقیم برای تولیدکنندگان، عمده‌فروشان و کسب‌وکارهای در حال رشد در ترکیه.' },
   { name: 'QCT Studio', region: 'بالکان', href: 'https://qctstudio.com', text: 'راهکارهای چندزبانه وب، تجارت الکترونیک، SEO، GEO، AEO، AIO و اتوماسیون برای کسب‌وکارهای منطقه بالکان.' },
   { name: 'Mythborn', region: 'بین‌المللی', href: 'https://mythborn.co', text: 'برند و اکوسیستم محصول و تجارت بین‌المللی در حال توسعه.' },
+  { name: 'CTSEG', region: 'تأمین و تجارت', href: 'https://ctseg.com.tr', text: 'ساختار تخصصی برای تأمین راهبردی، پژوهش و اعتبارسنجی تأمین‌کننده، RFQ، مذاکره تجاری و هماهنگی تجارت بین‌المللی.' },
 ];
 const expertise = [
   { title: 'تجارت بین‌المللی', items: ['فرصت‌های واردات و صادرات', 'تطبیق محصول و بازار', 'هماهنگی خریدار و تولیدکننده', 'فرایندهای RFQ و پیشنهاد قیمت', 'مذاکره تجاری', 'توسعه کسب‌وکار فرامرزی'] },
@@ -13,12 +14,11 @@ const expertise = [
 ];
 const schema = {
   '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: 'Teyfik Gökdemir',
-  url: 'https://teyfikgokdemir.com/fa/',
-  jobTitle: 'مشاور تجارت بین‌المللی و تأمین راهبردی',
-  email,
-  knowsAbout: ['تجارت بین‌المللی', 'تأمین راهبردی', 'پژوهش تأمین‌کننده', 'توسعه کسب‌وکار', 'ورود به بازار', 'SEO', 'GEO', 'AEO', 'AIO', 'هوش مصنوعی در عملیات تجاری'],
+  '@graph': [
+    { '@type': 'Person', '@id': 'https://teyfikgokdemir.com/#person', name: 'Teyfik Gökdemir', url: 'https://teyfikgokdemir.com/fa/', jobTitle: 'مشاور تجارت بین‌المللی و تأمین راهبردی', email, knowsAbout: ['تجارت بین‌المللی', 'تأمین راهبردی', 'پژوهش تأمین‌کننده', 'توسعه کسب‌وکار', 'ورود به بازار', 'SEO', 'GEO', 'AEO', 'AIO', 'هوش مصنوعی در عملیات تجاری'] },
+    { '@type': 'WebSite', '@id': 'https://teyfikgokdemir.com/#website', name: 'Teyfik Gökdemir', url: 'https://teyfikgokdemir.com/', author: { '@id': 'https://teyfikgokdemir.com/#person' } },
+    { '@type': 'WebPage', '@id': 'https://teyfikgokdemir.com/fa/#webpage', url: 'https://teyfikgokdemir.com/fa/', name: 'تیفیک گوکدمیر | تجارت بین‌المللی و تأمین راهبردی', inLanguage: 'fa', isPartOf: { '@id': 'https://teyfikgokdemir.com/#website' }, about: { '@id': 'https://teyfikgokdemir.com/#person' } },
+  ],
 };
 ---
 <!doctype html>
@@ -32,11 +32,11 @@ const schema = {
   <link rel="canonical" href="https://teyfikgokdemir.com/fa/" />
   <link rel="alternate" hreflang="fa" href="https://teyfikgokdemir.com/fa/" />
   <link rel="alternate" hreflang="tr" href="https://teyfikgokdemir.com/tr/" />
-  <link rel="alternate" hreflang="en" href="https://teyfikgokdemir.com/" />
+  <link rel="alternate" hreflang="en" href="https://teyfikgokdemir.com/en/" />
   <link rel="alternate" hreflang="mk" href="https://teyfikgokdemir.com/mk/" />
   <link rel="alternate" hreflang="sr" href="https://teyfikgokdemir.com/sr/" />
   <link rel="alternate" hreflang="sq" href="https://teyfikgokdemir.com/sq/" />
-  <link rel="alternate" hreflang="x-default" href="https://teyfikgokdemir.com/" />
+  <link rel="alternate" hreflang="x-default" href="https://teyfikgokdemir.com/tr/" />
   <meta property="og:title" content="تیفیک گوکدمیر | تجارت بین‌المللی و تأمین راهبردی" />
   <meta property="og:description" content="تجارت بین‌المللی، تأمین راهبردی، توسعه بازار و عملیات تجاری مبتنی بر هوش مصنوعی." />
   <meta property="og:url" content="https://teyfikgokdemir.com/fa/" />
@@ -48,8 +48,8 @@ const schema = {
 <body>
   <header>
     <a class="brand" href="/fa/"><img src="/images/teyfik-gokdemir-tg-logo-transparent.png?v=7" alt="" /><strong>Teyfik Gökdemir</strong></a>
-    <nav aria-label="ناوبری اصلی"><a href="#focus">حوزه‌های فعالیت</a><a href="#ventures">کسب‌وکارها</a><a href="#contact">تماس</a></nav>
-    <div class="langs"><a href="/tr/">TR</a><a href="/">EN</a><a class="active" href="/fa/" aria-current="page">FA</a></div>
+    <nav aria-label="ناوبری اصلی"><a href="#focus">حوزه‌های فعالیت</a><a href="#ventures">کسب‌وکارها</a><a href="/fa/blog/">بینش‌ها</a><a href="/fa/مشاهده-پذیری-در-جستجوی-هوش-مصنوعی/">دیده‌شدن در AI</a><a href="#contact">تماس</a></nav>
+    <div class="langs"><a href="/tr/">TR</a><a href="/en/">EN</a><a href="/mk/">MK</a><a href="/sr/">SR</a><a href="/sq/">SQ</a><a class="active" href="/fa/" aria-current="page">FA</a></div>
   </header>
   <main>
     <section class="hero shell">
@@ -72,4 +72,5 @@ const schema = {
 </html>
 <style>
 :root{color-scheme:dark;--bg:#09111d;--deep:#070d16;--panel:#101c2b;--text:#f4f1e9;--muted:#aab7c9;--accent:#f2aa8f;--line:#26374d;--max:1180px}*{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--bg)}body{margin:0;background:radial-gradient(circle at 20% 4%,rgba(35,67,103,.34),transparent 30rem),linear-gradient(180deg,var(--bg),var(--deep) 58%,var(--bg));color:var(--text);font-family:Tahoma,"Segoe UI",Arial,sans-serif;line-height:1.8}a{color:inherit;text-decoration:none}.shell{width:min(var(--max),calc(100% - 3rem));margin-inline:auto}header{position:sticky;top:0;z-index:10;min-height:76px;display:flex;align-items:center;gap:1.25rem;padding:.7rem max(1.25rem,calc((100vw - var(--max))/2));border-bottom:1px solid var(--line);background:rgba(9,17,29,.92);backdrop-filter:blur(18px)}.brand{margin-left:auto;display:flex;align-items:center;gap:.7rem;direction:ltr}.brand img{width:54px;height:54px;object-fit:contain}.brand strong{font:700 .95rem/1.2 Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase}nav{display:flex;gap:1.2rem}nav a,.langs a{min-height:42px;display:inline-flex;align-items:center;color:var(--muted);font-size:.88rem}.langs{display:flex;border:1px solid var(--line);border-radius:999px;padding:.15rem;direction:ltr}.langs a{justify-content:center;min-width:40px;border-radius:50%;font:800 .72rem Arial}.langs .active{background:var(--text);color:var(--bg)}.hero{min-height:calc(100svh - 76px);display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:clamp(2rem,5vw,5rem);padding-block:4rem}.portrait{width:100%;max-height:720px;object-fit:cover;border:1px solid var(--line);border-radius:24px}.label{margin:0 0 1rem;color:var(--accent);font-size:.78rem;font-weight:800}h1,h2,h3{margin-top:0;text-wrap:balance}h1{font-size:clamp(2.7rem,6vw,5.8rem);line-height:1.08;margin-bottom:1.5rem}h2{font-size:clamp(2.1rem,4.5vw,4.5rem);line-height:1.15;margin-bottom:1.25rem}.lead{max-width:800px;color:var(--muted);font-size:clamp(1rem,1.5vw,1.22rem)}.summary{max-width:760px;color:var(--muted);font-size:.9rem}.actions{display:flex;flex-wrap:wrap;gap:.8rem;margin:2rem 0}.actions a,.primary{min-height:48px;display:inline-flex;align-items:center;padding:.75rem 1.15rem;border:1px solid var(--line);border-radius:999px}.primary{background:var(--text);color:var(--bg);font-weight:800}.section{padding:clamp(4rem,7vw,7rem) 0;border-top:1px solid var(--line)}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2.5rem}.grid article,.note{padding:1.5rem;border:1px solid var(--line);border-radius:20px;background:var(--panel)}h3{font-size:1.25rem}ul{margin:0;padding-right:1.2rem;color:var(--muted)}.ventures{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.5rem}.ventures a{position:relative;min-height:270px;padding:1.6rem;border:1px solid var(--line);border-radius:20px;background:var(--panel)}.ventures span{color:var(--accent);font-size:.8rem}.ventures b{position:absolute;left:1.5rem;bottom:1.2rem}.split{display:grid;grid-template-columns:1.3fr .7fr;gap:2rem;align-items:start}.contact{text-align:center}.contact .lead{margin-inline:auto}footer{display:flex;justify-content:space-between;gap:1rem;padding:2rem max(1.5rem,calc((100vw - var(--max))/2));border-top:1px solid var(--line);color:var(--muted)}footer div{display:flex;gap:1rem}@media(max-width:900px){header nav{display:none}.hero,.split{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.ventures{grid-template-columns:1fr}.portrait{max-height:560px}}@media(max-width:560px){.shell{width:min(var(--max),calc(100% - 1.5rem))}.grid{grid-template-columns:1fr}header{gap:.5rem}.brand strong{font-size:.72rem}footer{flex-direction:column}}
+.ventures{grid-template-columns:repeat(4,minmax(0,1fr))}@media(max-width:980px){.ventures{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:620px){.ventures{grid-template-columns:1fr}}
 </style>

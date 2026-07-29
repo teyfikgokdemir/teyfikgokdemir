@@ -1,5 +1,5 @@
 ---
-import { blogLocales, localeMeta, posts, blogPath, postPath, localePrefix, type BlogLocale, type BlogPost } from '../data/blog';
+import { blogLocales, localeMeta, posts, blogPath, postPath, homePath, legacySeoArticle, type BlogLocale, type BlogPost } from '../data/blog';
 
 interface Props { locale: BlogLocale; post?: BlogPost }
 const { locale, post } = Astro.props;
@@ -8,8 +8,13 @@ const origin = 'https://teyfikgokdemir.com';
 const canonicalPath = post ? postPath(locale, post.slug) : blogPath(locale);
 const canonical = origin + canonicalPath;
 const title = post ? `${post.title[locale]} | Teyfik Gökdemir` : `${meta.blog} | Teyfik Gökdemir`;
-const description = post ? post.description[locale] : posts.map((item) => item.title[locale]).join(' · ');
+const description = post ? post.description[locale] : meta.description;
 const alternates = Object.fromEntries(blogLocales.map((item) => [item, origin + (post ? postPath(item, post.slug) : blogPath(item))]));
+const legacy = legacySeoArticle[locale];
+const indexItems = [
+  ...(legacy ? [{ url: origin + legacy.path, name: legacy.title }] : []),
+  ...posts.map((item) => ({ url: origin + postPath(locale, item.slug), name: item.title[locale] })),
+];
 const graph = post ? [
   {
     '@type': 'BlogPosting', '@id': canonical + '#article', headline: post.title[locale], description: post.description[locale],
@@ -20,7 +25,7 @@ const graph = post ? [
   },
   {
     '@type': 'BreadcrumbList', itemListElement: [
-      { '@type': 'ListItem', position: 1, name: meta.home, item: origin + localePrefix(locale) + '/' },
+      { '@type': 'ListItem', position: 1, name: meta.home, item: origin + homePath(locale) },
       { '@type': 'ListItem', position: 2, name: meta.blog, item: origin + blogPath(locale) },
       { '@type': 'ListItem', position: 3, name: post.title[locale], item: canonical },
     ],
@@ -29,10 +34,16 @@ const graph = post ? [
   {
     '@type': 'Blog', '@id': canonical + '#blog', name: meta.blog, url: canonical, inLanguage: locale,
     author: { '@type': 'Person', '@id': origin + '/#person', name: 'Teyfik Gökdemir', url: origin },
-    blogPost: posts.map((item) => ({ '@type': 'BlogPosting', headline: item.title[locale], url: origin + postPath(locale, item.slug), datePublished: item.date })),
+    description: meta.description,
   },
   {
-    '@type': 'ItemList', itemListElement: posts.map((item, index) => ({ '@type': 'ListItem', position: index + 1, url: origin + postPath(locale, item.slug), name: item.title[locale] })),
+    '@type': 'ItemList', itemListElement: indexItems.map((item, index) => ({ '@type': 'ListItem', position: index + 1, url: item.url, name: item.name })),
+  },
+  {
+    '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: meta.home, item: origin + homePath(locale) },
+      { '@type': 'ListItem', position: 2, name: meta.blog, item: canonical },
+    ],
   },
 ];
 const schema = { '@context': 'https://schema.org', '@graph': graph };
@@ -62,22 +73,25 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href={`${localePrefix(locale)}/`}><img src="/images/teyfik-gokdemir-tg-logo-transparent.png?v=7" alt="" /><strong>Teyfik Gökdemir</strong></a>
-    <nav aria-label="Blog navigation"><a href={`${localePrefix(locale)}/`}>{meta.home}</a><a class="active" href={blogPath(locale)}>{meta.blog}</a></nav>
+    <a class="brand" href={homePath(locale)}><img src="/images/teyfik-gokdemir-tg-logo-transparent.png?v=7" alt="" /><strong>Teyfik Gökdemir</strong></a>
+    <nav aria-label="Blog navigation"><a href={homePath(locale)}>{meta.home}</a><a class="active" href={blogPath(locale)}>{meta.blog}</a></nav>
     <div class="langs">{blogLocales.map((item) => <a class={item === locale ? 'active' : ''} href={post ? postPath(item, post.slug) : blogPath(item)} aria-current={item === locale ? 'page' : undefined}>{item.toUpperCase()}</a>)}</div>
   </header>
   <main>
     {!post ? (
       <>
-        <section class="hero shell"><p class="eyebrow">Teyfik Gökdemir · International Trade & Strategic Sourcing</p><h1>{meta.blog}</h1><p>{description}</p></section>
-        <section class="shell cards">{posts.map((item) => <article><time datetime={item.date}>{item.date}</time><h2><a href={postPath(locale, item.slug)}>{item.title[locale]}</a></h2><p>{item.description[locale]}</p><a class="read" href={postPath(locale, item.slug)}>{meta.read} →</a></article>)}</section>
+        <section class="hero shell"><p class="eyebrow">Teyfik Gökdemir · {meta.eyebrow}</p><h1>{meta.blog}</h1><p>{description}</p><p><a class="read" href={`${homePath(locale)}#focus`}>{meta.expertise} →</a></p></section>
+        <section class="shell cards">
+          {legacy && <article><p class="eyebrow">SEO · GEO · AEO · AIO</p><h2><a href={legacy.path}>{legacy.title}</a></h2><p>{legacy.description}</p><a class="read" href={legacy.path}>{meta.read} →</a></article>}
+          {posts.map((item) => <article><time datetime={item.date}>{item.date}</time><h2><a href={postPath(locale, item.slug)}>{item.title[locale]}</a></h2><p>{item.description[locale]}</p><a class="read" href={postPath(locale, item.slug)}>{meta.read} →</a></article>)}
+        </section>
       </>
     ) : (
       <article class="article shell">
-        <nav class="crumbs" aria-label="Breadcrumb"><a href={`${localePrefix(locale)}/`}>{meta.home}</a><span>/</span><a href={blogPath(locale)}>{meta.blog}</a></nav>
+        <nav class="crumbs" aria-label="Breadcrumb"><a href={homePath(locale)}>{meta.home}</a><span>/</span><a href={blogPath(locale)}>{meta.blog}</a></nav>
         <section class="article-head"><p class="eyebrow">Strategic Sourcing · International Trade</p><h1>{post.title[locale]}</h1><p class="lead">{post.intro[locale]}</p><p class="date">{meta.published}: <time datetime={post.date}>{post.date}</time> · {post.readingMinutes} min</p></section>
         <div class="content">{post.sections[locale].map((section) => <section><h2>{section.heading}</h2>{section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}{section.bullets && <ul>{section.bullets.map((bullet) => <li>{bullet}</li>)}</ul>}</section>)}</div>
-        <aside class="context"><h2>{meta.related}</h2><div class="related">{related.map((item) => <a href={postPath(locale, item.slug)}><strong>{item.title[locale]}</strong><span>{item.description[locale]}</span></a>)}</div><p><a href={`${localePrefix(locale)}/#focus`}>← {meta.home}: International Trade & Strategic Sourcing</a></p></aside>
+        <aside class="context"><h2>{meta.related}</h2><div class="related">{related.map((item) => <a href={postPath(locale, item.slug)}><strong>{item.title[locale]}</strong><span>{item.description[locale]}</span></a>)}</div><p><a href={`${homePath(locale)}#focus`}>← {meta.expertise}</a></p></aside>
       </article>
     )}
   </main>
