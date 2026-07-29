@@ -2,6 +2,7 @@
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import FloatingActions from '../../components/FloatingActions.astro';
+import RevealController from '../../components/RevealController.astro';
 import { content } from '../../i18n/content';
 
 const email = 'info@teyfikgokdemir.com';
@@ -83,7 +84,7 @@ const schema = {
     </section>
 
     <section class="section ctseg-feature" id="ctseg">
-      <div class="shell ctseg-panel">
+      <div class="shell ctseg-panel" data-reveal="scene">
         <div>
           <img class="ctseg-logo" src="/images/ctseg-logo-transparent.png" alt="CTSEG" />
           <p class="label">ساختار اصلی تجاری</p>
@@ -107,28 +108,14 @@ const schema = {
   <FloatingActions locale="fa" />
   <script is:inline>
     (() => {
-      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const items = [...document.querySelectorAll('.hero > *, .ctseg-panel > *, .section .shell > *, .grid article, .ventures a')];
       items.forEach((item, index) => {
         item.dataset.reveal = '';
         item.style.setProperty('--reveal-order', String(index % 4));
       });
-      if (!reducedMotion && 'IntersectionObserver' in window) {
-        document.documentElement.classList.add('motion-ready');
-        const observer = new IntersectionObserver((entries, instance) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('is-visible');
-              instance.unobserve(entry.target);
-            }
-          });
-        }, { threshold: .14, rootMargin: '0px 0px -7% 0px' });
-        items.forEach((item) => observer.observe(item));
-      } else {
-        items.forEach((item) => item.classList.add('is-visible'));
-      }
     })();
   </script>
+  <RevealController />
 </body>
 </html>
 <style>
@@ -331,5 +318,88 @@ footer{
 }
 @media(prefers-reduced-motion:reduce){
   .header-panel{transition:none}
+}
+</style>
+<style>
+:root{
+  --scene-paper:#f3eee6;
+  --scene-stone:#e7e0d4;
+  --scene-mineral:#d9ddd5;
+  --scene-sage:#e0e4d9;
+  --scene-olive:#293029;
+  --scene-smoke:#211c18;
+  --accent-rust:#a65332;
+  --accent-coral:#d78263;
+  --accent-gold-muted:#b79a63;
+  --motion-fast:180ms;
+  --motion-base:420ms;
+  --motion-slow:640ms;
+  --ease-editorial:cubic-bezier(.2,.75,.25,1);
+  --reveal-distance:16px;
+  --stagger-step:64ms;
+}
+html{scroll-behavior:smooth}
+.hero{background:var(--scene-stone)}
+#focus.light-stage{background:var(--scene-mineral)}
+#ventures.light-stage{background:var(--scene-sage)}
+.section:not(.ctseg-feature):not(.light-stage):not(#contact){background:var(--scene-stone)}
+#ctseg.ctseg-feature,#contact{background:var(--scene-olive)}
+footer{background:var(--scene-smoke)}
+:global(.motion-ready) [data-reveal]{
+  opacity:0;
+  transform:translate3d(0,var(--reveal-distance),0);
+  transition:
+    opacity var(--motion-slow) var(--ease-editorial),
+    transform var(--motion-slow) var(--ease-editorial);
+  transition-delay:calc(var(--reveal-order,0)*var(--stagger-step));
+}
+:global(.motion-ready) .hero > img[data-reveal]{
+  transform:translate3d(0,8px,0) scale(1.015);
+}
+:global(.motion-ready) [data-reveal].is-visible{
+  opacity:1;
+  transform:none;
+}
+.ctseg-panel::before{
+  content:"";
+  position:absolute;
+  inset:0 0 auto;
+  height:2px;
+  background:var(--accent-rust);
+  transform-origin:right;
+}
+.ctseg-panel{position:relative}
+:global(.motion-ready) .ctseg-panel::before{
+  transform:scaleX(0);
+  transition:transform var(--motion-slow) var(--ease-editorial);
+}
+:global(.motion-ready) .ctseg-panel.is-visible::before{transform:scaleX(1)}
+.ventures a h3,.ventures a b,.ventures a p{
+  transition:
+    color var(--motion-fast) ease,
+    transform var(--motion-fast) ease;
+}
+.ventures a:hover h3,.ventures a:focus-visible h3,
+.ventures a:hover b,.ventures a:focus-visible b{
+  transform:translateX(-4px);
+}
+.ventures a:hover p,.ventures a:focus-visible p{color:#3f3a34}
+.grid article,.note{
+  transition:
+    transform var(--motion-fast) ease,
+    border-color var(--motion-fast) ease,
+    background-color var(--motion-fast) ease;
+}
+.grid article:hover,.note:hover{
+  transform:translateY(-2px);
+  border-color:var(--accent-rust);
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  [data-reveal],.ctseg-panel::before{
+    opacity:1;
+    transform:none;
+    transition:none;
+  }
 }
 </style>

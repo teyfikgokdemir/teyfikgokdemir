@@ -56,7 +56,7 @@ const homePath = `/${locale}/`;
 
   <main id="main-content" class="content-page">
     <header class="content-hero" id="top">
-      <div class="content-shell">
+      <div class="content-shell" data-reveal="content-hero">
         <nav class="content-breadcrumb" aria-label="Breadcrumb">
           <a href={homePath}>{locale === 'tr' ? 'Ana sayfa' : locale === 'fa' ? 'خانه' : 'Home'}</a>
           <span aria-hidden="true">/</span>
@@ -77,7 +77,7 @@ const homePath = `/${locale}/`;
       </div>
     </header>
 
-    <div class="content-shell content-body">
+    <div class="content-shell content-body" data-reveal="content-body">
       <slot />
     </div>
   </main>
@@ -87,13 +87,13 @@ const homePath = `/${locale}/`;
 </BaseLayout>
 
 <style>
-  .content-page { min-height: 70vh; background: var(--bg-alt); }
+  .content-page { min-height: 70vh; background: var(--scene-paper); }
   .content-shell { width: min(840px, calc(100% - 3rem)); margin-inline: auto; }
   .content-hero .content-shell { width: min(1080px, calc(100% - 3rem)); }
   .content-hero {
     padding: clamp(4.5rem, 8vw, 7.25rem) 0 clamp(3rem, 5vw, 4.5rem);
     border-bottom: 1px solid var(--border);
-    background: color-mix(in srgb, var(--bg) 72%, #d7dbd1);
+    background: var(--scene-mineral);
   }
   .content-breadcrumb { display: flex; gap: .55rem; align-items: center; margin-bottom: 2rem; color: var(--muted); font-size: .82rem; }
   .content-breadcrumb a:hover { color: var(--text); }
@@ -113,7 +113,7 @@ const homePath = `/${locale}/`;
     padding: clamp(1.5rem, 4vw, 2.25rem);
     border: 1px solid #5b6259;
     border-radius: 7px;
-    background: var(--surface-olive);
+    background: var(--scene-olive);
   }
   .content-body :global(.answer-block p) { margin: 0; color: #f3eee6; font-size: 1.05rem; }
   .content-body :global(.answer-block strong) { color: #fff; }
@@ -123,7 +123,24 @@ const homePath = `/${locale}/`;
   .content-body :global(.content-card p) { margin-bottom: 0; font-size: .94rem; }
   .content-body :global(.faq-list) { display: grid; gap: 0; margin-top: 2rem; border-top: 1px solid var(--border); }
   .content-body :global(.faq-list details) { padding: 1.15rem 0; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; background: transparent; }
-  .content-body :global(.faq-list summary) { color: var(--text); font-weight: 750; cursor: pointer; }
+  .content-body :global(.faq-list summary) {
+    position: relative;
+    padding-inline-end: 2rem;
+    color: var(--text);
+    font-weight: 750;
+    cursor: pointer;
+  }
+  .content-body :global(.faq-list summary::after) {
+    content: "+";
+    position: absolute;
+    inset-inline-end: .2rem;
+    color: var(--accent-rust);
+    transition: transform var(--motion-fast) ease;
+  }
+  .content-body :global(.faq-list details[open] summary::after) { transform: rotate(45deg); }
+  .content-body :global(.faq-list details[open] > :not(summary)) {
+    animation: faq-enter var(--motion-fast) var(--ease-editorial);
+  }
   .content-body :global(.faq-list details p) { margin-bottom: 0; }
   .content-body :global(.content-cta) {
     margin-top: 4rem;
@@ -131,10 +148,36 @@ const homePath = `/${locale}/`;
     border: 1px solid #5b6259;
     border-radius: 7px;
     color: #f3eee6;
-    background: var(--surface-olive);
+    background: var(--scene-olive);
   }
   .content-body :global(.content-cta h2) { margin-top: 0; }
   .content-body :global(.content-cta p) { color: #d2c8bc; }
   .content-body :global(.content-cta a) { color: #d78263; }
+  :global(.motion-ready) .content-page [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-distance), 0);
+    transition:
+      opacity var(--motion-slow) var(--ease-editorial),
+      transform var(--motion-slow) var(--ease-editorial);
+  }
+  :global(.motion-ready) .content-page [data-reveal="content-body"] {
+    transition-delay: var(--stagger-step);
+  }
+  :global(.motion-ready) .content-page [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+  @keyframes faq-enter {
+    from { opacity: 0; transform: translate3d(0, -4px, 0); }
+    to { opacity: 1; transform: none; }
+  }
   @media (max-width: 680px) { .content-shell { width: min(900px, calc(100% - 2rem)); } .content-hero .content-shell { width: min(1080px, calc(100% - 1.25rem)); } .content-body :global(.content-grid) { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) {
+    .content-page [data-reveal] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .content-body :global(.faq-list details[open] > :not(summary)) { animation: none; }
+  }
 </style>

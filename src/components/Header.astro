@@ -121,6 +121,13 @@ const navLabels = locale === 'fa'
 <script is:inline>
   const toggle = document.querySelector('.menu-toggle');
   const panel = document.querySelector('.header-panel');
+  const header = document.querySelector('.site-header');
+
+  if (header) {
+    const updateHeader = () => header.classList.toggle('is-scrolled', window.scrollY > 12);
+    updateHeader();
+    window.addEventListener('scroll', updateHeader, { passive: true });
+  }
 
   if (toggle && panel) {
     const closeMenu = () => {
