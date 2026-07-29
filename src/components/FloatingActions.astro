@@ -38,7 +38,23 @@ const whatsappUrl =
     aria-label={labels[locale].top}
     title={labels[locale].top}
   >
-    <span aria-hidden="true">↑</span>
+    <svg
+      class="back-to-top__icon"
+      viewBox="0 0 20 20"
+      width="18"
+      height="18"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M4.5 12.5 10 7l5.5 5.5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
   </button>
 
   <a
@@ -134,10 +150,23 @@ const whatsappUrl =
   }
 
   .back-to-top {
+    color: #f3eee6;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
     transform: translateY(8px);
+  }
+
+  .back-to-top__icon {
+    display: block;
+    width: 18px;
+    height: 18px;
+    color: inherit;
+  }
+
+  .back-to-top:hover,
+  .back-to-top:focus-visible {
+    color: #fff;
   }
 
   .back-to-top.is-visible {
@@ -169,6 +198,11 @@ const whatsappUrl =
     .floating-action {
       width: 40px;
       height: 40px;
+    }
+
+    .back-to-top__icon {
+      width: 16px;
+      height: 16px;
     }
   }
 
