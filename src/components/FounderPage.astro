@@ -775,7 +775,7 @@ const displayedYear = (title: string, year: string) =>
     font-size: .9rem;
     font-weight: 750;
   }
-  .ctseg-featured h2 { max-width: 700px; font-size: clamp(2.35rem, 3.8vw, 3.75rem); line-height: .98; }
+  .ctseg-featured h2 { max-width: 700px; font-size: clamp(2.35rem, 3.8vw, 3.75rem); line-height: var(--leading-heading); }
   .ctseg-featured__founder {
     max-width: 740px;
     margin: 1rem 0 0;
@@ -826,7 +826,7 @@ const displayedYear = (title: string, year: string) =>
     background: var(--bg);
   }
   .hero-description { color: var(--text-muted); }
-  .hero h1 { max-width: 22ch; font-size: clamp(3rem, 4.7vw, 4.85rem); line-height: .99; }
+  .hero h1 { max-width: 22ch; font-size: clamp(3rem, 4.7vw, 4.85rem); line-height: var(--leading-display); }
   .hero-media { min-height: 620px; }
   .hero-media::before {
     inset: 0;
@@ -930,6 +930,13 @@ const displayedYear = (title: string, year: string) =>
   .legal-links { --text: #f3eee6; --muted: #c9bfb2; }
   .legal-links a { min-height: 44px; display: inline-flex; align-items: center; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; }
   .legal-links a:hover { color: var(--text); }
+  @media (min-width: 1600px) {
+    .hero {
+      width: min(1480px, calc(100% - 4rem));
+      grid-template-columns: minmax(0, 1.45fr) minmax(360px, .55fr);
+    }
+    .hero h1 { max-width: 24ch; }
+  }
   @media (max-width: 900px) {
     .hero { width: min(100% - 2rem, var(--max)); grid-template-columns: 1fr; }
     .hero-media { min-height: 520px; }
@@ -939,7 +946,8 @@ const displayedYear = (title: string, year: string) =>
     .ctseg-featured__services { grid-template-columns: 1fr; }
   }
   @media (max-width: 560px) {
-    .hero h1 { font-size: clamp(2.55rem, 11vw, 3.45rem); line-height: 1; letter-spacing: -.045em; }
+    .hero { width: min(100% - 1.25rem, var(--max)); }
+    .hero h1 { font-size: clamp(2.55rem, 11vw, 3.45rem); line-height: var(--leading-display); letter-spacing: var(--tracking-display); }
     .hero-media { min-height: 420px; }
     .ctseg-featured__panel { padding: 0; border-radius: 0; }
     .ctseg-featured__identity > img { margin-bottom: 1.5rem; }

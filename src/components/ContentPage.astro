@@ -89,6 +89,7 @@ const homePath = `/${locale}/`;
 <style>
   .content-page { min-height: 70vh; background: var(--bg-alt); }
   .content-shell { width: min(840px, calc(100% - 3rem)); margin-inline: auto; }
+  .content-hero .content-shell { width: min(1080px, calc(100% - 3rem)); }
   .content-hero {
     padding: clamp(4.5rem, 8vw, 7.25rem) 0 clamp(3rem, 5vw, 4.5rem);
     border-bottom: 1px solid var(--border);
@@ -96,11 +97,11 @@ const homePath = `/${locale}/`;
   }
   .content-breadcrumb { display: flex; gap: .55rem; align-items: center; margin-bottom: 2rem; color: var(--muted); font-size: .82rem; }
   .content-breadcrumb a:hover { color: var(--text); }
-  .content-hero h1 { max-width: 920px; margin: .55rem 0 1.4rem; font-size: clamp(2.8rem, 6.3vw, 5.45rem); line-height: .98; letter-spacing: -.052em; }
+  .content-hero h1 { max-width: 1080px; margin: .65rem 0 1.65rem; font-size: clamp(2.8rem, 6.3vw, 5.45rem); line-height: var(--leading-title); letter-spacing: var(--tracking-title); }
   .content-lead { max-width: 760px; margin: 0; color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.35rem); line-height: 1.75; }
   .article-meta { display: flex; flex-wrap: wrap; gap: .7rem 1.2rem; margin-top: 2rem; color: var(--muted); font-size: .82rem; }
   .content-body { padding-block: clamp(3.5rem, 7vw, 6rem); }
-  .content-body :global(h2) { margin: 4rem 0 1.1rem; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.08; letter-spacing: -.035em; }
+  .content-body :global(h2) { margin: 4rem 0 1.1rem; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.08; letter-spacing: var(--tracking-heading); }
   .content-body :global(h2:first-child) { margin-top: 0; }
   .content-body :global(h3) { margin: 2.2rem 0 .75rem; font-size: 1.35rem; }
   .content-body :global(p), .content-body :global(li) { color: var(--muted); font-size: 1.02rem; line-height: 1.8; }
@@ -135,5 +136,5 @@ const homePath = `/${locale}/`;
   .content-body :global(.content-cta h2) { margin-top: 0; }
   .content-body :global(.content-cta p) { color: #d2c8bc; }
   .content-body :global(.content-cta a) { color: #d78263; }
-  @media (max-width: 680px) { .content-shell { width: min(900px, calc(100% - 2rem)); } .content-body :global(.content-grid) { grid-template-columns: 1fr; } }
+  @media (max-width: 680px) { .content-shell { width: min(900px, calc(100% - 2rem)); } .content-hero .content-shell { width: min(1080px, calc(100% - 1.25rem)); } .content-body :global(.content-grid) { grid-template-columns: 1fr; } }
 </style>

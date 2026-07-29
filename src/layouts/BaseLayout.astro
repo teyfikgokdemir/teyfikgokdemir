@@ -237,10 +237,24 @@ const jsonLd = {
     --max: 1180px;
     --radius: 22px;
     --header-height: 76px;
+    --leading-display: 1;
+    --leading-heading: 1.04;
+    --leading-title: 1.02;
+    --tracking-display: -.032em;
+    --tracking-heading: -.025em;
+    --tracking-title: -.03em;
   }
 
   * { box-sizing: border-box; }
   html { overflow-x: clip; background: var(--bg); }
+  html[lang="fa"] {
+    --leading-display: 1.18;
+    --leading-heading: 1.2;
+    --leading-title: 1.18;
+    --tracking-display: 0;
+    --tracking-heading: 0;
+    --tracking-title: 0;
+  }
   body {
     margin: 0;
     overflow-x: clip;
@@ -286,11 +300,16 @@ const jsonLd = {
     font-family: "Iowan Old Style", Baskerville, Georgia, "Times New Roman", serif;
     font-weight: 600;
   }
+  html[lang="fa"] h1,
+  html[lang="fa"] h2,
+  html[lang="fa"] h3 {
+    font-family: "Noto Naskh Arabic", Tahoma, "Segoe UI", sans-serif;
+  }
   h2 {
     margin: 0 0 1.25rem;
     font-size: clamp(2.15rem, 5vw, 4.65rem);
-    line-height: 1.02;
-    letter-spacing: -.045em;
+    line-height: var(--leading-heading);
+    letter-spacing: var(--tracking-heading);
   }
   .section-lead {
     margin: 0;
@@ -399,8 +418,8 @@ const jsonLd = {
     max-width: 19ch;
     margin: 1rem 0 1.6rem;
     font-size: clamp(3.15rem, 5.2vw, 5.15rem);
-    line-height: .99;
-    letter-spacing: -.052em;
+    line-height: var(--leading-display);
+    letter-spacing: var(--tracking-display);
   }
   .hero-description {
     max-width: 740px;
@@ -802,7 +821,7 @@ const jsonLd = {
   @media (min-width: 1025px) {
     .section { padding-block: clamp(3.5rem, 5vw, 5.5rem); }
     .section-heading { max-width: 900px; margin-bottom: 2rem; }
-    h2 { font-size: clamp(2.15rem, 4.25vw, 4rem); line-height: 1.02; }
+    h2 { font-size: clamp(2.15rem, 4.25vw, 4rem); line-height: var(--leading-heading); }
     .editorial-image img { max-height: 560px; }
     .regional-grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); }
   }
@@ -866,6 +885,22 @@ const jsonLd = {
   }
 
   @media (max-width: 560px) {
+    :root {
+      --leading-display: 1.03;
+      --leading-heading: 1.06;
+      --leading-title: 1.04;
+      --tracking-display: -.024em;
+      --tracking-heading: -.015em;
+      --tracking-title: -.02em;
+    }
+    html[lang="fa"] {
+      --leading-display: 1.22;
+      --leading-heading: 1.22;
+      --leading-title: 1.22;
+      --tracking-display: 0;
+      --tracking-heading: 0;
+      --tracking-title: 0;
+    }
     .site-header { min-height: 70px; padding: .65rem 1rem; }
     .brand strong { max-width: 9.5rem; font-size: .7rem; }
     .brand span { width: 40px; height: 40px; }
@@ -1012,7 +1047,7 @@ const jsonLd = {
       max-width: none;
       white-space: nowrap;
       font-size: clamp(2.9rem, 3.65vw, 4rem);
-      letter-spacing: -.05em;
+      letter-spacing: var(--tracking-heading);
     }
 
     #expertise .section-lead {
@@ -1045,7 +1080,7 @@ const jsonLd = {
       max-width: 900px;
       margin-bottom: .65rem;
       font-size: clamp(2.8rem, 3.7vw, 3.45rem);
-      line-height: .98;
+      line-height: var(--leading-heading);
     }
 
     #ventures .section-lead {
@@ -1164,8 +1199,8 @@ const jsonLd = {
       margin-bottom: .75rem;
       white-space: nowrap;
       font-size: clamp(2.9rem, 3.45vw, 3.55rem);
-      line-height: 1;
-      letter-spacing: -.045em;
+      line-height: var(--leading-heading);
+      letter-spacing: var(--tracking-heading);
     }
 
     #expertise .section-lead {
@@ -1307,6 +1342,11 @@ const jsonLd = {
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+  }
+</style>
+<style is:global>
+  html[lang="fa"] .content-page .content-hero h1 {
+    font-size: clamp(2.35rem, 10vw, 5.45rem);
   }
 </style>
 

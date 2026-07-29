@@ -233,11 +233,11 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
   }
   .blog-hero h1,
   .article-head h1 {
-    max-width: 1000px;
+    max-width: 1120px;
     margin: .45rem 0 1.35rem;
     font-size: clamp(3.25rem, 7vw, 6.8rem);
-    line-height: .94;
-    letter-spacing: -.055em;
+    line-height: var(--leading-display);
+    letter-spacing: var(--tracking-display);
   }
   .blog-hero > div > p:not(.section-label) {
     max-width: 760px;
@@ -266,8 +266,8 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
   .featured-article h2 {
     margin: 1rem 0 0;
     font-size: clamp(2.2rem, 4.5vw, 4.35rem);
-    line-height: 1;
-    letter-spacing: -.045em;
+    line-height: var(--leading-heading);
+    letter-spacing: var(--tracking-heading);
   }
   .featured-article p { margin: 0; color: #d2c8bc; font-size: 1rem; line-height: 1.7; }
   .featured-article .text-link { color: #d78263; }
@@ -302,16 +302,16 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
   .blog-article { padding-block: clamp(2.5rem, 6vw, 5.5rem); }
   .crumbs { display: flex; gap: .55rem; margin-bottom: clamp(2rem, 5vw, 4rem); color: var(--text-muted); font-size: .85rem; }
   .article-head {
-    max-width: 1040px;
+    max-width: 1120px;
     padding-bottom: clamp(2.5rem, 5vw, 4rem);
     border-bottom: 1px solid var(--border);
   }
-  .article-head h1 { font-size: clamp(2.8rem, 6vw, 5.9rem); }
+  .article-head h1 { font-size: clamp(2.8rem, 6vw, 5.9rem); line-height: var(--leading-title); letter-spacing: var(--tracking-title); }
   .article-lead { max-width: 780px; margin: 0; color: var(--text-muted); font-size: clamp(1.1rem, 1.8vw, 1.35rem); line-height: 1.7; }
   .article-date { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.5rem 0 0; color: var(--text-muted); font-size: .85rem; }
   .article-content { width: min(720px, 100%); margin: clamp(3rem, 6vw, 5rem) auto; }
   .article-content section { padding-block: .5rem 2rem; }
-  .article-content h2 { margin: 2.5rem 0 1rem; font-size: clamp(1.85rem, 3.5vw, 2.8rem); line-height: 1.12; letter-spacing: -.035em; }
+  .article-content h2 { margin: 2.5rem 0 1rem; font-size: clamp(1.85rem, 3.5vw, 2.8rem); line-height: 1.12; letter-spacing: var(--tracking-heading); }
   .article-content p,
   .article-content li { color: var(--text-muted); font-size: 1.06rem; line-height: 1.82; }
   .article-content li + li { margin-top: .55rem; }
@@ -331,7 +331,7 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
     .article-list > a { grid-template-columns: minmax(130px, .45fr) minmax(220px, .8fr) minmax(0, 1.2fr) 28px; gap: 1rem; }
   }
   @media (max-width: 680px) {
-    .blog-shell { width: min(100% - 2rem, 1180px); }
+    .blog-shell { width: min(100% - 1.25rem, 1180px); }
     .article-list > a { grid-template-columns: 1fr auto; }
     .article-list .article-meta-line,
     .article-list > a > p:not(.article-meta-line) { grid-column: 1 / -1; }

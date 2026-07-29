@@ -137,6 +137,10 @@ const schema = {
 <style>
 :root{
   color-scheme:light;
+  --leading-display:1.18;
+  --leading-heading:1.2;
+  --tracking-display:0;
+  --tracking-heading:0;
   --bg:#e7e0d4;
   --bg-alt:#f3eee6;
   --surface:#ddd4c7;
@@ -166,7 +170,7 @@ header{
 }
 .langs .active{background:var(--bg-alt);color:var(--surface-dark)}
 .hero{width:min(1340px,calc(100% - 3rem));grid-template-columns:1.25fr .75fr;background:var(--bg)}
-.hero h1{max-width:20ch;font-size:clamp(2.85rem,5.2vw,5.1rem);line-height:1.18}
+.hero h1{max-width:20ch;font-size:clamp(2.85rem,5.2vw,5.1rem);line-height:var(--leading-display);letter-spacing:var(--tracking-display)}
 .portrait{
   padding:10px;
   border-radius:8px;
@@ -238,7 +242,7 @@ footer{
 }
 @media(max-width:620px){
   .hero{width:min(var(--max),calc(100% - 1.5rem))}
-  .hero h1{font-size:clamp(2.45rem,11.5vw,3.4rem);line-height:1.22}
+  .hero h1{font-size:clamp(2.45rem,11.5vw,3.4rem);line-height:1.22;letter-spacing:0}
   .ctseg-panel{border-radius:6px}
 }
 </style>
@@ -297,7 +301,7 @@ footer{
 #ctseg .ctseg-logo{width:min(205px,52%);margin-bottom:1rem}
 #ctseg .service-list{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:1.5rem}
 #ctseg .service-list li{padding:.85rem 0;border:0;border-top:1px solid var(--border);border-radius:0;background:transparent}
-#ctseg h2{font-size:clamp(2.5rem,4.5vw,4.2rem);line-height:1.2}
+#ctseg h2{font-size:clamp(2.5rem,4.5vw,4.2rem);line-height:var(--leading-heading);letter-spacing:var(--tracking-heading)}
 @media(max-width:1100px){
   .menu-toggle{display:block;margin-inline-start:auto}
   .header-panel{
