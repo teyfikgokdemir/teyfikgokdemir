@@ -4,15 +4,17 @@ import type { SiteContent } from '../i18n/content';
 import { site } from '../data/site';
 import CookieBanner from '../components/CookieBanner.astro';
 
+type SupportedLocale = Locale | 'fa';
+
 interface Props {
-  locale: Locale;
+  locale: SupportedLocale;
   copy: SiteContent;
   title?: string;
   description?: string;
   pathname?: string;
   alternates?: Partial<Record<Locale | 'fa' | 'x-default', string>>;
   ogType?: 'website' | 'article';
-  pageSchema?: Record<string, unknown>;
+  pageSchema?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
@@ -26,7 +28,7 @@ const {
   pageSchema,
 } = Astro.props;
 
-const localeUrl = (item: Locale) => '/' + item + '/';
+const localeUrl = (item: SupportedLocale) => '/' + item + '/';
 const pagePath = pathname ?? localeUrl(locale);
 const canonical = new URL(pagePath, site.origin).toString();
 const profileImage =
@@ -124,7 +126,9 @@ const jsonLd = {
       url: site.origin,
       author: { '@id': site.origin + '/#person' },
     },
-    pageSchema ?? {
+    ...(pageSchema
+      ? (Array.isArray(pageSchema) ? pageSchema : [pageSchema])
+      : [{
       '@type': 'WebPage',
       '@id': canonical + '#webpage',
       url: canonical,
@@ -139,16 +143,16 @@ const jsonLd = {
         width: site.images.profile.originalWidth,
         height: site.images.profile.originalHeight,
       },
-    },
+    }]),
   ],
 };
 ---
 <!doctype html>
-<html lang={locale}>
+<html lang={locale} dir={locale === 'fa' ? 'rtl' : 'ltr'}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#09111d" />
+    <meta name="theme-color" content="#211c18" />
     <link
       rel="icon"
       href="/favicon-32x32.png?v=7"
@@ -812,8 +816,7 @@ const jsonLd = {
     .expertise-grid, .method-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 
-  @media (max-width: 800px) {
-    .shell { width: min(100% - 2rem, var(--max)); }
+  @media (max-width: 1100px) {
     .menu-toggle { display: block; }
     .header-panel {
       position: absolute;
@@ -847,6 +850,10 @@ const jsonLd = {
     .menu-toggle[aria-expanded="true"] span:last-child { transform: translateY(-7px) rotate(-45deg); }
     .language-switcher { width: 100%; justify-content: space-between; }
     .language-switcher a { min-width: 44px; min-height: 44px; }
+  }
+
+  @media (max-width: 800px) {
+    .shell { width: min(100% - 2rem, var(--max)); }
     .hero { min-height: auto; grid-template-columns: 1fr; padding-top: 3.5rem; }
     .hero-media { min-height: 480px; order: 2; }
     .hero-media::before { inset-inline: 3%; }
@@ -1207,21 +1214,20 @@ const jsonLd = {
     right: clamp(1rem, 2.5vw, 2rem);
     bottom: clamp(1rem, 2.5vw, 2rem);
     display: grid;
-    gap: .7rem;
+    gap: .45rem;
   }
 
   .floating-action {
     display: grid;
     place-items: center;
-    width: 48px;
-    height: 48px;
+    width: 42px;
+    height: 42px;
     padding: 0;
     border: 1px solid rgba(242, 170, 143, .42);
     border-radius: 50%;
     background: rgba(33, 28, 24, .95);
     color: var(--text);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, .28);
-    backdrop-filter: blur(14px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .16);
     cursor: pointer;
     transition:
       transform .2s ease,
@@ -1263,8 +1269,8 @@ const jsonLd = {
     }
 
     .floating-action {
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
     }
   }
 

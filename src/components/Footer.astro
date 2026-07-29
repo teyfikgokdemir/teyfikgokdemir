@@ -5,10 +5,10 @@ import { site } from '../data/site';
 
 interface Props {
   copy: SiteContent;
-  locale: Locale;
+  locale?: Locale | 'fa';
 }
 
-const { copy, locale } = Astro.props;
+const { copy, locale = 'en' } = Astro.props;
 
 const footerText = {
   tr: { connect: 'Bağlantılar', ventures: 'Yapılar', contact: 'İletişim', position: 'CTSEG kurucusu · Uluslararası ticaret ve stratejik tedarik sistemleri.' },

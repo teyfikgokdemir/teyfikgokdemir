@@ -399,6 +399,16 @@ const operationalSystemsLabel = {
   sr: 'Digitalni i operativni sistemi podržani AI tehnologijom',
   sq: 'Sisteme digjitale dhe operacionale të asistuara nga AI',
 } as const;
+const journeyItems = [localPositioning.journey, ...baseCopy.journey.items]
+  .sort((left, right) => {
+    const leftYear = left.title === 'QCT Studio' || left.title === 'QCT Commerce'
+      ? 2025
+      : Number(left.year);
+    const rightYear = right.title === 'QCT Studio' || right.title === 'QCT Commerce'
+      ? 2025
+      : Number(right.year);
+    return leftYear - rightYear;
+  });
 
 const copy = {
   ...baseCopy,
@@ -419,7 +429,7 @@ const copy = {
   contact: { ...baseCopy.contact, ...localPositioning.contact },
   journey: {
     ...baseCopy.journey,
-    items: [localPositioning.journey, ...baseCopy.journey.items],
+    items: journeyItems,
   },
 };
 
@@ -689,7 +699,7 @@ const displayedYear = (title: string, year: string) =>
   }
   .story-stage--intro { padding-block: clamp(6rem, 10vw, 10rem); }
   .story-stage--ventures {
-    padding-block: clamp(5.5rem, 9vw, 9rem);
+    padding-block: clamp(4rem, 6vw, 6rem);
     background: var(--bg);
   }
 
@@ -722,7 +732,7 @@ const displayedYear = (title: string, year: string) =>
     --panel: #293029;
     --trust: #c9d0c4;
     --accent-soft: #d78263;
-    padding-block: clamp(5rem, 8vw, 8rem);
+    padding-block: clamp(3rem, 5vw, 4.5rem);
     color: var(--text);
     background: var(--surface-olive);
   }
@@ -730,25 +740,21 @@ const displayedYear = (title: string, year: string) =>
     position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1.3fr) minmax(280px, .7fr);
-    gap: clamp(2.5rem, 7vw, 7rem);
-    padding: clamp(2rem, 5vw, 4.75rem);
-    overflow: hidden;
-    border: 1px solid var(--line-strong);
-    border-radius: 8px;
-    background: color-mix(in srgb, var(--surface-dark) 56%, var(--surface-olive));
+    gap: clamp(2rem, 5vw, 4.5rem);
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
     box-shadow: none;
   }
   .ctseg-featured__panel::after {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto;
-    height: 3px;
-    background: var(--accent);
+    display: none;
   }
   .ctseg-featured__identity > img {
-    width: clamp(170px, 20vw, 250px);
+    width: clamp(145px, 16vw, 205px);
     height: auto;
-    margin-bottom: 2.8rem;
+    margin-bottom: 1.5rem;
     object-fit: contain;
     object-position: left center;
   }
@@ -769,21 +775,22 @@ const displayedYear = (title: string, year: string) =>
     font-size: .9rem;
     font-weight: 750;
   }
-  .ctseg-featured h2 { max-width: 760px; font-size: clamp(2.5rem, 4.6vw, 4.45rem); }
+  .ctseg-featured h2 { max-width: 700px; font-size: clamp(2.35rem, 3.8vw, 3.75rem); line-height: .98; }
   .ctseg-featured__founder {
     max-width: 740px;
-    margin: 1.4rem 0 0;
+    margin: 1rem 0 0;
     padding-left: 1rem;
     border-left: 2px solid var(--accent);
     color: var(--text-secondary);
     line-height: 1.75;
   }
-  .ctseg-featured__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2.5rem; }
+  .ctseg-featured__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
   .ctseg-featured__actions .button:not(.primary) { border-color: #8b8175; }
   .ctseg-featured__services {
     display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     align-content: center;
-    gap: 0;
+    column-gap: 1.5rem;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -814,16 +821,25 @@ const displayedYear = (title: string, year: string) =>
   }
   .hero {
     width: min(1340px, calc(100% - 3rem));
-    grid-template-columns: minmax(0, 1.25fr) minmax(330px, .65fr);
+    grid-template-columns: minmax(0, 1.35fr) minmax(330px, .65fr);
     color: var(--text);
     background: var(--bg);
   }
   .hero-description { color: var(--text-muted); }
+  .hero h1 { max-width: 22ch; font-size: clamp(3rem, 4.7vw, 4.85rem); line-height: .99; }
+  .hero-media { min-height: 620px; }
   .hero-media::before {
-    border-radius: 12rem 12rem 8px 8px;
-    background: var(--surface-olive);
+    inset: 0;
+    border-color: #b9b4a8;
+    border-radius: 9px;
+    background: #d7dbd1;
   }
-  .hero-media img { border-radius: 12rem 12rem 8px 8px; }
+  .hero-media img {
+    inset: 10px;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    border-radius: 6px;
+  }
   .focus-list {
     border-top: 1px solid var(--line);
   }
@@ -833,6 +849,11 @@ const displayedYear = (title: string, year: string) =>
     border-bottom: 1px solid var(--line);
     font-size: .96rem;
   }
+  #ventures .section-heading { margin-bottom: clamp(2rem, 4vw, 3.25rem); }
+  #ventures .venture-card,
+  #ventures .venture-card.has-image { padding-block: clamp(1.25rem, 2vw, 1.75rem); }
+  #ventures .venture-card p,
+  #ventures .venture-card.has-image p { color: #585149; }
   .expertise-card,
   .method-card {
     border-radius: 6px;
@@ -865,6 +886,12 @@ const displayedYear = (title: string, year: string) =>
     font-size: .98rem;
     line-height: 1.65;
   }
+  #journey { padding-block: clamp(3.5rem, 5vw, 5rem); }
+  #journey .section-heading { margin-bottom: 1.5rem; }
+  #journey .journey-layout { gap: clamp(2rem, 4vw, 3.5rem); }
+  #journey .journey-image img { max-height: 520px; border-radius: 7px; }
+  #journey .timeline-content { padding-bottom: 1rem; }
+  #journey .timeline h3 { margin-bottom: .3rem; font-size: 1.14rem; }
   .method-card p { color: var(--text-secondary); font-size: .96rem; }
   .operational-systems {
     margin-top: clamp(3rem, 6vw, 5rem);
@@ -905,13 +932,16 @@ const displayedYear = (title: string, year: string) =>
   .legal-links a:hover { color: var(--text); }
   @media (max-width: 900px) {
     .hero { width: min(100% - 2rem, var(--max)); grid-template-columns: 1fr; }
+    .hero-media { min-height: 520px; }
     .ctseg-featured__panel { grid-template-columns: 1fr; }
     .ctseg-featured__identity,
     .ctseg-featured__services { transform: none; will-change: auto; }
+    .ctseg-featured__services { grid-template-columns: 1fr; }
   }
   @media (max-width: 560px) {
     .hero h1 { font-size: clamp(2.55rem, 11vw, 3.45rem); line-height: 1; letter-spacing: -.045em; }
-    .ctseg-featured__panel { padding: 1.5rem; border-radius: 6px; }
+    .hero-media { min-height: 420px; }
+    .ctseg-featured__panel { padding: 0; border-radius: 0; }
     .ctseg-featured__identity > img { margin-bottom: 1.5rem; }
     .ctseg-featured__actions { flex-direction: column; }
     .ctseg-featured__actions .button { width: 100%; }

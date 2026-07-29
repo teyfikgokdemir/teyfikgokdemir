@@ -1,4 +1,9 @@
 ---
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import FloatingActions from '../../components/FloatingActions.astro';
+import { content } from '../../i18n/content';
+
 const email = 'info@teyfikgokdemir.com';
 const ctsegUrl = 'https://ctseg.com.tr/fa/tamin-beynolmelali-iran/';
 const ventures = [
@@ -64,12 +69,8 @@ const schema = {
   <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
 </head>
 <body>
-  <header>
-    <a class="brand" href="/fa/"><img src="/images/teyfik-gokdemir-tg-logo-transparent.png?v=7" alt="" /><strong>Teyfik Gökdemir</strong></a>
-    <nav aria-label="ناوبری اصلی"><a href="#ctseg">CTSEG</a><a href="#focus">حوزه فعالیت</a><a href="#ventures">ساختارها</a><a href="/fa/blog/">بینش‌ها</a><a href="#contact">تماس</a></nav>
-    <div class="langs"><a href="/tr/">TR</a><a href="/en/">EN</a><a href="/mk/">MK</a><a href="/sr/">SR</a><a href="/sq/">SQ</a><a class="active" href="/fa/" aria-current="page">FA</a></div>
-  </header>
-  <main>
+  <Header locale="fa" copy={content.en} homePath="/fa/" />
+  <main id="main-content">
     <section class="hero shell">
       <div>
         <p class="label">بنیان‌گذار CTSEG · تجارت بین‌المللی · تأمین راهبردی</p>
@@ -102,7 +103,8 @@ const schema = {
 
     <section class="section" id="contact"><div class="shell contact"><p class="label">برای همکاری تجاری</p><h2>بیایید محصول، بازار یا فرصت تأمین را با شواهد بررسی کنیم.</h2><p class="lead">برای پروژه‌های اجرایی CTSEG را ببینید؛ برای گفت‌وگو با بنیان‌گذار مستقیماً ایمیل بزنید.</p><div class="actions centered"><a class="primary" href={ctsegUrl}>خدمات CTSEG</a><a href={`mailto:${email}`}>{email}</a></div></div></section>
   </main>
-  <footer><span>© 2026 Teyfik Gökdemir · بنیان‌گذار CTSEG</span><div><a href="/privacy-policy/">حریم خصوصی</a><a href="/terms/">شرایط استفاده</a></div></footer>
+  <Footer copy={content.en} locale="fa" />
+  <FloatingActions locale="fa" />
   <script is:inline>
     (() => {
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -256,4 +258,74 @@ footer{
 }
 #ventures.light-stage{background:var(--bg)}
 .light-stage .label{color:var(--accent)}
+</style>
+<style is:global>
+.site-header{
+  --text:#f3eee6;
+  --muted:#c9bfb2;
+  --border:#51483f;
+  --panel:#302a25;
+  position:sticky;
+  top:0;
+  z-index:50;
+  min-height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1.25rem;
+  padding:.55rem max(1.25rem,calc((100vw - 1180px)/2));
+  color:var(--text);
+  border-bottom:1px solid var(--border);
+  background:rgba(33,28,24,.97);
+}
+.site-header .brand{margin:0;display:inline-flex;align-items:center;gap:.75rem}
+.site-header a{text-decoration:none}
+.site-header .brand{color:var(--text)}
+.header-panel{display:flex;align-items:center;gap:1.25rem}
+.header-panel nav{display:flex;align-items:center;gap:1rem}
+.header-panel nav a{min-height:42px;display:inline-flex;align-items:center;color:var(--muted);font-size:.86rem}
+.language-switcher{display:flex;padding:.15rem;border:1px solid var(--border);border-radius:999px;direction:ltr}
+.language-switcher a{display:grid;place-items:center;min-width:36px;min-height:36px;border-radius:50%;color:var(--muted);font-size:.68rem;font-weight:800}
+.language-switcher a[aria-current="page"]{background:var(--bg-alt);color:var(--surface-dark)}
+.menu-toggle{display:none;width:44px;height:44px;padding:10px;border:1px solid var(--border);border-radius:50%;background:var(--panel)}
+.menu-toggle span{display:block;height:2px;margin:5px 0;background:var(--text)}
+.hero{min-height:auto;padding-block:clamp(3rem,5vw,4.5rem)}
+.portrait{padding:10px;border-color:#b9b4a8;background:#d7dbd1}
+#ctseg.ctseg-feature{padding-block:clamp(3rem,5vw,4.5rem)}
+#ctseg{scroll-margin-top:90px}
+#ctseg .ctseg-panel{padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+#ctseg .ctseg-logo{width:min(205px,52%);margin-bottom:1rem}
+#ctseg .service-list{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:1.5rem}
+#ctseg .service-list li{padding:.85rem 0;border:0;border-top:1px solid var(--border);border-radius:0;background:transparent}
+#ctseg h2{font-size:clamp(2.5rem,4.5vw,4.2rem);line-height:1.2}
+@media(max-width:1100px){
+  .menu-toggle{display:block;margin-inline-start:auto}
+  .header-panel{
+    position:absolute;
+    top:100%;
+    inset-inline:1rem;
+    display:grid;
+    padding:1rem;
+    border:1px solid var(--border);
+    border-radius:0 0 8px 8px;
+    background:rgba(33,28,24,.99);
+    visibility:hidden;
+    opacity:0;
+    pointer-events:none;
+    transform:translateY(-10px);
+    transition:opacity 200ms ease,transform 200ms ease,visibility 200ms;
+  }
+  .header-panel.is-open{visibility:visible;opacity:1;pointer-events:auto;transform:none}
+  .header-panel nav{display:grid}
+  .language-switcher{justify-content:space-between}
+  #ctseg .service-list{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  .site-header{padding-inline:.75rem}
+  .site-header .brand strong{display:block;font-size:.72rem}
+  .hero{padding-block:2.5rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .header-panel{transition:none}
+}
 </style>
