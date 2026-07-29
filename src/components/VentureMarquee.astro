@@ -31,11 +31,9 @@ const repeatedVentures = ventures;
     max-width: 100vw;
     overflow: hidden;
     contain: inline-size;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(2, 9, 17, 0.76);
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+    border-top: 1px solid #51483f;
+    border-bottom: 1px solid #51483f;
+    background: var(--surface-dark);
   }
 
   .venture-marquee__track {
@@ -53,7 +51,7 @@ const repeatedVentures = ventures;
     align-items: center;
     gap: 18px;
     padding: 0 clamp(24px, 3.5vw, 52px);
-    color: rgba(244, 241, 233, 0.46);
+    color: #bdb3a8;
     font-family: Georgia, 'Times New Roman', serif;
     font-size: clamp(1.45rem, 2.6vw, 2.7rem);
     font-weight: 400;
@@ -65,7 +63,7 @@ const repeatedVentures = ventures;
 
   .venture-marquee__item:hover,
   .venture-marquee__item:focus-visible {
-    color: rgba(244, 241, 233, 0.9);
+    color: #f3eee6;
   }
 
   .venture-marquee__mark {
@@ -74,13 +72,12 @@ const repeatedVentures = ventures;
     flex: 0 0 auto;
     border: 1px solid currentColor;
     border-radius: 50%;
-    box-shadow: 0 0 20px color-mix(in srgb, currentColor 32%, transparent);
   }
 
-  .venture-marquee__item--ctseg { color: var(--accent-soft); }
+  .venture-marquee__item--ctseg { color: #d78263; }
   .venture-marquee__item--studio,
   .venture-marquee__item--commerce,
-  .venture-marquee__item--mythborn { color: rgba(170, 184, 192, .58); }
+  .venture-marquee__item--mythborn { color: #bdb3a8; }
 
   @media (max-width: 760px) {
     .venture-marquee__item {

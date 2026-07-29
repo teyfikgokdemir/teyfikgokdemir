@@ -390,6 +390,15 @@ const positioning = {
 
 const localPositioning = positioning[locale] ?? positioning.en;
 const localeCtsegLinks = ctsegLinks[locale] ?? ctsegLinks.en;
+const ventureItems = baseCopy.ventures.items.filter((item) => item.url);
+const operationalSystems = baseCopy.ventures.items.filter((item) => !item.url);
+const operationalSystemsLabel = {
+  tr: 'Dijital ve AI destekli operasyon sistemleri',
+  en: 'Digital and AI-assisted operating systems',
+  mk: 'Дигитални и оперативни системи поддржани од AI',
+  sr: 'Digitalni i operativni sistemi podržani AI tehnologijom',
+  sq: 'Sisteme digjitale dhe operacionale të asistuara nga AI',
+} as const;
 
 const copy = {
   ...baseCopy,
@@ -398,7 +407,7 @@ const copy = {
   ventures: {
     ...baseCopy.ventures,
     ...localPositioning.ventures,
-    items: baseCopy.ventures.items,
+    items: ventureItems,
   },
   expertise: {
     ...baseCopy.expertise,
@@ -535,6 +544,15 @@ const displayedYear = (title: string, year: string) =>
     <div class="shell">
       <div class="section-heading" data-reveal="heading"><p class="section-label">{copy.method.label}</p><h2 id="method-title">{copy.method.title}</h2><p class="section-lead">{copy.method.lead}</p></div>
       <div class="method-grid">{copy.method.steps.map((step, index) => <article class="method-card" data-reveal="item" style={`--reveal-order:${index}`}><h3>{step.title}</h3><p>{step.description}</p></article>)}</div>
+      <div class="operational-systems" data-reveal="section">
+        <p class="section-label">{operationalSystemsLabel[locale] ?? operationalSystemsLabel.en}</p>
+        {operationalSystems.map((system) => (
+          <article>
+            <h3>{system.name}</h3>
+            <p>{system.description}</p>
+          </article>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -542,20 +560,6 @@ const displayedYear = (title: string, year: string) =>
     <div class="shell regional-grid" data-reveal="section">
       <div><p class="section-label">{copy.regional.label}</p><h2 id="regional-title">{copy.regional.title}</h2><p class="section-lead">{copy.regional.body}</p></div>
       <div class="editorial-image"><img src={site.images.global.path} width={site.images.global.width} height={site.images.global.height} alt={copy.images.regional} loading="lazy" decoding="async" /></div>
-    </div>
-  </section>
-
-  <section class="section ecosystem-section" aria-labelledby="ecosystem-title">
-    <div class="shell ecosystem-card" data-reveal="section">
-      <p class="section-label">{localPositioning.ecosystem.label}</p>
-      <h2 id="ecosystem-title">{localPositioning.ecosystem.title}</h2>
-      <p class="section-lead">{localPositioning.ecosystem.text}</p>
-      <div class="ecosystem-links">
-        <a class="ecosystem-links__ctseg" href={localeCtsegLinks.home} target="_blank" rel="noopener noreferrer">CTSEG ↗</a>
-        <a href="https://qctstudio.com" target="_blank" rel="noopener noreferrer">QCT Studio ↗</a>
-        <a href="https://qctcommerce.com" target="_blank" rel="noopener noreferrer">QCT Commerce ↗</a>
-        <a href="https://mythborn.co" target="_blank" rel="noopener noreferrer">Mythborn ↗</a>
-      </div>
     </div>
   </section>
 
@@ -634,19 +638,19 @@ const displayedYear = (title: string, year: string) =>
     isolation: isolate;
   }
   .story-stage--light {
-    --text: #1a1d1d;
-    --text-primary: #1a1d1d;
-    --text-secondary: #5b6260;
-    --muted: #5b6260;
-    --line: #cbc6bb;
-    --line-strong: #aaa397;
-    --panel: #f0ede5;
-    --panel-soft: #e9e4da;
-    --surface-elevated: #f0ede5;
-    --border: #cbc6bb;
-    --accent-soft: #925936;
+    --text: #181613;
+    --text-primary: #181613;
+    --text-secondary: #625c54;
+    --muted: #625c54;
+    --line: #c9bfb2;
+    --line-strong: #a99d8f;
+    --panel: #f3eee6;
+    --panel-soft: #ddd4c7;
+    --surface-elevated: #f3eee6;
+    --border: #c9bfb2;
+    --accent-soft: #a65332;
     color: var(--text);
-    background: #e7e2d8;
+    background: var(--bg-alt);
     border-color: var(--line);
   }
   .story-stage--light::before {
@@ -661,18 +665,33 @@ const displayedYear = (title: string, year: string) =>
     background-position: center;
     background-repeat: no-repeat;
   }
-  .story-stage--light .section-label { color: #925936; }
+  .story-stage--light .section-label { color: var(--accent); }
   .story-stage--light .focus-list span {
     border-radius: 0;
     background: transparent;
   }
   .story-stage--light .editorial-image {
-    background: #d8d2c7;
+    background: var(--surface);
     border-color: var(--line);
   }
-  .story-stage--dark { background: #081118; }
+  .story-stage--dark {
+    --text: #f3eee6;
+    --text-primary: #f3eee6;
+    --text-secondary: #cec5ba;
+    --muted: #cec5ba;
+    --line: #5b5047;
+    --line-strong: #75675b;
+    --panel: #2b2520;
+    --panel-soft: #293029;
+    --accent-soft: #d78263;
+    color: var(--text);
+    background: var(--surface-dark);
+  }
   .story-stage--intro { padding-block: clamp(6rem, 10vw, 10rem); }
-  .story-stage--ventures { padding-block: clamp(5.5rem, 9vw, 9rem); }
+  .story-stage--ventures {
+    padding-block: clamp(5.5rem, 9vw, 9rem);
+    background: var(--bg);
+  }
 
   .motion-ready [data-reveal] {
     opacity: 0;
@@ -693,7 +712,20 @@ const displayedYear = (title: string, year: string) =>
     transform: translate3d(0, 0, 0) scale(1);
   }
 
-  .ctseg-featured { padding-block: clamp(3.5rem, 6vw, 6.5rem); }
+  .ctseg-featured {
+    --text: #f3eee6;
+    --text-primary: #f3eee6;
+    --text-secondary: #d3c9bd;
+    --muted: #d3c9bd;
+    --line: #596157;
+    --line-strong: #71786d;
+    --panel: #293029;
+    --trust: #c9d0c4;
+    --accent-soft: #d78263;
+    padding-block: clamp(5rem, 8vw, 8rem);
+    color: var(--text);
+    background: var(--surface-olive);
+  }
   .ctseg-featured__panel {
     position: relative;
     display: grid;
@@ -702,23 +734,21 @@ const displayedYear = (title: string, year: string) =>
     padding: clamp(2rem, 5vw, 4.75rem);
     overflow: hidden;
     border: 1px solid var(--line-strong);
-    border-radius: calc(var(--radius) + 4px);
-    background:
-      linear-gradient(120deg, rgba(185, 116, 63, .12), transparent 38%),
-      var(--panel);
-    box-shadow: 0 28px 70px rgba(0, 0, 0, .24);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--surface-dark) 56%, var(--surface-olive));
+    box-shadow: none;
   }
   .ctseg-featured__panel::after {
     content: "";
     position: absolute;
     inset: 0 0 auto;
     height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-soft), transparent 72%);
+    background: var(--accent);
   }
   .ctseg-featured__identity > img {
     width: clamp(170px, 20vw, 250px);
     height: auto;
-    margin-bottom: 2.2rem;
+    margin-bottom: 2.8rem;
     object-fit: contain;
     object-position: left center;
   }
@@ -739,7 +769,7 @@ const displayedYear = (title: string, year: string) =>
     font-size: .9rem;
     font-weight: 750;
   }
-  .ctseg-featured h2 { max-width: 780px; font-size: clamp(2.5rem, 5vw, 4.9rem); }
+  .ctseg-featured h2 { max-width: 760px; font-size: clamp(2.5rem, 4.6vw, 4.45rem); }
   .ctseg-featured__founder {
     max-width: 740px;
     margin: 1.4rem 0 0;
@@ -748,7 +778,8 @@ const displayedYear = (title: string, year: string) =>
     color: var(--text-secondary);
     line-height: 1.75;
   }
-  .ctseg-featured__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
+  .ctseg-featured__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2.5rem; }
+  .ctseg-featured__actions .button:not(.primary) { border-color: #8b8175; }
   .ctseg-featured__services {
     display: grid;
     align-content: center;
@@ -763,7 +794,9 @@ const displayedYear = (title: string, year: string) =>
     padding: 1rem 0 1rem 1.3rem;
     border-bottom: 1px solid var(--line);
     color: var(--text-secondary);
-    font-weight: 700;
+    font-size: 1rem;
+    font-weight: 650;
+    line-height: 1.6;
   }
   .ctseg-featured__services li::before {
     content: "";
@@ -775,27 +808,114 @@ const displayedYear = (title: string, year: string) =>
     border-radius: 50%;
     background: var(--accent-soft);
   }
-  .ecosystem-card { padding: clamp(2rem, 5vw, 4rem); border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); }
-  .ecosystem-links { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
-  .ecosystem-links a { min-height: 44px; display: inline-flex; align-items: center; padding: .7rem 1rem; border: 1px solid var(--line-strong); border-radius: 999px; }
-  .ecosystem-links__ctseg { border-color: var(--accent) !important; background: var(--accent-muted); }
   .expertise-card.is-active {
     border-color: color-mix(in srgb, var(--accent) 72%, var(--line));
     background: color-mix(in srgb, var(--panel) 88%, var(--accent-muted));
   }
-  .legal-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem 1.5rem; padding: 1.25rem 1.5rem 2rem; background: #06111f; border-top: 1px solid rgba(255,255,255,.1); }
+  .hero {
+    width: min(1340px, calc(100% - 3rem));
+    grid-template-columns: minmax(0, 1.25fr) minmax(330px, .65fr);
+    color: var(--text);
+    background: var(--bg);
+  }
+  .hero-description { color: var(--text-muted); }
+  .hero-media::before {
+    border-radius: 12rem 12rem 8px 8px;
+    background: var(--surface-olive);
+  }
+  .hero-media img { border-radius: 12rem 12rem 8px 8px; }
+  .focus-list {
+    border-top: 1px solid var(--line);
+  }
+  .story-stage--light .focus-list span {
+    padding-inline: 0;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    font-size: .96rem;
+  }
+  .expertise-card,
+  .method-card {
+    border-radius: 6px;
+    background: transparent;
+    box-shadow: none;
+  }
+  .expertise-card::before {
+    background: var(--accent);
+  }
+  .expertise-card::after { display: none; }
+  .expertise-card:hover {
+    transform: none;
+    border-color: var(--accent);
+    box-shadow: none;
+  }
+  .expertise-card li {
+    color: var(--text-secondary);
+    font-size: .96rem;
+    line-height: 1.55;
+  }
+  .expertise-card li::before { box-shadow: none; }
+  .definitions {
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: .88rem;
+  }
+  .timeline p {
+    color: var(--muted);
+    font-size: .98rem;
+    line-height: 1.65;
+  }
+  .method-card p { color: var(--text-secondary); font-size: .96rem; }
+  .operational-systems {
+    margin-top: clamp(3rem, 6vw, 5rem);
+    border-top: 1px solid var(--line);
+  }
+  .operational-systems > .section-label { padding-top: 1.5rem; }
+  .operational-systems article {
+    display: grid;
+    grid-template-columns: minmax(220px, .7fr) minmax(0, 1.3fr);
+    gap: clamp(1rem, 4vw, 4rem);
+    padding: 1.4rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .operational-systems h3,
+  .operational-systems p { margin: 0; }
+  .operational-systems p { color: var(--text-secondary); line-height: 1.7; }
+  .contact-section {
+    --text: #f3eee6;
+    --muted: #d2c8bc;
+    --line: #5b6259;
+    --line-strong: #777e73;
+    color: var(--text);
+    background: var(--surface-olive);
+  }
+  .contact-card {
+    max-width: 980px;
+    padding: clamp(3rem, 7vw, 6rem) 0;
+    border: 0;
+    border-top: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+    border-radius: 0;
+    background: transparent;
+  }
+  .contact-card .section-lead { color: var(--muted); }
+  .legal-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem 1.5rem; padding: 1.25rem 1.5rem 2rem; background: var(--surface-dark); border-top: 1px solid #51483f; }
+  .legal-links { --text: #f3eee6; --muted: #c9bfb2; }
   .legal-links a { min-height: 44px; display: inline-flex; align-items: center; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; }
   .legal-links a:hover { color: var(--text); }
   @media (max-width: 900px) {
+    .hero { width: min(100% - 2rem, var(--max)); grid-template-columns: 1fr; }
     .ctseg-featured__panel { grid-template-columns: 1fr; }
     .ctseg-featured__identity,
     .ctseg-featured__services { transform: none; will-change: auto; }
   }
   @media (max-width: 560px) {
-    .ctseg-featured__panel { padding: 1.5rem; border-radius: 18px; }
+    .hero h1 { font-size: clamp(2.55rem, 11vw, 3.45rem); line-height: 1; letter-spacing: -.045em; }
+    .ctseg-featured__panel { padding: 1.5rem; border-radius: 6px; }
     .ctseg-featured__identity > img { margin-bottom: 1.5rem; }
     .ctseg-featured__actions { flex-direction: column; }
     .ctseg-featured__actions .button { width: 100%; }
+    .operational-systems article { grid-template-columns: 1fr; gap: .55rem; }
   }
   @media (prefers-reduced-motion: reduce) {
     [data-reveal],

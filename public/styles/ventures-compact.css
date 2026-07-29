@@ -34,7 +34,7 @@
   counter-increment: venture;
   grid-column: 1 !important;
   grid-row: auto !important;
-  transition: color 240ms ease, padding 240ms ease;
+  transition: color 180ms ease, background-color 180ms ease;
 }
 
 #ventures .venture-card::before {
@@ -42,7 +42,7 @@
   position: absolute;
   inset: 1rem auto auto 0;
   z-index: 0;
-  color: var(--accent-soft);
+  color: var(--accent-secondary);
   font-size: .68rem;
   font-weight: 850;
   letter-spacing: .12em;
@@ -55,16 +55,14 @@
   inset: 0;
   border: 0;
   border-radius: 0;
-  background: color-mix(in srgb, var(--panel) 74%, transparent);
+  background: color-mix(in srgb, var(--surface) 58%, transparent);
   box-shadow: none;
   opacity: 0;
-  transform: scaleY(.82);
-  transition: opacity 240ms ease, transform 240ms ease;
+  transition: opacity 180ms ease;
 }
 
 #ventures .venture-card:hover,
 #ventures .venture-card:focus-visible {
-  padding-inline: 1rem;
   border-color: var(--line);
   box-shadow: none;
   transform: none;
@@ -73,7 +71,6 @@
 #ventures .venture-card:hover::after,
 #ventures .venture-card:focus-visible::after {
   opacity: 1;
-  transform: scaleY(1);
 }
 
 #ventures .venture-card.has-image > img,
@@ -104,7 +101,7 @@
   backdrop-filter: none;
 }
 
-#ventures .tag:first-child { color: var(--accent-soft); }
+#ventures .tag:first-child { color: var(--accent); }
 
 #ventures .venture-card h3,
 #ventures .venture-card.has-image h3 {
@@ -121,8 +118,8 @@
   margin: 0;
   max-width: 48rem;
   color: var(--muted);
-  font-size: .93rem;
-  line-height: 1.65;
+  font-size: 1rem;
+  line-height: 1.7;
 }
 
 #ventures .venture-arrow,
@@ -131,14 +128,14 @@
   justify-self: end;
   margin: 0;
   padding: 0;
-  color: var(--accent-soft);
+  color: var(--accent);
   font-size: 1.35rem;
-  transition: transform 220ms ease;
+  transition: color 180ms ease;
 }
 
 #ventures .venture-card:hover .venture-arrow,
 #ventures .venture-card:focus-visible .venture-arrow {
-  transform: translate3d(.3rem, -.3rem, 0);
+  color: var(--accent-secondary);
 }
 
 @media (max-width: 900px) {
@@ -157,11 +154,6 @@
     grid-template-columns: 1fr auto;
     gap: .75rem 1rem;
     padding-block: 1.5rem;
-  }
-
-  #ventures .venture-card:hover,
-  #ventures .venture-card:focus-visible {
-    padding-inline: .75rem;
   }
 
   #ventures .venture-meta {

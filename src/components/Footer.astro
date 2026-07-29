@@ -187,13 +187,10 @@ const whatsappUrl =
     width: 100%;
     overflow: hidden;
     padding: 86px 0 54px;
-    background:
-      radial-gradient(
-        circle at 12% 20%,
-        rgba(23, 64, 99, 0.18),
-        transparent 36%
-      ),
-      #06111f;
+    --text: #f3eee6;
+    --muted: #c9bfb2;
+    color: var(--text);
+    background: var(--surface-dark);
   }
 
   .premium-footer__inner {
@@ -263,7 +260,7 @@ const whatsappUrl =
 
   .premium-footer__label {
     margin-bottom: 28px;
-    color: #dfa950;
+    color: #d78263;
     font-size: 0.84rem;
     font-weight: 700;
     letter-spacing: 0.18em;
@@ -292,17 +289,15 @@ const whatsappUrl =
     overflow-wrap: normal;
     word-break: normal;
     transition:
-      color 180ms ease,
-      transform 180ms ease;
+      color 180ms ease;
   }
 
   .premium-footer__group nav a:hover {
-    color: #dfaa55;
-    transform: translateX(3px);
+    color: #f3eee6;
   }
 
   .premium-footer__group nav a span:last-child {
-    color: #dfaa55;
+    color: #d78263;
   }
 
   .premium-footer__group--contact nav a {

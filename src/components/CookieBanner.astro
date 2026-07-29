@@ -137,6 +137,9 @@ const copy = messages[locale] ?? messages.en;
 
 <style>
   .cookie-banner {
+    --text: #f3eee6;
+    --muted: #c9bfb2;
+    --accent-soft: #d78263;
     position: fixed;
     z-index: 120;
     right: 1rem;
@@ -149,9 +152,9 @@ const copy = messages[locale] ?? messages.en;
     width: min(920px, calc(100% - 2rem));
     margin-inline: auto;
     padding: 1.1rem;
-    border: 1px solid var(--line-strong);
+    border: 1px solid #6a5e53;
     border-radius: 18px;
-    background: rgba(9, 17, 29, .97);
+    background: rgba(33, 28, 24, .98);
     box-shadow: 0 24px 70px rgba(0, 0, 0, .38);
     backdrop-filter: blur(18px);
   }
@@ -172,15 +175,15 @@ const copy = messages[locale] ?? messages.en;
     font-weight: 800;
   }
   .cookie-button.primary {
-    border-color: #f2b244;
-    background: #f2b244;
-    color: #07111f;
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #fff;
   }
   .cookie-button:focus-visible {
     outline: 3px solid #ffffff;
     outline-offset: 3px;
   }
-  .cookie-button:hover { transform: translateY(-1px); }
+  .cookie-button:hover { border-color: var(--accent-soft); }
   @media (max-width: 720px) {
     .cookie-banner { align-items: stretch; flex-direction: column; }
     .cookie-actions { width: 100%; }
