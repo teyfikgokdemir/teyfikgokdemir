@@ -248,6 +248,7 @@ const jsonLd = {
     --max: 1180px;
     --radius: 22px;
     --header-height: 76px;
+    --header-offset: 100px;
     --leading-display: 1;
     --leading-heading: 1.04;
     --leading-title: 1.02;
@@ -299,7 +300,7 @@ const jsonLd = {
   }
   .skip-link:focus { transform: translateY(0); }
   .shell { width: min(var(--max), calc(100% - 3rem)); margin-inline: auto; }
-  #main-content, section[id] { scroll-margin-top: calc(var(--header-height) + 1rem); }
+  #main-content, section[id] { scroll-margin-top: var(--header-offset); }
   .section { padding: clamp(4rem, 6vw, 6.5rem) 0; border-top: 1px solid var(--line); }
   .section-heading { max-width: 820px; margin-bottom: 2.25rem; }
   .section-label {
@@ -923,6 +924,7 @@ const jsonLd = {
 
   @media (max-width: 560px) {
     :root {
+      --header-offset: 86px;
       --leading-display: 1.03;
       --leading-heading: 1.06;
       --leading-title: 1.04;

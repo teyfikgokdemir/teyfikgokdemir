@@ -653,6 +653,8 @@ const displayedYear = (title: string, year: string) =>
   .story-stage--intro { padding-block: clamp(6rem, 10vw, 10rem); }
   .story-stage--ventures {
     padding-block: clamp(4rem, 6vw, 6rem);
+    min-height: 0;
+    height: auto;
     background: var(--scene-sage);
   }
 
@@ -852,7 +854,7 @@ const displayedYear = (title: string, year: string) =>
   #ventures .venture-card,
   #ventures .venture-card.has-image { padding-block: clamp(1.25rem, 2vw, 1.75rem); }
   #ventures .venture-card p,
-  #ventures .venture-card.has-image p { color: #585149; }
+  #ventures .venture-card.has-image p { color: #d3c9bd; }
   #ventures .venture-card:hover,
   #ventures .venture-card:focus-visible {
     transform: none;
@@ -876,7 +878,7 @@ const displayedYear = (title: string, year: string) =>
   }
   #ventures .venture-card:hover p,
   #ventures .venture-card:focus-visible p {
-    color: #3f3a34;
+    color: #f3eee6;
   }
   html[dir="rtl"] #ventures .venture-card:hover h3,
   html[dir="rtl"] #ventures .venture-card:focus-visible h3,

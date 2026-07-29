@@ -90,7 +90,10 @@ const schema = {
           <p class="label">ساختار اصلی تجاری</p>
           <h2>CTSEG، مرکز اجرای تجارت بین‌المللی و تأمین راهبردی.</h2>
           <p class="lead">خدمات CTSEG برای تصمیم‌گیری قابل دفاع و اجرای منظم طراحی شده‌اند: از شناخت بازار و تأمین‌کننده تا اعتبارسنجی، مقایسه پیشنهادها و هماهنگی عملیات.</p>
-          <div class="actions"><a class="primary" href={ctsegUrl}>صفحه فارسی CTSEG</a><a href="https://ctseg.com.tr/en/contact/">تماس با CTSEG</a></div>
+          <div class="actions">
+            <a class="primary ctseg-cta" href={ctsegUrl} aria-label="صفحه فارسی CTSEG"><span>صفحه فارسی</span><bdi dir="ltr" lang="en">CTSEG</bdi></a>
+            <a class="ctseg-cta" href="https://ctseg.com.tr/en/contact/" aria-label="تماس با CTSEG"><span>تماس با</span><bdi dir="ltr" lang="en">CTSEG</bdi></a>
+          </div>
         </div>
         <ul class="service-list"><li>پژوهش تأمین‌کننده و تولیدکننده</li><li>اعتبارسنجی هویت و ظرفیت</li><li>مدیریت RFQ و مقایسه پیشنهادها</li><li>مذاکره و هماهنگی تجاری</li><li>آمادگی صادرات و ورود به بازار</li><li>پیگیری عملیات فرامرزی</li></ul>
       </div>
@@ -124,6 +127,7 @@ const schema = {
 <style>
 :root{
   color-scheme:light;
+  --header-offset:106px;
   --leading-display:1.18;
   --leading-heading:1.2;
   --tracking-display:0;
@@ -283,12 +287,36 @@ footer{
 .hero{min-height:auto;padding-block:clamp(3rem,5vw,4.5rem)}
 .portrait{padding:10px;border-color:#b9b4a8;background:#d7dbd1}
 #ctseg.ctseg-feature{padding-block:clamp(3rem,5vw,4.5rem)}
-#ctseg{scroll-margin-top:90px}
+section[id]{scroll-margin-top:var(--header-offset)}
 #ctseg .ctseg-panel{padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
 #ctseg .ctseg-logo{width:min(205px,52%);margin-bottom:1rem}
 #ctseg .service-list{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:1.5rem}
 #ctseg .service-list li{padding:.85rem 0;border:0;border-top:1px solid var(--border);border-radius:0;background:transparent}
 #ctseg h2{font-size:clamp(2.5rem,4.5vw,4.2rem);line-height:var(--leading-heading);letter-spacing:var(--tracking-heading)}
+.actions .ctseg-cta{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.34em;
+  min-height:50px;
+  line-height:1.2;
+  white-space:nowrap;
+}
+.ctseg-cta > span{
+  font-family:"Noto Naskh Arabic",Tahoma,serif;
+  font-size:1.04em;
+  font-weight:700;
+  line-height:1;
+}
+.ctseg-cta > bdi{
+  direction:ltr;
+  unicode-bidi:isolate;
+  font-family:Arial,sans-serif;
+  font-size:.86em;
+  font-weight:700;
+  line-height:1;
+  letter-spacing:.035em;
+}
 @media(max-width:1100px){
   .menu-toggle{display:block;margin-inline-start:auto}
   .header-panel{
