@@ -12,160 +12,427 @@ interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const baseCopy = content[locale];
 
+const ctsegLinks = {
+  tr: {
+    home: 'https://ctseg.com.tr/',
+    services: 'https://ctseg.com.tr/tr/hizmetler/',
+    contact: 'https://ctseg.com.tr/tr/iletisim/',
+  },
+  en: {
+    home: 'https://ctseg.com.tr/en/',
+    services: 'https://ctseg.com.tr/en/services/',
+    contact: 'https://ctseg.com.tr/en/contact/',
+  },
+  mk: {
+    home: 'https://ctseg.com.tr/en/',
+    services: 'https://ctseg.com.tr/en/services/',
+    contact: 'https://ctseg.com.tr/en/contact/',
+  },
+  sr: {
+    home: 'https://ctseg.com.tr/en/',
+    services: 'https://ctseg.com.tr/en/services/',
+    contact: 'https://ctseg.com.tr/en/contact/',
+  },
+  sq: {
+    home: 'https://ctseg.com.tr/en/',
+    services: 'https://ctseg.com.tr/en/services/',
+    contact: 'https://ctseg.com.tr/en/contact/',
+  },
+} as const;
+
 const positioning = {
   tr: {
     hero: {
-      eyebrow: 'Uluslararası ticaret · Stratejik tedarik · İş geliştirme',
-      title: 'Uluslararası ticaret ve stratejik tedarik sistemleri kuruyorum.',
-      description: 'Üretici araştırmasından fiyat ve kapasite doğrulamasına, alıcı-satıcı koordinasyonundan lojistik ve pazara giriş planına kadar ticari süreci uçtan uca yapılandırıyorum.',
-      primary: 'Çalışma alanlarını incele', secondary: 'İletişime geç',
-      summary: 'Teyfik Gökdemir; uluslararası ticaret, stratejik tedarik, tedarikçi araştırması, iş geliştirme ve AI destekli ticari operasyonlar üzerine çalışan Türkiye merkezli bir girişimcidir.',
+      eyebrow: 'Kurucu · Uluslararası ticaret · Stratejik tedarik',
+      title: 'Uluslararası ticaret, stratejik tedarik ve dijital büyüme sistemleri geliştiriyorum.',
+      description: 'Türkiye ile uluslararası pazarlar arasında; tedarikçi ağı, ticari operasyonlar, dijital ticaret ve yapay zekâ destekli araştırma sistemlerini karar verici bakışıyla bir araya getiriyorum.',
+      primary: 'CTSEG’i incele',
+      secondary: 'Teyfik Gökdemir ile görüş',
+      summary: 'Teyfik Gökdemir, CTSEG Sanayi ve Ticaret Limited Şirketi’nin kurucusudur. Ticari fırsatları araştırma, doğrulama, koordinasyon ve uygulanabilir büyüme sistemleriyle yapılandırır.',
     },
     intro: {
-      label: 'Ticari yaklaşım', title: 'Ticari fırsatı araştırmadan uygulamaya taşıyorum.',
-      body: 'Ürün ve üretici araştırması, tedarikçi doğrulama, teklif toplama, ticari müzakere, ihracata uygunluk, ödeme, lojistik ve satış kanallarını tek bir ticari sistem olarak ele alıyorum. Amaç yalnızca bağlantı kurmak değil; güvenilir, ölçülebilir ve sürdürülebilir bir iş modeli oluşturmaktır.',
-      areas: ['Uluslararası ticaret', 'Stratejik tedarik', 'Tedarikçi araştırması ve doğrulama', 'İş geliştirme ve pazara giriş'],
+      label: 'Kurucu yaklaşımı',
+      title: 'Ticari fırsatı araştırmadan operasyona taşıyan doğrudan çalışma modeli.',
+      body: 'Ürün ve pazar araştırmasını; tedarikçi doğrulama, teklif yönetimi, ticari müzakere, ödeme, lojistik ve dijital görünürlükle birlikte ele alıyorum. Kurucu olarak hedefim, belirsiz bir fırsatı karar verilebilir ve yönetilebilir bir ticari yapıya dönüştürmektir.',
+      areas: ['Uluslararası ticaret', 'Stratejik tedarik', 'Tedarikçi doğrulama', 'Pazar geliştirme', 'Dijital ticaret', 'AI destekli araştırma'],
+    },
+    ventures: {
+      label: 'Ticari yapı ve girişimler',
+      title: 'CTSEG ana ticari yapı; diğer girişimler onu tamamlayan yetkinlik katmanlarıdır.',
+      lead: 'CTSEG stratejik tedarik ve uluslararası ticaretin operasyonel platformudur. QCT Studio, QCT Commerce ve Mythborn dijital yetkinlik, büyüme ve bağımsız ürün geliştirme alanlarında destekleyici yapılardır.',
     },
     expertise: {
-      title: 'Ticari fırsatı uçtan uca yöneten uzmanlık alanları.', lead: 'Tedarik, pazar erişimi, müzakere, operasyon ve dijital görünürlük aynı ticari hedef doğrultusunda birlikte yönetilir.',
+      title: 'Ticari kararları araştırma, doğrulama ve uygulamayla birleştiren uzmanlık.',
+      lead: 'Bu alanlar ayrı bir ajans hizmet kataloğu değil; uluslararası ticari fırsatları değerlendirmek ve yürütmek için kullandığım profesyonel çalışma disiplinidir.',
       groups: [
-        { title: 'Uluslararası ticaret', items: ['İhracat ve ithalat fırsatları', 'Ürün-pazar eşleştirme', 'Alıcı ve üretici koordinasyonu', 'Teklif ve RFQ süreçleri', 'Ticari müzakere', 'Sınır ötesi iş geliştirme'] },
-        { title: 'Stratejik tedarik', items: ['Üretici ve tedarikçi araştırması', 'Tedarikçi doğrulama', 'Fiyat ve kapasite analizi', 'Ürün spesifikasyonu', 'Kalite ve belge koordinasyonu', 'Lojistik ve sipariş takibi'] },
-        { title: 'Pazar geliştirme ve görünürlük', items: ['Pazara giriş stratejisi', 'B2B dijital ticaret', 'Doğrudan satış sistemleri', 'SEO', 'GEO', 'AEO', 'AIO', 'İçerik ve otorite yapılanması'] },
-        { title: 'AI destekli ticari sistemler', items: ['Tedarikçi araştırma akışları', 'Satış istihbaratı', 'Şirket ve fırsat analizi', 'Teklif otomasyonu', 'Bilgi yönetimi', 'Operasyon standardizasyonu'] },
+        { title: 'Uluslararası ticaret', items: ['İhracat ve ithalat fırsatları', 'Ürün–pazar eşleştirme', 'Alıcı ve üretici koordinasyonu', 'Ticari müzakere', 'Sınır ötesi iş geliştirme'] },
+        { title: 'Stratejik tedarik ve doğrulama', items: ['Üretici ve tedarikçi araştırması', 'Tedarikçi doğrulama', 'Fiyat ve kapasite analizi', 'Kalite ve belge koordinasyonu', 'RFQ ve teklif süreçleri'] },
+        { title: 'Ticari büyüme ve pazar geliştirme', items: ['Pazara giriş stratejisi', 'Ürün ve pazar araştırması', 'Ticari operasyon koordinasyonu', 'B2B dijital ticaret', 'Doğrudan satış sistemleri'] },
+        { title: 'Dijital ve AI destekli sistemler', items: ['Tedarikçi araştırma akışları', 'Satış istihbaratı', 'Şirket ve fırsat analizi', 'Bilgi yönetimi', 'Operasyon standardizasyonu'] },
       ],
     },
-    regional: { label: 'Sınır ötesi bakış', title: 'Türkiye, Balkanlar ve çevre pazarlarda yeni ticaret bağlantıları.', body: 'Türkiye’nin üretim ve tedarik gücünü bölgesel talep ile buluşturan; aynı zamanda çevre pazarlardaki ürün, alıcı ve iş ortaklığı fırsatlarını Türkiye’ye bağlayan ticari yapılar geliştiriyorum. Her fırsatı ürün, taraflar, mevzuat, ödeme, risk ve lojistik gerçekleriyle birlikte değerlendiriyorum.' },
-    contact: { label: 'Ticari iş birlikleri için', title: 'Bir ürün, pazar veya tedarik fırsatını birlikte değerlendirelim.', body: 'Uluslararası alım-satım, üretici veya tedarikçi bulma, yeni pazar geliştirme, ticari iş ortaklığı ya da AI destekli ticaret operasyonları üzerinde çalışıyorsanız doğrudan iletişime geçebilirsiniz.', action: 'E-posta gönder' },
+    method: {
+      label: 'Çalışma modeli',
+      title: 'Doğrudan, kanıta dayalı ve operasyon gerçeklerine bağlı.',
+      lead: 'Her ticari çalışma; varsayımları azaltan, tarafları netleştiren ve uygulanabilir sonraki adımı görünür kılan bir süreçle ilerler.',
+      steps: [
+        { title: 'Araştır', description: 'Ürün, pazar, üretici ve talep sinyallerini güvenilir kaynaklarla haritalandır.' },
+        { title: 'Doğrula', description: 'Tedarikçi, kapasite, kalite, belge, fiyat ve ticari koşulları karşılaştır.' },
+        { title: 'Yapılandır', description: 'Teklif, risk, ödeme, lojistik ve pazara giriş modelini karar verilebilir hale getir.' },
+        { title: 'Koordine et', description: 'Taraflar ve operasyon arasındaki kritik adımları doğrudan ve şeffaf biçimde yönet.' },
+      ],
+    },
+    regional: {
+      label: 'Uluslararası bakış',
+      title: 'Türkiye’nin ticari kapasitesini uluslararası pazarlarla buluşturan yapı.',
+      body: 'Türkiye’deki üretim ve tedarik kapasitesini bölgesel ve uluslararası taleple buluştururken; farklı pazarlardaki ürün, alıcı ve iş ortaklığı fırsatlarını da Türkiye ile ilişkilendiriyorum. Her fırsat ürün, taraflar, mevzuat, ödeme, risk ve lojistik gerçekleriyle birlikte değerlendirilir.',
+    },
+    contact: {
+      label: 'Stratejik ticari görüşme',
+      title: 'Bir ürün, pazar veya tedarik kararını birlikte netleştirelim.',
+      body: 'Kurucu düzeyinde stratejik değerlendirme, uluslararası iş geliştirme veya doğrudan çalışma modeli için iletişime geçebilirsiniz. Operasyonel tedarik ve ticaret talepleri CTSEG üzerinden yapılandırılır.',
+      action: 'E-posta gönder',
+    },
+    ctseg: {
+      label: 'Ana ticari yapı',
+      kicker: 'Kurucusu tarafından yönetilen stratejik ticaret platformu',
+      title: 'CTSEG Sanayi ve Ticaret Limited Şirketi',
+      body: 'CTSEG; şirketlerin doğru ürün, üretici, tedarikçi ve pazar kararlarını daha güvenilir verilerle almasına yardımcı olan stratejik tedarik ve uluslararası ticaret platformudur.',
+      founder: 'Teyfik Gökdemir, CTSEG’in kurucusu olarak araştırma, doğrulama, ticari yapılandırma ve operasyon koordinasyonunu tek karar çerçevesinde birleştirir.',
+      services: ['Stratejik tedarik', 'Tedarikçi bulma ve doğrulama', 'Uluslararası ticaret danışmanlığı', 'Ürün ve pazar araştırması', 'Ticari operasyon koordinasyonu', 'Türkiye ile uluslararası pazarlar arasında iş geliştirme'],
+      primary: 'CTSEG hizmetlerini incele',
+      secondary: 'Tedarik talebini görüş',
+    },
+    journey: { year: '2026', title: 'CTSEG', description: 'Stratejik tedarik, tedarikçi doğrulama ve uluslararası ticaret operasyonları için ana ticari yapı.' },
+    ecosystem: {
+      label: 'Destekleyici girişimler',
+      title: 'Dijital yetkinlik ve bağımsız girişim katmanları.',
+      text: 'QCT Studio ve QCT Commerce dijital ticaret ile büyüme sistemlerinde; Mythborn ise bağımsız tüketici girişimi olarak gelişir. Bu yapılar CTSEG’in ana ticari konumunu tamamlar, onunla eşit bir şirket hiyerarşisi oluşturmaz.',
+    },
   },
   en: {
     hero: {
-      eyebrow: 'International trade · Strategic sourcing · Business development',
-      title: 'Building international trade and strategic sourcing systems.',
-      description: 'I structure the commercial process end to end—from manufacturer research, price and capacity validation to buyer-seller coordination, logistics and market-entry planning.',
-      primary: 'Explore focus areas', secondary: 'Get in touch',
-      summary: 'Teyfik Gökdemir is a Türkiye-based entrepreneur working across international trade, strategic sourcing, supplier research, business development and AI-assisted commercial operations.',
+      eyebrow: 'Founder · International trade · Strategic sourcing',
+      title: 'I build systems for international trade, strategic sourcing and digital growth.',
+      description: 'Across Türkiye and international markets, I connect supplier networks, commercial operations, digital commerce and AI-assisted research with a founder’s decision-making perspective.',
+      primary: 'Explore CTSEG',
+      secondary: 'Speak with Teyfik Gökdemir',
+      summary: 'Teyfik Gökdemir is the founder of CTSEG. He structures commercial opportunities through research, verification, coordination and practical growth systems.',
     },
     intro: {
-      label: 'Commercial approach', title: 'Turning commercial opportunities into executable structures.',
-      body: 'Product and manufacturer research, supplier verification, quotation management, commercial negotiation, export readiness, payment, logistics and sales channels are managed as one connected commercial system. The objective is not simply to make introductions, but to build reliable, measurable and sustainable trade structures.',
-      areas: ['International trade', 'Strategic sourcing', 'Supplier research & verification', 'Business development & market entry'],
+      label: 'Founder perspective',
+      title: 'A direct working model that moves commercial opportunities from research to operation.',
+      body: 'I treat product and market research, supplier verification, quotation management, commercial negotiation, payment, logistics and digital visibility as one connected system. My role as founder is to turn ambiguity into a commercial structure that can be evaluated and managed.',
+      areas: ['International trade', 'Strategic sourcing', 'Supplier verification', 'Market development', 'Digital commerce', 'AI-assisted research'],
+    },
+    ventures: {
+      label: 'Commercial structure & ventures',
+      title: 'CTSEG is the principal commercial company; the other ventures provide supporting capabilities.',
+      lead: 'CTSEG is the operational platform for strategic sourcing and international trade. QCT Studio, QCT Commerce and Mythborn support digital capability, growth and independent product development.',
     },
     expertise: {
-      title: 'Expertise across the full commercial opportunity.', lead: 'Sourcing, market access, negotiation, operations and digital visibility remain connected to the same commercial objective.',
+      title: 'Expertise connecting commercial decisions with research, verification and execution.',
+      lead: 'These are not packaged agency services. They are the professional disciplines I use to assess and operate international commercial opportunities.',
       groups: [
-        { title: 'International trade', items: ['Import and export opportunities', 'Product-market matching', 'Buyer and manufacturer coordination', 'RFQ and quotation processes', 'Commercial negotiation', 'Cross-border business development'] },
-        { title: 'Strategic sourcing', items: ['Manufacturer and supplier research', 'Supplier verification', 'Price and capacity analysis', 'Product specifications', 'Quality and documentation coordination', 'Logistics and order tracking'] },
-        { title: 'Market development & visibility', items: ['Market-entry strategy', 'B2B digital commerce', 'Direct sales systems', 'SEO', 'GEO', 'AEO', 'AIO', 'Content and authority building'] },
-        { title: 'AI-assisted commercial systems', items: ['Supplier research workflows', 'Sales intelligence', 'Company and opportunity analysis', 'Proposal automation', 'Knowledge management', 'Operational standardisation'] },
+        { title: 'International trade', items: ['Import and export opportunities', 'Product–market matching', 'Buyer and manufacturer coordination', 'Commercial negotiation', 'Cross-border business development'] },
+        { title: 'Strategic sourcing & verification', items: ['Manufacturer and supplier research', 'Supplier verification', 'Price and capacity analysis', 'Quality and documentation coordination', 'RFQ and quotation processes'] },
+        { title: 'Commercial growth & market development', items: ['Market-entry strategy', 'Product and market research', 'Commercial operations coordination', 'B2B digital commerce', 'Direct sales systems'] },
+        { title: 'Digital & AI-assisted systems', items: ['Supplier research workflows', 'Sales intelligence', 'Company and opportunity analysis', 'Knowledge management', 'Operational standardisation'] },
       ],
     },
-    regional: { label: 'Cross-border perspective', title: 'Building new commercial links across Türkiye, the Balkans and neighbouring markets.', body: 'I develop structures that connect Türkiye’s production and sourcing capabilities with regional demand, while linking product, buyer and partnership opportunities in neighbouring markets back to Türkiye. Each opportunity is assessed through product, counterpart, compliance, payment, risk and logistics realities.' },
-    contact: { label: 'For commercial partnerships', title: 'Let’s evaluate a product, market or sourcing opportunity.', body: 'Get in touch for international buying and selling, manufacturer or supplier sourcing, market development, commercial partnerships or AI-assisted trade operations.', action: 'Send an email' },
+    method: {
+      label: 'Working model',
+      title: 'Direct, evidence-led and grounded in operational reality.',
+      lead: 'Each engagement reduces assumptions, clarifies the counterparties and makes the next executable decision visible.',
+      steps: [
+        { title: 'Research', description: 'Map the product, market, manufacturer and demand signals through reliable sources.' },
+        { title: 'Verify', description: 'Compare suppliers, capacity, quality, documentation, pricing and commercial terms.' },
+        { title: 'Structure', description: 'Turn proposals, risk, payment, logistics and market entry into a decision framework.' },
+        { title: 'Coordinate', description: 'Manage critical steps between counterparties and operations directly and transparently.' },
+      ],
+    },
+    regional: {
+      label: 'International perspective',
+      title: 'Connecting Türkiye’s commercial capabilities with international markets.',
+      body: 'I connect production and sourcing capacity in Türkiye with regional and international demand, while linking product, buyer and partnership opportunities in other markets back to Türkiye. Each opportunity is assessed through product, counterpart, compliance, payment, risk and logistics realities.',
+    },
+    contact: {
+      label: 'Strategic commercial conversation',
+      title: 'Let’s clarify a product, market or sourcing decision.',
+      body: 'Get in touch for founder-level strategic assessment, international business development or a direct working relationship. Operational sourcing and trade enquiries are structured through CTSEG.',
+      action: 'Send an email',
+    },
+    ctseg: {
+      label: 'Principal commercial company',
+      kicker: 'A founder-led strategic trade platform',
+      title: 'CTSEG',
+      body: 'CTSEG is a strategic sourcing and international trade platform helping companies make better-informed decisions about products, manufacturers, suppliers and markets.',
+      founder: 'As founder, Teyfik Gökdemir brings research, verification, commercial structuring and operational coordination into one decision framework.',
+      services: ['Strategic sourcing', 'Supplier sourcing and verification', 'International trade advisory', 'Product and market research', 'Commercial operations coordination', 'Business development between Türkiye and international markets'],
+      primary: 'Explore CTSEG services',
+      secondary: 'Discuss a sourcing requirement',
+    },
+    journey: { year: '2026', title: 'CTSEG', description: 'The principal commercial company for strategic sourcing, supplier verification and international trade operations.' },
+    ecosystem: {
+      label: 'Supporting ventures',
+      title: 'Digital capability and independent venture layers.',
+      text: 'QCT Studio and QCT Commerce develop digital commerce and growth systems; Mythborn is an independent consumer venture. These structures support the founder’s wider capabilities without competing with CTSEG’s principal commercial role.',
+    },
   },
   mk: {
     hero: {
-      eyebrow: 'Меѓународна трговија · Стратешко снабдување · Деловен развој',
-      title: 'Градам системи за меѓународна трговија и стратешко снабдување.',
-      description: 'Го структурирам трговскиот процес од почеток до крај — од истражување производители и проверка на цена и капацитет, до координација меѓу купувач и продавач, логистика и влез на пазар.',
-      primary: 'Истражете ги областите', secondary: 'Контактирајте ме',
-      summary: 'Тејфик Ѓокдемир е претприемач од Турција кој работи во меѓународна трговија, стратешко снабдување, истражување добавувачи, деловен развој и комерцијални операции поддржани со AI.',
+      eyebrow: 'Основач · Меѓународна трговија · Стратешко снабдување',
+      title: 'Развивам системи за меѓународна трговија, стратешко снабдување и дигитален раст.',
+      description: 'Меѓу Турција и меѓународните пазари ги поврзувам мрежите на добавувачи, трговските операции, дигиталната трговија и истражувањето поддржано од вештачка интелигенција со перспектива на основач и носител на одлуки.',
+      primary: 'Истражете го CTSEG',
+      secondary: 'Разговарајте со Teyfik Gökdemir',
+      summary: 'Teyfik Gökdemir е основач на CTSEG. Тој ги структурира трговските можности преку истражување, проверка, координација и применливи системи за раст.',
     },
     intro: {
-      label: 'Трговски пристап', title: 'Ги претворам трговските можности во применливи структури.',
-      body: 'Истражувањето на производи и производители, проверката на добавувачи, управувањето со понуди, преговорите, извозната подготвеност, плаќањето, логистиката и продажните канали ги водам како еден поврзан трговски систем.',
-      areas: ['Меѓународна трговија', 'Стратешко снабдување', 'Истражување и проверка на добавувачи', 'Деловен развој и влез на пазар'],
+      label: 'Пристап на основач',
+      title: 'Директен модел што ги води трговските можности од истражување до операција.',
+      body: 'Истражувањето на производи и пазари, проверката на добавувачи, управувањето со понуди, преговорите, плаќањето, логистиката и дигиталната видливост ги третирам како еден поврзан систем.',
+      areas: ['Меѓународна трговија', 'Стратешко снабдување', 'Проверка на добавувачи', 'Развој на пазар', 'Дигитална трговија', 'Истражување со AI'],
+    },
+    ventures: {
+      label: 'Трговска структура и потфати',
+      title: 'CTSEG е главната трговска компанија; другите потфати обезбедуваат дополнителни способности.',
+      lead: 'CTSEG е оперативна платформа за стратешко снабдување и меѓународна трговија. QCT Studio, QCT Commerce и Mythborn поддржуваат дигитални способности, раст и независен развој на производи.',
     },
     expertise: {
-      title: 'Експертиза низ целата трговска можност.', lead: 'Снабдувањето, пристапот до пазар, преговорите, операциите и дигиталната видливост се управуваат кон иста трговска цел.',
+      title: 'Експертиза што ги поврзува трговските одлуки со истражување, проверка и реализација.',
+      lead: 'Ова не е каталог на агенциски услуги, туку професионална дисциплина за процена и водење меѓународни трговски можности.',
       groups: [
-        { title: 'Меѓународна трговија', items: ['Увозни и извозни можности', 'Поврзување производ и пазар', 'Координација купувач–производител', 'RFQ и понудбени процеси', 'Комерцијални преговори', 'Прекуграничен деловен развој'] },
-        { title: 'Стратешко снабдување', items: ['Истражување производители и добавувачи', 'Проверка на добавувачи', 'Анализа на цена и капацитет', 'Спецификации на производ', 'Квалитет и документација', 'Логистика и следење на нарачки'] },
-        { title: 'Развој на пазар и видливост', items: ['Стратегија за влез на пазар', 'B2B дигитална трговија', 'Системи за директна продажба', 'SEO', 'GEO', 'AEO', 'AIO', 'Содржина и авторитет'] },
-        { title: 'AI-поддржани трговски системи', items: ['Текови за истражување добавувачи', 'Продажна интелигенција', 'Анализа на компании и можности', 'Автоматизација на понуди', 'Управување со знаење', 'Стандардизација на операции'] },
+        { title: 'Меѓународна трговија', items: ['Увозни и извозни можности', 'Поврзување производ–пазар', 'Координација купувач–производител', 'Трговски преговори', 'Прекуграничен деловен развој'] },
+        { title: 'Стратешко снабдување и проверка', items: ['Истражување производители и добавувачи', 'Проверка на добавувачи', 'Анализа на цена и капацитет', 'Квалитет и документација', 'RFQ и процеси на понуди'] },
+        { title: 'Трговски раст и развој на пазар', items: ['Стратегија за влез на пазар', 'Истражување производи и пазари', 'Координација на операции', 'B2B дигитална трговија', 'Системи за директна продажба'] },
+        { title: 'Дигитални и AI системи', items: ['Процеси за истражување добавувачи', 'Продажна интелигенција', 'Анализа на компании и можности', 'Управување со знаење', 'Стандардизација на операции'] },
       ],
     },
-    regional: { label: 'Прекуграничен поглед', title: 'Нови трговски врски меѓу Турција, Балканот и соседните пазари.', body: 'Развивам структури што ги поврзуваат производствените и снабдувачките капацитети на Турција со регионалната побарувачка. Секоја можност ја оценувам според производ, партнери, усогласеност, плаќање, ризик и логистика.' },
-    contact: { label: 'За трговски партнерства', title: 'Да оцениме производ, пазар или можност за снабдување.', body: 'Контактирајте ме за меѓународна купопродажба, пронаоѓање производители или добавувачи, развој на пазар, трговски партнерства или AI-поддржани операции.', action: 'Испратете е-пошта' },
+    method: {
+      label: 'Модел на работа',
+      title: 'Директен, заснован на докази и поврзан со оперативната реалност.',
+      lead: 'Секоја соработка ги намалува претпоставките, ги појаснува страните и ја прави видлива следната применлива одлука.',
+      steps: [
+        { title: 'Истражување', description: 'Мапирање на производот, пазарот, производителите и побарувачката.' },
+        { title: 'Проверка', description: 'Споредба на добавувачи, капацитет, квалитет, документи, цени и услови.' },
+        { title: 'Структурирање', description: 'Понудите, ризикот, плаќањето, логистиката и влезот на пазар се претвораат во рамка за одлука.' },
+        { title: 'Координација', description: 'Критичните чекори меѓу страните и операциите се водат директно и транспарентно.' },
+      ],
+    },
+    regional: {
+      label: 'Меѓународна перспектива',
+      title: 'Поврзување на трговските способности на Турција со меѓународните пазари.',
+      body: 'Ги поврзувам производствените и снабдувачките капацитети во Турција со регионалната и меѓународната побарувачка. Секоја можност се проценува преку производот, страните, усогласеноста, плаќањето, ризикот и логистиката.',
+    },
+    contact: {
+      label: 'Стратешки трговски разговор',
+      title: 'Да разјасниме одлука за производ, пазар или снабдување.',
+      body: 'Контактирајте за стратешка процена на ниво на основач, меѓународен деловен развој или директен модел на соработка. Оперативните барања за снабдување и трговија се структурираат преку CTSEG.',
+      action: 'Испратете е-пошта',
+    },
+    ctseg: {
+      label: 'Главна трговска компанија',
+      kicker: 'Стратешка трговска платформа водена од основачот',
+      title: 'CTSEG',
+      body: 'CTSEG е платформа за стратешко снабдување и меѓународна трговија што им помага на компаниите да донесуваат подобро информирани одлуки за производи, производители, добавувачи и пазари.',
+      founder: 'Како основач, Teyfik Gökdemir ги обединува истражувањето, проверката, трговското структурирање и оперативната координација во една рамка за одлучување.',
+      services: ['Стратешко снабдување', 'Наоѓање и проверка на добавувачи', 'Советување за меѓународна трговија', 'Истражување производи и пазари', 'Координација на трговски операции', 'Деловен развој меѓу Турција и меѓународните пазари'],
+      primary: 'Истражете ги услугите на CTSEG',
+      secondary: 'Разговарајте за барање за снабдување',
+    },
+    journey: { year: '2026', title: 'CTSEG', description: 'Главната трговска компанија за стратешко снабдување, проверка на добавувачи и меѓународни операции.' },
+    ecosystem: {
+      label: 'Поддржувачки потфати',
+      title: 'Дигитални способности и независни потфати.',
+      text: 'QCT Studio и QCT Commerce развиваат системи за дигитална трговија и раст; Mythborn е независен потрошувачки потфат. Овие структури ја поддржуваат пошироката експертиза без да ја заменат главната трговска улога на CTSEG.',
+    },
   },
   sr: {
     hero: {
-      eyebrow: 'Međunarodna trgovina · Strateški sourcing · Razvoj poslovanja',
-      title: 'Gradim sisteme za međunarodnu trgovinu i strateški sourcing.',
-      description: 'Komercijalni proces strukturiram od početka do kraja — od istraživanja proizvođača i provere cena i kapaciteta do koordinacije kupca i prodavca, logistike i planiranja ulaska na tržište.',
-      primary: 'Pogledajte oblasti rada', secondary: 'Kontaktirajte me',
-      summary: 'Teyfik Gökdemir je preduzetnik iz Turske koji radi u međunarodnoj trgovini, strateškom sourcingu, istraživanju dobavljača, razvoju poslovanja i komercijalnim operacijama podržanim veštačkom inteligencijom.',
+      eyebrow: 'Osnivač · Međunarodna trgovina · Strateška nabavka',
+      title: 'Razvijam sisteme za međunarodnu trgovinu, stratešku nabavku i digitalni rast.',
+      description: 'Između Turske i međunarodnih tržišta povezujem mreže dobavljača, komercijalne operacije, digitalnu trgovinu i istraživanje podržano veštačkom inteligencijom iz perspektive osnivača i donosioca odluka.',
+      primary: 'Istražite CTSEG',
+      secondary: 'Razgovarajte sa Teyfikom Gökdemirom',
+      summary: 'Teyfik Gökdemir je osnivač CTSEG-a. Komercijalne prilike strukturira kroz istraživanje, proveru, koordinaciju i primenljive sisteme rasta.',
     },
     intro: {
-      label: 'Komercijalni pristup', title: 'Komercijalne prilike pretvaram u primenljive strukture.',
-      body: 'Istraživanje proizvoda i proizvođača, provera dobavljača, upravljanje ponudama, komercijalni pregovori, izvozna spremnost, plaćanje, logistika i prodajni kanali vode se kao jedan povezan trgovinski sistem.',
-      areas: ['Međunarodna trgovina', 'Strateški sourcing', 'Istraživanje i provera dobavljača', 'Razvoj poslovanja i ulazak na tržište'],
+      label: 'Pristup osnivača',
+      title: 'Direktan model koji komercijalnu priliku vodi od istraživanja do operacije.',
+      body: 'Istraživanje proizvoda i tržišta, proveru dobavljača, upravljanje ponudama, pregovore, plaćanje, logistiku i digitalnu vidljivost posmatram kao jedan povezan sistem.',
+      areas: ['Međunarodna trgovina', 'Strateška nabavka', 'Provera dobavljača', 'Razvoj tržišta', 'Digitalna trgovina', 'Istraživanje uz AI'],
+    },
+    ventures: {
+      label: 'Komercijalna struktura i poduhvati',
+      title: 'CTSEG je glavna komercijalna kompanija; ostali poduhvati pružaju prateće sposobnosti.',
+      lead: 'CTSEG je operativna platforma za stratešku nabavku i međunarodnu trgovinu. QCT Studio, QCT Commerce i Mythborn podržavaju digitalne sposobnosti, rast i nezavisan razvoj proizvoda.',
     },
     expertise: {
-      title: 'Stručnost kroz ceo komercijalni proces.', lead: 'Sourcing, pristup tržištu, pregovori, operacije i digitalna vidljivost povezani su sa istim komercijalnim ciljem.',
+      title: 'Stručnost koja povezuje komercijalne odluke sa istraživanjem, proverom i realizacijom.',
+      lead: 'Ovo nije katalog agencijskih usluga, već profesionalna disciplina za procenu i vođenje međunarodnih komercijalnih prilika.',
       groups: [
-        { title: 'Međunarodna trgovina', items: ['Uvozne i izvozne prilike', 'Usklađivanje proizvoda i tržišta', 'Koordinacija kupca i proizvođača', 'RFQ i procesi ponuda', 'Komercijalni pregovori', 'Prekogranični razvoj poslovanja'] },
-        { title: 'Strateški sourcing', items: ['Istraživanje proizvođača i dobavljača', 'Provera dobavljača', 'Analiza cena i kapaciteta', 'Specifikacije proizvoda', 'Koordinacija kvaliteta i dokumentacije', 'Logistika i praćenje porudžbina'] },
-        { title: 'Razvoj tržišta i vidljivost', items: ['Strategija ulaska na tržište', 'B2B digitalna trgovina', 'Sistemi direktne prodaje', 'SEO', 'GEO', 'AEO', 'AIO', 'Sadržaj i izgradnja autoriteta'] },
-        { title: 'AI podržani komercijalni sistemi', items: ['Tokovi istraživanja dobavljača', 'Prodajna inteligencija', 'Analiza kompanija i prilika', 'Automatizacija ponuda', 'Upravljanje znanjem', 'Standardizacija operacija'] },
+        { title: 'Međunarodna trgovina', items: ['Uvozne i izvozne prilike', 'Usklađivanje proizvoda i tržišta', 'Koordinacija kupca i proizvođača', 'Komercijalni pregovori', 'Prekogranični razvoj poslovanja'] },
+        { title: 'Strateška nabavka i provera', items: ['Istraživanje proizvođača i dobavljača', 'Provera dobavljača', 'Analiza cena i kapaciteta', 'Kvalitet i dokumentacija', 'RFQ i procesi ponuda'] },
+        { title: 'Komercijalni rast i razvoj tržišta', items: ['Strategija ulaska na tržište', 'Istraživanje proizvoda i tržišta', 'Koordinacija komercijalnih operacija', 'B2B digitalna trgovina', 'Sistemi direktne prodaje'] },
+        { title: 'Digitalni i AI sistemi', items: ['Tokovi istraživanja dobavljača', 'Prodajna inteligencija', 'Analiza kompanija i prilika', 'Upravljanje znanjem', 'Standardizacija operacija'] },
       ],
     },
-    regional: { label: 'Prekogranična perspektiva', title: 'Nove trgovinske veze između Turske, Balkana i susednih tržišta.', body: 'Razvijam strukture koje povezuju proizvodne i sourcing kapacitete Turske sa regionalnom tražnjom. Svaku priliku procenjujem kroz proizvod, partnere, usklađenost, plaćanje, rizik i logistiku.' },
-    contact: { label: 'Za komercijalna partnerstva', title: 'Hajde da procenimo proizvod, tržište ili sourcing priliku.', body: 'Javite se za međunarodnu kupovinu i prodaju, pronalaženje proizvođača ili dobavljača, razvoj tržišta, komercijalna partnerstva ili AI podržane trgovinske operacije.', action: 'Pošaljite e-poštu' },
+    method: {
+      label: 'Model rada',
+      title: 'Direktan, zasnovan na dokazima i vezan za operativnu stvarnost.',
+      lead: 'Svaki angažman smanjuje pretpostavke, razjašnjava učesnike i čini sledeću primenljivu odluku vidljivom.',
+      steps: [
+        { title: 'Istraživanje', description: 'Mapiranje proizvoda, tržišta, proizvođača i signala potražnje.' },
+        { title: 'Provera', description: 'Poređenje dobavljača, kapaciteta, kvaliteta, dokumentacije, cena i uslova.' },
+        { title: 'Strukturiranje', description: 'Ponude, rizik, plaćanje, logistika i ulazak na tržište postaju okvir za odluku.' },
+        { title: 'Koordinacija', description: 'Kritični koraci između učesnika i operacija vode se direktno i transparentno.' },
+      ],
+    },
+    regional: {
+      label: 'Međunarodna perspektiva',
+      title: 'Povezivanje komercijalnih kapaciteta Turske sa međunarodnim tržištima.',
+      body: 'Povezujem proizvodne i nabavne kapacitete u Turskoj sa regionalnom i međunarodnom potražnjom. Svaku priliku procenjujem kroz proizvod, učesnike, usklađenost, plaćanje, rizik i logistiku.',
+    },
+    contact: {
+      label: 'Strateški komercijalni razgovor',
+      title: 'Razjasnimo odluku o proizvodu, tržištu ili nabavci.',
+      body: 'Javite se za stratešku procenu na nivou osnivača, međunarodni razvoj poslovanja ili direktan model saradnje. Operativni zahtevi za nabavku i trgovinu strukturiraju se kroz CTSEG.',
+      action: 'Pošaljite e-poštu',
+    },
+    ctseg: {
+      label: 'Glavna komercijalna kompanija',
+      kicker: 'Strateška trgovinska platforma koju vodi osnivač',
+      title: 'CTSEG',
+      body: 'CTSEG je platforma za stratešku nabavku i međunarodnu trgovinu koja kompanijama pomaže da donose bolje informisane odluke o proizvodima, proizvođačima, dobavljačima i tržištima.',
+      founder: 'Kao osnivač, Teyfik Gökdemir objedinjuje istraživanje, proveru, komercijalno strukturiranje i koordinaciju operacija u jedan okvir za odlučivanje.',
+      services: ['Strateška nabavka', 'Pronalaženje i provera dobavljača', 'Savetovanje za međunarodnu trgovinu', 'Istraživanje proizvoda i tržišta', 'Koordinacija komercijalnih operacija', 'Razvoj poslovanja između Turske i međunarodnih tržišta'],
+      primary: 'Istražite CTSEG usluge',
+      secondary: 'Razgovarajte o zahtevu za nabavku',
+    },
+    journey: { year: '2026', title: 'CTSEG', description: 'Glavna komercijalna kompanija za stratešku nabavku, proveru dobavljača i međunarodne trgovinske operacije.' },
+    ecosystem: {
+      label: 'Prateći poduhvati',
+      title: 'Digitalne sposobnosti i nezavisni poduhvati.',
+      text: 'QCT Studio i QCT Commerce razvijaju sisteme digitalne trgovine i rasta; Mythborn je nezavisan potrošački poduhvat. Ove strukture podržavaju širu stručnost bez konkurisanja glavnoj komercijalnoj ulozi CTSEG-a.',
+    },
   },
   sq: {
     hero: {
-      eyebrow: 'Tregti ndërkombëtare · Furnizim strategjik · Zhvillim biznesi',
-      title: 'Ndërtoj sisteme për tregti ndërkombëtare dhe furnizim strategjik.',
-      description: 'E strukturoj procesin tregtar nga fillimi në fund — nga kërkimi i prodhuesve dhe verifikimi i çmimit e kapacitetit, te koordinimi blerës–shitës, logjistika dhe hyrja në treg.',
-      primary: 'Shiko fushat e punës', secondary: 'Kontakto',
-      summary: 'Teyfik Gökdemir është sipërmarrës me bazë në Turqi, i fokusuar në tregtinë ndërkombëtare, furnizimin strategjik, kërkimin e furnitorëve, zhvillimin e biznesit dhe operacionet tregtare të mbështetura nga AI.',
+      eyebrow: 'Themelues · Tregti ndërkombëtare · Furnizim strategjik',
+      title: 'Zhvilloj sisteme për tregti ndërkombëtare, furnizim strategjik dhe rritje digjitale.',
+      description: 'Mes Turqisë dhe tregjeve ndërkombëtare lidh rrjetet e furnitorëve, operacionet tregtare, tregtinë digjitale dhe kërkimin e mbështetur nga inteligjenca artificiale me këndvështrimin e një themeluesi dhe vendimmarrësi.',
+      primary: 'Eksploroni CTSEG',
+      secondary: 'Bisedoni me Teyfik Gökdemir',
+      summary: 'Teyfik Gökdemir është themeluesi i CTSEG. Ai strukturon mundësitë tregtare përmes kërkimit, verifikimit, koordinimit dhe sistemeve praktike të rritjes.',
     },
     intro: {
-      label: 'Qasje tregtare', title: 'I kthej mundësitë tregtare në struktura të zbatueshme.',
-      body: 'Kërkimi i produkteve dhe prodhuesve, verifikimi i furnitorëve, menaxhimi i ofertave, negociatat tregtare, gatishmëria për eksport, pagesat, logjistika dhe kanalet e shitjes trajtohen si një sistem i vetëm tregtar.',
-      areas: ['Tregti ndërkombëtare', 'Furnizim strategjik', 'Kërkim dhe verifikim furnitorësh', 'Zhvillim biznesi dhe hyrje në treg'],
+      label: 'Qasja e themeluesit',
+      title: 'Një model i drejtpërdrejtë që e çon mundësinë tregtare nga kërkimi në operim.',
+      body: 'Kërkimin e produktit dhe tregut, verifikimin e furnitorëve, menaxhimin e ofertave, negociatat, pagesën, logjistikën dhe dukshmërinë digjitale i trajtoj si një sistem të lidhur.',
+      areas: ['Tregti ndërkombëtare', 'Furnizim strategjik', 'Verifikim furnitorësh', 'Zhvillim tregu', 'Tregti digjitale', 'Kërkim me AI'],
+    },
+    ventures: {
+      label: 'Struktura tregtare dhe sipërmarrjet',
+      title: 'CTSEG është kompania kryesore tregtare; sipërmarrjet e tjera ofrojnë aftësi mbështetëse.',
+      lead: 'CTSEG është platforma operative për furnizim strategjik dhe tregti ndërkombëtare. QCT Studio, QCT Commerce dhe Mythborn mbështesin aftësitë digjitale, rritjen dhe zhvillimin e pavarur të produkteve.',
     },
     expertise: {
-      title: 'Ekspertizë në të gjithë mundësinë tregtare.', lead: 'Furnizimi, hyrja në treg, negociatat, operacionet dhe dukshmëria digjitale lidhen me të njëjtin objektiv tregtar.',
+      title: 'Ekspertizë që lidh vendimet tregtare me kërkimin, verifikimin dhe realizimin.',
+      lead: 'Ky nuk është katalog shërbimesh agjencie, por disiplinë profesionale për vlerësimin dhe drejtimin e mundësive tregtare ndërkombëtare.',
       groups: [
-        { title: 'Tregti ndërkombëtare', items: ['Mundësi importi dhe eksporti', 'Përputhje produkt–treg', 'Koordinim blerës–prodhues', 'Procese RFQ dhe ofertash', 'Negociata tregtare', 'Zhvillim biznesi ndërkufitar'] },
-        { title: 'Furnizim strategjik', items: ['Kërkim prodhuesish dhe furnitorësh', 'Verifikim furnitorësh', 'Analizë çmimi dhe kapaciteti', 'Specifikime produkti', 'Koordinim cilësie dhe dokumentacioni', 'Logjistikë dhe ndjekje porosish'] },
-        { title: 'Zhvillim tregu dhe dukshmëri', items: ['Strategji hyrjeje në treg', 'Tregti digjitale B2B', 'Sisteme shitjeje direkte', 'SEO', 'GEO', 'AEO', 'AIO', 'Përmbajtje dhe autoritet'] },
-        { title: 'Sisteme tregtare të mbështetura nga AI', items: ['Procese kërkimi furnitorësh', 'Inteligjencë shitjesh', 'Analizë kompanish dhe mundësish', 'Automatizim ofertash', 'Menaxhim njohurish', 'Standardizim operacionesh'] },
+        { title: 'Tregti ndërkombëtare', items: ['Mundësi importi dhe eksporti', 'Përputhje produkt–treg', 'Koordinim blerës–prodhues', 'Negociata tregtare', 'Zhvillim biznesi ndërkufitar'] },
+        { title: 'Furnizim strategjik dhe verifikim', items: ['Kërkim prodhuesish dhe furnitorësh', 'Verifikim furnitorësh', 'Analizë çmimi dhe kapaciteti', 'Cilësi dhe dokumentacion', 'Procese RFQ dhe ofertash'] },
+        { title: 'Rritje tregtare dhe zhvillim tregu', items: ['Strategji hyrjeje në treg', 'Kërkim produkti dhe tregu', 'Koordinim operacionesh tregtare', 'Tregti digjitale B2B', 'Sisteme shitjeje direkte'] },
+        { title: 'Sisteme digjitale dhe AI', items: ['Procese kërkimi furnitorësh', 'Inteligjencë shitjesh', 'Analizë kompanish dhe mundësish', 'Menaxhim njohurish', 'Standardizim operacionesh'] },
       ],
     },
-    regional: { label: 'Perspektivë ndërkufitare', title: 'Lidhje të reja tregtare mes Turqisë, Ballkanit dhe tregjeve fqinje.', body: 'Zhvilloj struktura që lidhin kapacitetet prodhuese dhe të furnizimit të Turqisë me kërkesën rajonale. Çdo mundësi vlerësohet sipas produktit, palëve, përputhshmërisë, pagesës, rrezikut dhe logjistikës.' },
-    contact: { label: 'Për partneritete tregtare', title: 'Le të vlerësojmë një produkt, treg ose mundësi furnizimi.', body: 'Kontaktoni për blerje dhe shitje ndërkombëtare, gjetje prodhuesish ose furnitorësh, zhvillim tregu, partneritete tregtare ose operacione të mbështetura nga AI.', action: 'Dërgo email' },
+    method: {
+      label: 'Modeli i punës',
+      title: 'I drejtpërdrejtë, i bazuar në prova dhe i lidhur me realitetin operacional.',
+      lead: 'Çdo angazhim redukton supozimet, qartëson palët dhe e bën të dukshëm vendimin e ardhshëm të zbatueshëm.',
+      steps: [
+        { title: 'Kërkim', description: 'Hartëzim i produktit, tregut, prodhuesve dhe sinjaleve të kërkesës.' },
+        { title: 'Verifikim', description: 'Krahasim i furnitorëve, kapacitetit, cilësisë, dokumentacionit, çmimeve dhe kushteve.' },
+        { title: 'Strukturim', description: 'Ofertat, rreziku, pagesa, logjistika dhe hyrja në treg kthehen në kornizë vendimmarrjeje.' },
+        { title: 'Koordinim', description: 'Hapat kritikë mes palëve dhe operacioneve menaxhohen drejtpërdrejt dhe në mënyrë transparente.' },
+      ],
+    },
+    regional: {
+      label: 'Perspektivë ndërkombëtare',
+      title: 'Lidhja e kapaciteteve tregtare të Turqisë me tregjet ndërkombëtare.',
+      body: 'Lidh kapacitetet prodhuese dhe furnizuese në Turqi me kërkesën rajonale dhe ndërkombëtare. Çdo mundësi vlerësohet sipas produktit, palëve, përputhshmërisë, pagesës, rrezikut dhe logjistikës.',
+    },
+    contact: {
+      label: 'Bisedë strategjike tregtare',
+      title: 'Le të qartësojmë një vendim për produktin, tregun ose furnizimin.',
+      body: 'Kontaktoni për vlerësim strategjik në nivel themeluesi, zhvillim biznesi ndërkombëtar ose bashkëpunim të drejtpërdrejtë. Kërkesat operative për furnizim dhe tregti strukturohen përmes CTSEG.',
+      action: 'Dërgo email',
+    },
+    ctseg: {
+      label: 'Kompania kryesore tregtare',
+      kicker: 'Platformë strategjike tregtare e drejtuar nga themeluesi',
+      title: 'CTSEG',
+      body: 'CTSEG është platformë për furnizim strategjik dhe tregti ndërkombëtare që ndihmon kompanitë të marrin vendime më të informuara për produkte, prodhues, furnitorë dhe tregje.',
+      founder: 'Si themelues, Teyfik Gökdemir bashkon kërkimin, verifikimin, strukturimin tregtar dhe koordinimin operacional në një kornizë vendimmarrjeje.',
+      services: ['Furnizim strategjik', 'Gjetje dhe verifikim furnitorësh', 'Këshillim për tregti ndërkombëtare', 'Kërkim produkti dhe tregu', 'Koordinim operacionesh tregtare', 'Zhvillim biznesi mes Turqisë dhe tregjeve ndërkombëtare'],
+      primary: 'Eksploroni shërbimet e CTSEG',
+      secondary: 'Diskutoni një kërkesë furnizimi',
+    },
+    journey: { year: '2026', title: 'CTSEG', description: 'Kompania kryesore tregtare për furnizim strategjik, verifikim furnitorësh dhe operacione ndërkombëtare.' },
+    ecosystem: {
+      label: 'Sipërmarrje mbështetëse',
+      title: 'Aftësi digjitale dhe sipërmarrje të pavarura.',
+      text: 'QCT Studio dhe QCT Commerce zhvillojnë sisteme të tregtisë digjitale dhe rritjes; Mythborn është sipërmarrje e pavarur konsumatore. Këto struktura mbështesin ekspertizën më të gjerë pa konkurruar rolin kryesor tregtar të CTSEG.',
+    },
   },
 } as const;
 
 const localPositioning = positioning[locale] ?? positioning.en;
-const ctsegVenture = {
-  tr: { name: 'CTSEG', description: 'Stratejik tedarik, satın alma, tedarikçi geliştirme ve uluslararası ticaret süreçlerini uçtan uca yapılandıran kurumsal girişim.', status: 'Aktif girişim', region: 'Türkiye · Uluslararası', url: 'https://ctseg.com.tr', aria: 'CTSEG web sitesini ziyaret et', image: 'ctseg' },
-  en: { name: 'CTSEG', description: 'A corporate venture structuring strategic sourcing, procurement, supplier development and international trade operations end to end.', status: 'Active venture', region: 'Türkiye · International', url: 'https://ctseg.com.tr/en/', aria: 'Visit the CTSEG website', image: 'ctseg' },
-  mk: { name: 'CTSEG', description: 'Корпоративен потфат за стратешко снабдување, набавки, развој на добавувачи и меѓународна трговија.', status: 'Активен потфат', region: 'Турција · Меѓународно', url: 'https://ctseg.com.tr/en/', aria: 'Посетете ја веб-страницата на CTSEG', image: 'ctseg' },
-  sr: { name: 'CTSEG', description: 'Korporativni poduhvat za strateški sourcing, nabavku, razvoj dobavljača i međunarodnu trgovinu.', status: 'Aktivan poduhvat', region: 'Turska · Međunarodno', url: 'https://ctseg.com.tr/en/', aria: 'Posetite CTSEG sajt', image: 'ctseg' },
-  sq: { name: 'CTSEG', description: 'Sipërmarrje korporative për furnizim strategjik, prokurim, zhvillim furnitorësh dhe tregti ndërkombëtare.', status: 'Sipërmarrje aktive', region: 'Turqi · Ndërkombëtare', url: 'https://ctseg.com.tr/en/', aria: 'Vizitoni faqen e CTSEG', image: 'ctseg' },
+const localeCtsegLinks = ctsegLinks[locale] ?? ctsegLinks.en;
+const ventureItems = baseCopy.ventures.items.filter((item) => item.url);
+const operationalSystems = baseCopy.ventures.items.filter((item) => !item.url);
+const operationalSystemsLabel = {
+  tr: 'Dijital ve AI destekli operasyon sistemleri',
+  en: 'Digital and AI-assisted operating systems',
+  mk: 'Дигитални и оперативни системи поддржани од AI',
+  sr: 'Digitalni i operativni sistemi podržani AI tehnologijom',
+  sq: 'Sisteme digjitale dhe operacionale të asistuara nga AI',
 } as const;
+const journeyItems = [localPositioning.journey, ...baseCopy.journey.items]
+  .sort((left, right) => {
+    const leftYear = left.title === 'QCT Studio' || left.title === 'QCT Commerce'
+      ? 2025
+      : Number(left.year);
+    const rightYear = right.title === 'QCT Studio' || right.title === 'QCT Commerce'
+      ? 2025
+      : Number(right.year);
+    return leftYear - rightYear;
+  });
 
 const copy = {
   ...baseCopy,
   hero: { ...baseCopy.hero, ...localPositioning.hero },
   intro: { ...baseCopy.intro, ...localPositioning.intro },
-  ventures: { ...baseCopy.ventures, items: [...baseCopy.ventures.items, ctsegVenture[locale] ?? ctsegVenture.en] },
-  expertise: { ...baseCopy.expertise, ...localPositioning.expertise, definitions: baseCopy.expertise.definitions },
+  ventures: {
+    ...baseCopy.ventures,
+    ...localPositioning.ventures,
+    items: ventureItems,
+  },
+  expertise: {
+    ...baseCopy.expertise,
+    ...localPositioning.expertise,
+    definitions: baseCopy.expertise.definitions,
+  },
+  method: { ...baseCopy.method, ...localPositioning.method },
   regional: { ...baseCopy.regional, ...localPositioning.regional },
   contact: { ...baseCopy.contact, ...localPositioning.contact },
+  journey: {
+    ...baseCopy.journey,
+    items: journeyItems,
+  },
 };
 
-const ecosystemCopy = {
-  tr: { label: 'QCT ekosistemi', title: 'Ticaret, teknoloji ve pazar geliştirme için bağlantılı girişimler.', text: 'Teyfik Gökdemir, 2025 yılında başlayan QCT yapılanması kapsamında Türkiye’de QCT Commerce’i, Balkanlar’da QCT Studio’yu, uluslararası pazara yönelik Mythborn’u ve stratejik tedarik ile uluslararası ticaret odağındaki CTSEG’i geliştirmektedir.' },
-  en: { label: 'QCT ecosystem', title: 'Connected ventures for commerce, technology and market development.', text: 'Teyfik Gökdemir develops QCT Commerce for Türkiye, QCT Studio for the Balkans, Mythborn for international markets and CTSEG for strategic sourcing and international trade within the QCT structure established in 2025.' },
-  mk: { label: 'QCT екосистем', title: 'Поврзани потфати за трговија, технологија и развој на пазар.', text: 'Тејфик Ѓокдемир ги развива QCT Commerce за Турција, QCT Studio за Балканот, Mythborn за меѓународните пазари и CTSEG за стратешко снабдување и меѓународна трговија во рамките на QCT структурата започната во 2025 година.' },
-  sr: { label: 'QCT ekosistem', title: 'Povezani poduhvati za trgovinu, tehnologiju i razvoj tržišta.', text: 'Teyfik Gökdemir razvija QCT Commerce za Tursku, QCT Studio za Balkan, Mythborn za međunarodna tržišta i CTSEG za strateški sourcing i međunarodnu trgovinu u okviru QCT strukture pokrenute 2025. godine.' },
-  sq: { label: 'Ekosistemi QCT', title: 'Sipërmarrje të lidhura për tregti, teknologji dhe zhvillim tregu.', text: 'Teyfik Gökdemir zhvillon QCT Commerce për Turqinë, QCT Studio për Ballkanin, Mythborn për tregjet ndërkombëtare dhe CTSEG për furnizim strategjik dhe tregti ndërkombëtare brenda strukturës QCT të nisur në vitin 2025.' },
-} as const;
 const legalCopy = {
   tr: { privacy: 'Gizlilik ve Çerez Politikası', kvkk: 'KVKK Aydınlatma Metni', terms: 'Kullanım Koşulları' },
   en: { privacy: 'Privacy & Cookie Policy', kvkk: 'Data Protection Notice', terms: 'Terms of Use' },
@@ -173,34 +440,529 @@ const legalCopy = {
   sr: { privacy: 'Politika privatnosti i kolačića', kvkk: 'Obaveštenje o zaštiti podataka', terms: 'Uslovi korišćenja' },
   sq: { privacy: 'Politika e Privatësisë dhe Cookies', kvkk: 'Njoftim për Mbrojtjen e të Dhënave', terms: 'Kushtet e Përdorimit' },
 } as const;
-const ecosystem = ecosystemCopy[locale] ?? ecosystemCopy.en;
+
 const legal = legalCopy[locale] ?? legalCopy.en;
-const displayedYear = (title: string, year: string) => title === 'QCT Studio' || title === 'QCT Commerce' ? '2025' : year;
+const displayedYear = (title: string, year: string) =>
+  title === 'QCT Studio' || title === 'QCT Commerce' ? '2025' : year;
 ---
 <link rel="stylesheet" href="/styles/ventures-compact.css" />
 <Header locale={locale} copy={copy} homePath={`/${locale}/`} />
 <main id="main-content">
   <section class="hero shell" id="top" aria-labelledby="hero-title">
-    <div class="hero-copy"><p class="section-label">{copy.hero.eyebrow}</p><h1 id="hero-title">{copy.hero.title}</h1><p class="hero-description">{copy.hero.description}</p><div class="hero-actions"><a class="button primary" href="#expertise">{copy.hero.primary}</a><a class="button" href="#contact">{copy.hero.secondary}</a></div><p class="hero-summary">{copy.hero.summary}</p></div>
-    <div class="hero-media"><img src={site.images.hero.path} srcset={site.images.hero.srcset} sizes="(max-width: 760px) 92vw, (max-width: 1180px) 48vw, 665px" width={site.images.hero.width} height={site.images.hero.height} alt={copy.images.hero} loading="eager" decoding="async" fetchpriority="high" /></div>
+    <div class="hero-copy" data-reveal="hero">
+      <p class="section-label">{copy.hero.eyebrow}</p>
+      <h1 id="hero-title">{copy.hero.title}</h1>
+      <p class="hero-description">{copy.hero.description}</p>
+      <div class="hero-actions">
+        <a class="button primary" href={localeCtsegLinks.home}>{copy.hero.primary}</a>
+        <a class="button" href="#contact">{copy.hero.secondary}</a>
+      </div>
+      <p class="hero-summary">{copy.hero.summary}</p>
+    </div>
+    <div class="hero-media" data-reveal="hero-media">
+      <img src={site.images.hero.path} srcset={site.images.hero.srcset} sizes="(max-width: 760px) 92vw, (max-width: 1180px) 48vw, 665px" width={site.images.hero.width} height={site.images.hero.height} alt={copy.images.hero} loading="eager" decoding="async" fetchpriority="high" />
+    </div>
   </section>
-  <section class="section" aria-labelledby="intro-title"><div class="shell intro-grid"><div class="editorial-image"><img src={site.images.profile.path} srcset={site.images.profile.srcset} sizes="(max-width: 760px) 92vw, (max-width: 1180px) 48vw, 662px" width={site.images.profile.width} height={site.images.profile.height} alt={copy.images.profile} loading="lazy" decoding="async" /></div><div><p class="section-label">{copy.intro.label}</p><h2 id="intro-title">{copy.intro.title}</h2><p class="section-lead">{copy.intro.body}</p><div class="focus-list">{copy.intro.areas.map((area) => <span>{area}</span>)}</div></div></div></section>
-  <section class="section" id="ventures" aria-labelledby="ventures-title"><div class="shell"><div class="section-heading"><p class="section-label">{copy.ventures.label}</p><h2 id="ventures-title">{copy.ventures.title}</h2><p class="section-lead">{copy.ventures.lead}</p></div><div class="venture-grid">{copy.ventures.items.map((item) => item.url ? (<a class:list={['venture-card', { 'has-image': item.image === 'commerce', 'venture-card--ctseg': item.image === 'ctseg' }]} href={item.url} target="_blank" rel="noopener noreferrer" aria-label={item.aria + ', ' + copy.a11y.external}>{item.image === 'commerce' && <img src={site.images.commerce.path} width={site.images.commerce.width} height={site.images.commerce.height} alt={copy.images.commerce} loading="lazy" decoding="async" />}<div class="venture-meta"><span class="tag">{item.status}</span><span class="tag">{item.region}</span></div><h3>{item.name}</h3><p>{item.description}</p><span class="venture-arrow" aria-hidden="true">↗</span></a>) : (<article class="venture-card" aria-label={item.aria}><div class="venture-meta"><span class="tag">{item.status}</span><span class="tag">{item.region}</span></div><h3>{item.name}</h3><p>{item.description}</p></article>))}</div></div></section>
-  <section class="section" id="expertise" aria-labelledby="expertise-title"><div class="shell"><div class="section-heading"><p class="section-label">{copy.expertise.label}</p><h2 id="expertise-title">{copy.expertise.title}</h2><p class="section-lead">{copy.expertise.lead}</p></div><div class="expertise-grid">{copy.expertise.groups.map((group) => <article class="expertise-card"><h3>{group.title}</h3><ul>{group.items.map((item) => <li>{item}</li>)}</ul></article>)}</div><p class="definitions">{copy.expertise.definitions}</p></div></section>
-  <section class="section" id="journey" aria-labelledby="journey-title"><div class="shell journey-layout"><div class="journey-image"><img src={site.images.executive.path} width={site.images.executive.width} height={site.images.executive.height} alt={copy.images.executive} loading="lazy" decoding="async" /></div><div><div class="section-heading"><p class="section-label">{copy.journey.label}</p><h2 id="journey-title">{copy.journey.title}</h2><p class="section-lead">{copy.journey.lead}</p></div><ol class="timeline">{copy.journey.items.map((item) => <li><time datetime={displayedYear(item.title, item.year)}>{displayedYear(item.title, item.year)}</time><div class="timeline-content"><h3>{item.title}</h3><p>{item.description}</p></div></li>)}</ol></div></div></section>
-  <section class="section" aria-labelledby="method-title"><div class="shell"><div class="section-heading"><p class="section-label">{copy.method.label}</p><h2 id="method-title">{copy.method.title}</h2><p class="section-lead">{copy.method.lead}</p></div><div class="method-grid">{copy.method.steps.map((step) => <article class="method-card"><h3>{step.title}</h3><p>{step.description}</p></article>)}</div></div></section>
-  <section class="section" aria-labelledby="regional-title"><div class="shell regional-grid"><div><p class="section-label">{copy.regional.label}</p><h2 id="regional-title">{copy.regional.title}</h2><p class="section-lead">{copy.regional.body}</p></div><div class="editorial-image"><img src={site.images.global.path} width={site.images.global.width} height={site.images.global.height} alt={copy.images.regional} loading="lazy" decoding="async" /></div></div></section>
-  <section class="section ecosystem-section" aria-labelledby="ecosystem-title"><div class="shell ecosystem-card"><p class="section-label">{ecosystem.label}</p><h2 id="ecosystem-title">{ecosystem.title}</h2><p class="section-lead">{ecosystem.text}</p><div class="ecosystem-links"><a href="https://qctcommerce.com" target="_blank" rel="noopener noreferrer">QCT Commerce ↗</a><a href="https://qctstudio.com" target="_blank" rel="noopener noreferrer">QCT Studio ↗</a><a href="https://mythborn.co" target="_blank" rel="noopener noreferrer">Mythborn ↗</a><a href="https://ctseg.com.tr" target="_blank" rel="noopener noreferrer">CTSEG ↗</a></div></div></section>
-  <section class="section contact-section" id="contact" aria-labelledby="contact-title"><div class="shell"><div class="contact-card"><p class="section-label">{copy.contact.label}</p><h2 id="contact-title">{copy.contact.title}</h2><p class="section-lead">{copy.contact.body}</p><a class="button primary" href={'mailto:' + site.email} aria-label={copy.contact.action + ': ' + site.email}>{site.email}</a></div></div></section>
+
+  <section class="section ctseg-featured" id="ctseg" aria-labelledby="ctseg-title">
+    <div class="shell ctseg-featured__panel" data-reveal="scene">
+      <div class="ctseg-featured__identity" data-ctseg-layer="identity">
+        <img src={site.images.ctseg.path} width={site.images.ctseg.width} height={site.images.ctseg.height} alt="CTSEG" loading="lazy" decoding="async" />
+        <p class="section-label">{localPositioning.ctseg.label}</p>
+        <p class="ctseg-featured__kicker">{localPositioning.ctseg.kicker}</p>
+        <h2 id="ctseg-title">{localPositioning.ctseg.title}</h2>
+        <p class="section-lead">{localPositioning.ctseg.body}</p>
+        <p class="ctseg-featured__founder">{localPositioning.ctseg.founder}</p>
+        <div class="ctseg-featured__actions">
+          <a class="button primary" href={localeCtsegLinks.services}>{localPositioning.ctseg.primary}</a>
+          <a class="button" href={localeCtsegLinks.contact}>{localPositioning.ctseg.secondary}</a>
+        </div>
+      </div>
+      <ul class="ctseg-featured__services" data-ctseg-layer="services">
+        {localPositioning.ctseg.services.map((service) => <li>{service}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section story-stage story-stage--light story-stage--intro" aria-labelledby="intro-title">
+    <div class="shell intro-grid" data-reveal="section">
+      <div class="editorial-image">
+        <img src={site.images.profile.path} srcset={site.images.profile.srcset} sizes="(max-width: 760px) 92vw, (max-width: 1180px) 48vw, 662px" width={site.images.profile.width} height={site.images.profile.height} alt={copy.images.profile} loading="lazy" decoding="async" />
+      </div>
+      <div>
+        <p class="section-label">{copy.intro.label}</p>
+        <h2 id="intro-title">{copy.intro.title}</h2>
+        <p class="section-lead">{copy.intro.body}</p>
+        <div class="focus-list">{copy.intro.areas.map((area) => <span>{area}</span>)}</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section story-stage story-stage--light story-stage--ventures" id="ventures" aria-labelledby="ventures-title">
+    <div class="shell">
+      <div class="section-heading" data-reveal="heading">
+        <p class="section-label">{copy.ventures.label}</p>
+        <h2 id="ventures-title">{copy.ventures.title}</h2>
+        <p class="section-lead">{copy.ventures.lead}</p>
+      </div>
+      <div class="venture-grid">
+        {copy.ventures.items.map((item, index) => item.url ? (
+          <a class:list={['venture-card', { 'has-image': item.image === 'commerce', 'venture-card--ctseg': item.image === 'ctseg' }]} href={item.url} target="_blank" rel="noopener noreferrer" aria-label={item.aria + ', ' + copy.a11y.external} data-reveal="item" style={`--reveal-order:${index}`}>
+            {item.image === 'commerce' && <img src={site.images.commerce.path} width={site.images.commerce.width} height={site.images.commerce.height} alt={copy.images.commerce} loading="lazy" decoding="async" />}
+            {item.image === 'ctseg' && <img class="venture-card__ctseg-logo" src={site.images.ctseg.path} width={site.images.ctseg.width} height={site.images.ctseg.height} alt="" loading="lazy" decoding="async" />}
+            <div class="venture-meta"><span class="tag">{item.status}</span><span class="tag">{item.region}</span></div>
+            <h3>{item.name}</h3>
+            <p>{item.description}</p>
+            <span class="venture-arrow" aria-hidden="true">↗</span>
+          </a>
+        ) : (
+          <article class="venture-card" aria-label={item.aria} data-reveal="item" style={`--reveal-order:${index}`}>
+            <div class="venture-meta"><span class="tag">{item.status}</span><span class="tag">{item.region}</span></div>
+            <h3>{item.name}</h3>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section story-stage story-stage--dark" id="expertise" aria-labelledby="expertise-title">
+    <div class="shell">
+      <div class="section-heading" data-reveal="heading">
+        <p class="section-label">{copy.expertise.label}</p>
+        <h2 id="expertise-title">{copy.expertise.title}</h2>
+        <p class="section-lead">{copy.expertise.lead}</p>
+      </div>
+      <div class="expertise-grid">
+        {copy.expertise.groups.map((group, index) => <article class="expertise-card" data-reveal="item" style={`--reveal-order:${index}`}><h3>{group.title}</h3><ul>{group.items.map((item) => <li>{item}</li>)}</ul></article>)}
+      </div>
+      <p class="definitions">{copy.expertise.definitions}</p>
+    </div>
+  </section>
+
+  <section class="section story-stage story-stage--light" id="journey" aria-labelledby="journey-title">
+    <div class="shell journey-layout" data-reveal="section">
+      <div class="journey-image"><img src={site.images.executive.path} width={site.images.executive.width} height={site.images.executive.height} alt={copy.images.executive} loading="lazy" decoding="async" /></div>
+      <div>
+        <div class="section-heading"><p class="section-label">{copy.journey.label}</p><h2 id="journey-title">{copy.journey.title}</h2><p class="section-lead">{copy.journey.lead}</p></div>
+        <ol class="timeline">{copy.journey.items.map((item) => <li><time datetime={displayedYear(item.title, item.year)}>{displayedYear(item.title, item.year)}</time><div class="timeline-content"><h3>{item.title}</h3><p>{item.description}</p></div></li>)}</ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section story-stage story-stage--dark" aria-labelledby="method-title">
+    <div class="shell">
+      <div class="section-heading" data-reveal="heading"><p class="section-label">{copy.method.label}</p><h2 id="method-title">{copy.method.title}</h2><p class="section-lead">{copy.method.lead}</p></div>
+      <div class="method-grid">{copy.method.steps.map((step, index) => <article class="method-card" data-reveal="item" style={`--reveal-order:${index}`}><h3>{step.title}</h3><p>{step.description}</p></article>)}</div>
+      <div class="operational-systems" data-reveal="section">
+        <p class="section-label">{operationalSystemsLabel[locale] ?? operationalSystemsLabel.en}</p>
+        {operationalSystems.map((system) => (
+          <article>
+            <h3>{system.name}</h3>
+            <p>{system.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section story-stage story-stage--light" aria-labelledby="regional-title">
+    <div class="shell regional-grid" data-reveal="section">
+      <div><p class="section-label">{copy.regional.label}</p><h2 id="regional-title">{copy.regional.title}</h2><p class="section-lead">{copy.regional.body}</p></div>
+      <div class="editorial-image"><img src={site.images.global.path} width={site.images.global.width} height={site.images.global.height} alt={copy.images.regional} loading="lazy" decoding="async" /></div>
+    </div>
+  </section>
+
+  <section class="section contact-section" id="contact" aria-labelledby="contact-title">
+    <div class="shell">
+      <div class="contact-card" data-reveal="section">
+        <p class="section-label">{copy.contact.label}</p>
+        <h2 id="contact-title">{copy.contact.title}</h2>
+        <p class="section-lead">{copy.contact.body}</p>
+        <a class="button primary" href={'mailto:' + site.email} aria-label={copy.contact.action + ': ' + site.email}>{site.email}</a>
+      </div>
+    </div>
+  </section>
 </main>
-<VentureMarquee /><Footer copy={copy} locale={locale} />
+<VentureMarquee />
+<Footer copy={copy} locale={locale} />
 <nav class="legal-links" aria-label="Legal"><a href="/privacy-policy/">{legal.privacy}</a><a href="/kvkk/">{legal.kvkk}</a><a href="/terms/">{legal.terms}</a></nav>
 <FloatingActions locale={locale} />
+
+<script is:inline>
+  (() => {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const revealItems = [...document.querySelectorAll('[data-reveal]')];
+    const expertiseCards = [...document.querySelectorAll('.expertise-card')];
+    const ctsegScene = document.querySelector('.ctseg-featured__panel');
+
+    if (!reducedMotion.matches && 'IntersectionObserver' in window) {
+      document.documentElement.classList.add('motion-ready');
+
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.14, rootMargin: '0px 0px -7% 0px' });
+
+      revealItems.forEach((item) => revealObserver.observe(item));
+
+      const expertiseObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            expertiseCards.forEach((card) => card.classList.remove('is-active'));
+            entry.target.classList.add('is-active');
+          }
+        });
+      }, { threshold: 0.58 });
+
+      expertiseCards.forEach((card) => expertiseObserver.observe(card));
+
+      if (ctsegScene && window.matchMedia('(min-width: 901px)').matches) {
+        let frame = 0;
+        const updateScene = () => {
+          frame = 0;
+          const rect = ctsegScene.getBoundingClientRect();
+          const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
+          ctsegScene.style.setProperty('--scene-progress', progress.toFixed(3));
+        };
+        const requestSceneUpdate = () => {
+          if (!frame) frame = requestAnimationFrame(updateScene);
+        };
+        updateScene();
+        window.addEventListener('scroll', requestSceneUpdate, { passive: true });
+        window.addEventListener('resize', requestSceneUpdate);
+      }
+    } else {
+      revealItems.forEach((item) => item.classList.add('is-visible'));
+    }
+  })();
+</script>
+
 <style>
-  .ecosystem-card { padding: clamp(2rem, 5vw, 4rem); border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); }
-  .ecosystem-links { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
-  .ecosystem-links a { min-height: 44px; display: inline-flex; align-items: center; padding: .7rem 1rem; border: 1px solid var(--line-strong); border-radius: 999px; }
-  .legal-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem 1.5rem; padding: 1.25rem 1.5rem 2rem; background: #06111f; border-top: 1px solid rgba(255,255,255,.1); }
+  .story-stage {
+    position: relative;
+    isolation: isolate;
+  }
+  .story-stage--light {
+    --text: #181613;
+    --text-primary: #181613;
+    --text-secondary: #625c54;
+    --muted: #625c54;
+    --line: #c9bfb2;
+    --line-strong: #a99d8f;
+    --panel: #f3eee6;
+    --panel-soft: #ddd4c7;
+    --surface-elevated: #f3eee6;
+    --border: #c9bfb2;
+    --accent-soft: #a65332;
+    color: var(--text);
+    background: var(--bg-alt);
+    border-color: var(--line);
+  }
+  .story-stage--light::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(90deg, transparent calc(50% - .5px), rgba(26, 29, 29, .06) 50%, transparent calc(50% + .5px));
+    background-size: min(100% - 3rem, 1180px) 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .story-stage--light .section-label { color: var(--accent); }
+  .story-stage--light .focus-list span {
+    border-radius: 0;
+    background: transparent;
+  }
+  .story-stage--light .editorial-image {
+    background: var(--surface);
+    border-color: var(--line);
+  }
+  .story-stage--dark {
+    --text: #f3eee6;
+    --text-primary: #f3eee6;
+    --text-secondary: #cec5ba;
+    --muted: #cec5ba;
+    --line: #5b5047;
+    --line-strong: #75675b;
+    --panel: #2b2520;
+    --panel-soft: #293029;
+    --accent-soft: #d78263;
+    color: var(--text);
+    background: var(--surface-dark);
+  }
+  .story-stage--intro { padding-block: clamp(6rem, 10vw, 10rem); }
+  .story-stage--ventures {
+    padding-block: clamp(4rem, 6vw, 6rem);
+    background: var(--bg);
+  }
+
+  .motion-ready [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+    transition:
+      opacity 680ms cubic-bezier(.2, .75, .25, 1),
+      transform 680ms cubic-bezier(.2, .75, .25, 1);
+    transition-delay: calc(var(--reveal-order, 0) * 70ms);
+  }
+  .motion-ready [data-reveal="hero"] { transform: translate3d(0, 18px, 0); }
+  .motion-ready [data-reveal="hero-media"] {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0) scale(.985);
+    transition-delay: 120ms;
+  }
+  .motion-ready [data-reveal].is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  .ctseg-featured {
+    --text: #f3eee6;
+    --text-primary: #f3eee6;
+    --text-secondary: #d3c9bd;
+    --muted: #d3c9bd;
+    --line: #596157;
+    --line-strong: #71786d;
+    --panel: #293029;
+    --trust: #c9d0c4;
+    --accent-soft: #d78263;
+    padding-block: clamp(3rem, 5vw, 4.5rem);
+    color: var(--text);
+    background: var(--surface-olive);
+  }
+  .ctseg-featured__panel {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(280px, .7fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .ctseg-featured__panel::after {
+    display: none;
+  }
+  .ctseg-featured__identity > img {
+    width: clamp(145px, 16vw, 205px);
+    height: auto;
+    margin-bottom: 1.5rem;
+    object-fit: contain;
+    object-position: left center;
+  }
+  .ctseg-featured__identity,
+  .ctseg-featured__services {
+    transition: transform 180ms linear;
+    will-change: transform;
+  }
+  .ctseg-featured__identity {
+    transform: translate3d(0, calc(var(--scene-progress, .5) * -12px), 0);
+  }
+  .ctseg-featured__services {
+    transform: translate3d(0, calc(var(--scene-progress, .5) * 9px), 0);
+  }
+  .ctseg-featured__kicker {
+    margin: 0 0 .8rem;
+    color: var(--trust);
+    font-size: .9rem;
+    font-weight: 750;
+  }
+  .ctseg-featured h2 { max-width: 700px; font-size: clamp(2.35rem, 3.8vw, 3.75rem); line-height: var(--leading-heading); }
+  .ctseg-featured__founder {
+    max-width: 740px;
+    margin: 1rem 0 0;
+    padding-left: 1rem;
+    border-left: 2px solid var(--accent);
+    color: var(--text-secondary);
+    line-height: 1.75;
+  }
+  .ctseg-featured__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
+  .ctseg-featured__actions .button:not(.primary) { border-color: #8b8175; }
+  .ctseg-featured__services {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: center;
+    column-gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+  .ctseg-featured__services li {
+    position: relative;
+    padding: 1rem 0 1rem 1.3rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 650;
+    line-height: 1.6;
+  }
+  .ctseg-featured__services li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 1.55rem;
+    width: .45rem;
+    height: .45rem;
+    border-radius: 50%;
+    background: var(--accent-soft);
+  }
+  .expertise-card.is-active {
+    border-color: color-mix(in srgb, var(--accent) 72%, var(--line));
+    background: color-mix(in srgb, var(--panel) 88%, var(--accent-muted));
+  }
+  .hero {
+    width: min(1340px, calc(100% - 3rem));
+    grid-template-columns: minmax(0, 1.35fr) minmax(330px, .65fr);
+    color: var(--text);
+    background: var(--bg);
+  }
+  .hero-description { color: var(--text-muted); }
+  .hero h1 { max-width: 22ch; font-size: clamp(3rem, 4.7vw, 4.85rem); line-height: var(--leading-display); }
+  .hero-media { min-height: 620px; }
+  .hero-media::before {
+    inset: 0;
+    border-color: #b9b4a8;
+    border-radius: 9px;
+    background: #d7dbd1;
+  }
+  .hero-media img {
+    inset: 10px;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    border-radius: 6px;
+  }
+  .focus-list {
+    border-top: 1px solid var(--line);
+  }
+  .story-stage--light .focus-list span {
+    padding-inline: 0;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    font-size: .96rem;
+  }
+  #ventures .section-heading { margin-bottom: clamp(2rem, 4vw, 3.25rem); }
+  #ventures .venture-card,
+  #ventures .venture-card.has-image { padding-block: clamp(1.25rem, 2vw, 1.75rem); }
+  #ventures .venture-card p,
+  #ventures .venture-card.has-image p { color: #585149; }
+  .expertise-card,
+  .method-card {
+    border-radius: 6px;
+    background: transparent;
+    box-shadow: none;
+  }
+  .expertise-card::before {
+    background: var(--accent);
+  }
+  .expertise-card::after { display: none; }
+  .expertise-card:hover {
+    transform: none;
+    border-color: var(--accent);
+    box-shadow: none;
+  }
+  .expertise-card li {
+    color: var(--text-secondary);
+    font-size: .96rem;
+    line-height: 1.55;
+  }
+  .expertise-card li::before { box-shadow: none; }
+  .definitions {
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: .88rem;
+  }
+  .timeline p {
+    color: var(--muted);
+    font-size: .98rem;
+    line-height: 1.65;
+  }
+  #journey { padding-block: clamp(3.5rem, 5vw, 5rem); }
+  #journey .section-heading { margin-bottom: 1.5rem; }
+  #journey .journey-layout { gap: clamp(2rem, 4vw, 3.5rem); }
+  #journey .journey-image img { max-height: 520px; border-radius: 7px; }
+  #journey .timeline-content { padding-bottom: 1rem; }
+  #journey .timeline h3 { margin-bottom: .3rem; font-size: 1.14rem; }
+  .method-card p { color: var(--text-secondary); font-size: .96rem; }
+  .operational-systems {
+    margin-top: clamp(3rem, 6vw, 5rem);
+    border-top: 1px solid var(--line);
+  }
+  .operational-systems > .section-label { padding-top: 1.5rem; }
+  .operational-systems article {
+    display: grid;
+    grid-template-columns: minmax(220px, .7fr) minmax(0, 1.3fr);
+    gap: clamp(1rem, 4vw, 4rem);
+    padding: 1.4rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .operational-systems h3,
+  .operational-systems p { margin: 0; }
+  .operational-systems p { color: var(--text-secondary); line-height: 1.7; }
+  .contact-section {
+    --text: #f3eee6;
+    --muted: #d2c8bc;
+    --line: #5b6259;
+    --line-strong: #777e73;
+    color: var(--text);
+    background: var(--surface-olive);
+  }
+  .contact-card {
+    max-width: 980px;
+    padding: clamp(3rem, 7vw, 6rem) 0;
+    border: 0;
+    border-top: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+    border-radius: 0;
+    background: transparent;
+  }
+  .contact-card .section-lead { color: var(--muted); }
+  .legal-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem 1.5rem; padding: 1.25rem 1.5rem 2rem; background: var(--surface-dark); border-top: 1px solid #51483f; }
+  .legal-links { --text: #f3eee6; --muted: #c9bfb2; }
   .legal-links a { min-height: 44px; display: inline-flex; align-items: center; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; }
   .legal-links a:hover { color: var(--text); }
+  @media (min-width: 1600px) {
+    .hero {
+      width: min(1480px, calc(100% - 4rem));
+      grid-template-columns: minmax(0, 1.45fr) minmax(360px, .55fr);
+    }
+    .hero h1 { max-width: 24ch; }
+  }
+  @media (max-width: 900px) {
+    .hero { width: min(100% - 2rem, var(--max)); grid-template-columns: 1fr; }
+    .hero-media { min-height: 520px; }
+    .ctseg-featured__panel { grid-template-columns: 1fr; }
+    .ctseg-featured__identity,
+    .ctseg-featured__services { transform: none; will-change: auto; }
+    .ctseg-featured__services { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .hero { width: min(100% - 1.25rem, var(--max)); }
+    .hero h1 { font-size: clamp(2.55rem, 11vw, 3.45rem); line-height: var(--leading-display); letter-spacing: var(--tracking-display); }
+    .hero-media { min-height: 420px; }
+    .ctseg-featured__panel { padding: 0; border-radius: 0; }
+    .ctseg-featured__identity > img { margin-bottom: 1.5rem; }
+    .ctseg-featured__actions { flex-direction: column; }
+    .ctseg-featured__actions .button { width: 100%; }
+    .operational-systems article { grid-template-columns: 1fr; gap: .55rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal],
+    .ctseg-featured__identity,
+    .ctseg-featured__services {
+      opacity: 1;
+      transform: none;
+      transition: none;
+      will-change: auto;
+    }
+  }
 </style>

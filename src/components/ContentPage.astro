@@ -82,38 +82,59 @@ const homePath = `/${locale}/`;
     </div>
   </main>
 
-  <Footer copy={copy} />
+  <Footer copy={copy} locale={locale} />
   <FloatingActions locale={locale as Locale} />
 </BaseLayout>
 
 <style>
-  .content-page { min-height: 70vh; }
-  .content-shell { width: min(900px, calc(100% - 3rem)); margin-inline: auto; }
-  .content-hero { padding: clamp(5.5rem, 10vw, 9rem) 0 clamp(3.5rem, 7vw, 6rem); border-bottom: 1px solid var(--line); background: radial-gradient(circle at 78% 16%, rgba(226, 118, 98, .16), transparent 24rem), linear-gradient(180deg, rgba(16, 28, 43, .72), rgba(9, 17, 29, .1)); }
+  .content-page { min-height: 70vh; background: var(--bg-alt); }
+  .content-shell { width: min(840px, calc(100% - 3rem)); margin-inline: auto; }
+  .content-hero .content-shell { width: min(1080px, calc(100% - 3rem)); }
+  .content-hero {
+    padding: clamp(4.5rem, 8vw, 7.25rem) 0 clamp(3rem, 5vw, 4.5rem);
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg) 72%, #d7dbd1);
+  }
   .content-breadcrumb { display: flex; gap: .55rem; align-items: center; margin-bottom: 2rem; color: var(--muted); font-size: .82rem; }
   .content-breadcrumb a:hover { color: var(--text); }
-  .content-hero h1 { max-width: 850px; margin: .55rem 0 1.4rem; font-size: clamp(2.8rem, 7vw, 5.8rem); line-height: .98; letter-spacing: -.055em; }
+  .content-hero h1 { max-width: 1080px; margin: .65rem 0 1.65rem; font-size: clamp(2.8rem, 6.3vw, 5.45rem); line-height: var(--leading-title); letter-spacing: var(--tracking-title); }
   .content-lead { max-width: 760px; margin: 0; color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.35rem); line-height: 1.75; }
   .article-meta { display: flex; flex-wrap: wrap; gap: .7rem 1.2rem; margin-top: 2rem; color: var(--muted); font-size: .82rem; }
   .content-body { padding-block: clamp(3.5rem, 7vw, 6rem); }
-  .content-body :global(h2) { margin: 4rem 0 1.1rem; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.08; letter-spacing: -.035em; }
+  .content-body :global(h2) { margin: 4rem 0 1.1rem; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.08; letter-spacing: var(--tracking-heading); }
   .content-body :global(h2:first-child) { margin-top: 0; }
   .content-body :global(h3) { margin: 2.2rem 0 .75rem; font-size: 1.35rem; }
   .content-body :global(p), .content-body :global(li) { color: var(--muted); font-size: 1.02rem; line-height: 1.8; }
   .content-body :global(strong) { color: var(--text); }
   .content-body :global(ul), .content-body :global(ol) { padding-left: 1.35rem; }
-  .content-body :global(a) { color: var(--accent-soft); text-decoration: underline; text-underline-offset: .2em; }
-  .content-body :global(.answer-block) { margin: 2.2rem 0; padding: 1.5rem; border: 1px solid var(--line-strong); border-radius: 18px; background: rgba(20, 34, 53, .72); }
-  .content-body :global(.answer-block p) { margin: 0; color: var(--text); font-size: 1.05rem; }
+  .content-body :global(a) { color: var(--accent); text-decoration: underline; text-underline-offset: .2em; }
+  .content-body :global(.answer-block) {
+    margin: 2.2rem 0;
+    padding: clamp(1.5rem, 4vw, 2.25rem);
+    border: 1px solid #5b6259;
+    border-radius: 7px;
+    background: var(--surface-olive);
+  }
+  .content-body :global(.answer-block p) { margin: 0; color: #f3eee6; font-size: 1.05rem; }
+  .content-body :global(.answer-block strong) { color: #fff; }
   .content-body :global(.content-grid) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 2rem 0; }
-  .content-body :global(.content-card) { padding: 1.5rem; border: 1px solid var(--line); border-radius: 18px; background: rgba(16, 28, 43, .72); }
+  .content-body :global(.content-card) { padding: 1.5rem 0; border: 0; border-top: 1px solid var(--border); border-radius: 0; background: transparent; }
   .content-body :global(.content-card h3) { margin-top: 0; }
   .content-body :global(.content-card p) { margin-bottom: 0; font-size: .94rem; }
-  .content-body :global(.faq-list) { display: grid; gap: .8rem; margin-top: 2rem; }
-  .content-body :global(.faq-list details) { padding: 1.15rem 1.25rem; border: 1px solid var(--line); border-radius: 14px; background: rgba(16, 28, 43, .55); }
+  .content-body :global(.faq-list) { display: grid; gap: 0; margin-top: 2rem; border-top: 1px solid var(--border); }
+  .content-body :global(.faq-list details) { padding: 1.15rem 0; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; background: transparent; }
   .content-body :global(.faq-list summary) { color: var(--text); font-weight: 750; cursor: pointer; }
   .content-body :global(.faq-list details p) { margin-bottom: 0; }
-  .content-body :global(.content-cta) { margin-top: 4rem; padding: clamp(1.6rem, 4vw, 2.5rem); border: 1px solid rgba(226, 118, 98, .48); border-radius: 22px; background: radial-gradient(circle at 90% 0%, rgba(226, 118, 98, .16), transparent 16rem), var(--panel); }
+  .content-body :global(.content-cta) {
+    margin-top: 4rem;
+    padding: clamp(2rem, 5vw, 3.5rem);
+    border: 1px solid #5b6259;
+    border-radius: 7px;
+    color: #f3eee6;
+    background: var(--surface-olive);
+  }
   .content-body :global(.content-cta h2) { margin-top: 0; }
-  @media (max-width: 680px) { .content-shell { width: min(900px, calc(100% - 2rem)); } .content-body :global(.content-grid) { grid-template-columns: 1fr; } }
+  .content-body :global(.content-cta p) { color: #d2c8bc; }
+  .content-body :global(.content-cta a) { color: #d78263; }
+  @media (max-width: 680px) { .content-shell { width: min(900px, calc(100% - 2rem)); } .content-hero .content-shell { width: min(1080px, calc(100% - 1.25rem)); } .content-body :global(.content-grid) { grid-template-columns: 1fr; } }
 </style>

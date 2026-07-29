@@ -45,8 +45,8 @@ export type SiteContent = {
 export const content = {
   tr: {
     seo: {
-      title: 'Teyfik Gökdemir | Founder, Dijital Ticaret ve Büyüme Operatörü',
-      description: 'Teyfik Gökdemir; Türkiye, Balkanlar ve uluslararası pazarlar için e-ticaret, dijital büyüme, operasyon ve AI destekli iş sistemleri geliştirir.',
+      title: 'Teyfik Gökdemir | Uluslararası Ticaret, Stratejik Tedarik ve CTSEG',
+      description: 'CTSEG kurucusu Teyfik Gökdemir; Türkiye, Balkanlar ve uluslararası pazarlar için stratejik tedarik, tedarikçi doğrulama ve ticari operasyon sistemleri kurar.',
     },
     a11y: { skip: 'Ana içeriğe geç', language: 'Dil seçin', menuOpen: 'Menüyü aç', menuClose: 'Menüyü kapat', external: 'yeni sekmede açılır' },
     nav: { ventures: 'Girişimler', expertise: 'Uzmanlık', journey: 'Yolculuk', contact: 'İletişim' },
@@ -134,8 +134,8 @@ export const content = {
   },
   en: {
     seo: {
-      title: 'Teyfik Gökdemir | Founder, Digital Commerce & Growth Operator',
-      description: 'Teyfik Gökdemir builds digital commerce, growth, operations and AI-assisted business systems for Türkiye, the Balkans and international markets.',
+      title: 'Teyfik Gökdemir | International Trade, Strategic Sourcing & CTSEG',
+      description: 'CTSEG founder Teyfik Gökdemir builds strategic sourcing, supplier verification and cross-border commercial operating systems for international markets.',
     },
     a11y: { skip: 'Skip to main content', language: 'Choose language', menuOpen: 'Open menu', menuClose: 'Close menu', external: 'opens in a new tab' },
     nav: { ventures: 'Ventures', expertise: 'Expertise', journey: 'Journey', contact: 'Contact' },
@@ -223,8 +223,8 @@ export const content = {
   },
   mk: {
     seo: {
-      title: 'Тејфик Ѓокдемир | Основач, дигитална трговија и раст',
-      description: 'Тејфик Ѓокдемир развива е-трговија, дигитален раст, операции и деловни системи поддржани со AI за Турција, Балканот и меѓународните пазари.',
+      title: 'Тејфик Ѓокдемир | Меѓународна трговија, стратешко снабдување и CTSEG',
+      description: 'Основачот на CTSEG, Тејфик Ѓокдемир, гради системи за стратешко снабдување, проверка на добавувачи и прекугранични комерцијални операции.',
     },
     a11y: { skip: 'Премини на главната содржина', language: 'Избери јазик', menuOpen: 'Отвори мени', menuClose: 'Затвори мени', external: 'се отвора во нов таб' },
     nav: { ventures: 'Потфати', expertise: 'Експертиза', journey: 'Патување', contact: 'Контакт' },
@@ -312,8 +312,8 @@ export const content = {
   },
   sr: {
     seo: {
-      title: 'Teyfik Gökdemir | Osnivač, digitalna trgovina i rast',
-      description: 'Teyfik Gökdemir razvija e-trgovinu, digitalni rast, operacije i poslovne sisteme podržane veštačkom inteligencijom za Tursku, Balkan i međunarodna tržišta.',
+      title: 'Teyfik Gökdemir | Međunarodna trgovina, strateška nabavka i CTSEG',
+      description: 'Osnivač CTSEG-a Teyfik Gökdemir gradi sisteme strateške nabavke, provere dobavljača i prekograničnih komercijalnih operacija.',
     },
     a11y: { skip: 'Pređi na glavni sadržaj', language: 'Izaberi jezik', menuOpen: 'Otvori meni', menuClose: 'Zatvori meni', external: 'otvara se u novom tabu' },
     nav: { ventures: 'Poduhvati', expertise: 'Ekspertiza', journey: 'Put', contact: 'Kontakt' },
@@ -401,8 +401,8 @@ export const content = {
   },
   sq: {
     seo: {
-      title: 'Teyfik Gökdemir | Themelues, tregti digjitale dhe rritje',
-      description: 'Teyfik Gökdemir zhvillon tregti digjitale, rritje, operacione dhe sisteme biznesi të mbështetura nga AI për Turqinë, Ballkanin dhe tregjet ndërkombëtare.',
+      title: 'Teyfik Gökdemir | Tregti ndërkombëtare, furnizim strategjik dhe CTSEG',
+      description: 'Themeluesi i CTSEG, Teyfik Gökdemir, ndërton sisteme për furnizim strategjik, verifikim furnitorësh dhe operacione tregtare ndërkufitare.',
     },
     a11y: { skip: 'Kalo te përmbajtja kryesore', language: 'Zgjidh gjuhën', menuOpen: 'Hap menynë', menuClose: 'Mbyll menynë', external: 'hapet në një skedë të re' },
     nav: { ventures: 'Sipërmarrjet', expertise: 'Ekspertiza', journey: 'Rrugëtimi', contact: 'Kontakti' },

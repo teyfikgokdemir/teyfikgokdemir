@@ -64,6 +64,128 @@ const whatsappUrl =
   </a>
 </div>
 
+<style>
+  .floating-actions {
+    position: fixed;
+    z-index: 45;
+    inset-inline-end: max(
+      clamp(1rem, 2.5vw, 2rem),
+      env(safe-area-inset-right),
+      env(safe-area-inset-left)
+    );
+    bottom: max(clamp(1rem, 2.5vw, 2rem), env(safe-area-inset-bottom));
+    display: grid;
+    gap: .45rem;
+    opacity: 1;
+    transition: opacity .2s ease;
+  }
+
+  .floating-action {
+    box-sizing: border-box;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1px solid rgba(242, 170, 143, .42);
+    border-radius: 50%;
+    background: rgba(33, 28, 24, .95);
+    color: var(--text, #f3eee6);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .16);
+    font: inherit;
+    line-height: 1;
+    text-decoration: none;
+    appearance: none;
+    cursor: pointer;
+    transition:
+      transform .2s ease,
+      border-color .2s ease,
+      background-color .2s ease,
+      opacity .2s ease;
+  }
+
+  .floating-action:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-soft, #d78263);
+    background: var(--panel-soft, #302a25);
+  }
+
+  .floating-action:focus-visible {
+    outline: 3px solid var(--focus, #bd5e3c);
+    outline-offset: 3px;
+  }
+
+  .whatsapp-action {
+    border-color: #25d366;
+    background: #25d366;
+    color: #fff;
+    font-size: .7rem;
+    font-weight: 900;
+    letter-spacing: .08em;
+  }
+
+  .whatsapp-action:hover {
+    border-color: #20bd5a;
+    background: #20bd5a;
+  }
+
+  .whatsapp-action svg {
+    display: block;
+  }
+
+  .back-to-top {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(8px);
+  }
+
+  .back-to-top.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .safe-floating-actions.is-scrolling {
+    opacity: .28;
+  }
+
+  .safe-floating-actions:hover,
+  .safe-floating-actions:focus-within {
+    opacity: 1;
+  }
+
+  @media (max-width: 640px) {
+    .floating-actions {
+      inset-inline-end: max(
+        .9rem,
+        env(safe-area-inset-right),
+        env(safe-area-inset-left)
+      );
+      bottom: max(.9rem, env(safe-area-inset-bottom));
+    }
+
+    .floating-action {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .floating-actions,
+    .floating-action {
+      transition: none;
+    }
+
+    .floating-action:hover,
+    .back-to-top,
+    .back-to-top.is-visible {
+      transform: none;
+    }
+  }
+</style>
+
 <script is:inline>
   const floatingActions = document.querySelector('.safe-floating-actions');
   const backToTop = document.querySelector('.back-to-top');

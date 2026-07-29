@@ -3,55 +3,67 @@ import { localeNames, locales, type Locale } from '../i18n/locales';
 import type { SiteContent } from '../i18n/content';
 
 interface Props {
-  locale: Locale;
+  locale: Locale | 'fa';
   copy: SiteContent;
   homePath?: string;
-  languageUrls?: Partial<Record<Locale, string>>;
+  languageUrls?: Partial<Record<Locale | 'fa', string>>;
 }
 
 const { locale, copy, homePath, languageUrls } = Astro.props;
 
-const localeUrl = (item: Locale) => `/${item}/`;
+const localeUrl = (item: Locale | 'fa') => `/${item}/`;
 const currentHomePath = homePath ?? localeUrl(locale);
 const sectionUrl = (section: string) => `${currentHomePath}#${section}`;
 
-const aiVisibilityUrls: Record<Locale, string> = {
+const aiVisibilityUrls: Record<Locale | 'fa', string> = {
   en: '/ai-search-visibility/',
   tr: '/tr/yapay-zeka-arama-gorunurlugu/',
   sq: '/sq/dukshmeria-ne-kerkimin-ai/',
   mk: '/mk/vidlivost-vo-ai-prebaruvanje/',
   sr: '/sr/vidljivost-u-ai-pretrazi/',
+  fa: '/fa/مشاهده-پذیری-در-جستجوی-هوش-مصنوعی/',
 };
 
-const blogUrls: Record<Locale, string> = {
+const blogUrls: Record<Locale | 'fa', string> = {
   en: '/blog/',
   tr: '/tr/blog/',
   sq: '/sq/blog/',
   mk: '/mk/blog/',
   sr: '/sr/blog/',
+  fa: '/fa/blog/',
 };
 
 const aiVisibilityUrl = aiVisibilityUrls[locale];
 const blogUrl = blogUrls[locale];
 
-const aiVisibilityLabels: Record<Locale, string> = {
+const aiVisibilityLabels: Record<Locale | 'fa', string> = {
   en: 'AI Visibility',
   tr: 'AI Görünürlüğü',
   sq: 'Dukshmëri AI',
   mk: 'АИ Видливост',
   sr: 'AI Vidljivost',
+  fa: 'دیده‌شدن در هوش مصنوعی',
 };
 
-const blogLabels: Record<Locale, string> = {
+const blogLabels: Record<Locale | 'fa', string> = {
   en: 'Insights',
   tr: 'Blog',
   sq: 'Artikuj',
   mk: 'Блог',
   sr: 'Blog',
+  fa: 'بینش‌ها',
 };
 
 const aiVisibilityLabel = aiVisibilityLabels[locale];
 const blogLabel = blogLabels[locale];
+const navLabels = locale === 'fa'
+  ? {
+      ventures: 'ساختارها',
+      expertise: 'تخصص',
+      journey: 'مسیر',
+      contact: 'تماس',
+    }
+  : copy.nav;
 ---
 <header class="site-header">
   <a class="brand" href={localeUrl(locale)} aria-label="Teyfik Gökdemir">
@@ -80,13 +92,13 @@ const blogLabel = blogLabels[locale];
   </button>
 
   <div class="header-panel" id="site-navigation">
-    <nav aria-label={copy.nav.ventures}>
-      <a href={sectionUrl('ventures')}>{copy.nav.ventures}</a>
-      <a href={sectionUrl('expertise')}>{copy.nav.expertise}</a>
+    <nav aria-label={navLabels.ventures}>
+      <a href={sectionUrl('ventures')}>{navLabels.ventures}</a>
+      <a href={sectionUrl('expertise')}>{navLabels.expertise}</a>
       <a href={aiVisibilityUrl}>{aiVisibilityLabel}</a>
       <a href={blogUrl}>{blogLabel}</a>
-      <a href={sectionUrl('journey')}>{copy.nav.journey}</a>
-      <a href={sectionUrl('contact')}>{copy.nav.contact}</a>
+      <a href={sectionUrl('journey')}>{navLabels.journey}</a>
+      <a href={sectionUrl('contact')}>{navLabels.contact}</a>
     </nav>
 
     <div class="language-switcher" aria-label={copy.a11y.language}>
@@ -101,7 +113,7 @@ const blogLabel = blogLabels[locale];
           {item.toUpperCase()}
         </a>
       ))}
-      <a href="/fa/" lang="fa" hreflang="fa" title="فارسی">FA</a>
+      <a href="/fa/" lang="fa" hreflang="fa" title="فارسی" aria-current={locale === 'fa' ? 'page' : undefined}>FA</a>
     </div>
   </div>
 </header>
