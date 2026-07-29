@@ -321,6 +321,7 @@ const jsonLd = {
   .header-panel { display: flex; align-items: center; gap: 1.5rem; }
   .header-panel nav { display: flex; align-items: center; gap: 1.25rem; }
   .header-panel nav a {
+    position: relative;
     display: inline-flex;
     align-items: center;
     min-height: 44px;
@@ -328,7 +329,19 @@ const jsonLd = {
     font-size: .9rem;
     font-weight: 650;
   }
+  .header-panel nav a::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 .35rem;
+    height: 1px;
+    background: var(--accent-soft);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 220ms ease;
+  }
   .header-panel nav a:hover { color: var(--text); }
+  .header-panel nav a:hover::after,
+  .header-panel nav a:focus-visible::after { transform: scaleX(1); }
   .language-switcher {
     display: flex;
     align-items: center;
@@ -797,17 +810,31 @@ const jsonLd = {
       top: calc(100% + 1px);
       left: 1rem;
       right: 1rem;
-      display: none;
+      display: grid;
       align-items: stretch;
       padding: 1rem;
       border: 1px solid var(--line);
       border-radius: 0 0 var(--radius) var(--radius);
       background: rgba(9, 17, 29, .98);
       box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, .35);
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate3d(0, -12px, 0);
+      transition: opacity 240ms ease, transform 240ms ease, visibility 240ms;
     }
-    .header-panel.is-open { display: grid; }
+    .header-panel.is-open {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate3d(0, 0, 0);
+    }
     .header-panel nav { display: grid; }
     .header-panel nav a { min-height: 48px; padding-inline: .5rem; }
+    .menu-toggle span { transition: transform 220ms ease, opacity 180ms ease; }
+    .menu-toggle[aria-expanded="true"] span:first-child { transform: translateY(7px) rotate(45deg); }
+    .menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .menu-toggle[aria-expanded="true"] span:last-child { transform: translateY(-7px) rotate(-45deg); }
     .language-switcher { width: 100%; justify-content: space-between; }
     .language-switcher a { min-width: 44px; min-height: 44px; }
     .hero { min-height: auto; grid-template-columns: 1fr; padding-top: 3.5rem; }

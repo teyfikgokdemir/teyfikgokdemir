@@ -391,14 +391,6 @@ const positioning = {
 const localPositioning = positioning[locale] ?? positioning.en;
 const localeCtsegLinks = ctsegLinks[locale] ?? ctsegLinks.en;
 
-const ctsegVenture = {
-  tr: { name: 'CTSEG', description: 'Stratejik tedarik, tedarikçi bulma ve doğrulama, uluslararası ticaret danışmanlığı ve ticari operasyon koordinasyonu için ana ticari şirket.', status: 'Ana ticari şirket', region: 'Türkiye · Uluslararası', url: localeCtsegLinks.home, aria: 'CTSEG stratejik tedarik hizmetlerini incele', image: 'ctseg' },
-  en: { name: 'CTSEG', description: 'The principal commercial company for strategic sourcing, supplier verification, international trade advisory and operational coordination.', status: 'Principal company', region: 'Türkiye · International', url: localeCtsegLinks.home, aria: 'Explore CTSEG strategic sourcing services', image: 'ctseg' },
-  mk: { name: 'CTSEG', description: 'Главната трговска компанија за стратешко снабдување, проверка на добавувачи, меѓународно советување и оперативна координација.', status: 'Главна компанија', region: 'Турција · Меѓународно', url: localeCtsegLinks.home, aria: 'Истражете ги услугите за стратешко снабдување на CTSEG', image: 'ctseg' },
-  sr: { name: 'CTSEG', description: 'Glavna komercijalna kompanija za stratešku nabavku, proveru dobavljača, međunarodno savetovanje i koordinaciju operacija.', status: 'Glavna kompanija', region: 'Turska · Međunarodno', url: localeCtsegLinks.home, aria: 'Istražite CTSEG usluge strateške nabavke', image: 'ctseg' },
-  sq: { name: 'CTSEG', description: 'Kompania kryesore tregtare për furnizim strategjik, verifikim furnitorësh, këshillim ndërkombëtar dhe koordinim operacionesh.', status: 'Kompania kryesore', region: 'Turqi · Ndërkombëtare', url: localeCtsegLinks.home, aria: 'Eksploroni shërbimet e furnizimit strategjik të CTSEG', image: 'ctseg' },
-} as const;
-
 const copy = {
   ...baseCopy,
   hero: { ...baseCopy.hero, ...localPositioning.hero },
@@ -406,7 +398,7 @@ const copy = {
   ventures: {
     ...baseCopy.ventures,
     ...localPositioning.ventures,
-    items: [ctsegVenture[locale] ?? ctsegVenture.en, ...baseCopy.ventures.items],
+    items: baseCopy.ventures.items,
   },
   expertise: {
     ...baseCopy.expertise,
@@ -438,7 +430,7 @@ const displayedYear = (title: string, year: string) =>
 <Header locale={locale} copy={copy} homePath={`/${locale}/`} />
 <main id="main-content">
   <section class="hero shell" id="top" aria-labelledby="hero-title">
-    <div class="hero-copy">
+    <div class="hero-copy" data-reveal="hero">
       <p class="section-label">{copy.hero.eyebrow}</p>
       <h1 id="hero-title">{copy.hero.title}</h1>
       <p class="hero-description">{copy.hero.description}</p>
@@ -448,14 +440,14 @@ const displayedYear = (title: string, year: string) =>
       </div>
       <p class="hero-summary">{copy.hero.summary}</p>
     </div>
-    <div class="hero-media">
+    <div class="hero-media" data-reveal="hero-media">
       <img src={site.images.hero.path} srcset={site.images.hero.srcset} sizes="(max-width: 760px) 92vw, (max-width: 1180px) 48vw, 665px" width={site.images.hero.width} height={site.images.hero.height} alt={copy.images.hero} loading="eager" decoding="async" fetchpriority="high" />
     </div>
   </section>
 
   <section class="section ctseg-featured" id="ctseg" aria-labelledby="ctseg-title">
-    <div class="shell ctseg-featured__panel">
-      <div class="ctseg-featured__identity">
+    <div class="shell ctseg-featured__panel" data-reveal="scene">
+      <div class="ctseg-featured__identity" data-ctseg-layer="identity">
         <img src={site.images.ctseg.path} width={site.images.ctseg.width} height={site.images.ctseg.height} alt="CTSEG" loading="lazy" decoding="async" />
         <p class="section-label">{localPositioning.ctseg.label}</p>
         <p class="ctseg-featured__kicker">{localPositioning.ctseg.kicker}</p>
@@ -467,14 +459,14 @@ const displayedYear = (title: string, year: string) =>
           <a class="button" href={localeCtsegLinks.contact}>{localPositioning.ctseg.secondary}</a>
         </div>
       </div>
-      <ul class="ctseg-featured__services">
+      <ul class="ctseg-featured__services" data-ctseg-layer="services">
         {localPositioning.ctseg.services.map((service) => <li>{service}</li>)}
       </ul>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="intro-title">
-    <div class="shell intro-grid">
+  <section class="section story-stage story-stage--light story-stage--intro" aria-labelledby="intro-title">
+    <div class="shell intro-grid" data-reveal="section">
       <div class="editorial-image">
         <img src={site.images.profile.path} srcset={site.images.profile.srcset} sizes="(max-width: 760px) 92vw, (max-width: 1180px) 48vw, 662px" width={site.images.profile.width} height={site.images.profile.height} alt={copy.images.profile} loading="lazy" decoding="async" />
       </div>
@@ -487,16 +479,16 @@ const displayedYear = (title: string, year: string) =>
     </div>
   </section>
 
-  <section class="section" id="ventures" aria-labelledby="ventures-title">
+  <section class="section story-stage story-stage--light story-stage--ventures" id="ventures" aria-labelledby="ventures-title">
     <div class="shell">
-      <div class="section-heading">
+      <div class="section-heading" data-reveal="heading">
         <p class="section-label">{copy.ventures.label}</p>
         <h2 id="ventures-title">{copy.ventures.title}</h2>
         <p class="section-lead">{copy.ventures.lead}</p>
       </div>
       <div class="venture-grid">
-        {copy.ventures.items.map((item) => item.url ? (
-          <a class:list={['venture-card', { 'has-image': item.image === 'commerce', 'venture-card--ctseg': item.image === 'ctseg' }]} href={item.url} target="_blank" rel="noopener noreferrer" aria-label={item.aria + ', ' + copy.a11y.external}>
+        {copy.ventures.items.map((item, index) => item.url ? (
+          <a class:list={['venture-card', { 'has-image': item.image === 'commerce', 'venture-card--ctseg': item.image === 'ctseg' }]} href={item.url} target="_blank" rel="noopener noreferrer" aria-label={item.aria + ', ' + copy.a11y.external} data-reveal="item" style={`--reveal-order:${index}`}>
             {item.image === 'commerce' && <img src={site.images.commerce.path} width={site.images.commerce.width} height={site.images.commerce.height} alt={copy.images.commerce} loading="lazy" decoding="async" />}
             {item.image === 'ctseg' && <img class="venture-card__ctseg-logo" src={site.images.ctseg.path} width={site.images.ctseg.width} height={site.images.ctseg.height} alt="" loading="lazy" decoding="async" />}
             <div class="venture-meta"><span class="tag">{item.status}</span><span class="tag">{item.region}</span></div>
@@ -505,7 +497,7 @@ const displayedYear = (title: string, year: string) =>
             <span class="venture-arrow" aria-hidden="true">↗</span>
           </a>
         ) : (
-          <article class="venture-card" aria-label={item.aria}>
+          <article class="venture-card" aria-label={item.aria} data-reveal="item" style={`--reveal-order:${index}`}>
             <div class="venture-meta"><span class="tag">{item.status}</span><span class="tag">{item.region}</span></div>
             <h3>{item.name}</h3>
             <p>{item.description}</p>
@@ -515,22 +507,22 @@ const displayedYear = (title: string, year: string) =>
     </div>
   </section>
 
-  <section class="section" id="expertise" aria-labelledby="expertise-title">
+  <section class="section story-stage story-stage--dark" id="expertise" aria-labelledby="expertise-title">
     <div class="shell">
-      <div class="section-heading">
+      <div class="section-heading" data-reveal="heading">
         <p class="section-label">{copy.expertise.label}</p>
         <h2 id="expertise-title">{copy.expertise.title}</h2>
         <p class="section-lead">{copy.expertise.lead}</p>
       </div>
       <div class="expertise-grid">
-        {copy.expertise.groups.map((group) => <article class="expertise-card"><h3>{group.title}</h3><ul>{group.items.map((item) => <li>{item}</li>)}</ul></article>)}
+        {copy.expertise.groups.map((group, index) => <article class="expertise-card" data-reveal="item" style={`--reveal-order:${index}`}><h3>{group.title}</h3><ul>{group.items.map((item) => <li>{item}</li>)}</ul></article>)}
       </div>
       <p class="definitions">{copy.expertise.definitions}</p>
     </div>
   </section>
 
-  <section class="section" id="journey" aria-labelledby="journey-title">
-    <div class="shell journey-layout">
+  <section class="section story-stage story-stage--light" id="journey" aria-labelledby="journey-title">
+    <div class="shell journey-layout" data-reveal="section">
       <div class="journey-image"><img src={site.images.executive.path} width={site.images.executive.width} height={site.images.executive.height} alt={copy.images.executive} loading="lazy" decoding="async" /></div>
       <div>
         <div class="section-heading"><p class="section-label">{copy.journey.label}</p><h2 id="journey-title">{copy.journey.title}</h2><p class="section-lead">{copy.journey.lead}</p></div>
@@ -539,22 +531,22 @@ const displayedYear = (title: string, year: string) =>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="method-title">
+  <section class="section story-stage story-stage--dark" aria-labelledby="method-title">
     <div class="shell">
-      <div class="section-heading"><p class="section-label">{copy.method.label}</p><h2 id="method-title">{copy.method.title}</h2><p class="section-lead">{copy.method.lead}</p></div>
-      <div class="method-grid">{copy.method.steps.map((step) => <article class="method-card"><h3>{step.title}</h3><p>{step.description}</p></article>)}</div>
+      <div class="section-heading" data-reveal="heading"><p class="section-label">{copy.method.label}</p><h2 id="method-title">{copy.method.title}</h2><p class="section-lead">{copy.method.lead}</p></div>
+      <div class="method-grid">{copy.method.steps.map((step, index) => <article class="method-card" data-reveal="item" style={`--reveal-order:${index}`}><h3>{step.title}</h3><p>{step.description}</p></article>)}</div>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="regional-title">
-    <div class="shell regional-grid">
+  <section class="section story-stage story-stage--light" aria-labelledby="regional-title">
+    <div class="shell regional-grid" data-reveal="section">
       <div><p class="section-label">{copy.regional.label}</p><h2 id="regional-title">{copy.regional.title}</h2><p class="section-lead">{copy.regional.body}</p></div>
       <div class="editorial-image"><img src={site.images.global.path} width={site.images.global.width} height={site.images.global.height} alt={copy.images.regional} loading="lazy" decoding="async" /></div>
     </div>
   </section>
 
   <section class="section ecosystem-section" aria-labelledby="ecosystem-title">
-    <div class="shell ecosystem-card">
+    <div class="shell ecosystem-card" data-reveal="section">
       <p class="section-label">{localPositioning.ecosystem.label}</p>
       <h2 id="ecosystem-title">{localPositioning.ecosystem.title}</h2>
       <p class="section-lead">{localPositioning.ecosystem.text}</p>
@@ -569,7 +561,7 @@ const displayedYear = (title: string, year: string) =>
 
   <section class="section contact-section" id="contact" aria-labelledby="contact-title">
     <div class="shell">
-      <div class="contact-card">
+      <div class="contact-card" data-reveal="section">
         <p class="section-label">{copy.contact.label}</p>
         <h2 id="contact-title">{copy.contact.title}</h2>
         <p class="section-lead">{copy.contact.body}</p>
@@ -583,7 +575,124 @@ const displayedYear = (title: string, year: string) =>
 <nav class="legal-links" aria-label="Legal"><a href="/privacy-policy/">{legal.privacy}</a><a href="/kvkk/">{legal.kvkk}</a><a href="/terms/">{legal.terms}</a></nav>
 <FloatingActions locale={locale} />
 
+<script is:inline>
+  (() => {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const revealItems = [...document.querySelectorAll('[data-reveal]')];
+    const expertiseCards = [...document.querySelectorAll('.expertise-card')];
+    const ctsegScene = document.querySelector('.ctseg-featured__panel');
+
+    if (!reducedMotion.matches && 'IntersectionObserver' in window) {
+      document.documentElement.classList.add('motion-ready');
+
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.14, rootMargin: '0px 0px -7% 0px' });
+
+      revealItems.forEach((item) => revealObserver.observe(item));
+
+      const expertiseObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            expertiseCards.forEach((card) => card.classList.remove('is-active'));
+            entry.target.classList.add('is-active');
+          }
+        });
+      }, { threshold: 0.58 });
+
+      expertiseCards.forEach((card) => expertiseObserver.observe(card));
+
+      if (ctsegScene && window.matchMedia('(min-width: 901px)').matches) {
+        let frame = 0;
+        const updateScene = () => {
+          frame = 0;
+          const rect = ctsegScene.getBoundingClientRect();
+          const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
+          ctsegScene.style.setProperty('--scene-progress', progress.toFixed(3));
+        };
+        const requestSceneUpdate = () => {
+          if (!frame) frame = requestAnimationFrame(updateScene);
+        };
+        updateScene();
+        window.addEventListener('scroll', requestSceneUpdate, { passive: true });
+        window.addEventListener('resize', requestSceneUpdate);
+      }
+    } else {
+      revealItems.forEach((item) => item.classList.add('is-visible'));
+    }
+  })();
+</script>
+
 <style>
+  .story-stage {
+    position: relative;
+    isolation: isolate;
+  }
+  .story-stage--light {
+    --text: #1a1d1d;
+    --text-primary: #1a1d1d;
+    --text-secondary: #5b6260;
+    --muted: #5b6260;
+    --line: #cbc6bb;
+    --line-strong: #aaa397;
+    --panel: #f0ede5;
+    --panel-soft: #e9e4da;
+    --surface-elevated: #f0ede5;
+    --border: #cbc6bb;
+    --accent-soft: #925936;
+    color: var(--text);
+    background: #e7e2d8;
+    border-color: var(--line);
+  }
+  .story-stage--light::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(90deg, transparent calc(50% - .5px), rgba(26, 29, 29, .06) 50%, transparent calc(50% + .5px));
+    background-size: min(100% - 3rem, 1180px) 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .story-stage--light .section-label { color: #925936; }
+  .story-stage--light .focus-list span {
+    border-radius: 0;
+    background: transparent;
+  }
+  .story-stage--light .editorial-image {
+    background: #d8d2c7;
+    border-color: var(--line);
+  }
+  .story-stage--dark { background: #081118; }
+  .story-stage--intro { padding-block: clamp(6rem, 10vw, 10rem); }
+  .story-stage--ventures { padding-block: clamp(5.5rem, 9vw, 9rem); }
+
+  .motion-ready [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+    transition:
+      opacity 680ms cubic-bezier(.2, .75, .25, 1),
+      transform 680ms cubic-bezier(.2, .75, .25, 1);
+    transition-delay: calc(var(--reveal-order, 0) * 70ms);
+  }
+  .motion-ready [data-reveal="hero"] { transform: translate3d(0, 18px, 0); }
+  .motion-ready [data-reveal="hero-media"] {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0) scale(.985);
+    transition-delay: 120ms;
+  }
+  .motion-ready [data-reveal].is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
   .ctseg-featured { padding-block: clamp(3.5rem, 6vw, 6.5rem); }
   .ctseg-featured__panel {
     position: relative;
@@ -612,6 +721,17 @@ const displayedYear = (title: string, year: string) =>
     margin-bottom: 2.2rem;
     object-fit: contain;
     object-position: left center;
+  }
+  .ctseg-featured__identity,
+  .ctseg-featured__services {
+    transition: transform 180ms linear;
+    will-change: transform;
+  }
+  .ctseg-featured__identity {
+    transform: translate3d(0, calc(var(--scene-progress, .5) * -12px), 0);
+  }
+  .ctseg-featured__services {
+    transform: translate3d(0, calc(var(--scene-progress, .5) * 9px), 0);
   }
   .ctseg-featured__kicker {
     margin: 0 0 .8rem;
@@ -659,16 +779,32 @@ const displayedYear = (title: string, year: string) =>
   .ecosystem-links { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
   .ecosystem-links a { min-height: 44px; display: inline-flex; align-items: center; padding: .7rem 1rem; border: 1px solid var(--line-strong); border-radius: 999px; }
   .ecosystem-links__ctseg { border-color: var(--accent) !important; background: var(--accent-muted); }
+  .expertise-card.is-active {
+    border-color: color-mix(in srgb, var(--accent) 72%, var(--line));
+    background: color-mix(in srgb, var(--panel) 88%, var(--accent-muted));
+  }
   .legal-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem 1.5rem; padding: 1.25rem 1.5rem 2rem; background: #06111f; border-top: 1px solid rgba(255,255,255,.1); }
   .legal-links a { min-height: 44px; display: inline-flex; align-items: center; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; }
   .legal-links a:hover { color: var(--text); }
   @media (max-width: 900px) {
     .ctseg-featured__panel { grid-template-columns: 1fr; }
+    .ctseg-featured__identity,
+    .ctseg-featured__services { transform: none; will-change: auto; }
   }
   @media (max-width: 560px) {
     .ctseg-featured__panel { padding: 1.5rem; border-radius: 18px; }
     .ctseg-featured__identity > img { margin-bottom: 1.5rem; }
     .ctseg-featured__actions { flex-direction: column; }
     .ctseg-featured__actions .button { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal],
+    .ctseg-featured__identity,
+    .ctseg-featured__services {
+      opacity: 1;
+      transform: none;
+      transition: none;
+      will-change: auto;
+    }
   }
 </style>
