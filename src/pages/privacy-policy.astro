@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import FloatingActions from '../components/FloatingActions.astro';
 import { content } from '../i18n/content';
 import { site } from '../data/site';
 
@@ -74,6 +75,7 @@ const description = 'TeyfikGokdemir.com üzerinde kişisel verilerin, zorunlu ve
     </article>
   </main>
   <Footer copy={copy} locale={locale} />
+  <FloatingActions locale={locale} />
 </BaseLayout>
 
 <style>
