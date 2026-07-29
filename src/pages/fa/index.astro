@@ -2,6 +2,7 @@
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import FloatingActions from '../../components/FloatingActions.astro';
+import RevealController from '../../components/RevealController.astro';
 import { content } from '../../i18n/content';
 
 const email = 'info@teyfikgokdemir.com';
@@ -83,13 +84,16 @@ const schema = {
     </section>
 
     <section class="section ctseg-feature" id="ctseg">
-      <div class="shell ctseg-panel">
+      <div class="shell ctseg-panel" data-reveal="scene">
         <div>
           <img class="ctseg-logo" src="/images/ctseg-logo-transparent.png" alt="CTSEG" />
           <p class="label">ساختار اصلی تجاری</p>
           <h2>CTSEG، مرکز اجرای تجارت بین‌المللی و تأمین راهبردی.</h2>
           <p class="lead">خدمات CTSEG برای تصمیم‌گیری قابل دفاع و اجرای منظم طراحی شده‌اند: از شناخت بازار و تأمین‌کننده تا اعتبارسنجی، مقایسه پیشنهادها و هماهنگی عملیات.</p>
-          <div class="actions"><a class="primary" href={ctsegUrl}>صفحه فارسی CTSEG</a><a href="https://ctseg.com.tr/en/contact/">تماس با CTSEG</a></div>
+          <div class="actions">
+            <a class="primary ctseg-cta" href={ctsegUrl} aria-label="صفحه فارسی CTSEG"><span>صفحه فارسی</span><bdi dir="ltr" lang="en">CTSEG</bdi></a>
+            <a class="ctseg-cta" href="https://ctseg.com.tr/en/contact/" aria-label="تماس با CTSEG"><span>تماس با</span><bdi dir="ltr" lang="en">CTSEG</bdi></a>
+          </div>
         </div>
         <ul class="service-list"><li>پژوهش تأمین‌کننده و تولیدکننده</li><li>اعتبارسنجی هویت و ظرفیت</li><li>مدیریت RFQ و مقایسه پیشنهادها</li><li>مذاکره و هماهنگی تجاری</li><li>آمادگی صادرات و ورود به بازار</li><li>پیگیری عملیات فرامرزی</li></ul>
       </div>
@@ -107,28 +111,14 @@ const schema = {
   <FloatingActions locale="fa" />
   <script is:inline>
     (() => {
-      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const items = [...document.querySelectorAll('.hero > *, .ctseg-panel > *, .section .shell > *, .grid article, .ventures a')];
       items.forEach((item, index) => {
         item.dataset.reveal = '';
         item.style.setProperty('--reveal-order', String(index % 4));
       });
-      if (!reducedMotion && 'IntersectionObserver' in window) {
-        document.documentElement.classList.add('motion-ready');
-        const observer = new IntersectionObserver((entries, instance) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('is-visible');
-              instance.unobserve(entry.target);
-            }
-          });
-        }, { threshold: .14, rootMargin: '0px 0px -7% 0px' });
-        items.forEach((item) => observer.observe(item));
-      } else {
-        items.forEach((item) => item.classList.add('is-visible'));
-      }
     })();
   </script>
+  <RevealController />
 </body>
 </html>
 <style>
@@ -137,6 +127,7 @@ const schema = {
 <style>
 :root{
   color-scheme:light;
+  --header-offset:106px;
   --leading-display:1.18;
   --leading-heading:1.2;
   --tracking-display:0;
@@ -296,12 +287,36 @@ footer{
 .hero{min-height:auto;padding-block:clamp(3rem,5vw,4.5rem)}
 .portrait{padding:10px;border-color:#b9b4a8;background:#d7dbd1}
 #ctseg.ctseg-feature{padding-block:clamp(3rem,5vw,4.5rem)}
-#ctseg{scroll-margin-top:90px}
+section[id]{scroll-margin-top:var(--header-offset)}
 #ctseg .ctseg-panel{padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
 #ctseg .ctseg-logo{width:min(205px,52%);margin-bottom:1rem}
 #ctseg .service-list{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:1.5rem}
 #ctseg .service-list li{padding:.85rem 0;border:0;border-top:1px solid var(--border);border-radius:0;background:transparent}
 #ctseg h2{font-size:clamp(2.5rem,4.5vw,4.2rem);line-height:var(--leading-heading);letter-spacing:var(--tracking-heading)}
+.actions .ctseg-cta{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.34em;
+  min-height:50px;
+  line-height:1.2;
+  white-space:nowrap;
+}
+.ctseg-cta > span{
+  font-family:"Noto Naskh Arabic",Tahoma,serif;
+  font-size:1.04em;
+  font-weight:700;
+  line-height:1;
+}
+.ctseg-cta > bdi{
+  direction:ltr;
+  unicode-bidi:isolate;
+  font-family:Arial,sans-serif;
+  font-size:.86em;
+  font-weight:700;
+  line-height:1;
+  letter-spacing:.035em;
+}
 @media(max-width:1100px){
   .menu-toggle{display:block;margin-inline-start:auto}
   .header-panel{
@@ -331,5 +346,88 @@ footer{
 }
 @media(prefers-reduced-motion:reduce){
   .header-panel{transition:none}
+}
+</style>
+<style>
+:root{
+  --scene-paper:#f3eee6;
+  --scene-stone:#e7e0d4;
+  --scene-mineral:#d9ddd5;
+  --scene-sage:#e0e4d9;
+  --scene-olive:#293029;
+  --scene-smoke:#211c18;
+  --accent-rust:#a65332;
+  --accent-coral:#d78263;
+  --accent-gold-muted:#b79a63;
+  --motion-fast:180ms;
+  --motion-base:420ms;
+  --motion-slow:640ms;
+  --ease-editorial:cubic-bezier(.2,.75,.25,1);
+  --reveal-distance:16px;
+  --stagger-step:64ms;
+}
+html{scroll-behavior:smooth}
+.hero{background:var(--scene-stone)}
+#focus.light-stage{background:var(--scene-mineral)}
+#ventures.light-stage{background:var(--scene-sage)}
+.section:not(.ctseg-feature):not(.light-stage):not(#contact){background:var(--scene-stone)}
+#ctseg.ctseg-feature,#contact{background:var(--scene-olive)}
+footer{background:var(--scene-smoke)}
+:global(.motion-ready) [data-reveal]{
+  opacity:0;
+  transform:translate3d(0,var(--reveal-distance),0);
+  transition:
+    opacity var(--motion-slow) var(--ease-editorial),
+    transform var(--motion-slow) var(--ease-editorial);
+  transition-delay:calc(var(--reveal-order,0)*var(--stagger-step));
+}
+:global(.motion-ready) .hero > img[data-reveal]{
+  transform:translate3d(0,8px,0) scale(1.015);
+}
+:global(.motion-ready) [data-reveal].is-visible{
+  opacity:1;
+  transform:none;
+}
+.ctseg-panel::before{
+  content:"";
+  position:absolute;
+  inset:0 0 auto;
+  height:2px;
+  background:var(--accent-rust);
+  transform-origin:right;
+}
+.ctseg-panel{position:relative}
+:global(.motion-ready) .ctseg-panel::before{
+  transform:scaleX(0);
+  transition:transform var(--motion-slow) var(--ease-editorial);
+}
+:global(.motion-ready) .ctseg-panel.is-visible::before{transform:scaleX(1)}
+.ventures a h3,.ventures a b,.ventures a p{
+  transition:
+    color var(--motion-fast) ease,
+    transform var(--motion-fast) ease;
+}
+.ventures a:hover h3,.ventures a:focus-visible h3,
+.ventures a:hover b,.ventures a:focus-visible b{
+  transform:translateX(-4px);
+}
+.ventures a:hover p,.ventures a:focus-visible p{color:#3f3a34}
+.grid article,.note{
+  transition:
+    transform var(--motion-fast) ease,
+    border-color var(--motion-fast) ease,
+    background-color var(--motion-fast) ease;
+}
+.grid article:hover,.note:hover{
+  transform:translateY(-2px);
+  border-color:var(--accent-rust);
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  [data-reveal],.ctseg-panel::before{
+    opacity:1;
+    transform:none;
+    transition:none;
+  }
 }
 </style>

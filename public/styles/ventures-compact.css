@@ -6,9 +6,13 @@
 #ventures .venture-grid {
   display: grid;
   grid-template-columns: 1fr !important;
-  gap: 0;
+  grid-template-rows: none !important;
+  grid-auto-rows: auto;
+  gap: .75rem;
   counter-reset: venture;
-  border-top: 1px solid var(--line);
+  min-height: 0;
+  height: auto;
+  border-top: 0;
 }
 
 #ventures .venture-card,
@@ -22,15 +26,14 @@
   min-width: 0;
   min-height: 0;
   height: auto;
-  padding: clamp(1.5rem, 2.5vw, 2.25rem) 0;
+  padding: clamp(1.35rem, 2.25vw, 1.85rem) clamp(1.15rem, 2.5vw, 2rem);
   overflow: visible;
-  isolation: auto;
-  border: 0;
-  border-bottom: 1px solid var(--line);
-  border-radius: 0;
-  background: transparent;
+  isolation: isolate;
+  border: 1px solid #626b61;
+  border-radius: 8px;
+  background: #343a33;
   box-shadow: none;
-  color: var(--text);
+  color: #f3eee6;
   counter-increment: venture;
   grid-column: 1 !important;
   grid-row: auto !important;
@@ -40,9 +43,9 @@
 #ventures .venture-card::before {
   content: counter(venture, decimal-leading-zero);
   position: absolute;
-  inset: 1rem auto auto 0;
-  z-index: 0;
-  color: var(--accent-secondary);
+  inset: .8rem auto auto 1rem;
+  z-index: 1;
+  color: #e09272;
   font-size: .68rem;
   font-weight: 850;
   letter-spacing: .12em;
@@ -51,26 +54,31 @@
 #ventures .venture-card::after {
   content: "";
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   inset: 0;
   border: 0;
-  border-radius: 0;
-  background: color-mix(in srgb, var(--surface) 58%, transparent);
+  border-radius: inherit;
+  background: #f3eee6;
   box-shadow: none;
   opacity: 0;
   transition: opacity 180ms ease;
 }
 
+#ventures .venture-card > * {
+  position: relative;
+  z-index: 1;
+}
+
 #ventures .venture-card:hover,
 #ventures .venture-card:focus-visible {
-  border-color: var(--line);
+  border-color: #8a9187;
   box-shadow: none;
   transform: none;
 }
 
 #ventures .venture-card:hover::after,
 #ventures .venture-card:focus-visible::after {
-  opacity: 1;
+  opacity: .055;
 }
 
 #ventures .venture-card.has-image > img,
@@ -92,7 +100,7 @@
   border: 0;
   border-radius: 0;
   background: none;
-  color: var(--muted);
+  color: #c9bfb2;
   font-size: .68rem;
   font-weight: 750;
   letter-spacing: .08em;
@@ -101,12 +109,13 @@
   backdrop-filter: none;
 }
 
-#ventures .tag:first-child { color: var(--accent); }
+#ventures .tag:first-child { color: #e09272; }
 
 #ventures .venture-card h3,
 #ventures .venture-card.has-image h3 {
   grid-column: 2;
   margin: 0;
+  color: #f3eee6;
   font-size: clamp(1.6rem, 2.5vw, 2.7rem);
   line-height: 1;
   letter-spacing: -.04em;
@@ -117,7 +126,7 @@
   grid-column: 3;
   margin: 0;
   max-width: 48rem;
-  color: var(--muted);
+  color: #d3c9bd;
   font-size: 1rem;
   line-height: 1.7;
 }
@@ -128,14 +137,14 @@
   justify-self: end;
   margin: 0;
   padding: 0;
-  color: var(--accent);
+  color: #e09272;
   font-size: 1.35rem;
   transition: color 180ms ease;
 }
 
 #ventures .venture-card:hover .venture-arrow,
 #ventures .venture-card:focus-visible .venture-arrow {
-  color: var(--accent-secondary);
+  color: #f0b199;
 }
 
 @media (max-width: 900px) {
@@ -153,7 +162,7 @@
   #ventures .venture-card--ctseg {
     grid-template-columns: 1fr auto;
     gap: .75rem 1rem;
-    padding-block: 1.5rem;
+    padding: 1.5rem 1.15rem;
   }
 
   #ventures .venture-meta {

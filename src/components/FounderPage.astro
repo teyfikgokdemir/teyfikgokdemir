@@ -449,15 +449,15 @@ const displayedYear = (title: string, year: string) =>
 <Header locale={locale} copy={copy} homePath={`/${locale}/`} />
 <main id="main-content">
   <section class="hero shell" id="top" aria-labelledby="hero-title">
-    <div class="hero-copy" data-reveal="hero">
-      <p class="section-label">{copy.hero.eyebrow}</p>
-      <h1 id="hero-title">{copy.hero.title}</h1>
-      <p class="hero-description">{copy.hero.description}</p>
-      <div class="hero-actions">
+    <div class="hero-copy">
+      <p class="section-label" data-reveal="hero-part" style="--reveal-order:0">{copy.hero.eyebrow}</p>
+      <h1 id="hero-title" data-reveal="hero-part" style="--reveal-order:1">{copy.hero.title}</h1>
+      <p class="hero-description" data-reveal="hero-part" style="--reveal-order:2">{copy.hero.description}</p>
+      <div class="hero-actions" data-reveal="hero-part" style="--reveal-order:3">
         <a class="button primary" href={localeCtsegLinks.home}>{copy.hero.primary}</a>
         <a class="button" href="#contact">{copy.hero.secondary}</a>
       </div>
-      <p class="hero-summary">{copy.hero.summary}</p>
+      <p class="hero-summary" data-reveal="hero-part" style="--reveal-order:4">{copy.hero.summary}</p>
     </div>
     <div class="hero-media" data-reveal="hero-media">
       <img src={site.images.hero.path} srcset={site.images.hero.srcset} sizes="(max-width: 760px) 92vw, (max-width: 1180px) 48vw, 665px" width={site.images.hero.width} height={site.images.hero.height} alt={copy.images.hero} loading="eager" decoding="async" fetchpriority="high" />
@@ -484,12 +484,12 @@ const displayedYear = (title: string, year: string) =>
     </div>
   </section>
 
-  <section class="section story-stage story-stage--light story-stage--intro" aria-labelledby="intro-title">
-    <div class="shell intro-grid" data-reveal="section">
-      <div class="editorial-image">
+  <section class="section story-stage story-stage--light story-stage--mineral story-stage--intro" aria-labelledby="intro-title">
+    <div class="shell intro-grid">
+      <div class="editorial-image" data-reveal="portrait">
         <img src={site.images.profile.path} srcset={site.images.profile.srcset} sizes="(max-width: 760px) 92vw, (max-width: 1180px) 48vw, 662px" width={site.images.profile.width} height={site.images.profile.height} alt={copy.images.profile} loading="lazy" decoding="async" />
       </div>
-      <div>
+      <div data-reveal="section">
         <p class="section-label">{copy.intro.label}</p>
         <h2 id="intro-title">{copy.intro.title}</h2>
         <p class="section-lead">{copy.intro.body}</p>
@@ -498,7 +498,7 @@ const displayedYear = (title: string, year: string) =>
     </div>
   </section>
 
-  <section class="section story-stage story-stage--light story-stage--ventures" id="ventures" aria-labelledby="ventures-title">
+  <section class="section story-stage story-stage--light story-stage--sage story-stage--ventures" id="ventures" aria-labelledby="ventures-title">
     <div class="shell">
       <div class="section-heading" data-reveal="heading">
         <p class="section-label">{copy.ventures.label}</p>
@@ -526,7 +526,7 @@ const displayedYear = (title: string, year: string) =>
     </div>
   </section>
 
-  <section class="section story-stage story-stage--dark" id="expertise" aria-labelledby="expertise-title">
+  <section class="section story-stage story-stage--dark story-stage--smoke" id="expertise" aria-labelledby="expertise-title">
     <div class="shell">
       <div class="section-heading" data-reveal="heading">
         <p class="section-label">{copy.expertise.label}</p>
@@ -540,17 +540,17 @@ const displayedYear = (title: string, year: string) =>
     </div>
   </section>
 
-  <section class="section story-stage story-stage--light" id="journey" aria-labelledby="journey-title">
-    <div class="shell journey-layout" data-reveal="section">
-      <div class="journey-image"><img src={site.images.executive.path} width={site.images.executive.width} height={site.images.executive.height} alt={copy.images.executive} loading="lazy" decoding="async" /></div>
+  <section class="section story-stage story-stage--light story-stage--mineral" id="journey" aria-labelledby="journey-title">
+    <div class="shell journey-layout">
+      <div class="journey-image" data-reveal="portrait"><img src={site.images.executive.path} width={site.images.executive.width} height={site.images.executive.height} alt={copy.images.executive} loading="lazy" decoding="async" /></div>
       <div>
-        <div class="section-heading"><p class="section-label">{copy.journey.label}</p><h2 id="journey-title">{copy.journey.title}</h2><p class="section-lead">{copy.journey.lead}</p></div>
-        <ol class="timeline">{copy.journey.items.map((item) => <li><time datetime={displayedYear(item.title, item.year)}>{displayedYear(item.title, item.year)}</time><div class="timeline-content"><h3>{item.title}</h3><p>{item.description}</p></div></li>)}</ol>
+        <div class="section-heading" data-reveal="heading"><p class="section-label">{copy.journey.label}</p><h2 id="journey-title">{copy.journey.title}</h2><p class="section-lead">{copy.journey.lead}</p></div>
+        <ol class="timeline" data-reveal="timeline">{copy.journey.items.map((item, index) => <li style={`--reveal-order:${index}`}><time datetime={displayedYear(item.title, item.year)}>{displayedYear(item.title, item.year)}</time><div class="timeline-content"><h3>{item.title}</h3><p>{item.description}</p></div></li>)}</ol>
       </div>
     </div>
   </section>
 
-  <section class="section story-stage story-stage--dark" aria-labelledby="method-title">
+  <section class="section story-stage story-stage--dark story-stage--smoke story-stage--method" aria-labelledby="method-title">
     <div class="shell">
       <div class="section-heading" data-reveal="heading"><p class="section-label">{copy.method.label}</p><h2 id="method-title">{copy.method.title}</h2><p class="section-lead">{copy.method.lead}</p></div>
       <div class="method-grid">{copy.method.steps.map((step, index) => <article class="method-card" data-reveal="item" style={`--reveal-order:${index}`}><h3>{step.title}</h3><p>{step.description}</p></article>)}</div>
@@ -566,14 +566,14 @@ const displayedYear = (title: string, year: string) =>
     </div>
   </section>
 
-  <section class="section story-stage story-stage--light" aria-labelledby="regional-title">
-    <div class="shell regional-grid" data-reveal="section">
-      <div><p class="section-label">{copy.regional.label}</p><h2 id="regional-title">{copy.regional.title}</h2><p class="section-lead">{copy.regional.body}</p></div>
-      <div class="editorial-image"><img src={site.images.global.path} width={site.images.global.width} height={site.images.global.height} alt={copy.images.regional} loading="lazy" decoding="async" /></div>
+  <section class="section story-stage story-stage--light story-stage--stone story-stage--regional" aria-labelledby="regional-title">
+    <div class="shell regional-grid">
+      <div data-reveal="section"><p class="section-label">{copy.regional.label}</p><h2 id="regional-title">{copy.regional.title}</h2><p class="section-lead">{copy.regional.body}</p></div>
+      <div class="editorial-image" data-reveal="portrait"><img src={site.images.global.path} width={site.images.global.width} height={site.images.global.height} alt={copy.images.regional} loading="lazy" decoding="async" /></div>
     </div>
   </section>
 
-  <section class="section contact-section" id="contact" aria-labelledby="contact-title">
+  <section class="section contact-section story-stage--olive" id="contact" aria-labelledby="contact-title">
     <div class="shell">
       <div class="contact-card" data-reveal="section">
         <p class="section-label">{copy.contact.label}</p>
@@ -588,59 +588,6 @@ const displayedYear = (title: string, year: string) =>
 <Footer copy={copy} locale={locale} />
 <nav class="legal-links" aria-label="Legal"><a href="/privacy-policy/">{legal.privacy}</a><a href="/kvkk/">{legal.kvkk}</a><a href="/terms/">{legal.terms}</a></nav>
 <FloatingActions locale={locale} />
-
-<script is:inline>
-  (() => {
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const revealItems = [...document.querySelectorAll('[data-reveal]')];
-    const expertiseCards = [...document.querySelectorAll('.expertise-card')];
-    const ctsegScene = document.querySelector('.ctseg-featured__panel');
-
-    if (!reducedMotion.matches && 'IntersectionObserver' in window) {
-      document.documentElement.classList.add('motion-ready');
-
-      const revealObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.14, rootMargin: '0px 0px -7% 0px' });
-
-      revealItems.forEach((item) => revealObserver.observe(item));
-
-      const expertiseObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            expertiseCards.forEach((card) => card.classList.remove('is-active'));
-            entry.target.classList.add('is-active');
-          }
-        });
-      }, { threshold: 0.58 });
-
-      expertiseCards.forEach((card) => expertiseObserver.observe(card));
-
-      if (ctsegScene && window.matchMedia('(min-width: 901px)').matches) {
-        let frame = 0;
-        const updateScene = () => {
-          frame = 0;
-          const rect = ctsegScene.getBoundingClientRect();
-          const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
-          ctsegScene.style.setProperty('--scene-progress', progress.toFixed(3));
-        };
-        const requestSceneUpdate = () => {
-          if (!frame) frame = requestAnimationFrame(updateScene);
-        };
-        updateScene();
-        window.addEventListener('scroll', requestSceneUpdate, { passive: true });
-        window.addEventListener('resize', requestSceneUpdate);
-      }
-    } else {
-      revealItems.forEach((item) => item.classList.add('is-visible'));
-    }
-  })();
-</script>
 
 <style>
   .story-stage {
@@ -660,9 +607,12 @@ const displayedYear = (title: string, year: string) =>
     --border: #c9bfb2;
     --accent-soft: #a65332;
     color: var(--text);
-    background: var(--bg-alt);
+    background: var(--scene-paper);
     border-color: var(--line);
   }
+  .story-stage--mineral { background: var(--scene-mineral); }
+  .story-stage--sage { background: var(--scene-sage); }
+  .story-stage--stone { background: var(--scene-stone); }
   .story-stage--light::before {
     content: "";
     position: absolute;
@@ -695,29 +645,39 @@ const displayedYear = (title: string, year: string) =>
     --panel-soft: #293029;
     --accent-soft: #d78263;
     color: var(--text);
-    background: var(--surface-dark);
+    background: var(--scene-smoke);
+  }
+  .story-stage--method {
+    background: color-mix(in srgb, var(--scene-smoke) 90%, var(--scene-olive));
   }
   .story-stage--intro { padding-block: clamp(6rem, 10vw, 10rem); }
   .story-stage--ventures {
     padding-block: clamp(4rem, 6vw, 6rem);
-    background: var(--bg);
+    min-height: 0;
+    height: auto;
+    background: var(--scene-sage);
   }
 
-  .motion-ready [data-reveal] {
+  :global(.motion-ready) [data-reveal] {
     opacity: 0;
-    transform: translate3d(0, 28px, 0);
+    transform: translate3d(0, var(--reveal-distance), 0);
     transition:
-      opacity 680ms cubic-bezier(.2, .75, .25, 1),
-      transform 680ms cubic-bezier(.2, .75, .25, 1);
-    transition-delay: calc(var(--reveal-order, 0) * 70ms);
+      opacity var(--motion-slow) var(--ease-editorial),
+      transform var(--motion-slow) var(--ease-editorial);
+    transition-delay: calc(var(--reveal-order, 0) * var(--stagger-step));
   }
-  .motion-ready [data-reveal="hero"] { transform: translate3d(0, 18px, 0); }
-  .motion-ready [data-reveal="hero-media"] {
+  :global(.motion-ready) [data-reveal="hero-part"] {
+    transform: translate3d(0, 14px, 0);
+  }
+  :global(.motion-ready) [data-reveal="hero-media"] {
     opacity: 0;
-    transform: translate3d(0, 22px, 0) scale(.985);
-    transition-delay: 120ms;
+    transform: translate3d(0, 9px, 0) scale(1.015);
+    transition-delay: calc(2 * var(--stagger-step));
   }
-  .motion-ready [data-reveal].is-visible {
+  :global(.motion-ready) [data-reveal="portrait"] {
+    transform: translate3d(0, 9px, 0) scale(1.015);
+  }
+  :global(.motion-ready) [data-reveal].is-visible {
     opacity: 1;
     transform: translate3d(0, 0, 0) scale(1);
   }
@@ -734,7 +694,7 @@ const displayedYear = (title: string, year: string) =>
     --accent-soft: #d78263;
     padding-block: clamp(3rem, 5vw, 4.5rem);
     color: var(--text);
-    background: var(--surface-olive);
+    background: var(--scene-olive);
   }
   .ctseg-featured__panel {
     position: relative;
@@ -748,9 +708,19 @@ const displayedYear = (title: string, year: string) =>
     background: transparent;
     box-shadow: none;
   }
+  .ctseg-featured__panel::before {
+    content: "";
+    position: absolute;
+    inset: -1.35rem 0 auto;
+    height: 2px;
+    background: var(--accent-rust);
+    transform: scaleX(1);
+    transform-origin: left;
+  }
   .ctseg-featured__panel::after {
     display: none;
   }
+  html[dir="rtl"] .ctseg-featured__panel::before { transform-origin: right; }
   .ctseg-featured__identity > img {
     width: clamp(145px, 16vw, 205px);
     height: auto;
@@ -758,16 +728,49 @@ const displayedYear = (title: string, year: string) =>
     object-fit: contain;
     object-position: left center;
   }
-  .ctseg-featured__identity,
-  .ctseg-featured__services {
-    transition: transform 180ms linear;
-    will-change: transform;
+  :global(.motion-ready) .ctseg-featured__panel::before {
+    transform: scaleX(0);
+    transition: transform var(--motion-slow) var(--ease-editorial);
   }
-  .ctseg-featured__identity {
-    transform: translate3d(0, calc(var(--scene-progress, .5) * -12px), 0);
+  :global(.motion-ready) .ctseg-featured__panel.is-visible::before {
+    transform: scaleX(1);
   }
-  .ctseg-featured__services {
-    transform: translate3d(0, calc(var(--scene-progress, .5) * 9px), 0);
+  :global(.motion-ready) .ctseg-featured__identity > *,
+  :global(.motion-ready) .ctseg-featured__services li {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+    transition:
+      opacity var(--motion-base) var(--ease-editorial),
+      transform var(--motion-base) var(--ease-editorial);
+  }
+  :global(.motion-ready) .ctseg-featured__panel.is-visible .ctseg-featured__identity > *,
+  :global(.motion-ready) .ctseg-featured__panel.is-visible .ctseg-featured__services li {
+    opacity: 1;
+    transform: none;
+  }
+  :global(.motion-ready) .ctseg-featured__panel.is-visible .ctseg-featured__identity > *:nth-child(2) { transition-delay: 50ms; }
+  :global(.motion-ready) .ctseg-featured__panel.is-visible .ctseg-featured__identity > *:nth-child(3) { transition-delay: 90ms; }
+  :global(.motion-ready) .ctseg-featured__panel.is-visible .ctseg-featured__identity > *:nth-child(4) { transition-delay: 130ms; }
+  :global(.motion-ready) .ctseg-featured__panel.is-visible .ctseg-featured__identity > *:nth-child(n + 5) { transition-delay: 170ms; }
+  :global(.motion-ready) .ctseg-featured__panel.is-visible .ctseg-featured__services li:nth-child(2) { transition-delay: 45ms; }
+  :global(.motion-ready) .ctseg-featured__panel.is-visible .ctseg-featured__services li:nth-child(3) { transition-delay: 90ms; }
+  :global(.motion-ready) .ctseg-featured__panel.is-visible .ctseg-featured__services li:nth-child(4) { transition-delay: 135ms; }
+  :global(.motion-ready) .ctseg-featured__panel.is-visible .ctseg-featured__services li:nth-child(n + 5) { transition-delay: 180ms; }
+  .ctseg-featured__actions .button::after {
+    content: "→";
+    margin-inline-start: .45rem;
+    transition: transform var(--motion-fast) ease;
+  }
+  html[dir="rtl"] .ctseg-featured__actions .button::after {
+    content: "←";
+  }
+  .ctseg-featured__actions .button:hover::after,
+  .ctseg-featured__actions .button:focus-visible::after {
+    transform: translateX(4px);
+  }
+  html[dir="rtl"] .ctseg-featured__actions .button:hover::after,
+  html[dir="rtl"] .ctseg-featured__actions .button:focus-visible::after {
+    transform: translateX(-4px);
   }
   .ctseg-featured__kicker {
     margin: 0 0 .8rem;
@@ -815,15 +818,11 @@ const displayedYear = (title: string, year: string) =>
     border-radius: 50%;
     background: var(--accent-soft);
   }
-  .expertise-card.is-active {
-    border-color: color-mix(in srgb, var(--accent) 72%, var(--line));
-    background: color-mix(in srgb, var(--panel) 88%, var(--accent-muted));
-  }
   .hero {
     width: min(1340px, calc(100% - 3rem));
     grid-template-columns: minmax(0, 1.35fr) minmax(330px, .65fr);
     color: var(--text);
-    background: var(--bg);
+    background: var(--scene-stone);
   }
   .hero-description { color: var(--text-muted); }
   .hero h1 { max-width: 22ch; font-size: clamp(3rem, 4.7vw, 4.85rem); line-height: var(--leading-display); }
@@ -832,7 +831,9 @@ const displayedYear = (title: string, year: string) =>
     inset: 0;
     border-color: #b9b4a8;
     border-radius: 9px;
-    background: #d7dbd1;
+    background: var(--scene-mineral);
+    clip-path: inset(0 0 0 0);
+    transition: clip-path var(--motion-slow) var(--ease-editorial);
   }
   .hero-media img {
     inset: 10px;
@@ -853,20 +854,59 @@ const displayedYear = (title: string, year: string) =>
   #ventures .venture-card,
   #ventures .venture-card.has-image { padding-block: clamp(1.25rem, 2vw, 1.75rem); }
   #ventures .venture-card p,
-  #ventures .venture-card.has-image p { color: #585149; }
+  #ventures .venture-card.has-image p { color: #d3c9bd; }
+  #ventures .venture-card:hover,
+  #ventures .venture-card:focus-visible {
+    transform: none;
+    border-color: var(--accent-rust);
+    box-shadow: none;
+  }
+  #ventures .venture-card h3,
+  #ventures .venture-card .venture-arrow,
+  #ventures .venture-card p {
+    transition:
+      color var(--motion-fast) ease,
+      transform var(--motion-fast) ease;
+  }
+  #ventures .venture-card:hover h3,
+  #ventures .venture-card:focus-visible h3 {
+    transform: translateX(4px);
+  }
+  #ventures .venture-card:hover .venture-arrow,
+  #ventures .venture-card:focus-visible .venture-arrow {
+    transform: translateX(4px);
+  }
+  #ventures .venture-card:hover p,
+  #ventures .venture-card:focus-visible p {
+    color: #f3eee6;
+  }
+  html[dir="rtl"] #ventures .venture-card:hover h3,
+  html[dir="rtl"] #ventures .venture-card:focus-visible h3,
+  html[dir="rtl"] #ventures .venture-card:hover .venture-arrow,
+  html[dir="rtl"] #ventures .venture-card:focus-visible .venture-arrow {
+    transform: translateX(-4px);
+  }
   .expertise-card,
   .method-card {
     border-radius: 6px;
     background: transparent;
     box-shadow: none;
+    transition:
+      transform var(--motion-fast) ease,
+      border-color var(--motion-fast) ease,
+      background-color var(--motion-fast) ease;
   }
   .expertise-card::before {
     background: var(--accent);
   }
   .expertise-card::after { display: none; }
-  .expertise-card:hover {
-    transform: none;
+  .expertise-card:hover,
+  .expertise-card:focus-within,
+  .method-card:hover,
+  .method-card:focus-within {
+    transform: translateY(-2px);
     border-color: var(--accent);
+    background: color-mix(in srgb, var(--panel) 86%, var(--accent-rust));
     box-shadow: none;
   }
   .expertise-card li {
@@ -880,6 +920,52 @@ const displayedYear = (title: string, year: string) =>
     background: transparent;
     color: var(--text-secondary);
     font-size: .88rem;
+  }
+  .timeline {
+    position: relative;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    inset-block: .35rem 0;
+    inset-inline-start: calc(80px + 1rem);
+    width: 1px;
+    background: var(--line-strong);
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  :global(.motion-ready) .timeline::before {
+    transform: scaleY(0);
+    transition: transform var(--motion-slow) var(--ease-editorial);
+  }
+  :global(.motion-ready) .timeline.is-visible::before {
+    transform: scaleY(1);
+  }
+  :global(.motion-ready) .timeline li {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+    transition:
+      opacity var(--motion-base) var(--ease-editorial),
+      transform var(--motion-base) var(--ease-editorial);
+    transition-delay: calc(var(--reveal-order, 0) * 45ms);
+  }
+  :global(.motion-ready) .timeline.is-visible li {
+    opacity: 1;
+    transform: none;
+  }
+  .timeline-content {
+    border-left: 0;
+  }
+  .timeline-content::before {
+    left: auto;
+    inset-inline-start: -5px;
+  }
+  .timeline time {
+    color: var(--accent-rust);
+    transition: color var(--motion-fast) ease;
+  }
+  .timeline li:hover time {
+    color: var(--accent-gold-muted);
   }
   .timeline p {
     color: var(--muted);
@@ -914,7 +1000,7 @@ const displayedYear = (title: string, year: string) =>
     --line: #5b6259;
     --line-strong: #777e73;
     color: var(--text);
-    background: var(--surface-olive);
+    background: var(--scene-olive);
   }
   .contact-card {
     max-width: 980px;
@@ -941,8 +1027,6 @@ const displayedYear = (title: string, year: string) =>
     .hero { width: min(100% - 2rem, var(--max)); grid-template-columns: 1fr; }
     .hero-media { min-height: 520px; }
     .ctseg-featured__panel { grid-template-columns: 1fr; }
-    .ctseg-featured__identity,
-    .ctseg-featured__services { transform: none; will-change: auto; }
     .ctseg-featured__services { grid-template-columns: 1fr; }
   }
   @media (max-width: 560px) {
@@ -954,11 +1038,15 @@ const displayedYear = (title: string, year: string) =>
     .ctseg-featured__actions { flex-direction: column; }
     .ctseg-featured__actions .button { width: 100%; }
     .operational-systems article { grid-template-columns: 1fr; gap: .55rem; }
+    .timeline::before { inset-inline-start: calc(62px + .5rem); }
   }
   @media (prefers-reduced-motion: reduce) {
     [data-reveal],
-    .ctseg-featured__identity,
-    .ctseg-featured__services {
+    .ctseg-featured__identity > *,
+    .ctseg-featured__services li,
+    .ctseg-featured__panel::before,
+    .timeline::before,
+    .timeline li {
       opacity: 1;
       transform: none;
       transition: none;

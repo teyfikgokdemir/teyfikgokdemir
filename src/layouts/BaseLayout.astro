@@ -3,6 +3,7 @@ import { locales, type Locale } from '../i18n/locales';
 import type { SiteContent } from '../i18n/content';
 import { site } from '../data/site';
 import CookieBanner from '../components/CookieBanner.astro';
+import RevealController from '../components/RevealController.astro';
 
 type SupportedLocale = Locale | 'fa';
 
@@ -201,21 +202,31 @@ const jsonLd = {
     <a class="skip-link" href="#main-content">{copy.a11y.skip}</a>
     <slot />
     <CookieBanner locale={locale} />
+    <RevealController />
   </body>
 </html>
 
 <style is:global>
   :root {
     color-scheme: light;
-    --bg: #e7e0d4;
-    --bg-alt: #f3eee6;
+    --scene-paper: #f3eee6;
+    --scene-stone: #e7e0d4;
+    --scene-mineral: #d9ddd5;
+    --scene-sage: #e0e4d9;
+    --scene-olive: #293029;
+    --scene-smoke: #211c18;
+    --accent-rust: #a65332;
+    --accent-coral: #d78263;
+    --accent-gold-muted: #b79a63;
+    --bg: var(--scene-stone);
+    --bg-alt: var(--scene-paper);
     --surface: #ddd4c7;
-    --surface-dark: #211c18;
-    --surface-olive: #293029;
+    --surface-dark: var(--scene-smoke);
+    --surface-olive: var(--scene-olive);
     --text: #181613;
     --text-muted: #625c54;
     --border: #c9bfb2;
-    --accent: #a65332;
+    --accent: var(--accent-rust);
     --accent-hover: #874126;
     --accent-secondary: #6e3e49;
     --trust: #4f604b;
@@ -237,16 +248,23 @@ const jsonLd = {
     --max: 1180px;
     --radius: 22px;
     --header-height: 76px;
+    --header-offset: 100px;
     --leading-display: 1;
     --leading-heading: 1.04;
     --leading-title: 1.02;
     --tracking-display: -.032em;
     --tracking-heading: -.025em;
     --tracking-title: -.03em;
+    --motion-fast: 180ms;
+    --motion-base: 420ms;
+    --motion-slow: 640ms;
+    --ease-editorial: cubic-bezier(.2, .75, .25, 1);
+    --reveal-distance: 18px;
+    --stagger-step: 64ms;
   }
 
   * { box-sizing: border-box; }
-  html { overflow-x: clip; background: var(--bg); }
+  html { overflow-x: clip; scroll-behavior: smooth; background: var(--bg); }
   html[lang="fa"] {
     --leading-display: 1.18;
     --leading-heading: 1.2;
@@ -282,7 +300,7 @@ const jsonLd = {
   }
   .skip-link:focus { transform: translateY(0); }
   .shell { width: min(var(--max), calc(100% - 3rem)); margin-inline: auto; }
-  #main-content, section[id] { scroll-margin-top: calc(var(--header-height) + 1rem); }
+  #main-content, section[id] { scroll-margin-top: var(--header-offset); }
   .section { padding: clamp(4rem, 6vw, 6.5rem) 0; border-top: 1px solid var(--line); }
   .section-heading { max-width: 820px; margin-bottom: 2.25rem; }
   .section-label {
@@ -318,6 +336,17 @@ const jsonLd = {
     font-size: clamp(1rem, 1.6vw, 1.22rem);
     line-height: 1.75;
   }
+  .motion-ready .legal-card[data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-distance), 0);
+    transition:
+      opacity var(--motion-slow) var(--ease-editorial),
+      transform var(--motion-slow) var(--ease-editorial);
+  }
+  .motion-ready .legal-card[data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
 
   .site-header {
     --text: #f3eee6;
@@ -337,6 +366,15 @@ const jsonLd = {
     border-bottom: 1px solid var(--line);
     background: rgba(33, 28, 24, .97);
     backdrop-filter: blur(10px);
+    transition:
+      border-color var(--motion-fast) ease,
+      background-color var(--motion-fast) ease,
+      box-shadow var(--motion-fast) ease;
+  }
+  .site-header.is-scrolled {
+    border-bottom-color: #67584b;
+    background: rgba(33, 28, 24, .985);
+    box-shadow: 0 12px 30px rgba(24, 20, 17, .16);
   }
   .brand { display: inline-flex; align-items: center; gap: .75rem; min-height: 48px; }
   .brand span {
@@ -886,6 +924,7 @@ const jsonLd = {
 
   @media (max-width: 560px) {
     :root {
+      --header-offset: 86px;
       --leading-display: 1.03;
       --leading-heading: 1.06;
       --leading-title: 1.04;
@@ -1341,6 +1380,7 @@ const jsonLd = {
     }
   }
   @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
     *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
   }
 </style>

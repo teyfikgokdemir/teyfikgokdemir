@@ -136,7 +136,7 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
     {!post ? (
       <>
         <header class="blog-hero" id="top">
-          <div class="blog-shell">
+          <div class="blog-shell" data-reveal="content-hero">
             <p class="section-label">Teyfik Gökdemir · {meta.eyebrow}</p>
             <h1>{meta.blog}</h1>
             <p>{description}</p>
@@ -145,7 +145,7 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
         </header>
 
         <section class="blog-index blog-shell" aria-label={meta.blog}>
-          <a class="featured-article" href={featured.href}>
+          <a class="featured-article" href={featured.href} data-reveal="featured">
             <div>
               <p class="article-meta-line">
                 <span>{featured.eyebrow}</span>
@@ -160,8 +160,8 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
           </a>
 
           <div class="article-list">
-            {remaining.map((item) => (
-              <a href={item.href}>
+            {remaining.map((item, index) => (
+              <a href={item.href} data-reveal="content-row" style={`--reveal-order:${index}`}>
                 <p class="article-meta-line">
                   <span>{item.eyebrow}</span>
                   {item.date && <time datetime={item.date}>{item.date}</time>}
@@ -182,7 +182,7 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
           <a href={blogPath(locale)}>{meta.blog}</a>
         </nav>
 
-        <header class="article-head">
+        <header class="article-head" data-reveal="content-hero">
           <p class="section-label">{meta.eyebrow}</p>
           <h1>{post.title[locale]}</h1>
           <p class="article-lead">{post.intro[locale]}</p>
@@ -194,8 +194,8 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
         </header>
 
         <div class="article-content">
-          {post.sections[locale].map((section) => (
-            <section>
+          {post.sections[locale].map((section, index) => (
+            <section data-reveal="content-section" style={`--reveal-order:${Math.min(index, 3)}`}>
               <h2>{section.heading}</h2>
               {section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
               {section.bullets && <ul>{section.bullets.map((bullet) => <li>{bullet}</li>)}</ul>}
@@ -203,7 +203,7 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
           ))}
         </div>
 
-        <aside class="related-insights">
+        <aside class="related-insights" data-reveal="content-section">
           <p class="section-label">{meta.related}</p>
           <div>
             {related.map((item) => (
@@ -224,12 +224,12 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
 </BaseLayout>
 
 <style>
-  .blog-page { min-height: 70vh; background: var(--bg-alt); }
+  .blog-page { min-height: 70vh; background: var(--scene-paper); }
   .blog-shell { width: min(1180px, calc(100% - 3rem)); margin-inline: auto; }
   .blog-hero {
     padding: clamp(4.5rem, 8vw, 7.5rem) 0 clamp(3rem, 5vw, 4.5rem);
     border-bottom: 1px solid var(--border);
-    background: var(--bg);
+    background: var(--scene-stone);
   }
   .blog-hero h1,
   .article-head h1 {
@@ -261,7 +261,7 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
     border: 1px solid #5b6259;
     border-radius: 7px;
     color: #f3eee6;
-    background: var(--surface-olive);
+    background: var(--scene-olive);
   }
   .featured-article h2 {
     margin: 1rem 0 0;
@@ -295,7 +295,41 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
     border-bottom: 1px solid var(--border);
     transition: background-color 180ms ease;
   }
-  .article-list > a:hover { background: color-mix(in srgb, var(--surface) 45%, transparent); }
+  .article-list > a:hover,
+  .article-list > a:focus-visible { background: color-mix(in srgb, var(--scene-mineral) 58%, transparent); }
+  :global(.motion-ready) .blog-page [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-distance), 0);
+    transition:
+      opacity var(--motion-slow) var(--ease-editorial),
+      transform var(--motion-slow) var(--ease-editorial);
+    transition-delay: calc(var(--reveal-order, 0) * var(--stagger-step));
+  }
+  :global(.motion-ready) .blog-page [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+  .featured-article,
+  .article-list > a,
+  .text-link,
+  .article-arrow {
+    transition:
+      color var(--motion-fast) ease,
+      background-color var(--motion-fast) ease,
+      transform var(--motion-fast) ease;
+  }
+  .featured-article:hover .text-link,
+  .featured-article:focus-visible .text-link,
+  .article-list > a:hover .article-arrow,
+  .article-list > a:focus-visible .article-arrow {
+    transform: translateX(4px);
+  }
+  html[dir="rtl"] .featured-article:hover .text-link,
+  html[dir="rtl"] .featured-article:focus-visible .text-link,
+  html[dir="rtl"] .article-list > a:hover .article-arrow,
+  html[dir="rtl"] .article-list > a:focus-visible .article-arrow {
+    transform: translateX(-4px);
+  }
   .article-list h2 { margin: 0; font-size: clamp(1.5rem, 2.3vw, 2.35rem); line-height: 1.08; }
   .article-list > a > p:not(.article-meta-line) { margin: 0; color: var(--text-muted); line-height: 1.7; }
   .article-arrow { color: var(--accent); font-size: 1.2rem; }
@@ -342,6 +376,11 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
     .related-insights b { grid-column: 2; grid-row: 1; }
   }
   @media (prefers-reduced-motion: reduce) {
+    .blog-page [data-reveal] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
     .article-list > a { transition: none; }
   }
 </style>
