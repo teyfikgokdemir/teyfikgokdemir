@@ -64,6 +64,15 @@ const navLabels = locale === 'fa'
       contact: 'تماس',
     }
   : copy.nav;
+
+const logoAltText: Record<Locale | 'fa', string> = {
+  tr: 'Teyfik Gökdemir logosu',
+  en: 'Teyfik Gökdemir logo',
+  mk: 'Лого на Тејфик Ѓокдемир',
+  sq: 'Logoja e Teyfik Gökdemir',
+  sr: 'Logo Teyfik Gökdemir',
+  fa: 'لوگوی تیفیک گوکدمیر',
+};
 ---
 <header class="site-header">
   <a class="brand" href={localeUrl(locale)} aria-label="Teyfik Gökdemir">
@@ -72,7 +81,7 @@ const navLabels = locale === 'fa'
       src="/images/teyfik-gokdemir-tg-logo-transparent.png?v=7"
       width="64"
       height="64"
-      alt=""
+      alt={logoAltText[locale]}
       aria-hidden="true"
       decoding="async"
     />
