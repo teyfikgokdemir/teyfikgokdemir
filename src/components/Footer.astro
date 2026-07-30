@@ -21,6 +21,15 @@ const footerText = {
 
 const footer = footerText[locale] ?? footerText.en;
 
+const logoAltText: Record<Locale | 'fa', string> = {
+  tr: 'Teyfik Gökdemir logosu',
+  en: 'Teyfik Gökdemir logo',
+  mk: 'Лого на Тејфик Ѓокдемир',
+  sq: 'Logoja e Teyfik Gökdemir',
+  sr: 'Logo Teyfik Gökdemir',
+  fa: 'لوگوی تیفیک گوکدمیر',
+};
+
 const socialLinks = [
   ['LinkedIn', site.links.linkedin],
   ['Instagram', site.links.instagram],
@@ -59,7 +68,7 @@ const whatsappUrl =
           src="/images/teyfik-gokdemir-tg-logo-transparent.png?v=7"
           width="64"
           height="64"
-          alt=""
+          alt={logoAltText[locale]}
           aria-hidden="true"
           loading="lazy"
           decoding="async"
