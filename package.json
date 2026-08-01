@@ -9,6 +9,7 @@
     "dev": "astro dev",
     "build": "astro build && node scripts/generate-seo-artifacts.mjs",
     "audit": "node scripts/audit-built-site.mjs",
+    "check:responsive": "node scripts/check-responsive.mjs",
     "sitemap": "node scripts/generate-seo-artifacts.mjs --public",
     "test:seo": "npm run audit",
     "preview": "astro preview",
@@ -18,6 +19,7 @@
     "astro": "^7.1.3"
   },
   "devDependencies": {
+    "playwright-core": "^1.62.0",
     "sharp": "^0.35.3"
   }
 }

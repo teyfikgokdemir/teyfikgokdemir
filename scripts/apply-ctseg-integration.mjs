@@ -9,7 +9,7 @@ async function patch(path, transform) {
 
 await patch('src/data/site.ts', (source) => {
   let next = source;
-  if (!next.includes("ctseg: 'https://ctseg.com.tr'")) next = next.replace("    mythborn: 'https://mythborn.co',", "    mythborn: 'https://mythborn.co',\n    ctseg: 'https://ctseg.com.tr',");
+  if (!next.includes("ctseg: 'https://ctseg.com.tr'")) next = next.replace("    mythborn: 'https://mythborn.co/',", "    mythborn: 'https://mythborn.co/',\n    ctseg: 'https://ctseg.com.tr',");
   if (!next.includes("ctseg: { path: '/images/ctseg-logo-transparent.png'")) next = next.replace("    legacy: { path: '/images/teyfik-gokdemir.webp', width: 900, height: 1213 },", "    legacy: { path: '/images/teyfik-gokdemir.webp', width: 900, height: 1213 },\n    ctseg: { path: '/images/ctseg-logo-transparent.png', width: 1063, height: 342 },");
   return next;
 });
@@ -45,7 +45,7 @@ await patch('src/components/Footer.astro', (source) => {
 
 await patch('src/components/VentureMarquee.astro', (source) => {
   let next = source;
-  if (!next.includes("{ name: 'CTSEG'")) next = next.replace("  { name: 'Mythborn', href: 'https://mythborn.co', tone: 'mythborn' },", "  { name: 'Mythborn', href: 'https://mythborn.co', tone: 'mythborn' },\n  { name: 'CTSEG', href: 'https://ctseg.com.tr', tone: 'ctseg', logo: '/images/ctseg-logo-transparent.png' },");
+  if (!next.includes("{ name: 'CTSEG'")) next = next.replace("  { name: 'Mythborn', href: 'https://mythborn.co/', tone: 'mythborn' },", "  { name: 'Mythborn', href: 'https://mythborn.co/', tone: 'mythborn' },\n  { name: 'CTSEG', href: 'https://ctseg.com.tr', tone: 'ctseg', logo: '/images/ctseg-logo-transparent.png' },");
   return next;
 });
 
@@ -81,8 +81,8 @@ await patch('src/components/FounderPage.astro', (source) => {
 
   if (!next.includes('>CTSEG ↗</a>')) {
     next = next.replace(
-      '<a href="https://mythborn.co" target="_blank" rel="noopener noreferrer">Mythborn ↗</a>',
-      '<a href="https://mythborn.co" target="_blank" rel="noopener noreferrer">Mythborn ↗</a><a href="https://ctseg.com.tr" target="_blank" rel="noopener noreferrer">CTSEG ↗</a>'
+      '<a href="https://mythborn.co/" target="_blank" rel="noopener noreferrer">Mythborn ↗</a>',
+      '<a href="https://mythborn.co/" target="_blank" rel="noopener noreferrer">Mythborn ↗</a><a href="https://ctseg.com.tr" target="_blank" rel="noopener noreferrer">CTSEG ↗</a>'
     );
   }
 

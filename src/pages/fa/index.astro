@@ -12,7 +12,7 @@ const ctsegUrl = 'https://ctseg.com.tr/fa/tamin-beynolmelali-iran/';
 const ventures = [
   { name: 'QCT Studio', region: 'ساختار پشتیبان · بالکان', href: 'https://qctstudio.com', text: 'زیرساخت‌های چندزبانه وب، دیده‌شدن در جستجو و اتوماسیون برای پشتیبانی از توسعه تجاری منطقه‌ای.' },
   { name: 'QCT Commerce', region: 'ساختار پشتیبان · ترکیه', href: 'https://qctcommerce.com', text: 'سیستم‌های تجارت دیجیتال و فروش مستقیم که از اجرای تجاری و توسعه کانال پشتیبانی می‌کنند.' },
-  { name: 'Mythborn', region: 'برند مستقل', href: 'https://mythborn.co', text: 'یک برند مستقل با هویت و مسیر توسعه جداگانه.' },
+  { name: 'Mythborn', region: 'برند فعال و مستقل · بین‌المللی', href: 'https://mythborn.co/', text: 'یک برند مستقل و چندزبانه برای تجربه‌های تاروت، کاتینا، طالع‌بینی و خودشناسی در یک پلتفرم دیجیتال.' },
 ];
 const expertise = [
   { title: 'تجارت بین‌المللی', items: ['تطبیق محصول و بازار', 'هماهنگی خریدار و تولیدکننده', 'فرایند RFQ و پیشنهاد قیمت', 'مذاکره و توسعه فرامرزی'] },
@@ -354,9 +354,32 @@ section[id]{scroll-margin-top:var(--header-offset)}
   #ctseg .service-list{grid-template-columns:1fr}
 }
 @media(max-width:620px){
-  .site-header{padding-inline:.75rem}
+  .site-header{padding-inline:20px}
   .site-header .brand strong{display:block;font-size:.72rem}
-  .hero{padding-block:2.5rem}
+  .header-panel{inset-inline:20px}
+  .hero{padding-block:2.25rem 3.5rem}
+  html[lang="fa"] body .hero.shell,html[lang="fa"] body main .shell{width:calc(100% - 40px);margin-inline:auto}
+  .section{padding-block:3.75rem}
+  h1,h2,h3{max-width:100%;overflow-wrap:anywhere;text-wrap:balance}
+  h1,.hero h1{font-size:clamp(2rem,10vw,2.8rem);line-height:1.32}
+  h2,#ctseg h2{font-size:clamp(1.8rem,8.5vw,2.35rem);line-height:1.35}
+  .hero .lead,.hero .summary,.section .lead,.section .note p{max-width:40ch}
+  .summary{padding-inline-start:1rem;padding-inline-end:0;border-inline-start:2px solid var(--accent);border-inline-end:0}
+  .actions{display:grid;width:100%}
+  .actions a,.actions .ctseg-cta{width:100%;max-width:100%;justify-content:center;text-align:center;white-space:normal;overflow-wrap:anywhere}
+  #ctseg .ctseg-panel{width:calc(100% - 40px)}
+  #ctseg .ctseg-logo{max-width:100%}
+  .grid,.ventures{grid-template-columns:1fr}
+  .grid article,.note,.ventures a,.ventures .featured{width:100%;max-width:100%}
+  .light-stage .ventures a,.light-stage .ventures .featured{padding-block:1.35rem}
+  .light-stage .ventures h3,.light-stage .ventures p{max-width:100%;overflow-wrap:anywhere}
+  footer{padding-inline:20px}
+  .premium-footer__inner,.premium-footer__bottom{width:calc(100% - 40px)}
+  .premium-footer__position{max-width:40ch;margin-inline:0;text-align:start}
+  .premium-footer__group,.premium-footer__group nav{align-items:flex-start;text-align:start}
+  .premium-footer__group nav a{max-width:100%;text-align:start;white-space:normal;overflow-wrap:anywhere}
+  .footer-brand,.footer-brand__signature-frame{direction:ltr;unicode-bidi:isolate}
+  .floating-actions{inset-inline-end:20px;bottom:max(16px,env(safe-area-inset-bottom))}
 }
 @media(prefers-reduced-motion:reduce){
   .header-panel{transition:none}

@@ -3,7 +3,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 const path = new URL('../src/pages/fa/index.astro', import.meta.url);
 let source = await readFile(path, 'utf8');
 
-const mythborn = "  { name: 'Mythborn', region: 'بین‌المللی', href: 'https://mythborn.co', text: 'برند و اکوسیستم محصول و تجارت بین‌المللی در حال توسعه.' },";
+const mythborn = "  { name: 'Mythborn', region: 'برند فعال و مستقل · بین‌المللی', href: 'https://mythborn.co/', text: 'یک برند مستقل و چندزبانه برای تجربه‌های تاروت، کاتینا، طالع‌بینی و خودشناسی در یک پلتفرم دیجیتال.' },";
 const ctseg = "  { name: 'CTSEG', region: 'تأمین و تجارت', href: 'https://ctseg.com.tr', text: 'ساختار تخصصی برای تأمین راهبردی، پژوهش و اعتبارسنجی تأمین‌کننده، RFQ، مذاکره تجاری و هماهنگی تجارت بین‌المللی.' },";
 if (!source.includes("name: 'CTSEG'")) {
   source = source.replace(mythborn, `${mythborn}\n${ctseg}`);

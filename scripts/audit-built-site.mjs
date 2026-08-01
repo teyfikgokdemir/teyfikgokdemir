@@ -170,9 +170,42 @@ else {
   }
 }
 
+const tradeEntryContracts = {
+  tr:{title:'İran halısı ve tekstilde uluslararası ticari koordinasyon',links:['https://ctseg.com.tr/tr/sourcing/iran-halisi/','https://ctseg.com.tr/tr/sourcing/el-dokumasi-ipek-hali/','https://ctseg.com.tr/tr/sourcing/toptan-tekstil-tedariki/']},
+  en:{title:'International commercial coordination for Iranian carpets and textiles',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
+  mk:{title:'Меѓународна трговска координација за ирански теписи и текстил',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
+  sr:{title:'Međunarodna komercijalna koordinacija za iranske tepihe i tekstil',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
+  sq:{title:'Koordinim tregtar ndërkombëtar për qilimat iranianë dhe tekstilet',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
+  fa:{title:'هماهنگی تجاری بین‌المللی برای فرش ایرانی و منسوجات',links:['https://ctseg.com.tr/fa/sourcing/فرش-ایرانی/','https://ctseg.com.tr/fa/sourcing/فرش-ابریشم-دستباف/','https://ctseg.com.tr/fa/sourcing/تامین-عمده-منسوجات/']}
+};
+const mythbornContracts = {
+  tr:{status:'Aktif girişim',region:'Uluslararası',description:'Tarot, Katina, astroloji ve kişisel keşif deneyimlerini çok dilli dijital bir platformda birleştiren bağımsız tüketici markası.'},
+  en:{status:'Active venture',region:'International',description:'An independent multilingual consumer brand bringing together Tarot, Katina, astrology and personal discovery experiences in one digital platform.'},
+  mk:{status:'Активен потфат',region:'Меѓународно',description:'Независен повеќејазичен потрошувачки бренд што на една дигитална платформа ги обединува искуствата со тарот, Катина, астрологија и лично самооткривање.'},
+  sr:{status:'Aktivan poduhvat',region:'Međunarodno',description:'Nezavisan višejezični potrošački brend koji na jednoj digitalnoj platformi objedinjuje iskustva tarota, Katine, astrologije i ličnog otkrivanja.'},
+  sq:{status:'Sipërmarrje aktive',region:'Ndërkombëtare',description:'Një markë e pavarur shumëgjuhëshe për konsumatorët, që bashkon në një platformë digjitale përvoja të Tarotit, Katinës, astrologjisë dhe zbulimit personal.'},
+  fa:{status:'برند فعال و مستقل',region:'بین‌المللی',description:'یک برند مستقل و چندزبانه برای تجربه‌های تاروت، کاتینا، طالع‌بینی و خودشناسی در یک پلتفرم دیجیتال.'}
+};
+const obsoleteMythbornCopy = [
+  'Uluslararası pazara yönelik marka, ürün ve dijital ticaret ekosistemi',
+  'A new venture in development as a brand, product and digital commerce ecosystem',
+  'Нов потфат во развој како екосистем',
+  'Novi poduhvat u razvoju kao ekosistem',
+  'Sipërmarrje e re në zhvillim si ekosistem',
+  'برند و اکوسیستم محصول و تجارت بین‌المللی در حال توسعه'
+];
 for (const [lang,route] of [['tr','/tr/'],['en','/en/'],['mk','/mk/'],['sr','/sr/'],['sq','/sq/'],['fa','/fa/']]) {
   const page = pageByRoute.get(route);
   if (!page) { errors.push(`${route}: locale ana sayfası eksik.`); continue; }
+  const tradeContract = tradeEntryContracts[lang];
+  if (!page.html.includes(tradeContract.title)) errors.push(`${route}: halı/tekstil uzmanlık başlığı eksik.`);
+  if ((page.html.match(/data-sector-link=/g) ?? []).length !== 3) errors.push(`${route}: üç ayrı sektör CTA bağlantısı bekleniyor.`);
+  for (const href of tradeContract.links) if (!page.html.includes(`href="${encodeURI(href)}"`) && !page.html.includes(`href="${href}"`)) errors.push(`${route}: sektör CTA hedefi eksik (${href}).`);
+  if (!page.html.includes('/images/ctseg-iranian-carpets-editorial.webp')) errors.push(`${route}: kontrollü editoryal görsel eksik.`);
+  const mythbornContract = mythbornContracts[lang];
+  for (const expected of [mythbornContract.status,mythbornContract.region,mythbornContract.description]) if (!page.html.includes(expected)) errors.push(`${route}: Mythborn yerelleştirmesi eksik (${expected}).`);
+  if (!page.html.includes('href="https://mythborn.co/"')) errors.push(`${route}: Mythborn kartı canlı trailing-slash hedefini kullanmıyor.`);
+  for (const obsolete of obsoleteMythbornCopy) if (page.html.includes(obsolete)) errors.push(`${route}: eski Mythborn konumlandırması hâlâ görünüyor (${obsolete}).`);
   const localeLinks = tags(page.html,'a').filter((tag)=>attribute(tag,'hreflang') && ['tr','en','mk','sr','sq','fa'].includes(attribute(tag,'hreflang')));
   if (localeLinks.length < 6) errors.push(`${route}: global dil menüsü altı dili göstermiyor.`);
   for (const code of ['tr','en','mk','sr','sq','fa']) {
@@ -186,7 +219,7 @@ for (const [lang,route] of [['tr','/tr/'],['en','/en/'],['mk','/mk/'],['sr','/sr
   if ((page.html.match(/\/brand\/teyfik-gokdemir-signature\.webp/g) ?? []).length !== 1) errors.push(`${route}: imza logosu tam bir görünür yerde bulunmalı.`);
   if (!/<img\b[^>]*src="\/brand\/teyfik-gokdemir-signature\.png"[^>]*alt="Teyfik Gökdemir"/i.test(page.html)) errors.push(`${route}: footer imza fallback veya alt metni yanlış.`);
   const marqueeLinks = tags(page.html, 'a').filter((tag) => /\bventure-marquee__item\b/.test(attribute(tag, 'class') ?? ''));
-  const marqueeTargets = ['https://ctseg.com.tr', 'https://qctstudio.com', 'https://qctcommerce.com', 'https://mythborn.co'];
+  const marqueeTargets = ['https://ctseg.com.tr', 'https://qctstudio.com', 'https://qctcommerce.com', 'https://mythborn.co/'];
   if (marqueeLinks.length !== 8) errors.push(`${route}: marquee iki eş marka grubu içermiyor.`);
   for (const target of marqueeTargets) {
     if (marqueeLinks.filter((tag) => normalizedUrl(attribute(tag, 'href')) === normalizedUrl(target)).length !== 2) errors.push(`${route}: marquee marka hedefi eksik veya yinelenme sayısı yanlış (${target}).`);
