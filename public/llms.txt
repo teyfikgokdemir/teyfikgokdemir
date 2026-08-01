@@ -29,6 +29,7 @@ The canonical English homepage is `/en/`. The root route permanently redirects t
 - Hand-knotted silk carpets as a distinct specialist field
 - Wholesale textiles: fabric, towels, bathrobes, home textiles, ready-to-wear, private label, samples, RFQ, producer verification, quality, packaging and logistics
 - Operational sourcing and trade execution are handled through CTSEG; the personal website is not a carpet shop or product catalogue
+- In Persian, Teyfik Gökdemir is positioned as a commercial coordinator who connects qualified Iranian manufacturers, workshops and exporters with international buyers and target markets; CTSEG provides the operational structure for export-readiness review, RFQs, samples, packaging, documents and logistics.
 
 - International trade
 - Strategic sourcing
