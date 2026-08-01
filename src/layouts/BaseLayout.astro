@@ -34,6 +34,8 @@ const pagePath = pathname ?? localeUrl(locale);
 const canonical = new URL(pagePath, site.origin).toString();
 const profileImage =
   site.origin + site.images.profile.originalPath;
+const brandPrimaryImage = site.origin + '/brand/teyfik-gokdemir-primary.png';
+const brandOgImage = site.origin + '/brand/teyfik-gokdemir-og.webp';
 
 const defaultAlternates: Partial<Record<Locale | 'fa' | 'x-default', string>> =
   Object.fromEntries([
@@ -70,7 +72,7 @@ const jsonLd = {
           email: site.directEmail,
         },
       ],
-      image: profileImage,
+      image: [profileImage, brandPrimaryImage],
       address: {
         '@type': 'PostalAddress',
         addressLocality: 'İstanbul',
@@ -90,6 +92,10 @@ const jsonLd = {
         'Search Visibility',
         'AI-Assisted Research',
         'AI-Assisted Operations',
+        'Iranian Carpets',
+        'Hand-Knotted Silk Carpets',
+        'Wholesale Textile Sourcing',
+        'Private Label Textiles',
       ],
       sameAs: [site.links.github, site.links.linkedin, site.links.instagram],
     },
@@ -185,17 +191,17 @@ const jsonLd = {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={profileImage} />
-    <meta property="og:image:width" content={String(site.images.profile.width)} />
-    <meta property="og:image:height" content={String(site.images.profile.height)} />
-    <meta property="og:image:alt" content={copy.images.profile} />
+    <meta property="og:image" content={brandOgImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Teyfik Gökdemir" />
     <meta property="og:locale" content={locale} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={profileImage} />
-    <meta name="twitter:image:alt" content={copy.images.profile} />
+    <meta name="twitter:image" content={brandOgImage} />
+    <meta name="twitter:image:alt" content="Teyfik Gökdemir" />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
   </head>
   <body>

@@ -16,19 +16,10 @@ const footerText = {
   mk: { connect: 'Поврзување', ventures: 'Организации', contact: 'Контакт', position: 'Основач на CTSEG · Меѓународна трговија и стратешко снабдување.' },
   sr: { connect: 'Povezivanje', ventures: 'Organizacije', contact: 'Kontakt', position: 'Osnivač CTSEG-a · Međunarodna trgovina i strateška nabavka.' },
   sq: { connect: 'Lidhje', ventures: 'Organizata', contact: 'Kontakt', position: 'Themelues i CTSEG · Tregti ndërkombëtare dhe furnizim strategjik.' },
-  fa: { connect: 'ارتباطات', ventures: 'سازمان‌ها', contact: 'تماس', position: 'بنیان‌گذار CTSEG · تجارت بین‌المللی و تأمین راهبردی.' },
+  fa: { connect: 'ارتباطات', ventures: 'سازمان‌ها', contact: 'تماس', position: 'بنیان‌گذار CTSEG · هماهنگ‌کننده تجاری تولیدکنندگان ایرانی با بازارهای بین‌المللی.' },
 } as const;
 
 const footer = footerText[locale] ?? footerText.en;
-
-const logoAltText: Record<Locale | 'fa', string> = {
-  tr: 'Teyfik Gökdemir logosu',
-  en: 'Teyfik Gökdemir logo',
-  mk: 'Лого на Тејфик Ѓокдемир',
-  sq: 'Logoja e Teyfik Gökdemir',
-  sr: 'Logo Teyfik Gökdemir',
-  fa: 'لوگوی تیفیک گوکدمیر',
-};
 
 const socialLinks = [
   ['LinkedIn', site.links.linkedin],
@@ -63,18 +54,18 @@ const whatsappUrl =
         href="#top"
         aria-label="Teyfik Gökdemir"
       >
-        <img
-          class="footer-brand__logo"
-          src="/images/teyfik-gokdemir-tg-logo-transparent.png?v=7"
-          width="64"
-          height="64"
-          alt={logoAltText[locale]}
-          aria-hidden="true"
-          loading="lazy"
-          decoding="async"
-        />
-
-        <span>Teyfik Gökdemir</span>
+        <picture class="footer-brand__signature-frame">
+          <source srcset="/brand/teyfik-gokdemir-signature.webp" type="image/webp" />
+          <img
+            class="footer-brand__signature"
+            src="/brand/teyfik-gokdemir-signature.png"
+            width="380"
+            height="102"
+            alt="Teyfik Gökdemir"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
       </a>
 
       <p class="premium-footer__position">
@@ -218,32 +209,30 @@ const whatsappUrl =
   }
 
   .footer-brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 34px;
+    display: inline-block;
+    width: min(380px, 100%);
+    max-width: 100%;
     color: inherit;
     text-decoration: none;
-    white-space: nowrap;
+    direction: ltr;
+    unicode-bidi: isolate;
   }
 
-  .footer-brand__logo {
+  .footer-brand__signature-frame,
+  .footer-brand__signature {
     display: block;
-    width: 112px;
-    height: 112px;
-    flex: 0 0 112px;
-    object-fit: contain;
+    width: 100%;
+    height: auto;
   }
 
-  .footer-brand span {
-    font-size: clamp(2rem, 2.35vw, 2.6rem);
-    font-weight: 500;
-    letter-spacing: -0.035em;
+  .footer-brand__signature {
+    width: 100%;
   }
 
   .premium-footer__position {
     width: auto;
     max-width: 410px;
-    margin: 28px 0 0;
+    margin: 22px 0 0;
     font-size: clamp(1rem, 1.25vw, 1.18rem);
     line-height: 1.68;
     white-space: normal;
@@ -402,20 +391,6 @@ const whatsappUrl =
     .premium-footer__inner,
     .premium-footer__bottom {
       width: min(100% - 40px, 1440px);
-    }
-
-    .footer-brand {
-      gap: 20px;
-    }
-
-    .footer-brand__logo {
-      width: 76px;
-      height: 76px;
-      flex-basis: 76px;
-    }
-
-    .footer-brand span {
-      font-size: 1.7rem;
     }
 
     .premium-footer__groups {

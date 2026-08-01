@@ -3,6 +3,8 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import FloatingActions from '../../components/FloatingActions.astro';
 import RevealController from '../../components/RevealController.astro';
+import FounderTradeExpertise from '../../components/FounderTradeExpertise.astro';
+import VentureMarquee from '../../components/VentureMarquee.astro';
 import { content } from '../../i18n/content';
 
 const email = 'info@teyfikgokdemir.com';
@@ -26,10 +28,11 @@ const schema = {
       '@id': 'https://teyfikgokdemir.com/#person',
       name: 'Teyfik Gökdemir',
       url: 'https://teyfikgokdemir.com/',
-      jobTitle: 'بنیان‌گذار CTSEG و متخصص تجارت بین‌المللی و تأمین راهبردی',
-      description: 'بنیان‌گذار CTSEG که سیستم‌های مبتنی بر شواهد برای تأمین راهبردی، اعتبارسنجی تأمین‌کننده و عملیات تجاری فرامرزی ایجاد می‌کند.',
+      jobTitle: 'بنیان‌گذار CTSEG و هماهنگ‌کننده تجاری بین‌المللی',
+      description: 'بنیان‌گذار CTSEG و هماهنگ‌کننده تجاری که تولیدکنندگان، کارگاه‌ها و صادرکنندگان ایرانی را برای آمادگی صادرات، ارتباط با خریداران و توسعه بازار در ترکیه، اروپا، آمریکا و دیگر بازارهای هدف همراهی می‌کند.',
       email,
-      knowsAbout: ['تجارت بین‌المللی', 'تأمین راهبردی', 'پژوهش تأمین‌کننده', 'اعتبارسنجی تأمین‌کننده', 'RFQ', 'مذاکره تجاری', 'توسعه بازار', 'عملیات فرامرزی', 'پژوهش مبتنی بر هوش مصنوعی'],
+      image: 'https://teyfikgokdemir.com/brand/teyfik-gokdemir-primary.png',
+      knowsAbout: ['تجارت بین‌المللی', 'تأمین راهبردی', 'هماهنگی تجاری بین‌المللی', 'ورود تولیدکنندگان ایرانی به بازار', 'ارتباط تولیدکننده و خریدار', 'توسعه کانال فروش', 'پژوهش تأمین‌کننده', 'اعتبارسنجی تأمین‌کننده', 'RFQ', 'مذاکره تجاری', 'توسعه بازار', 'عملیات فرامرزی', 'فرش ایرانی', 'فرش ابریشم دستباف', 'تأمین عمده منسوجات', 'تولید با برند اختصاصی', 'پژوهش مبتنی بر هوش مصنوعی'],
     },
     {
       '@type': 'Organization',
@@ -41,7 +44,7 @@ const schema = {
       description: 'شرکت تجارت بین‌المللی و تأمین راهبردی.',
     },
     { '@type': 'WebSite', '@id': 'https://teyfikgokdemir.com/#website', name: 'Teyfik Gökdemir', url: 'https://teyfikgokdemir.com/', author: { '@id': 'https://teyfikgokdemir.com/#person' } },
-    { '@type': 'WebPage', '@id': 'https://teyfikgokdemir.com/fa/#webpage', url: 'https://teyfikgokdemir.com/fa/', name: 'تیفیک گوکدمیر | بنیان‌گذار CTSEG، تجارت بین‌المللی و تأمین راهبردی', description: 'هویت حرفه‌ای بنیان‌گذار CTSEG و رویکرد او به تجارت بین‌المللی و تأمین راهبردی.', inLanguage: 'fa', isPartOf: { '@id': 'https://teyfikgokdemir.com/#website' }, about: { '@id': 'https://teyfikgokdemir.com/#person' } },
+    { '@type': 'WebPage', '@id': 'https://teyfikgokdemir.com/fa/#webpage', url: 'https://teyfikgokdemir.com/fa/', name: 'تیفیک گوکدمیر | هماهنگ‌کننده تجاری تولیدکنندگان و صادرکنندگان ایرانی', description: 'معرفی تیفیک گوکدمیر، بنیان‌گذار CTSEG و هماهنگ‌کننده تجاری برای پیوند تولیدکنندگان و صادرکنندگان ایرانی با خریداران و بازارهای بین‌المللی.', inLanguage: 'fa', isPartOf: { '@id': 'https://teyfikgokdemir.com/#website' }, about: { '@id': 'https://teyfikgokdemir.com/#person' } },
   ],
 };
 ---
@@ -50,8 +53,8 @@ const schema = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>تیفیک گوکدمیر | بنیان‌گذار CTSEG، تجارت بین‌المللی و تأمین راهبردی</title>
-  <meta name="description" content="بنیان‌گذار CTSEG؛ ایجاد سیستم‌های مبتنی بر شواهد برای تجارت بین‌المللی، تأمین راهبردی، اعتبارسنجی تأمین‌کننده و عملیات فرامرزی." />
+  <title>تیفیک گوکدمیر | هماهنگ‌کننده تجاری تولیدکنندگان و صادرکنندگان ایرانی</title>
+  <meta name="description" content="تیفیک گوکدمیر، بنیان‌گذار CTSEG و هماهنگ‌کننده تجاری برای پیوند تولیدکنندگان و صادرکنندگان ایرانی با خریداران در ترکیه، اروپا، آمریکا و دیگر بازارهای هدف." />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="https://teyfikgokdemir.com/fa/" />
   <link rel="alternate" hreflang="fa" href="https://teyfikgokdemir.com/fa/" />
@@ -61,11 +64,19 @@ const schema = {
   <link rel="alternate" hreflang="sr" href="https://teyfikgokdemir.com/sr/" />
   <link rel="alternate" hreflang="sq" href="https://teyfikgokdemir.com/sq/" />
   <link rel="alternate" hreflang="x-default" href="https://teyfikgokdemir.com/tr/" />
-  <meta property="og:title" content="تیفیک گوکدمیر | بنیان‌گذار CTSEG" />
-  <meta property="og:description" content="تجارت بین‌المللی، تأمین راهبردی و عملیات تجاری مبتنی بر شواهد." />
+  <meta property="og:title" content="تیفیک گوکدمیر | هماهنگ‌کننده تجاری بین‌المللی" />
+  <meta property="og:description" content="پیوند تولیدکنندگان و صادرکنندگان ایرانی با خریداران و بازارهای بین‌المللی از طریق ساختار عملیاتی CTSEG." />
   <meta property="og:url" content="https://teyfikgokdemir.com/fa/" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://teyfikgokdemir.com/images/teyfik-gokdemir.webp" />
+  <meta property="og:image" content="https://teyfikgokdemir.com/brand/teyfik-gokdemir-og.webp" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Teyfik Gökdemir" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="تیفیک گوکدمیر | هماهنگ‌کننده تجاری بین‌المللی" />
+  <meta name="twitter:description" content="پیوند تولیدکنندگان و صادرکنندگان ایرانی با خریداران و بازارهای بین‌المللی از طریق ساختار عملیاتی CTSEG." />
+  <meta name="twitter:image" content="https://teyfikgokdemir.com/brand/teyfik-gokdemir-og.webp" />
+  <meta name="twitter:image:alt" content="Teyfik Gökdemir" />
   <link rel="icon" href="/favicon-32x32.png?v=7" type="image/png" sizes="32x32" />
   <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
 </head>
@@ -99,6 +110,8 @@ const schema = {
       </div>
     </section>
 
+    <FounderTradeExpertise locale="fa" />
+
     <section class="section light-stage" id="focus"><div class="shell"><p class="label">حوزه فعالیت</p><h2>از فرضیه تجاری تا تصمیم قابل اجرا.</h2><p class="lead">روش کار بر شواهد، بررسی متقابل منابع، مستندسازی و نقاط کنترل روشن تکیه دارد. ابزارهای دیجیتال و AI سرعت پژوهش را بالا می‌برند؛ مسئولیت قضاوت تجاری همچنان انسانی می‌ماند.</p><div class="grid">{expertise.map(group => <article><h3>{group.title}</h3><ul>{group.items.map(item => <li>{item}</li>)}</ul></article>)}</div></div></section>
 
     <section class="section light-stage" id="ventures"><div class="shell"><p class="label">ساختار تجاری و اکوسیستم پشتیبان</p><h2>CTSEG در مرکز؛ سایر ساختارها در نقش پشتیبان یا مستقل.</h2><div class="ventures">{ventures.map(v => <a class:list={{ featured: v.featured }} href={v.href} target="_blank" rel="noopener noreferrer"><span>{v.region}</span><h3>{v.name}</h3><p>{v.text}</p><b>↗</b></a>)}</div></div></section>
@@ -107,6 +120,7 @@ const schema = {
 
     <section class="section" id="contact"><div class="shell contact"><p class="label">برای همکاری تجاری</p><h2>بیایید محصول، بازار یا فرصت تأمین را با شواهد بررسی کنیم.</h2><p class="lead">برای پروژه‌های اجرایی CTSEG را ببینید؛ برای گفت‌وگو با بنیان‌گذار مستقیماً ایمیل بزنید.</p><div class="actions centered"><a class="primary" href={ctsegUrl}>خدمات CTSEG</a><a href={`mailto:${email}`}>{email}</a></div></div></section>
   </main>
+  <VentureMarquee />
   <Footer copy={content.en} locale="fa" />
   <FloatingActions locale="fa" />
   <script is:inline>
