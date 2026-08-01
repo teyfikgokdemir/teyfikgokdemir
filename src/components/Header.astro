@@ -68,27 +68,21 @@ const a11y = locale === 'fa'
   ? { language:'انتخاب زبان', menuOpen:'باز کردن منو', menuClose:'بستن منو' }
   : copy.a11y;
 
-const logoAltText: Record<Locale | 'fa', string> = {
-  tr: 'Teyfik Gökdemir logosu',
-  en: 'Teyfik Gökdemir logo',
-  mk: 'Лого на Тејфик Ѓокдемир',
-  sq: 'Logoja e Teyfik Gökdemir',
-  sr: 'Logo Teyfik Gökdemir',
-  fa: 'لوگوی تیفیک گوکدمیر',
-};
 ---
 <header class="site-header">
-  <a class="brand" href={localeUrl(locale)} aria-label="Teyfik Gökdemir">
-    <img
-      class="brand__logo"
-      src="/images/teyfik-gokdemir-tg-logo-transparent.png?v=7"
-      width="64"
-      height="64"
-      alt={logoAltText[locale]}
-      aria-hidden="true"
-      decoding="async"
-    />
-    <strong>Teyfik Gökdemir</strong>
+  <a class="brand" href={currentHomePath} aria-label="Teyfik Gökdemir">
+    <picture class="brand__mark">
+      <source media="(max-width: 760px)" srcset="/brand/teyfik-gokdemir-monogram.webp" type="image/webp" />
+      <source media="(max-width: 760px)" srcset="/brand/teyfik-gokdemir-monogram.png" type="image/png" />
+      <source srcset="/brand/teyfik-gokdemir-primary.webp" type="image/webp" />
+      <img
+        src="/brand/teyfik-gokdemir-primary.png"
+        width="794"
+        height="251"
+        alt="Teyfik Gökdemir"
+        decoding="async"
+      />
+    </picture>
   </a>
 
   <button
@@ -175,31 +169,33 @@ const logoAltText: Record<Locale | 'fa', string> = {
 </script>
 
 <style>
-  .brand__logo {
+  .brand__mark {
     display: block;
-    width: 58px;
-    height: 58px;
-    flex: 0 0 58px;
-    object-fit: contain;
+    width: clamp(10.5rem, 13.2vw, 11.5rem);
+    flex: 0 0 auto;
+    direction: ltr;
+    unicode-bidi: isolate;
   }
 
-  .brand strong {
-    font-size: clamp(0.9rem, 1.1vw, 1.05rem);
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+  .brand__mark img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 794 / 251;
+    object-fit: contain;
+    border-radius: 5px;
   }
 
   @media (max-width: 760px) {
-    .brand__logo {
-      width: 44px;
-      height: 44px;
-      flex-basis: 44px;
+    .brand__mark {
+      width: 46px;
+      height: 46px;
     }
 
-    .brand strong {
-      font-size: 0.78rem;
-      letter-spacing: 0.08em;
+    .brand__mark img {
+      width: 46px;
+      height: 46px;
+      aspect-ratio: 1;
+      border-radius: 4px;
     }
   }
 </style>

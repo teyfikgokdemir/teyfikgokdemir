@@ -21,15 +21,6 @@ const footerText = {
 
 const footer = footerText[locale] ?? footerText.en;
 
-const logoAltText: Record<Locale | 'fa', string> = {
-  tr: 'Teyfik Gökdemir logosu',
-  en: 'Teyfik Gökdemir logo',
-  mk: 'Лого на Тејфик Ѓокдемир',
-  sq: 'Logoja e Teyfik Gökdemir',
-  sr: 'Logo Teyfik Gökdemir',
-  fa: 'لوگوی تیفیک گوکدمیر',
-};
-
 const socialLinks = [
   ['LinkedIn', site.links.linkedin],
   ['Instagram', site.links.instagram],
@@ -63,18 +54,18 @@ const whatsappUrl =
         href="#top"
         aria-label="Teyfik Gökdemir"
       >
-        <img
-          class="footer-brand__logo"
-          src="/images/teyfik-gokdemir-tg-logo-transparent.png?v=7"
-          width="64"
-          height="64"
-          alt={logoAltText[locale]}
-          aria-hidden="true"
-          loading="lazy"
-          decoding="async"
-        />
-
-        <span>Teyfik Gökdemir</span>
+        <picture class="footer-brand__signature-frame">
+          <source srcset="/brand/teyfik-gokdemir-signature.webp" type="image/webp" />
+          <img
+            class="footer-brand__signature"
+            src="/brand/teyfik-gokdemir-signature.png"
+            width="408"
+            height="106"
+            alt="Teyfik Gökdemir"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
       </a>
 
       <p class="premium-footer__position">
@@ -218,26 +209,29 @@ const whatsappUrl =
   }
 
   .footer-brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 34px;
+    display: inline-block;
+    width: min(396px, 100%);
+    max-width: 100%;
+    padding: 12px 18px;
+    overflow: hidden;
+    border: 1px solid rgba(183, 154, 99, 0.24);
+    border-radius: 10px;
     color: inherit;
+    background: #071015;
     text-decoration: none;
-    white-space: nowrap;
+    direction: ltr;
+    unicode-bidi: isolate;
   }
 
-  .footer-brand__logo {
+  .footer-brand__signature-frame,
+  .footer-brand__signature {
     display: block;
-    width: 112px;
-    height: 112px;
-    flex: 0 0 112px;
-    object-fit: contain;
+    width: 100%;
+    height: auto;
   }
 
-  .footer-brand span {
-    font-size: clamp(2rem, 2.35vw, 2.6rem);
-    font-weight: 500;
-    letter-spacing: -0.035em;
+  .footer-brand__signature {
+    width: 100%;
   }
 
   .premium-footer__position {
@@ -405,17 +399,7 @@ const whatsappUrl =
     }
 
     .footer-brand {
-      gap: 20px;
-    }
-
-    .footer-brand__logo {
-      width: 76px;
-      height: 76px;
-      flex-basis: 76px;
-    }
-
-    .footer-brand span {
-      font-size: 1.7rem;
+      padding: 10px 14px;
     }
 
     .premium-footer__groups {

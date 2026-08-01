@@ -33,6 +33,22 @@ const normalizedUrl = (value) => {
 if (!fs.existsSync(dist)) throw new Error('dist/ bulunamadı. Önce npm run build çalıştırın.');
 walk(dist);
 
+const requiredBrandAssets = [
+  'brand/teyfik-gokdemir-primary.webp',
+  'brand/teyfik-gokdemir-primary.png',
+  'brand/teyfik-gokdemir-signature.webp',
+  'brand/teyfik-gokdemir-signature.png',
+  'brand/teyfik-gokdemir-monogram.webp',
+  'brand/teyfik-gokdemir-monogram.png',
+  'brand/teyfik-gokdemir-og.webp',
+];
+for (const asset of requiredBrandAssets) {
+  const assetPath = path.join(dist, ...asset.split('/'));
+  if (!fs.existsSync(assetPath) || fs.statSync(assetPath).size === 0) {
+    errors.push(`Marka varlığı eksik veya boş: /${asset}`);
+  }
+}
+
 const redirectFile = path.join(dist, '_redirects');
 const redirectLines = fs.existsSync(redirectFile)
   ? fs.readFileSync(redirectFile, 'utf8').split(/\r?\n/).map((line) => line.trim()).filter((line) => line && !line.startsWith('#'))
@@ -86,6 +102,14 @@ for (const file of htmlFiles) {
     try { JSON.parse(block[1]); } catch { errors.push(`${route}: geçersiz JSON-LD.`); }
   }
   if (!/application\/ld\+json/i.test(html)) errors.push(`${route}: JSON-LD eksik.`);
+  const ogImage = attribute(selectedTag(html, 'meta', 'property', 'og:image'), 'content');
+  const ogWidth = attribute(selectedTag(html, 'meta', 'property', 'og:image:width'), 'content');
+  const ogHeight = attribute(selectedTag(html, 'meta', 'property', 'og:image:height'), 'content');
+  const twitterCard = attribute(selectedTag(html, 'meta', 'name', 'twitter:card'), 'content');
+  const twitterImage = attribute(selectedTag(html, 'meta', 'name', 'twitter:image'), 'content');
+  if (ogImage !== `${origin}/brand/teyfik-gokdemir-og.webp`) errors.push(`${route}: marka OG görseli yanlış.`);
+  if (ogWidth !== '1200' || ogHeight !== '630') errors.push(`${route}: OG görsel boyutları 1200x630 değil.`);
+  if (twitterCard !== 'summary_large_image' || twitterImage !== ogImage) errors.push(`${route}: Twitter card marka görseliyle eşleşmiyor.`);
   if (/<script\b[^>]*src=["'][^"']*googletagmanager\.com\/gtag/i.test(html)) {
     errors.push(`${route}: analitik scripti izin alınmadan HTML içinde yükleniyor.`);
   }
@@ -147,6 +171,11 @@ for (const [lang,route] of [['tr','/tr/'],['en','/en/'],['mk','/mk/'],['sr','/sr
     if (routeFromUrl(attribute(link,'href')) !== `/${code}/`) errors.push(`${route}: ${code} locale hedefi yanlış.`);
     if ((code===lang) !== (attribute(link,'aria-current')==='page')) errors.push(`${route}: ${code} aktif locale durumu yanlış.`);
   }
+  if (!new RegExp(`<a\\b[^>]*class="brand"[^>]*href="${route}"[^>]*aria-label="Teyfik Gökdemir"`, 'i').test(page.html)) errors.push(`${route}: header logo bağlantısı locale ana sayfasına gitmiyor.`);
+  if (!page.html.includes('/brand/teyfik-gokdemir-primary.webp') || !page.html.includes('/brand/teyfik-gokdemir-monogram.webp')) errors.push(`${route}: responsive kişisel marka kaynakları eksik.`);
+  if (!/<img\b[^>]*src="\/brand\/teyfik-gokdemir-primary\.png"[^>]*alt="Teyfik Gökdemir"/i.test(page.html)) errors.push(`${route}: header logo alt metni veya PNG fallback yanlış.`);
+  if ((page.html.match(/\/brand\/teyfik-gokdemir-signature\.webp/g) ?? []).length !== 1) errors.push(`${route}: imza logosu tam bir görünür yerde bulunmalı.`);
+  if (!/<img\b[^>]*src="\/brand\/teyfik-gokdemir-signature\.png"[^>]*alt="Teyfik Gökdemir"/i.test(page.html)) errors.push(`${route}: footer imza fallback veya alt metni yanlış.`);
 }
 
 const internalAssetPrefixes = ['/images/', '/_astro/', '/favicon-', '/apple-touch-icon', '/site.webmanifest'];
