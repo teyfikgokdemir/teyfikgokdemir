@@ -42,7 +42,7 @@ export const site = {
     instagram: 'https://www.instagram.com/teyfikgokdemir/',
     qctStudio: 'https://qctstudio.com',
     qctCommerce: 'https://qctcommerce.com',
-    mythborn: 'https://mythborn.co',
+    mythborn: 'https://mythborn.co/',
     ctseg: 'https://ctseg.com.tr',
   },
 } as const;
