@@ -48,6 +48,15 @@ for (const asset of requiredBrandAssets) {
     errors.push(`Marka varlığı eksik veya boş: /${asset}`);
   }
 }
+const astroAssetDirectory = path.join(dist, '_astro');
+const builtCss = fs.existsSync(astroAssetDirectory)
+  ? fs.readdirSync(astroAssetDirectory)
+      .filter((file) => file.endsWith('.css'))
+      .map((file) => fs.readFileSync(path.join(astroAssetDirectory, file), 'utf8'))
+      .join('\n')
+  : '';
+if (!builtCss.includes('ventureMarqueeFlow')) errors.push('Marquee keyframe derlenmiş CSS içinde eksik.');
+if (!builtCss.includes('venture-marquee__group') || !builtCss.includes('prefers-reduced-motion:reduce')) errors.push('Marquee reduced-motion stili derlenmiş CSS içinde eksik.');
 
 const redirectFile = path.join(dist, '_redirects');
 const redirectLines = fs.existsSync(redirectFile)
@@ -176,6 +185,14 @@ for (const [lang,route] of [['tr','/tr/'],['en','/en/'],['mk','/mk/'],['sr','/sr
   if (!/<img\b[^>]*src="\/brand\/teyfik-gokdemir-primary\.png"[^>]*alt="Teyfik Gökdemir"/i.test(page.html)) errors.push(`${route}: header logo alt metni veya PNG fallback yanlış.`);
   if ((page.html.match(/\/brand\/teyfik-gokdemir-signature\.webp/g) ?? []).length !== 1) errors.push(`${route}: imza logosu tam bir görünür yerde bulunmalı.`);
   if (!/<img\b[^>]*src="\/brand\/teyfik-gokdemir-signature\.png"[^>]*alt="Teyfik Gökdemir"/i.test(page.html)) errors.push(`${route}: footer imza fallback veya alt metni yanlış.`);
+  const marqueeLinks = tags(page.html, 'a').filter((tag) => /\bventure-marquee__item\b/.test(attribute(tag, 'class') ?? ''));
+  const marqueeTargets = ['https://ctseg.com.tr', 'https://qctstudio.com', 'https://qctcommerce.com', 'https://mythborn.co'];
+  if (marqueeLinks.length !== 8) errors.push(`${route}: marquee iki eş marka grubu içermiyor.`);
+  for (const target of marqueeTargets) {
+    if (marqueeLinks.filter((tag) => normalizedUrl(attribute(tag, 'href')) === normalizedUrl(target)).length !== 2) errors.push(`${route}: marquee marka hedefi eksik veya yinelenme sayısı yanlış (${target}).`);
+  }
+  if (marqueeLinks.filter((tag) => attribute(tag, 'tabindex') === '-1').length !== 4) errors.push(`${route}: marquee dekoratif tekrarları klavye sırasından çıkarılmamış.`);
+  if ((page.html.match(/class="venture-marquee__group"/g) ?? []).length !== 2 || !/class="venture-marquee__group" aria-hidden="true"/i.test(page.html)) errors.push(`${route}: marquee erişilebilir tekrar grubu yanlış.`);
 }
 
 const internalAssetPrefixes = ['/images/', '/_astro/', '/favicon-', '/apple-touch-icon', '/site.webmanifest'];

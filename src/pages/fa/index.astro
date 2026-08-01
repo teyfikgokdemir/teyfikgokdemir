@@ -4,6 +4,7 @@ import Footer from '../../components/Footer.astro';
 import FloatingActions from '../../components/FloatingActions.astro';
 import RevealController from '../../components/RevealController.astro';
 import FounderTradeExpertise from '../../components/FounderTradeExpertise.astro';
+import VentureMarquee from '../../components/VentureMarquee.astro';
 import { content } from '../../i18n/content';
 
 const email = 'info@teyfikgokdemir.com';
@@ -119,6 +120,7 @@ const schema = {
 
     <section class="section" id="contact"><div class="shell contact"><p class="label">برای همکاری تجاری</p><h2>بیایید محصول، بازار یا فرصت تأمین را با شواهد بررسی کنیم.</h2><p class="lead">برای پروژه‌های اجرایی CTSEG را ببینید؛ برای گفت‌وگو با بنیان‌گذار مستقیماً ایمیل بزنید.</p><div class="actions centered"><a class="primary" href={ctsegUrl}>خدمات CTSEG</a><a href={`mailto:${email}`}>{email}</a></div></div></section>
   </main>
+  <VentureMarquee />
   <Footer copy={content.en} locale="fa" />
   <FloatingActions locale="fa" />
   <script is:inline>

@@ -6,22 +6,37 @@ const ventures = [
   { name: 'Mythborn', href: 'https://mythborn.co', tone: 'mythborn' },
 ] as const;
 
-const repeatedVentures = ventures;
 ---
 
 <div class="venture-marquee" aria-label="Teyfik Gökdemir venture ecosystem">
   <div class="venture-marquee__track">
-    {repeatedVentures.map((venture) => (
-      <a
-        class:list={['venture-marquee__item', `venture-marquee__item--${venture.tone}`]}
-        href={venture.href}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <span class="venture-marquee__mark" aria-hidden="true"></span>
-        <span>{venture.name}</span>
-      </a>
-    ))}
+    <div class="venture-marquee__group">
+      {ventures.map((venture) => (
+        <a
+          class:list={['venture-marquee__item', `venture-marquee__item--${venture.tone}`]}
+          href={venture.href}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span class="venture-marquee__mark" aria-hidden="true"></span>
+          <span>{venture.name}</span>
+        </a>
+      ))}
+    </div>
+    <div class="venture-marquee__group" aria-hidden="true">
+      {ventures.map((venture) => (
+        <a
+          class:list={['venture-marquee__item', `venture-marquee__item--${venture.tone}`]}
+          href={venture.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          tabindex="-1"
+        >
+          <span class="venture-marquee__mark" aria-hidden="true"></span>
+          <span>{venture.name}</span>
+        </a>
+      ))}
+    </div>
   </div>
 </div>
 
@@ -34,23 +49,31 @@ const repeatedVentures = ventures;
     border-top: 1px solid #51483f;
     border-bottom: 1px solid #51483f;
     background: var(--surface-dark);
+    direction: ltr;
+    unicode-bidi: isolate;
   }
 
   .venture-marquee__track {
     display: flex;
-    width: 100%;
-    flex-wrap: wrap;
+    width: max-content;
     align-items: center;
-    justify-content: center;
+    animation: ventureMarqueeFlow 46s linear infinite;
+    will-change: transform;
+  }
+
+  .venture-marquee__group {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
   }
 
   .venture-marquee__item {
-    min-height: 86px;
+    min-height: 82px;
     display: inline-flex;
     flex: 0 0 auto;
     align-items: center;
-    gap: 18px;
-    padding: 0 clamp(24px, 3.5vw, 52px);
+    gap: 14px;
+    padding: 0 clamp(30px, 4vw, 64px);
     color: #bdb3a8;
     font-family: Georgia, 'Times New Roman', serif;
     font-size: clamp(1.45rem, 2.6vw, 2.7rem);
@@ -66,9 +89,14 @@ const repeatedVentures = ventures;
     color: #f3eee6;
   }
 
+  .venture-marquee:hover .venture-marquee__track,
+  .venture-marquee:focus-within .venture-marquee__track {
+    animation-play-state: paused;
+  }
+
   .venture-marquee__mark {
-    width: clamp(14px, 1.6vw, 24px);
-    height: clamp(14px, 1.6vw, 24px);
+    width: 9px;
+    height: 9px;
     flex: 0 0 auto;
     border: 1px solid currentColor;
     border-radius: 50%;
@@ -79,20 +107,39 @@ const repeatedVentures = ventures;
   .venture-marquee__item--commerce,
   .venture-marquee__item--mythborn { color: #bdb3a8; }
 
+  @keyframes ventureMarqueeFlow {
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+
   @media (max-width: 760px) {
     .venture-marquee__item {
       min-height: 64px;
-      padding-inline: 18px;
+      padding-inline: 24px;
       font-size: clamp(1.25rem, 6vw, 2rem);
     }
   }
 
-  @media (max-width: 460px) {
-    .venture-marquee__item {
-      width: 50%;
+  @media (prefers-reduced-motion: reduce) {
+    .venture-marquee__track {
+      width: 100%;
+      animation: none;
+      transform: none;
+      will-change: auto;
+    }
+
+    .venture-marquee__group:first-child {
+      width: 100%;
+      flex-wrap: wrap;
       justify-content: center;
-      padding-inline: 10px;
-      font-size: 1.12rem;
+    }
+
+    .venture-marquee__group[aria-hidden="true"] {
+      display: none;
+    }
+
+    .venture-marquee__item {
+      min-height: 64px;
+      padding-inline: clamp(16px, 3vw, 34px);
     }
   }
 </style>
