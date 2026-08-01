@@ -3,6 +3,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import FloatingActions from '../../components/FloatingActions.astro';
 import RevealController from '../../components/RevealController.astro';
+import FounderTradeExpertise from '../../components/FounderTradeExpertise.astro';
 import { content } from '../../i18n/content';
 
 const email = 'info@teyfikgokdemir.com';
@@ -29,7 +30,7 @@ const schema = {
       jobTitle: 'بنیان‌گذار CTSEG و متخصص تجارت بین‌المللی و تأمین راهبردی',
       description: 'بنیان‌گذار CTSEG که سیستم‌های مبتنی بر شواهد برای تأمین راهبردی، اعتبارسنجی تأمین‌کننده و عملیات تجاری فرامرزی ایجاد می‌کند.',
       email,
-      knowsAbout: ['تجارت بین‌المللی', 'تأمین راهبردی', 'پژوهش تأمین‌کننده', 'اعتبارسنجی تأمین‌کننده', 'RFQ', 'مذاکره تجاری', 'توسعه بازار', 'عملیات فرامرزی', 'پژوهش مبتنی بر هوش مصنوعی'],
+      knowsAbout: ['تجارت بین‌المللی', 'تأمین راهبردی', 'پژوهش تأمین‌کننده', 'اعتبارسنجی تأمین‌کننده', 'RFQ', 'مذاکره تجاری', 'توسعه بازار', 'عملیات فرامرزی', 'فرش ایرانی', 'فرش ابریشم دستباف', 'تأمین عمده منسوجات', 'تولید با برند اختصاصی', 'پژوهش مبتنی بر هوش مصنوعی'],
     },
     {
       '@type': 'Organization',
@@ -98,6 +99,8 @@ const schema = {
         <ul class="service-list"><li>پژوهش تأمین‌کننده و تولیدکننده</li><li>اعتبارسنجی هویت و ظرفیت</li><li>مدیریت RFQ و مقایسه پیشنهادها</li><li>مذاکره و هماهنگی تجاری</li><li>آمادگی صادرات و ورود به بازار</li><li>پیگیری عملیات فرامرزی</li></ul>
       </div>
     </section>
+
+    <FounderTradeExpertise locale="fa" />
 
     <section class="section light-stage" id="focus"><div class="shell"><p class="label">حوزه فعالیت</p><h2>از فرضیه تجاری تا تصمیم قابل اجرا.</h2><p class="lead">روش کار بر شواهد، بررسی متقابل منابع، مستندسازی و نقاط کنترل روشن تکیه دارد. ابزارهای دیجیتال و AI سرعت پژوهش را بالا می‌برند؛ مسئولیت قضاوت تجاری همچنان انسانی می‌ماند.</p><div class="grid">{expertise.map(group => <article><h3>{group.title}</h3><ul>{group.items.map(item => <li>{item}</li>)}</ul></article>)}</div></div></section>
 
