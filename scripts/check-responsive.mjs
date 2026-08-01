@@ -26,7 +26,7 @@ const server=createServer(async(request,response)=>{
 await new Promise(resolvePromise=>server.listen(4323,'127.0.0.1',resolvePromise));
 
 const locales=['tr','en','mk','sr','sq','fa'];
-const widths=[320,390,430,820,1440];
+const widths=[320,360,390,430,820,1440];
 const targets={
   tr:['https://ctseg.com.tr/tr/sourcing/iran-halisi/','https://ctseg.com.tr/tr/sourcing/el-dokumasi-ipek-hali/','https://ctseg.com.tr/tr/sourcing/toptan-tekstil-tedariki/'],
   en:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/'],
@@ -43,6 +43,32 @@ try{
     for(const width of widths){
       const page=await browser.newPage({viewport:{width,height:width<500?900:1100},reducedMotion:'reduce'});
       const response=await page.goto(`http://127.0.0.1:4323/${locale}/`,{waitUntil:'networkidle'});
+      const faMobile=locale==='fa'&&width<=430;
+      let faMobileResult=null;
+      if(faMobile){
+        faMobileResult=await page.evaluate(()=>{
+          const rect=element=>element.getBoundingClientRect();
+          const header=rect(document.querySelector('.site-header'));
+          const hero=rect(document.querySelector('.hero'));
+          const containers=[...document.querySelectorAll('.hero.shell,#ctseg .shell,.founder-trade>.shell,#focus>.shell,#ventures>.shell,.section>.shell.split,#contact>.shell')];
+          const headings=[...document.querySelectorAll('h1,h2')];
+          const ctas=[...document.querySelectorAll('.actions a,.sector-link,.fa-producer-strategy__actions a')];
+          return {
+            gutters:containers.map(element=>({selector:element.className,left:rect(element).left,right:innerWidth-rect(element).right})),
+            headings:headings.map(element=>({text:element.textContent.trim().slice(0,32),left:rect(element).left,right:rect(element).right,width:rect(element).width})),
+            ctas:ctas.map(element=>({text:element.textContent.trim().slice(0,32),left:rect(element).left,right:rect(element).right})),
+            headerBottom:header.bottom,
+            heroTop:hero.top
+          };
+        });
+        const badGutter=faMobileResult.gutters.some(item=>item.left<15.5||item.right<15.5);
+        const badHeading=faMobileResult.headings.some(item=>item.left<0||item.right>width+.5||item.width>width+.5);
+        const badCta=faMobileResult.ctas.some(item=>item.left<0||item.right>width+.5);
+        if(badGutter||badHeading||badCta||faMobileResult.heroTop<faMobileResult.headerBottom-1){
+          failures.push(`fa-${width} mobile geometry: ${JSON.stringify(faMobileResult)}`);
+        }
+        if(width===320||width===390)await page.screenshot({path:resolve('.artifacts/visual',`fa-${width}-hero.png`)});
+      }
       await page.locator('.founder-trade').scrollIntoViewIfNeeded();
       await page.locator('.founder-trade__editorial img').evaluate(image=>image.complete?true:new Promise(resolvePromise=>image.addEventListener('load',()=>resolvePromise(true),{once:true})));
       const result=await page.evaluate(({locale,targets})=>{
@@ -73,6 +99,29 @@ try{
         !result.arrowsLtr||!result.headerVisible||!result.footerVisible||result.marqueeLinks!==8;
       if(bad)failures.push(`${locale}-${width}: ${JSON.stringify(result)}`);
       results.push(`${locale}-${width}: overflow=${result.overflow}px, links=${result.links.length}, dir=${result.dir}`);
+      if(faMobile){
+        const captureTargets=width===390?[
+          ['.founder-trade__grid','fa-390-carpet-textile.png'],
+          ['[data-fa-producer-strategy]','fa-390-producer-exporter.png'],
+          ['footer','fa-390-footer.png']
+        ]:[];
+        for(const [selector,file] of captureTargets){
+          await page.locator(selector).scrollIntoViewIfNeeded();
+          await page.waitForTimeout(100);
+          await page.screenshot({path:resolve('.artifacts/visual',file)});
+          const overlap=await page.evaluate(()=>{
+            const floating=[...document.querySelectorAll('.floating-action')].filter(element=>{const group=element.closest('.floating-actions');return getComputedStyle(element).visibility!=='hidden'&&Number(getComputedStyle(group).opacity)>.05});
+            const content=[...document.querySelectorAll('h1,h2,.actions a,.sector-link,.fa-producer-strategy__actions a')].filter(element=>{const box=element.getBoundingClientRect();return box.bottom>0&&box.top<innerHeight});
+            const intersects=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
+            return floating.some(action=>content.some(element=>intersects(action.getBoundingClientRect(),element.getBoundingClientRect())));
+          });
+          if(overlap)failures.push(`fa-${width}: floating actions overlap text or CTA near ${selector}`);
+        }
+        if(width===430){
+          await page.evaluate(()=>scrollTo(0,0));
+          await page.screenshot({path:resolve('.artifacts/visual','fa-430-full-page.png'),fullPage:true});
+        }
+      }
       if(width===390||width===1440)await page.locator('.founder-trade').screenshot({path:resolve('.artifacts/visual',`trade-${locale}-${width}.png`)});
       await page.close();
     }
@@ -80,4 +129,4 @@ try{
 }finally{await browser?.close();await new Promise(resolvePromise=>server.close(resolvePromise))}
 if(failures.length){console.error(failures.join('\n'));process.exit(1)}
 console.log(results.join('\n'));
-console.log('Responsive check passed: six locales, five widths, three CTA targets, editorial visual, RTL/LTR, header/footer/marquee and zero horizontal overflow.');
+console.log('Responsive check passed: six locales, six widths, three CTA targets, editorial visual, RTL/LTR, header/footer/marquee and zero horizontal overflow; FA mobile gutters, headings, CTAs, sticky-header spacing and floating-action overlap verified.');

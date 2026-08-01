@@ -31,7 +31,7 @@ const labels: Record<SupportedLocale, { whatsapp: string; top: string }> = {
 const whatsappUrl =
   `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(messages[locale])}`;
 ---
-<div class="floating-actions safe-floating-actions" aria-label="Quick actions">
+<div class="floating-actions safe-floating-actions" data-locale={locale} aria-label="Quick actions">
   <button
     class="floating-action back-to-top"
     type="button"
@@ -185,6 +185,11 @@ const whatsappUrl =
     opacity: 1;
   }
 
+  .safe-floating-actions.is-obscured {
+    opacity: 0;
+    pointer-events: none;
+  }
+
   @media (max-width: 640px) {
     .floating-actions {
       inset-inline-end: max(
@@ -250,15 +255,44 @@ const whatsappUrl =
   if (floatingActions) {
     let scrollTimer;
 
+    const updateFaMobileCollision = () => {
+      if (
+        floatingActions.dataset.locale !== 'fa' ||
+        !window.matchMedia('(max-width: 640px)').matches
+      ) {
+        floatingActions.classList.remove('is-obscured');
+        return;
+      }
+
+      const floatingBox = floatingActions.getBoundingClientRect();
+      const protectedElements = document.querySelectorAll(
+        'h1, h2, .actions a, .sector-link, .fa-producer-strategy__actions a'
+      );
+      const overlaps = [...protectedElements].some((element) => {
+        const box = element.getBoundingClientRect();
+        const visible = box.bottom > 0 && box.top < window.innerHeight;
+        return visible &&
+          floatingBox.left < box.right && floatingBox.right > box.left &&
+          floatingBox.top < box.bottom && floatingBox.bottom > box.top;
+      });
+
+      floatingActions.classList.toggle('is-obscured', overlaps);
+    };
+
+    updateFaMobileCollision();
+    window.addEventListener('resize', updateFaMobileCollision, { passive: true });
+
     window.addEventListener(
       'scroll',
       () => {
         floatingActions.classList.add('is-scrolling');
+        window.requestAnimationFrame(updateFaMobileCollision);
 
         window.clearTimeout(scrollTimer);
 
         scrollTimer = window.setTimeout(() => {
           floatingActions.classList.remove('is-scrolling');
+          updateFaMobileCollision();
         }, 240);
       },
       { passive: true }
