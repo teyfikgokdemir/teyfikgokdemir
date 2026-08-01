@@ -64,6 +64,9 @@ const navLabels = locale === 'fa'
       contact: 'تماس',
     }
   : copy.nav;
+const a11y = locale === 'fa'
+  ? { language:'انتخاب زبان', menuOpen:'باز کردن منو', menuClose:'بستن منو' }
+  : copy.a11y;
 
 const logoAltText: Record<Locale | 'fa', string> = {
   tr: 'Teyfik Gökdemir logosu',
@@ -93,9 +96,9 @@ const logoAltText: Record<Locale | 'fa', string> = {
     type="button"
     aria-expanded="false"
     aria-controls="site-navigation"
-    data-open-label={copy.a11y.menuOpen}
-    data-close-label={copy.a11y.menuClose}
-    aria-label={copy.a11y.menuOpen}
+    data-open-label={a11y.menuOpen}
+    data-close-label={a11y.menuClose}
+    aria-label={a11y.menuOpen}
   >
     <span></span><span></span><span></span>
   </button>
@@ -110,7 +113,7 @@ const logoAltText: Record<Locale | 'fa', string> = {
       <a href={sectionUrl('contact')}>{navLabels.contact}</a>
     </nav>
 
-    <div class="language-switcher" aria-label={copy.a11y.language}>
+    <div class="language-switcher" aria-label={a11y.language}>
       {locales.map((item) => (
         <a
           href={languageUrls?.[item] ?? localeUrl(item)}

@@ -106,6 +106,49 @@ for (const page of pageByRoute.values()) {
   }
 }
 
+const faHome = pageByRoute.get('/fa/');
+if (!faHome) errors.push('/fa/: sayfa bulunamadı.');
+else {
+  const requiredPersianStrategy = [
+    'برای تولیدکنندگان و صادرکنندگان ایرانی',
+    'ترکیه، اروپا، آمریکا و سایر بازارهای هدف',
+    'کارگاه‌های فرش دستباف','تولیدکنندگان فرش ابریشم دستباف','تولیدکنندگان فرش ماشینی','صادرکنندگان فرش',
+    'تولیدکنندگان پارچه','تولیدکنندگان حوله و حوله تن‌پوش','تولیدکنندگان منسوجات خانگی','تولیدکنندگان پوشاک','برندهای دارای تولید با نام تجاری اختصاصی',
+    'ارزیابی تجاری محصول','تعیین بازار هدف','آماده‌سازی پیشنهاد تجاری','ارتباط و مذاکره اولیه با خریداران','مدیریت RFQ','هماهنگی نمونه',
+    'بررسی قیمت، MOQ و ظرفیت تولید','هماهنگی بسته‌بندی و برچسب‌گذاری','بررسی آمادگی اسناد صادراتی','هماهنگی ورود به بازار و توسعه کانال فروش',
+    'هر محصول پیش از معرفی به بازار باید از نظر کیفیت، ظرفیت تولید، قیمت‌گذاری، حداقل سفارش، بسته‌بندی، اسناد و امکان اجرای تجاری بررسی شود.',
+    'معرفی محصول برای ارزیابی تجاری','آغاز گفت‌وگو درباره بازارهای بین‌المللی'
+  ];
+  for (const text of requiredPersianStrategy) if (!faHome.html.includes(text)) errors.push(`/fa/: محتوای راهبردی فارسی eksik (${text}).`);
+  const expectedSectorLinks = [
+    'https://ctseg.com.tr/fa/sourcing/فرش-ایرانی/',
+    'https://ctseg.com.tr/fa/sourcing/فرش-ابریشم-دستباف/',
+    'https://ctseg.com.tr/fa/sourcing/تامین-عمده-منسوجات/'
+  ];
+  for (const href of expectedSectorLinks) if (!faHome.html.includes(`href="${encodeURI(href)}"`) && !faHome.html.includes(`href="${href}"`)) errors.push(`/fa/: CTSEG sektör bağlantısı eksik (${href}).`);
+  if ((faHome.html.match(/data-fa-sector-link=/g) ?? []).length !== 3) errors.push('/fa/: üç ayrı CTSEG sektör bağlantısı bekleniyor.');
+  if (!titleText(faHome.html)?.includes('هماهنگ‌کننده تجاری تولیدکنندگان و صادرکنندگان ایرانی')) errors.push('/fa/: title üretici/ihracatçı hedefini yansıtmıyor.');
+  const faDescription = attribute(selectedTag(faHome.html, 'meta', 'name', 'description'), 'content') ?? '';
+  if (!faDescription.includes('تولیدکنندگان و صادرکنندگان ایرانی') || !faDescription.includes('ترکیه، اروپا، آمریکا')) errors.push('/fa/: meta description üretici/ihracatçı ve hedef pazarları yansıtmıyor.');
+  if (!/<html\b[^>]*lang="fa"[^>]*dir="rtl"/i.test(faHome.html)) errors.push('/fa/: lang=fa ve dir=rtl eksik.');
+  const schemaText = [...faHome.html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)].map((match)=>match[1]).join('\n');
+  for (const expertise of ['هماهنگی تجاری بین‌المللی','ورود تولیدکنندگان ایرانی به بازار','ارتباط تولیدکننده و خریدار','توسعه کانال فروش']) {
+    if (!schemaText.includes(expertise)) errors.push(`/fa/: Person schema expertise eksik (${expertise}).`);
+  }
+}
+
+for (const [lang,route] of [['tr','/tr/'],['en','/en/'],['mk','/mk/'],['sr','/sr/'],['sq','/sq/'],['fa','/fa/']]) {
+  const page = pageByRoute.get(route);
+  if (!page) { errors.push(`${route}: locale ana sayfası eksik.`); continue; }
+  const localeLinks = tags(page.html,'a').filter((tag)=>attribute(tag,'hreflang') && ['tr','en','mk','sr','sq','fa'].includes(attribute(tag,'hreflang')));
+  if (localeLinks.length < 6) errors.push(`${route}: global dil menüsü altı dili göstermiyor.`);
+  for (const code of ['tr','en','mk','sr','sq','fa']) {
+    const link = localeLinks.find((tag)=>attribute(tag,'hreflang')===code);
+    if (routeFromUrl(attribute(link,'href')) !== `/${code}/`) errors.push(`${route}: ${code} locale hedefi yanlış.`);
+    if ((code===lang) !== (attribute(link,'aria-current')==='page')) errors.push(`${route}: ${code} aktif locale durumu yanlış.`);
+  }
+}
+
 const internalAssetPrefixes = ['/images/', '/_astro/', '/favicon-', '/apple-touch-icon', '/site.webmanifest'];
 for (const page of pageByRoute.values()) {
   if (!page.indexable) continue;
