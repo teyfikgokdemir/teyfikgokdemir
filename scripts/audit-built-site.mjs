@@ -170,9 +170,22 @@ else {
   }
 }
 
+const tradeEntryContracts = {
+  tr:{title:'İran halısı ve tekstilde uluslararası ticari koordinasyon',links:['https://ctseg.com.tr/tr/sourcing/iran-halisi/','https://ctseg.com.tr/tr/sourcing/el-dokumasi-ipek-hali/','https://ctseg.com.tr/tr/sourcing/toptan-tekstil-tedariki/']},
+  en:{title:'International commercial coordination for Iranian carpets and textiles',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
+  mk:{title:'Меѓународна трговска координација за ирански теписи и текстил',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
+  sr:{title:'Međunarodna komercijalna koordinacija za iranske tepihe i tekstil',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
+  sq:{title:'Koordinim tregtar ndërkombëtar për qilimat iranianë dhe tekstilet',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
+  fa:{title:'هماهنگی تجاری بین‌المللی برای فرش ایرانی و منسوجات',links:['https://ctseg.com.tr/fa/sourcing/فرش-ایرانی/','https://ctseg.com.tr/fa/sourcing/فرش-ابریشم-دستباف/','https://ctseg.com.tr/fa/sourcing/تامین-عمده-منسوجات/']}
+};
 for (const [lang,route] of [['tr','/tr/'],['en','/en/'],['mk','/mk/'],['sr','/sr/'],['sq','/sq/'],['fa','/fa/']]) {
   const page = pageByRoute.get(route);
   if (!page) { errors.push(`${route}: locale ana sayfası eksik.`); continue; }
+  const tradeContract = tradeEntryContracts[lang];
+  if (!page.html.includes(tradeContract.title)) errors.push(`${route}: halı/tekstil uzmanlık başlığı eksik.`);
+  if ((page.html.match(/data-sector-link=/g) ?? []).length !== 3) errors.push(`${route}: üç ayrı sektör CTA bağlantısı bekleniyor.`);
+  for (const href of tradeContract.links) if (!page.html.includes(`href="${encodeURI(href)}"`) && !page.html.includes(`href="${href}"`)) errors.push(`${route}: sektör CTA hedefi eksik (${href}).`);
+  if (!page.html.includes('/images/ctseg-iranian-carpets-editorial.webp')) errors.push(`${route}: kontrollü editoryal görsel eksik.`);
   const localeLinks = tags(page.html,'a').filter((tag)=>attribute(tag,'hreflang') && ['tr','en','mk','sr','sq','fa'].includes(attribute(tag,'hreflang')));
   if (localeLinks.length < 6) errors.push(`${route}: global dil menüsü altı dili göstermiyor.`);
   for (const code of ['tr','en','mk','sr','sq','fa']) {
