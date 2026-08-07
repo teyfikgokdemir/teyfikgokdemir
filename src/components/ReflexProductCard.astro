@@ -30,10 +30,30 @@ const labelMap: Record<string, { colors: string; sizes: string }> = {
   fa: { colors: 'رنگ‌ها', sizes: 'سایزها' },
 };
 
+const translateColor = (col: string) => {
+  const map: Record<string, Record<string, string>> = {
+    'Siyah': { tr: 'Siyah', en: 'Black', mk: 'Црна', sr: 'Crna', sq: 'E Zezë', fa: 'مشکی' },
+    'Şeffaf': { tr: 'Şeffaf', en: 'Clear', mk: 'Проѕирна', sr: 'Providna', sq: 'Transparente', fa: 'شفاف' },
+    'Mavi': { tr: 'Mavi', en: 'Blue', mk: 'Сина', sr: 'Plava', sq: 'Blu', fa: 'آبی' },
+    'Mor': { tr: 'Mor', en: 'Purple', mk: 'Виолетова', sr: 'Ljubičasta', sq: 'Vjollcë', fa: 'بنفش' },
+    'Yeşil': { tr: 'Yeşil', en: 'Green', mk: 'Зелена', sr: 'Zelena', sq: 'Jeshile', fa: 'سبز' },
+    'Pembe': { tr: 'Pembe', en: 'Pink', mk: 'Розева', sr: 'Roze', sq: 'Rozë', fa: 'صورتی' },
+    'Krem': { tr: 'Krem', en: 'Cream', mk: 'Крем', sr: 'Krem', sq: 'Krem', fa: 'کرم' }
+  };
+  return map[col]?.[lang] || col;
+};
+
+const translateSize = (sz: string) => {
+  const map: Record<string, Record<string, string>> = {
+    'Çocuk Standart': { tr: 'Çocuk Standart', en: 'Kids Standard', mk: 'Детски стандард', sr: 'Dečiji standard', sq: 'Fëmijë Standard', fa: 'استاندارد کودک' }
+  };
+  return map[sz]?.[lang] || sz;
+};
+
 const labels = labelMap[locale] || labelMap.tr;
 const buttonText = buttonTextMap[locale] || 'Ürünü İncele';
-const displayColors = (i18n.colors || product.colors).join(', ');
-const displaySizes = (i18n.sizes || product.sizes).join(', ');
+const displayColors = (i18n.colors || product.colors).map(translateColor).join(', ');
+const displaySizes = (i18n.sizes || product.sizes).map(translateSize).join(', ');
 ---
 
 <article class="reflex-card">

@@ -188,6 +188,16 @@ const translateQty = (val: string) => {
   if (lang === 'fa') return val.replace(/Adet/g, 'عدد').replace(/Kutu/g, 'جعبه').replace(/Koli/g, 'کارتن');
   return val;
 };
+const translateSpec = (val: string) => {
+  if (!val) return val;
+  const map: Record<string, Record<string, string>> = {
+    'Pudrasız': { tr: 'Pudrasız', en: 'Powder-Free', mk: 'Без пудра', sr: 'Bez pudera', sq: 'Pa pluhur', fa: 'بدون پودر' },
+    'Lateks İçermez': { tr: 'Lateks İçermez', en: 'Latex-Free', mk: 'Без латекс', sr: 'Bez lateksa', sq: 'Pa lateks', fa: 'بدون لاتکس' },
+    'Silikon İçermez': { tr: 'Silikon İçermez', en: 'Silicone-Free', mk: 'Без силикон', sr: 'Bez silikona', sq: 'Pa silikon', fa: 'بدون سیلیکون' },
+    'Non-Steril': { tr: 'Non-Steril', en: 'Non-Sterile', mk: 'Нон-стерилно', sr: 'Non-sterilno', sq: 'Jo-sterile', fa: 'غیر استریل' },
+  };
+  return map[val]?.[lang] || val;
+};
 ---
 
 <div class="reflex-specs-wrapper">
@@ -202,19 +212,19 @@ const translateQty = (val: string) => {
           </tr>
           <tr>
             <th>{labels.powder}</th>
-            <td>{i18n.powderStatus || product.powderStatus}</td>
+            <td>{translateSpec(i18n.powderStatus || product.powderStatus)}</td>
           </tr>
           <tr>
             <th>{labels.latex}</th>
-            <td>{i18n.latexStatus || product.latexStatus}</td>
+            <td>{translateSpec(i18n.latexStatus || product.latexStatus)}</td>
           </tr>
           <tr>
             <th>{labels.silicone}</th>
-            <td>{i18n.siliconeStatus || product.siliconeStatus}</td>
+            <td>{translateSpec(i18n.siliconeStatus || product.siliconeStatus)}</td>
           </tr>
           <tr>
             <th>{labels.sterility}</th>
-            <td>{i18n.sterilityStatus || product.sterilityStatus}</td>
+            <td>{translateSpec(i18n.sterilityStatus || product.sterilityStatus)}</td>
           </tr>
           <tr>
             <th>{labels.foodContact}</th>
@@ -222,11 +232,11 @@ const translateQty = (val: string) => {
           </tr>
           <tr>
             <th>{labels.colors}</th>
-            <td>{(i18n.colors || product.colors).join(', ')}</td>
+            <td>{(i18n.colors || product.colors).map(translateColor).join(', ')}</td>
           </tr>
           <tr>
             <th>{labels.sizes}</th>
-            <td>{(i18n.sizes || product.sizes).join(', ')}</td>
+            <td>{(i18n.sizes || product.sizes).map(translateSize).join(', ')}</td>
           </tr>
         </tbody>
       </table>

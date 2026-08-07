@@ -140,6 +140,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Silikon İçermez",
         sterilityStatus: "Non-Steril",
         foodContactLabel: "Evet / Tam Uyumlu",
+        colors: ["Siyah","Şeffaf","Mavi"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pudrasız",
+        latexStatus: "Lateks İçermez",
+        siliconeStatus: "Silikon İçermez",
+        sterilityStatus: "Non-Steril",
+        foodContactLabel: "Evet / Tam Uyumlu",
         materialName: 'TPE (Termoplastik Elastomer)',
         faq: [
           {
@@ -179,6 +186,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Beauty & Personal Care',
           'General Industrial Operations'
         ],
+        colors: ["Black","Clear","Blue"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Powder-Free",
+        latexStatus: "Latex-Free",
+        siliconeStatus: "Silicone-Free",
+        sterilityStatus: "Non-Sterile",
+        foodContactLabel: "Yes / Fully Compliant",
         colors: ["Black","Clear","Blue"],
         sizes: ["S","M","L","XL"],
         powderStatus: "Powder-Free",
@@ -232,6 +246,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Без силикон",
         sterilityStatus: "Нон-стерилно",
         foodContactLabel: "Да / Соодветно",
+        colors: ["Црна","Проѕирна","Сина"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Без пудра",
+        latexStatus: "Без латекс",
+        siliconeStatus: "Без силикон",
+        sterilityStatus: "Нон-стерилно",
+        foodContactLabel: "Да / Соодветно",
         materialName: 'TPE (Термопластичен Еластомер)',
         faq: [
           {
@@ -271,6 +292,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Kozmetički saloni',
           'Opšta industrijska primena'
         ],
+        colors: ["Crna","Providna","Plava"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Bez pudera",
+        latexStatus: "Bez lateksa",
+        siliconeStatus: "Bez silikona",
+        sterilityStatus: "Non-sterilno",
+        foodContactLabel: "Da / Bezbedno",
         colors: ["Crna","Providna","Plava"],
         sizes: ["S","M","L","XL"],
         powderStatus: "Bez pudera",
@@ -324,6 +352,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Pa silikon",
         sterilityStatus: "Jo-sterile",
         foodContactLabel: "Po / Plotësisht konform",
+        colors: ["E Zezë","Transparente","Blu"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pa pluhur",
+        latexStatus: "Pa lateks",
+        siliconeStatus: "Pa silikon",
+        sterilityStatus: "Jo-sterile",
+        foodContactLabel: "Po / Plotësisht konform",
         materialName: 'TPE (Elastomer Termoplastik)',
         faq: [
           {
@@ -364,6 +399,13 @@ export const reflexProducts: ReflexProduct[] = [
                 "سالن‌های زیبایی و آرایشی",
                 "کاربردهای عمومی صنعتی"
         ],
+        colors: ["مشکی","شفاف","آبی"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "بدون پودر",
+        latexStatus: "بدون لاتکس",
+        siliconeStatus: "بدون سیلیکون",
+        sterilityStatus: "غیر استریل",
+        foodContactLabel: "بله / کاملاً مناسب",
         "materialName": "TPE (الاستومر ترموپلاستیک)"
 },
     }
@@ -428,6 +470,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Silikon İçermez",
         sterilityStatus: "Non-Steril",
         foodContactLabel: "Evet / Tam Uyumlu",
+        colors: ["Şeffaf"],
+        sizes: ["Çocuk Standart"],
+        powderStatus: "Pudrasız",
+        latexStatus: "Lateks İçermez",
+        siliconeStatus: "Silikon İçermez",
+        sterilityStatus: "Non-Steril",
+        foodContactLabel: "Evet / Tam Uyumlu",
         materialName: 'Geri Dönüştürülebilir TPE',
         faq: [
           {
@@ -466,6 +515,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Arts, Crafts & Painting Workshops',
           'Daily Hygiene & Protection'
         ],
+        colors: ["Clear"],
+        sizes: ["Kids Standard"],
+        powderStatus: "Powder-Free",
+        latexStatus: "Latex-Free",
+        siliconeStatus: "Silicone-Free",
+        sterilityStatus: "Non-Sterile",
+        foodContactLabel: "Yes / Fully Compliant",
         colors: ["Clear"],
         sizes: ["Kids Standard"],
         powderStatus: "Powder-Free",
@@ -518,6 +574,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Без силикон",
         sterilityStatus: "Нон-стерилно",
         foodContactLabel: "Да / Соодветно",
+        colors: ["Проѕирна"],
+        sizes: ["Детски стандард"],
+        powderStatus: "Без пудра",
+        latexStatus: "Без латекс",
+        siliconeStatus: "Без силикон",
+        sterilityStatus: "Нон-стерилно",
+        foodContactLabel: "Да / Соодветно",
         materialName: 'Рециклирачки TPE',
         faq: [
           {
@@ -556,6 +619,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Kreativne i slikarske radionice',
           'KID higijena'
         ],
+        colors: ["Providna"],
+        sizes: ["Dečiji standard"],
+        powderStatus: "Bez pudera",
+        latexStatus: "Bez lateksa",
+        siliconeStatus: "Bez silikona",
+        sterilityStatus: "Non-sterilno",
+        foodContactLabel: "Da / Bezbedno",
         colors: ["Providna"],
         sizes: ["Dečiji standard"],
         powderStatus: "Bez pudera",
@@ -608,6 +678,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Pa silikon",
         sterilityStatus: "Jo-sterile",
         foodContactLabel: "Po / Plotësisht konform",
+        colors: ["Transparente"],
+        sizes: ["Fëmijë Standard"],
+        powderStatus: "Pa pluhur",
+        latexStatus: "Pa lateks",
+        siliconeStatus: "Pa silikon",
+        sterilityStatus: "Jo-sterile",
+        foodContactLabel: "Po / Plotësisht konform",
         materialName: 'TPE i Riciklueshëm',
         faq: [
           {
@@ -647,6 +724,13 @@ export const reflexProducts: ReflexProduct[] = [
                 "کارگاه‌های نقاشی و صنایع دستی",
                 "بهداشت روزانه کودکان"
         ],
+        colors: ["شفاف"],
+        sizes: ["استاندارد کودک"],
+        powderStatus: "بدون پودر",
+        latexStatus: "بدون لاتکس",
+        siliconeStatus: "بدون سیلیکون",
+        sterilityStatus: "غیر استریل",
+        foodContactLabel: "بله / کاملاً مناسب",
         "materialName": "TPE قابل بازیافت"
 },
     }
@@ -745,6 +829,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Silikon İçermez",
         sterilityStatus: "Non-Steril",
         foodContactLabel: "Evet / Tam Uyumlu",
+        colors: ["Şeffaf","Mavi","Siyah"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pudrasız",
+        latexStatus: "Lateks İçermez",
+        siliconeStatus: "Silikon İçermez",
+        sterilityStatus: "Non-Steril",
+        foodContactLabel: "Evet / Tam Uyumlu",
         materialName: 'Pudrasız Hibrit Polimer',
         faq: [
           {
@@ -783,6 +874,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Catering & Food Outlets',
           'Retail & Deli Counter Operations'
         ],
+        colors: ["Clear","Blue","Black"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Powder-Free",
+        latexStatus: "Latex-Free",
+        siliconeStatus: "Silicone-Free",
+        sterilityStatus: "Non-Sterile",
+        foodContactLabel: "Yes / Fully Compliant",
         colors: ["Clear","Blue","Black"],
         sizes: ["S","M","L","XL"],
         powderStatus: "Powder-Free",
@@ -835,6 +933,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Без силикон",
         sterilityStatus: "Нон-стерилно",
         foodContactLabel: "Да / Соодветно",
+        colors: ["Проѕирна","Сина","Црна"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Без пудра",
+        latexStatus: "Без латекс",
+        siliconeStatus: "Без силикон",
+        sterilityStatus: "Нон-стерилно",
+        foodContactLabel: "Да / Соодветно",
         materialName: 'Хибриден Полимер Без Пудра',
         faq: [
           {
@@ -873,6 +978,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Ketering i ugostiteljstvo',
           'Maloprodajni objekti'
         ],
+        colors: ["Providna","Plava","Crna"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Bez pudera",
+        latexStatus: "Bez lateksa",
+        siliconeStatus: "Bez silikona",
+        sterilityStatus: "Non-sterilno",
+        foodContactLabel: "Da / Bezbedno",
         colors: ["Providna","Plava","Crna"],
         sizes: ["S","M","L","XL"],
         powderStatus: "Bez pudera",
@@ -925,6 +1037,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Pa silikon",
         sterilityStatus: "Jo-sterile",
         foodContactLabel: "Po / Plotësisht konform",
+        colors: ["Transparente","Blu","E Zezë"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pa pluhur",
+        latexStatus: "Pa lateks",
+        siliconeStatus: "Pa silikon",
+        sterilityStatus: "Jo-sterile",
+        foodContactLabel: "Po / Plotësisht konform",
         materialName: 'Polimer Hibrid Pa Pluhur',
         faq: [
           {
@@ -964,6 +1083,13 @@ export const reflexProducts: ReflexProduct[] = [
                 "کترینگ و مراکز ارائه غذا",
                 "فروشگاه‌ها و غرفه‌های پروتئینی"
         ],
+        colors: ["شفاف","آبی","مشکی"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "بدون پودر",
+        latexStatus: "بدون لاتکس",
+        siliconeStatus: "بدون سیلیکون",
+        sterilityStatus: "غیر استریل",
+        foodContactLabel: "بله / کاملاً مناسب",
         "materialName": "پلیمر هیبریدی بدون پودر"
 },
     }
@@ -1066,6 +1192,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Silikon İçermez",
         sterilityStatus: "Non-Steril",
         foodContactLabel: "Evet / Tam Uyumlu",
+        colors: ["Mor","Şeffaf","Mavi"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pudrasız",
+        latexStatus: "Lateks İçermez",
+        siliconeStatus: "Silikon İçermez",
+        sterilityStatus: "Non-Steril",
+        foodContactLabel: "Evet / Tam Uyumlu",
         materialName: 'Termo Vinil (Thermo Vinyl)',
         faq: [
           {
@@ -1104,6 +1237,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Cosmetology, Salons & Tattoo Studios',
           'General Maintenance & Assembly'
         ],
+        colors: ["Purple","Clear","Blue"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Powder-Free",
+        latexStatus: "Latex-Free",
+        siliconeStatus: "Silicone-Free",
+        sterilityStatus: "Non-Sterile",
+        foodContactLabel: "Yes / Fully Compliant",
         colors: ["Purple","Clear","Blue"],
         sizes: ["S","M","L","XL"],
         powderStatus: "Powder-Free",
@@ -1156,6 +1296,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Без силикон",
         sterilityStatus: "Нон-стерилно",
         foodContactLabel: "Да / Соодветно",
+        colors: ["Виолетова","Проѕирна","Сина"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Без пудра",
+        latexStatus: "Без латекс",
+        siliconeStatus: "Без силикон",
+        sterilityStatus: "Нон-стерилно",
+        foodContactLabel: "Да / Соодветно",
         materialName: 'Термо Винил Полимер',
         faq: [
           {
@@ -1194,6 +1341,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Frizerski i kozmetički saloni',
           'Montažni i servisni radovi'
         ],
+        colors: ["Ljubičasta","Providna","Plava"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Bez pudera",
+        latexStatus: "Bez lateksa",
+        siliconeStatus: "Bez silikona",
+        sterilityStatus: "Non-sterilno",
+        foodContactLabel: "Da / Bezbedno",
         colors: ["Ljubičasta","Providna","Plava"],
         sizes: ["S","M","L","XL"],
         powderStatus: "Bez pudera",
@@ -1246,6 +1400,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Pa silikon",
         sterilityStatus: "Jo-sterile",
         foodContactLabel: "Po / Plotësisht konform",
+        colors: ["Vjollcë","Transparente","Blu"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pa pluhur",
+        latexStatus: "Pa lateks",
+        siliconeStatus: "Pa silikon",
+        sterilityStatus: "Jo-sterile",
+        foodContactLabel: "Po / Plotësisht konform",
         materialName: 'Polimer Termo Vinil',
         faq: [
           {
@@ -1285,6 +1446,13 @@ export const reflexProducts: ReflexProduct[] = [
                 "سالن‌های زیبایی و آرایشگاه‌ها",
                 "مونتاژ و نگهداری عمومی"
         ],
+        colors: ["بنفش","شفاف","آبی"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "بدون پودر",
+        latexStatus: "بدون لاتکس",
+        siliconeStatus: "بدون سیلیکون",
+        sterilityStatus: "غیر استریل",
+        foodContactLabel: "بله / کاملاً مناسب",
         "materialName": "پلیمر ترمو وینیل"
 },
     }
@@ -1386,6 +1554,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Silikon İçermez",
         sterilityStatus: "Non-Steril",
         foodContactLabel: "Evet / Tam Uyumlu",
+        colors: ["Yeşil","Pembe","Mavi","Siyah"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pudrasız",
+        latexStatus: "Lateks İçermez",
+        siliconeStatus: "Silikon İçermez",
+        sterilityStatus: "Non-Steril",
+        foodContactLabel: "Evet / Tam Uyumlu",
         materialName: 'Sıhhi Hijyen Polimeri',
         faq: [
           {
@@ -1424,6 +1599,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Aesthetic & Beauty Practices',
           'Hygienic Surface & Sample Handling'
         ],
+        colors: ["Green","Pink","Blue","Black"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Powder-Free",
+        latexStatus: "Latex-Free",
+        siliconeStatus: "Silicone-Free",
+        sterilityStatus: "Non-Sterile",
+        foodContactLabel: "Yes / Fully Compliant",
         colors: ["Green","Pink","Blue","Black"],
         sizes: ["S","M","L","XL"],
         powderStatus: "Powder-Free",
@@ -1476,6 +1658,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Без силикон",
         sterilityStatus: "Нон-стерилно",
         foodContactLabel: "Да / Соодветно",
+        colors: ["Зелена","Розева","Сина","Црна"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Без пудра",
+        latexStatus: "Без латекс",
+        siliconeStatus: "Без силикон",
+        sterilityStatus: "Нон-стерилно",
+        foodContactLabel: "Да / Соодветно",
         materialName: 'Санитарен Хигиенски Полимер',
         faq: [
           {
@@ -1514,6 +1703,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Higijenske ustanove',
           'Laboratorijske i analitičke usluge'
         ],
+        colors: ["Zelena","Roze","Plava","Crna"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Bez pudera",
+        latexStatus: "Bez lateksa",
+        siliconeStatus: "Bez silikona",
+        sterilityStatus: "Non-sterilno",
+        foodContactLabel: "Da / Bezbedno",
         colors: ["Zelena","Roze","Plava","Crna"],
         sizes: ["S","M","L","XL"],
         powderStatus: "Bez pudera",
@@ -1566,6 +1762,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Pa silikon",
         sterilityStatus: "Jo-sterile",
         foodContactLabel: "Po / Plotësisht konform",
+        colors: ["Jeshile","Rozë","Blu","E Zezë"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pa pluhur",
+        latexStatus: "Pa lateks",
+        siliconeStatus: "Pa silikon",
+        sterilityStatus: "Jo-sterile",
+        foodContactLabel: "Po / Plotësisht konform",
         materialName: 'Polimer Sanitar Higjienik',
         faq: [
           {
@@ -1605,6 +1808,13 @@ export const reflexProducts: ReflexProduct[] = [
                 "کلینیک‌های زیبایی و استتیک",
                 "نمونه‌برداری و بررسی‌های بهداشتی"
         ],
+        colors: ["سبز","صورتی","آبی","مشکی"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "بدون پودر",
+        latexStatus: "بدون لاتکس",
+        siliconeStatus: "بدون سیلیکون",
+        sterilityStatus: "غیر استریل",
+        foodContactLabel: "بله / کاملاً مناسب",
         "materialName": "پلیمر بهداشتی Medilex"
 },
     }
@@ -1706,6 +1916,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Silikon İçermez",
         sterilityStatus: "Non-Steril",
         foodContactLabel: "Evet / Tam Uyumlu",
+        colors: ["Mavi","Siyah","Şeffaf","Krem"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pudrasız",
+        latexStatus: "Lateks İçermez",
+        siliconeStatus: "Silikon İçermez",
+        sterilityStatus: "Non-Steril",
+        foodContactLabel: "Evet / Tam Uyumlu",
         materialName: 'Çok Amaçlı TPE',
         faq: [
           {
@@ -1744,6 +1961,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Light Packaging & Sorting Lines',
           'Daily Hygiene & Maintenance'
         ],
+        colors: ["Blue","Black","Clear","Cream"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Powder-Free",
+        latexStatus: "Latex-Free",
+        siliconeStatus: "Silicone-Free",
+        sterilityStatus: "Non-Sterile",
+        foodContactLabel: "Yes / Fully Compliant",
         colors: ["Blue","Black","Clear","Cream"],
         sizes: ["S","M","L","XL"],
         powderStatus: "Powder-Free",
@@ -1796,6 +2020,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Без силикон",
         sterilityStatus: "Нон-стерилно",
         foodContactLabel: "Да / Соодветно",
+        colors: ["Сина","Црна","Проѕирна","Крем"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Без пудра",
+        latexStatus: "Без латекс",
+        siliconeStatus: "Без силикон",
+        sterilityStatus: "Нон-стерилно",
+        foodContactLabel: "Да / Соодветно",
         materialName: 'Повеќенаменски TPE',
         faq: [
           {
@@ -1834,6 +2065,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Pakovanje i sortiranje robe',
           'Svakodnevno održavanje higijene'
         ],
+        colors: ["Plava","Crna","Providna","Krem"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Bez pudera",
+        latexStatus: "Bez lateksa",
+        siliconeStatus: "Bez silikona",
+        sterilityStatus: "Non-sterilno",
+        foodContactLabel: "Da / Bezbedno",
         colors: ["Plava","Crna","Providna","Krem"],
         sizes: ["S","M","L","XL"],
         powderStatus: "Bez pudera",
@@ -1886,6 +2124,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Pa silikon",
         sterilityStatus: "Jo-sterile",
         foodContactLabel: "Po / Plotësisht konform",
+        colors: ["Blu","E Zezë","Transparente","Krem"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pa pluhur",
+        latexStatus: "Pa lateks",
+        siliconeStatus: "Pa silikon",
+        sterilityStatus: "Jo-sterile",
+        foodContactLabel: "Po / Plotësisht konform",
         materialName: 'TPE për Shumë Përdorime',
         faq: [
           {
@@ -1925,6 +2170,13 @@ export const reflexProducts: ReflexProduct[] = [
                 "خطوط بسته‌بندی و سورتینگ",
                 "نظافت روزانه و عمومی"
         ],
+        colors: ["آبی","مشکی","شفاف","کرم"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "بدون پودر",
+        latexStatus: "بدون لاتکس",
+        siliconeStatus: "بدون سیلیکون",
+        sterilityStatus: "غیر استریل",
+        foodContactLabel: "بله / کاملاً مناسب",
         "materialName": "TPE چندمنظوره"
 },
     }
@@ -2024,6 +2276,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Silikon İçermez",
         sterilityStatus: "Non-Steril",
         foodContactLabel: "Evet / Tam Uyumlu",
+        colors: ["Krem","Şeffaf"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pudrasız",
+        latexStatus: "Lateks İçermez",
+        siliconeStatus: "Silikon İçermez",
+        sterilityStatus: "Non-Steril",
+        foodContactLabel: "Evet / Tam Uyumlu",
         materialName: 'Kopolimer Polimer',
         faq: [
           {
@@ -2062,6 +2321,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Micro-Assembly & Delicate Handling',
           'Personal Hygiene & Touch Safety'
         ],
+        colors: ["Cream","Clear"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Powder-Free",
+        latexStatus: "Latex-Free",
+        siliconeStatus: "Silicone-Free",
+        sterilityStatus: "Non-Sterile",
+        foodContactLabel: "Yes / Fully Compliant",
         colors: ["Cream","Clear"],
         sizes: ["S","M","L","XL"],
         powderStatus: "Powder-Free",
@@ -2114,6 +2380,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Без силикон",
         sterilityStatus: "Нон-стерилно",
         foodContactLabel: "Да / Соодветно",
+        colors: ["Крем","Проѕирна"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Без пудра",
+        latexStatus: "Без латекс",
+        siliconeStatus: "Без силикон",
+        sterilityStatus: "Нон-стерилно",
+        foodContactLabel: "Да / Соодветно",
         materialName: 'Кополимерен Полимер',
         faq: [
           {
@@ -2152,6 +2425,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Precizna montaža i rukovanje',
           'Lična higijena'
         ],
+        colors: ["Krem","Providna"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Bez pudera",
+        latexStatus: "Bez lateksa",
+        siliconeStatus: "Bez silikona",
+        sterilityStatus: "Non-sterilno",
+        foodContactLabel: "Da / Bezbedno",
         colors: ["Krem","Providna"],
         sizes: ["S","M","L","XL"],
         powderStatus: "Bez pudera",
@@ -2204,6 +2484,13 @@ export const reflexProducts: ReflexProduct[] = [
         siliconeStatus: "Pa silikon",
         sterilityStatus: "Jo-sterile",
         foodContactLabel: "Po / Plotësisht konform",
+        colors: ["Krem","Transparente"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pa pluhur",
+        latexStatus: "Pa lateks",
+        siliconeStatus: "Pa silikon",
+        sterilityStatus: "Jo-sterile",
+        foodContactLabel: "Po / Plotësisht konform",
         materialName: 'Polimer Kopolimer',
         faq: [
           {
@@ -2243,6 +2530,13 @@ export const reflexProducts: ReflexProduct[] = [
                 "مونتاژ قطعات ظریف",
                 "بهداشت شخصی"
         ],
+        colors: ["کرم","شفاف"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "بدون پودر",
+        latexStatus: "بدون لاتکس",
+        siliconeStatus: "بدون سیلیکون",
+        sterilityStatus: "غیر استریل",
+        foodContactLabel: "بله / کاملاً مناسب",
         "materialName": "پلیمر کوپلیمر"
 },
     }
