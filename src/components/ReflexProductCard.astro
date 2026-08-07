@@ -61,9 +61,9 @@ const buttonText = buttonTextMap[locale] || 'Ürünü İncele';
     </div>
 
     <div class="reflex-card__footer">
-      <a href={detailUrl} class="button primary reflex-card__btn">
+      <a href={detailUrl} class="reflex-card__btn">
         <span>{buttonText}</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="5" y1="12" x2="19" y2="12"></line>
           <polyline points="12 5 19 12 12 19"></polyline>
         </svg>
@@ -77,92 +77,96 @@ const buttonText = buttonTextMap[locale] || 'Ürünü İncele';
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--surface-dark);
-    color: #f3eee6;
+    border: 1px solid #E6E1D7;
+    border-radius: 18px;
+    background: #FFFFFF;
+    color: #1A1815;
+    box-shadow: 0 4px 20px rgba(26, 24, 21, 0.04);
     transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;
   }
   .reflex-card:hover {
     transform: translateY(-6px);
-    border-color: var(--accent);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    border-color: #D45D35;
+    box-shadow: 0 16px 36px rgba(26, 24, 21, 0.1);
   }
   .reflex-card__image-link {
     position: relative;
     display: block;
     aspect-ratio: 450 / 300;
     overflow: hidden;
-    background: #181411;
+    background: #F4F0E8;
   }
   .reflex-card__image-link img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
-    transition: transform 0.5s ease, filter 0.3s ease;
+    transition: transform 0.5s ease;
   }
   .reflex-card:hover .reflex-card__image-link img {
-    transform: scale(1.05);
+    transform: scale(1.04);
   }
   .reflex-card__badge-row {
     position: absolute;
-    top: 1rem;
-    left: 1rem;
+    top: 0.9rem;
+    left: 0.9rem;
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
     z-index: 2;
   }
   .reflex-card__badge {
-    padding: 0.3rem 0.65rem;
+    padding: 0.35rem 0.75rem;
     border-radius: 999px;
-    background: rgba(33, 28, 24, 0.85);
-    border: 1px solid rgba(242, 170, 143, 0.3);
-    color: var(--accent-coral);
+    background: #1A1815;
+    color: #FFFFFF;
     font-size: 0.72rem;
     font-weight: 750;
-    backdrop-filter: blur(6px);
+    letter-spacing: 0.02em;
   }
   .reflex-card__badge.alt {
-    border-color: rgba(255, 255, 255, 0.2);
-    color: #e7e0d4;
+    background: #EFECE5;
+    color: #1A1815;
+    border: 1px solid #DED9CE;
   }
   .reflex-card__body {
     display: flex;
     flex-direction: column;
     flex: 1;
-    padding: 1.5rem;
+    padding: 1.6rem;
   }
   .reflex-card__title {
     margin: 0 0 0.6rem;
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
     font-size: 1.45rem;
-    line-height: 1.2;
+    line-height: 1.25;
+    font-weight: 700;
   }
   .reflex-card__title a {
-    color: #ffffff;
+    color: #1A1815;
     transition: color 0.2s ease;
+    text-decoration: none;
   }
   .reflex-card__title a:hover {
-    color: var(--accent-coral);
+    color: #D45D35;
   }
   .reflex-card__tagline {
     margin: 0 0 1.25rem;
-    color: #c9bfb2;
-    font-size: 0.92rem;
+    color: #4A453E;
+    font-size: 0.93rem;
     line-height: 1.55;
     flex: 1;
   }
   .reflex-card__specs {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: 0.45rem;
     padding: 0.85rem 1rem;
     margin-bottom: 1.25rem;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    font-size: 0.82rem;
+    background: #F6F3EC;
+    border: 1px solid #E8E3D8;
+    font-size: 0.84rem;
   }
   .spec-item {
     display: flex;
@@ -171,11 +175,11 @@ const buttonText = buttonTextMap[locale] || 'Ürünü İncele';
     gap: 0.5rem;
   }
   .spec-label {
-    color: #a99d8f;
+    color: #635D55;
     font-weight: 600;
   }
   .spec-val {
-    color: #f3eee6;
+    color: #1A1815;
     font-weight: 700;
   }
   .reflex-card__footer {
@@ -187,9 +191,20 @@ const buttonText = buttonTextMap[locale] || 'Ürünü İncele';
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    font-size: 0.88rem;
+    font-size: 0.9rem;
+    font-weight: 700;
     min-height: 48px;
+    padding: 0.75rem 1.25rem;
+    border-radius: 10px;
+    background: #1A1815;
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
     touch-action: manipulation;
+  }
+  .reflex-card__btn:hover {
+    background: #D45D35;
+    color: #FFFFFF;
   }
 
   @media (max-width: 480px) {

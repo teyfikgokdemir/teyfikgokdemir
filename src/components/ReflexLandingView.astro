@@ -12,9 +12,9 @@ const lang = (locale === 'fa' ? 'tr' : locale) as 'tr' | 'en' | 'mk' | 'sr' | 's
 
 const landingText = {
   tr: {
-    heroTag: 'Reflex Plastik · Profesyonel Tek Kullanımlık Eldiven Çözümleri',
-    heroTitle: 'Profesyonel B2B Eldiven Çözümleri ve Hijyen Teknolojileri',
-    heroLead: 'Endüstriyel mutfaklardan sağlık ve güzellik sektörüne, gıda üretim hatlarından kurumsal hijyen operasyonlarına kadar 7 farklı uzman ürün ailesi ile güvenilir tedarik.',
+    heroTag: 'Reflex Plastik · B2B Eldiven Çözümleri',
+    heroTitle: 'Profesyonel Eldiven Sistemleri & Hijyen Teknolojileri',
+    heroLead: 'Endüstriyel mutfaklar, gıda üretim hatları, sağlık, kişisel bakım ve hijyen operasyonları için 7 farklı uzman ürün ailesi ile yüksek hacimli güvenilir tedarik.',
     primaryCta: 'Ürün Portföyünü İncele',
     secondaryCta: 'Teklif & Tedarik Talebi',
     whyTitle: 'Neden Reflex Ürün Portföyü?',
@@ -25,20 +25,20 @@ const landingText = {
     quoteBtn: 'Ticari İletişime Geç',
   },
   en: {
-    heroTag: 'Reflex Plastik · Professional Disposable Glove Solutions',
-    heroTitle: 'Professional B2B Disposable Glove & Hygiene Solutions',
+    heroTag: 'Reflex Plastik · B2B Disposable Glove Systems',
+    heroTitle: 'Professional B2B Glove Systems & Hygiene Solutions',
     heroLead: 'Delivering reliable high-volume supply across 7 specialized product lines engineered for food manufacturing, ho-re-ca, healthcare, beauty, and industrial maintenance.',
-    primaryCta: 'Explore Product Line',
+    primaryCta: 'Explore Product Portfolio',
     secondaryCta: 'Request B2B Quotation',
     whyTitle: 'Why Choose Reflex Portfolio?',
     whyLead: 'High-performance, cost-effective, and food-safe next-generation elastomer alternatives to traditional Nitrile and Vinyl gloves.',
-    applicationsTitle: 'Industry Application Areas',
+    applicationsTitle: 'Industry Application Sectors',
     quoteTitle: 'Request B2B Wholesale Quote & Export Inquiries',
     quoteDesc: 'Connect directly with our commercial team for container/pallet load inquiries, private label options, or regional distribution partnerships.',
     quoteBtn: 'Contact Commercial Team',
   },
   mk: {
-    heroTag: 'Reflex Plastik · Професионални Ракавици За Еднократна Употреба',
+    heroTag: 'Reflex Plastik · Професионални Ракавици',
     heroTitle: 'Професионални B2B Ракавици и Хигиенски Решенија',
     heroLead: 'Сигурна снабденост низ 7 специјализирани серии на ракавици развиени за прехранбена индустрија, угостителство, козметика и општа заштита.',
     primaryCta: 'Прегледај Портфолио',
@@ -51,7 +51,7 @@ const landingText = {
     quoteBtn: 'Контактирај Комерција',
   },
   sr: {
-    heroTag: 'Reflex Plastik · Profesionalna Rešenja Rukavica za Jednokratnu Upotrebu',
+    heroTag: 'Reflex Plastik · B2B Sistem Rukavica',
     heroTitle: 'Profesionalni B2B Portfolijo Rukavica i Higijenskih Sistema',
     heroLead: 'Pouzdano snabdevanje kroz 7 specijalizovanih linija rukavica razvijenih za prehrambenu industriju, ugostiteljstvo, lepoticu i industrijsko održavanje.',
     primaryCta: 'Istraži Portfolijo',
@@ -64,7 +64,7 @@ const landingText = {
     quoteBtn: 'Kontaktirajte Komercijalu',
   },
   sq: {
-    heroTag: 'Reflex Plastik · Zgjidhje Profesionale të Dorezave Njëpërdorimëshe',
+    heroTag: 'Reflex Plastik · Zgjidhje B2B të Dorezave',
     heroTitle: 'Zgjidhje Profesionale B2B për Doreza dhe Higjienë',
     heroLead: 'Furnizim i besueshëm në volum të lartë në 7 linja të specializuara të dorezave për industrinë ushqimore, restorante, kozmetikë dhe mirëmbajtje.',
     primaryCta: 'Shiko Portofolin',
@@ -103,145 +103,239 @@ const applications = [
   { name: lang === 'tr' ? 'Güzellik & Bakım Salonları' : 'Beauty & Wellness', icon: '✨' },
   { name: lang === 'tr' ? 'Endüstriyel & Genel Temas' : 'Industrial & General Purpose', icon: '⚙️' }
 ];
+
+const heroMainProduct = reflexProducts.find(p => p.slug === 'florex') || reflexProducts[0];
 ---
 
-<section class="reflex-hero">
-  <div class="shell">
-    <div class="reflex-hero__content">
-      <span class="reflex-hero__tag">{landingText.heroTag}</span>
-      <h1 class="reflex-hero__title">{landingText.heroTitle}</h1>
-      <p class="reflex-hero__lead">{landingText.heroLead}</p>
-      <div class="reflex-hero__actions">
-        <a href="#product-families" class="button primary">{landingText.primaryCta}</a>
-        <a href="#quote-section" class="button">{landingText.secondaryCta}</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="product-families" class="section">
-  <div class="shell">
-    <div class="section-heading">
-      <p class="section-label">Reflex Product Line</p>
-      <h2>{lang === 'tr' ? '7 Uzman Ürün Ailesi' : '7 Specialized Product Families'}</h2>
-      <p class="section-lead">
-        {lang === 'tr'
-          ? 'Her biri belirli kullanım ihtiyaçları, hijyen standartları ve et kalınlığı için geliştirilmiş profesyonel eldiven çözümleri.'
-          : 'Professional disposable glove solutions engineered for specialized hygiene standards, materials, and tactile requirements.'}
-      </p>
-    </div>
-
-    <div class="reflex-grid">
-      {reflexProducts.map((product) => (
-        <ReflexProductCard product={product} locale={locale} />
-      ))}
-    </div>
-  </div>
-</section>
-
-<section class="section why-reflex-section">
-  <div class="shell">
-    <div class="section-heading">
-      <p class="section-label">Core Advantages</p>
-      <h2>{landingText.whyTitle}</h2>
-      <p class="section-lead">{landingText.whyLead}</p>
-    </div>
-
-    <div class="why-grid">
-      {whyCards.map((card) => (
-        <div class="why-card">
-          <div class="why-card__icon">{card.icon}</div>
-          <h3>{card.title}</h3>
-          <p>{card.desc}</p>
+<div class="reflex-landing">
+  <!-- HERO SECTION -->
+  <section class="reflex-hero">
+    <div class="shell">
+      <div class="hero-editorial-grid">
+        <div class="hero-left">
+          <span class="black-pill hero-eyebrow">{landingText.heroTag}</span>
+          <h1 class="hero-editorial-title">{landingText.heroTitle}</h1>
+          <p class="hero-editorial-lead">{landingText.heroLead}</p>
+          <div class="hero-actions">
+            <a href="#product-families" class="button dark-btn">{landingText.primaryCta}</a>
+            <a href="#quote-section" class="button amber-btn">{landingText.secondaryCta}</a>
+          </div>
         </div>
-      ))}
-    </div>
-  </div>
-</section>
 
-<section class="section applications-section">
-  <div class="shell">
-    <div class="section-heading">
-      <p class="section-label">Industries & Use Cases</p>
-      <h2>{landingText.applicationsTitle}</h2>
-    </div>
-
-    <div class="apps-grid">
-      {applications.map((app) => (
-        <div class="app-card">
-          <span class="app-card__icon">{app.icon}</span>
-          <span class="app-card__name">{app.name}</span>
+        <div class="hero-right">
+          <div class="hero-image-card">
+            <img
+              src={heroMainProduct.images.main}
+              alt="Reflex Plastik Portfolio Showcase"
+              width="600"
+              height="450"
+              decoding="async"
+            />
+          </div>
         </div>
-      ))}
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="quote-section" class="section quote-section">
-  <div class="shell">
-    <div class="quote-card">
-      <div class="quote-card__content">
-        <h2>{landingText.quoteTitle}</h2>
-        <p>{landingText.quoteDesc}</p>
+  <!-- PRODUCT FAMILIES GRID -->
+  <section id="product-families" class="section">
+    <div class="shell">
+      <div class="editorial-section-heading">
+        <span class="section-badge">Reflex Product Line</span>
+        <h2>{lang === 'tr' ? '7 Uzman Ürün Ailesi' : '7 Specialized Product Families'}</h2>
+        <p class="section-lead">
+          {lang === 'tr'
+            ? 'Her biri belirli kullanım ihtiyaçları, hijyen standartları ve et kalınlığı için geliştirilmiş profesyonel eldiven çözümleri.'
+            : 'Professional disposable glove solutions engineered for specialized hygiene standards, materials, and tactile requirements.'}
+        </p>
       </div>
-      <div class="quote-card__action">
-        <a href="mailto:info@teyfikgokdemir.com?subject=Reflex%20B2B%20Glove%20Quotation" class="button primary">
-          {landingText.quoteBtn}
-        </a>
+
+      <div class="reflex-grid">
+        {reflexProducts.map((product) => (
+          <ReflexProductCard product={product} locale={locale} />
+        ))}
       </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- WHY REFLEX SECTION -->
+  <section class="section why-reflex-section">
+    <div class="shell">
+      <div class="editorial-section-heading">
+        <span class="section-badge">Core Advantages</span>
+        <h2>{landingText.whyTitle}</h2>
+        <p class="section-lead">{landingText.whyLead}</p>
+      </div>
+
+      <div class="why-grid">
+        {whyCards.map((card) => (
+          <div class="why-card">
+            <div class="why-card__icon">{card.icon}</div>
+            <h3>{card.title}</h3>
+            <p>{card.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- APPLICATIONS SECTION -->
+  <section class="section applications-section">
+    <div class="shell">
+      <div class="editorial-section-heading">
+        <span class="section-badge">Industries & Use Cases</span>
+        <h2>{landingText.applicationsTitle}</h2>
+      </div>
+
+      <div class="apps-grid">
+        {applications.map((app) => (
+          <div class="app-card">
+            <span class="app-card__icon">{app.icon}</span>
+            <span class="app-card__name">{app.name}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE SECTION -->
+  <section id="quote-section" class="section quote-section">
+    <div class="shell">
+      <div class="quote-card">
+        <div class="quote-card__content">
+          <h2>{landingText.quoteTitle}</h2>
+          <p>{landingText.quoteDesc}</p>
+        </div>
+        <div class="quote-card__action">
+          <a href="mailto:info@teyfikgokdemir.com?subject=Reflex%20B2B%20Glove%20Quotation" class="quote-btn">
+            {landingText.quoteBtn}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
 
 <style>
+  .reflex-landing {
+    background-color: #F6F3EC;
+    color: #1A1815;
+    min-height: 100vh;
+  }
   .reflex-hero {
-    padding-block: clamp(3rem, 6vw, 6rem);
-    background: radial-gradient(circle at 50% 0%, rgba(226, 118, 98, 0.12), transparent 70%), var(--surface-dark);
-    border-bottom: 1px solid var(--line);
-    color: #f3eee6;
+    padding-block: clamp(3.5rem, 6vw, 6rem);
+    border-bottom: 1px solid #E6E1D7;
   }
-  .reflex-hero__content {
-    max-width: 840px;
-    margin-inline: auto;
-    text-align: center;
+  .hero-editorial-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(2.5rem, 5vw, 5rem);
+    align-items: center;
   }
-  .reflex-hero__tag {
-    display: inline-block;
-    padding: 0.4rem 1rem;
-    margin-bottom: 1.2rem;
-    border: 1px solid rgba(242, 170, 143, 0.35);
-    border-radius: 999px;
-    background: rgba(226, 118, 98, 0.1);
-    color: var(--accent-coral);
-    font-size: 0.78rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-  .reflex-hero__title {
-    font-size: clamp(2.4rem, 4.8vw, 4.2rem);
-    line-height: 1.05;
+  .hero-eyebrow {
     margin-bottom: 1.25rem;
-    color: #ffffff;
   }
-  .reflex-hero__lead {
-    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
-    color: #c9bfb2;
+  .hero-editorial-title {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: clamp(2.4rem, 4.5vw, 4rem);
+    line-height: 1.12;
+    font-weight: 700;
+    margin: 0 0 1.25rem;
+    color: #1A1815;
+  }
+  .hero-editorial-lead {
+    font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+    color: #2E2A25;
     line-height: 1.65;
     margin-bottom: 2rem;
   }
-  .reflex-hero__actions {
+  .hero-actions {
     display: flex;
-    justify-content: center;
     gap: 1rem;
     flex-wrap: wrap;
+  }
+
+  .black-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    background: #1A1815;
+    color: #FFFFFF;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .dark-btn {
+    background: #1A1815 !important;
+    color: #FFFFFF !important;
+    padding: 0.85rem 1.6rem;
+    border-radius: 10px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .amber-btn {
+    background: #D45D35 !important;
+    color: #FFFFFF !important;
+    padding: 0.85rem 1.6rem;
+    border-radius: 10px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .dark-btn:hover {
+    background: #D45D35 !important;
+  }
+  .amber-btn:hover {
+    background: #B84A25 !important;
+  }
+
+  .hero-image-card {
+    background: #FFFFFF;
+    border: 1px solid #E6E1D7;
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(26, 24, 21, 0.05);
+    overflow: hidden;
+  }
+  .hero-image-card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  .editorial-section-heading {
+    margin-bottom: 2.5rem;
+  }
+  .section-badge {
+    display: inline-block;
+    color: #D45D35;
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+  .editorial-section-heading h2 {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 700;
+    color: #1A1815;
+    margin: 0 0 0.75rem;
+  }
+  .section-lead {
+    font-size: 1.05rem;
+    color: #4A453E;
+    max-width: 680px;
+    line-height: 1.6;
+    margin: 0;
   }
 
   .reflex-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 1.75rem;
-    margin-top: 2rem;
   }
 
   .why-grid {
@@ -251,23 +345,26 @@ const applications = [
   }
   .why-card {
     padding: 2rem;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--surface-dark);
-    color: #f3eee6;
+    border: 1px solid #E6E1D7;
+    border-radius: 18px;
+    background: #FFFFFF;
+    color: #1A1815;
+    box-shadow: 0 4px 20px rgba(26, 24, 21, 0.03);
   }
   .why-card__icon {
     font-size: 2.2rem;
     margin-bottom: 1rem;
   }
   .why-card h3 {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
     font-size: 1.35rem;
     margin: 0 0 0.75rem;
-    color: #ffffff;
+    color: #1A1815;
+    font-weight: 700;
   }
   .why-card p {
     margin: 0;
-    color: #c9bfb2;
+    color: #4A453E;
     font-size: 0.95rem;
     line-height: 1.6;
   }
@@ -282,11 +379,12 @@ const applications = [
     align-items: center;
     gap: 0.85rem;
     padding: 1.2rem 1.4rem;
-    border: 1px solid var(--line);
+    border: 1px solid #E6E1D7;
     border-radius: 14px;
-    background: var(--surface-dark);
-    color: #f3eee6;
+    background: #FFFFFF;
+    color: #1A1815;
     font-weight: 700;
+    box-shadow: 0 2px 10px rgba(26, 24, 21, 0.02);
   }
   .app-card__icon {
     font-size: 1.5rem;
@@ -298,20 +396,41 @@ const applications = [
     justify-content: space-between;
     gap: 2rem;
     padding: clamp(2rem, 4vw, 3.5rem);
-    border: 1px solid var(--accent);
-    border-radius: var(--radius);
-    background: radial-gradient(circle at 100% 0%, rgba(226, 118, 98, 0.2), transparent 20rem), var(--surface-dark);
-    color: #ffffff;
+    border: 1px solid #2D2722;
+    border-radius: 20px;
+    background: #1A1815;
+    color: #FFFFFF;
     flex-wrap: wrap;
+    margin-top: 2rem;
   }
   .quote-card__content h2 {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
     font-size: clamp(1.8rem, 3vw, 2.5rem);
     margin: 0 0 0.75rem;
+    color: #FFFFFF;
   }
   .quote-card__content p {
     margin: 0;
     max-width: 600px;
-    color: #c9bfb2;
+    color: #D6CFCE;
     line-height: 1.6;
+  }
+  .quote-btn {
+    background: #D45D35 !important;
+    color: #FFFFFF !important;
+    padding: 0.85rem 1.6rem;
+    font-weight: 700;
+    border-radius: 10px;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .quote-btn:hover {
+    background: #B84A25 !important;
+  }
+
+  @media (max-width: 900px) {
+    .hero-editorial-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

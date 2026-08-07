@@ -26,6 +26,13 @@ const detailText = {
     quoteDesc: 'Koli, palet ve konteyner bazlı toptan alım talepleriniz için teknik detayları ve fiyatlandırmayı hemen öğrenin.',
     quoteBtn: 'Fiyat & Tedarik Talebi Gönder',
     faqTitle: 'Sıkça Sorulan Sorular (SSS)',
+    homeBreadcrumb: 'Ana Sayfa',
+    kutuIci: 'Kutu İçi Adet',
+    koliIci: 'Koli İçi Adet',
+    paletIci: 'Palet İçi Adet',
+    kutuOlcusu: 'Kutu Ölçüsü',
+    endustriyelKullanim: 'Endüstriyel Kullanım',
+    genelPaket: 'Genel Paket',
   },
   en: {
     backToCatalog: '← Back to Reflex Product Portfolio',
@@ -38,6 +45,13 @@ const detailText = {
     quoteDesc: 'Contact us for bulk purchasing by box, carton, pallet, or container loading, including private label availability.',
     quoteBtn: 'Request B2B Quote',
     faqTitle: 'Frequently Asked Questions (FAQ)',
+    homeBreadcrumb: 'Home',
+    kutuIci: 'Box Quantity',
+    koliIci: 'Carton Quantity',
+    paletIci: 'Pallet Load',
+    kutuOlcusu: 'Box Dimensions',
+    endustriyelKullanim: 'Industrial & B2B Use',
+    genelPaket: 'Standard Carton Pack',
   },
   mk: {
     backToCatalog: '← Назад до Сите Reflex Производи',
@@ -50,6 +64,13 @@ const detailText = {
     quoteDesc: 'Контактирајте нѐ за големопродажба на ниво на кутии, палети или контејнери.',
     quoteBtn: 'Побарај Понуда',
     faqTitle: 'Често Поставувани Прашања (ЧПП)',
+    homeBreadcrumb: 'Почетна',
+    kutuIci: 'Количина во кутија',
+    koliIci: 'Количина во коли',
+    paletIci: 'Количина на палета',
+    kutuOlcusu: 'Димензија на кутија',
+    endustriyelKullanim: 'Индустриска употреба',
+    genelPaket: 'Стандардна коли',
   },
   sr: {
     backToCatalog: '← Nazad na Reflex Portfolijo',
@@ -62,6 +83,13 @@ const detailText = {
     quoteDesc: 'Kontaktirajte nas za veleprodajne cene po kutijama, kartonima i paletnim isporukama.',
     quoteBtn: 'Zatraži Ponudu',
     faqTitle: 'Često Postavljana Pitanja (FAQ)',
+    homeBreadcrumb: 'Početna',
+    kutuIci: 'Sadržaj Kutije',
+    koliIci: 'Sadržaj Kartona',
+    paletIci: 'Paletno Pakovanje',
+    kutuOlcusu: 'Dimenzija Kutije',
+    endustriyelKullanim: 'Industrijska Upotreba',
+    genelPaket: 'Standardni Karton',
   },
   sq: {
     backToCatalog: '← Kthehu te Portofoli Reflex',
@@ -74,103 +102,148 @@ const detailText = {
     quoteDesc: 'Na kontaktoni për blerje me shumicë në kuti, kartona ose paleta sipas nevojave tuaja.',
     quoteBtn: 'Kërko Ofertë',
     faqTitle: 'Pyetjet më të Shpeshta (FAQ)',
+    homeBreadcrumb: 'Ballina',
+    kutuIci: 'Sasia në Kuti',
+    koliIci: 'Sasia në Karton',
+    paletIci: 'Sasia në Paletë',
+    kutuOlcusu: 'Përmasat e Kutisë',
+    endustriyelKullanim: 'Përdorim Industrial',
+    genelPaket: 'Karton Standard',
   }
 }[lang] || detailText.tr;
 if (locale === 'fa') {
   detailText.faqTitle = 'پرسش‌های متداول (SSS)';
+  detailText.homeBreadcrumb = 'صفحه اصلی';
 }
+
+const v0 = product.variants[0];
+const boxQty = v0?.boxQuantity || '100 Adet';
+const cartonQty = v0?.cartonQuantity || '20 Kutu';
+const palletQty = v0?.palletQuantity || '70 Koli';
+const boxDim = v0?.boxDimensions || '200 x 120 x 28.5 mm';
+const primaryApp = i18n.applications?.[0] || detailText.endustriyelKullanim;
 
 const relatedProducts = reflexProducts.filter(p => p.slug !== product.slug).slice(0, 3);
 ---
 
 <div class="reflex-detail">
   <div class="shell">
-    <div class="reflex-detail__top-nav">
-      <a href={`/${locale}/reflex/`} class="reflex-back-link">
-        {locale === 'fa' ? '→ بازگشت به سبد محصولات رفلکس' : detailText.backToCatalog}
-      </a>
-    </div>
+    <!-- BREADCRUMB -->
+    <nav class="reflex-breadcrumb" aria-label="Breadcrumb">
+      <a href={`/${locale}/`}>{detailText.homeBreadcrumb}</a>
+      <span class="bc-sep">›</span>
+      <a href={`/${locale}/reflex/`}>Reflex</a>
+      <span class="bc-sep">›</span>
+      <span class="bc-current">{i18n.name}</span>
+    </nav>
 
-    <!-- HERO HEADER -->
-    <div class="detail-hero">
-      <div class="detail-hero__gallery">
-        <div class="main-image-wrap">
+    <!-- MAIN EDITORIAL OVERVIEW LAYOUT -->
+    <div class="detail-main-grid">
+      <!-- LEFT COLUMN -->
+      <div class="detail-left-col">
+        <h1 class="detail-editorial-title">{detailText.overviewTitle}</h1>
+        <p class="detail-editorial-desc">{i18n.description}</p>
+
+        <h2 class="detail-section-subtitle">{detailText.featuresTitle}</h2>
+        <ul class="editorial-features-list">
+          {i18n.features.map(f => (
+            <li>
+              <span class="feature-badge" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              <span class="feature-text">{f}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="detail-right-col">
+        <div class="black-pills-row">
+          <span class="black-pill">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 21h18"></path>
+              <path d="M5 21V7l8-4v18"></path>
+              <path d="M19 21V11l-6-3"></path>
+            </svg>
+            <span>{primaryApp}</span>
+          </span>
+          <span class="black-pill">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            </svg>
+            <span>{detailText.genelPaket}: {cartonQty}</span>
+          </span>
+        </div>
+
+        <div class="editorial-image-card">
           <img
             src={product.images.main}
             alt={`${i18n.name} - ${i18n.materialName}`}
             width="600"
-            height="420"
+            height="450"
             decoding="async"
           />
         </div>
       </div>
-
-      <div class="detail-hero__info">
-        <span class="detail-badge">{i18n.materialName}</span>
-        <h1 class="detail-title">{i18n.name}</h1>
-        <p class="detail-tagline">{i18n.tagline}</p>
-
-        <div class="quick-highlights">
-          <div class="qh-item">
-            <span class="qh-label">Pudra:</span>
-            <span class="qh-val">{product.powderStatus}</span>
-          </div>
-          <div class="qh-item">
-            <span class="qh-label">Lateks:</span>
-            <span class="qh-val">{product.latexStatus}</span>
-          </div>
-          <div class="qh-item">
-            <span class="qh-label">Silikon:</span>
-            <span class="qh-val">{product.siliconeStatus}</span>
-          </div>
-          <div class="qh-item">
-            <span class="qh-label">Gıda Uyumu:</span>
-            <span class="qh-val">{product.foodContact ? 'Uygun' : 'Uygun Değil'}</span>
-          </div>
-        </div>
-
-        <div class="detail-hero__ctas">
-          <a href="#quote" class="button primary">{detailText.quoteBtn}</a>
-          {product.images.packaging && (
-            <a href="#packaging-specs" class="button">Lojistik Detayları</a>
-          )}
-        </div>
-      </div>
     </div>
 
-    <!-- OVERVIEW & FEATURES -->
-    <div class="section-content">
-      <div class="detail-grid">
-        <div class="detail-col">
-          <h2>{detailText.overviewTitle}</h2>
-          <p class="overview-desc">{i18n.description}</p>
-
-          <h3>{detailText.featuresTitle}</h3>
-          <ul class="features-list">
-            {i18n.features.map(f => (
-              <li>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-coral)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                <span>{f}</span>
-              </li>
-            ))}
-          </ul>
+    <!-- 4-COLUMN LOGISTICS SUMMARY BAR -->
+    <div class="logistics-bar-card">
+      <div class="logistics-col">
+        <div class="logistics-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D45D35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+          </svg>
         </div>
+        <div class="logistics-info">
+          <span class="logistics-label">{detailText.kutuIci}</span>
+          <strong class="logistics-val">{boxQty}</strong>
+        </div>
+      </div>
 
-        <div class="detail-col">
-          <h3>{detailText.applicationsTitle}</h3>
-          <div class="apps-pills">
-            {i18n.applications.map(app => (
-              <span class="app-pill">{app}</span>
-            ))}
-          </div>
+      <div class="logistics-col">
+        <div class="logistics-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D45D35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16.5 9.4 7.55 4.24"></path>
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.29 7 12 12 20.71 7"></polyline>
+            <line x1="12" y1="22" x2="12" y2="12"></line>
+          </svg>
+        </div>
+        <div class="logistics-info">
+          <span class="logistics-label">{detailText.koliIci}</span>
+          <strong class="logistics-val">{cartonQty}</strong>
+        </div>
+      </div>
 
-          {product.images.packaging && (
-            <div class="packaging-box-img">
-              <img src={product.images.packaging} alt={`${i18n.name} Ambalaj Kutusu`} width="400" height="280" loading="lazy" />
-            </div>
-          )}
+      <div class="logistics-col">
+        <div class="logistics-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D45D35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 20h20"></path>
+            <path d="M5 20v-4h14v4"></path>
+            <path d="M7 16V4h10v12"></path>
+          </svg>
+        </div>
+        <div class="logistics-info">
+          <span class="logistics-label">{detailText.paletIci}</span>
+          <strong class="logistics-val">{palletQty}</strong>
+        </div>
+      </div>
+
+      <div class="logistics-col">
+        <div class="logistics-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D45D35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="3" y1="9" x2="21" y2="9"></line>
+            <line x1="9" y1="21" x2="9" y2="9"></line>
+          </svg>
+        </div>
+        <div class="logistics-info">
+          <span class="logistics-label">{detailText.kutuOlcusu}</span>
+          <strong class="logistics-val">{boxDim}</strong>
         </div>
       </div>
     </div>
@@ -231,7 +304,7 @@ const relatedProducts = reflexProducts.filter(p => p.slug !== product.slug).slic
         <p>{detailText.quoteDesc}</p>
       </div>
       <div class="quote-card__action">
-        <a href={`mailto:info@teyfikgokdemir.com?subject=Reflex%20${encodeURIComponent(i18n.name)}%20Quotation`} class="button primary">
+        <a href={`mailto:info@teyfikgokdemir.com?subject=Reflex%20${encodeURIComponent(i18n.name)}%20Quotation`} class="button primary quote-btn">
           {detailText.quoteBtn}
         </a>
       </div>
@@ -241,175 +314,203 @@ const relatedProducts = reflexProducts.filter(p => p.slug !== product.slug).slic
 
 <style>
   .reflex-detail {
-    padding-block: 2.5rem 5rem;
-    color: #f3eee6;
+    padding-block: 2rem 5rem;
+    background-color: #F6F3EC;
+    color: #1A1815;
+    min-height: 100vh;
   }
-  .reflex-detail__top-nav {
-    margin-bottom: 2rem;
-  }
-  .reflex-back-link {
-    color: var(--accent-coral);
-    font-weight: 700;
-    font-size: 0.92rem;
-    transition: opacity 0.2s ease;
-  }
-  .reflex-back-link:hover {
-    opacity: 0.8;
-  }
-
-  .detail-hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-    gap: clamp(2rem, 4vw, 4rem);
+  .reflex-breadcrumb {
+    display: flex;
     align-items: center;
-    padding: 2.5rem;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--surface-dark);
-    margin-bottom: 3rem;
-  }
-  .main-image-wrap {
-    overflow: hidden;
-    border-radius: 16px;
-    background: #181411;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-  .main-image-wrap img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-  }
-
-  .detail-badge {
-    display: inline-block;
-    padding: 0.35rem 0.8rem;
-    margin-bottom: 1rem;
-    border-radius: 999px;
-    background: rgba(226, 118, 98, 0.12);
-    border: 1px solid rgba(242, 170, 143, 0.3);
-    color: var(--accent-coral);
-    font-size: 0.78rem;
-    font-weight: 800;
-    text-transform: uppercase;
-  }
-  .detail-title {
-    font-size: clamp(2.2rem, 4vw, 3.4rem);
-    line-height: 1.1;
-    margin: 0 0 0.8rem;
-    color: #ffffff;
-  }
-  .detail-tagline {
-    font-size: 1.15rem;
-    color: #c9bfb2;
-    margin: 0 0 1.75rem;
-    line-height: 1.55;
-  }
-
-  .quick-highlights {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.6rem 1rem;
-    padding: 1rem 1.2rem;
-    margin-bottom: 1.75rem;
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    font-size: 0.88rem;
-  }
-  .qh-item {
-    display: flex;
-    gap: 0.4rem;
-  }
-  .qh-label {
-    color: #a99d8f;
-  }
-  .qh-val {
-    color: #ffffff;
-    font-weight: 700;
-  }
-
-  .detail-hero__ctas {
-    display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
+    font-size: 0.92rem;
+    margin-bottom: 2.2rem;
+    color: #59534B;
     flex-wrap: wrap;
   }
+  .reflex-breadcrumb a {
+    color: #59534B;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+  .reflex-breadcrumb a:hover {
+    color: #D45D35;
+  }
+  .bc-sep {
+    color: #A39B8E;
+  }
+  .bc-current {
+    color: #D45D35;
+    font-weight: 700;
+  }
 
-  .detail-grid {
+  .detail-main-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 3rem;
-    margin-block: 3rem;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: flex-start;
+    margin-bottom: 2.5rem;
   }
-  .detail-col h2,
-  .detail-col h3 {
-    color: #ffffff;
-    margin-top: 0;
+
+  .detail-editorial-title {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    line-height: 1.15;
+    font-weight: 700;
+    margin: 0 0 1.25rem;
+    color: #1A1815;
   }
-  .overview-desc {
+  .detail-editorial-desc {
     font-size: 1.05rem;
     line-height: 1.7;
-    color: #c9bfb2;
+    color: #2E2A25;
     margin-bottom: 2rem;
   }
 
-  .features-list {
+  .detail-section-subtitle {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 1.25rem;
+    color: #1A1815;
+  }
+
+  .editorial-features-list {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
+  }
+  .editorial-features-list li {
+    display: flex;
+    align-items: center;
     gap: 0.85rem;
-  }
-  .features-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
+    padding-block: 0.9rem;
+    border-bottom: 1px solid #E6E1D7;
     font-size: 0.98rem;
-    color: #f3eee6;
+    font-weight: 600;
+    color: #1A1815;
   }
-
-  .apps-pills {
+  .feature-badge {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #D45D35;
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    margin-bottom: 2rem;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
-  .app-pill {
-    padding: 0.5rem 1rem;
-    border-radius: 999px;
-    border: 1px solid var(--line);
-    background: var(--surface-dark);
-    font-size: 0.88rem;
-    font-weight: 700;
+  .feature-text {
+    line-height: 1.4;
   }
 
-  .packaging-box-img {
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1px solid var(--line);
-    background: #181411;
+  .black-pills-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.65rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
   }
-  .packaging-box-img img {
+  .black-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    background: #1A1815;
+    color: #FFFFFF;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  .editorial-image-card {
+    background: #FFFFFF;
+    border: 1px solid #E6E1D7;
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(26, 24, 21, 0.05);
+    overflow: hidden;
+  }
+  .editorial-image-card img {
     width: 100%;
     height: auto;
     object-fit: cover;
+    border-radius: 12px;
+  }
+
+  .logistics-bar-card {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    padding: 1.75rem 2rem;
+    background: #FFFFFF;
+    border: 1px solid #E6E1D7;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(26, 24, 21, 0.04);
+    margin-bottom: 3rem;
+  }
+  .logistics-col {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .logistics-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #F6F3EC;
+    border: 1px solid #E6E1D7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .logistics-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .logistics-label {
+    font-size: 0.82rem;
+    color: #635D55;
+    font-weight: 600;
+  }
+  .logistics-val {
+    font-size: 1.05rem;
+    color: #1A1815;
+    font-weight: 800;
   }
 
   .detail-gallery-section,
-  .related-section {
+  .related-section,
+  .detail-faq-section {
     margin-block: 4rem;
   }
+  .detail-gallery-section h2,
+  .related-section h2,
+  .detail-faq-section h2 {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #1A1815;
+    font-weight: 700;
+  }
+
   .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 1.25rem;
-    margin-top: 1.5rem;
   }
   .gallery-item {
-    border-radius: 14px;
+    border-radius: 16px;
     overflow: hidden;
-    border: 1px solid var(--line);
-    background: #181411;
+    border: 1px solid #E6E1D7;
+    background: #FFFFFF;
+    box-shadow: 0 4px 16px rgba(26, 24, 21, 0.04);
   }
   .gallery-item img {
     width: 100%;
@@ -417,65 +518,29 @@ const relatedProducts = reflexProducts.filter(p => p.slug !== product.slug).slic
     object-fit: cover;
   }
 
-  .reflex-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-  }
-
-  .quote-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-    padding: clamp(2rem, 4vw, 3.5rem);
-    border: 1px solid var(--accent);
-    border-radius: var(--radius);
-    background: radial-gradient(circle at 100% 0%, rgba(226, 118, 98, 0.2), transparent 20rem), var(--surface-dark);
-    color: #ffffff;
-    flex-wrap: wrap;
-    margin-top: 4rem;
-  }
-  .quote-card__content h2 {
-    font-size: clamp(1.8rem, 3vw, 2.5rem);
-    margin: 0 0 0.75rem;
-  }
-  .quote-card__content p {
-    margin: 0;
-    max-width: 600px;
-    color: #c9bfb2;
-    line-height: 1.6;
-  }
-
-  .detail-faq-section {
-    margin-block: 4rem;
-  }
-  .detail-faq-section h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-    color: #ffffff;
-  }
   .faq-accordion {
     display: flex;
     flex-direction: column;
     gap: 0.85rem;
   }
   .faq-item {
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: var(--surface-dark);
+    border: 1px solid #E6E1D7;
+    border-radius: 14px;
+    background: #FFFFFF;
     overflow: hidden;
-    transition: border-color 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 10px rgba(26, 24, 21, 0.02);
   }
   .faq-item[open] {
-    border-color: rgba(226, 118, 98, 0.4);
+    border-color: #D45D35;
+    box-shadow: 0 4px 20px rgba(212, 93, 53, 0.08);
   }
   .faq-question {
-    padding: 1.1rem 1.4rem;
+    padding: 1.15rem 1.4rem;
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
     font-weight: 700;
-    font-size: 1.02rem;
-    color: #f3eee6;
+    font-size: 1.05rem;
+    color: #1A1815;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
@@ -487,28 +552,86 @@ const relatedProducts = reflexProducts.filter(p => p.slug !== product.slug).slic
     display: none;
   }
   .faq-icon {
-    font-size: 1.2rem;
-    color: var(--accent-coral);
+    font-size: 1.3rem;
+    color: #D45D35;
     transition: transform 0.2s ease;
     flex-shrink: 0;
     margin-inline-start: 0.75rem;
+    font-weight: 400;
   }
   .faq-item[open] .faq-icon {
     transform: rotate(45deg);
   }
   .faq-answer {
-    padding: 0 1.4rem 1.25rem;
-    color: #c9bfb2;
-    font-size: 0.95rem;
-    line-height: 1.6;
+    padding: 0 1.4rem 1.3rem;
+    color: #2E2A25;
+    font-size: 0.96rem;
+    line-height: 1.65;
   }
   .faq-answer p {
     margin: 0;
   }
 
-  @media (max-width: 768px) {
-    .detail-hero {
+  .reflex-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .quote-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: clamp(2rem, 4vw, 3.5rem);
+    border: 1px solid #2D2722;
+    border-radius: 20px;
+    background: #1A1815;
+    color: #FFFFFF;
+    flex-wrap: wrap;
+    margin-top: 4rem;
+  }
+  .quote-card__content h2 {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    margin: 0 0 0.75rem;
+    color: #FFFFFF;
+  }
+  .quote-card__content p {
+    margin: 0;
+    max-width: 600px;
+    color: #D6CFCE;
+    line-height: 1.6;
+  }
+  .quote-btn {
+    background: #D45D35 !important;
+    color: #FFFFFF !important;
+    padding: 0.85rem 1.6rem;
+    font-weight: 700;
+    border-radius: 10px;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .quote-btn:hover {
+    background: #B84A25 !important;
+  }
+
+  @media (max-width: 900px) {
+    .detail-main-grid {
       grid-template-columns: 1fr;
+    }
+    .black-pills-row {
+      justify-content: flex-start;
+    }
+    .logistics-bar-card {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 540px) {
+    .logistics-bar-card {
+      grid-template-columns: 1fr;
+      padding: 1.25rem;
     }
   }
 </style>
