@@ -1035,6 +1035,23 @@ const displayedYear = (title: string, year: string) =>
   html[dir="rtl"] #ventures .venture-card:focus-visible .venture-arrow {
     transform: translateX(-4px);
   }
+  #expertise .section-heading {
+    max-width: 920px;
+    margin-inline: auto;
+    margin-bottom: clamp(2.25rem, 4vw, 3.5rem);
+    text-align: center;
+  }
+  #expertise .section-heading h2 {
+    font-size: clamp(2.1rem, 3.6vw, 3.5rem);
+    line-height: 1.14;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    text-wrap: balance;
+  }
+  #expertise .section-lead {
+    margin-inline: auto;
+    max-width: 760px;
+  }
   .expertise-card,
   .method-card {
     border-radius: 6px;
@@ -1065,10 +1082,14 @@ const displayedYear = (title: string, year: string) =>
   }
   .expertise-card li::before { box-shadow: none; }
   .definitions {
-    border-radius: 4px;
-    background: transparent;
+    margin-top: clamp(2rem, 3.5vw, 3.25rem);
+    padding: 0.9rem 1.4rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     color: var(--text-secondary);
     font-size: .88rem;
+    text-align: center;
   }
   .timeline {
     position: relative;
