@@ -542,15 +542,20 @@ const displayedYear = (title: string, year: string) =>
     </div>
 
     <div class="shell ctseg-featured__reflex" data-reveal="item">
-      <div class="reflex-card__badge-row">
-        {reflex.badges.map((b) => <span class="reflex-chip">{b}</span>)}
+      <div class="reflex-card__content">
+        <div class="reflex-card__badge-row">
+          {reflex.badges.map((b) => <span class="reflex-chip">{b}</span>)}
+        </div>
+        <p class="reflex-card__kicker">{reflex.kicker}</p>
+        <h3>{reflex.title}</h3>
+        <p>{reflex.description}</p>
+        <a class="button primary reflex-card__button" href={localeCtsegLinks.reflex} target="_blank" rel="noopener noreferrer">
+          {reflex.cta} <span aria-hidden="true">↗</span>
+        </a>
       </div>
-      <p class="reflex-card__kicker">{reflex.kicker}</p>
-      <h3>{reflex.title}</h3>
-      <p>{reflex.description}</p>
-      <a class="button primary reflex-card__button" href={localeCtsegLinks.reflex} target="_blank" rel="noopener noreferrer">
-        {reflex.cta} <span aria-hidden="true">↗</span>
-      </a>
+      <div class="reflex-card__image">
+        <img src="/images/reflex-gloves-b2b.jpg" width="600" height="400" alt="REFLEX B2B Gloves" loading="lazy" decoding="async" />
+      </div>
     </div>
   </section>
 
@@ -769,12 +774,30 @@ const displayedYear = (title: string, year: string) =>
     background: var(--scene-olive);
   }
   .ctseg-featured__reflex {
-    margin-top: 2rem;
-    padding: 1.5rem 1.75rem;
+    margin-top: 2.25rem;
+    padding: 1.75rem 2rem;
     border: 1px solid rgba(214, 184, 120, 0.28);
-    border-radius: 12px;
+    border-radius: 14px;
     background: linear-gradient(135deg, rgba(38, 44, 38, 0.95) 0%, rgba(24, 28, 24, 0.98) 100%);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.25);
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(260px, .75fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: center;
+  }
+  .reflex-card__image img {
+    width: 100%;
+    height: clamp(200px, 20vw, 270px);
+    object-fit: cover;
+    object-position: center;
+    border-radius: 10px;
+    border: 1px solid rgba(214, 184, 120, 0.25);
+  }
+  @media (max-width: 820px) {
+    .ctseg-featured__reflex {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
   }
   .reflex-card__badge-row {
     display: flex;
@@ -942,15 +965,15 @@ const displayedYear = (title: string, year: string) =>
   }
   .hero {
     width: min(1340px, calc(100% - 3rem));
-    grid-template-columns: minmax(0, 1.35fr) minmax(320px, .65fr);
+    grid-template-columns: minmax(0, 1.35fr) minmax(330px, .65fr);
     color: var(--text);
     background: var(--scene-stone);
-    padding-block: clamp(1.75rem, 3vw, 3.25rem);
+    padding-block: clamp(3rem, 5vw, 5.5rem);
     align-items: center;
   }
   .hero-description { color: var(--text-muted); }
-  .hero h1 { max-width: 22ch; font-size: clamp(2.4rem, 3.8vw, 3.8rem); line-height: 1.08; }
-  .hero-media { min-height: 340px; max-height: 460px; aspect-ratio: 4/3; }
+  .hero h1 { max-width: 22ch; font-size: clamp(2.8rem, 4.4vw, 4.6rem); line-height: var(--leading-display); }
+  .hero-media { min-height: 620px; }
   .hero-media::before {
     inset: 0;
     border-color: #b9b4a8;
