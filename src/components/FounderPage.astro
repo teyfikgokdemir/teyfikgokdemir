@@ -18,26 +18,82 @@ const ctsegLinks = {
     home: 'https://ctseg.com.tr/',
     services: 'https://ctseg.com.tr/tr/hizmetler/',
     contact: 'https://ctseg.com.tr/tr/iletisim/',
+    reflex: 'https://ctseg.com.tr/tr/ticari-urunler/reflex-tek-kullanimlik-eldivenler/',
   },
   en: {
     home: 'https://ctseg.com.tr/en/',
     services: 'https://ctseg.com.tr/en/services/',
     contact: 'https://ctseg.com.tr/en/contact/',
+    reflex: 'https://ctseg.com.tr/en/trade-products/reflex-disposable-gloves/',
   },
   mk: {
     home: 'https://ctseg.com.tr/en/',
     services: 'https://ctseg.com.tr/en/services/',
     contact: 'https://ctseg.com.tr/en/contact/',
+    reflex: 'https://ctseg.com.tr/en/trade-products/reflex-disposable-gloves/',
   },
   sr: {
     home: 'https://ctseg.com.tr/en/',
     services: 'https://ctseg.com.tr/en/services/',
     contact: 'https://ctseg.com.tr/en/contact/',
+    reflex: 'https://ctseg.com.tr/en/trade-products/reflex-disposable-gloves/',
   },
   sq: {
     home: 'https://ctseg.com.tr/en/',
     services: 'https://ctseg.com.tr/en/services/',
     contact: 'https://ctseg.com.tr/en/contact/',
+    reflex: 'https://ctseg.com.tr/en/trade-products/reflex-disposable-gloves/',
+  },
+  fa: {
+    home: 'https://ctseg.com.tr/fa/',
+    services: 'https://ctseg.com.tr/fa/services/',
+    contact: 'https://ctseg.com.tr/fa/contact/',
+    reflex: 'https://ctseg.com.tr/fa/trade-products/',
+  },
+} as const;
+
+const reflexCopy = {
+  tr: {
+    kicker: 'CTSEG Öne Çıkan Ürün Markası',
+    title: 'REFLEX Tek Kullanımlık ve Muayene Eldivenleri',
+    description: 'Medikal, endüstriyel, gıda ve hijyen sektörleri için nitril, latekssiz TPE, termo vinil ve kopolimer tek kullanımlık eldiven portföyü. CE 2841 ve ISO 9001 sertifikasyonu, toplu ihracat tedariği ve özel ambalaj (private label) imkânı.',
+    badges: ['CE 2841 & ISO 9001', 'Nitril & TPE Portföyü', 'Toplu İhracat Tedariği', 'Private Label'],
+    cta: 'REFLEX Ürün Portföyünü CTSEG’de İnceleyin',
+  },
+  en: {
+    kicker: 'CTSEG Featured Product Brand',
+    title: 'REFLEX Disposable & Examination Gloves',
+    description: 'Nitrile, latex-free TPE, thermo vinyl and copolymer disposable glove portfolio for medical, industrial, food and hygiene sectors. CE 2841 & ISO 9001 quality documentation, bulk export supply and private label manufacturing.',
+    badges: ['CE 2841 & ISO 9001', 'Nitrile & TPE Portfolio', 'Bulk Export Supply', 'Private Label'],
+    cta: 'Explore REFLEX Gloves on CTSEG',
+  },
+  mk: {
+    kicker: 'CTSEG Истакната марка на производи',
+    title: 'REFLEX Ракавици за еднократна употреба и прегледи',
+    description: 'Портфолио на нитрилни, TPE без латекс, винилни и кополимерни ракавици за медицински, индустриски и прехранбени сектори. CE 2841 и ISO 9001 сертификација и масовно извозно снабдување.',
+    badges: ['CE 2841 & ISO 9001', 'Нитрил & TPE портфолио', 'Извозно снабдување', 'Private Label'],
+    cta: 'Истражете ги REFLEX ракавиците на CTSEG',
+  },
+  sr: {
+    kicker: 'CTSEG Istaknuti brend proizvoda',
+    title: 'REFLEX Rukavice za jednokratnu upotrebu i preglede',
+    description: 'Portfolio nitrilnih, TPE bez lateksa, vinilnih i kopolimernih rukavica za medicinsku, industrijsku i prehrambenu primenu. CE 2841 i ISO 9001 sertifikati i masovno izvozno snabdevanje.',
+    badges: ['CE 2841 & ISO 9001', 'Nitril & TPE portfolio', 'Masovni izvoz', 'Private Label'],
+    cta: 'Istražite REFLEX rukavice na CTSEG-u',
+  },
+  sq: {
+    kicker: 'CTSEG Linjë e Zgjedhur e Produkteve',
+    title: 'Doreza REFLEX me Një Përdorim dhe Ekzaminimi',
+    description: 'Portofol dorezash nitrili, TPE pa lateks, vinili dhe kopolimeri për sektorin mjekësor, industrial dhe ushqimor. Dokumentacion CE 2841 & ISO 9001 dhe furnizim eksporti me shumicë.',
+    badges: ['CE 2841 & ISO 9001', 'Portofol Nitril & TPE', 'Furnizim Eksporti', 'Private Label'],
+    cta: 'Eksploroni Dorezat REFLEX në CTSEG',
+  },
+  fa: {
+    kicker: 'برند برجسته محصولات CTSEG',
+    title: 'دستکش‌های یک‌بارمصرف و معاینه REFLEX',
+    description: 'سبد دستکش‌های نیتریل، TPE بدون لاتکس، وینیل و کوپلیمر برای کاربردهای پزشکی، صنعتی و صنایع غذایی. گواهینامه‌های CE 2841 و ISO 9001، تأمین صادراتی عمده و برند اختصاصی.',
+    badges: ['CE 2841 & ISO 9001', 'سبد نیتریل و TPE', 'تأمین صادرات عمده', 'Private Label'],
+    cta: 'بررسی دستکش‌های REFLEX در CTSEG',
   },
 } as const;
 
@@ -390,7 +446,8 @@ const positioning = {
 } as const;
 
 const localPositioning = positioning[locale] ?? positioning.en;
-const localeCtsegLinks = ctsegLinks[locale] ?? ctsegLinks.en;
+const localeCtsegLinks = ctsegLinks[locale as keyof typeof ctsegLinks] ?? ctsegLinks.en;
+const reflex = reflexCopy[locale as keyof typeof reflexCopy] ?? reflexCopy.en;
 const ventureItems = baseCopy.ventures.items.filter((item) => item.url);
 const operationalSystems = baseCopy.ventures.items.filter((item) => !item.url);
 const operationalSystemsLabel = {
@@ -482,6 +539,18 @@ const displayedYear = (title: string, year: string) =>
       <ul class="ctseg-featured__services" data-ctseg-layer="services">
         {localPositioning.ctseg.services.map((service) => <li>{service}</li>)}
       </ul>
+    </div>
+
+    <div class="shell ctseg-featured__reflex" data-reveal="item">
+      <div class="reflex-card__badge-row">
+        {reflex.badges.map((b) => <span class="reflex-chip">{b}</span>)}
+      </div>
+      <p class="reflex-card__kicker">{reflex.kicker}</p>
+      <h3>{reflex.title}</h3>
+      <p>{reflex.description}</p>
+      <a class="button primary reflex-card__button" href={localeCtsegLinks.reflex} target="_blank" rel="noopener noreferrer">
+        {reflex.cta} <span aria-hidden="true">↗</span>
+      </a>
     </div>
   </section>
 
@@ -653,9 +722,9 @@ const displayedYear = (title: string, year: string) =>
   .story-stage--method {
     background: color-mix(in srgb, var(--scene-smoke) 90%, var(--scene-olive));
   }
-  .story-stage--intro { padding-block: clamp(6rem, 10vw, 10rem); }
+  .story-stage--intro { padding-block: clamp(2.75rem, 4.5vw, 4.5rem); }
   .story-stage--ventures {
-    padding-block: clamp(4rem, 6vw, 6rem);
+    padding-block: clamp(2.5rem, 4vw, 4.5rem);
     min-height: 0;
     height: auto;
     background: var(--scene-sage);
@@ -695,9 +764,59 @@ const displayedYear = (title: string, year: string) =>
     --panel: #293029;
     --trust: #c9d0c4;
     --accent-soft: #d78263;
-    padding-block: clamp(3rem, 5vw, 4.5rem);
+    padding-block: clamp(2.25rem, 3.5vw, 3.5rem);
     color: var(--text);
     background: var(--scene-olive);
+  }
+  .ctseg-featured__reflex {
+    margin-top: 2rem;
+    padding: 1.5rem 1.75rem;
+    border: 1px solid rgba(214, 184, 120, 0.28);
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(38, 44, 38, 0.95) 0%, rgba(24, 28, 24, 0.98) 100%);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  }
+  .reflex-card__badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 0.75rem;
+  }
+  .reflex-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.65rem;
+    border: 1px solid rgba(214, 184, 120, 0.35);
+    border-radius: 999px;
+    background: rgba(214, 184, 120, 0.12);
+    color: #f3eee6;
+    font-size: 0.76rem;
+    font-weight: 700;
+  }
+  .reflex-card__kicker {
+    margin: 0 0 0.3rem;
+    color: var(--accent-soft, #d78263);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .ctseg-featured__reflex h3 {
+    margin: 0 0 0.55rem;
+    color: #ffffff;
+    font-size: clamp(1.35rem, 2.1vw, 1.75rem);
+    line-height: 1.25;
+  }
+  .ctseg-featured__reflex p {
+    margin: 0 0 1.15rem;
+    color: #d3c9bd;
+    font-size: 0.94rem;
+    line-height: 1.6;
+  }
+  .reflex-card__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
   }
   .ctseg-featured__panel {
     position: relative;
@@ -823,13 +942,15 @@ const displayedYear = (title: string, year: string) =>
   }
   .hero {
     width: min(1340px, calc(100% - 3rem));
-    grid-template-columns: minmax(0, 1.35fr) minmax(330px, .65fr);
+    grid-template-columns: minmax(0, 1.35fr) minmax(320px, .65fr);
     color: var(--text);
     background: var(--scene-stone);
+    padding-block: clamp(1.75rem, 3vw, 3.25rem);
+    align-items: center;
   }
   .hero-description { color: var(--text-muted); }
-  .hero h1 { max-width: 22ch; font-size: clamp(3rem, 4.7vw, 4.85rem); line-height: var(--leading-display); }
-  .hero-media { min-height: 620px; }
+  .hero h1 { max-width: 22ch; font-size: clamp(2.4rem, 3.8vw, 3.8rem); line-height: 1.08; }
+  .hero-media { min-height: 340px; max-height: 460px; aspect-ratio: 4/3; }
   .hero-media::before {
     inset: 0;
     border-color: #b9b4a8;
@@ -842,6 +963,8 @@ const displayedYear = (title: string, year: string) =>
     inset: 10px;
     width: calc(100% - 20px);
     height: calc(100% - 20px);
+    object-fit: cover;
+    object-position: center;
     border-radius: 6px;
   }
   .focus-list {
