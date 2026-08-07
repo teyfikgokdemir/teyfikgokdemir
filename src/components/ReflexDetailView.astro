@@ -463,11 +463,19 @@ const relatedProducts = reflexProducts.filter(p => p.slug !== product.slug).slic
     padding: 1.5rem;
     box-shadow: 0 10px 30px rgba(26, 24, 21, 0.05);
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 340px;
+    max-height: 460px;
   }
   .editorial-image-card img {
-    width: 100%;
+    max-width: 100%;
+    max-height: 420px;
+    width: auto;
     height: auto;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
     border-radius: 12px;
   }
 
@@ -540,11 +548,24 @@ const relatedProducts = reflexProducts.filter(p => p.slug !== product.slug).slic
     border: 1px solid #E6E1D7;
     background: #FFFFFF;
     box-shadow: 0 4px 16px rgba(26, 24, 21, 0.04);
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 240px;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .gallery-item:hover {
+    border-color: #D45D35;
+    transform: translateY(-3px);
   }
   .gallery-item img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
   }
 
   .faq-accordion {
