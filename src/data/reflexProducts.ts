@@ -133,6 +133,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Kozmetik & Güzellik Salonları',
           'Genel Endüstriyel Temas'
         ],
+        colors: ["Siyah","Şeffaf","Mavi"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pudrasız",
+        latexStatus: "Lateks İçermez",
+        siliconeStatus: "Silikon İçermez",
+        sterilityStatus: "Non-Steril",
+        foodContactLabel: "Evet / Tam Uyumlu",
         materialName: 'TPE (Termoplastik Elastomer)',
         faq: [
           {
@@ -172,6 +179,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Beauty & Personal Care',
           'General Industrial Operations'
         ],
+        colors: ["Black","Clear","Blue"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Powder-Free",
+        latexStatus: "Latex-Free",
+        siliconeStatus: "Silicone-Free",
+        sterilityStatus: "Non-Sterile",
+        foodContactLabel: "Yes / Fully Compliant",
         materialName: 'TPE (Thermoplastic Elastomer)',
         faq: [
           {
@@ -211,6 +225,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Козметички салони',
           'Индустриска употреба'
         ],
+        colors: ["Црна","Проѕирна","Сина"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Без пудра",
+        latexStatus: "Без латекс",
+        siliconeStatus: "Без силикон",
+        sterilityStatus: "Нон-стерилно",
+        foodContactLabel: "Да / Соодветно",
         materialName: 'TPE (Термопластичен Еластомер)',
         faq: [
           {
@@ -250,6 +271,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Kozmetički saloni',
           'Opšta industrijska primena'
         ],
+        colors: ["Crna","Providna","Plava"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Bez pudera",
+        latexStatus: "Bez lateksa",
+        siliconeStatus: "Bez silikona",
+        sterilityStatus: "Non-sterilno",
+        foodContactLabel: "Da / Bezbedno",
         materialName: 'TPE (Termoplastični Elastomer)',
         faq: [
           {
@@ -289,6 +317,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Salone bukurie',
           'Përdorim i përgjithshëm industrial'
         ],
+        colors: ["E Zezë","Transparente","Blu"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pa pluhur",
+        latexStatus: "Pa lateks",
+        siliconeStatus: "Pa silikon",
+        sterilityStatus: "Jo-sterile",
+        foodContactLabel: "Po / Plotësisht konform",
         materialName: 'TPE (Elastomer Termoplastik)',
         faq: [
           {
@@ -386,6 +421,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Sanat, Resim ve Atölye Çalışmaları',
           'Günlük Hijyen ve Kişisel Koruma'
         ],
+        colors: ["Şeffaf"],
+        sizes: ["Çocuk Standart"],
+        powderStatus: "Pudrasız",
+        latexStatus: "Lateks İçermez",
+        siliconeStatus: "Silikon İçermez",
+        sterilityStatus: "Non-Steril",
+        foodContactLabel: "Evet / Tam Uyumlu",
         materialName: 'Geri Dönüştürülebilir TPE',
         faq: [
           {
@@ -403,24 +445,6 @@ export const reflexProducts: ReflexProduct[] = [
           {
                     "question": "Hangi kullanım alanları için uygundur?",
                     "answer": "Okul ve anaokulu etkinlikleri, çocuk gıda hazırlığı, resim ve el sanatları atölyeleri için uygundur."
-          }
-],
-        faq: [
-          {
-                    "question": "دستکش Flex Hi-Tech از چه موادی ساخته شده است؟",
-                    "answer": "دستکش Flex Hi-Tech از مواد TPE (الاستومر ترموپلاستیک) ساخته شده است. این دستکش بدون پودر، بدون لاتکس و بدون سیلیکون است."
-          },
-          {
-                    "question": "آیا برای تماس با مواد غذایی مناسب است؟",
-                    "answer": "بله، ۱۰۰٪ با استانداردهای تماس با مواد غذایی مطابقت دارد و بدون بو و طعم است."
-          },
-          {
-                    "question": "چه رنگ‌ها و سایزهایی موجود است؟",
-                    "answer": "در رنگ‌های مشکی، شفاف و آبی و سایزهای S، M، L و XL عرضه می‌شود."
-          },
-          {
-                    "question": "مشخصات بسته‌بندی و لوگستیک چیست؟",
-                    "answer": "هر جعبه شامل ۱۰۰ عدد، هر کارتن شامل ۲۰ جعبه (۲۰۰۰ عدد) و هر پالت شامل ۷۰ کارتن است."
           }
 ]
       },
@@ -442,6 +466,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Arts, Crafts & Painting Workshops',
           'Daily Hygiene & Protection'
         ],
+        colors: ["Clear"],
+        sizes: ["Kids Standard"],
+        powderStatus: "Powder-Free",
+        latexStatus: "Latex-Free",
+        siliconeStatus: "Silicone-Free",
+        sterilityStatus: "Non-Sterile",
+        foodContactLabel: "Yes / Fully Compliant",
         materialName: 'Recyclable TPE',
         faq: [
           {
@@ -480,6 +511,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Уметнички работилници',
           'Секојдневна детска хигиена'
         ],
+        colors: ["Проѕирна"],
+        sizes: ["Детски стандард"],
+        powderStatus: "Без пудра",
+        latexStatus: "Без латекс",
+        siliconeStatus: "Без силикон",
+        sterilityStatus: "Нон-стерилно",
+        foodContactLabel: "Да / Соодветно",
         materialName: 'Рециклирачки TPE',
         faq: [
           {
@@ -518,6 +556,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Kreativne i slikarske radionice',
           'KID higijena'
         ],
+        colors: ["Providna"],
+        sizes: ["Dečiji standard"],
+        powderStatus: "Bez pudera",
+        latexStatus: "Bez lateksa",
+        siliconeStatus: "Bez silikona",
+        sterilityStatus: "Non-sterilno",
+        foodContactLabel: "Da / Bezbedno",
         materialName: 'Reciklabilni TPE',
         faq: [
           {
@@ -556,6 +601,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Punëtori arti dhe vizatimi',
           'Higjienë e përditshme'
         ],
+        colors: ["Transparente"],
+        sizes: ["Fëmijë Standard"],
+        powderStatus: "Pa pluhur",
+        latexStatus: "Pa lateks",
+        siliconeStatus: "Pa silikon",
+        sterilityStatus: "Jo-sterile",
+        foodContactLabel: "Po / Plotësisht konform",
         materialName: 'TPE i Riciklueshëm',
         faq: [
           {
@@ -686,41 +738,30 @@ export const reflexProducts: ReflexProduct[] = [
           'Catering ve Restoran Hizmetleri',
           'Perakende ve Gıda Satış Noktaları'
         ],
+        colors: ["Şeffaf","Mavi","Siyah"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pudrasız",
+        latexStatus: "Lateks İçermez",
+        siliconeStatus: "Silikon İçermez",
+        sterilityStatus: "Non-Steril",
+        foodContactLabel: "Evet / Tam Uyumlu",
         materialName: 'Pudrasız Hibrit Polimer',
         faq: [
           {
-                    "question": "Reflex Winlyex Pudrasız eldivenin malzeme yapısı nedir?",
-                    "answer": "Winlyex Pudrasız, pudrasız hibrit polimer malzemeden üretilmiş çok amaçlı bir eldivendir."
+                    "question": "Winlyex Pudrasız eldivenin malzemesi nedir?",
+                    "answer": "Winlyex Pudrasız, çok amaçlı kullanım için pudrasız hibrit polimer malzemeden üretilmiştir."
           },
           {
-                    "question": "Eldiven pudrasız mıdır ve leke bırakır mı?",
-                    "answer": "Evet, pudrasız iç yüzeyi sayesinde temas ettiği yüzeylerde ve gıdalarda beyaz pudra izi bırakmaz."
+                    "question": "Kullanım sırasında pudra izi bırakır mı?",
+                    "answer": "Hayır, pudrasız iç yüzeyi leke ve kalıntı bırakmasını engeller."
           },
           {
                     "question": "Hangi renk ve beden seçenekleri mevcuttur?",
-                    "answer": "Şeffaf, Mavi ve Siyah renk seçenekleri ile S, M, L, XL bedenlerinde sunulmaktadır."
+                    "answer": "Şeffaf, Mavi ve Siyah renklerinde S, M, L ve XL bedenlerinde sunulmaktadır."
           },
           {
-                    "question": "Ambalaj bilgileri nedir?",
-                    "answer": "Her kutuda 100 adet, her kolide 20 kutu (2.000 adet) ve her palette 70 koli bulunmaktadır."
-          }
-],
-        faq: [
-          {
-                    "question": "دستکش Flex Kids برای چه کسانی طراحی شده است؟",
-                    "answer": "دستکش Flex Kids مخصوص دست کودکان و از جنس TPE ۱۰۰٪ قابل بازیافت ساخته شده است."
-          },
-          {
-                    "question": "آیا حاوی لاتکس یا پودر است؟",
-                    "answer": "خیر، بدون پودر و بدون لاتکس با ترکیب ضد آلرژی است."
-          },
-          {
-                    "question": "مشخصات سایز و بسته‌بندی چیست؟",
-                    "answer": "در سایز استاندارد کودک و رنگ شفاف عرضه می‌شود. هر جعبه ۵۰ عدد، هر کارتن ۴۰ جعبه و هر پالت ۸۰ کارتن دارد."
-          },
-          {
-                    "question": "برای چه کاربردهایی مناسب است؟",
-                    "answer": "مناسب برای فعالیت‌های مدارس، مهدکودک‌ها، آماده‌سازی غذای کودکان و کارگاه‌های نقاشی."
+                    "question": "Ambalaj detayları nelerdir?",
+                    "answer": "Her kutuda 100 adet, 1 kolide 20 kutu (2.000 adet) ve 1 palette 70 koli yer almaktadır."
           }
 ]
       },
@@ -742,6 +783,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Catering & Food Outlets',
           'Retail & Deli Counter Operations'
         ],
+        colors: ["Clear","Blue","Black"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Powder-Free",
+        latexStatus: "Latex-Free",
+        siliconeStatus: "Silicone-Free",
+        sterilityStatus: "Non-Sterile",
+        foodContactLabel: "Yes / Fully Compliant",
         materialName: 'Powder-Free Hybrid Polymer',
         faq: [
           {
@@ -780,6 +828,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Кетеринг и ресторани',
           'Продажба на мало'
         ],
+        colors: ["Проѕирна","Сина","Црна"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Без пудра",
+        latexStatus: "Без латекс",
+        siliconeStatus: "Без силикон",
+        sterilityStatus: "Нон-стерилно",
+        foodContactLabel: "Да / Соодветно",
         materialName: 'Хибриден Полимер Без Пудра',
         faq: [
           {
@@ -818,6 +873,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Ketering i ugostiteljstvo',
           'Maloprodajni objekti'
         ],
+        colors: ["Providna","Plava","Crna"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Bez pudera",
+        latexStatus: "Bez lateksa",
+        siliconeStatus: "Bez silikona",
+        sterilityStatus: "Non-sterilno",
+        foodContactLabel: "Da / Bezbedno",
         materialName: 'Hibridni Polimer Bez Pudera',
         faq: [
           {
@@ -856,6 +918,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Katering dhe restorante',
           'Sektori i shitjes me pakicë'
         ],
+        colors: ["Transparente","Blu","E Zezë"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pa pluhur",
+        latexStatus: "Pa lateks",
+        siliconeStatus: "Pa silikon",
+        sterilityStatus: "Jo-sterile",
+        foodContactLabel: "Po / Plotësisht konform",
         materialName: 'Polimer Hibrid Pa Pluhur',
         faq: [
           {
@@ -990,41 +1059,30 @@ export const reflexProducts: ReflexProduct[] = [
           'Güzellik, Kuaför ve Dövme Salonları',
           'Laboratuvar Dışı Analiz & Montaj'
         ],
+        colors: ["Mor","Şeffaf","Mavi"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pudrasız",
+        latexStatus: "Lateks İçermez",
+        siliconeStatus: "Silikon İçermez",
+        sterilityStatus: "Non-Steril",
+        foodContactLabel: "Evet / Tam Uyumlu",
         materialName: 'Termo Vinil (Thermo Vinyl)',
         faq: [
           {
-                    "question": "Winlyex Termo Vinil eldivenin temel özelliği nedir?",
-                    "answer": "Ekstra kalınlaştırılmış termo vinil yapısı sayesinde yüksek yırtılma mukavemeti sunar ve vücut sıcaklığı ile ele uyum sağlar."
+                    "question": "Winlyex Thermo Vinyl eldivenin temel özelliği nedir?",
+                    "answer": "Elde ısınarak elin şeklini alan, yüksek yırtılma direncine sahip ekstra thermo vinil kalibreye sahiptir."
           },
           {
-                    "question": "Pudra, lateks veya silikon içerir mi?",
-                    "answer": "Hayır, pudrasız, latekssiz ve silikonsuz içerikle üretilmiştir."
+                    "question": "Lateks, pudra veya silikon içerir mi?",
+                    "answer": "Hayır, pudrasız, latekssiz ve silikonsuz üretilmiştir."
           },
           {
-                    "question": "Hangi renk ve beden alternatifleri mevcuttur?",
-                    "answer": "Mor, Şeffaf ve Mavi renk seçenekleri ile S, M, L, XL bedenlerinde üretilmektedir."
+                    "question": "Hangi renk ve bedenlerde sunulur?",
+                    "answer": "Mor, Şeffaf ve Mavi renklerde S, M, L ve XL beden seçenekleri mevcuttur."
           },
           {
-                    "question": "Ambalaj ve lojistik değerleri nelerdir?",
-                    "answer": "Kutuda 100 adet, kolide 20 kutu (2.000 adet) ve palette 70 koli bulunmaktadır."
-          }
-],
-        faq: [
-          {
-                    "question": "جنس دستکش بدون پودر Winlyex چیست؟",
-                    "answer": "دستکش بدون پودر Winlyex از پلیمر هیبریدی بدون پودر برای کاربردهای چندمنظوره ساخته شده است."
-          },
-          {
-                    "question": "آیا ردی از پودر به جا می‌گذارد؟",
-                    "answer": "خیر، سطح داخلی بدون پودر آن از ایجاد لکه جلوگیری می‌کند."
-          },
-          {
-                    "question": "چه رنگ‌ها و سایزهایی موجود است؟",
-                    "answer": "در رنگ‌های شفاف، آبی و مشکی و سایزهای S، M، L و XL عرضه می‌شود."
-          },
-          {
-                    "question": "مشخصات بسته‌بندی چیست؟",
-                    "answer": "هر جعبه ۱۰۰ عدد، هر کارتن ۲۰ جعبه (۲۰۰۰ عدد) و هر پالت ۷۰ کارتن دارد."
+                    "question": "Koli ve palet ambalaj adetleri nedir?",
+                    "answer": "Kutuda 100 adet, kolide 20 kutu (2.000 adet) ve palette 70 koli bulunur."
           }
 ]
       },
@@ -1046,6 +1104,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Cosmetology, Salons & Tattoo Studios',
           'General Maintenance & Assembly'
         ],
+        colors: ["Purple","Clear","Blue"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Powder-Free",
+        latexStatus: "Latex-Free",
+        siliconeStatus: "Silicone-Free",
+        sterilityStatus: "Non-Sterile",
+        foodContactLabel: "Yes / Fully Compliant",
         materialName: 'Thermo Vinyl Polymer',
         faq: [
           {
@@ -1084,6 +1149,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Салони за убавина',
           'Општо одржување'
         ],
+        colors: ["Виолетова","Проѕирна","Сина"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Без пудра",
+        latexStatus: "Без латекс",
+        siliconeStatus: "Без силикон",
+        sterilityStatus: "Нон-стерилно",
+        foodContactLabel: "Да / Соодветно",
         materialName: 'Термо Винил Полимер',
         faq: [
           {
@@ -1122,6 +1194,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Frizerski i kozmetički saloni',
           'Montažni i servisni radovi'
         ],
+        colors: ["Ljubičasta","Providna","Plava"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Bez pudera",
+        latexStatus: "Bez lateksa",
+        siliconeStatus: "Bez silikona",
+        sterilityStatus: "Non-sterilno",
+        foodContactLabel: "Da / Bezbedno",
         materialName: 'Termo Vinil Polimer',
         faq: [
           {
@@ -1160,6 +1239,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Salone bukurie dhe parukeri',
           'Punë mirëmbajtjeje'
         ],
+        colors: ["Vjollcë","Transparente","Blu"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pa pluhur",
+        latexStatus: "Pa lateks",
+        siliconeStatus: "Pa silikon",
+        sterilityStatus: "Jo-sterile",
+        foodContactLabel: "Po / Plotësisht konform",
         materialName: 'Polimer Termo Vinil',
         faq: [
           {
@@ -1293,41 +1379,30 @@ export const reflexProducts: ReflexProduct[] = [
           'Estetik, Medikal Güzellik & Bakım',
           'Hassas Laboratuvar Dışı İncelemeler'
         ],
+        colors: ["Yeşil","Pembe","Mavi","Siyah"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pudrasız",
+        latexStatus: "Lateks İçermez",
+        siliconeStatus: "Silikon İçermez",
+        sterilityStatus: "Non-Steril",
+        foodContactLabel: "Evet / Tam Uyumlu",
         materialName: 'Sıhhi Hijyen Polimeri',
         faq: [
           {
-                    "question": "Medilex muayene eldiveni hangi kullanım alanları için uygundur?",
-                    "answer": "Medilex, sıhhi temaslar, hijyenik muayene ortamları, estetik ve kişisel bakım süreçleri için özel geliştirilmiştir."
+                    "question": "Medilex Muayene eldiveni hangi kullanım alanları için uygundur?",
+                    "answer": "Sağlık, hijyenik muayene ve kişisel bakım merkezleri için tasarlanmıştır."
           },
           {
-                    "question": "Lateks veya silikon alerjenleri içerir mi?",
-                    "answer": "Hayır, silikon ve lateks içermeyen anti-alerjenik ve pudrasız formüle sahiptir."
+                    "question": "Alerjenik lateks veya silikon içerir mi?",
+                    "answer": "Hayır, latekssiz, silikonsuz ve pudrasız hipoalerjenik yapıdadır."
           },
           {
-                    "question": "Hangi renk seçenekleri vardır?",
-                    "answer": "Hijyen alanlarını ayırt etmeyi kolaylaştıran Yeşil, Pembe, Mavi ve Siyah renk seçenekleri bulunur."
+                    "question": "Hangi renk seçenekleri sunulmaktadır?",
+                    "answer": "Yeşil, Pembe, Mavi ve Siyah renk seçenekleri mevcuttur."
           },
           {
-                    "question": "Beden ve ambalaj ebatları nedir?",
-                    "answer": "S, M, L, XL bedenleri mevcuttur. Kutu ebatı 200x110x60 mm, koli ebatı 420x320x240 mm olup kolide 20 kutu yer alır."
-          }
-],
-        faq: [
-          {
-                    "question": "ویژگی اصلی دستکش ترمو وینیل Winlyex چیست؟",
-                    "answer": "دارای ضخامت بیشتر برای مقاومت بالا در برابر پارگی است که با گرمای دست نرم می‌شود."
-          },
-          {
-                    "question": "آیا حاوی لاتکس، پودر یا سیلیکون است؟",
-                    "answer": "خیر، بدون پودر، بدون لاتکس و بدون سیلیکون است."
-          },
-          {
-                    "question": "چه رنگ‌ها و سایزهایی دارد؟",
-                    "answer": "در رنگ‌های بنفش، شفاف و آبی و سایزهای S، M، L و XL عرضه می‌شود."
-          },
-          {
-                    "question": "مشخصات بسته‌بندی چیست؟",
-                    "answer": "۱۰۰ عدد در جعبه، ۲۰ جعبه در کارتن (۲۰۰۰ عدد) و ۷۰ کارتن در پالت."
+                    "question": "Kutu ve koli ölçüleri nedir?",
+                    "answer": "S, M, L, XL bedenlerinde; kutu boyutu 200x110x60 mm, koli boyutu 420x320x240 mm (20 kutulu) olarak paketlenir."
           }
 ]
       },
@@ -1349,6 +1424,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Aesthetic & Beauty Practices',
           'Hygienic Surface & Sample Handling'
         ],
+        colors: ["Green","Pink","Blue","Black"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Powder-Free",
+        latexStatus: "Latex-Free",
+        siliconeStatus: "Silicone-Free",
+        sterilityStatus: "Non-Sterile",
+        foodContactLabel: "Yes / Fully Compliant",
         materialName: 'Sanitary Hygiene Polymer',
         faq: [
           {
@@ -1387,6 +1469,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Естетски салони',
           'Хигиенска анализа'
         ],
+        colors: ["Зелена","Розева","Сина","Црна"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Без пудра",
+        latexStatus: "Без латекс",
+        siliconeStatus: "Без силикон",
+        sterilityStatus: "Нон-стерилно",
+        foodContactLabel: "Да / Соодветно",
         materialName: 'Санитарен Хигиенски Полимер',
         faq: [
           {
@@ -1425,6 +1514,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Higijenske ustanove',
           'Laboratorijske i analitičke usluge'
         ],
+        colors: ["Zelena","Roze","Plava","Crna"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Bez pudera",
+        latexStatus: "Bez lateksa",
+        siliconeStatus: "Bez silikona",
+        sterilityStatus: "Non-sterilno",
+        foodContactLabel: "Da / Bezbedno",
         materialName: 'Sanitarni Higijenski Polimer',
         faq: [
           {
@@ -1463,6 +1559,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Estetikë dhe parukeri',
           'Kujdes higjienik personal'
         ],
+        colors: ["Jeshile","Rozë","Blu","E Zezë"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pa pluhur",
+        latexStatus: "Pa lateks",
+        siliconeStatus: "Pa silikon",
+        sterilityStatus: "Jo-sterile",
+        foodContactLabel: "Po / Plotësisht konform",
         materialName: 'Polimer Sanitar Higjienik',
         faq: [
           {
@@ -1596,41 +1699,30 @@ export const reflexProducts: ReflexProduct[] = [
           'Genel Paketleme ve Montaj Lines',
           'Günlük Temizlik Operasyonları'
         ],
+        colors: ["Mavi","Siyah","Şeffaf","Krem"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pudrasız",
+        latexStatus: "Lateks İçermez",
+        siliconeStatus: "Silikon İçermez",
+        sterilityStatus: "Non-Steril",
+        foodContactLabel: "Evet / Tam Uyumlu",
         materialName: 'Çok Amaçlı TPE',
         faq: [
           {
-                    "question": "Florex eldivenin yüzey dokusu ve tutuş özelliği nasıldır?",
-                    "answer": "Florex, kaymaz tutuş sağlayan ergonomik mikro dokulu TPE malzemeden üretilmiştir."
+                    "question": "Florex eldivenin yüzey kavrama dokusu nasıldır?",
+                    "answer": "Kaydırmaz TPE malzemeden üretilmiş mikro dokulu kavrama yüzeyine sahiptir."
           },
           {
-                    "question": "Pudra veya lateks alerjisine neden olur mu?",
-                    "answer": "Pudrasız, latekssiz ve silikonsuz olup kokusuz ve tatsız yapısıyla cilt dostudur."
+                    "question": "Pudrasız ve latekssiz midir?",
+                    "answer": "Evet, pudrasız, latekssiz ve silikonsuzdur; kokusuz formüllüdür."
           },
           {
-                    "question": "Hangi renk ve beden alternatifleri mevcuttur?",
-                    "answer": "Mavi, Siyah, Şeffaf ve Krem renk seçenekleri ile S, M, L, XL bedenleri mevcuttur."
+                    "question": "Hangi renk ve beden seçenekleri mevcuttur?",
+                    "answer": "Mavi, Siyah, Şeffaf ve Krem renklerde S, M, L ve XL bedenlerinde mevcuttur."
           },
           {
-                    "question": "Ambalaj ve koli içeriği nasıldır?",
-                    "answer": "Kutuda 100 adet, kolide 20 kutu (2.000 adet) ve palette 70 koli yer almaktadır."
-          }
-],
-        faq: [
-          {
-                    "question": "دستکش معاینه Medilex برای چه مواردی مناسب است؟",
-                    "answer": "برای مراقبت‌های بهداشتی، معاینات عمومی و مراکز زیبایی طراحی شده است."
-          },
-          {
-                    "question": "آیا حاوی لاتکس یا سیلیکون است؟",
-                    "answer": "خیر، بدون لاتکس، بدون سیلیکون و بدون پودر با ترکیب ضد آلرژی است."
-          },
-          {
-                    "question": "چه رنگ‌هایی موجود است؟",
-                    "answer": "در رنگ‌های سبز، صورتی، آبی و مشکی عرضه می‌شود."
-          },
-          {
-                    "question": "ابعاد جعبه و کارتن چیست؟",
-                    "answer": "در سایزهای S، M، L، XL. ابعاد جعبه 200x110x60 میلی‌متر و کارتن 420x320x240 میلی‌متر شامل ۲۰ جعبه."
+                    "question": "Koli ambalaj kapasitesi nedir?",
+                    "answer": "Kutuda 100 adet, kolide 20 kutu (2.000 adet) ve palette 70 koli yer alır."
           }
 ]
       },
@@ -1652,6 +1744,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Light Packaging & Sorting Lines',
           'Daily Hygiene & Maintenance'
         ],
+        colors: ["Blue","Black","Clear","Cream"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Powder-Free",
+        latexStatus: "Latex-Free",
+        siliconeStatus: "Silicone-Free",
+        sterilityStatus: "Non-Sterile",
+        foodContactLabel: "Yes / Fully Compliant",
         materialName: 'Multipurpose TPE',
         faq: [
           {
@@ -1690,6 +1789,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Линии за пакување',
           'Секојдневно чистење'
         ],
+        colors: ["Сина","Црна","Проѕирна","Крем"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Без пудра",
+        latexStatus: "Без латекс",
+        siliconeStatus: "Без силикон",
+        sterilityStatus: "Нон-стерилно",
+        foodContactLabel: "Да / Соодветно",
         materialName: 'Повеќенаменски TPE',
         faq: [
           {
@@ -1728,6 +1834,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Pakovanje i sortiranje robe',
           'Svakodnevno održavanje higijene'
         ],
+        colors: ["Plava","Crna","Providna","Krem"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Bez pudera",
+        latexStatus: "Bez lateksa",
+        siliconeStatus: "Bez silikona",
+        sterilityStatus: "Non-sterilno",
+        foodContactLabel: "Da / Bezbedno",
         materialName: 'Višenamenski TPE',
         faq: [
           {
@@ -1766,6 +1879,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Linja paketimi dhe montimi',
           'Pastrim i përditshëm'
         ],
+        colors: ["Blu","E Zezë","Transparente","Krem"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pa pluhur",
+        latexStatus: "Pa lateks",
+        siliconeStatus: "Pa silikon",
+        sterilityStatus: "Jo-sterile",
+        foodContactLabel: "Po / Plotësisht konform",
         materialName: 'TPE për Shumë Përdorime',
         faq: [
           {
@@ -1897,41 +2017,30 @@ export const reflexProducts: ReflexProduct[] = [
           'Elektronik & İnce Montaj İşleri',
           'Kişisel Hijyen & Genel Temas'
         ],
+        colors: ["Krem","Şeffaf"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pudrasız",
+        latexStatus: "Lateks İçermez",
+        siliconeStatus: "Silikon İçermez",
+        sterilityStatus: "Non-Steril",
+        foodContactLabel: "Evet / Tam Uyumlu",
         materialName: 'Kopolimer Polimer',
         faq: [
           {
-                    "question": "Reflex Slimfit Copolymer eldivenin öne çıkan özelliği nedir?",
-                    "answer": "Ekstra ince kopolimer polimer yapısı ile ikinci bir cilt hissi ve maksimum dokunma hassasiyeti sağlar."
+                    "question": "Slimfit Copolymer eldivenin öne çıkan özelliği nedir?",
+                    "answer": "İkinci bir ten hissi yaratan ultra ince kopolimer yapısıyla maksimum dokunsal hassasiyet sağlar."
           },
           {
-                    "question": "Hangi kullanım alanları için tercih edilir?",
-                    "answer": "Hassas gıda sunumu, pastacılık, kozmetik ve ince montaj işleri için idealdir."
+                    "question": "Hangi hassas işler için önerilir?",
+                    "answer": "Pastacılık, gıda süsleme, cilt bakımı ve hassas montaj işleri için idealdir."
           },
           {
-                    "question": "İçeriğinde lateks veya pudra var mıdır?",
-                    "answer": "Hayır, pudrasız, latekssiz ve silikonsuz içerikle üretilmiştir."
+                    "question": "Pudra veya lateks barındırır mı?",
+                    "answer": "Hayır, pudrasız, latekssiz ve silikonsuzdur."
           },
           {
-                    "question": "Kutu ve koli ebatları nedir?",
-                    "answer": "Krem ve Şeffaf renklerde S, M, L, XL bedenleri bulunur. Kutu ebatı 190x100x60 mm, koli ebatı 400x320x210 mm’dir."
-          }
-],
-        faq: [
-          {
-                    "question": "بافت سطح دستکش Florex چگونه است؟",
-                    "answer": "دارای سطح میکرو برای گیرایی بدون لغزش از جنس TPE است."
-          },
-          {
-                    "question": "آیا حاوی پودر یا لاتکس است؟",
-                    "answer": "خیر، بدون پودر، بدون لاتکس و بدون سیلیکون است."
-          },
-          {
-                    "question": "چه رنگ‌ها و سایزهایی دارد؟",
-                    "answer": "در رنگ‌های آبی، مشکی، شفاف و کرم و سایزهای S، M، L و XL عرضه می‌شود."
-          },
-          {
-                    "question": "مشخصات بسته‌بندی چیست؟",
-                    "answer": "۱۰۰ عدد در جعبه، ۲۰ جعبه در کارتن (۲۰۰۰ عدد) و ۷۰ کارتن در پالت."
+                    "question": "Kutu ölçüleri ve renk seçenekleri nelerdir?",
+                    "answer": "Krem ve Şeffaf renk seçeneklerinde S, M, L, XL bedenlerde sunulur. Kutu boyutu 190x100x60 mm, koli boyutu 400x320x210 mm'dir."
           }
 ]
       },
@@ -1953,6 +2062,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Micro-Assembly & Delicate Handling',
           'Personal Hygiene & Touch Safety'
         ],
+        colors: ["Cream","Clear"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Powder-Free",
+        latexStatus: "Latex-Free",
+        siliconeStatus: "Silicone-Free",
+        sterilityStatus: "Non-Sterile",
+        foodContactLabel: "Yes / Fully Compliant",
         materialName: 'Copolymer Polymer',
         faq: [
           {
@@ -1991,6 +2107,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Прецизно склапање',
           'Лична хигиена'
         ],
+        colors: ["Крем","Проѕирна"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Без пудра",
+        latexStatus: "Без латекс",
+        siliconeStatus: "Без силикон",
+        sterilityStatus: "Нон-стерилно",
+        foodContactLabel: "Да / Соодветно",
         materialName: 'Кополимерен Полимер',
         faq: [
           {
@@ -2029,6 +2152,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Precizna montaža i rukovanje',
           'Lična higijena'
         ],
+        colors: ["Krem","Providna"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Bez pudera",
+        latexStatus: "Bez lateksa",
+        siliconeStatus: "Bez silikona",
+        sterilityStatus: "Non-sterilno",
+        foodContactLabel: "Da / Bezbedno",
         materialName: 'Kopolimerni Polimer',
         faq: [
           {
@@ -2067,6 +2197,13 @@ export const reflexProducts: ReflexProduct[] = [
           'Montim i imët dhe punë precize',
           'Higjienë personale'
         ],
+        colors: ["Krem","Transparente"],
+        sizes: ["S","M","L","XL"],
+        powderStatus: "Pa pluhur",
+        latexStatus: "Pa lateks",
+        siliconeStatus: "Pa silikon",
+        sterilityStatus: "Jo-sterile",
+        foodContactLabel: "Po / Plotësisht konform",
         materialName: 'Polimer Kopolimer',
         faq: [
           {

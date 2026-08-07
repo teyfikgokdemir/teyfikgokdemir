@@ -32,7 +32,7 @@ if (!product) {
   throw new Error(`Product not found for slug: ${slug}`);
 }
 
-const lang = (locale === 'fa' ? 'tr' : locale) as 'tr' | 'en' | 'mk' | 'sr' | 'sq';
+const lang = (locale || 'tr') as 'tr' | 'en' | 'mk' | 'sr' | 'sq' | 'fa';
 const i18n = product.i18n[lang] || product.i18n.tr;
 const copy = content[locale as Locale] || content.tr;
 
@@ -75,9 +75,9 @@ const productSchema = {
     name: 'Reflex Plastik',
     url: 'https://www.reflexplastik.com/',
   },
-  material: product.material,
-  color: product.colors.join(', '),
-  size: product.sizes.join(', '),
+  material: i18n.materialName || product.material,
+  color: (i18n.colors || product.colors).join(', '),
+  size: (i18n.sizes || product.sizes).join(', '),
   category: 'Disposable Protective Gloves',
 };
 

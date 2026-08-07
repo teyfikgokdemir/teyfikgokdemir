@@ -11,7 +11,7 @@ interface Props {
 }
 
 const { product, locale } = Astro.props;
-const lang = (locale === 'fa' ? 'tr' : locale) as 'tr' | 'en' | 'mk' | 'sr' | 'sq';
+const lang = (locale || 'tr') as 'tr' | 'en' | 'mk' | 'sr' | 'sq' | 'fa';
 const i18n = product.i18n[lang] || product.i18n.tr;
 
 const detailText = {
@@ -109,20 +109,49 @@ const detailText = {
     kutuOlcusu: 'Përmasat e Kutisë',
     endustriyelKullanim: 'Përdorim Industrial',
     genelPaket: 'Karton Standard',
+  },
+  fa: {
+    backToCatalog: '→ بازگشت به سبد محصولات رفلکس',
+    overviewTitle: 'بررسی کلی محصول',
+    featuresTitle: 'ویژگی‌ها و مزایای اصلی',
+    applicationsTitle: 'کاربردها و صنایع هدف',
+    galleryTitle: 'گالری تصاویر محصول',
+    relatedTitle: 'سایر محصولات رفلکس',
+    quoteTitle: 'دریافت پیش‌فاکتور و استعلام قیمت',
+    quoteDesc: 'برای سفارش‌های عمده و کانتینری با تیم تجاری ما تماس بگیرید.',
+    quoteBtn: 'ارسال درخواست قیمت',
+    faqTitle: 'پرسش‌های متداول (SSS)',
+    homeBreadcrumb: 'صفحه اصلی',
+    kutuIci: 'تعداد در جعبه',
+    koliIci: 'تعداد در کارتن',
+    paletIci: 'مقدار پالت',
+    kutuOlcusu: 'ابعاد جعبه',
+    endustriyelKullanim: 'کاربرد صنعتی',
+    genelPaket: 'بسته‌بندی کارتن',
   }
 }[lang] || detailText.tr;
-if (locale === 'fa') {
-  detailText.faqTitle = 'پرسش‌های متداول (SSS)';
-  detailText.homeBreadcrumb = 'صفحه اصلی';
-}
+
+const translateQty = (val: string) => {
+  if (!val) return val;
+  if (lang === 'en') return val.replace(/Adet/g, 'Pcs').replace(/Kutu/g, 'Boxes').replace(/Koli/g, 'Cartons');
+  if (lang === 'mk') return val.replace(/Adet/g, 'парчиња').replace(/Kutu/g, 'кутии').replace(/Koli/g, 'коли');
+  if (lang === 'sr') return val.replace(/Adet/g, 'komada').replace(/Kutu/g, 'kutija').replace(/Koli/g, 'kartona');
+  if (lang === 'sq') return val.replace(/Adet/g, 'copë').replace(/Kutu/g, 'kuti').replace(/Koli/g, 'kartona');
+  if (lang === 'fa') return val.replace(/Adet/g, 'عدد').replace(/Kutu/g, 'جعبه').replace(/Koli/g, 'کارتن');
+  return val;
+};
 
 const v0 = product.variants[0];
-const boxQty = v0?.boxQuantity || '100 Adet';
-const cartonQty = v0?.cartonQuantity || '20 Kutu';
-const palletQty = v0?.palletQuantity || '70 Koli';
+const rawBoxQty = v0?.boxQuantity || '100 Adet';
+const rawCartonQty = v0?.cartonQuantity || '20 Kutu';
+const rawPalletQty = v0?.palletQuantity || '70 Koli';
 const boxDim = v0?.boxDimensions || '200 x 120 x 28.5 mm';
-const primaryApp = i18n.applications?.[0] || detailText.endustriyelKullanim;
 
+const boxQty = translateQty(rawBoxQty);
+const cartonQty = translateQty(rawCartonQty);
+const palletQty = translateQty(rawPalletQty);
+
+const primaryApp = i18n.applications?.[0] || detailText.endustriyelKullanim;
 const relatedProducts = reflexProducts.filter(p => p.slug !== product.slug).slice(0, 3);
 ---
 

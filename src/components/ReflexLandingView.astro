@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { locale } = Astro.props;
-const lang = (locale === 'fa' ? 'tr' : locale) as 'tr' | 'en' | 'mk' | 'sr' | 'sq';
+const lang = (locale || 'tr') as 'tr' | 'en' | 'mk' | 'sr' | 'sq' | 'fa';
 
 const landingText = {
   tr: {
@@ -75,6 +75,19 @@ const landingText = {
     quoteTitle: 'Kërkoni Ofertë me Shumicë B2B',
     quoteDesc: 'Kontaktoni drejtpërdrejt ekipin tonë tregtar për porosi me paleta, shpërndarje rajonale dhe eksport.',
     quoteBtn: 'Kontakto Ekipin Tregtar',
+  },
+  fa: {
+    heroTag: 'رفلکس پلاستیک · سیستم‌های دستکش B2B',
+    heroTitle: 'سیستم‌های حرفه‌ای دستکش و راهکارهای بهداشتی B2B',
+    heroLead: 'تامین مطمئن در حجم بالا در ۷ سبد محصول تخصصی برای صنایع غذایی، رستوران‌ها، مراکز بهداشتی و آرایشی.',
+    primaryCta: 'بررسی محصولات',
+    secondaryCta: 'درخواست پیش‌فاکتور B2B',
+    whyTitle: 'چرا محصولات رفلکس؟',
+    whyLead: 'جایگزین‌های الاستومری نسل جدید با کارایی بالا، اقتصادی و ایمن برای مواد غذایی در مقایسه با دستکش‌های نیتریل و وینیل.',
+    applicationsTitle: 'صنایع و کاربردها',
+    quoteTitle: 'استعلام قیمت عمده B2B و صادرات',
+    quoteDesc: 'برای سفارش‌های عمده، پالت و همکاری‌های توزیع منطقه‌ای مستقیماً با تیم تجاری ما تماس بگیرید.',
+    quoteBtn: 'تماس با تیم تجاری',
   }
 }[lang] || landingText.tr;
 

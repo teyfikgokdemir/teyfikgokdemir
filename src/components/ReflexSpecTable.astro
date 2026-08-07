@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { product, locale } = Astro.props;
-const lang = (locale === 'fa' ? 'tr' : locale) as 'tr' | 'en' | 'mk' | 'sr' | 'sq';
+const lang = (locale || 'tr') as 'tr' | 'en' | 'mk' | 'sr' | 'sq' | 'fa';
 
 const labels = {
   tr: {
@@ -130,10 +130,64 @@ const labels = {
     cartonDim: 'Përmasat e Kartonit',
     boxBarcode: 'Barkodi i Kutisë',
     cartonBarcode: 'Barkodi i Kartonit',
+  },
+  fa: {
+    specsTitle: 'مشخصات فنی',
+    material: 'ماده اولیه',
+    powder: 'وضعیت پودر',
+    latex: 'وضعیت لاتکس',
+    silicone: 'وضعیت سیلیکون',
+    sterility: 'استریل بودن',
+    foodContact: 'تاییدیه تماس با غذا',
+    yes: 'بله / کاملاً مناسب',
+    no: 'خیر',
+    colors: 'رنگ‌های موجود',
+    sizes: 'سایزهای موجود',
+    variantsTitle: 'اطلاعات بسته‌بندی و لوگستیک',
+    color: 'رنگ',
+    size: 'سایز',
+    productCode: 'کد محصول',
+    boxQty: 'محتویات جعبه',
+    cartonQty: 'محتویات کارتن',
+    palletQty: 'مقدار پالت',
+    boxDim: 'ابعاد جعبه',
+    cartonDim: 'ابعاد کارتن',
+    boxBarcode: 'بارکد جعبه',
+    cartonBarcode: 'بارکد کارتن',
   }
 }[lang] || labels.tr;
 
 const i18n = product.i18n[lang] || product.i18n.tr;
+
+const translateColor = (col: string) => {
+  const map: Record<string, Record<string, string>> = {
+    'Siyah': { tr: 'Siyah', en: 'Black', mk: 'Црна', sr: 'Crna', sq: 'E Zezë', fa: 'مشکی' },
+    'Şeffaf': { tr: 'Şeffaf', en: 'Clear', mk: 'Проѕирна', sr: 'Providna', sq: 'Transparente', fa: 'شفاف' },
+    'Mavi': { tr: 'Mavi', en: 'Blue', mk: 'Сина', sr: 'Plava', sq: 'Blu', fa: 'آبی' },
+    'Mor': { tr: 'Mor', en: 'Purple', mk: 'Виолетова', sr: 'Ljubičasta', sq: 'Vjollcë', fa: 'بنفش' },
+    'Yeşil': { tr: 'Yeşil', en: 'Green', mk: 'Зелена', sr: 'Zelena', sq: 'Jeshile', fa: 'سبز' },
+    'Pembe': { tr: 'Pembe', en: 'Pink', mk: 'Розева', sr: 'Roze', sq: 'Rozë', fa: 'صورتی' },
+    'Krem': { tr: 'Krem', en: 'Cream', mk: 'Крем', sr: 'Krem', sq: 'Krem', fa: 'کرم' }
+  };
+  return map[col]?.[lang] || col;
+};
+
+const translateSize = (sz: string) => {
+  const map: Record<string, Record<string, string>> = {
+    'Çocuk Standart': { tr: 'Çocuk Standart', en: 'Kids Standard', mk: 'Детски стандард', sr: 'Dečiji standard', sq: 'Fëmijë Standard', fa: 'استاندارد کودک' }
+  };
+  return map[sz]?.[lang] || sz;
+};
+
+const translateQty = (val: string) => {
+  if (!val) return val;
+  if (lang === 'en') return val.replace(/Adet/g, 'Pcs').replace(/Kutu/g, 'Boxes').replace(/Koli/g, 'Cartons');
+  if (lang === 'mk') return val.replace(/Adet/g, 'парчиња').replace(/Kutu/g, 'кутии').replace(/Koli/g, 'коли');
+  if (lang === 'sr') return val.replace(/Adet/g, 'komada').replace(/Kutu/g, 'kutija').replace(/Koli/g, 'kartona');
+  if (lang === 'sq') return val.replace(/Adet/g, 'copë').replace(/Kutu/g, 'kuti').replace(/Koli/g, 'kartona');
+  if (lang === 'fa') return val.replace(/Adet/g, 'عدد').replace(/Kutu/g, 'جعبه').replace(/Koli/g, 'کارتن');
+  return val;
+};
 ---
 
 <div class="reflex-specs-wrapper">
@@ -148,31 +202,31 @@ const i18n = product.i18n[lang] || product.i18n.tr;
           </tr>
           <tr>
             <th>{labels.powder}</th>
-            <td>{product.powderStatus || 'Belirtilmemiş'}</td>
+            <td>{i18n.powderStatus || product.powderStatus}</td>
           </tr>
           <tr>
             <th>{labels.latex}</th>
-            <td>{product.latexStatus || 'Belirtilmemiş'}</td>
+            <td>{i18n.latexStatus || product.latexStatus}</td>
           </tr>
           <tr>
             <th>{labels.silicone}</th>
-            <td>{product.siliconeStatus || 'Belirtilmemiş'}</td>
+            <td>{i18n.siliconeStatus || product.siliconeStatus}</td>
           </tr>
           <tr>
             <th>{labels.sterility}</th>
-            <td>{product.sterilityStatus || 'Belirtilmemiş'}</td>
+            <td>{i18n.sterilityStatus || product.sterilityStatus}</td>
           </tr>
           <tr>
             <th>{labels.foodContact}</th>
-            <td>{product.foodContact ? labels.yes : labels.no}</td>
+            <td>{product.foodContact ? (i18n.foodContactLabel || labels.yes) : labels.no}</td>
           </tr>
           <tr>
             <th>{labels.colors}</th>
-            <td>{product.colors.join(', ')}</td>
+            <td>{(i18n.colors || product.colors).join(', ')}</td>
           </tr>
           <tr>
             <th>{labels.sizes}</th>
-            <td>{product.sizes.join(', ')}</td>
+            <td>{(i18n.sizes || product.sizes).join(', ')}</td>
           </tr>
         </tbody>
       </table>
@@ -198,12 +252,12 @@ const i18n = product.i18n[lang] || product.i18n.tr;
           <tbody>
             {product.variants.map((v) => (
               <tr>
-                <td><strong>{v.color}</strong></td>
-                <td>{v.size}</td>
+                <td><strong>{translateColor(v.color)}</strong></td>
+                <td>{translateSize(v.size)}</td>
                 <td><code>{v.productCode}</code></td>
-                <td>{v.boxQuantity}</td>
-                <td>{v.cartonQuantity}</td>
-                <td>{v.palletQuantity}</td>
+                <td>{translateQty(v.boxQuantity)}</td>
+                <td>{translateQty(v.cartonQuantity)}</td>
+                <td>{translateQty(v.palletQuantity)}</td>
                 <td><code>{v.boxBarcode}</code></td>
               </tr>
             ))}

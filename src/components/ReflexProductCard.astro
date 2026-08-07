@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { product, locale } = Astro.props;
-const lang = (locale === 'fa' ? 'tr' : locale) as 'tr' | 'en' | 'mk' | 'sr' | 'sq';
+const lang = (locale || 'tr') as 'tr' | 'en' | 'mk' | 'sr' | 'sq' | 'fa';
 const i18n = product.i18n[lang] || product.i18n.tr;
 const detailUrl = `/${locale}/reflex/${product.slug}/`;
 
@@ -20,14 +20,27 @@ const buttonTextMap: Record<string, string> = {
   sq: 'Shiko Produktin',
   fa: 'مشاهده محصول',
 };
+
+const labelMap: Record<string, { colors: string; sizes: string }> = {
+  tr: { colors: 'Renkler', sizes: 'Bedenler' },
+  en: { colors: 'Colors', sizes: 'Sizes' },
+  mk: { colors: 'Бои', sizes: 'Димензии' },
+  sr: { colors: 'Boje', sizes: 'Veličine' },
+  sq: { colors: 'Ngjyrat', sizes: 'Përmasat' },
+  fa: { colors: 'رنگ‌ها', sizes: 'سایزها' },
+};
+
+const labels = labelMap[locale] || labelMap.tr;
 const buttonText = buttonTextMap[locale] || 'Ürünü İncele';
+const displayColors = (i18n.colors || product.colors).join(', ');
+const displaySizes = (i18n.sizes || product.sizes).join(', ');
 ---
 
 <article class="reflex-card">
   <a href={detailUrl} class="reflex-card__image-link" aria-label={i18n.name}>
     <img
       src={product.images.main}
-      alt={`${i18n.name} - ${product.material}`}
+      alt={`${i18n.name} - ${i18n.materialName}`}
       width="450"
       height="315"
       loading="lazy"
@@ -35,7 +48,7 @@ const buttonText = buttonTextMap[locale] || 'Ürünü İncele';
     />
     <div class="reflex-card__badge-row">
       <span class="reflex-card__badge">{i18n.materialName}</span>
-      {product.powderStatus && <span class="reflex-card__badge alt">{product.powderStatus}</span>}
+      {i18n.powderStatus && <span class="reflex-card__badge alt">{i18n.powderStatus}</span>}
     </div>
   </a>
 
@@ -47,16 +60,12 @@ const buttonText = buttonTextMap[locale] || 'Ürünü İncele';
     
     <div class="reflex-card__specs">
       <div class="spec-item">
-        <span class="spec-label">
-          {lang === 'tr' ? 'Renkler' : lang === 'en' ? 'Colors' : 'Boja/Ngjyra'}:
-        </span>
-        <span class="spec-val">{product.colors.join(', ')}</span>
+        <span class="spec-label">{labels.colors}:</span>
+        <span class="spec-val">{displayColors}</span>
       </div>
       <div class="spec-item">
-        <span class="spec-label">
-          {lang === 'tr' ? 'Bedenler' : lang === 'en' ? 'Sizes' : 'Veličine/Përmasat'}:
-        </span>
-        <span class="spec-val">{product.sizes.join(', ')}</span>
+        <span class="spec-label">{labels.sizes}:</span>
+        <span class="spec-val">{displaySizes}</span>
       </div>
     </div>
 
