@@ -71,6 +71,14 @@ const pageSchema = [
     ],
   },
 ];
+const reflexLanguageUrls: Record<string, string> = {
+  tr: '/tr/reflex/',
+  en: '/en/reflex/',
+  mk: '/mk/reflex/',
+  sr: '/sr/reflex/',
+  sq: '/sq/reflex/',
+  fa: '/fa/reflex/',
+};
 ---
 
 <BaseLayout
@@ -82,7 +90,7 @@ const pageSchema = [
   alternates={alternates}
   pageSchema={pageSchema}
 >
-  <Header locale={locale} copy={copy} />
+  <Header locale={locale} copy={copy} languageUrls={reflexLanguageUrls} />
   <main id="main-content">
     <ReflexLandingView locale={locale} />
   </main>

@@ -120,6 +120,15 @@ const faqSchema = i18n.faq && i18n.faq.length > 0 ? {
 } : null;
 
 const pageSchema = [productSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])];
+
+const reflexLanguageUrls: Record<string, string> = {
+  tr: `/tr/reflex/${product.slug}/`,
+  en: `/en/reflex/${product.slug}/`,
+  mk: `/mk/reflex/${product.slug}/`,
+  sr: `/sr/reflex/${product.slug}/`,
+  sq: `/sq/reflex/${product.slug}/`,
+  fa: `/fa/reflex/${product.slug}/`,
+};
 ---
 
 <BaseLayout
@@ -131,7 +140,7 @@ const pageSchema = [productSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema]
   alternates={alternates}
   pageSchema={pageSchema}
 >
-  <Header locale={locale} copy={copy} />
+  <Header locale={locale} copy={copy} languageUrls={reflexLanguageUrls} />
   <main id="main-content">
     <ReflexDetailView product={product} locale={locale} />
   </main>
