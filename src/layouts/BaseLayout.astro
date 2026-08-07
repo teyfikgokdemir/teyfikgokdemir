@@ -434,9 +434,11 @@ const jsonLd = {
     transform-origin: left;
     transition: transform 220ms ease;
   }
-  .header-panel nav a:hover { color: var(--text); }
+  .header-panel nav a:hover,
+  .header-panel nav a[aria-current="page"] { color: var(--text); }
   .header-panel nav a:hover::after,
-  .header-panel nav a:focus-visible::after { transform: scaleX(1); }
+  .header-panel nav a:focus-visible::after,
+  .header-panel nav a[aria-current="page"]::after { transform: scaleX(1); }
   .language-switcher {
     display: flex;
     align-items: center;

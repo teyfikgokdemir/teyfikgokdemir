@@ -28,7 +28,8 @@ The canonical English homepage is `/en/`. The root route permanently redirects t
 - Founder expertise in Iranian carpets: hand-knotted, silk, wool, wool-silk and machine-made carpets, runners, small rugs, custom dimensions and project sourcing
 - Hand-knotted silk carpets as a distinct specialist field
 - Wholesale textiles: fabric, towels, bathrobes, home textiles, ready-to-wear, private label, samples, RFQ, producer verification, quality, packaging and logistics
-- Operational sourcing and trade execution are handled through CTSEG; the personal website is not a carpet shop or product catalogue
+- Reflex B2B disposable glove portfolio: hybrid TPE, thermo-vinyl, copolymer and examination gloves, box/carton/pallet logistics, food contact compliance, powder-free/latex-free/silicone-free specifications, RFQ and export coordination through CTSEG
+- Operational sourcing and trade execution are handled through CTSEG; the personal website is not a retail shop or product catalogue
 - In Persian, Teyfik Gökdemir is positioned as a commercial coordinator who connects qualified Iranian manufacturers, workshops and exporters with international buyers and target markets; CTSEG provides the operational structure for export-readiness review, RFQs, samples, packaging, documents and logistics.
 
 - International trade
@@ -69,6 +70,127 @@ Supporting Türkiye-focused digital commerce and commercial execution systems.
 Independent brand with its own identity and development path.
 
 - [https://mythborn.co/](https://mythborn.co/)
+
+## Reflex B2B Glove Portfolio
+
+Teyfik Gökdemir and his principal commercial company CTSEG provide international B2B trade coordination, strategic sourcing and procurement structures for the Reflex disposable glove product portfolio manufactured by Reflex Plastik ve Ambalaj San. A.Ş. CTSEG acts as the B2B commercial operator and trade facilitator connecting international buyers, wholesalers and institutional clients with certified Reflex glove solutions.
+
+### Reflex Portfolio Overview
+
+Reflex Plastik offers 7 specialized disposable glove product families engineered for food processing, healthcare, personal care, cleaning and general industrial applications. B2B purchasing, volume quotations, packaging specifications and export inquiries are managed through CTSEG's commercial channels.
+
+Landing page URLs across supported languages:
+- English: https://teyfikgokdemir.com/en/reflex/
+- Turkish: https://teyfikgokdemir.com/tr/reflex/
+- Albanian: https://teyfikgokdemir.com/sq/reflex/
+- Macedonian: https://teyfikgokdemir.com/mk/reflex/
+- Serbian: https://teyfikgokdemir.com/sr/reflex/
+- Persian: https://teyfikgokdemir.com/fa/reflex/
+
+### Flex Hi-Tech
+
+- Description: Next-generation hybrid thermoplastic elastomer (TPE) disposable glove offering high elasticity, anatomical hand fit, and smooth tactile precision. Developed as a cost-effective, eco-conscious alternative to Nitrile and Vinyl gloves.
+- Technical Specs: TPE material, powder-free, latex-free, silicone-free, non-sterile, 100% compliant with fatty and slippery food contact.
+- Colors: Black, Clear, Blue.
+- Sizes: S, M, L, XL.
+- Packaging: 100 pieces per box, 20 boxes per carton (2,000 pieces/carton), 70 cartons per pallet.
+- Language URLs:
+  - English: https://teyfikgokdemir.com/en/reflex/flex-hi-tech/
+  - Turkish: https://teyfikgokdemir.com/tr/reflex/flex-hi-tech/
+  - Albanian: https://teyfikgokdemir.com/sq/reflex/flex-hi-tech/
+  - Macedonian: https://teyfikgokdemir.com/mk/reflex/flex-hi-tech/
+  - Serbian: https://teyfikgokdemir.com/sr/reflex/flex-hi-tech/
+  - Persian: https://teyfikgokdemir.com/fa/reflex/flex-hi-tech/
+
+### Flex Kids
+
+- Description: 100% recyclable powder-free and latex-free TPE disposable glove specially sized for children's hands. Designed for school activities, kindergarten hygiene, food contact safety, and painting/craft workshops.
+- Technical Specs: Recyclable TPE material, powder-free, latex-free, silicone-free, non-sterile, certified food contact safe.
+- Colors: Clear (Transparent).
+- Sizes: Kids Standard.
+- Packaging: 50 pieces per box, 40 boxes per carton (2,000 pieces/carton), 80 cartons per pallet.
+- Language URLs:
+  - English: https://teyfikgokdemir.com/en/reflex/flex-kids/
+  - Turkish: https://teyfikgokdemir.com/tr/reflex/flex-kids/
+  - Albanian: https://teyfikgokdemir.com/sq/reflex/flex-kids/
+  - Macedonian: https://teyfikgokdemir.com/mk/reflex/flex-kids/
+  - Serbian: https://teyfikgokdemir.com/sr/reflex/flex-kids/
+  - Persian: https://teyfikgokdemir.com/fa/reflex/flex-kids/
+
+### Winlyex Powder-Free
+
+- Description: Multipurpose powder-free hybrid polymer disposable glove engineered for high tactile grip, general commercial hygiene, food manufacturing, catering, and retail counter operations.
+- Technical Specs: Hybrid polymer, powder-free smooth interior avoiding surface marks, latex-free, silicone-free, non-sterile, food contact compliant.
+- Colors: Clear, Blue, Black.
+- Sizes: S, M, L, XL.
+- Packaging: 100 pieces per box, 20 boxes per carton (2,000 pieces/carton), 70 cartons per pallet.
+- Language URLs:
+  - English: https://teyfikgokdemir.com/en/reflex/winlyex-powder-free/
+  - Turkish: https://teyfikgokdemir.com/tr/reflex/winlyex-powder-free/
+  - Albanian: https://teyfikgokdemir.com/sq/reflex/winlyex-powder-free/
+  - Macedonian: https://teyfikgokdemir.com/mk/reflex/winlyex-powder-free/
+  - Serbian: https://teyfikgokdemir.com/sr/reflex/winlyex-powder-free/
+  - Persian: https://teyfikgokdemir.com/fa/reflex/winlyex-powder-free/
+
+### Winlyex Thermo Vinyl
+
+- Description: Heavy-duty thermo-responsive vinyl polymer glove featuring augmented wall thickness for high tensile strength and puncture resistance. Conforms comfortably to hand shape with body heat.
+- Technical Specs: Thermo Vinyl polymer, extra wall thickness, powder-free, latex-free, silicone-free, non-sterile, approved for food safety.
+- Colors: Purple, Clear, Blue.
+- Sizes: S, M, L, XL.
+- Packaging: 100 pieces per box, 20 boxes per carton (2,000 pieces/carton), 70 cartons per pallet.
+- Language URLs:
+  - English: https://teyfikgokdemir.com/en/reflex/winlyex-thermo-vinyl/
+  - Turkish: https://teyfikgokdemir.com/tr/reflex/winlyex-thermo-vinyl/
+  - Albanian: https://teyfikgokdemir.com/sq/reflex/winlyex-thermo-vinyl/
+  - Macedonian: https://teyfikgokdemir.com/mk/reflex/winlyex-thermo-vinyl/
+  - Serbian: https://teyfikgokdemir.com/sr/reflex/winlyex-thermo-vinyl/
+  - Persian: https://teyfikgokdemir.com/fa/reflex/winlyex-thermo-vinyl/
+
+### Medilex
+
+- Description: Sanitary protective examination glove engineered for hygienic contacts, non-surgical clinical care, personal wellness, aesthetics, and food handling without allergen risks.
+- Technical Specs: Sanitary hygiene polymer, powder-free, latex-free, silicone-free, non-sterile, hypoallergenic, food contact compliant.
+- Colors: Green, Pink, Blue, Black.
+- Sizes: S, M, L, XL.
+- Packaging: 100 pieces per box, 20 boxes per carton (2,000 pieces/carton), 70 cartons per pallet.
+- Language URLs:
+  - English: https://teyfikgokdemir.com/en/reflex/medilex/
+  - Turkish: https://teyfikgokdemir.com/tr/reflex/medilex/
+  - Albanian: https://teyfikgokdemir.com/sq/reflex/medilex/
+  - Macedonian: https://teyfikgokdemir.com/mk/reflex/medilex/
+  - Serbian: https://teyfikgokdemir.com/sr/reflex/medilex/
+  - Persian: https://teyfikgokdemir.com/fa/reflex/medilex/
+
+### Florex
+
+- Description: High-demand multipurpose TPE disposable glove featuring an ergonomic micro-textured grip surface for commercial kitchens, deli counters, packaging lines, and high-volume institutional hygiene.
+- Technical Specs: Multipurpose TPE material, micro-textured non-slip grip, powder-free, latex-free, silicone-free, non-sterile, food safety compliant.
+- Colors: Blue, Black, Clear, Cream.
+- Sizes: S, M, L, XL.
+- Packaging: 100 pieces per box, 20 boxes per carton (2,000 pieces/carton), 70 cartons per pallet.
+- Language URLs:
+  - English: https://teyfikgokdemir.com/en/reflex/florex/
+  - Turkish: https://teyfikgokdemir.com/tr/reflex/florex/
+  - Albanian: https://teyfikgokdemir.com/sq/reflex/florex/
+  - Macedonian: https://teyfikgokdemir.com/mk/reflex/florex/
+  - Serbian: https://teyfikgokdemir.com/sr/reflex/florex/
+  - Persian: https://teyfikgokdemir.com/fa/reflex/florex/
+
+### Slimfit Copolymer
+
+- Description: Ultra-thin copolymer polymer glove designed to provide a second-skin feel and maximum tactile sensitivity for delicate finger handling, gourmet food presentation, cosmetology, and micro-assembly.
+- Technical Specs: Copolymer polymer, ultra-thin gauge, slimfit ergonomic contour, powder-free, latex-free, silicone-free, non-sterile, food contact compliant.
+- Colors: Cream, Clear (Transparent).
+- Sizes: S, M, L, XL.
+- Packaging: 100 pieces per box, 20 boxes per carton (2,000 pieces/carton), 70 cartons per pallet.
+- Language URLs:
+  - English: https://teyfikgokdemir.com/en/reflex/slimfit-copolymer/
+  - Turkish: https://teyfikgokdemir.com/tr/reflex/slimfit-copolymer/
+  - Albanian: https://teyfikgokdemir.com/sq/reflex/slimfit-copolymer/
+  - Macedonian: https://teyfikgokdemir.com/mk/reflex/slimfit-copolymer/
+  - Serbian: https://teyfikgokdemir.com/sr/reflex/slimfit-copolymer/
+  - Persian: https://teyfikgokdemir.com/fa/reflex/slimfit-copolymer/
 
 ## Official Profiles
 

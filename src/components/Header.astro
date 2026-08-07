@@ -33,6 +33,17 @@ const blogUrls: Record<Locale | 'fa', string> = {
   fa: '/fa/blog/',
 };
 
+const reflexUrls: Record<Locale | 'fa', string> = {
+  en: '/en/reflex/',
+  tr: '/tr/reflex/',
+  sq: '/sq/reflex/',
+  mk: '/mk/reflex/',
+  sr: '/sr/reflex/',
+  fa: '/fa/reflex/',
+};
+
+const reflexUrl = reflexUrls[locale];
+const isReflexPage = Astro.url.pathname.includes('/reflex/');
 const aiVisibilityUrl = aiVisibilityUrls[locale];
 const blogUrl = blogUrls[locale];
 
@@ -101,6 +112,7 @@ const a11y = locale === 'fa'
     <nav aria-label={navLabels.ventures}>
       <a href={sectionUrl('ventures')}>{navLabels.ventures}</a>
       <a href={sectionUrl('expertise')}>{navLabels.expertise}</a>
+      <a href={reflexUrl} aria-current={isReflexPage ? 'page' : undefined}>Reflex</a>
       <a href={aiVisibilityUrl}>{aiVisibilityLabel}</a>
       <a href={blogUrl}>{blogLabel}</a>
       <a href={sectionUrl('journey')}>{navLabels.journey}</a>

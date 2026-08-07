@@ -1,0 +1,200 @@
+---
+import type { ReflexProduct } from '../data/reflexProducts';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  product: ReflexProduct;
+  locale: Locale | 'fa';
+}
+
+const { product, locale } = Astro.props;
+const lang = (locale === 'fa' ? 'tr' : locale) as 'tr' | 'en' | 'mk' | 'sr' | 'sq';
+const i18n = product.i18n[lang] || product.i18n.tr;
+const detailUrl = `/${locale}/reflex/${product.slug}/`;
+
+const buttonTextMap: Record<string, string> = {
+  tr: 'Ürünü İncele',
+  en: 'View Product',
+  mk: 'Прегледај Производ',
+  sr: 'Pogledaj Proizvod',
+  sq: 'Shiko Produktin',
+  fa: 'مشاهده محصول',
+};
+const buttonText = buttonTextMap[locale] || 'Ürünü İncele';
+---
+
+<article class="reflex-card">
+  <a href={detailUrl} class="reflex-card__image-link" aria-label={i18n.name}>
+    <img
+      src={product.images.main}
+      alt={`${i18n.name} - ${product.material}`}
+      width="450"
+      height="315"
+      loading="lazy"
+      decoding="async"
+    />
+    <div class="reflex-card__badge-row">
+      <span class="reflex-card__badge">{i18n.materialName}</span>
+      {product.powderStatus && <span class="reflex-card__badge alt">{product.powderStatus}</span>}
+    </div>
+  </a>
+
+  <div class="reflex-card__body">
+    <h3 class="reflex-card__title">
+      <a href={detailUrl}>{i18n.name}</a>
+    </h3>
+    <p class="reflex-card__tagline">{i18n.tagline}</p>
+    
+    <div class="reflex-card__specs">
+      <div class="spec-item">
+        <span class="spec-label">
+          {lang === 'tr' ? 'Renkler' : lang === 'en' ? 'Colors' : 'Boja/Ngjyra'}:
+        </span>
+        <span class="spec-val">{product.colors.join(', ')}</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">
+          {lang === 'tr' ? 'Bedenler' : lang === 'en' ? 'Sizes' : 'Veličine/Përmasat'}:
+        </span>
+        <span class="spec-val">{product.sizes.join(', ')}</span>
+      </div>
+    </div>
+
+    <div class="reflex-card__footer">
+      <a href={detailUrl} class="button primary reflex-card__btn">
+        <span>{buttonText}</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .reflex-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface-dark);
+    color: #f3eee6;
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .reflex-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--accent);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  }
+  .reflex-card__image-link {
+    position: relative;
+    display: block;
+    aspect-ratio: 450 / 300;
+    overflow: hidden;
+    background: #181411;
+  }
+  .reflex-card__image-link img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.5s ease, filter 0.3s ease;
+  }
+  .reflex-card:hover .reflex-card__image-link img {
+    transform: scale(1.05);
+  }
+  .reflex-card__badge-row {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    z-index: 2;
+  }
+  .reflex-card__badge {
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(33, 28, 24, 0.85);
+    border: 1px solid rgba(242, 170, 143, 0.3);
+    color: var(--accent-coral);
+    font-size: 0.72rem;
+    font-weight: 750;
+    backdrop-filter: blur(6px);
+  }
+  .reflex-card__badge.alt {
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #e7e0d4;
+  }
+  .reflex-card__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1.5rem;
+  }
+  .reflex-card__title {
+    margin: 0 0 0.6rem;
+    font-size: 1.45rem;
+    line-height: 1.2;
+  }
+  .reflex-card__title a {
+    color: #ffffff;
+    transition: color 0.2s ease;
+  }
+  .reflex-card__title a:hover {
+    color: var(--accent-coral);
+  }
+  .reflex-card__tagline {
+    margin: 0 0 1.25rem;
+    color: #c9bfb2;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    flex: 1;
+  }
+  .reflex-card__specs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.25rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 0.82rem;
+  }
+  .spec-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .spec-label {
+    color: #a99d8f;
+    font-weight: 600;
+  }
+  .spec-val {
+    color: #f3eee6;
+    font-weight: 700;
+  }
+  .reflex-card__footer {
+    margin-top: auto;
+  }
+  .reflex-card__btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.88rem;
+    min-height: 48px;
+    touch-action: manipulation;
+  }
+
+  @media (max-width: 480px) {
+    .reflex-card__body {
+      padding: 1.25rem;
+    }
+  }
+</style>

@@ -1,0 +1,317 @@
+---
+import { reflexProducts } from '../data/reflexProducts';
+import ReflexProductCard from './ReflexProductCard.astro';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale | 'fa';
+}
+
+const { locale } = Astro.props;
+const lang = (locale === 'fa' ? 'tr' : locale) as 'tr' | 'en' | 'mk' | 'sr' | 'sq';
+
+const landingText = {
+  tr: {
+    heroTag: 'Reflex Plastik · Profesyonel Tek Kullanımlık Eldiven Çözümleri',
+    heroTitle: 'Profesyonel B2B Eldiven Çözümleri ve Hijyen Teknolojileri',
+    heroLead: 'Endüstriyel mutfaklardan sağlık ve güzellik sektörüne, gıda üretim hatlarından kurumsal hijyen operasyonlarına kadar 7 farklı uzman ürün ailesi ile güvenilir tedarik.',
+    primaryCta: 'Ürün Portföyünü İncele',
+    secondaryCta: 'Teklif & Tedarik Talebi',
+    whyTitle: 'Neden Reflex Ürün Portföyü?',
+    whyLead: 'Geleneksel nitril ve vinil eldivenlere yüksek performanslı, ekonomik ve gıda uyumlu yeni nesil elastomer alternatifler.',
+    applicationsTitle: 'Sektörel Uygulama Alanları',
+    quoteTitle: 'B2B Toplu Tedarik ve Özel Teklif İsteği',
+    quoteDesc: 'Reflex eldiven ürün grupları için koli ve palet bazlı kurumsal tedarik talepleriniz, distribütörlük ve ihracat iş birlikleri için doğrudan iletişime geçin.',
+    quoteBtn: 'Ticari İletişime Geç',
+  },
+  en: {
+    heroTag: 'Reflex Plastik · Professional Disposable Glove Solutions',
+    heroTitle: 'Professional B2B Disposable Glove & Hygiene Solutions',
+    heroLead: 'Delivering reliable high-volume supply across 7 specialized product lines engineered for food manufacturing, ho-re-ca, healthcare, beauty, and industrial maintenance.',
+    primaryCta: 'Explore Product Line',
+    secondaryCta: 'Request B2B Quotation',
+    whyTitle: 'Why Choose Reflex Portfolio?',
+    whyLead: 'High-performance, cost-effective, and food-safe next-generation elastomer alternatives to traditional Nitrile and Vinyl gloves.',
+    applicationsTitle: 'Industry Application Areas',
+    quoteTitle: 'Request B2B Wholesale Quote & Export Inquiries',
+    quoteDesc: 'Connect directly with our commercial team for container/pallet load inquiries, private label options, or regional distribution partnerships.',
+    quoteBtn: 'Contact Commercial Team',
+  },
+  mk: {
+    heroTag: 'Reflex Plastik · Професионални Ракавици За Еднократна Употреба',
+    heroTitle: 'Професионални B2B Ракавици и Хигиенски Решенија',
+    heroLead: 'Сигурна снабденост низ 7 специјализирани серии на ракавици развиени за прехранбена индустрија, угостителство, козметика и општа заштита.',
+    primaryCta: 'Прегледај Портфолио',
+    secondaryCta: 'Побарај Понуда',
+    whyTitle: 'Зошто Reflex Ракавици?',
+    whyLead: 'Високо-перформансни, економични и безбедни за храна еластомерни алтернативи на нитрилни и винилни ракавици.',
+    applicationsTitle: 'Индустриски Сектори',
+    quoteTitle: 'Побарај B2B Големопродажна Понуда',
+    quoteDesc: 'Контактирајте го нашиот комерцијален тим за палетна испорака, регионална дистрибуција и извоз.',
+    quoteBtn: 'Контактирај Комерција',
+  },
+  sr: {
+    heroTag: 'Reflex Plastik · Profesionalna Rešenja Rukavica za Jednokratnu Upotrebu',
+    heroTitle: 'Profesionalni B2B Portfolijo Rukavica i Higijenskih Sistema',
+    heroLead: 'Pouzdano snabdevanje kroz 7 specijalizovanih linija rukavica razvijenih za prehrambenu industriju, ugostiteljstvo, lepoticu i industrijsko održavanje.',
+    primaryCta: 'Istraži Portfolijo',
+    secondaryCta: 'Zatraži B2B Ponudu',
+    whyTitle: 'Zašto Odabrati Reflex Rukavice?',
+    whyLead: 'Ekonomične, rastegljive i bezbedne elastomerne alternative tradicionalnim nitrilnim i vinilnim rukavicama.',
+    applicationsTitle: 'Sektori Primene',
+    quoteTitle: 'Zatražite B2B Veleprodajnu Ponudu',
+    quoteDesc: 'Stupite u kontakt sa našim timom za paletne isporuke, distribuciju i izvozne aranžmane.',
+    quoteBtn: 'Kontaktirajte Komercijalu',
+  },
+  sq: {
+    heroTag: 'Reflex Plastik · Zgjidhje Profesionale të Dorezave Njëpërdorimëshe',
+    heroTitle: 'Zgjidhje Profesionale B2B për Doreza dhe Higjienë',
+    heroLead: 'Furnizim i besueshëm në volum të lartë në 7 linja të specializuara të dorezave për industrinë ushqimore, restorante, kozmetikë dhe mirëmbajtje.',
+    primaryCta: 'Shiko Portofolin',
+    secondaryCta: 'Kërko Ofertë B2B',
+    whyTitle: 'Pse të Zgjidhni Portofolin Reflex?',
+    whyLead: 'Alternativa elastomere të gjeneratës së re, ekonomike dhe të sigurta për ushqimin ndaj dorezave nitrile dhe vinil.',
+    applicationsTitle: 'Sektorët e Përdorimit',
+    quoteTitle: 'Kërkoni Ofertë me Shumicë B2B',
+    quoteDesc: 'Kontaktoni drejtpërdrejt ekipin tonë tregtar për porosi me paleta, shpërndarje rajonale dhe eksport.',
+    quoteBtn: 'Kontakto Ekipin Tregtar',
+  }
+}[lang] || landingText.tr;
+
+const whyCards = [
+  {
+    icon: '⚡',
+    title: lang === 'tr' ? 'Hibrit TPE Teknolojisi' : 'Hybrid TPE Technology',
+    desc: lang === 'tr' ? 'PVC ve Nitril eldivenlere kıyasla daha fazla esneklik, pürüzsüz doku ve üstün çevre dostu yapı.' : 'Greater elasticity and smooth texture compared to vinyl and nitrile.'
+  },
+  {
+    icon: '🛡️',
+    title: lang === 'tr' ? '%100 Gıda Uyumu & Hipoalerjenik' : '100% Food Safe & Hypoallergenic',
+    desc: lang === 'tr' ? 'Kokusuz, tatsız, silikon ve lateks içermeyen yapısı ile alerji riskini sıfıra indiren güvenli temas.' : 'Odorless, tasteless, latex-free & silicone-free formula for zero allergy risk.'
+  },
+  {
+    icon: '💰',
+    title: lang === 'tr' ? 'Maliyet & Tedarik Avantajı' : 'Cost & Supply Efficiency',
+    desc: lang === 'tr' ? 'Muadillerine göre yüksek maliyet avantajı, hızlı üretim ve yüksek hacimli B2B stok sürekliliği.' : 'High cost advantage over traditional gloves with robust B2B inventory readiness.'
+  }
+];
+
+const applications = [
+  { name: lang === 'tr' ? 'Gıda Üretimi & Servis' : 'Food Processing & Service', icon: '🍽️' },
+  { name: lang === 'tr' ? 'Muayene & Sıhhi Temas' : 'Examination & Hygiene', icon: '🩺' },
+  { name: lang === 'tr' ? 'Temizlik & Hijyen' : 'Cleaning & Maintenance', icon: '🧹' },
+  { name: lang === 'tr' ? 'Güzellik & Bakım Salonları' : 'Beauty & Wellness', icon: '✨' },
+  { name: lang === 'tr' ? 'Endüstriyel & Genel Temas' : 'Industrial & General Purpose', icon: '⚙️' }
+];
+---
+
+<section class="reflex-hero">
+  <div class="shell">
+    <div class="reflex-hero__content">
+      <span class="reflex-hero__tag">{landingText.heroTag}</span>
+      <h1 class="reflex-hero__title">{landingText.heroTitle}</h1>
+      <p class="reflex-hero__lead">{landingText.heroLead}</p>
+      <div class="reflex-hero__actions">
+        <a href="#product-families" class="button primary">{landingText.primaryCta}</a>
+        <a href="#quote-section" class="button">{landingText.secondaryCta}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="product-families" class="section">
+  <div class="shell">
+    <div class="section-heading">
+      <p class="section-label">Reflex Product Line</p>
+      <h2>{lang === 'tr' ? '7 Uzman Ürün Ailesi' : '7 Specialized Product Families'}</h2>
+      <p class="section-lead">
+        {lang === 'tr'
+          ? 'Her biri belirli kullanım ihtiyaçları, hijyen standartları ve et kalınlığı için geliştirilmiş profesyonel eldiven çözümleri.'
+          : 'Professional disposable glove solutions engineered for specialized hygiene standards, materials, and tactile requirements.'}
+      </p>
+    </div>
+
+    <div class="reflex-grid">
+      {reflexProducts.map((product) => (
+        <ReflexProductCard product={product} locale={locale} />
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="section why-reflex-section">
+  <div class="shell">
+    <div class="section-heading">
+      <p class="section-label">Core Advantages</p>
+      <h2>{landingText.whyTitle}</h2>
+      <p class="section-lead">{landingText.whyLead}</p>
+    </div>
+
+    <div class="why-grid">
+      {whyCards.map((card) => (
+        <div class="why-card">
+          <div class="why-card__icon">{card.icon}</div>
+          <h3>{card.title}</h3>
+          <p>{card.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="section applications-section">
+  <div class="shell">
+    <div class="section-heading">
+      <p class="section-label">Industries & Use Cases</p>
+      <h2>{landingText.applicationsTitle}</h2>
+    </div>
+
+    <div class="apps-grid">
+      {applications.map((app) => (
+        <div class="app-card">
+          <span class="app-card__icon">{app.icon}</span>
+          <span class="app-card__name">{app.name}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section id="quote-section" class="section quote-section">
+  <div class="shell">
+    <div class="quote-card">
+      <div class="quote-card__content">
+        <h2>{landingText.quoteTitle}</h2>
+        <p>{landingText.quoteDesc}</p>
+      </div>
+      <div class="quote-card__action">
+        <a href="mailto:info@teyfikgokdemir.com?subject=Reflex%20B2B%20Glove%20Quotation" class="button primary">
+          {landingText.quoteBtn}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .reflex-hero {
+    padding-block: clamp(3rem, 6vw, 6rem);
+    background: radial-gradient(circle at 50% 0%, rgba(226, 118, 98, 0.12), transparent 70%), var(--surface-dark);
+    border-bottom: 1px solid var(--line);
+    color: #f3eee6;
+  }
+  .reflex-hero__content {
+    max-width: 840px;
+    margin-inline: auto;
+    text-align: center;
+  }
+  .reflex-hero__tag {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    margin-bottom: 1.2rem;
+    border: 1px solid rgba(242, 170, 143, 0.35);
+    border-radius: 999px;
+    background: rgba(226, 118, 98, 0.1);
+    color: var(--accent-coral);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .reflex-hero__title {
+    font-size: clamp(2.4rem, 4.8vw, 4.2rem);
+    line-height: 1.05;
+    margin-bottom: 1.25rem;
+    color: #ffffff;
+  }
+  .reflex-hero__lead {
+    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+    color: #c9bfb2;
+    line-height: 1.65;
+    margin-bottom: 2rem;
+  }
+  .reflex-hero__actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .reflex-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.75rem;
+    margin-top: 2rem;
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .why-card {
+    padding: 2rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface-dark);
+    color: #f3eee6;
+  }
+  .why-card__icon {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+  }
+  .why-card h3 {
+    font-size: 1.35rem;
+    margin: 0 0 0.75rem;
+    color: #ffffff;
+  }
+  .why-card p {
+    margin: 0;
+    color: #c9bfb2;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .apps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .app-card {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface-dark);
+    color: #f3eee6;
+    font-weight: 700;
+  }
+  .app-card__icon {
+    font-size: 1.5rem;
+  }
+
+  .quote-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: clamp(2rem, 4vw, 3.5rem);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    background: radial-gradient(circle at 100% 0%, rgba(226, 118, 98, 0.2), transparent 20rem), var(--surface-dark);
+    color: #ffffff;
+    flex-wrap: wrap;
+  }
+  .quote-card__content h2 {
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    margin: 0 0 0.75rem;
+  }
+  .quote-card__content p {
+    margin: 0;
+    max-width: 600px;
+    color: #c9bfb2;
+    line-height: 1.6;
+  }
+</style>
