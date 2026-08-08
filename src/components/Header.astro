@@ -47,15 +47,6 @@ const isReflexPage = Astro.url.pathname.includes('/reflex/');
 const aiVisibilityUrl = aiVisibilityUrls[locale];
 const blogUrl = blogUrls[locale];
 
-const aiVisibilityLabels: Record<Locale | 'fa', string> = {
-  en: 'AI Visibility',
-  tr: 'AI Görünürlüğü',
-  sq: 'Dukshmëri AI',
-  mk: 'АИ Видливост',
-  sr: 'AI Vidljivost',
-  fa: 'دیده‌شدن در هوش مصنوعی',
-};
-
 const blogLabels: Record<Locale | 'fa', string> = {
   en: 'Insights',
   tr: 'İçgörüler',
@@ -74,8 +65,18 @@ const aboutLabels: Record<Locale | 'fa', string> = {
   fa: 'درباره من',
 };
 
+const aiVisibilityLabels: Record<Locale | 'fa', string> = {
+  en: 'AI Search Visibility',
+  tr: 'AI Arama Görünürlüğü',
+  sq: 'Dukshmëri AI',
+  mk: 'АИ Пребарување',
+  sr: 'AI Vidljivost',
+  fa: 'دیده‌شدن در هوش مصنوعی',
+};
+
 const blogLabel = blogLabels[locale];
 const aboutLabel = aboutLabels[locale];
+const aiVisibilityLabel = aiVisibilityLabels[locale];
 
 const navLabels = locale === 'fa'
   ? {
@@ -93,6 +94,26 @@ const navLabels = locale === 'fa'
 const a11y = locale === 'fa'
   ? { language:'انتخاب زبان', menuOpen:'باز کردن منو', menuClose:'بستن منو' }
   : copy.a11y;
+
+const ctsegUrl = locale === 'tr'
+  ? 'https://ctseg.com.tr/'
+  : locale === 'fa'
+    ? 'https://ctseg.com.tr/fa/tamin-beynolmelali-iran/'
+    : 'https://ctseg.com.tr/en/';
+
+const ventureSubItems = [
+  { name: 'CTSEG', desc: 'Principal Trade & Sourcing', url: ctsegUrl, external: true },
+  { name: 'QCT Studio', desc: 'Digital & Technology', url: 'https://qctstudio.com', external: true },
+  { name: 'QCT Commerce', desc: 'Digital Commerce', url: 'https://qctcommerce.com', external: true },
+  { name: 'Mythborn', desc: 'Consumer Brand', url: 'https://mythborn.co', external: true },
+];
+
+const expertiseSubItems = [
+  { name: locale === 'tr' ? 'Uluslararası Ticaret' : 'International Trade', url: sectionUrl('expertise') },
+  { name: locale === 'tr' ? 'Stratejik Tedarik' : 'Strategic Sourcing', url: sectionUrl('expertise') },
+  { name: locale === 'tr' ? 'Dijital Ticaret & Büyüme' : 'Digital Commerce & Growth', url: sectionUrl('expertise') },
+  { name: aiVisibilityLabel, url: aiVisibilityUrl },
+];
 
 ---
 <header class="site-header">
@@ -125,8 +146,39 @@ const a11y = locale === 'fa'
 
   <div class="header-panel" id="site-navigation">
     <nav aria-label="Main Navigation">
-      <a href={sectionUrl('ventures')}>{navLabels.ventures}</a>
-      <a href={sectionUrl('expertise')}>{navLabels.expertise}</a>
+      <div class="nav-item-dropdown" data-dropdown>
+        <button class="dropdown-trigger" type="button" aria-expanded="false">
+          <span>{navLabels.ventures}</span>
+          <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
+            <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="dropdown-menu">
+          {ventureSubItems.map((item) => (
+            <a href={item.url} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined} class="dropdown-link">
+              <span class="dropdown-link__title">{item.name}</span>
+              <span class="dropdown-link__desc">{item.desc}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div class="nav-item-dropdown" data-dropdown>
+        <button class="dropdown-trigger" type="button" aria-expanded="false">
+          <span>{navLabels.expertise}</span>
+          <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
+            <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="dropdown-menu">
+          {expertiseSubItems.map((item) => (
+            <a href={item.url} class="dropdown-link">
+              <span class="dropdown-link__title">{item.name}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
       <a href={reflexUrl} aria-current={isReflexPage ? 'page' : undefined}>Reflex</a>
       <a href={blogUrl}>{blogLabel}</a>
       <a href={sectionUrl('journey')}>{aboutLabel}</a>
@@ -152,73 +204,168 @@ const a11y = locale === 'fa'
 <script is:inline>
   const toggle = document.querySelector('.menu-toggle');
   const panel = document.querySelector('.header-panel');
-  const header = document.querySelector('.site-header');
-
-  if (header) {
-    const updateHeader = () => header.classList.toggle('is-scrolled', window.scrollY > 12);
-    updateHeader();
-    window.addEventListener('scroll', updateHeader, { passive: true });
-  }
 
   if (toggle && panel) {
-    const closeMenu = () => {
-      toggle.setAttribute('aria-expanded', 'false');
-      toggle.setAttribute('aria-label', toggle.dataset.openLabel);
-      panel.classList.remove('is-open');
-    };
-
     toggle.addEventListener('click', () => {
-      const expanded = toggle.getAttribute('aria-expanded') === 'true';
-      toggle.setAttribute('aria-expanded', String(!expanded));
-      toggle.setAttribute(
-        'aria-label',
-        expanded ? toggle.dataset.openLabel : toggle.dataset.closeLabel
-      );
-      panel.classList.toggle('is-open', !expanded);
-    });
-
-    panel.querySelectorAll('a').forEach((link) =>
-      link.addEventListener('click', closeMenu)
-    );
-
-    document.addEventListener('keydown', (event) => {
-      if (
-        event.key === 'Escape' &&
-        toggle.getAttribute('aria-expanded') === 'true'
-      ) {
-        closeMenu();
-        toggle.focus();
-      }
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+      panel.classList.toggle('is-open', !open);
+      toggle.setAttribute('aria-label', open ? toggle.dataset.openLabel : toggle.dataset.closeLabel);
     });
   }
+
+  // Dropdown interactivity
+  document.querySelectorAll('[data-dropdown]').forEach((dropdown) => {
+    const trigger = dropdown.querySelector('.dropdown-trigger');
+    if (!trigger) return;
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = trigger.getAttribute('aria-expanded') === 'true';
+      
+      // Close other dropdowns
+      document.querySelectorAll('[data-dropdown] .dropdown-trigger').forEach((other) => {
+        if (other !== trigger) other.setAttribute('aria-expanded', 'false');
+      });
+
+      trigger.setAttribute('aria-expanded', String(!open));
+    });
+  });
+
+  document.addEventListener('click', () => {
+    document.querySelectorAll('[data-dropdown] .dropdown-trigger').forEach((trigger) => {
+      trigger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('[data-dropdown] .dropdown-trigger').forEach((trigger) => {
+        trigger.setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
 </script>
 
-<style>
-  .brand__mark {
-    display: block;
-    width: clamp(10.5rem, 13.2vw, 11.5rem);
-    flex: 0 0 auto;
-    direction: ltr;
-    unicode-bidi: isolate;
+<style is:global>
+  .site-header {
+    padding-inline: clamp(1.5rem, 5vw, 4rem) !important;
   }
-
-  .brand__mark img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 705 / 203;
-    object-fit: contain;
+  .header-panel nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.2rem, 2.5vw, 2.2rem);
   }
-
-  @media (max-width: 760px) {
-    .brand__mark {
-      width: 46px;
-      height: 46px;
+  .header-panel nav a,
+  .dropdown-trigger {
+    font-size: 0.92rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em !important;
+    color: var(--text-secondary, #625c54) !important;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 180ms ease !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0;
+  }
+  .header-panel nav a:hover,
+  .dropdown-trigger:hover,
+  .dropdown-trigger[aria-expanded="true"] {
+    color: var(--accent-soft, #a65332) !important;
+  }
+  .dropdown-arrow {
+    transition: transform 180ms ease;
+  }
+  .dropdown-trigger[aria-expanded="true"] .dropdown-arrow {
+    transform: rotate(180deg);
+  }
+  .nav-item-dropdown {
+    position: relative;
+  }
+  .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 0.75rem);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 210px;
+    padding: 0.5rem 0;
+    background: #ffffff;
+    border: 1px solid var(--line, #c9bfb2);
+    border-radius: 8px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    display: none;
+    flex-direction: column;
+    z-index: 100;
+  }
+  .dropdown-trigger[aria-expanded="true"] + .dropdown-menu,
+  .nav-item-dropdown:hover .dropdown-menu {
+    display: flex;
+  }
+  .dropdown-link {
+    padding: 0.55rem 1rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.15rem !important;
+    text-align: left !important;
+    border-bottom: 1px solid rgba(0,0,0,0.03);
+    transition: background 150ms ease !important;
+  }
+  .dropdown-link:last-child {
+    border-bottom: none;
+  }
+  .dropdown-link:hover {
+    background: #f9f6f0 !important;
+  }
+  .dropdown-link__title {
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    color: #1c1917 !important;
+  }
+  .dropdown-link__desc {
+    font-size: 0.75rem !important;
+    font-weight: 400 !important;
+    color: #78716c !important;
+  }
+  .language-switcher {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.25rem !important;
+    padding: 0.25rem !important;
+    background: rgba(41, 48, 41, 0.05) !important;
+    border: 1px solid var(--line, #c9bfb2) !important;
+    border-radius: 999px !important;
+  }
+  .language-switcher a {
+    padding: 0.25rem 0.55rem !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.05em !important;
+    color: var(--text-secondary, #625c54) !important;
+    border-radius: 999px !important;
+    text-decoration: none !important;
+    transition: all 180ms ease !important;
+  }
+  .language-switcher a[aria-current="page"] {
+    background: #293029 !important;
+    color: #f3eee6 !important;
+  }
+  @media (max-width: 990px) {
+    .header-panel nav {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.25rem;
     }
-
-    .brand__mark img {
-      width: 46px;
-      height: 46px;
-      aspect-ratio: 1;
+    .dropdown-menu {
+      position: static;
+      transform: none;
+      box-shadow: none;
+      border: none;
+      background: transparent;
+      padding-left: 1rem;
     }
   }
 </style>
