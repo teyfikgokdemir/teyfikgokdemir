@@ -105,7 +105,7 @@ for (const file of htmlFiles) {
   else titleOwners.set(title, route);
   if (descriptionOwners.has(description)) errors.push(`${route}: description tekrar ediyor.`);
   else descriptionOwners.set(description, route);
-  if (!['tr', 'en', 'mk', 'sr', 'sq', 'fa'].includes(lang)) errors.push(`${route}: geçersiz html lang (${lang}).`);
+  if (!['tr', 'en', 'ru', 'mk', 'sr', 'sq', 'fa'].includes(lang)) errors.push(`${route}: geçersiz html lang (${lang}).`);
   if ((html.match(/<h1\b/gi) ?? []).length !== 1) errors.push(`${route}: tam bir H1 bekleniyor.`);
   for (const block of html.matchAll(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
     try { JSON.parse(block[1]); } catch { errors.push(`${route}: geçersiz JSON-LD.`); }
@@ -173,6 +173,7 @@ else {
 const tradeEntryContracts = {
   tr:{title:'İran halısı ve tekstilde uluslararası ticari koordinasyon',links:['https://ctseg.com.tr/tr/sourcing/iran-halisi/','https://ctseg.com.tr/tr/sourcing/el-dokumasi-ipek-hali/','https://ctseg.com.tr/tr/sourcing/toptan-tekstil-tedariki/']},
   en:{title:'International commercial coordination for Iranian carpets and textiles',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
+  ru:{title:'Международная коммерческая координация в сфере ковров и текстиля',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
   mk:{title:'Меѓународна трговска координација за ирански теписи и текстил',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
   sr:{title:'Međunarodna komercijalna koordinacija za iranske tepihe i tekstil',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
   sq:{title:'Koordinim tregtar ndërkombëtar për qilimat iranianë dhe tekstilet',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
@@ -181,6 +182,7 @@ const tradeEntryContracts = {
 const mythbornContracts = {
   tr:{status:'Aktif girişim',region:'Uluslararası',description:'Tarot, Katina, astroloji ve kişisel keşif deneyimlerini çok dilli dijital bir platformda birleştiren bağımsız tüketici markası.'},
   en:{status:'Active venture',region:'International',description:'An independent multilingual consumer brand bringing together Tarot, Katina, astrology and personal discovery experiences in one digital platform.'},
+  ru:{status:'Активный проект',region:'Международный',description:'Независимый потребительский бренд, объединяющий Таро, Катину, астрологию и самопознание на многоязычной цифровой платформе.'},
   mk:{status:'Активен потфат',region:'Меѓународно',description:'Независен повеќејазичен потрошувачки бренд што на една дигитална платформа ги обединува искуствата со тарот, Катина, астрологија и лично самооткривање.'},
   sr:{status:'Aktivan poduhvat',region:'Međunarodno',description:'Nezavisan višejezični potrošački brend koji na jednoj digitalnoj platformi objedinjuje iskustva tarota, Katine, astrologije i ličnog otkrivanja.'},
   sq:{status:'Sipërmarrje aktive',region:'Ndërkombëtare',description:'Një markë e pavarur shumëgjuhëshe për konsumatorët, që bashkon në një platformë digjitale përvoja të Tarotit, Katinës, astrologjisë dhe zbulimit personal.'},
@@ -194,7 +196,7 @@ const obsoleteMythbornCopy = [
   'Sipërmarrje e re në zhvillim si ekosistem',
   'برند و اکوسیستم محصول و تجارت بین‌المللی در حال توسعه'
 ];
-for (const [lang,route] of [['tr','/'],['en','/en/'],['mk','/mk/'],['sr','/sr/'],['sq','/sq/'],['fa','/fa/']]) {
+for (const [lang,route] of [['tr','/'],['en','/en/'],['ru','/ru/'],['mk','/mk/'],['sr','/sr/'],['sq','/sq/'],['fa','/fa/']]) {
   const page = pageByRoute.get(route);
   if (!page) { errors.push(`${route}: locale ana sayfası eksik.`); continue; }
   const tradeContract = tradeEntryContracts[lang];
@@ -206,9 +208,9 @@ for (const [lang,route] of [['tr','/'],['en','/en/'],['mk','/mk/'],['sr','/sr/']
   for (const expected of [mythbornContract.status,mythbornContract.region,mythbornContract.description]) if (!page.html.includes(expected)) errors.push(`${route}: Mythborn yerelleştirmesi eksik (${expected}).`);
   if (!page.html.includes('href="https://mythborn.co/"')) errors.push(`${route}: Mythborn kartı canlı trailing-slash hedefini kullanmıyor.`);
   for (const obsolete of obsoleteMythbornCopy) if (page.html.includes(obsolete)) errors.push(`${route}: eski Mythborn konumlandırması hâlâ görünüyor (${obsolete}).`);
-  const localeLinks = tags(page.html,'a').filter((tag)=>attribute(tag,'hreflang') && ['tr','en','mk','sr','sq','fa'].includes(attribute(tag,'hreflang')));
-  if (localeLinks.length < 6) errors.push(`${route}: global dil menüsü altı dili göstermiyor.`);
-  for (const code of ['tr','en','mk','sr','sq','fa']) {
+  const localeLinks = tags(page.html,'a').filter((tag)=>attribute(tag,'hreflang') && ['tr','en','ru','mk','sr','sq','fa'].includes(attribute(tag,'hreflang')));
+  if (localeLinks.length < 7) errors.push(`${route}: global dil menüsü yedi dili göstermiyor.`);
+  for (const code of ['tr','en','ru','mk','sr','sq','fa']) {
     const link = localeLinks.find((tag)=>attribute(tag,'hreflang')===code);
     if (routeFromUrl(attribute(link,'href')) !== (code === 'tr' ? '/' : `/${code}/`)) errors.push(`${route}: ${code} locale hedefi yanlış.`);
     if ((code===lang) !== (attribute(link,'aria-current')==='page')) errors.push(`${route}: ${code} aktif locale durumu yanlış.`);

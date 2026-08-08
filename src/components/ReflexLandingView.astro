@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { locale } = Astro.props;
-const lang = (locale || 'tr') as 'tr' | 'en' | 'mk' | 'sr' | 'sq' | 'fa';
+const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa';
 
 const landingText = {
   tr: {
@@ -36,6 +36,19 @@ const landingText = {
     quoteTitle: 'Request B2B Wholesale Quote & Export Inquiries',
     quoteDesc: 'Connect directly with our commercial team for container/pallet load inquiries, private label options, or regional distribution partnerships.',
     quoteBtn: 'Contact Commercial Team',
+  },
+  ru: {
+    heroTag: 'Reflex Plastik · Одноразовые перчатки B2B',
+    heroTitle: 'Профессиональные системы перчаток и гигиенические решения',
+    heroLead: 'Надежные оптовые поставки по 7 специализированным линейкам продуктов для пищевой промышленности, HoReCa, здравоохранения, бьюти-сферы и производства.',
+    primaryCta: 'Смотреть каталог продуктов',
+    secondaryCta: 'Запросить коммерческое предложение',
+    whyTitle: 'Почему выбирают Reflex?',
+    whyLead: 'Высокоэффективные, экономичные и безопасные для пищевых продуктов эластомерные альтернативы нитриловым и виниловым перчаткам.',
+    applicationsTitle: 'Отрасли применения',
+    quoteTitle: 'Оптовые B2B-закупки и экспортные запросы',
+    quoteDesc: 'Свяжитесь с отделом продаж для заказа контейнерных/паллетных партий, производства под собственной торговой маркой (private label) или регионального дистрибьюторства.',
+    quoteBtn: 'Связаться с отделом продаж',
   },
   mk: {
     heroTag: 'Reflex Plastik · Професионални Ракавици',

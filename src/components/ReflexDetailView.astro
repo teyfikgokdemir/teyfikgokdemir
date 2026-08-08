@@ -11,7 +11,7 @@ interface Props {
 }
 
 const { product, locale } = Astro.props;
-const lang = (locale || 'tr') as 'tr' | 'en' | 'mk' | 'sr' | 'sq' | 'fa';
+const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa';
 const i18n = product.i18n[lang] || product.i18n.tr;
 
 const detailText = {
@@ -52,6 +52,25 @@ const detailText = {
     kutuOlcusu: 'Box Dimensions',
     endustriyelKullanim: 'Industrial & B2B Use',
     genelPaket: 'Standard Carton Pack',
+  },
+  ru: {
+    backToCatalog: '← Вернуться в каталог Reflex',
+    overviewTitle: 'Обзор продукта',
+    featuresTitle: 'Ключевые характеристики и преимущества',
+    applicationsTitle: 'Области применения',
+    galleryTitle: 'Галерея изображений',
+    relatedTitle: 'Другие линейки перчаток Reflex',
+    quoteTitle: 'Запросить цену на этот продукт',
+    quoteDesc: 'Обратитесь к нам для расчета оптовых поставок коробками, коробками-мастер, паллетами или контейнерами.',
+    quoteBtn: 'Запросить B2B котировку',
+    faqTitle: 'Часто задаваемые вопросы (FAQ)',
+    homeBreadcrumb: 'Главная',
+    kutuIci: 'Штук в коробке',
+    koliIci: 'Коробок в мастере',
+    paletIci: 'Коробок на паллете',
+    kutuOlcusu: 'Размер коробки',
+    endustriyelKullanim: 'Промышленное применение',
+    genelPaket: 'Упаковка',
   },
   mk: {
     backToCatalog: '← Назад до Сите Reflex Производи',

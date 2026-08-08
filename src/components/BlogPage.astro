@@ -211,7 +211,7 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
         </header>
 
         <div class="article-content">
-          {post.sections[locale].map((section, index) => (
+          {(post.sections[locale] || post.sections.en).map((section, index) => (
             <section data-reveal="content-section" style={`--reveal-order:${Math.min(index, 3)}`}>
               <h2>{section.heading}</h2>
               {section.paragraphs.map((paragraph) => <p set:html={paragraph} />)}

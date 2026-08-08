@@ -11,6 +11,7 @@ interface Props {
 const { locale } = Astro.props;
 
 const messages: Record<SupportedLocale, string> = {
+  ru: 'Здравствуйте Тейфик, пишу вам с вашего сайта.',
   en: 'Hello Teyfik, I am contacting you through your website.',
   tr: 'Merhaba Teyfik Bey, web siteniz üzerinden iletişime geçiyorum.',
   sq: 'Përshëndetje Teyfik, po ju kontaktoj përmes faqes suaj.',
@@ -20,6 +21,7 @@ const messages: Record<SupportedLocale, string> = {
 };
 
 const labels: Record<SupportedLocale, { whatsapp: string; top: string }> = {
+  ru: { whatsapp: 'Связаться с Тейфиком в WhatsApp', top: 'Наверх' },
   en: { whatsapp: 'Contact Teyfik on WhatsApp', top: 'Back to top' },
   tr: { whatsapp: 'WhatsApp üzerinden iletişime geç', top: 'Sayfa başına dön' },
   sq: { whatsapp: 'Kontaktoni në WhatsApp', top: 'Kthehu në krye' },

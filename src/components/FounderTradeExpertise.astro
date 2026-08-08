@@ -1,5 +1,5 @@
 ---
-type Lang='tr'|'en'|'mk'|'sr'|'sq'|'fa';
+type Lang='tr'|'en'|'ru'|'mk'|'sr'|'sq'|'fa';
 type TradeCopy={label:string;title:string;lead:string;sectors:{title:string;text:string;cta:string}[];caption:string;note:string};
 const {locale}=Astro.props as {locale:Lang};
 const copy:Record<Lang,TradeCopy>={
@@ -7,6 +7,10 @@ const copy:Record<Lang,TradeCopy>={
     {title:'İran halısı',text:'El dokuması, ipek, yün, yün-ipek ve makine halıları; yolluk, küçük halı, özel ölçü ve proje bazlı tedarik.',cta:'İran halısı alanını incele'},
     {title:'El dokuması ipek halı',text:'İpek halı; menşe, lif yapısı, düğüm inceliği, işçilik, ölçü ve taşıma koşulları ayrı incelenen görünür bir uzmanlık alanıdır.',cta:'İpek halı alanını incele'},
     {title:'Toptan tekstil',text:'Kumaş, havlu, bornoz, ev tekstili ve hazır giyim; private label, numune, RFQ, üretici doğrulama, kalite, paketleme ve lojistik.',cta:'Toptan tekstil alanını incele'}]},
+  ru:{label:'Экспертиза основателя · Исполнение через CTSEG',title:'Международная коммерческая координация в сфере ковров и текстиля',lead:'В качестве основателя, международного коммерческого координатора и разработчика рыночных систем Тейфик Гёкдемир выстраивает коммерческий путь между продуктом и рынком. CTSEG обрабатывает RFQ, образцы, котировки, аудит фабрик, контроль качества, упаковку, документы и логистику.',caption:'Эдиториал-презентация экспертизы в сфере иранских ковров и текстиля.',note:'Данный личный сайт не является магазином ковров или каталогом продукции. Он объясняет экспертизу основателя; расценки, образцы и исполнение структурируются через CTSEG.',sectors:[
+    {title:'Иранские ковры',text:'Ковры ручной работы, шелковые, шерстяные, шерсть-шелк и машинного ткачества, дорожки, специализированные размеры и проектные закупки.',cta:'Изучить иранские ковры'},
+    {title:'Шелковые ковры ручной работы',text:'Специализированное направление, где происхождение, структура волокна, плотность узлов, мастерство, размеры и условия транспортировки оцениваются отдельно.',cta:'Изучить шелковые ковры'},
+    {title:'Текстиль оптом',text:'Ткани, полотенца, халаты, домашний текстиль и одежда; private label, образцы, RFQ, верификация фабрик, качество, упаковка и логистика.',cta:'Изучить текстиль оптом'}]},
   en:{label:'Founder expertise · CTSEG execution',title:'International commercial coordination for Iranian carpets and textiles',lead:'As founder, international commercial coordinator and market-systems builder, Teyfik Gökdemir structures the commercial path between product and market. CTSEG executes RFQs, samples, quotations, producer verification, quality, packaging, documents and logistics.',caption:'Editorial representation of Iranian carpet and textile expertise.',note:'This personal site is not a carpet shop or product catalogue. It explains founder expertise; CTSEG structures quotations, samples and execution.',sectors:[
     {title:'Iranian carpets',text:'Hand-knotted, silk, wool, wool-silk and machine-made carpets, runners, small rugs, custom dimensions and project sourcing.',cta:'Explore Iranian carpets'},
     {title:'Hand-knotted silk carpets',text:'A distinct field where origin, fibre, knot fineness, workmanship, dimensions and transport are assessed separately.',cta:'Explore silk carpets'},
@@ -30,6 +34,7 @@ const copy:Record<Lang,TradeCopy>={
 };
 const sectorLinks:Record<Lang,string[]>={
   tr:['https://ctseg.com.tr/tr/sourcing/iran-halisi/','https://ctseg.com.tr/tr/sourcing/el-dokumasi-ipek-hali/','https://ctseg.com.tr/tr/sourcing/toptan-tekstil-tedariki/'],
+  ru:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/'],
   en:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/'],
   mk:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/'],
   sr:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/'],

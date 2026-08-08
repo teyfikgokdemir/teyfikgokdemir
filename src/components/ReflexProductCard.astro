@@ -8,13 +8,14 @@ interface Props {
 }
 
 const { product, locale } = Astro.props;
-const lang = (locale || 'tr') as 'tr' | 'en' | 'mk' | 'sr' | 'sq' | 'fa';
+const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa';
 const i18n = product.i18n[lang] || product.i18n.tr;
 const detailUrl = locale === 'tr' ? `/reflex/${product.slug}/` : `/${locale}/reflex/${product.slug}/`;
 
 const buttonTextMap: Record<string, string> = {
   tr: 'Ürünü İncele',
   en: 'View Product',
+  ru: 'Подробнее',
   mk: 'Прегледај Производ',
   sr: 'Pogledaj Proizvod',
   sq: 'Shiko Produktin',
@@ -24,6 +25,7 @@ const buttonTextMap: Record<string, string> = {
 const labelMap: Record<string, { colors: string; sizes: string }> = {
   tr: { colors: 'Renkler', sizes: 'Bedenler' },
   en: { colors: 'Colors', sizes: 'Sizes' },
+  ru: { colors: 'Цвета', sizes: 'Размеры' },
   mk: { colors: 'Бои', sizes: 'Димензии' },
   sr: { colors: 'Boje', sizes: 'Veličine' },
   sq: { colors: 'Ngjyrat', sizes: 'Përmasat' },
@@ -32,13 +34,13 @@ const labelMap: Record<string, { colors: string; sizes: string }> = {
 
 const translateColor = (col: string) => {
   const map: Record<string, Record<string, string>> = {
-    'Siyah': { tr: 'Siyah', en: 'Black', mk: 'Црна', sr: 'Crna', sq: 'E Zezë', fa: 'مشکی' },
-    'Şeffaf': { tr: 'Şeffaf', en: 'Clear', mk: 'Проѕирна', sr: 'Providna', sq: 'Transparente', fa: 'شفاف' },
-    'Mavi': { tr: 'Mavi', en: 'Blue', mk: 'Сина', sr: 'Plava', sq: 'Blu', fa: 'آبی' },
-    'Mor': { tr: 'Mor', en: 'Purple', mk: 'Виолетова', sr: 'Ljubičasta', sq: 'Vjollcë', fa: 'بنفش' },
-    'Yeşil': { tr: 'Yeşil', en: 'Green', mk: 'Зелена', sr: 'Zelena', sq: 'Jeshile', fa: 'سبز' },
-    'Pembe': { tr: 'Pembe', en: 'Pink', mk: 'Розева', sr: 'Roze', sq: 'Rozë', fa: 'صورتی' },
-    'Krem': { tr: 'Krem', en: 'Cream', mk: 'Крем', sr: 'Krem', sq: 'Krem', fa: 'کرم' }
+    'Siyah': { tr: 'Siyah', en: 'Black', ru: 'Черный', mk: 'Црна', sr: 'Crna', sq: 'E Zezë', fa: 'مشکی' },
+    'Şeffaf': { tr: 'Şeffaf', en: 'Clear', ru: 'Прозрачный', mk: 'Проѕирна', sr: 'Providna', sq: 'Transparente', fa: 'شفاف' },
+    'Mavi': { tr: 'Mavi', en: 'Blue', ru: 'Синий', mk: 'Сина', sr: 'Plava', sq: 'Blu', fa: 'آبی' },
+    'Mor': { tr: 'Mor', en: 'Purple', ru: 'Фиолетовый', mk: 'Виолетова', sr: 'Ljubičasta', sq: 'Vjollcë', fa: 'بنفش' },
+    'Yeşil': { tr: 'Yeşil', en: 'Green', ru: 'Зеленый', mk: 'Зелена', sr: 'Zelena', sq: 'Jeshile', fa: 'سبز' },
+    'Pembe': { tr: 'Pembe', en: 'Pink', ru: 'Розовый', mk: 'Розева', sr: 'Roze', sq: 'Rozë', fa: 'صورتی' },
+    'Krem': { tr: 'Krem', en: 'Cream', ru: 'Кремовый', mk: 'Крем', sr: 'Krem', sq: 'Krem', fa: 'کرم' }
   };
   return map[col]?.[lang] || col;
 };

@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { product, locale } = Astro.props;
-const lang = (locale || 'tr') as 'tr' | 'en' | 'mk' | 'sr' | 'sq' | 'fa';
+const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa';
 
 const labels = {
   tr: {
@@ -58,6 +58,30 @@ const labels = {
     cartonDim: 'Carton Dimensions',
     boxBarcode: 'Box Barcode (EAN)',
     cartonBarcode: 'Carton Barcode (EAN)',
+  },
+  ru: {
+    specsTitle: 'Технические характеристики',
+    material: 'Сырье / Материал',
+    powder: 'Наличие пудры',
+    latex: 'Наличие латекса',
+    silicone: 'Наличие силикона',
+    sterility: 'Стерильность',
+    foodContact: 'Пищевой контакт',
+    yes: 'Да / Полное соответствие',
+    no: 'Нет',
+    colors: 'Доступные цвета',
+    sizes: 'Доступные размеры',
+    variantsTitle: 'Информация об упаковке и логистике',
+    color: 'Цвет',
+    size: 'Размер',
+    productCode: 'Артикул',
+    boxQty: 'Штук в коробке',
+    cartonQty: 'Коробок в мастере',
+    palletQty: 'Коробок на паллете',
+    boxDim: 'Размер коробки',
+    cartonDim: 'Размер мастера',
+    boxBarcode: 'Штрихкод коробки',
+    cartonBarcode: 'Штрихкод мастера',
   },
   mk: {
     specsTitle: 'Технички Спецификации',

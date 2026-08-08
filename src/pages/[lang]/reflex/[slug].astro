@@ -9,7 +9,7 @@ import { reflexProducts, getReflexProductBySlug } from '../../../data/reflexProd
 import { site } from '../../../data/site';
 
 export function getStaticPaths() {
-  const languages: (Locale | 'fa')[] = ['en', 'mk', 'sr', 'sq', 'fa'];
+  const languages: (Locale | 'fa')[] = ['en', 'ru', 'mk', 'sr', 'sq', 'fa'];
   const paths = [];
 
   for (const lang of languages) {
@@ -32,7 +32,7 @@ if (!product) {
   throw new Error(`Product not found for slug: ${slug}`);
 }
 
-const lang = (locale || 'tr') as 'tr' | 'en' | 'mk' | 'sr' | 'sq' | 'fa';
+const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa';
 const i18n = product.i18n[lang] || product.i18n.tr;
 const copy = content[locale as Locale] || content.tr;
 
@@ -40,6 +40,7 @@ const pagePath = `/${locale}/reflex/${product.slug}/`;
 const alternates: Record<string, string> = {
   tr: `${site.origin}/reflex/${product.slug}/`,
   en: `${site.origin}/en/reflex/${product.slug}/`,
+  ru: `${site.origin}/ru/reflex/${product.slug}/`,
   mk: `${site.origin}/mk/reflex/${product.slug}/`,
   sr: `${site.origin}/sr/reflex/${product.slug}/`,
   sq: `${site.origin}/sq/reflex/${product.slug}/`,
@@ -50,6 +51,7 @@ const alternates: Record<string, string> = {
 const langBrandTitles: Record<string, string> = {
   tr: 'Reflex Plastik B2B Portföyü',
   en: 'Reflex Plastik B2B Portfolio',
+  ru: 'Reflex Plastik B2B Портфель',
   mk: 'Reflex Plastik B2B Портфолио',
   sr: 'Reflex Plastik B2B Portfolio',
   sq: 'Portofoli B2B Reflex Plastik',

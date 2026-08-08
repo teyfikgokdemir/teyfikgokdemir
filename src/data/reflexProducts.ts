@@ -114,6 +114,24 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+      ru: {
+        "name": "Reflex Flex Hi-Tech",
+        "tagline": "Перчатки премиум-класса из эластичного ТПЭ",
+        "description": "Одноразовые перчатки Reflex Flex Hi-Tech изготавливаются из высококачественного ТПЭ. Обладают высокой эластичностью и прочностью.",
+        "materialName": "ТПЭ (Термопластичный эластомер)",
+        "features": [
+                "Соответствует стандарту контакта с пищевыми продуктами",
+                "Не содержит пудры, латекса и силикона",
+                "Высокая эластичность и прочность на разрыв",
+                "Экономичная альтернатива нитрилу"
+        ],
+        "applications": [
+                "Пищевое производство и HoReCa",
+                "Клининг и хозяйственные работы",
+                "Косметология и салоны красоты",
+                "Упаковка и сборка"
+        ]
+},
       tr: {
         name: 'Flex Hi-Tech Eldiven',
         tagline: 'Yeni nesil hibrit elastomer teknoloji, üstün esneklik ve hassas dokunuş.',
@@ -445,6 +463,24 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+      ru: {
+        "name": "Reflex Flex Kids",
+        "tagline": "Гигиеничные одноразовые перчатки ТПЭ специального детского размера",
+        "description": "Разработаны специально для детей. Идеальны для школьных мероприятий, творческих мастерских и гигиены.",
+        "materialName": "ТПЭ (Термопластичный эластомер)",
+        "features": [
+                "Специально адаптированный детский размер",
+                "Безопасно для контакта с пищей",
+                "Не вызывает аллергии на латекс",
+                "Прочный и мягкий материал"
+        ],
+        "applications": [
+                "Школы и детские сады",
+                "Творческие студии и мастер-классы",
+                "Кулинарные занятия для детей",
+                "Личная гигиена"
+        ]
+},
       tr: {
         name: 'Flex Kids Şeffaf Çocuk Eldiveni',
         tagline: 'Çocuklar için özel ergonomik tasarım, %100 geri dönüştürülebilir eldiven.',
@@ -804,6 +840,24 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+      ru: {
+        "name": "Reflex Winlyex Pudrasız",
+        "tagline": "Неопудренные виниловые перчатки повышенной прочности",
+        "description": "Одноразовые неопудренные виниловые перчатки Winlyex обеспечивают надежную защиту рук при выполнении ежедневных задач.",
+        "materialName": "Винил (ПВХ)",
+        "features": [
+                "Без пудры и без латекса",
+                "Гладкая поверхность и точная посадка",
+                "Устойчивость к химическим растворам",
+                "Высокий уровень гигиены"
+        ],
+        "applications": [
+                "Общие гигиенические процедуры",
+                "Уборка и обслуживание",
+                "Пищевой сервис",
+                "Легкая промышленность"
+        ]
+},
       tr: {
         name: 'Reflex Winlyex Pudrasız Eldiven',
         tagline: 'Çok amaçlı koruma, yüksek kavrama gücü ve pudrasız hijyen standartları.',
@@ -1167,6 +1221,24 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+      ru: {
+        "name": "Reflex Winlyex Termo Vinil",
+        "tagline": "Термовиниловые перчатки с повышенной термостойкостью и эластичностью",
+        "description": "Специальный состав термовинила сочетает в себе гибкость ТПЭ и защитные свойства винила.",
+        "materialName": "Термовинил",
+        "features": [
+                "Улучшенная термостойкость",
+                "Высокая прочность на растяжение",
+                "Безопасно для пищевых продуктов",
+                "Не содержит аллергенов латекса"
+        ],
+        "applications": [
+                "Пищевая промышленность",
+                "Рестораны и кейтеринг",
+                "Лабораторные работы",
+                "Уборка и дезинфекция"
+        ]
+},
       tr: {
         name: 'Winlyex Termo Vinil Eldiven',
         tagline: 'Ekstra kalınlaştırılmış termo vinil yapısı ile yüksek mukavemet ve ekstra dayanıklılık.',
@@ -1529,6 +1601,24 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+      ru: {
+        "name": "Reflex Medilex",
+        "tagline": "Гигиенические виниловые перчатки медицинского и смотрового назначения",
+        "description": "Перчатки Reflex Medilex разработаны для применения в смотровых кабинетах и санитарных зонах.",
+        "materialName": "Винил медицинского качества",
+        "features": [
+                "Высокий стандарт гигиенической защиты",
+                "Без пудры, гипоаллергенно",
+                "Анатомическая форма",
+                "Высокая прочность материалов"
+        ],
+        "applications": [
+                "Санитарно-гигиенический уход",
+                "Смотровые процедуры",
+                "Лаборатории и фармацевтика",
+                "Косметологические центры"
+        ]
+},
       tr: {
         name: 'Medilex Muayene Eldiveni',
         tagline: 'Sıhhi temas ve hijyenik muayene standartlarına uygun, pudrasız koruyucu eldiven.',
@@ -1891,6 +1981,24 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+      ru: {
+        "name": "Reflex Florex",
+        "tagline": "Универсальные хозяйственные и профессиональные перчатки",
+        "description": "Перчатки Florex предназначены для интенсивной уборки и хозяйственных нужд.",
+        "materialName": "ПВХ / Винил",
+        "features": [
+                "Повышенная износостойкость",
+                "Защита от бытовой химии",
+                "Комфортное прилегание",
+                "Экономичный расход"
+        ],
+        "applications": [
+                "Клининговые компании",
+                "Хозяйственные работы",
+                "Садоводство",
+                "Обслуживание объектов"
+        ]
+},
       tr: {
         name: 'Florex Eldiven',
         tagline: 'Çok amaçlı elastik tasarım, yumuşak mikro doku ve ekonomik B2B tedarik çözümü.',
@@ -2251,6 +2359,24 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+      ru: {
+        "name": "Reflex Slimfit Copolymer",
+        "tagline": "Тонкие и высокочувствительные сополимерные перчатки",
+        "description": "Ультратонкие сополимерные перчатки Slimfit обеспечивают максимальную тактильную чувствительность.",
+        "materialName": "Сополимер",
+        "features": [
+                "Ультратонкий материал с высокой чувствительностью",
+                "Подходит для контакта с продуктами",
+                "Без пудры и без латекса",
+                "Плотно прилегает к кисти"
+        ],
+        "applications": [
+                "Точная сборка и электроника",
+                "Пищевое оформление и кондитерские",
+                "Косметология и макияж",
+                "Лабораторные исследования"
+        ]
+},
       tr: {
         name: 'Reflex Slimfit Copolymer Eldiven',
         tagline: 'İnce kopolimer formülasyonu ile maksimum hassasiyet ve konforlu kavrama.',

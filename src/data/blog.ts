@@ -1,7 +1,8 @@
-export const blogLocales = ['en', 'tr', 'mk', 'sr', 'sq', 'fa'] as const;
+export const blogLocales = ['en', 'tr', 'ru', 'mk', 'sr', 'sq', 'fa'] as const;
 export type BlogLocale = (typeof blogLocales)[number];
 
 export const localeMeta: Record<BlogLocale, { name: string; dir: 'ltr' | 'rtl'; blog: string; home: string; read: string; related: string; published: string; description: string; eyebrow: string; expertise: string }> = {
+  ru: { name: 'Русский', dir: 'ltr', blog: 'Инсайты', home: 'Главная', read: 'Читать статью', related: 'Похожие статьи', published: 'Опубликовано', description: 'Практические инсайты о стратегических закупках, аудите фабрик и международных торговых операциях.', eyebrow: 'Международная торговля и стратегические закупки', expertise: 'Изучите экспертизу в международной торговле и закупках' },
   en: { name: 'English', dir: 'ltr', blog: 'Insights', home: 'Home', read: 'Read article', related: 'Related insights', published: 'Published', description: 'Practical insights on strategic sourcing, procurement, supplier validation and international trade operations.', eyebrow: 'International Trade & Strategic Sourcing', expertise: 'Explore international trade and strategic sourcing expertise' },
   tr: { name: 'Türkçe', dir: 'ltr', blog: 'İçgörüler', home: 'Ana Sayfa', read: 'Yazıyı oku', related: 'İlgili içgörüler', published: 'Yayın tarihi', description: 'Stratejik tedarik, satın alma, tedarikçi doğrulama ve uluslararası ticaret operasyonları üzerine pratik içgörüler.', eyebrow: 'Uluslararası Ticaret ve Stratejik Tedarik', expertise: 'Uluslararası ticaret ve stratejik tedarik uzmanlığını inceleyin' },
   mk: { name: 'Македонски', dir: 'ltr', blog: 'Увиди', home: 'Почетна', read: 'Прочитај', related: 'Поврзани увиди', published: 'Објавено', description: 'Практични увиди за стратешко снабдување, набавка, проверка на добавувачи и меѓународна трговија.', eyebrow: 'Меѓународна трговија и стратешко снабдување', expertise: 'Истражете ја експертизата за меѓународна трговија и снабдување' },
@@ -29,6 +30,7 @@ export const posts: BlogPost[] = [
   "updated": "2026-08-08",
   "readingMinutes": 9,
   "title": {
+    "ru": "ТПЭ, виниловые и сополимерные перчатки: Руководство B2B-закупок",
     "tr": "TPE, Vinil ve Kopolimer Eldiven: B2B Alım Rehberi",
     "en": "TPE, Vinyl and Copolymer Gloves: B2B Buying Guide",
     "mk": "TPE, винилни и кополимерни ракавици: Водич за B2B набавка",
@@ -37,6 +39,7 @@ export const posts: BlogPost[] = [
     "fa": "دستکش‌های TPE، وینیل و کوپلیمر: راهنمای خرید B2B"
   },
   "description": {
+    "ru": "Сравнение материалов ТПЭ, термовинила и сополимерных одноразовых перчаток для B2B-закупок, технический чек-лист и портфель продуктов Reflex.",
     "tr": "B2B tek kullanımlık eldiven alımında TPE, termo vinil ve kopolimer malzemelerin karşılaştırması, teknik kontrol listesi ve Reflex ürün portföyü tedarik rehberi.",
     "en": "A technical B2B purchasing guide comparing TPE, thermo vinyl and copolymer disposable gloves, key evaluation criteria and the Reflex product portfolio.",
     "mk": "Водич за B2B набавка: споредба на TPE, термо винил и кополимерни ракавици, критериуми за оцена и портфолиото Reflex.",
@@ -45,6 +48,7 @@ export const posts: BlogPost[] = [
     "fa": "راهنمای خرید B2B: مقایسه دستکش‌های TPE، ترمو وینیل و کوپلیمر، معیارهای ارزیابی و سبد محصولات رفلکس."
   },
   "intro": {
+    "ru": "Фокусирование исключительно на цене за единицу при B2B-закупках одноразовых перчаток может привести к неверному выбору материала и операционным сбоям. Грамотное решение требует оценки структуры материала, эластичности, санитарных норм, размеров, упаковки и стабильности поставок.",
     "tr": "B2B tek kullanımlık eldiven alımında yalnızca birim fiyata odaklanmak, hatalı malzeme seçimine ve operasyonel aksaklıklara yol açabilir. Doğru satın alma kararı; malzeme yapısı, esneklik, hijyen standartları, beden aralığı, ambalaj düzeni, lojistik hacimler ve tedarik sürekliliği birlikte değerlendirildiğinde verilir.",
     "en": "Focusing solely on unit price in B2B disposable glove purchasing can lead to incorrect material selection and operational disruptions. A sound procurement decision requires evaluating material structure, elasticity, hygiene compliance, sizing, packaging density, logistics volumes, and supply continuity together.",
     "mk": "Фокусирањето само на поединечната цена при B2B набавка на ракавици може да доведе до погрешен избор на материјал. Правилната одлука бара споредба на материјалот, еластичноста, димензиите, пакувањето и континуитетот на снабдување.",
@@ -53,6 +57,15 @@ export const posts: BlogPost[] = [
     "fa": "تمرکز صرف بر قیمت واحد در خرید عمده دستکش‌های یک‌بارمصرف می‌تواند به انتخاب نادرست ماده و اختلالات عملیاتی منجر شود. تصمیم درست نیازمند ارزیابی ساختار ماده، انعطاف‌پذیری، استانداردها، بسته‌بندی، لجستیک و تداوم تأمین است."
   },
   "sections": {
+    "ru": [
+      {
+        "heading": "Обзор и ключевые параметры",
+        "paragraphs": [
+          "В международной B2B-торговле выбор правильных материалов и спецификаций напрямую влияет на экономическую эффективность и соответствие стандартам.",
+          "Системный подход к закупкам позволяет минимизировать браки, оптимизировать логистику и обеспечить непрерывность поставок."
+        ]
+      }
+    ],
     "tr": [
       {
         "heading": "TPE Eldiven Nedir?",
@@ -1083,6 +1096,7 @@ export const posts: BlogPost[] = [
   "updated": "2026-08-08",
   "readingMinutes": 8,
   "title": {
+    "ru": "Руководство по выбору одноразовых перчаток для пищевого сектора",
     "tr": "Gıda İşletmeleri İçin Tek Kullanımlık Eldiven Seçim Rehberi",
     "en": "Disposable Glove Selection Guide for Food Businesses",
     "mk": "Водич за избор на ракавици во прехранбениот сектор",
@@ -1091,6 +1105,7 @@ export const posts: BlogPost[] = [
     "fa": "راهنمای انتخاب دستکش یک‌بارمصرف برای کسب‌وکارهای غذایی"
   },
   "description": {
+    "ru": "Стандарты пищевой безопасности, сертификация контакта с пищевыми продуктами, выбор ТПЭ и виниловых перчаток для HoReCa и фабрик.",
     "tr": "Restoranlar, catering, gıda üretim tesisleri ve profesyonel mutfaklar için gıda temasına uygun pudrasız, latekssiz ve silikonsuz tek kullanımlık eldiven seçim rehberi.",
     "en": "A practical disposable glove selection guide for restaurants, catering, food processing plants and professional kitchens focusing on food-safe, powder-free solutions.",
     "mk": "Практичен водич за избор на ракавици без пудра за ресторани, кетеринг и прехранбено производство.",
@@ -1099,6 +1114,7 @@ export const posts: BlogPost[] = [
     "fa": "راهنمای عملی انتخاب دستکش بدون پودر برای رستوران‌ها، کترینگ و واحدهای تولید مواد غذایی."
   },
   "intro": {
+    "ru": "В сфере общественного питания и пищевой промышленности гигиена и соответствие нормативам пищевого контакта имеют решающее значение. В этом руководстве рассматриваются ключевые параметры выбора одноразовых перчаток.",
     "tr": "Gıda sektöründe çalışan işletmeler için doğru tek kullanımlık eldiveni seçmek; gıda güvenliği, hijyen sürekliliği ve operasyon hızı açısından kritik öneme sahiptir. Pudrasız, latekssiz, silikonsuz ve doğru beden/renk dağılımı ile planlanan eldiven tedariği işletme risklerini minimize eder.",
     "en": "Choosing the right disposable glove in the food industry is crucial for food safety, continuous hygiene, and operational efficiency. Powder-free, latex-free, silicone-free glove procurement planned with correct sizing and color-coding minimizes operational risks.",
     "mk": "Изборот на вистинските ракавици во прехранбениот сектор е клучен за безбедноста на храната и оперативната ефикасност. Набавката на ракавици без пудра и латекс ги намалува ризиците.",
@@ -1107,6 +1123,27 @@ export const posts: BlogPost[] = [
     "fa": "انتخاب دستکش یک‌بارمصرف مناسب در صنعت غذا برای حفظ بهداشت، ایمنی مواد غذایی و سرعت عملیات حیاتی است. تأمین دستکش‌های بدون پودر و لاتکس ریسک‌های بهداشتی را به حداقل می‌رساند."
   },
   "sections": {
+      "ru": [
+    {
+        "heading": "Стандарты безопасности пищевых продуктов и спецификации перчаток",
+        "paragraphs": [
+            "На предприятиях по переработке пищевых продуктов, в ресторанах и выпечке выбор перчаток не является формальностью. Подходящая перчатка предотвращает перекрестное загрязнение и снижает риск попадания инородных предметов в продукцию.",
+            "Перчатки для пищевой промышленности должны отвечать строгим правилам: отсутствие вредных пластификаторов, гипоаллергенность и высокая прочность на разрыв при работе со жирами и влагой."
+        ],
+        "bullets": [
+            "Соответствие регламентам о контакте с пищевыми продуктами",
+            "Отсутствие опудривающих веществ",
+            "Текстурированная поверхность для надежного захвата"
+        ]
+    },
+    {
+        "heading": "Выбор материала для пищевых производств",
+        "paragraphs": [
+            "Различные производственные участки требуют разного типа перчаток. Для кратковременного контакта подойдут термопластичные эластомеры (ТПЭ), а для длительных работ — гибридный сополимер.",
+            "Правильное разделение перчаток по цветовой кодировке на производстве помогает контролировать гигиенические зоны."
+        ]
+    }
+],
     "tr": [
       {
         "heading": "Gıda İşletmeleri Neden Eldiven Seçimine Dikkat Etmeli?",
@@ -1747,6 +1784,7 @@ export const posts: BlogPost[] = [
   "updated": "2026-08-08",
   "readingMinutes": 9,
   "title": {
+    "ru": "Оценка продуктов для международных B2B-портфелей",
     "tr": "Bir Ürünü Uluslararası B2B Portföye Almadan Önce Nelere Bakarım?",
     "en": "Evaluating Products for International B2B Portfolios",
     "mk": "Што проценувам пред да додадам производ во меѓународно B2B портфолио",
@@ -1755,6 +1793,7 @@ export const posts: BlogPost[] = [
     "fa": "ارزیابی محصول برای پرتفوی بین‌المللی B2B"
   },
   "description": {
+    "ru": "Критерии отбора товаров для трансграничной торговли: мощности производителей, сертификация, маржинальность и надежность поставок.",
     "tr": "Uluslararası ticarette bir ürünü portföye alırken üretici doğrulamadan teknik veriye, lojistikten pazara giriş yapısına kadar uyguladığım 10 adımlı ticari değerlendirme disiplini.",
     "en": "A founder perspective on the 10-step commercial evaluation framework used to assess manufacturer reliability, product data, logistics structure and B2B demand before portfolio integration.",
     "mk": "Перспектива на основач: 10 чекори за оцена на добавувачи, податоци за производи, логистика и пазар пред портфолио интеграција.",
@@ -1763,6 +1802,7 @@ export const posts: BlogPost[] = [
     "fa": "دیدگاه بنیان‌گذار: ۱۰ گام ارزیابی برای اعتبارسنجی تولیدکننده، داده‌های فنی، لجستیک و تقاضا پیش از افزودن به پرتفوی تجاری."
   },
   "intro": {
+    "ru": "Формирование эффективного B2B-портфеля требует глубокого аудита фабрик, проверки стандартов качества, анализа логистики и постоянного контроля цепочки поставок.",
     "tr": "Uluslararası B2B ticarette bir ürünü yalnızca görseli güzel olduğu, trend göründüğü veya ilk birim fiyatı cazip geldiği için portföye almak en yaygın operasyonel hatalardan biridir. Ticari kararlar; üretici güvenilirliği, doğrulanabilir veri, ambalaj standardı, lojistik hacmi ve sürdürülebilir tedarik yapısı bir bütün olarak değerlendirildiğinde başarıya ulaşır.",
     "en": "In international B2B trade, adopting a product into a portfolio simply because it looks good or offers an appealing initial unit price is a frequent operational mistake. Commercial success requires evaluating manufacturer credibility, verifiable technical data, packaging standards, logistics density, and repeatable supply structures together.",
     "mk": "Додавањето производ во меѓународно B2B портфолио само поради добра цена или изглед е честа грешка. Успехот бара проверка на добавувачот, податоците, пакувањето и логистиката.",
@@ -1771,6 +1811,15 @@ export const posts: BlogPost[] = [
     "fa": "افزودن یک محصول به پرتفوی تجاری بین‌المللی صرفاً به دلیل ظاهر جذاب یا قیمت اولیه پایین، یکی از رایج‌ترین اشتباهات عملیاتی است. موفقیت تجاری نیازمند اعتبارسنجی تولیدکننده، داده‌های فنی، بسته‌بندی، لجستیک و تداوم تأمین است."
   },
   "sections": {
+      "ru": [
+    {
+        "heading": "Критерии оценки продуктов для международных B2B-портфелей",
+        "paragraphs": [
+            "Формирование международного B2B-портфеля требует глубокого анализа рыночного спроса, сертификации и логистической эффективности.",
+            "Каждый продукт должен оцениваться с точки зрения маржинальности, требований к транспортировке и потенциала частных торговых марок (Private Label)."
+        ]
+    }
+],
     "tr": [
       {
         "heading": "1. Üretici Kim?",
@@ -2249,6 +2298,7 @@ export const posts: BlogPost[] = [
   "updated": "2026-08-08",
   "readingMinutes": 9,
   "title": {
+    "ru": "Почему B2B-сайт продукта должен быть больше чем просто каталогом",
     "tr": "B2B Ürün Web Sitesi Katalogdan Daha Fazlası Olmalı",
     "en": "A B2B Product Website Must Be More Than a Catalogue",
     "mk": "B2B веб-страницата за производи мора да биде повеќе од каталог",
@@ -2257,6 +2307,7 @@ export const posts: BlogPost[] = [
     "fa": "وب‌سایت محصول B2B باید فراتر از یک کاتالوگ باشد"
   },
   "description": {
+    "ru": "Превращение цифрового ресурса в эффективный инструмент продаж: спецификации, обработка RFQ, сертификаты и доверие байеров.",
     "tr": "B2B dijital ticarette PDF katalogların ötesine geçerek ürün verisini, varyantları, ambalaj bilgilerini ve SEO/GEO/AEO/AIO yapısını aranabilir ticari sistemlere dönüştürme rehberi.",
     "en": "How B2B companies turn static PDF catalogues into structured, searchable digital product systems optimized for search engines and AI discovery.",
     "mk": "Како B2B компаниите ги претвораат PDF каталозите во структурирани дигитални системи оптимизирани за пребарување и AI.",
@@ -2265,6 +2316,7 @@ export const posts: BlogPost[] = [
     "fa": "چگونه شرکت‌های B2B کاتالوگ‌های پی‌دی‌اف را به سیستم‌های دیجیتال ساختاریافته و بهینه‌شده برای موتورهای جستجو و هوش مصنوعی تبدیل می‌کنند."
   },
   "intro": {
+    "ru": "Современные B2B-байеры и дистрибьюторы ожидают от сайта поставщика исчерпывающих технических спецификаций, доступных сертификатов и понятного процесса оформления RFQ.",
     "tr": "Geleneksel B2B ticarette ürün sunumu genellikle statik PDF kataloglara veya basılı broşürlere dayanır. Ancak günümüz kurumsal alıcıları ve arama sistemleri; hızlı erişilebilir, doğrulanabilir teknik veri içeren, çok dilli ve aranabilir dijital ürün yapıları talep etmektedir. B2B web sitesi bir broşür değil, satın alma kararını kolaylaştıran ticari bir bilgi sistemidir.",
     "en": "Traditional B2B trade product presentation often relies on static PDF catalogues or printed brochures. However, modern institutional buyers and automated search engines demand rapidly accessible, verifiable technical data formatted into structured, multilingual digital product systems. A B2B website is not a brochure; it is a commercial decision system.",
     "mk": "Традиционалната B2B презентација се потпира на статички PDF каталози. Но модерните купувачи и AI системи бараат брз пристап до структурирани податоци.",
@@ -2273,6 +2325,15 @@ export const posts: BlogPost[] = [
     "fa": "ارائه традиционный B2B غالباً متکی بر کاتالوگ‌های پی‌دی‌اف ایستا است. اما خریداران امروز و موتورهای هوش مصنوعی نیازمند داده‌های ساختاریافته، چندزبانه و قابل اعتبارسنجی هستند."
   },
   "sections": {
+      "ru": [
+    {
+        "heading": "B2B-сайт как коммерческий инструмент",
+        "paragraphs": [
+            "Современный B2B-сайт не должен являться простой витриной товаров. Он должен предоставлять техническую документацию, логистические данные и условия заказа.",
+            "Оптимизация под AI-поиск и генеративные системы позволяет привлекать качественные коммерческие запросы от международных байеров."
+        ]
+    }
+],
     "tr": [
       {
         "heading": "PDF Katalog Neden Tek Başına Yeterli Değil?",
@@ -2673,6 +2734,7 @@ export const posts: BlogPost[] = [
   {
     slug: 'strategic-sourcing-vs-procurement', date: '2026-07-25', updated: '2026-07-25', readingMinutes: 7,
     title: {
+      ru: 'Стратегические закупки и операционное снабжение: В чем разница?',
       en: 'Strategic Sourcing vs Procurement: What Is the Difference?',
       tr: 'Stratejik Tedarik ve Satın Alma Arasındaki Fark Nedir?',
       mk: 'Стратешко снабдување наспроти набавка: Која е разликата?',
@@ -2681,6 +2743,7 @@ export const posts: BlogPost[] = [
       fa: 'تأمین راهبردی در برابر خرید: تفاوت چیست؟',
     },
     description: {
+      ru: 'Разбор различий между стратегическим поиском поставщиков (sourcing) и операционным снабжением (procurement) в международном B2B-бизнесе.',
       en: 'A practical explanation of how strategic sourcing differs from procurement, where each process begins, and how companies can connect them.',
       tr: 'Stratejik tedarik ile satın alma arasındaki farkı, süreçlerin nerede başladığını ve şirketlerin bu iki yapıyı nasıl bağlayabileceğini açıklayan pratik rehber.',
       mk: 'Практично објаснување за разликата меѓу стратешкото снабдување и набавката и како компаниите можат да ги поврзат.',
@@ -2689,6 +2752,7 @@ export const posts: BlogPost[] = [
       fa: 'راهنمایی عملی درباره تفاوت تأمین راهبردی و خرید و چگونگی اتصال این دو فرایند در شرکت‌ها.',
     },
     intro: {
+      ru: 'Операционное снабжение поддерживает процесс покупок. Стратегические закупки определяют, что покупать, у кого, по какой коммерческой модели и с каким уровнем риска.',
       en: 'Procurement keeps purchases moving. Strategic sourcing decides what should be bought, from whom, under which commercial model, and with what level of risk. Treating the two as identical usually creates price pressure without building supply resilience.',
       tr: 'Satın alma, siparişlerin ilerlemesini sağlar. Stratejik tedarik ise neyin, kimden, hangi ticari modelle ve hangi risk düzeyinde alınması gerektiğine karar verir. İki kavramı aynı görmek, çoğu zaman dayanıklı bir tedarik yapısı kurmadan yalnızca fiyat baskısı yaratır.',
       mk: 'Набавката го одржува движењето на нарачките. Стратешкото снабдување одлучува што треба да се купи, од кого, под кој комерцијален модел и со кое ниво на ризик.',
@@ -2737,9 +2801,9 @@ export const posts: BlogPost[] = [
   },
   {
     slug: 'how-to-evaluate-an-international-supplier', date: '2026-07-23', updated: '2026-07-23', readingMinutes: 8,
-    title: { en: 'How to Evaluate an International Supplier', tr: 'Uluslararası Bir Tedarikçi Nasıl Değerlendirilir?', mk: 'Како да оцените меѓународен добавувач', sr: 'Kako proceniti međunarodnog dobavljača', sq: 'Si të vlerësoni një furnitor ndërkombëtar', fa: 'چگونه یک تأمین‌کننده بین‌المللی را ارزیابی کنیم؟' },
-    description: { en: 'A practical supplier evaluation framework covering legal identity, capability, quality, capacity, commercial terms and delivery risk.', tr: 'Hukuki kimlik, yetkinlik, kalite, kapasite, ticari koşullar ve teslimat riskini kapsayan pratik tedarikçi değerlendirme çerçevesi.', mk: 'Практична рамка за правен идентитет, способност, квалитет, капацитет и ризик.', sr: 'Praktičan okvir za pravni identitet, sposobnost, kvalitet, kapacitet i rizik.', sq: 'Kornizë praktike për identitetin ligjor, aftësinë, cilësinë, kapacitetin dhe rrezikun.', fa: 'چارچوبی عملی برای هویت حقوقی، توانمندی، کیفیت، ظرفیت، شرایط تجاری و ریسک تحویل.' },
-    intro: { en: 'A polished website and a competitive quotation do not prove that a supplier can deliver consistently. International supplier evaluation must combine documentary checks, operational evidence and a controlled commercial test.', tr: 'Profesyonel bir web sitesi ve rekabetçi teklif, tedarikçinin sürekli ve güvenilir teslimat yapabildiğini kanıtlamaz. Uluslararası tedarikçi değerlendirmesi; belge kontrolünü, operasyonel kanıtı ve kontrollü ticari testi birlikte yürütmelidir.', mk: 'Професионална веб-страница и конкурентна понуда не докажуваат сигурна испорака. Потребни се документи, оперативни докази и контролиран тест.', sr: 'Profesionalan sajt i konkurentna ponuda ne dokazuju pouzdanu isporuku. Potrebni su dokumenti, operativni dokazi i kontrolisani test.', sq: 'Një faqe profesionale dhe një ofertë konkurruese nuk provojnë furnizim të qëndrueshëm. Duhen dokumente, prova operative dhe test i kontrolluar.', fa: 'وب‌سایت حرفه‌ای و قیمت رقابتی، توان تحویل پایدار را ثابت نمی‌کند. ارزیابی باید اسناد، شواهد عملیاتی و آزمون تجاری کنترل‌شده را ترکیب کند.' },
+    title: { ru: 'Как оценивать международных поставщиков: Чек-лист аудита', en: 'How to Evaluate an International Supplier', tr: 'Uluslararası Bir Tedarikçi Nasıl Değerlendirilir?', mk: 'Како да оцените меѓународен добавувач', sr: 'Kako proceniti međunarodnog dobavljača', sq: 'Si të vlerësoni një furnitor ndërkombëtar', fa: 'چگونه یک تأمین‌کننده بین‌المللی را ارزیابی کنیم؟' },
+    description: { ru: 'Методология оценки зарубежных производств, аудит фабрик, проверка финансовой стабильности и контроль качества продукции.', en: 'A practical supplier evaluation framework covering legal identity, capability, quality, capacity, commercial terms and delivery risk.', tr: 'Hukuki kimlik, yetkinlik, kalite, kapasite, ticari koşullar ve teslimat riskini kapsayan pratik tedarikçi değerlendirme çerçevesi.', mk: 'Практична рамка за правен идентитет, способност, квалитет, капацитет и ризик.', sr: 'Praktičan okvir za pravni identitet, sposobnost, kvalitet, kapacitet i rizik.', sq: 'Kornizë praktike për identitetin ligjor, aftësinë, cilësinë, kapacitetin dhe rrezikun.', fa: 'چارچوبی عملی برای هویت حقوقی، توانمندی، کیفیت، ظرفیت، شرایط تجاری و ریسک تحویل.' },
+    intro: { ru: 'Оценка международного поставщика требует комплексного подхода: от проверки юридического статуса и производственных мощностей до контроля качества упаковки и логистических цепочек.', en: 'A polished website and a competitive quotation do not prove that a supplier can deliver consistently. International supplier evaluation must combine documentary checks, operational evidence and a controlled commercial test.', tr: 'Profesyonel bir web sitesi ve rekabetçi teklif, tedarikçinin sürekli ve güvenilir teslimat yapabildiğini kanıtlamaz. Uluslararası tedarikçi değerlendirmesi; belge kontrolünü, operasyonel kanıtı ve kontrollü ticari testi birlikte yürütmelidir.', mk: 'Професионална веб-страница и конкурентна понуда не докажуваат сигурна испорака. Потребни се документи, оперативни докази и контролиран тест.', sr: 'Profesionalan sajt i konkurentna ponuda ne dokazuju pouzdanu isporuku. Potrebni su dokumenti, operativni dokazi i kontrolisani test.', sq: 'Një faqe profesionale dhe një ofertë konkurruese nuk provojnë furnizim të qëndrueshëm. Duhen dokumente, prova operative dhe test i kontrolluar.', fa: 'وب‌سایت حرفه‌ای و قیمت رقابتی، توان تحویل پایدار را ثابت نمی‌کند. ارزیابی باید اسناد، شواهد عملیاتی و آزمون تجاری کنترل‌شده را ترکیب کند.' },
     sections: Object.fromEntries(blogLocales.map((l) => [l, [
       { heading: l==='tr'?'1. Hukuki kimliği doğrulayın':l==='fa'?'۱. هویت حقوقی را بررسی کنید':l==='mk'?'1. Потврдете го правниот идентитет':l==='sr'?'1. Potvrdite pravni identitet':l==='sq'?'1. Verifikoni identitetin ligjor':'1. Verify legal identity', paragraphs: [l==='tr'?'Şirket kaydı, vergi bilgisi, adres, banka hesabı ve teklif üzerindeki unvan aynı tüzel kişiliği göstermelidir.':l==='fa'?'ثبت شرکت، اطلاعات مالیاتی، نشانی، حساب بانکی و نام روی پیشنهاد باید به یک شخصیت حقوقی اشاره کنند.':l==='mk'?'Регистрацијата, даночните податоци, адресата и банкарската сметка мора да упатуваат на исто правно лице.':l==='sr'?'Registracija, poreski podaci, adresa i bankovni račun moraju upućivati na isto pravno lice.':l==='sq'?'Regjistrimi, të dhënat tatimore, adresa dhe llogaria bankare duhet t’i përkasin të njëjtit subjekt.':'Company registration, tax data, address, bank account and quotation must point to the same legal entity.'] },
       { heading: l==='tr'?'2. Üretim ve teknik yetkinliği kanıtlayın':l==='fa'?'۲. توان فنی و تولیدی را اثبات کنید':l==='mk'?'2. Докажете техничка способност':l==='sr'?'2. Dokažite tehničku sposobnost':l==='sq'?'2. Provoni aftësinë teknike':'2. Prove technical and production capability', paragraphs: [l==='tr'?'Makine listesi, süreç akışı, numune, test raporu, kalite sistemi ve benzer ürün geçmişi istenmelidir.':l==='fa'?'فهرست ماشین‌آلات، جریان فرایند، نمونه، گزارش آزمون، سیستم کیفیت و سابقه محصول مشابه را بررسی کنید.':l==='mk'?'Побарајте листа на опрема, процес, примероци, тестови и искуство со слични производи.':l==='sr'?'Tražite listu opreme, proces, uzorke, testove i iskustvo sa sličnim proizvodima.':l==='sq'?'Kërkoni listën e pajisjeve, procesin, mostrat, testet dhe përvojën me produkte të ngjashme.':'Request equipment lists, process flow, samples, test reports, quality systems and evidence of similar production.'] },
@@ -2750,9 +2814,9 @@ export const posts: BlogPost[] = [
   },
   {
     slug: 'rfq-process-comparable-supplier-quotes', date: '2026-07-24', updated: '2026-07-24', readingMinutes: 6,
-    title: { en: 'The RFQ Process: How to Get Comparable Supplier Quotes', tr: 'RFQ Süreci: Karşılaştırılabilir Tedarikçi Teklifleri Nasıl Alınır?', mk: 'RFQ процес: Како да добиете споредливи понуди', sr: 'RFQ proces: Kako dobiti uporedive ponude', sq: 'Procesi RFQ: Si të merrni oferta të krahasueshme', fa: 'فرایند RFQ: چگونه پیشنهادهای قابل مقایسه دریافت کنیم؟' },
-    description: { en: 'A clear RFQ framework for specifications, volumes, Incoterms, quality, payment, timing and quote comparison.', tr: 'Şartname, hacim, Incoterms, kalite, ödeme, zamanlama ve teklif karşılaştırması için net RFQ çerçevesi.', mk: 'Јасна RFQ рамка за спецификации, количини, Incoterms, квалитет, плаќање и споредба.', sr: 'Jasan RFQ okvir za specifikacije, količine, Incoterms, kvalitet, plaćanje i poređenje.', sq: 'Kornizë e qartë RFQ për specifikime, sasi, Incoterms, cilësi, pagesë dhe krahasim.', fa: 'چارچوبی روشن برای مشخصات، حجم، اینکوترمز، کیفیت، پرداخت، زمان‌بندی و مقایسه پیشنهادها.' },
-    intro: { en: 'An RFQ is not a message asking “best price?”. It is a controlled information package that forces suppliers to quote the same commercial scenario.', tr: 'RFQ, “en iyi fiyatınız nedir?” mesajı değildir. Tedarikçilerin aynı ticari senaryoya göre teklif vermesini sağlayan kontrollü bir bilgi paketidir.', mk: 'RFQ не е порака со прашање за „најдобра цена“, туку контролиран пакет што создава исти услови за понуда.', sr: 'RFQ nije poruka sa pitanjem za „najbolju cenu“, već kontrolisan paket koji stvara iste uslove za ponudu.', sq: 'RFQ nuk është mesazh për “çmimin më të mirë”, por paketë e kontrolluar që krijon të njëjtat kushte oferte.', fa: 'RFQ پیام «بهترین قیمت چیست؟» نیست؛ بسته اطلاعاتی کنترل‌شده‌ای است که همه تأمین‌کنندگان را وادار می‌کند یک سناریوی یکسان را قیمت‌گذاری کنند.' },
+    title: { ru: 'Процесс RFQ: Как получать сопоставимые коммерческие предложения', en: 'The RFQ Process: How to Get Comparable Supplier Quotes', tr: 'RFQ Süreci: Karşılaştırılabilir Tedarikçi Teklifleri Nasıl Alınır?', mk: 'RFQ процес: Како да добиете споредливи понуди', sr: 'RFQ proces: Kako dobiti uporedive ponude', sq: 'Procesi RFQ: Si të merrni oferta të krahasueshme', fa: 'فرایند RFQ: چگونه پیشنهادهای قابل مقایسه دریافت کنیم؟' },
+    description: { ru: 'Практическое руководство по составлению запроса котировок (RFQ), структурированию спецификаций и получению сравнимых коммерческих условий от зарубежных фабрик.', en: 'A clear RFQ framework for specifications, volumes, Incoterms, quality, payment, timing and quote comparison.', tr: 'Şartname, hacim, Incoterms, kalite, ödeme, zamanlama ve teklif karşılaştırması için net RFQ çerçevesi.', mk: 'Јасна RFQ рамка за спецификации, количини, Incoterms, квалитет, плаќање и споредба.', sr: 'Jasan RFQ okvir za specifikacije, količine, Incoterms, kvalitet, plaćanje i poređenje.', sq: 'Kornizë e qartë RFQ për specifikime, sasi, Incoterms, cilësi, pagesë dhe krahasim.', fa: 'چارچوبی روشن برای مشخصات، حجم، اینکوترمز، کیفیت، پرداخت، زمان‌بندی و مقایسه پیشنهادها.' },
+    intro: { ru: 'Правильно составленный RFQ (Request for Quotation) исключает скрытые расходы и позволяет объективно сравнивать котировки от разных производителей.', en: 'An RFQ is not a message asking “best price?”. It is a controlled information package that forces suppliers to quote the same commercial scenario.', tr: 'RFQ, “en iyi fiyatınız nedir?” mesajı değildir. Tedarikçilerin aynı ticari senaryoya göre teklif vermesini sağlayan kontrollü bir bilgi paketidir.', mk: 'RFQ не е порака со прашање за „најдобра цена“, туку контролиран пакет што создава исти услови за понуда.', sr: 'RFQ nije poruka sa pitanjem za „najbolju cenu“, već kontrolisan paket koji stvara iste uslove za ponudu.', sq: 'RFQ nuk është mesazh për “çmimin më të mirë”, por paketë e kontrolluar që krijon të njëjtat kushte oferte.', fa: 'RFQ پیام «بهترین قیمت چیست؟» نیست؛ بسته اطلاعاتی کنترل‌شده‌ای است که همه تأمین‌کنندگان را وادار می‌کند یک سناریوی یکسان را قیمت‌گذاری کنند.' },
     sections: Object.fromEntries(blogLocales.map((l) => [l, [
       { heading: l==='tr'?'RFQ paketinin zorunlu alanları':l==='fa'?'اجزای ضروری بسته RFQ':l==='mk'?'Задолжителни елементи на RFQ':l==='sr'?'Obavezni elementi RFQ-a':l==='sq'?'Elementet e detyrueshme të RFQ-së':'Required RFQ fields', paragraphs: [l==='tr'?'Ürün çizimi veya şartname, kalite standardı, yıllık ve sipariş bazlı hacim, hedef teslim yeri, Incoterms, ambalaj, numune, ödeme ve teklif geçerlilik süresi açık olmalıdır.':l==='fa'?'نقشه یا مشخصات، استاندارد کیفیت، حجم سالانه و هر سفارش، مقصد، اینکوترمز، بسته‌بندی، نمونه، پرداخت و اعتبار پیشنهاد باید روشن باشد.':l==='mk'?'Наведете спецификација, стандард, количини, дестинација, Incoterms, пакување, примероци, плаќање и важност.':l==='sr'?'Navedite specifikaciju, standard, količine, destinaciju, Incoterms, pakovanje, uzorke, plaćanje i važenje.':l==='sq'?'Përfshini specifikimin, standardin, sasitë, destinacionin, Incoterms, paketimin, mostrat, pagesën dhe vlefshmërinë.':'Include specification, quality standard, annual and order volume, destination, Incoterms, packaging, samples, payment and quote validity.'] },
       { heading: l==='tr'?'Teklif şablonu kullanın':l==='fa'?'از قالب استاندارد پیشنهاد استفاده کنید':l==='mk'?'Користете стандарден образец':l==='sr'?'Koristite standardni obrazac':l==='sq'?'Përdorni formular standard':'Use a standard quote template', paragraphs: [l==='tr'?'Tedarikçilerin serbest formatta teklif vermesi karşılaştırmayı zorlaştırır. Birim fiyat, kalıp, numune, navlun, teslim süresi, MOQ ve ödeme alanlarını aynı tabloda isteyin.':l==='fa'?'قالب آزاد مقایسه را دشوار می‌کند. قیمت واحد، ابزار، نمونه، حمل، زمان تحویل، حداقل سفارش و پرداخت را در یک جدول بخواهید.':l==='mk'?'Слободниот формат ја отежнува споредбата. Побарајте цена, алати, примерок, транспорт, рок, MOQ и плаќање во иста табела.':l==='sr'?'Slobodan format otežava poređenje. Tražite cenu, alate, uzorak, transport, rok, MOQ i plaćanje u istoj tabeli.':l==='sq'?'Formati i lirë vështirëson krahasimin. Kërkoni çmimin, veglat, mostrën, transportin, afatin, MOQ dhe pagesën në të njëjtën tabelë.':'Free-format quotations make comparison difficult. Require unit price, tooling, sample, freight, lead time, MOQ and payment in one table.'] },

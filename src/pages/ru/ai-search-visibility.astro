@@ -1,0 +1,59 @@
+---
+import ContentPage from '../../components/ContentPage.astro';
+import { site } from '../../data/site';
+
+const title = 'Видимость в AI поиске: SEO, GEO, AEO и AIO | Тейфик Гёкдемир';
+const description = 'Практическая система, помогающая бизнесу быть найденным, понятным и правильно представленным в поисковых и AI-системах.';
+const pathname = '/ru/ai-search-visibility/';
+const canonical = site.origin + pathname;
+
+const faq = [
+  {
+    question: 'Что такое видимость в AI поиске?',
+    answer: 'Это способность компании или бренда быть правильно найденными, понятыми и цитируемыми поисковыми системами, диалоговыми интерфейсами и платформами ИИ.',
+  },
+  {
+    question: 'GEO — это то же самое, что и SEO?',
+    answer: 'Нет. SEO ориентировано на классические поисковые выдачи, в то время как GEO улучшает понятность и структурированность данных для генеративных нейросетей.',
+  },
+  {
+    question: 'Гарантирует ли файл llms.txt цитирование в AI?',
+    answer: 'Нет. Файл llms.txt дает дополнительный контекст, но не гарантирует индексацию или обязательное цитирование.',
+  },
+];
+
+const alternates = {
+  en: site.origin + '/ai-search-visibility/',
+  tr: site.origin + '/yapay-zeka-arama-gorunurlugu/',
+  ru: site.origin + '/ru/ai-search-visibility/',
+  sq: site.origin + '/sq/dukshmeria-ne-kerkimin-ai/',
+  mk: site.origin + '/mk/vidlivost-vo-ai-prebaruvanje/',
+  sr: site.origin + '/sr/vidljivost-u-ai-pretrazi/',
+  fa: site.origin + '/fa/مشاهده-پذیری-در-جستجوی-هوش-مصنوعی/',
+  'x-default': site.origin + '/yapay-zeka-arama-gorunurlugu/',
+};
+---
+
+<ContentPage
+  locale="ru"
+  title={title}
+  description={description}
+  eyebrow="Видимость в AI поиске"
+  heading="Сделайте ваш бизнес видимым и понятным для алгоритмов ИИ"
+  lead="Оптимизация для генеративных моделей (GEO), диалоговых систем (AEO) и классических поисковиков (SEO) в единой коммерческой стратегии."
+  pathname={pathname}
+  alternates={alternates}
+  faq={faq}
+>
+  <section class="prose">
+    <h2>Почему видимость в ИИ важна прямо сейчас?</h2>
+    <p>Клиенты все чаще используют диалоговые ИИ-платформы для поиска поставщиков, сравнения продуктов и принятия решений о закупках.</p>
+    <h2>Четыре столпа видимости</h2>
+    <ul>
+      <li><strong>SEO (Search Engine Optimization):</strong> Базовая индексация и авторитет в классическом поиске.</li>
+      <li><strong>GEO (Generative Engine Optimization):</strong> Структурирование данных для генеративных нейросетей.</li>
+      <li><strong>AEO (Answer Engine Optimization):</strong> Ответы на прямые вопросы пользователей в диалоговых системах.</li>
+      <li><strong>AIO (AI Optimization):</strong> Комплексная подготовка цифровых активов к анализу алгоритмами ИИ.</li>
+    </ul>
+  </section>
+</ContentPage>

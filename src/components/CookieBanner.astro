@@ -15,6 +15,13 @@ const messages = {
     reject: 'Reddet',
     accept: 'Onayla',
   },
+  ru: {
+    title: 'Файлы cookie',
+    text: 'Обязательные cookie используются для работы сайта. Аналитические cookie включаются только с вашего согласия.',
+    privacy: 'Политика конфиденциальности',
+    reject: 'Отклонить',
+    accept: 'Принять',
+  },
   en: {
     title: 'Cookie preferences',
     text: 'Essential cookies keep the site working. Analytics cookies are enabled only after you give consent.',
@@ -52,7 +59,7 @@ const messages = {
   },
 } as const;
 
-const copy = messages[locale] ?? messages.en;
+const copy = (messages[locale] || messages.en) ?? messages.en;
 ---
 
 <aside class="cookie-banner" data-cookie-banner hidden aria-labelledby="cookie-title" aria-live="polite">
