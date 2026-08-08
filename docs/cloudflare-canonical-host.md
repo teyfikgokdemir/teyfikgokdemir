@@ -12,21 +12,15 @@ in this order:
 
 - Menu: **Cloudflare dashboard → teyfikgokdemir.com → Rules → Redirect Rules
   → Single Redirects**
-- Root rule expression:
-  `(http.host in {"teyfikgokdemir.com" "www.teyfikgokdemir.com"} and http.request.uri.path eq "/")`
-- Root target: `https://teyfikgokdemir.com/tr/`
-- Root status: `301`; preserve the original query string
-- Host/scheme rule expression:
+- **SİLİNMESİ / KAPATILMASI GEREKEN ESKİ KURAL**:
+  Eski mimaride Cloudflare panelinde tanımlanmış olan `/` (kök adres) ➔ `/tr/` yönlendirme kuralını **Silin** veya **Devre Dışı (Disabled)** bırakın.
+- Host/scheme rule expression (www ve HTTP'den HTTPS non-www'ye yönlendirme):
   `((http.host eq "www.teyfikgokdemir.com" or starts_with(http.request.full_uri, "http://")) and http.request.uri.path ne "/")`
 - Status: `301` (permanent)
 - Dynamic target expression:
   `concat("https://teyfikgokdemir.com", http.request.uri.path)`
 - Query string: preserve the original query string
 
-These rules let `http://teyfikgokdemir.com/` reach `/tr/` in one hop instead of
-first stopping at the HTTPS root. Validate the root, a language page, a blog
-page, and a URL with a query string after deployment. Each test must have one
-permanent redirect at most and must end on the HTTPS, non-www, trailing-slash
-URL.
+Bu işlem Cloudflare panelinde yapıldığında, `/` adresi doğrudan 200 OK ile Türkçe ana sayfayı sunacak, `/tr/` adresi ise repository `_redirects` kuralı ile sorunsuz 301 olarak `/` adresine yönlenecektir.
 
 This repository does not deploy or change the Cloudflare zone rule itself.
