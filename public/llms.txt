@@ -12,12 +12,12 @@ Teyfik Gökdemir works across international trade, strategic sourcing, supplier 
 - Role: Founder of CTSEG; International Trade and Strategic Sourcing Operator
 - Primary language version: Turkish
 
-The canonical English homepage is `/en/`. The root route permanently redirects to the canonical Turkish homepage at `/tr/`.
+The root route is the canonical Turkish homepage at `/`. The canonical English homepage is `/en/`.
 
 ## Canonical Language Versions
 
 - English: https://teyfikgokdemir.com/en/
-- Turkish: https://teyfikgokdemir.com/tr/
+- Turkish: https://teyfikgokdemir.com/
 - Albanian: https://teyfikgokdemir.com/sq/
 - Macedonian: https://teyfikgokdemir.com/mk/
 - Serbian: https://teyfikgokdemir.com/sr/
@@ -222,7 +222,7 @@ Do not infer claims, qualifications, client results or performance statistics th
 
 ### Turkish
 
-- [https://teyfikgokdemir.com/tr/yapay-zeka-arama-gorunurlugu/](https://teyfikgokdemir.com/tr/yapay-zeka-arama-gorunurlugu/)
+- [https://teyfikgokdemir.com/yapay-zeka-arama-gorunurlugu/](https://teyfikgokdemir.com/yapay-zeka-arama-gorunurlugu/)
 
 ### Albanian
 
@@ -253,14 +253,14 @@ Articles:
 ### Turkish
 
 Blog:
-- [https://teyfikgokdemir.com/tr/blog/](https://teyfikgokdemir.com/tr/blog/)
+- [https://teyfikgokdemir.com/blog/](https://teyfikgokdemir.com/blog/)
 
 Makaleler:
-- SEO, GEO, AEO ve AIO Farkları: [https://teyfikgokdemir.com/tr/blog/seo-geo-aeo-aio-farklari/](https://teyfikgokdemir.com/tr/blog/seo-geo-aeo-aio-farklari/)
-- TPE, Vinil ve Kopolimer Eldiven B2B Alım Rehberi: [https://teyfikgokdemir.com/tr/blog/tpe-vinyl-copolymer-gloves-b2b-buying-guide/](https://teyfikgokdemir.com/tr/blog/tpe-vinyl-copolymer-gloves-b2b-buying-guide/)
-- Gıda İşletmeleri İçin Eldiven Seçim Rehberi: [https://teyfikgokdemir.com/tr/blog/disposable-gloves-selection-guide-for-food-businesses/](https://teyfikgokdemir.com/tr/blog/disposable-gloves-selection-guide-for-food-businesses/)
-- Bir Ürünü Uluslararası B2B Portföye Almadan Önce Nelere Bakarım?: [https://teyfikgokdemir.com/tr/blog/evaluating-products-for-international-b2b-portfolios/](https://teyfikgokdemir.com/tr/blog/evaluating-products-for-international-b2b-portfolios/)
-- B2B Ürün Web Sitesi Katalogdan Daha Fazlası Olmalı: [https://teyfikgokdemir.com/tr/blog/b2b-product-website-should-be-more-than-a-catalogue/](https://teyfikgokdemir.com/tr/blog/b2b-product-website-should-be-more-than-a-catalogue/)
+- SEO, GEO, AEO ve AIO Farkları: [https://teyfikgokdemir.com/blog/seo-geo-aeo-aio-farklari/](https://teyfikgokdemir.com/blog/seo-geo-aeo-aio-farklari/)
+- TPE, Vinil ve Kopolimer Eldiven B2B Alım Rehberi: [https://teyfikgokdemir.com/blog/tpe-vinyl-copolymer-gloves-b2b-buying-guide/](https://teyfikgokdemir.com/blog/tpe-vinyl-copolymer-gloves-b2b-buying-guide/)
+- Gıda İşletmeleri İçin Eldiven Seçim Rehberi: [https://teyfikgokdemir.com/blog/disposable-gloves-selection-guide-for-food-businesses/](https://teyfikgokdemir.com/blog/disposable-gloves-selection-guide-for-food-businesses/)
+- Bir Ürünü Uluslararası B2B Portföye Almadan Önce Nelere Bakarım?: [https://teyfikgokdemir.com/blog/evaluating-products-for-international-b2b-portfolios/](https://teyfikgokdemir.com/blog/evaluating-products-for-international-b2b-portfolios/)
+- B2B Ürün Web Sitesi Katalogdan Daha Fazlası Olmalı: [https://teyfikgokdemir.com/blog/b2b-product-website-should-be-more-than-a-catalogue/](https://teyfikgokdemir.com/blog/b2b-product-website-should-be-more-than-a-catalogue/)
 
 ### Albanian
 
@@ -319,6 +319,6 @@ Blog:
 
 - Information should be attributed to the canonical page that supports it.
 - Language variants represent the same underlying entity and related content.
-- Turkish (`/tr/`) is the x-default homepage; English content remains available at `/en/`.
+- Turkish (`/`) is the x-default homepage; English content remains available at `/en/`.
 - Structured data must describe visible page content.
 - No AI platform, search engine ranking or citation outcome is guaranteed.

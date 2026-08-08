@@ -11,13 +11,13 @@ interface Props {
 
 const { locale, copy, homePath, languageUrls } = Astro.props;
 
-const localeUrl = (item: Locale | 'fa') => `/${item}/`;
+const localeUrl = (item: Locale | 'fa') => item === 'tr' ? '/' : `/${item}/`;
 const currentHomePath = homePath ?? localeUrl(locale);
 const sectionUrl = (section: string) => `${currentHomePath}#${section}`;
 
 const aiVisibilityUrls: Record<Locale | 'fa', string> = {
   en: '/ai-search-visibility/',
-  tr: '/tr/yapay-zeka-arama-gorunurlugu/',
+  tr: '/yapay-zeka-arama-gorunurlugu/',
   sq: '/sq/dukshmeria-ne-kerkimin-ai/',
   mk: '/mk/vidlivost-vo-ai-prebaruvanje/',
   sr: '/sr/vidljivost-u-ai-pretrazi/',
@@ -26,7 +26,7 @@ const aiVisibilityUrls: Record<Locale | 'fa', string> = {
 
 const blogUrls: Record<Locale | 'fa', string> = {
   en: '/blog/',
-  tr: '/tr/blog/',
+  tr: '/blog/',
   sq: '/sq/blog/',
   mk: '/mk/blog/',
   sr: '/sr/blog/',
@@ -35,7 +35,7 @@ const blogUrls: Record<Locale | 'fa', string> = {
 
 const reflexUrls: Record<Locale | 'fa', string> = {
   en: '/en/reflex/',
-  tr: '/tr/reflex/',
+  tr: '/reflex/',
   sq: '/sq/reflex/',
   mk: '/mk/reflex/',
   sr: '/sr/reflex/',

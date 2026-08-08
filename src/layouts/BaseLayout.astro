@@ -29,7 +29,7 @@ const {
   pageSchema,
 } = Astro.props;
 
-const localeUrl = (item: SupportedLocale) => '/' + item + '/';
+const localeUrl = (item: SupportedLocale) => item === 'tr' ? '/' : '/' + item + '/';
 const pagePath = pathname ?? localeUrl(locale);
 const canonical = new URL(pagePath, site.origin).toString();
 const profileImage =
@@ -43,10 +43,10 @@ const defaultAlternates: Partial<Record<Locale | 'x-default', string>> =
       item,
       new URL(localeUrl(item), site.origin).toString(),
     ]),
-    ['x-default', new URL('/tr/', site.origin).toString()],
+    ['x-default', new URL('/', site.origin).toString()],
   ]);
 
-const alternateLinks = alternates ?? (pathname ? {} : defaultAlternates);
+const alternateLinks = alternates ?? defaultAlternates;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [

@@ -24,7 +24,7 @@ const routeFor = (file) => {
   return relative ? `/${relative}/` : '/';
 };
 const attr = (tag, name) => tag?.match(new RegExp(`\\b${name}=["']([^"']+)["']`, 'i'))?.[1];
-const redirectSource = new Set(['/']);
+const redirectSource = new Set(['/tr/']);
 const pages = [];
 
 for (const file of htmlFiles) {

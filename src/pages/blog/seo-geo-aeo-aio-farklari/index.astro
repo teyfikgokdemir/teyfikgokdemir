@@ -1,10 +1,10 @@
 ---
-import ContentPage from '../../../../components/ContentPage.astro';
-import { site } from '../../../../data/site';
+import ContentPage from '../../../components/ContentPage.astro';
+import { site } from '../../../data/site';
 
 const title = 'SEO, GEO, AEO ve AIO Arasındaki Farklar | Teyfik Gökdemir';
 const description = 'SEO, GEO, AEO ve AIO kavramlarının farklarını, kesiştikleri alanları ve tek bir arama ve yapay zekâ görünürlük sistemi içinde nasıl uygulanacağını öğrenin.';
-const pathname = '/tr/blog/seo-geo-aeo-aio-farklari/';
+const pathname = '/blog/seo-geo-aeo-aio-farklari/';
 const canonical = site.origin + pathname;
 const published = '2026-07-23';
 const modified = '2026-07-23';
@@ -32,7 +32,7 @@ const articleSchema = {
 
 const alternates = {
   en: site.origin + '/blog/seo-vs-geo-vs-aeo-vs-aio/',
-  tr: site.origin + '/tr/blog/seo-geo-aeo-aio-farklari/',
+  tr: site.origin + '/blog/seo-geo-aeo-aio-farklari/',
   sq: site.origin + '/sq/blog/dallimet-seo-geo-aeo-aio/',
   mk: site.origin + '/mk/blog/razliki-seo-geo-aeo-aio/',
   sr: site.origin + '/sr/blog/razlike-seo-geo-aeo-aio/',
@@ -138,6 +138,6 @@ const alternates = {
 
   <section class="content-cta">
     <h2>Bu çerçeveyi uygulanabilir bir sisteme dönüştürün.</h2>
-    <p><a href="/tr/yapay-zeka-arama-gorunurlugu/">Yapay Zekâ Arama Görünürlüğü sayfasını</a> inceleyebilir veya <a href={`mailto:${site.email}`}>{site.email}</a> adresinden iletişime geçebilirsiniz.</p>
+    <p><a href="/yapay-zeka-arama-gorunurlugu/">Yapay Zekâ Arama Görünürlüğü sayfasını</a> inceleyebilir veya <a href={`mailto:${site.email}`}>{site.email}</a> adresinden iletişime geçebilirsiniz.</p>
   </section>
 </ContentPage>

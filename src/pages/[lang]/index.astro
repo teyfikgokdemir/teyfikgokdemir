@@ -6,7 +6,7 @@ import { locales, type Locale } from '../../i18n/locales';
 
 export function getStaticPaths() {
   return locales
-    .filter((lang) => lang !== 'en' && lang !== 'fa')
+    .filter((lang) => lang !== 'tr' && lang !== 'en' && lang !== 'fa')
     .map((lang) => ({ params: { lang } }));
 }
 

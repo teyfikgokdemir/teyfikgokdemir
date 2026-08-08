@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ReflexLandingView from '../../components/ReflexLandingView.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { content } from '../../i18n/content';
+import { site } from '../../data/site';
+
+const locale = 'tr';
+const copy = content.tr;
+
+const title = 'Reflex Plastik Eldiven Çözümleri | Teyfik Gökdemir B2B Portföyü';
+const description = 'Reflex Plastik profesyonel eldiven ürün grupları: Flex Hi-Tech, Flex Kids, Winlyex Pudrasız, Winlyex Termo Vinil, Medilex, Florex ve Slimfit Copolymer.';
+
+const pagePath = '/reflex/';
+const alternates: Record<string, string> = {
+  tr: `${site.origin}/reflex/`,
+  en: `${site.origin}/en/reflex/`,
+  mk: `${site.origin}/mk/reflex/`,
+  sr: `${site.origin}/sr/reflex/`,
+  sq: `${site.origin}/sq/reflex/`,
+  fa: `${site.origin}/fa/reflex/`,
+  'x-default': `${site.origin}/reflex/`,
+};
+
+const pageSchema = [
+  {
+    '@type': 'Brand',
+    '@id': 'https://www.reflexplastik.com/#brand',
+    name: 'Reflex Plastik',
+    url: 'https://www.reflexplastik.com/',
+  },
+  {
+    '@type': 'BreadcrumbList',
+    '@id': `${site.origin}${pagePath}#breadcrumb`,
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Ana Sayfa',
+        item: `${site.origin}/`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Reflex',
+        item: `${site.origin}${pagePath}`,
+      },
+    ],
+  },
+];
+
+const reflexLanguageUrls: Record<string, string> = {
+  tr: '/reflex/',
+  en: '/en/reflex/',
+  mk: '/mk/reflex/',
+  sr: '/sr/reflex/',
+  sq: '/sq/reflex/',
+  fa: '/fa/reflex/',
+};
+---
+
+<BaseLayout
+  locale={locale}
+  copy={copy}
+  title={title}
+  description={description}
+  pathname={pagePath}
+  alternates={alternates}
+  pageSchema={pageSchema}
+>
+  <Header locale={locale} copy={copy} languageUrls={reflexLanguageUrls} />
+  <main id="main-content">
+    <ReflexLandingView locale={locale} />
+  </main>
+  <Footer locale={locale} copy={copy} />
+</BaseLayout>

@@ -159,9 +159,9 @@ const relatedProducts = reflexProducts.filter(p => p.slug !== product.slug).slic
   <div class="shell">
     <!-- BREADCRUMB -->
     <nav class="reflex-breadcrumb" aria-label="Breadcrumb">
-      <a href={`/${locale}/`}>{detailText.homeBreadcrumb}</a>
+      <a href={locale === 'tr' ? '/' : `/${locale}/`}>{detailText.homeBreadcrumb}</a>
       <span class="bc-sep">›</span>
-      <a href={`/${locale}/reflex/`}>Reflex</a>
+      <a href={locale === 'tr' ? '/reflex/' : `/${locale}/reflex/`}>Reflex</a>
       <span class="bc-sep">›</span>
       <span class="bc-current">{i18n.name}</span>
     </nav>

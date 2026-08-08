@@ -40,7 +40,7 @@ const {
 } = Astro.props;
 
 const copy = content[locale as Locale] ?? content.en;
-const homePath = `/${locale}/`;
+const homePath = locale === 'tr' ? '/' : `/${locale}/`;
 ---
 <BaseLayout
   locale={locale as Locale}

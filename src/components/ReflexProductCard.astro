@@ -10,7 +10,7 @@ interface Props {
 const { product, locale } = Astro.props;
 const lang = (locale || 'tr') as 'tr' | 'en' | 'mk' | 'sr' | 'sq' | 'fa';
 const i18n = product.i18n[lang] || product.i18n.tr;
-const detailUrl = `/${locale}/reflex/${product.slug}/`;
+const detailUrl = locale === 'tr' ? `/reflex/${product.slug}/` : `/${locale}/reflex/${product.slug}/`;
 
 const buttonTextMap: Record<string, string> = {
   tr: 'Ürünü İncele',

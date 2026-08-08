@@ -8,7 +8,7 @@ import { locales, type Locale } from '../../../i18n/locales';
 import { site } from '../../../data/site';
 
 export function getStaticPaths() {
-  const languages: (Locale | 'fa')[] = ['tr', 'en', 'mk', 'sr', 'sq', 'fa'];
+  const languages: (Locale | 'fa')[] = ['en', 'mk', 'sr', 'sq', 'fa'];
   return languages.map((lang) => ({ params: { lang } }));
 }
 
@@ -35,13 +35,13 @@ const seoDescriptions: Record<string, string> = {
 
 const pagePath = `/${locale}/reflex/`;
 const alternates: Record<string, string> = {
-  tr: `${site.origin}/tr/reflex/`,
+  tr: `${site.origin}/reflex/`,
   en: `${site.origin}/en/reflex/`,
   mk: `${site.origin}/mk/reflex/`,
   sr: `${site.origin}/sr/reflex/`,
   sq: `${site.origin}/sq/reflex/`,
   fa: `${site.origin}/fa/reflex/`,
-  'x-default': `${site.origin}/tr/reflex/`,
+  'x-default': `${site.origin}/reflex/`,
 };
 
 const pageSchema = [
@@ -72,7 +72,7 @@ const pageSchema = [
   },
 ];
 const reflexLanguageUrls: Record<string, string> = {
-  tr: '/tr/reflex/',
+  tr: '/reflex/',
   en: '/en/reflex/',
   mk: '/mk/reflex/',
   sr: '/sr/reflex/',

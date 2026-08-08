@@ -194,7 +194,7 @@ const obsoleteMythbornCopy = [
   'Sipërmarrje e re në zhvillim si ekosistem',
   'برند و اکوسیستم محصول و تجارت بین‌المللی در حال توسعه'
 ];
-for (const [lang,route] of [['tr','/tr/'],['en','/en/'],['mk','/mk/'],['sr','/sr/'],['sq','/sq/'],['fa','/fa/']]) {
+for (const [lang,route] of [['tr','/'],['en','/en/'],['mk','/mk/'],['sr','/sr/'],['sq','/sq/'],['fa','/fa/']]) {
   const page = pageByRoute.get(route);
   if (!page) { errors.push(`${route}: locale ana sayfası eksik.`); continue; }
   const tradeContract = tradeEntryContracts[lang];
@@ -210,7 +210,7 @@ for (const [lang,route] of [['tr','/tr/'],['en','/en/'],['mk','/mk/'],['sr','/sr
   if (localeLinks.length < 6) errors.push(`${route}: global dil menüsü altı dili göstermiyor.`);
   for (const code of ['tr','en','mk','sr','sq','fa']) {
     const link = localeLinks.find((tag)=>attribute(tag,'hreflang')===code);
-    if (routeFromUrl(attribute(link,'href')) !== `/${code}/`) errors.push(`${route}: ${code} locale hedefi yanlış.`);
+    if (routeFromUrl(attribute(link,'href')) !== (code === 'tr' ? '/' : `/${code}/`)) errors.push(`${route}: ${code} locale hedefi yanlış.`);
     if ((code===lang) !== (attribute(link,'aria-current')==='page')) errors.push(`${route}: ${code} aktif locale durumu yanlış.`);
   }
   if (!new RegExp(`<a\\b[^>]*class="brand"[^>]*href="${route}"[^>]*aria-label="Teyfik Gökdemir"`, 'i').test(page.html)) errors.push(`${route}: header logo bağlantısı locale ana sayfasına gitmiyor.`);

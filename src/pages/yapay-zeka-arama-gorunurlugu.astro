@@ -1,10 +1,10 @@
 ---
-import ContentPage from '../../components/ContentPage.astro';
-import { site } from '../../data/site';
+import ContentPage from '../components/ContentPage.astro';
+import { site } from '../data/site';
 
 const title = 'Yapay Zekâ Arama Görünürlüğü: GEO, AEO ve AIO | Teyfik Gökdemir';
 const description = 'İşletmelerin arama motorları, cevap motorları ve yapay zekâ destekli araştırma sistemleri tarafından bulunmasını ve doğru anlaşılmasını sağlayan görünürlük sistemi.';
-const pathname = '/tr/yapay-zeka-arama-gorunurlugu/';
+const pathname = '/yapay-zeka-arama-gorunurlugu/';
 const canonical = site.origin + pathname;
 
 const faq = [
@@ -52,7 +52,7 @@ const pageSchema = {
 
 const alternates = {
   en: site.origin + '/ai-search-visibility/',
-  tr: site.origin + '/tr/yapay-zeka-arama-gorunurlugu/',
+  tr: site.origin + '/yapay-zeka-arama-gorunurlugu/',
   sq: site.origin + '/sq/dukshmeria-ne-kerkimin-ai/',
   mk: site.origin + '/mk/vidlivost-vo-ai-prebaruvanje/',
   sr: site.origin + '/sr/vidljivost-u-ai-pretrazi/',
@@ -136,6 +136,6 @@ const alternates = {
 
   <section class="content-cta">
     <h2>Arama ve yapay zekâ görünürlüğünüzü güçlendirin.</h2>
-    <p>Denetim veya uygulama projesi için <a href={`mailto:${site.email}`}>{site.email}</a> adresinden iletişime geçebilir veya <a href="/tr/blog/seo-geo-aeo-aio-farklari/">SEO, GEO, AEO ve AIO rehberini</a> inceleyebilirsiniz.</p>
+    <p>Denetim veya uygulama projesi için <a href={`mailto:${site.email}`}>{site.email}</a> adresinden iletişime geçebilir veya <a href="/blog/seo-geo-aeo-aio-farklari/">SEO, GEO, AEO ve AIO rehberini</a> inceleyebilirsiniz.</p>
   </section>
 </ContentPage>

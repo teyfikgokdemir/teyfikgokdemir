@@ -581,7 +581,7 @@ const displayedYear = (title: string, year: string) =>
   title === 'QCT Studio' || title === 'QCT Commerce' ? '2025' : year;
 ---
 <link rel="stylesheet" href="/styles/ventures-compact.css" />
-<Header locale={locale} copy={copy} homePath={`/${locale}/`} />
+<Header locale={locale} copy={copy} homePath={locale === 'tr' ? '/' : `/${locale}/`} />
 <main id="main-content">
   <section class="hero shell" id="top" aria-labelledby="hero-title">
     <div class="hero-copy">
@@ -627,7 +627,7 @@ const displayedYear = (title: string, year: string) =>
         <h3>{reflex.title}</h3>
         <p>{reflex.description}</p>
         <div class="reflex-card__actions">
-          <a class="button primary reflex-card__button" href={`/${locale}/reflex/`}>
+          <a class="button primary reflex-card__button" href={locale === 'tr' ? '/reflex/' : `/${locale}/reflex/`}>
             {reflex.ctaInternal} <span aria-hidden="true">→</span>
           </a>
           <a class="button reflex-card__button-alt" href={localeCtsegLinks.reflex} target="_blank" rel="noopener noreferrer">

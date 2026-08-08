@@ -182,13 +182,13 @@ export const posts: BlogPost[] = [
           "Reflex Plastik ve Ambalaj San. A.Ş. tarafından üretilen Reflex eldiven portföyü, B2B alıcıların farklı ihtiyaçlarına yanıt veren 7 uzman ürün ailesinden oluşmaktadır. <a href=\"https://ctseg.com.tr/\" target=\"_blank\" rel=\"noopener noreferrer\">CTSEG Sanayi ve Ticaret Limited Şirketi</a>, Reflex ürünlerinin uluslararası B2B tedarik, ihracat koordinasyonu ve kurumsal satış operasyonlarını yürütmektedir:"
         ],
         "bullets": [
-          "<a href=\"/tr/reflex/flex-hi-tech/\">Flex Hi-Tech</a>: Yeni nesil TPE hibrit muayene ve koruma eldiveni (Siyah, Şeffaf, Mavi).",
-          "<a href=\"/tr/reflex/flex-kids/\">Flex Kids</a>: Çocuk el anatomisine özel TPE hijyen eldiveni (50 Adet/Kutu).",
-          "<a href=\"/tr/reflex/winlyex-powder-free/\">Winlyex Powder-Free</a>: Termo Vinil / TPE hibrit formülasyon (Şeffaf, Mavi, Siyah).",
-          "<a href=\"/tr/reflex/winlyex-thermo-vinyl/\">Winlyex Thermo Vinyl</a>: Ekstra mukavemetli termo vinil polymer eldiven (Mor, Şeffaf, Mavi).",
-          "<a href=\"/tr/reflex/medilex/\">Medilex</a>: Hijyen ve bakım odaklı TPE/Kopolimer eldiven (Yeşil, Pembe, Mavi, Siyah).",
-          "<a href=\"/tr/reflex/florex/\">Florex</a>: Çok renkli TPE/Kopolimer eldiven seçeneği (Mavi, Siyah, Şeffaf, Krem).",
-          "<a href=\"/tr/reflex/slimfit-copolymer/\">Slimfit Copolymer</a>: Kopolimer elastomer ekonomik eldiven (Krem, Şeffaf)."
+          "<a href=\"/reflex/flex-hi-tech/\">Flex Hi-Tech</a>: Yeni nesil TPE hibrit muayene ve koruma eldiveni (Siyah, Şeffaf, Mavi).",
+          "<a href=\"/reflex/flex-kids/\">Flex Kids</a>: Çocuk el anatomisine özel TPE hijyen eldiveni (50 Adet/Kutu).",
+          "<a href=\"/reflex/winlyex-powder-free/\">Winlyex Powder-Free</a>: Termo Vinil / TPE hibrit formülasyon (Şeffaf, Mavi, Siyah).",
+          "<a href=\"/reflex/winlyex-thermo-vinyl/\">Winlyex Thermo Vinyl</a>: Ekstra mukavemetli termo vinil polymer eldiven (Mor, Şeffaf, Mavi).",
+          "<a href=\"/reflex/medilex/\">Medilex</a>: Hijyen ve bakım odaklı TPE/Kopolimer eldiven (Yeşil, Pembe, Mavi, Siyah).",
+          "<a href=\"/reflex/florex/\">Florex</a>: Çok renkli TPE/Kopolimer eldiven seçeneği (Mavi, Siyah, Şeffaf, Krem).",
+          "<a href=\"/reflex/slimfit-copolymer/\">Slimfit Copolymer</a>: Kopolimer elastomer ekonomik eldiven (Krem, Şeffaf)."
         ],
         "callout": "Önemli Konumlandırma Notu: Reflex ürünlerinin üreticisi Reflex Plastik ve Ambalaj San. A.Ş.’dir. CTSEG, B2B tedarik kanalı, kurumsal satış ve ihracat koordinasyonunu yönetmektedir."
       },
@@ -196,7 +196,7 @@ export const posts: BlogPost[] = [
         "heading": "B2B Teklif Alırken Hangi Bilgileri Paylaşmalısınız?",
         "paragraphs": [
           "Tedarik sürecini hızlandırmak için teklif talebinizde hedef kullanım alanınızı, ihtiyaç duyduğunuz tahmini koli/palet miktarını, beden ve renk tercihinizi ve varsa Özel Ambalaj (Private Label) talebinizi paylaşmanız yeterlidir.",
-          "<a class=\"button primary\" href=\"/tr/reflex/\">Reflex B2B Portföyünü ve Teklif Alanını İnceleyin →</a>"
+          "<a class=\"button primary\" href=\"/reflex/\">Reflex B2B Portföyünü ve Teklif Alanını İnceleyin →</a>"
         ],
         "faq": [
           {
@@ -1179,17 +1179,17 @@ export const posts: BlogPost[] = [
           "Gıda işletmeleri için Reflex Plastik tarafından üretilen ve <a href=\"https://ctseg.com.tr/\" target=\"_blank\" rel=\"noopener noreferrer\">CTSEG</a> tarafından B2B tedariki sağlanan öne çıkan Reflex modelleri:"
         ],
         "bullets": [
-          "<a href=\"/tr/reflex/flex-hi-tech/\">Flex Hi-Tech</a>: Yağlı gıda temasında yüksek esneklik sunan TPE eldiven.",
-          "<a href=\"/tr/reflex/winlyex-powder-free/\">Winlyex Powder-Free</a>: Mutfak ve hazırlık için dayanıklı Termo Vinil / TPE hibrit.",
-          "<a href=\"/tr/reflex/florex/\">Florex</a>: Çok renkli seçenekleri ile çapraz kontaminasyon önleyici TPE/Kopolimer eldiven.",
-          "<a href=\"/tr/reflex/slimfit-copolymer/\">Slimfit Copolymer</a>: Fırın ve hızlı paketleme için ekonomik kopolimer eldiven."
+          "<a href=\"/reflex/flex-hi-tech/\">Flex Hi-Tech</a>: Yağlı gıda temasında yüksek esneklik sunan TPE eldiven.",
+          "<a href=\"/reflex/winlyex-powder-free/\">Winlyex Powder-Free</a>: Mutfak ve hazırlık için dayanıklı Termo Vinil / TPE hibrit.",
+          "<a href=\"/reflex/florex/\">Florex</a>: Çok renkli seçenekleri ile çapraz kontaminasyon önleyici TPE/Kopolimer eldiven.",
+          "<a href=\"/reflex/slimfit-copolymer/\">Slimfit Copolymer</a>: Fırın ve hızlı paketleme için ekonomik kopolimer eldiven."
         ]
       },
       {
         "heading": "B2B Tedarik ve Teklif Süreci",
         "paragraphs": [
           "Gıda işletmenizin aylık veya yıllık eldiven ihtiyacı için toplu koli/palet fiyat teklifi almak üzere Reflex portföyünü inceleyebilirsiniz.",
-          "<a class=\"button primary\" href=\"/tr/reflex/\">Reflex B2B Gıda Eldiven Portföyünü İnceleyin →</a>"
+          "<a class=\"button primary\" href=\"/reflex/\">Reflex B2B Gıda Eldiven Portföyünü İnceleyin →</a>"
         ],
         "faq": [
           {
@@ -1831,7 +1831,7 @@ export const posts: BlogPost[] = [
         "paragraphs": [
           "Son kararı verirken yalnızca tek bir ürünü değil, ürünün içinde yer aldığı tedarik sistemini seçeriz.",
           "Örnek Vaka Context: Reflex Plastik ve Ambalaj San. A.Ş. tarafından üretilen Reflex eldiven portföyünü değerlendirirken tam olarak bu 10 adımlı disiplini uyguladık. Ürünün 7 uzman modeli, net ambalaj standartları ve <a href=\"https://ctseg.com.tr/\" target=\"_blank\" rel=\"noopener noreferrer\">CTSEG Sanayi ve Ticaret Limited Şirketi</a> üzerinden yürüttüğümüz B2B tedarik koordinasyonu ile sürdürülebilir bir ticari sistem kurduk.",
-          "<a class=\"button primary\" href=\"/tr/reflex/\">Reflex B2B Ürün Sistemini İnceleyin →</a>"
+          "<a class=\"button primary\" href=\"/reflex/\">Reflex B2B Ürün Sistemini İnceleyin →</a>"
         ],
         "callout": "Kurucu Notu: CTSEG bir üretici değil, uluslararası tedarik ve ticaret operasyonlarını yapılandıran ana ticari platformumuzdur.",
         "faq": [
@@ -2314,7 +2314,7 @@ export const posts: BlogPost[] = [
       {
         "heading": "Çok Dilli B2B Ürün Sunumu",
         "paragraphs": [
-          "Uluslararası pazarlara hitap eden bir B2B sitesi; Türkçe, İngilizce, Makedonca, Sırpça, Arnavutça ve Farsça gibi hedef pazar dillerinde doğrudan URL yapıları (Örn. /tr/reflex/, /en/reflex/, /fa/reflex/) sunmalıdır. Otomatik çeviri yerine yerelleştirilmiş içerik güven yaratır."
+          "Uluslararası pazarlara hitap eden bir B2B sitesi; Türkçe, İngilizce, Makedonca, Sırpça, Arnavutça ve Farsça gibi hedef pazar dillerinde doğrudan URL yapıları (Örn. /reflex/, /en/reflex/, /fa/reflex/) sunmalıdır. Otomatik çeviri yerine yerelleştirilmiş içerik güven yaratır."
         ]
       },
       {
@@ -2353,9 +2353,9 @@ export const posts: BlogPost[] = [
       {
         "heading": "Reflex Üzerinden Bir Örnek",
         "paragraphs": [
-          "Bu web sitesinde kurduğumuz <a href=\"/tr/reflex/\">Reflex B2B Ürün Bölümü</a>, katalog mantığının ötesine geçen canlı bir örnektir. 7 Reflex ürününün (<a href=\"/tr/reflex/flex-hi-tech/\">Flex Hi-Tech</a>, <a href=\"/tr/reflex/winlyex-powder-free/\">Winlyex Powder-Free</a> vb.) tüm teknik verileri, ambalaj detayları ve SSS alanları 6 dilde yapılandırılmıştır.",
+          "Bu web sitesinde kurduğumuz <a href=\"/reflex/\">Reflex B2B Ürün Bölümü</a>, katalog mantığının ötesine geçen canlı bir örnektir. 7 Reflex ürününün (<a href=\"/reflex/flex-hi-tech/\">Flex Hi-Tech</a>, <a href=\"/reflex/winlyex-powder-free/\">Winlyex Powder-Free</a> vb.) tüm teknik verileri, ambalaj detayları ve SSS alanları 6 dilde yapılandırılmıştır.",
           "Sonuç olarak: B2B web sitesi bir katalog değil, satın alma kararını kolaylaştıran ticari bir bilgi sistemi olmalıdır.",
-          "<a class=\"button primary\" href=\"/tr/reflex/\">Reflex B2B Ürün Yapısını İnceleyin →</a>"
+          "<a class=\"button primary\" href=\"/reflex/\">Reflex B2B Ürün Yapısını İnceleyin →</a>"
         ],
         "callout": "Sistem Notu: Ürün verileri üretici firma Reflex Plastik’e aittir; B2B tedarik koordinasyonu CTSEG tarafından yönetilir.",
         "faq": [
@@ -2423,7 +2423,7 @@ export const posts: BlogPost[] = [
       {
         "heading": "Multilingual B2B Product Presentation",
         "paragraphs": [
-          "International trade websites must provide dedicated, indexable language URLs (e.g. /tr/reflex/, /en/reflex/, /fa/reflex/). Localized content builds international credibility."
+          "International trade websites must provide dedicated, indexable language URLs (e.g. /reflex/, /en/reflex/, /fa/reflex/). Localized content builds international credibility."
         ]
       },
       {
@@ -2763,12 +2763,12 @@ export const posts: BlogPost[] = [
 ];
 
 export const getPost = (slug: string) => posts.find((post) => post.slug === slug);
-export const localePrefix = (locale: BlogLocale) => locale === 'en' ? '' : `/${locale}`;
+export const localePrefix = (locale: BlogLocale) => locale === 'tr' ? '' : `/${locale}`;
 export const blogPath = (locale: BlogLocale) => `${localePrefix(locale)}/blog/`;
-export const homePath = (locale: BlogLocale) => `/${locale}/`;
+export const homePath = (locale: BlogLocale) => locale === 'tr' ? '/' : `/${locale}/`;
 export const legacySeoArticle: Partial<Record<BlogLocale, { path: string; title: string; description: string }>> = {
   en: { path: '/blog/seo-vs-geo-vs-aeo-vs-aio/', title: 'SEO vs GEO vs AEO vs AIO: What Is the Difference?', description: 'A practical guide to the role of each search and AI visibility discipline.' },
-  tr: { path: '/tr/blog/seo-geo-aeo-aio-farklari/', title: 'SEO, GEO, AEO ve AIO Arasındaki Farklar', description: 'Arama ve yapay zekâ görünürlüğü disiplinlerinin rolünü açıklayan pratik rehber.' },
+  tr: { path: '/blog/seo-geo-aeo-aio-farklari/', title: 'SEO, GEO, AEO ve AIO Arasındaki Farklar', description: 'Arama ve yapay zekâ görünürlüğü disiplinlerinin rolünü açıklayan pratik rehber.' },
   mk: { path: '/mk/blog/razliki-seo-geo-aeo-aio/', title: 'Разлики помеѓу SEO, GEO, AEO и AIO', description: 'Практичен водич за улогата на секоја дисциплина за пребарување и AI видливост.' },
   sr: { path: '/sr/blog/razlike-seo-geo-aeo-aio/', title: 'Razlike između SEO, GEO, AEO i AIO', description: 'Praktičan vodič kroz discipline vidljivosti u pretrazi i AI sistemima.' },
   sq: { path: '/sq/blog/dallimet-seo-geo-aeo-aio/', title: 'Dallimet mes SEO, GEO, AEO dhe AIO', description: 'Udhëzues praktik për disiplinat e dukshmërisë në kërkim dhe sistemet AI.' },

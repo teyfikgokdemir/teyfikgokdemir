@@ -1,42 +1,31 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import ReflexDetailView from '../../../components/ReflexDetailView.astro';
-import Header from '../../../components/Header.astro';
-import Footer from '../../../components/Footer.astro';
-import { content } from '../../../i18n/content';
-import { locales, type Locale } from '../../../i18n/locales';
-import { reflexProducts, getReflexProductBySlug } from '../../../data/reflexProducts';
-import { site } from '../../../data/site';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ReflexDetailView from '../../components/ReflexDetailView.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { content } from '../../i18n/content';
+import { reflexProducts, getReflexProductBySlug } from '../../data/reflexProducts';
+import { site } from '../../data/site';
 
 export function getStaticPaths() {
-  const languages: (Locale | 'fa')[] = ['en', 'mk', 'sr', 'sq', 'fa'];
-  const paths = [];
-
-  for (const lang of languages) {
-    for (const prod of reflexProducts) {
-      paths.push({
-        params: { lang, slug: prod.slug },
-        props: { product: prod },
-      });
-    }
-  }
-
-  return paths;
+  return reflexProducts.map((product) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
 }
 
 const { slug } = Astro.params;
-const locale = Astro.params.lang as Locale | 'fa';
+const locale = 'tr';
 const product = Astro.props.product || getReflexProductBySlug(slug as string);
 
 if (!product) {
   throw new Error(`Product not found for slug: ${slug}`);
 }
 
-const lang = (locale || 'tr') as 'tr' | 'en' | 'mk' | 'sr' | 'sq' | 'fa';
-const i18n = product.i18n[lang] || product.i18n.tr;
-const copy = content[locale as Locale] || content.tr;
+const i18n = product.i18n.tr;
+const copy = content.tr;
 
-const pagePath = `/${locale}/reflex/${product.slug}/`;
+const pagePath = `/reflex/${product.slug}/`;
 const alternates: Record<string, string> = {
   tr: `${site.origin}/reflex/${product.slug}/`,
   en: `${site.origin}/en/reflex/${product.slug}/`,
@@ -47,20 +36,8 @@ const alternates: Record<string, string> = {
   'x-default': `${site.origin}/reflex/${product.slug}/`,
 };
 
-const langBrandTitles: Record<string, string> = {
-  tr: 'Reflex Plastik B2B Portföyü',
-  en: 'Reflex Plastik B2B Portfolio',
-  mk: 'Reflex Plastik B2B Портфолио',
-  sr: 'Reflex Plastik B2B Portfolio',
-  sq: 'Portofoli B2B Reflex Plastik',
-  fa: 'پرتفوی B2B رفلکس پلاستیک',
-};
-
-const brandTitle = langBrandTitles[locale] || langBrandTitles.tr;
-const title = `${i18n.name} | ${brandTitle}`;
-const description = locale === 'fa' 
-  ? `${i18n.name}: ${i18n.tagline} اطلاعات فنی و سفارش عمده B2B.`
-  : `${i18n.name}: ${i18n.tagline} ${i18n.features.slice(0, 3).join(', ')}.`;
+const title = `${i18n.name} | Reflex Plastik B2B Portföyü`;
+const description = `${i18n.name}: ${i18n.tagline} ${i18n.features.slice(0, 3).join(', ')}.`;
 
 const productSchema = {
   '@type': 'Product',
@@ -88,14 +65,14 @@ const breadcrumbSchema = {
     {
       '@type': 'ListItem',
       position: 1,
-      name: 'Home',
-      item: `${site.origin}/${locale}/`,
+      name: 'Ana Sayfa',
+      item: `${site.origin}/`,
     },
     {
       '@type': 'ListItem',
       position: 2,
       name: 'Reflex',
-      item: `${site.origin}/${locale}/reflex/`,
+      item: `${site.origin}/reflex/`,
     },
     {
       '@type': 'ListItem',
