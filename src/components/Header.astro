@@ -149,8 +149,8 @@ const expertiseSubItems = [
       <div class="nav-item-dropdown" data-dropdown>
         <button class="dropdown-trigger" type="button" aria-expanded="false">
           <span>{navLabels.ventures}</span>
-          <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
-            <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg class="dropdown-arrow" width="9" height="5" viewBox="0 0 9 5" fill="none" aria-hidden="true">
+            <path d="M1 1L4.5 4L8 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
         <div class="dropdown-menu">
@@ -166,8 +166,8 @@ const expertiseSubItems = [
       <div class="nav-item-dropdown" data-dropdown>
         <button class="dropdown-trigger" type="button" aria-expanded="false">
           <span>{navLabels.expertise}</span>
-          <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
-            <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg class="dropdown-arrow" width="9" height="5" viewBox="0 0 9 5" fill="none" aria-hidden="true">
+            <path d="M1 1L4.5 4L8 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
         <div class="dropdown-menu">
@@ -249,61 +249,94 @@ const expertiseSubItems = [
 
 <style is:global>
   .site-header {
-    padding-inline: clamp(1.5rem, 5vw, 4rem) !important;
+    height: 86px !important;
+    min-height: 86px !important;
+    padding-inline: clamp(1.5rem, 4vw, 3.5rem) !important;
+    background: #211c18 !important;
+    border-bottom: 1px solid rgba(201, 191, 178, 0.15) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1000 !important;
+  }
+  
+  /* Compact branding area */
+  .brand {
+    display: inline-flex !important;
+    align-items: center !important;
+    max-width: 230px !important;
+    height: auto !important;
+    text-decoration: none !important;
+  }
+  .brand__mark img {
+    max-width: 220px !important;
+    height: auto !important;
+    display: block !important;
+    object-fit: contain !important;
+  }
+
+  .header-panel {
+    display: flex !important;
+    align-items: center !important;
+    gap: clamp(1.5rem, 3vw, 3rem) !important;
   }
   .header-panel nav {
-    display: flex;
-    align-items: center;
-    gap: clamp(1.2rem, 2.5vw, 2.2rem);
+    display: flex !important;
+    align-items: center !important;
+    gap: clamp(1.2rem, 2.2vw, 2rem) !important;
   }
   .header-panel nav a,
   .dropdown-trigger {
-    font-size: 0.92rem !important;
+    font-size: 0.9rem !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em !important;
-    color: var(--text-secondary, #625c54) !important;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
+    color: #c9bfb2 !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
     transition: color 180ms ease !important;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.35rem !important;
+    padding: 0 !important;
+    text-transform: none !important;
   }
   .header-panel nav a:hover,
   .dropdown-trigger:hover,
   .dropdown-trigger[aria-expanded="true"] {
-    color: var(--accent-soft, #a65332) !important;
+    color: #f3eee6 !important;
   }
   .dropdown-arrow {
-    transition: transform 180ms ease;
+    transition: transform 180ms ease !important;
+    opacity: 0.7 !important;
   }
   .dropdown-trigger[aria-expanded="true"] .dropdown-arrow {
-    transform: rotate(180deg);
+    transform: rotate(180deg) !important;
   }
   .nav-item-dropdown {
-    position: relative;
+    position: relative !important;
   }
   .dropdown-menu {
-    position: absolute;
-    top: calc(100% + 0.75rem);
-    left: 50%;
-    transform: translateX(-50%);
-    min-width: 210px;
-    padding: 0.5rem 0;
-    background: #ffffff;
-    border: 1px solid var(--line, #c9bfb2);
-    border-radius: 8px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    position: absolute !important;
+    top: calc(100% + 0.85rem) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    min-width: 210px !important;
+    padding: 0.4rem 0 !important;
+    background: #211c18 !important;
+    border: 1px solid rgba(201, 191, 178, 0.25) !important;
+    border-radius: 6px !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4) !important;
     display: none;
-    flex-direction: column;
-    z-index: 100;
+    flex-direction: column !important;
+    z-index: 100 !important;
   }
   .dropdown-trigger[aria-expanded="true"] + .dropdown-menu,
   .nav-item-dropdown:hover .dropdown-menu {
-    display: flex;
+    display: flex !important;
   }
   .dropdown-link {
     padding: 0.55rem 1rem !important;
@@ -311,61 +344,75 @@ const expertiseSubItems = [
     flex-direction: column !important;
     gap: 0.15rem !important;
     text-align: left !important;
-    border-bottom: 1px solid rgba(0,0,0,0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
     transition: background 150ms ease !important;
   }
   .dropdown-link:last-child {
-    border-bottom: none;
+    border-bottom: none !important;
   }
   .dropdown-link:hover {
-    background: #f9f6f0 !important;
+    background: rgba(201, 191, 178, 0.08) !important;
   }
   .dropdown-link__title {
-    font-size: 0.88rem !important;
+    font-size: 0.86rem !important;
     font-weight: 600 !important;
-    color: #1c1917 !important;
+    color: #f3eee6 !important;
   }
   .dropdown-link__desc {
-    font-size: 0.75rem !important;
+    font-size: 0.73rem !important;
     font-weight: 400 !important;
-    color: #78716c !important;
+    color: #a99d8f !important;
   }
+
+  /* Natural, non-pill language selector */
   .language-switcher {
     display: inline-flex !important;
     align-items: center !important;
-    gap: 0.25rem !important;
-    padding: 0.25rem !important;
-    background: rgba(41, 48, 41, 0.05) !important;
-    border: 1px solid var(--line, #c9bfb2) !important;
-    border-radius: 999px !important;
+    gap: 0.75rem !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
   }
   .language-switcher a {
-    padding: 0.25rem 0.55rem !important;
-    font-size: 0.75rem !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.05em !important;
-    color: var(--text-secondary, #625c54) !important;
-    border-radius: 999px !important;
+    font-size: 0.78rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.08em !important;
+    color: #a99d8f !important;
     text-decoration: none !important;
-    transition: all 180ms ease !important;
+    padding: 0 0 2px 0 !important;
+    border-bottom: 2px solid transparent !important;
+    transition: color 180ms ease, border-color 180ms ease !important;
   }
-  .language-switcher a[aria-current="page"] {
-    background: #293029 !important;
+  .language-switcher a:hover {
     color: #f3eee6 !important;
   }
+  .language-switcher a[aria-current="page"] {
+    color: #f3eee6 !important;
+    font-weight: 700 !important;
+    border-bottom-color: #a65332 !important;
+  }
+
   @media (max-width: 990px) {
+    .site-header {
+      height: 72px !important;
+      min-height: 72px !important;
+    }
+    .brand__mark img {
+      max-width: 160px !important;
+    }
     .header-panel nav {
       flex-direction: column;
       align-items: flex-start;
       gap: 1.25rem;
     }
     .dropdown-menu {
-      position: static;
-      transform: none;
-      box-shadow: none;
-      border: none;
-      background: transparent;
-      padding-left: 1rem;
+      position: static !important;
+      transform: none !important;
+      box-shadow: none !important;
+      border: none !important;
+      background: transparent !important;
+      padding-left: 1rem !important;
     }
   }
 </style>
