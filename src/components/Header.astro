@@ -74,6 +74,15 @@ const aiVisibilityLabels: Record<Locale | 'fa', string> = {
   fa: 'دیده‌شدن در هوش مصنوعی',
 };
 
+const nativeLanguageNames: Record<Locale | 'fa', string> = {
+  tr: 'Türkçe',
+  en: 'English',
+  mk: 'Македонски',
+  sr: 'Српски',
+  sq: 'Shqip',
+  fa: 'فارسی',
+};
+
 const blogLabel = blogLabels[locale];
 const aboutLabel = aboutLabels[locale];
 const aiVisibilityLabel = aiVisibilityLabels[locale];
@@ -185,18 +194,28 @@ const expertiseSubItems = [
       <a href={sectionUrl('contact')}>{navLabels.contact}</a>
     </nav>
 
-    <div class="language-switcher" aria-label={a11y.language}>
-      {locales.map((item) => (
-        <a
-          href={languageUrls?.[item] ?? localeUrl(item)}
-          lang={item}
-          hreflang={item}
-          aria-current={item === locale ? 'page' : undefined}
-          title={localeNames[item]}
-        >
-          {item.toUpperCase()}
-        </a>
-      ))}
+    <div class="nav-item-dropdown lang-dropdown" data-dropdown>
+      <button class="dropdown-trigger lang-trigger" type="button" aria-expanded="false" aria-label={a11y.language}>
+        <span class="lang-trigger__code">{locale.toUpperCase()}</span>
+        <svg class="dropdown-arrow" width="9" height="5" viewBox="0 0 9 5" fill="none" aria-hidden="true">
+          <path d="M1 1L4.5 4L8 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="dropdown-menu lang-menu">
+        {locales.map((item) => (
+          <a
+            href={languageUrls?.[item] ?? localeUrl(item)}
+            lang={item}
+            hreflang={item}
+            aria-current={item === locale ? 'page' : undefined}
+            class:list={['dropdown-link', 'lang-link', { 'is-active': item === locale }]}
+            title={localeNames[item]}
+          >
+            <span class="lang-link__name">{nativeLanguageNames[item]}</span>
+            <span class="lang-link__code">{item.toUpperCase()}</span>
+          </a>
+        ))}
+      </div>
     </div>
   </div>
 </header>
@@ -364,33 +383,64 @@ const expertiseSubItems = [
     color: #a99d8f !important;
   }
 
-  /* Natural, non-pill language selector */
-  .language-switcher {
+  /* Language Selector Dropdown */
+  .lang-dropdown {
+    position: relative !important;
+  }
+  .lang-trigger {
     display: inline-flex !important;
     align-items: center !important;
-    gap: 0.75rem !important;
-    padding: 0 !important;
+    gap: 0.35rem !important;
+    padding: 0.35rem 0.65rem !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.06em !important;
+    color: #f3eee6 !important;
     background: transparent !important;
-    border: none !important;
-    border-radius: 0 !important;
+    border: 1px solid rgba(201, 191, 178, 0.25) !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    transition: all 180ms ease !important;
   }
-  .language-switcher a {
-    font-size: 0.78rem !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.08em !important;
-    color: #a99d8f !important;
+  .lang-trigger:hover,
+  .lang-trigger[aria-expanded="true"] {
+    border-color: #a65332 !important;
+    color: #f3eee6 !important;
+  }
+  .lang-menu {
+    right: 0 !important;
+    left: auto !important;
+    transform: none !important;
+    min-width: 150px !important;
+  }
+  .lang-link {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0.5rem 0.85rem !important;
     text-decoration: none !important;
-    padding: 0 0 2px 0 !important;
-    border-bottom: 2px solid transparent !important;
-    transition: color 180ms ease, border-color 180ms ease !important;
   }
-  .language-switcher a:hover {
+  .lang-link__name {
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    color: #c9bfb2 !important;
+  }
+  .lang-link__code {
+    font-size: 0.72rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.05em !important;
+    color: #8c8275 !important;
+  }
+  .lang-link:hover .lang-link__name,
+  .lang-link.is-active .lang-link__name {
     color: #f3eee6 !important;
   }
-  .language-switcher a[aria-current="page"] {
-    color: #f3eee6 !important;
-    font-weight: 700 !important;
-    border-bottom-color: #a65332 !important;
+  .lang-link.is-active {
+    background: rgba(166, 83, 50, 0.2) !important;
+  }
+  .lang-link.is-active .lang-link__code {
+    color: #d78263 !important;
   }
 
   @media (max-width: 990px) {
