@@ -11,6 +11,18 @@ import { site } from '../data/site';
 interface Props { locale: Locale; }
 
 const { locale } = Astro.props;
+
+const positioningStrip = {
+  tr: ['Kurucu', 'Uluslararası Ticaret', 'Stratejik Tedarik', 'B2B', 'Dijital Görünürlük'],
+  en: ['Founder', 'International Trade', 'Strategic Sourcing', 'B2B', 'Digital Visibility'],
+  mk: ['Основач', 'Меѓународна трговија', 'Стратешко снабдување', 'B2B', 'Дигитална видливост'],
+  sr: ['Osnivač', 'Međunarodna trgovina', 'Strateška nabavka', 'B2B', 'Digitalna vidljivost'],
+  sq: ['Themelues', 'Tregti Ndërkombëtare', 'Furnizim Strategjik', 'B2B', 'Dukshmëri Digjitale'],
+  fa: ['بنیان‌گذار', 'تجارت بین‌المللی', 'تأمین راهبردی', 'B2B', 'دیده‌شدن دیجیتال'],
+} as const;
+
+const currentStrip = positioningStrip[locale as keyof typeof positioningStrip] ?? positioningStrip.en;
+
 const baseCopy = content[locale];
 
 const ctsegLinks = {
@@ -1329,4 +1341,47 @@ const displayedYear = (title: string, year: string) =>
       will-change: auto;
     }
   }
+
+  .positioning-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem 1.25rem;
+    padding-block: 1.5rem;
+    margin-block: 1.5rem 3rem;
+    border-block: 1px solid var(--line, #c9bfb2);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-secondary, #625c54);
+  }
+  .positioning-strip__item-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .positioning-strip__sep {
+    color: var(--accent-soft, #a65332);
+    font-weight: 700;
+  }
+  .hero-copy h1 {
+    max-width: 22ch !important;
+    font-family: var(--font-serif, Georgia, serif) !important;
+    font-size: clamp(2.3rem, 4.5vw, 4rem) !important;
+    line-height: 1.14 !important;
+    letter-spacing: -0.015em !important;
+  }
+  .hero-description {
+    max-width: 54ch !important;
+    font-size: clamp(1.05rem, 1.35vw, 1.22rem) !important;
+    line-height: 1.68 !important;
+  }
+  .hero-media img {
+    border: 1px solid var(--line, #c9bfb2) !important;
+    filter: contrast(1.02) saturate(0.95) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06) !important;
+  }
+
 </style>

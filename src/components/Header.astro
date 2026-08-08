@@ -58,23 +58,38 @@ const aiVisibilityLabels: Record<Locale | 'fa', string> = {
 
 const blogLabels: Record<Locale | 'fa', string> = {
   en: 'Insights',
-  tr: 'Blog',
-  sq: 'Artikuj',
-  mk: 'Блог',
-  sr: 'Blog',
+  tr: 'İçgörüler',
+  sq: 'Analiza',
+  mk: 'Увид',
+  sr: 'Uvidi',
   fa: 'بینش‌ها',
 };
 
-const aiVisibilityLabel = aiVisibilityLabels[locale];
+const aboutLabels: Record<Locale | 'fa', string> = {
+  en: 'About',
+  tr: 'Hakkımda',
+  sq: 'Rreth meje',
+  mk: 'За мене',
+  sr: 'O meni',
+  fa: 'درباره من',
+};
+
 const blogLabel = blogLabels[locale];
+const aboutLabel = aboutLabels[locale];
+
 const navLabels = locale === 'fa'
   ? {
       ventures: 'ساختارها',
       expertise: 'تخصص',
-      journey: 'مسیر',
+      journey: 'درباره من',
       contact: 'تماس',
     }
-  : copy.nav;
+  : {
+      ventures: copy.nav?.ventures || 'Girişimler',
+      expertise: copy.nav?.expertise || 'Uzmanlık',
+      journey: aboutLabel,
+      contact: copy.nav?.contact || 'İletişim',
+    };
 const a11y = locale === 'fa'
   ? { language:'انتخاب زبان', menuOpen:'باز کردن منو', menuClose:'بستن منو' }
   : copy.a11y;
@@ -109,13 +124,12 @@ const a11y = locale === 'fa'
   </button>
 
   <div class="header-panel" id="site-navigation">
-    <nav aria-label={navLabels.ventures}>
+    <nav aria-label="Main Navigation">
       <a href={sectionUrl('ventures')}>{navLabels.ventures}</a>
       <a href={sectionUrl('expertise')}>{navLabels.expertise}</a>
       <a href={reflexUrl} aria-current={isReflexPage ? 'page' : undefined}>Reflex</a>
-      <a href={aiVisibilityUrl}>{aiVisibilityLabel}</a>
       <a href={blogUrl}>{blogLabel}</a>
-      <a href={sectionUrl('journey')}>{navLabels.journey}</a>
+      <a href={sectionUrl('journey')}>{aboutLabel}</a>
       <a href={sectionUrl('contact')}>{navLabels.contact}</a>
     </nav>
 
