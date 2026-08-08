@@ -61,6 +61,10 @@ const indexItems = indexArticles.map((item) => ({
   url: origin + item.href,
   name: item.title,
 }));
+const postFaqs = post
+  ? (post.sections[locale] ?? []).flatMap((s) => s.faq ?? [])
+  : [];
+
 const graph = post
   ? [
       {
@@ -84,6 +88,19 @@ const graph = post
           { '@type': 'ListItem', position: 3, name: post.title[locale], item: canonical },
         ],
       },
+      ...(postFaqs.length > 0
+        ? [
+            {
+              '@type': 'FAQPage',
+              '@id': canonical + '#faq',
+              mainEntity: postFaqs.map((f) => ({
+                '@type': 'Question',
+                name: f.question,
+                acceptedAnswer: { '@type': 'Answer', text: f.answer },
+              })),
+            },
+          ]
+        : []),
     ]
   : [
       {
@@ -197,8 +214,44 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
           {post.sections[locale].map((section, index) => (
             <section data-reveal="content-section" style={`--reveal-order:${Math.min(index, 3)}`}>
               <h2>{section.heading}</h2>
-              {section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
-              {section.bullets && <ul>{section.bullets.map((bullet) => <li>{bullet}</li>)}</ul>}
+              {section.paragraphs.map((paragraph) => <p set:html={paragraph} />)}
+              {section.bullets && <ul>{section.bullets.map((bullet) => <li set:html={bullet} />)}</ul>}
+              {section.table && (
+                <div class="article-table-wrapper">
+                  <table class="article-table">
+                    <thead>
+                      <tr>
+                        {section.table.headers.map((h) => <th set:html={h} />)}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {section.table.rows.map((row) => (
+                        <tr>
+                          {row.map((cell) => <td set:html={cell} />)}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+              {section.callout && (
+                <div class="article-callout" set:html={section.callout} />
+              )}
+              {section.faq && section.faq.length > 0 && (
+                <div class="article-faq-container">
+                  <div class="article-faq-accordion">
+                    {section.faq.map((item) => (
+                      <details class="article-faq-item">
+                        <summary class="article-faq-question">
+                          <span>{item.question}</span>
+                          <span class="faq-icon" aria-hidden="true">+</span>
+                        </summary>
+                        <div class="article-faq-answer"><p>{item.answer}</p></div>
+                      </details>
+                    ))}
+                  </div>
+                </div>
+              )}
             </section>
           ))}
         </div>
@@ -360,6 +413,103 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
   }
   .related-insights span { color: var(--text-muted); line-height: 1.6; }
   .related-insights b { color: var(--accent); }
+  .article-content a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 600;
+  }
+  .article-content a:hover {
+    color: var(--text);
+  }
+  .article-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-block: 1.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--scene-paper);
+  }
+  .article-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.94rem;
+    text-align: left;
+  }
+  html[dir="rtl"] .article-table {
+    text-align: right;
+  }
+  .article-table th {
+    background: var(--scene-mineral);
+    color: var(--text);
+    font-weight: 700;
+    padding: 0.85rem 1rem;
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+  }
+  .article-table td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .article-table tr:last-child td {
+    border-bottom: none;
+  }
+  .article-callout {
+    padding: 1.25rem 1.5rem;
+    border-left: 3px solid var(--accent);
+    background: var(--scene-stone);
+    margin-block: 1.75rem;
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 1.02rem;
+    line-height: 1.7;
+  }
+  html[dir="rtl"] .article-callout {
+    border-left: none;
+    border-right: 3px solid var(--accent);
+  }
+  .article-faq-container {
+    margin-block: 2rem;
+  }
+  .article-faq-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .article-faq-item {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--scene-paper);
+    overflow: hidden;
+  }
+  .article-faq-item[open] {
+    border-color: var(--accent);
+  }
+  .article-faq-question {
+    padding: 1rem 1.25rem;
+    font-weight: 700;
+    font-size: 1.02rem;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    user-select: none;
+  }
+  .article-faq-question::-webkit-details-marker {
+    display: none;
+  }
+  .article-faq-answer {
+    padding: 0 1.25rem 1.25rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .article-faq-answer p {
+    margin: 0;
+  }
   @media (max-width: 900px) {
     .featured-article { grid-template-columns: 1fr; gap: 1.5rem; }
     .article-list > a { grid-template-columns: minmax(130px, .45fr) minmax(220px, .8fr) minmax(0, 1.2fr) 28px; gap: 1rem; }
