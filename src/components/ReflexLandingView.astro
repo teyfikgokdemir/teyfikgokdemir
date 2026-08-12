@@ -241,19 +241,24 @@ const heroMainProduct = reflexProducts.find(p => p.slug === 'florex') || reflexP
   <section id="product-families" class="section">
     <div class="shell">
       <div class="editorial-section-heading">
-        <span class="section-badge">Reflex Product Line</span>
-        <h2>{lang === 'tr' ? '7 Uzman Ürün Ailesi' : '7 Specialized Product Families'}</h2>
+        <span class="section-badge">{sectionTitles.badge}</span>
+        <h2>{sectionTitles.title}</h2>
         <p class="section-lead">
-          {lang === 'tr'
-            ? 'Her biri belirli kullanım ihtiyaçları, hijyen standartları ve et kalınlığı için geliştirilmiş profesyonel eldiven çözümleri.'
-            : 'Professional disposable glove solutions engineered for specialized hygiene standards, materials, and tactile requirements.'}
+          {sectionTitles.lead}
         </p>
       </div>
 
-      <div class="reflex-grid">
-        {reflexProducts.map((product) => (
-          <ReflexProductCard product={product} locale={locale} />
-        ))}
+      <div class="reflex-grid-custom">
+        <div class="reflex-row-top">
+          {reflexProducts.slice(0, 4).map((product) => (
+            <ReflexProductCard product={product} locale={locale} />
+          ))}
+        </div>
+        <div class="reflex-row-bottom">
+          {reflexProducts.slice(4).map((product) => (
+            <ReflexProductCard product={product} locale={locale} />
+          ))}
+        </div>
       </div>
     </div>
   </section>
@@ -262,7 +267,7 @@ const heroMainProduct = reflexProducts.find(p => p.slug === 'florex') || reflexP
   <section class="section why-reflex-section">
     <div class="shell">
       <div class="editorial-section-heading">
-        <span class="section-badge">Core Advantages</span>
+        <span class="section-badge">{sectionTitles.whyBadge}</span>
         <h2>{landingText.whyTitle}</h2>
         <p class="section-lead">{landingText.whyLead}</p>
       </div>
@@ -283,7 +288,7 @@ const heroMainProduct = reflexProducts.find(p => p.slug === 'florex') || reflexP
   <section class="section applications-section">
     <div class="shell">
       <div class="editorial-section-heading">
-        <span class="section-badge">Industries & Use Cases</span>
+        <span class="section-badge">{sectionTitles.appsBadge}</span>
         <h2>{landingText.applicationsTitle}</h2>
       </div>
 
@@ -432,10 +437,41 @@ const heroMainProduct = reflexProducts.find(p => p.slug === 'florex') || reflexP
     margin: 0;
   }
 
-  .reflex-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  .reflex-grid-custom {
+    display: flex;
+    flex-direction: column;
     gap: 1.75rem;
+  }
+  .reflex-row-top,
+  .reflex-row-bottom {
+    display: grid;
+    gap: 1.75rem;
+  }
+  .reflex-row-top {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .reflex-row-bottom {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: 85%;
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  @media (max-width: 1200px) {
+    .reflex-row-top {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .reflex-row-bottom {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .reflex-row-top,
+    .reflex-row-bottom {
+      grid-template-columns: 1fr;
+    }
   }
 
   .why-grid {
