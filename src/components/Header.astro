@@ -117,19 +117,95 @@ const ctsegUrl = locale === 'tr'
     ? 'https://ctseg.com.tr/fa/tamin-beynolmelali-iran/'
     : 'https://ctseg.com.tr/en/';
 
-const ventureSubItems = [
-  { name: 'CTSEG', desc: 'Principal Trade & Sourcing', url: ctsegUrl, external: true },
-  { name: 'QCT Studio', desc: 'Digital & Technology', url: 'https://qctstudio.com', external: true },
-  { name: 'QCT Commerce', desc: 'Digital Commerce', url: 'https://qctcommerce.com', external: true },
-  { name: 'Mythborn', desc: 'Consumer Brand', url: 'https://mythborn.co', external: true },
-];
+const ventureSubItems = {
+  tr: [
+    { name: 'CTSEG', desc: 'Ana Ticaret ve Tedarik', url: ctsegUrl, external: true },
+    { name: 'QCT Studio', desc: 'Dijital ve Teknoloji', url: 'https://qctstudio.com', external: true },
+    { name: 'QCT Commerce', desc: 'Dijital Ticaret', url: 'https://qctcommerce.com', external: true },
+    { name: 'Mythborn', desc: 'Tüketici Markası', url: 'https://mythborn.co', external: true },
+  ],
+  en: [
+    { name: 'CTSEG', desc: 'Principal Trade & Sourcing', url: ctsegUrl, external: true },
+    { name: 'QCT Studio', desc: 'Digital & Technology', url: 'https://qctstudio.com', external: true },
+    { name: 'QCT Commerce', desc: 'Digital Commerce', url: 'https://qctcommerce.com', external: true },
+    { name: 'Mythborn', desc: 'Consumer Brand', url: 'https://mythborn.co', external: true },
+  ],
+  ru: [
+    { name: 'CTSEG', desc: 'Торговля и закупки', url: ctsegUrl, external: true },
+    { name: 'QCT Studio', desc: 'Цифровые технологии', url: 'https://qctstudio.com', external: true },
+    { name: 'QCT Commerce', desc: 'Цифровая коммерция', url: 'https://qctcommerce.com', external: true },
+    { name: 'Mythborn', desc: 'Потребительский бренд', url: 'https://mythborn.co', external: true },
+  ],
+  mk: [
+    { name: 'CTSEG', desc: 'Главна трговија и снабдување', url: ctsegUrl, external: true },
+    { name: 'QCT Studio', desc: 'Дигитална технологија', url: 'https://qctstudio.com', external: true },
+    { name: 'QCT Commerce', desc: 'Дигитална трговија', url: 'https://qctcommerce.com', external: true },
+    { name: 'Mythborn', desc: 'Потрошувачки бренд', url: 'https://mythborn.co', external: true },
+  ],
+  sr: [
+    { name: 'CTSEG', desc: 'Glavna trgovina i nabavka', url: ctsegUrl, external: true },
+    { name: 'QCT Studio', desc: 'Digitalne tehnologije', url: 'https://qctstudio.com', external: true },
+    { name: 'QCT Commerce', desc: 'Digitalna trgovina', url: 'https://qctcommerce.com', external: true },
+    { name: 'Mythborn', desc: 'Potrošački brend', url: 'https://mythborn.co', external: true },
+  ],
+  sq: [
+    { name: 'CTSEG', desc: 'Tregti & Furnizim Kryesor', url: ctsegUrl, external: true },
+    { name: 'QCT Studio', desc: 'Teknologji & Digjitale', url: 'https://qctstudio.com', external: true },
+    { name: 'QCT Commerce', desc: 'Tregti Digjitale', url: 'https://qctcommerce.com', external: true },
+    { name: 'Mythborn', desc: 'Markë Konsumatore', url: 'https://mythborn.co', external: true },
+  ],
+  fa: [
+    { name: 'CTSEG', desc: 'تجارت و تأمین اصلی', url: ctsegUrl, external: true },
+    { name: 'QCT Studio', desc: 'فناوری و دیجیتال', url: 'https://qctstudio.com', external: true },
+    { name: 'QCT Commerce', desc: 'تجارت دیجیتال', url: 'https://qctcommerce.com', external: true },
+    { name: 'Mythborn', desc: 'برند مصرف‌کننده', url: 'https://mythborn.co', external: true },
+  ]
+}[locale] || ventureSubItems.en;
 
-const expertiseSubItems = [
-  { name: locale === 'tr' ? 'Uluslararası Ticaret' : 'International Trade', url: sectionUrl('expertise') },
-  { name: locale === 'tr' ? 'Stratejik Tedarik' : 'Strategic Sourcing', url: sectionUrl('expertise') },
-  { name: locale === 'tr' ? 'Dijital Ticaret & Büyüme' : 'Digital Commerce & Growth', url: sectionUrl('expertise') },
-  { name: aiVisibilityLabel, url: aiVisibilityUrl },
-];
+const expertiseSubItems = {
+  tr: [
+    { name: 'Uluslararası Ticaret', url: sectionUrl('expertise') },
+    { name: 'Stratejik Tedarik', url: sectionUrl('expertise') },
+    { name: 'Dijital Ticaret & Büyüme', url: sectionUrl('expertise') },
+    { name: aiVisibilityLabel, url: aiVisibilityUrl },
+  ],
+  en: [
+    { name: 'International Trade', url: sectionUrl('expertise') },
+    { name: 'Strategic Sourcing', url: sectionUrl('expertise') },
+    { name: 'Digital Commerce & Growth', url: sectionUrl('expertise') },
+    { name: aiVisibilityLabel, url: aiVisibilityUrl },
+  ],
+  ru: [
+    { name: 'Международная торговля', url: sectionUrl('expertise') },
+    { name: 'Стратегические закупки', url: sectionUrl('expertise') },
+    { name: 'Цифровая коммерция и рост', url: sectionUrl('expertise') },
+    { name: aiVisibilityLabel, url: aiVisibilityUrl },
+  ],
+  mk: [
+    { name: 'Меѓународна трговија', url: sectionUrl('expertise') },
+    { name: 'Стратешко снабдување', url: sectionUrl('expertise') },
+    { name: 'Дигитална трговија и раст', url: sectionUrl('expertise') },
+    { name: aiVisibilityLabel, url: aiVisibilityUrl },
+  ],
+  sr: [
+    { name: 'Međunarodna trgovina', url: sectionUrl('expertise') },
+    { name: 'Strateška nabavka', url: sectionUrl('expertise') },
+    { name: 'Digitalna trgovina i rast', url: sectionUrl('expertise') },
+    { name: aiVisibilityLabel, url: aiVisibilityUrl },
+  ],
+  sq: [
+    { name: 'Tregti Ndërkombëtare', url: sectionUrl('expertise') },
+    { name: 'Furnizim Strategjik', url: sectionUrl('expertise') },
+    { name: 'Tregti Digjitale & Rritje', url: sectionUrl('expertise') },
+    { name: aiVisibilityLabel, url: aiVisibilityUrl },
+  ],
+  fa: [
+    { name: 'تجارت بین‌المللی', url: sectionUrl('expertise') },
+    { name: 'تأمین راهبردی', url: sectionUrl('expertise') },
+    { name: 'تجارت دیجیتال و رشد', url: sectionUrl('expertise') },
+    { name: aiVisibilityLabel, url: aiVisibilityUrl },
+  ]
+}[locale] || expertiseSubItems.en;
 
 ---
 <header class="site-header">

@@ -104,31 +104,105 @@ const landingText = {
   }
 }[lang] || landingText.tr;
 
-const whyCards = [
-  {
-    icon: '⚡',
-    title: lang === 'tr' ? 'Hibrit TPE Teknolojisi' : 'Hybrid TPE Technology',
-    desc: lang === 'tr' ? 'PVC ve Nitril eldivenlere kıyasla daha fazla esneklik, pürüzsüz doku ve üstün çevre dostu yapı.' : 'Greater elasticity and smooth texture compared to vinyl and nitrile.'
-  },
-  {
-    icon: '🛡️',
-    title: lang === 'tr' ? '%100 Gıda Uyumu & Hipoalerjenik' : '100% Food Safe & Hypoallergenic',
-    desc: lang === 'tr' ? 'Kokusuz, tatsız, silikon ve lateks içermeyen yapısı ile alerji riskini sıfıra indiren güvenli temas.' : 'Odorless, tasteless, latex-free & silicone-free formula for zero allergy risk.'
-  },
-  {
-    icon: '💰',
-    title: lang === 'tr' ? 'Maliyet & Tedarik Avantajı' : 'Cost & Supply Efficiency',
-    desc: lang === 'tr' ? 'Muadillerine göre yüksek maliyet avantajı, hızlı üretim ve yüksek hacimli B2B stok sürekliliği.' : 'High cost advantage over traditional gloves with robust B2B inventory readiness.'
-  }
-];
+const whyCards = {
+  tr: [
+    { icon: '⚡', title: 'Hibrit TPE Teknolojisi', desc: 'PVC ve Nitril eldivenlere kıyasla daha fazla esneklik, pürüzsüz doku ve üstün çevre dostu yapı.' },
+    { icon: '🛡️', title: '%100 Gıda Uyumu & Hipoalerjenik', desc: 'Kokusuz, tatsız, silikon ve lateks içermeyen yapısı ile alerji riskini sıfıra indiren güvenli temas.' },
+    { icon: '💰', title: 'Maliyet & Tedarik Avantajı', desc: 'Muadillerine göre yüksek maliyet avantajı, hızlı üretim ve yüksek hacimli B2B stok sürekliliği.' }
+  ],
+  en: [
+    { icon: '⚡', title: 'Hybrid TPE Technology', desc: 'Greater elasticity and smooth texture compared to vinyl and nitrile.' },
+    { icon: '🛡️', title: '100% Food Safe & Hypoallergenic', desc: 'Odorless, tasteless, latex-free & silicone-free formula for zero allergy risk.' },
+    { icon: '💰', title: 'Cost & Supply Efficiency', desc: 'High cost advantage over traditional gloves with robust B2B inventory readiness.' }
+  ],
+  ru: [
+    { icon: '⚡', title: 'Гибридная технология ТПЭ', desc: 'Повышенная эластичность и гладкая текстура по сравнению с винилом и нитрилом.' },
+    { icon: '🛡️', title: '100% Безопасно для пищевых продуктов и гипоаллергенно', desc: 'Состав без запаха, без вкуса, без латекса и силикона для снижения риска аллергии до нуля.' },
+    { icon: '💰', title: 'Эффективность затрат и поставок', desc: 'Высокое ценовое преимущество перед традиционными перчатками и надежная готовность B2B-запасов.' }
+  ],
+  mk: [
+    { icon: '⚡', title: 'Хибридна TPE технологија', desc: 'Поголема еластичност и мазна текстура во споредба со винил и нитрил.' },
+    { icon: '🛡️', title: '100% безбедно за храна и хипоалергично', desc: 'Формула без мирис, вкус, латекс и силикон за нула ризик од алергија.' },
+    { icon: '💰', title: 'Ефикасност на трошоци и снабдување', desc: 'Висока предност во цената во споредба со традиционалните ракавици со солидна B2B залиха.' }
+  ],
+  sr: [
+    { icon: '⚡', title: 'Hibridna TPE tehnologija', desc: 'Veća elastičnost i glatka tekstura u poređenju sa vinilom i nitrilom.' },
+    { icon: '🛡️', title: '100% bezbedno za hranu i hipoalergeno', desc: 'Formula bez mirisa, ukusa, lateksa i silikona za nulti rizik od alergija.' },
+    { icon: '💰', title: 'Efikasnost troškova i snabdevanja', desc: 'Visoka cenovna prednost u odnosu na tradicionalne rukavice uz stabilne B2B zalihe.' }
+  ],
+  sq: [
+    { icon: '⚡', title: 'Teknologji Hibride TPE', desc: 'Elasticitet më i lartë dhe teksturë e lëmuar në krahasim me vinilin dhe nitrilin.' },
+    { icon: '🛡️', title: '100% të sigurta për ushqim & hipoalergjike', desc: 'Formulë pa erë, pa shije, pa lateks dhe pa silikon për rrezik zero ndaj alergjive.' },
+    { icon: '💰', title: 'Efiçencë e kostos & furnizimit', desc: 'Avantazh i lartë i kostos ndaj dorezave tradicionale me furnizim të qëndrueshëm B2B.' }
+  ],
+  fa: [
+    { icon: '⚡', title: 'فناوری تی‌پی‌ای هیبریدی', desc: 'کشش بیشتر و بافت نرم‌تر در مقایسه с وینیل و نیتریل.' },
+    { icon: '🛡️', title: '۱۰۰٪ ایمن برای مواد غذایی و ضد حساسیت', desc: 'فرمول بدون بو، بدون طعم، بدون لاتکس و سیلیکون برای ریسک حساسیت صفر.' },
+    { icon: '💰', title: 'بهینه‌سازی هزینه و زنجیره تامین', desc: 'مزیت هزینه بالا نسبت به دستکش‌های سنتی همراه با موجودی بالا برای تامین B2B.' }
+  ]
+}[lang] || whyCards.en;
 
-const applications = [
-  { name: lang === 'tr' ? 'Gıda Üretimi & Servis' : 'Food Processing & Service', icon: '🍽️' },
-  { name: lang === 'tr' ? 'Muayene & Sıhhi Temas' : 'Examination & Hygiene', icon: '🩺' },
-  { name: lang === 'tr' ? 'Temizlik & Hijyen' : 'Cleaning & Maintenance', icon: '🧹' },
-  { name: lang === 'tr' ? 'Güzellik & Bakım Salonları' : 'Beauty & Wellness', icon: '✨' },
-  { name: lang === 'tr' ? 'Endüstriyel & Genel Temas' : 'Industrial & General Purpose', icon: '⚙️' }
-];
+const applications = {
+  tr: [
+    { name: 'Gıda Üretimi & Servis', icon: '🍽️' },
+    { name: 'Muayene & Sıhhi Temas', icon: '🩺' },
+    { name: 'Temizlik & Hijyen', icon: '🧹' },
+    { name: 'Güzellik & Bakım Salonları', icon: '✨' },
+    { name: 'Endüstriyel & Genel Temas', icon: '⚙️' }
+  ],
+  en: [
+    { name: 'Food Processing & Service', icon: '🍽️' },
+    { name: 'Examination & Hygiene', icon: '🩺' },
+    { name: 'Cleaning & Maintenance', icon: '🧹' },
+    { name: 'Beauty & Wellness', icon: '✨' },
+    { name: 'Industrial & General Purpose', icon: '⚙️' }
+  ],
+  ru: [
+    { name: 'Пищевая промышленность и общепит', icon: '🍽️' },
+    { name: 'Осмотр и санитарный контакт', icon: '🩺' },
+    { name: 'Уборка и гигиена', icon: '🧹' },
+    { name: 'Салоны красоты и велнес', icon: '✨' },
+    { name: 'Производство и общие работы', icon: '⚙️' }
+  ],
+  mk: [
+    { name: 'Преработка на храна и услуги', icon: '🍽️' },
+    { name: 'Прегледи и хигиена', icon: '🩺' },
+    { name: 'Чистење и одржување', icon: '🧹' },
+    { name: 'Козметика и нега', icon: '✨' },
+    { name: 'Индустрија и општа намена', icon: '⚙️' }
+  ],
+  sr: [
+    { name: 'Прехрамбена индустрија и услуге', icon: '🍽️' },
+    { name: 'Прегледи и хигијена', icon: '🩺' },
+    { name: 'Чишћење и одржавање', icon: '🧹' },
+    { name: 'Козметика и нега', icon: '✨' },
+    { name: 'Индустрија и општа намена', icon: '⚙️' }
+  ],
+  sq: [
+    { name: 'Përpunim Ushqimi & Shërbim', icon: '🍽️' },
+    { name: 'Ekzaminim & Higjienë', icon: '🩺' },
+    { name: 'Pastrim & Mirëmbajtje', icon: '🧹' },
+    { name: 'Bukuri & Kujdes', icon: '✨' },
+    { name: 'Industri & Përdorim i Përgjithshëm', icon: '⚙️' }
+  ],
+  fa: [
+    { name: 'فرآوری و خدمات صنایع غذایی', icon: '🍽️' },
+    { name: 'معاینه و بهداشت', icon: '🩺' },
+    { name: 'نظافت و بهداشت عمومی', icon: '🧹' },
+    { name: 'سالن‌های زیبایی و سلامت', icon: '✨' },
+    { name: 'صنعتی و کاربردهای عمومی', icon: '⚙️' }
+  ]
+}[lang] || applications.en;
+
+const sectionTitles = {
+  tr: { badge: 'Reflex Ürün Grubu', title: '7 Uzman Ürün Ailesi', lead: 'Her biri belirli kullanım ihtiyaçları, hijyen standartları ve et kalınlığı için geliştirilmiş profesyonel eldiven çözümleri.', whyBadge: 'Temel Avantajlar', appsBadge: 'Sektörler ve Kullanım Alanları' },
+  en: { badge: 'Reflex Product Line', title: '7 Specialized Product Families', lead: 'Professional disposable glove solutions engineered for specialized hygiene standards, materials, and tactile requirements.', whyBadge: 'Core Advantages', appsBadge: 'Industries & Use Cases' },
+  ru: { badge: 'Линейка продуктов Reflex', title: '7 специализированных семейств продуктов', lead: 'Профессиональные одноразовые перчатки, разработанные для специализированных гигиенических стандартов, материалов и требований к чувствительности.', whyBadge: 'Основные преимущества', appsBadge: 'Отрасли и применение' },
+  mk: { badge: 'Reflex производи', title: '7 специјализирани категории производи', lead: 'Професионални решенија за ракавици за еднократна употреба развиени за посебни хигиенски стандарди, материјали и прецизност.', whyBadge: 'Основни предности', appsBadge: 'Индустрии и употреба' },
+  sr: { badge: 'Reflex proizvodi', title: '7 specijalizovanih kategorija proizvoda', lead: 'Profesionalna rešenja za rukavice za jednokratnu upotrebu razvijena za posebne higijenske standarde, materijale i preciznost.', whyBadge: 'Osnovne prednosti', appsBadge: 'Industrije i upotreba' },
+  sq: { badge: 'Linja e Produkteve Reflex', title: '7 Familje Specializuara Produktesh', lead: 'Zgjidhje profesionale dorezash me një përdorim të projektuara për standarde të veçanta higjienike, materiale dhe ndjeshmëri.', whyBadge: 'Avantazhet kryesore', appsBadge: 'Industritë dhe përdorimi' },
+  fa: { badge: 'سبد محصولات رفلکس', title: '۷ خانواده محصول تخصصی', lead: 'دستکش‌های یک‌بارمصرف حرفه‌ای طراحی‌شده برای استانداردهای بهداشتی، متریال و ضخامت‌های مختلف.', whyBadge: 'مزایای اصلی', appsBadge: 'صنایع و کاربردها' }
+}[lang] || sectionTitles.en;
 
 const heroMainProduct = reflexProducts.find(p => p.slug === 'florex') || reflexProducts[0];
 ---

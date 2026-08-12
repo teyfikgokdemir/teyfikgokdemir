@@ -47,7 +47,7 @@ const translateColor = (col: string) => {
 
 const translateSize = (sz: string) => {
   const map: Record<string, Record<string, string>> = {
-    'Çocuk Standart': { tr: 'Çocuk Standart', en: 'Kids Standard', mk: 'Детски стандард', sr: 'Dečiji standard', sq: 'Fëmijë Standard', fa: 'استاندارد کودک' }
+    'Çocuk Standart': { tr: 'Çocuk Standart', en: 'Kids Standard', ru: 'Детский стандарт', mk: 'Детски стандард', sr: 'Dečiji standard', sq: 'Fëmijë Standard', fa: 'استاندارد کودک' }
   };
   return map[sz]?.[lang] || sz;
 };
