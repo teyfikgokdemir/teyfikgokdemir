@@ -15,6 +15,7 @@ const { locale } = Astro.props;
 const positioningStrip = {
   tr: ['Kurucu', 'Uluslararası Ticaret', 'Stratejik Tedarik', 'B2B', 'Dijital Görünürlük'],
   en: ['Founder', 'International Trade', 'Strategic Sourcing', 'B2B', 'Digital Visibility'],
+  ru: ['Основатель', 'Международная торговля', 'Стратегические закупки', 'B2B', 'Цифровая видимость'],
   mk: ['Основач', 'Меѓународна трговија', 'Стратешко снабдување', 'B2B', 'Дигитална видливост'],
   sr: ['Osnivač', 'Međunarodna trgovina', 'Strateška nabavka', 'B2B', 'Digitalna vidljivost'],
   sq: ['Themelues', 'Tregti Ndërkombëtare', 'Furnizim Strategjik', 'B2B', 'Dukshmëri Digjitale'],
@@ -33,6 +34,12 @@ const ctsegLinks = {
     reflex: 'https://ctseg.com.tr/tr/ticari-urunler/reflex-tek-kullanimlik-eldivenler/',
   },
   en: {
+    home: 'https://ctseg.com.tr/en/',
+    services: 'https://ctseg.com.tr/en/services/',
+    contact: 'https://ctseg.com.tr/en/contact/',
+    reflex: 'https://ctseg.com.tr/en/trade-products/reflex-disposable-gloves/',
+  },
+  ru: {
     home: 'https://ctseg.com.tr/en/',
     services: 'https://ctseg.com.tr/en/services/',
     contact: 'https://ctseg.com.tr/en/contact/',
@@ -609,6 +616,7 @@ const operationalSystems = baseCopy.ventures.items.filter((item) => !item.url);
 const operationalSystemsLabel = {
   tr: 'Dijital ve AI destekli operasyon sistemleri',
   en: 'Digital and AI-assisted operating systems',
+  ru: 'Операционные системы на базе ИИ и цифровых технологий',
   mk: 'Дигитални и оперативни системи поддржани од AI',
   sr: 'Digitalni i operativni sistemi podržani AI tehnologijom',
   sq: 'Sisteme digjitale dhe operacionale të asistuara nga AI',
@@ -651,6 +659,7 @@ const copy = {
 const legalCopy = {
   tr: { privacy: 'Gizlilik ve Çerez Politikası', kvkk: 'KVKK Aydınlatma Metni', terms: 'Kullanım Koşulları' },
   en: { privacy: 'Privacy & Cookie Policy', kvkk: 'Data Protection Notice', terms: 'Terms of Use' },
+  ru: { privacy: 'Политика конфиденциальности и файлов cookie', kvkk: 'Уведомление о защите данных', terms: 'Условия использования' },
   mk: { privacy: 'Политика за приватност и колачиња', kvkk: 'Известување за заштита на податоци', terms: 'Услови за користење' },
   sr: { privacy: 'Politika privatnosti i kolačića', kvkk: 'Obaveštenje o zaštiti podataka', terms: 'Uslovi korišćenja' },
   sq: { privacy: 'Politika e Privatësisë dhe Cookies', kvkk: 'Njoftim për Mbrojtjen e të Dhënave', terms: 'Kushtet e Përdorimit' },
