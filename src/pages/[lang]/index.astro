@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import FounderPage from '../../components/FounderPage.astro';
 import { content } from '../../i18n/content';
 import { locales, type Locale } from '../../i18n/locales';
+import { faqSchema } from '../../data/homeFaq';
 
 export function getStaticPaths() {
   return locales
@@ -12,7 +13,8 @@ export function getStaticPaths() {
 
 const locale = Astro.params.lang as Locale;
 const copy = content[locale];
+const pageSchema = faqSchema(locale);
 ---
-<BaseLayout locale={locale} copy={copy}>
+<BaseLayout locale={locale} copy={copy} pageSchema={pageSchema}>
   <FounderPage locale={locale} />
 </BaseLayout>

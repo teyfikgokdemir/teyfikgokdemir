@@ -7,6 +7,7 @@ import FounderTradeExpertise from './FounderTradeExpertise.astro';
 import type { Locale } from '../i18n/locales';
 import { content } from '../i18n/content';
 import { site } from '../data/site';
+import { homeFaq } from '../data/homeFaq';
 
 interface Props { locale: Locale; }
 
@@ -675,6 +676,7 @@ const legalCopy = {
 } as const;
 
 const legal = legalCopy[locale] ?? legalCopy.en;
+const faq = homeFaq[locale];
 const displayedYear = (title: string, year: string) =>
   title === 'QCT Studio' || title === 'QCT Commerce' ? '2025' : year;
 ---
@@ -694,6 +696,14 @@ const displayedYear = (title: string, year: string) =>
     </div>
     <div class="hero-media" data-reveal="hero-media">
       <img src={site.images.hero.path} srcset={site.images.hero.srcset} sizes="(max-width: 760px) 92vw, (max-width: 1180px) 48vw, 665px" width={site.images.hero.width} height={site.images.hero.height} alt={copy.images.hero} loading="eager" decoding="async" fetchpriority="high" />
+    </div>
+  </section>
+
+  <section class="positioning-strip" aria-label={copy.hero.eyebrow}>
+    <div class="positioning-strip__inner" data-reveal="section">
+      {currentStrip.map((item, index) => (
+        <span><b aria-hidden="true">0{index + 1}</b>{item}</span>
+      ))}
     </div>
   </section>
 
@@ -830,6 +840,24 @@ const displayedYear = (title: string, year: string) =>
     </div>
   </section>
 
+  <section class="section common-questions story-stage--light story-stage--mineral" id="questions" aria-labelledby="questions-title">
+    <div class="shell common-questions__grid">
+      <header class="common-questions__intro" data-reveal="section">
+        <p class="section-label">{faq.eyebrow}</p>
+        <h2 id="questions-title">{faq.title}</h2>
+        <p class="section-lead">{faq.lead}</p>
+      </header>
+      <div class="common-questions__list" data-reveal="section">
+        {faq.items.map((item, index) => (
+          <details class="common-question" name="commercial-questions">
+            <summary><span><b aria-hidden="true">0{index + 1}</b>{item.question}</span><i aria-hidden="true">+</i></summary>
+            <p>{item.answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <section class="section contact-section story-stage--olive" id="contact" aria-labelledby="contact-title">
     <div class="shell">
       <div class="contact-card" data-reveal="section">
@@ -847,6 +875,95 @@ const displayedYear = (title: string, year: string) =>
 <FloatingActions locale={locale} />
 
 <style>
+  .positioning-strip {
+    background: var(--scene-stone);
+    border-block: 1px solid var(--border);
+  }
+  .positioning-strip__inner {
+    width: min(1340px, calc(100% - 3rem));
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .positioning-strip span {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    min-height: 4.15rem;
+    padding: .8rem 1.1rem;
+    border-inline-start: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: .76rem;
+    font-weight: 750;
+    letter-spacing: .055em;
+    line-height: 1.35;
+    text-transform: uppercase;
+  }
+  .positioning-strip span:last-child { border-inline-end: 1px solid var(--border); }
+  .positioning-strip b {
+    color: var(--accent);
+    font-size: .65rem;
+    letter-spacing: .08em;
+  }
+  .common-questions { padding-block: clamp(4rem, 7vw, 7rem); }
+  .common-questions__grid {
+    display: grid;
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    gap: clamp(2.5rem, 8vw, 8.5rem);
+    align-items: start;
+  }
+  .common-questions__intro { position: sticky; top: calc(var(--header-height) + 1.75rem); }
+  .common-questions__intro h2 { max-width: 10ch; }
+  .common-questions__list { border-top: 1px solid var(--line); }
+  .common-question { border-bottom: 1px solid var(--line); }
+  .common-question summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.35rem 0;
+    color: var(--text);
+    cursor: pointer;
+    font-family: "Iowan Old Style", Baskerville, Georgia, "Times New Roman", serif;
+    font-size: clamp(1.2rem, 2vw, 1.55rem);
+    font-weight: 600;
+    line-height: 1.18;
+    list-style: none;
+  }
+  .common-question summary::-webkit-details-marker { display: none; }
+  .common-question summary span { display: flex; gap: .9rem; align-items: baseline; }
+  .common-question summary b {
+    flex: none;
+    color: var(--accent);
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    font-size: .62rem;
+    letter-spacing: .08em;
+  }
+  .common-question summary i {
+    flex: none;
+    display: grid;
+    width: 1.75rem;
+    height: 1.75rem;
+    place-items: center;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    color: var(--accent);
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    transition: transform var(--motion-fast) ease, color var(--motion-fast) ease, border-color var(--motion-fast) ease;
+  }
+  .common-question[open] summary i { transform: rotate(45deg); border-color: var(--accent); }
+  .common-question p {
+    max-width: 65ch;
+    margin: 0;
+    padding: 0 3.25rem 1.5rem;
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.75;
+  }
   .story-stage {
     position: relative;
     isolation: isolate;
@@ -1402,6 +1519,10 @@ const displayedYear = (title: string, year: string) =>
     .hero-media { min-height: 520px; }
     .ctseg-featured__panel { grid-template-columns: 1fr; }
     .ctseg-featured__services { grid-template-columns: 1fr; }
+    .positioning-strip__inner { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .common-questions__grid { grid-template-columns: 1fr; gap: 2.75rem; }
+    .common-questions__intro { position: static; }
+    .common-questions__intro h2 { max-width: 15ch; }
   }
   @media (max-width: 560px) {
     .hero { width: min(100% - 1.25rem, var(--max)); }
@@ -1413,6 +1534,12 @@ const displayedYear = (title: string, year: string) =>
     .ctseg-featured__actions .button { width: 100%; }
     .operational-systems article { grid-template-columns: 1fr; gap: .55rem; }
     .timeline::before { inset-inline-start: calc(62px + .5rem); }
+    .positioning-strip__inner { width: min(100% - 1.25rem, 1340px); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .positioning-strip span { min-height: 3.75rem; padding: .7rem .75rem; font-size: .66rem; }
+    .positioning-strip span:nth-child(3) { border-inline-end: 1px solid var(--border); }
+    .common-question summary { gap: .85rem; padding: 1.1rem 0; font-size: 1.14rem; }
+    .common-question summary span { gap: .65rem; }
+    .common-question p { padding: 0 0 1.35rem 1.75rem; font-size: .95rem; }
   }
   @media (prefers-reduced-motion: reduce) {
     [data-reveal],
@@ -1420,7 +1547,8 @@ const displayedYear = (title: string, year: string) =>
     .ctseg-featured__services li,
     .ctseg-featured__panel::before,
     .timeline::before,
-    .timeline li {
+    .timeline li,
+    .common-question summary i {
       opacity: 1;
       transform: none;
       transition: none;
@@ -1428,30 +1556,6 @@ const displayedYear = (title: string, year: string) =>
     }
   }
 
-  .positioning-strip {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem 1.25rem;
-    padding-block: 1.5rem;
-    margin-block: 1.5rem 3rem;
-    border-block: 1px solid var(--line, #c9bfb2);
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-secondary, #625c54);
-  }
-  .positioning-strip__item-wrap {
-    display: inline-flex;
-    align-items: center;
-    gap: 1.25rem;
-  }
-  .positioning-strip__sep {
-    color: var(--accent-soft, #a65332);
-    font-weight: 700;
-  }
   .hero-copy h1 {
     max-width: 22ch !important;
     font-family: var(--font-serif, Georgia, serif) !important;

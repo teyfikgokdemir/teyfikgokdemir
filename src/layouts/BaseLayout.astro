@@ -150,9 +150,7 @@ const jsonLd = {
       url: site.origin,
       author: { '@id': site.origin + '/#person' },
     },
-    ...(pageSchema
-      ? (Array.isArray(pageSchema) ? pageSchema : [pageSchema])
-      : [{
+    {
       '@type': 'WebPage',
       '@id': canonical + '#webpage',
       url: canonical,
@@ -167,7 +165,8 @@ const jsonLd = {
         width: site.images.profile.originalWidth,
         height: site.images.profile.originalHeight,
       },
-    }]),
+    },
+    ...(pageSchema ? (Array.isArray(pageSchema) ? pageSchema : [pageSchema]) : []),
   ],
 };
 ---

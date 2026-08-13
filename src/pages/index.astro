@@ -2,12 +2,14 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FounderPage from '../components/FounderPage.astro';
 import { content } from '../i18n/content';
+import { faqSchema } from '../data/homeFaq';
 
 const locale = 'tr';
 const copy = content.tr;
 const title = 'Teyfik Gökdemir | Uluslararası Ticaret, Stratejik Tedarik ve CTSEG';
 const description = 'CTSEG kurucusu Teyfik Gökdemir; stratejik tedarik, tedarikçi doğrulama ve uluslararası ticari operasyonlar için kanıta dayalı sistemler kurar.';
+const pageSchema = faqSchema(locale);
 ---
-<BaseLayout locale={locale} copy={copy} title={title} description={description} pathname="/">
+<BaseLayout locale={locale} copy={copy} title={title} description={description} pathname="/" pageSchema={pageSchema}>
   <FounderPage locale={locale} />
 </BaseLayout>

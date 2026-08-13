@@ -2,12 +2,14 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FounderPage from '../../components/FounderPage.astro';
 import { content } from '../../i18n/content';
+import { faqSchema } from '../../data/homeFaq';
 
 const locale = 'en';
 const copy = content.en;
 const title = 'Teyfik Gökdemir | International Trade, Strategic Sourcing & CTSEG';
 const description = 'CTSEG founder Teyfik Gökdemir builds evidence-led systems for strategic sourcing, supplier verification and cross-border commercial operations.';
+const pageSchema = faqSchema(locale);
 ---
-<BaseLayout locale={locale} copy={copy} title={title} description={description}>
+<BaseLayout locale={locale} copy={copy} title={title} description={description} pageSchema={pageSchema}>
   <FounderPage locale={locale} />
 </BaseLayout>
