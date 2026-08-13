@@ -142,27 +142,25 @@ for (const page of pageByRoute.values()) {
 const faHome = pageByRoute.get('/fa/');
 if (!faHome) errors.push('/fa/: sayfa bulunamadı.');
 else {
-  const requiredPersianStrategy = [
-    'برای تولیدکنندگان و صادرکنندگان ایرانی',
-    'ترکیه، اروپا، آمریکا و سایر بازارهای هدف',
-    'کارگاه‌های فرش دستباف','تولیدکنندگان فرش ابریشم دستباف','تولیدکنندگان فرش ماشینی','صادرکنندگان فرش',
-    'تولیدکنندگان پارچه','تولیدکنندگان حوله و حوله تن‌پوش','تولیدکنندگان منسوجات خانگی','تولیدکنندگان پوشاک','برندهای دارای تولید با نام تجاری اختصاصی',
-    'ارزیابی تجاری محصول','تعیین بازار هدف','آماده‌سازی پیشنهاد تجاری','ارتباط و مذاکره اولیه با خریداران','مدیریت RFQ','هماهنگی نمونه',
-    'بررسی قیمت، MOQ و ظرفیت تولید','هماهنگی بسته‌بندی و برچسب‌گذاری','بررسی آمادگی اسناد صادراتی','هماهنگی ورود به بازار و توسعه کانال فروش',
-    'هر محصول پیش از معرفی به بازار باید از نظر کیفیت، ظرفیت تولید، قیمت‌گذاری، حداقل سفارش، بسته‌بندی، اسناد و امکان اجرای تجاری بررسی شود.',
-    'معرفی محصول برای ارزیابی تجاری','آغاز گفت‌وگو درباره بازارهای بین‌المللی'
+  const requiredPersianFocus = [
+    'تأمین روغن آفتابگردان',
+    'خشکبار و میوه خشک',
+    'مشخصات محصول و کاربرد هدف',
+    'COA'
   ];
-  for (const text of requiredPersianStrategy) if (!faHome.html.includes(text)) errors.push(`/fa/: محتوای راهبردی فارسی eksik (${text}).`);
-  const expectedSectorLinks = [
+  for (const text of requiredPersianFocus) if (!faHome.html.includes(text)) errors.push(`/fa/: محتوای تجاری فارسی eksik (${text}).`);
+  const expectedFocusLinks = [
+    'https://ctseg.com.tr/en/insights/vegetable-oil-sourcing-rfq-checklist/',
+    'https://ctseg.com.tr/en/insights/nuts-dried-fruit-quality-document-check/'
+  ];
+  const expectedSpecialistLinks = [
     'https://ctseg.com.tr/fa/sourcing/فرش-ایرانی/',
     'https://ctseg.com.tr/fa/sourcing/فرش-ابریشم-دستباف/',
     'https://ctseg.com.tr/fa/sourcing/تامین-عمده-منسوجات/'
   ];
-  for (const href of expectedSectorLinks) if (!faHome.html.includes(`href="${encodeURI(href)}"`) && !faHome.html.includes(`href="${href}"`)) errors.push(`/fa/: CTSEG sektör bağlantısı eksik (${href}).`);
-  if ((faHome.html.match(/data-fa-sector-link=/g) ?? []).length !== 3) errors.push('/fa/: üç ayrı CTSEG sektör bağlantısı bekleniyor.');
-  if (!titleText(faHome.html)?.includes('هماهنگ‌کننده تجاری تولیدکنندگان و صادرکنندگان ایرانی')) errors.push('/fa/: title üretici/ihracatçı hedefini yansıtmıyor.');
-  const faDescription = attribute(selectedTag(faHome.html, 'meta', 'name', 'description'), 'content') ?? '';
-  if (!faDescription.includes('تولیدکنندگان و صادرکنندگان ایرانی') || !faDescription.includes('ترکیه، اروپا، آمریکا')) errors.push('/fa/: meta description üretici/ihracatçı ve hedef pazarları yansıtmıyor.');
+  for (const href of [...expectedFocusLinks, ...expectedSpecialistLinks]) if (!faHome.html.includes(`href="${encodeURI(href)}"`) && !faHome.html.includes(`href="${href}"`)) errors.push(`/fa/: CTSEG bağlantısı eksik (${href}).`);
+  if ((faHome.html.match(/data-trade-focus-link=/g) ?? []).length !== 2) errors.push('/fa/: iki ticari odak bağlantısı bekleniyor.');
+  if ((faHome.html.match(/data-specialist-link=/g) ?? []).length !== 3) errors.push('/fa/: üç ikincil uzmanlık bağlantısı bekleniyor.');
   if (!/<html\b[^>]*lang="fa"[^>]*dir="rtl"/i.test(faHome.html)) errors.push('/fa/: lang=fa ve dir=rtl eksik.');
   const schemaText = [...faHome.html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)].map((match)=>match[1]).join('\n');
   for (const expertise of ['هماهنگی تجاری بین‌المللی','ورود تولیدکنندگان ایرانی به بازار','ارتباط تولیدکننده و خریدار','توسعه کانال فروش']) {
@@ -171,13 +169,13 @@ else {
 }
 
 const tradeEntryContracts = {
-  tr:{title:'İran halısı ve tekstilde uluslararası ticari koordinasyon',links:['https://ctseg.com.tr/tr/sourcing/iran-halisi/','https://ctseg.com.tr/tr/sourcing/el-dokumasi-ipek-hali/','https://ctseg.com.tr/tr/sourcing/toptan-tekstil-tedariki/']},
-  en:{title:'International commercial coordination for Iranian carpets and textiles',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
-  ru:{title:'Международная коммерческая координация в сфере ковров и текстиля',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
-  mk:{title:'Меѓународна трговска координација за ирански теписи и текстил',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
-  sr:{title:'Međunarodna komercijalna koordinacija za iranske tepihe i tekstil',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
-  sq:{title:'Koordinim tregtar ndërkombëtar për qilimat iranianë dhe tekstilet',links:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
-  fa:{title:'هماهنگی تجاری بین‌المللی برای فرش ایرانی و منسوجات',links:['https://ctseg.com.tr/fa/sourcing/فرش-ایرانی/','https://ctseg.com.tr/fa/sourcing/فرش-ابریشم-دستباف/','https://ctseg.com.tr/fa/sourcing/تامین-عمده-منسوجات/']}
+  tr:{focusLinks:['https://ctseg.com.tr/tr/insights/bitkisel-yag-tedarikinde-rfq-kontrol-listesi/','https://ctseg.com.tr/tr/insights/kuruyemis-kuru-meyve-kalite-belge-kontrolu/'],specialistLinks:['https://ctseg.com.tr/tr/sourcing/iran-halisi/','https://ctseg.com.tr/tr/sourcing/el-dokumasi-ipek-hali/','https://ctseg.com.tr/tr/sourcing/toptan-tekstil-tedariki/']},
+  en:{focusLinks:['https://ctseg.com.tr/en/insights/vegetable-oil-sourcing-rfq-checklist/','https://ctseg.com.tr/en/insights/nuts-dried-fruit-quality-document-check/'],specialistLinks:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
+  ru:{focusLinks:['https://ctseg.com.tr/en/insights/vegetable-oil-sourcing-rfq-checklist/','https://ctseg.com.tr/en/insights/nuts-dried-fruit-quality-document-check/'],specialistLinks:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
+  mk:{focusLinks:['https://ctseg.com.tr/en/insights/vegetable-oil-sourcing-rfq-checklist/','https://ctseg.com.tr/en/insights/nuts-dried-fruit-quality-document-check/'],specialistLinks:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
+  sr:{focusLinks:['https://ctseg.com.tr/en/insights/vegetable-oil-sourcing-rfq-checklist/','https://ctseg.com.tr/en/insights/nuts-dried-fruit-quality-document-check/'],specialistLinks:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
+  sq:{focusLinks:['https://ctseg.com.tr/en/insights/vegetable-oil-sourcing-rfq-checklist/','https://ctseg.com.tr/en/insights/nuts-dried-fruit-quality-document-check/'],specialistLinks:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
+  fa:{focusLinks:['https://ctseg.com.tr/en/insights/vegetable-oil-sourcing-rfq-checklist/','https://ctseg.com.tr/en/insights/nuts-dried-fruit-quality-document-check/'],specialistLinks:['https://ctseg.com.tr/fa/sourcing/فرش-ایرانی/','https://ctseg.com.tr/fa/sourcing/فرش-ابریشم-دستباف/','https://ctseg.com.tr/fa/sourcing/تامین-عمده-منسوجات/']}
 };
 const mythbornContracts = {
   tr:{status:'Aktif girişim',region:'Uluslararası',description:'Tarot, Katina, astroloji ve kişisel keşif deneyimlerini çok dilli dijital bir platformda birleştiren bağımsız tüketici markası.'},
@@ -200,10 +198,10 @@ for (const [lang,route] of [['tr','/'],['en','/en/'],['ru','/ru/'],['mk','/mk/']
   const page = pageByRoute.get(route);
   if (!page) { errors.push(`${route}: locale ana sayfası eksik.`); continue; }
   const tradeContract = tradeEntryContracts[lang];
-  if (!page.html.includes(tradeContract.title)) errors.push(`${route}: halı/tekstil uzmanlık başlığı eksik.`);
-  if ((page.html.match(/data-sector-link=/g) ?? []).length !== 3) errors.push(`${route}: üç ayrı sektör CTA bağlantısı bekleniyor.`);
-  for (const href of tradeContract.links) if (!page.html.includes(`href="${encodeURI(href)}"`) && !page.html.includes(`href="${href}"`)) errors.push(`${route}: sektör CTA hedefi eksik (${href}).`);
-  if (!page.html.includes('/images/ctseg-iranian-carpets-editorial.webp')) errors.push(`${route}: kontrollü editoryal görsel eksik.`);
+  if ((page.html.match(/data-trade-focus-link=/g) ?? []).length !== 2) errors.push(`${route}: iki ticari odak CTA bağlantısı bekleniyor.`);
+  if ((page.html.match(/data-specialist-link=/g) ?? []).length !== 3) errors.push(`${route}: üç ikincil uzmanlık CTA bağlantısı bekleniyor.`);
+  for (const href of [...tradeContract.focusLinks, ...tradeContract.specialistLinks]) if (!page.html.includes(`href="${encodeURI(href)}"`) && !page.html.includes(`href="${href}"`)) errors.push(`${route}: ticari CTA hedefi eksik (${href}).`);
+  for (const image of ['/images/ctseg-vegetable-oils-food-editorial.webp','/images/ctseg-iranian-pistachios-premium.webp']) if (!page.html.includes(image)) errors.push(`${route}: ticari odak görseli eksik (${image}).`);
   const mythbornContract = mythbornContracts[lang];
   for (const expected of [mythbornContract.status,mythbornContract.region,mythbornContract.description]) if (!page.html.includes(expected)) errors.push(`${route}: Mythborn yerelleştirmesi eksik (${expected}).`);
   if (!page.html.includes('href="https://mythborn.co/"')) errors.push(`${route}: Mythborn kartı canlı trailing-slash hedefini kullanmıyor.`);

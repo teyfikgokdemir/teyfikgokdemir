@@ -39,6 +39,14 @@ Yeni `npm run verify:premium` komutu, yedi ana dil sayfasının birer `h1` taş�
 
 Cloudflare tarafında mevcut disabled `Canonical root to Turkish` kuralı korunarak, etkin `Canonical HTTPS non-www` kuralının ifadesi kök yolu da kapsayacak şekilde güncellendi. Son canlı kontrollerde `https://www.teyfikgokdemir.com/` 301 ile `https://teyfikgokdemir.com/` adresine, `https://www.teyfikgokdemir.com/en/?source=canonical-test` ise query string korunarak `https://teyfikgokdemir.com/en/?source=canonical-test` adresine yönlendi.
 
+## Son ticari odak güncellemesi
+
+Ana sayfadaki geniş İran halısı ve tekstil bloğu yeniden kurgulandı. CTSEG ana sayfası ve kaynak içeriği incelendikten sonra birinci sıraya **ayçiçek yağı tedariki**, ikinci sıraya **İran menşeli kuruyemiş ve kuru meyve** yerleştirildi. Bu iki alan; ürün spesifikasyonu, ambalaj/MOQ, COA, menşe, parti analizi, numune, izlenebilirlik ve teslim modeli gibi gerçek satın alma kriterleriyle anlatılıyor. Her kart, CTSEG’in ilgili Türkçe veya İngilizce RFQ/kalite rehberine bağlanıyor.
+
+Halı ve tekstil kaldırılmadı; ana sayfada daha doğru bir ağırlıkla, **seçili uzmanlık alanları** satırına taşındı. İran halısı, el dokuması ipek halı ve toptan tekstil CTSEG iç sayfalarına ayrı bağlantılarla yaşamaya devam ediyor. Böylece ana sayfa, CTSEG’in güncel ticari odağını daha net taşırken kişisel marka geçmişindeki halı/tekstil uzmanlığını da kaybetmiyor.
+
+Yeni görseller CTSEG deposundan kişisel sitenin `public/images` alanına alınarak site içinde sunuluyor. Yedi dil varyantında üretim derlemesi, SEO denetimi, premium kontrolü ve `git diff --check` başarıyla tamamlandı.
+
 ## SEO/GEO/AEO/AIO için hâlâ gerekenler
 
 Teknik temel artık güçlü olsa da arama görünürlüğü yalnızca etiket ve şemadan oluşmaz. Google, AI Overviews ve AI Mode için ayrı bir işaretleme veya özel teknik gereksinim olmadığını; mevcut teknik SEO, taranabilirlik, iç bağlantılar, iyi sayfa deneyimi, metinsel içerik ve görünür içerikle uyumlu yapılandırılmış verinin esas olduğunu belirtiyor [3]. Bu nedenle `llms.txt` yardımcı bir makine-okunabilir kaynak olarak korunabilir ancak tek başına sıralama veya AI alıntısı sağlamaz.
