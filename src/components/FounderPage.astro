@@ -4,6 +4,7 @@ import Footer from './Footer.astro';
 import VentureMarquee from './VentureMarquee.astro';
 import FloatingActions from './FloatingActions.astro';
 import FounderTradeExpertise from './FounderTradeExpertise.astro';
+import CommercialEvaluations from './CommercialEvaluations.astro';
 import type { Locale } from '../i18n/locales';
 import { content } from '../i18n/content';
 import { site } from '../data/site';
@@ -750,6 +751,7 @@ const displayedYear = (title: string, year: string) =>
   </section>
 
   <FounderTradeExpertise locale={locale} />
+  <CommercialEvaluations locale={locale} />
 
   <section class="section story-stage story-stage--light story-stage--mineral story-stage--intro" aria-labelledby="intro-title">
     <div class="shell intro-grid">

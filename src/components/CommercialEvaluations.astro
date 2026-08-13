@@ -1,0 +1,382 @@
+---
+type Lang = 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa';
+
+type Evaluation = {
+  market: string;
+  title: string;
+  text: string;
+  signals: string[];
+};
+
+type Copy = {
+  label: string;
+  title: string;
+  lead: string;
+  status: string;
+  disclaimer: string;
+  evaluations: Evaluation[];
+  cta: string;
+};
+
+const { locale } = Astro.props as { locale: Lang };
+
+const copy: Record<Lang, Copy> = {
+  tr: {
+    label: 'Devam eden ticari değerlendirmeler',
+    title: 'Pazarlar arasında geliştirilen çalışma hatları.',
+    lead: 'Bu alanlar, ürün, karşı taraf, belge, teklif ve teslim gerçeklerini birlikte değerlendiren güncel uluslararası ticaret çalışmalarını temsil eder.',
+    status: 'Değerlendirme aşamasında',
+    disclaimer: 'Bu bölüm sonuçlanmış anlaşma, garanti edilen tedarik veya kamuya açıklanmış müşteri listesi değildir. Ticari gizlilik korunarak çalışma alanları ve karar disiplini özetlenir.',
+    evaluations: [
+      {
+        market: 'Asya · enerji ve hammadde',
+        title: 'Biyoyakıt tedarik koridoru',
+        text: 'Enerji hammaddesi için hacim, teknik uygunluk, menşe, teslim modeli ve karşı taraf hazırlığını ortak bir ticari çerçevede değerlendirme.',
+        signals: ['Ürün ve teknik çerçeve', 'Tedarik koridoru', 'Teslim modeli'],
+      },
+      {
+        market: 'Seçili pazarlar · bitkisel yağlar',
+        title: 'Ambalajlı ayçiçek yağı ihracatı',
+        text: 'PET veya teneke ambalajlı ürünlerde spesifikasyon, etiket, MOQ, teklif yapısı ve hedef pazar koşullarını birbirine bağlama.',
+        signals: ['Ambalaj ve etiket', 'RFQ ve teklif', 'Pazar uygunluğu'],
+      },
+      {
+        market: 'İran ↔ Türkiye · gıda ticareti',
+        title: 'Kuruyemiş ve kuru meyve ithalatı',
+        text: 'Ürün sınıfı, menşe, kalibre, numune, parti analizi, ambalaj ve ithalat belgeleri üzerinden uygulanabilir tedarik akışı oluşturma.',
+        signals: ['Kalite ve analiz', 'İzlenebilirlik', 'İthalat koordinasyonu'],
+      },
+      {
+        market: 'Türkiye → bölgesel pazarlar · hijyen',
+        title: 'Tek kullanımlık eldiven dağıtımı',
+        text: 'REFLEX portföyü için ürün uygulaması, dokümantasyon, alıcı profili, dağıtım modeli ve ilk ticari temasların yapılandırılması.',
+        signals: ['Ürün uygulaması', 'Kalite belgeleri', 'Dağıtım modeli'],
+      },
+      {
+        market: 'Avrupa · bitkisel yağlar',
+        title: 'İlk temas ve teklif çerçevesi',
+        text: 'Ayçiçek yağı ihracatı için alıcı ihtiyacını, ambalaj yapısını, fiyat varsayımlarını ve teslim koşullarını ilk değerlendirmede netleştirme.',
+        signals: ['Alıcı ihtiyacı', 'Teklif disiplini', 'Ticari sonraki adım'],
+      },
+    ],
+    cta: 'CTSEG ile ticari talebinizi paylaşın',
+  },
+  en: {
+    label: 'Ongoing commercial assessments',
+    title: 'Workstreams developed between markets.',
+    lead: 'These areas represent current international trade work in which product, counterparties, documents, quotations and delivery realities are assessed together.',
+    status: 'Under assessment',
+    disclaimer: 'This section is not a list of concluded agreements, guaranteed supply or publicly disclosed customers. It summarises work areas and decision discipline while preserving commercial confidentiality.',
+    evaluations: [
+      {
+        market: 'Asia · energy and feedstock',
+        title: 'Biofuel supply corridor',
+        text: 'A joint commercial assessment of volume, technical suitability, origin, delivery model and counterparty readiness for energy feedstock.',
+        signals: ['Product and technical frame', 'Supply corridor', 'Delivery model'],
+      },
+      {
+        market: 'Selected markets · vegetable oils',
+        title: 'Packed sunflower-oil exports',
+        text: 'Connecting specification, labelling, MOQ, quotation structure and target-market conditions for PET or tin-packed products.',
+        signals: ['Packaging and labelling', 'RFQ and quotation', 'Market suitability'],
+      },
+      {
+        market: 'Iran ↔ Türkiye · food trade',
+        title: 'Nuts and dried-fruit imports',
+        text: 'Building an executable supply flow through product grade, origin, sizing, samples, batch analysis, packaging and import documentation.',
+        signals: ['Quality and analysis', 'Traceability', 'Import coordination'],
+      },
+      {
+        market: 'Türkiye → regional markets · hygiene',
+        title: 'Disposable-glove distribution',
+        text: 'Structuring product application, documentation, buyer profile, distribution model and initial commercial contact for the REFLEX portfolio.',
+        signals: ['Product application', 'Quality documents', 'Distribution model'],
+      },
+      {
+        market: 'Europe · vegetable oils',
+        title: 'Initial contact and quotation frame',
+        text: 'Clarifying buyer requirements, packing format, price assumptions and delivery terms for sunflower-oil exports at the first assessment stage.',
+        signals: ['Buyer requirement', 'Quotation discipline', 'Commercial next step'],
+      },
+    ],
+    cta: 'Share your commercial requirement with CTSEG',
+  },
+  ru: {
+    label: 'Текущие коммерческие оценки',
+    title: 'Рабочие направления, развиваемые между рынками.',
+    lead: 'Эти направления отражают текущую международную торговую работу, где продукт, стороны сделки, документы, предложения и условия поставки рассматриваются вместе.',
+    status: 'На этапе оценки',
+    disclaimer: 'Этот раздел не является перечнем заключённых соглашений, гарантированных поставок или публично раскрытых клиентов. Он описывает направления работы и дисциплину принятия решений с сохранением коммерческой конфиденциальности.',
+    evaluations: [
+      { market: 'Азия · энергия и сырьё', title: 'Коридор поставок биотоплива', text: 'Совместная коммерческая оценка объёма, технической применимости, происхождения, модели поставки и готовности контрагентов для энергетического сырья.', signals: ['Продуктовая и техническая рамка', 'Коридор поставок', 'Модель поставки'] },
+      { market: 'Выбранные рынки · растительные масла', title: 'Экспорт фасованного подсолнечного масла', text: 'Сопоставление спецификации, маркировки, MOQ, структуры предложения и требований целевого рынка для продукции в PET или жестяной таре.', signals: ['Упаковка и маркировка', 'RFQ и предложение', 'Соответствие рынку'] },
+      { market: 'Иран ↔ Турция · продовольственная торговля', title: 'Импорт орехов и сухофруктов', text: 'Формирование применимого потока поставок через класс продукта, происхождение, калибр, образцы, анализ партии, упаковку и импортные документы.', signals: ['Качество и анализ', 'Прослеживаемость', 'Импортная координация'] },
+      { market: 'Турция → региональные рынки · гигиена', title: 'Дистрибуция одноразовых перчаток', text: 'Структурирование применения продукта, документации, профиля покупателя, модели дистрибуции и первого коммерческого контакта для портфеля REFLEX.', signals: ['Применение продукта', 'Документы качества', 'Модель дистрибуции'] },
+      { market: 'Европа · растительные масла', title: 'Первый контакт и рамка предложения', text: 'Уточнение требований покупателя, формата упаковки, ценовых предпосылок и условий поставки для экспорта подсолнечного масла на первом этапе оценки.', signals: ['Требование покупателя', 'Дисциплина предложения', 'Следующий коммерческий шаг'] },
+    ],
+    cta: 'Передайте ваш коммерческий запрос CTSEG',
+  },
+  mk: {
+    label: 'Тековни трговски процени',
+    title: 'Работни насоки развиени меѓу пазари.',
+    lead: 'Овие насоки претставуваат тековна меѓународна трговска работа во која производот, страните, документите, понудите и реалноста на испораката се проценуваат заедно.',
+    status: 'Во фаза на процена',
+    disclaimer: 'Овој дел не е листа на склучени договори, гарантирани набавки или јавно објавени клиенти. Ги сумира работните насоки и дисциплината на одлучување со зачувување на трговската доверливост.',
+    evaluations: [
+      { market: 'Азија · енергија и суровини', title: 'Коридор за снабдување со биогориво', text: 'Заедничка трговска процена на обем, техничка соодветност, потекло, модел на испорака и подготвеност на страните за енергетски суровини.', signals: ['Производна и техничка рамка', 'Коридор за снабдување', 'Модел на испорака'] },
+      { market: 'Избрани пазари · растителни масла', title: 'Извоз на пакувано сончогледово масло', text: 'Поврзување на спецификација, етикетирање, MOQ, структура на понуда и услови на целниот пазар за PET или лимено пакување.', signals: ['Пакување и етикетирање', 'RFQ и понуда', 'Пазарна соодветност'] },
+      { market: 'Иран ↔ Турција · трговија со храна', title: 'Увоз на јаткасти плодови и сушено овошје', text: 'Создавање применлив тек на снабдување преку класа на производ, потекло, калибар, примероци, анализи по партија, пакување и увозна документација.', signals: ['Квалитет и анализа', 'Следливост', 'Увозна координација'] },
+      { market: 'Турција → регионални пазари · хигиена', title: 'Дистрибуција на еднократни ракавици', text: 'Структурирање примена на производ, документација, профил на купувач, модел на дистрибуција и прв трговски контакт за портфолиото REFLEX.', signals: ['Примена на производ', 'Документи за квалитет', 'Модел на дистрибуција'] },
+      { market: 'Европа · растителни масла', title: 'Прв контакт и рамка за понуда', text: 'Појаснување на потребите на купувачот, форматот на пакување, ценовните претпоставки и условите за испорака за извоз на сончогледово масло во првата процена.', signals: ['Потреба на купувачот', 'Дисциплина на понуда', 'Следен трговски чекор'] },
+    ],
+    cta: 'Споделете го вашиот трговски услов со CTSEG',
+  },
+  sr: {
+    label: 'Tekuće komercijalne procene',
+    title: 'Radni pravci razvijeni između tržišta.',
+    lead: 'Ovi pravci predstavljaju tekući međunarodni trgovinski rad u kome se proizvod, strane, dokumenta, ponude i realnost isporuke procenjuju zajedno.',
+    status: 'U fazi procene',
+    disclaimer: 'Ovaj odeljak nije lista zaključenih ugovora, garantovanog snabdevanja ili javno objavljenih klijenata. Sažima oblasti rada i disciplinu odlučivanja uz očuvanje poslovne poverljivosti.',
+    evaluations: [
+      { market: 'Azija · energija i sirovine', title: 'Koridor snabdevanja biogorivom', text: 'Zajednička komercijalna procena obima, tehničke prikladnosti, porekla, modela isporuke i spremnosti strana za energetske sirovine.', signals: ['Proizvodni i tehnički okvir', 'Koridor snabdevanja', 'Model isporuke'] },
+      { market: 'Odabrana tržišta · biljna ulja', title: 'Izvoz pakovanog suncokretovog ulja', text: 'Povezivanje specifikacije, označavanja, MOQ-a, strukture ponude i uslova ciljnog tržišta za PET ili limenu ambalažu.', signals: ['Ambalaža i označavanje', 'RFQ i ponuda', 'Tržišna prikladnost'] },
+      { market: 'Iran ↔ Turska · trgovina hranom', title: 'Uvoz orašastih plodova i suvog voća', text: 'Formiranje primenljivog toka snabdevanja kroz klasu proizvoda, poreklo, kalibar, uzorke, analize partije, ambalažu i uvoznu dokumentaciju.', signals: ['Kvalitet i analiza', 'Sledljivost', 'Uvozna koordinacija'] },
+      { market: 'Turska → regionalna tržišta · higijena', title: 'Distribucija jednokratnih rukavica', text: 'Strukturiranje primene proizvoda, dokumentacije, profila kupca, modela distribucije i prvog komercijalnog kontakta za REFLEX portfolio.', signals: ['Primena proizvoda', 'Dokumenti kvaliteta', 'Model distribucije'] },
+      { market: 'Evropa · biljna ulja', title: 'Prvi kontakt i okvir ponude', text: 'Razjašnjavanje potreba kupca, formata ambalaže, cenovnih pretpostavki i uslova isporuke za izvoz suncokretovog ulja u prvoj proceni.', signals: ['Potreba kupca', 'Disciplina ponude', 'Sledeći komercijalni korak'] },
+    ],
+    cta: 'Podelite vaš komercijalni zahtev sa CTSEG-om',
+  },
+  sq: {
+    label: 'Vlerësime tregtare në vazhdim',
+    title: 'Linja pune të zhvilluara mes tregjeve.',
+    lead: 'Këto fusha përfaqësojnë punë aktuale në tregtinë ndërkombëtare, ku produkti, palët, dokumentet, ofertat dhe realiteti i dërgesës vlerësohen së bashku.',
+    status: 'Në fazë vlerësimi',
+    disclaimer: 'Ky seksion nuk është listë marrëveshjesh të përfunduara, furnizimesh të garantuara ose klientësh të publikuar. Ai përmbledh fushat e punës dhe disiplinën e vendimmarrjes duke ruajtur konfidencialitetin tregtar.',
+    evaluations: [
+      { market: 'Azi · energji dhe lëndë të para', title: 'Korridor furnizimi për biokarburant', text: 'Vlerësim i përbashkët tregtar i volumit, përshtatshmërisë teknike, origjinës, modelit të dërgesës dhe gatishmërisë së palëve për lëndë të para energjetike.', signals: ['Kornizë produkti dhe teknike', 'Korridor furnizimi', 'Model dërgese'] },
+      { market: 'Tregje të zgjedhura · vajra bimore', title: 'Eksport i vajit të lulediellit të paketuar', text: 'Lidhja e specifikimit, etiketimit, MOQ, strukturës së ofertës dhe kushteve të tregut synuar për produkte në PET ose teneqe.', signals: ['Paketim dhe etiketim', 'RFQ dhe ofertë', 'Përshtatshmëri tregu'] },
+      { market: 'Iran ↔ Turqi · tregti ushqimore', title: 'Import i arrave dhe frutave të thata', text: 'Krijimi i një fluksi të zbatueshëm furnizimi përmes klasës së produktit, origjinës, kalibrit, mostrave, analizës së partisë, paketimit dhe dokumentacionit të importit.', signals: ['Cilësi dhe analizë', 'Gjurmueshmëri', 'Koordinim importi'] },
+      { market: 'Turqi → tregje rajonale · higjienë', title: 'Shpërndarje e dorezave njëpërdorimëshe', text: 'Strukturimi i përdorimit të produktit, dokumentacionit, profilit të blerësit, modelit të shpërndarjes dhe kontaktit të parë tregtar për portofolin REFLEX.', signals: ['Përdorimi i produktit', 'Dokumente cilësie', 'Model shpërndarjeje'] },
+      { market: 'Evropë · vajra bimore', title: 'Kontakt fillestar dhe kornizë oferte', text: 'Sqarimi i kërkesave të blerësit, formatit të paketimit, supozimeve të çmimit dhe kushteve të dërgesës për eksportin e vajit të lulediellit në vlerësimin e parë.', signals: ['Kërkesa e blerësit', 'Disiplinë oferte', 'Hapi i ardhshëm tregtar'] },
+    ],
+    cta: 'Ndani kërkesën tuaj tregtare me CTSEG',
+  },
+  fa: {
+    label: 'ارزیابی‌های تجاری در حال انجام',
+    title: 'مسیرهای کاری در حال توسعه میان بازارها.',
+    lead: 'این حوزه‌ها نشان‌دهنده فعالیت‌های جاری تجارت بین‌الملل هستند که در آنها محصول، طرف‌های تجاری، اسناد، پیشنهادها و واقعیت‌های تحویل به‌صورت یکجا ارزیابی می‌شوند.',
+    status: 'در مرحله ارزیابی',
+    disclaimer: 'این بخش فهرست قراردادهای نهایی، تأمین تضمین‌شده یا مشتریان اعلام‌شده عمومی نیست. حوزه‌های کار و انضباط تصمیم‌گیری را با حفظ محرمانگی تجاری خلاصه می‌کند.',
+    evaluations: [
+      { market: 'آسیا · انرژی و مواد اولیه', title: 'کریدور تأمین سوخت زیستی', text: 'ارزیابی تجاری مشترک حجم، تناسب فنی، منشأ، مدل تحویل و آمادگی طرف‌های تجاری برای مواد اولیه انرژی.', signals: ['چارچوب محصول و فنی', 'کریدور تأمین', 'مدل تحویل'] },
+      { market: 'بازارهای منتخب · روغن‌های گیاهی', title: 'صادرات روغن آفتابگردان بسته‌بندی‌شده', text: 'هماهنگ‌سازی مشخصات، برچسب‌گذاری، MOQ، ساختار پیشنهاد و شرایط بازار هدف برای محصولات PET یا حلبی.', signals: ['بسته‌بندی و برچسب', 'RFQ و پیشنهاد', 'تناسب بازار'] },
+      { market: 'ایران ↔ ترکیه · تجارت مواد غذایی', title: 'واردات خشکبار و میوه خشک', text: 'ایجاد جریان قابل‌اجرا برای تأمین از طریق درجه محصول، منشأ، کالیبر، نمونه، تحلیل بچ، بسته‌بندی و اسناد واردات.', signals: ['کیفیت و تحلیل', 'قابلیت رهگیری', 'هماهنگی واردات'] },
+      { market: 'ترکیه → بازارهای منطقه‌ای · بهداشت', title: 'توزیع دستکش یک‌بارمصرف', text: 'ساختاربندی کاربرد محصول، مستندات، پروفایل خریدار، مدل توزیع و نخستین تماس تجاری برای سبد REFLEX.', signals: ['کاربرد محصول', 'اسناد کیفیت', 'مدل توزیع'] },
+      { market: 'اروپا · روغن‌های گیاهی', title: 'تماس اولیه و چارچوب پیشنهاد', text: 'شفاف‌سازی نیاز خریدار، قالب بسته‌بندی، مفروضات قیمت و شرایط تحویل برای صادرات روغن آفتابگردان در مرحله ارزیابی اولیه.', signals: ['نیاز خریدار', 'انضباط پیشنهاد', 'گام تجاری بعدی'] },
+    ],
+    cta: 'درخواست تجاری خود را با CTSEG در میان بگذارید',
+  },
+};
+
+const contactLinks: Record<Lang, string> = {
+  tr: 'https://ctseg.com.tr/tr/iletisim/',
+  en: 'https://ctseg.com.tr/en/contact/',
+  ru: 'https://ctseg.com.tr/en/contact/',
+  mk: 'https://ctseg.com.tr/en/contact/',
+  sr: 'https://ctseg.com.tr/en/contact/',
+  sq: 'https://ctseg.com.tr/en/contact/',
+  fa: 'https://ctseg.com.tr/fa/contact/',
+};
+
+const text = copy[locale];
+---
+
+<section class="commercial-evaluations" data-locale={locale} data-commercial-evaluations aria-labelledby="commercial-evaluations-title">
+  <div class="shell">
+    <header class="commercial-evaluations__heading" data-reveal="section">
+      <p class="section-label">{text.label}</p>
+      <div>
+        <h2 id="commercial-evaluations-title">{text.title}</h2>
+        <p class="section-lead">{text.lead}</p>
+      </div>
+    </header>
+
+    <div class="evaluation-grid">
+      {text.evaluations.map((evaluation, index) => (
+        <article class:list={['evaluation-card', index === 0 && 'evaluation-card--lead']} data-commercial-evaluation data-reveal="item">
+          <div class="evaluation-card__meta"><span>0{index + 1}</span><b>{text.status}</b></div>
+          <p class="evaluation-card__market">{evaluation.market}</p>
+          <h3>{evaluation.title}</h3>
+          <p class="evaluation-card__text">{evaluation.text}</p>
+          <ul>{evaluation.signals.map((signal) => <li>{signal}</li>)}</ul>
+        </article>
+      ))}
+    </div>
+
+    <footer class="commercial-evaluations__footer" data-reveal="section">
+      <p data-commercial-disclaimer>{text.disclaimer}</p>
+      <a class="commercial-evaluations__cta" href={contactLinks[locale]} target="_blank" rel="noopener noreferrer">{text.cta}<span aria-hidden="true">↗</span></a>
+    </footer>
+  </div>
+</section>
+
+<style>
+  .commercial-evaluations {
+    padding-block: clamp(4.5rem, 8vw, 8rem);
+    background: #242b25;
+    color: #f4eee5;
+  }
+  .commercial-evaluations .section-label { color: #dfad8e; }
+  .commercial-evaluations__heading {
+    display: grid;
+    grid-template-columns: minmax(11rem, .45fr) minmax(0, 1.55fr);
+    gap: clamp(1.25rem, 5vw, 5rem);
+    align-items: start;
+    margin-bottom: clamp(2rem, 5vw, 4rem);
+  }
+  .commercial-evaluations__heading .section-label { margin-top: .55rem; }
+  .commercial-evaluations__heading h2 {
+    max-width: 17ch;
+    margin: 0;
+    color: #f5f0e8;
+    font-size: clamp(2.25rem, 4.25vw, 4.75rem);
+    line-height: 1.05;
+  }
+  .commercial-evaluations__heading .section-lead {
+    max-width: 67ch;
+    margin: 1.35rem 0 0;
+    color: #d9d0c3;
+    font-size: clamp(1.02rem, 1.4vw, 1.2rem);
+    line-height: 1.75;
+  }
+  .evaluation-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    border-block: 1px solid rgba(235, 222, 207, .23);
+  }
+  .evaluation-card {
+    display: flex;
+    grid-column: span 3;
+    flex-direction: column;
+    min-height: 22rem;
+    padding: clamp(1.25rem, 2.4vw, 2.2rem);
+    border-inline-end: 1px solid rgba(235, 222, 207, .23);
+  }
+  .evaluation-card--lead {
+    grid-column: span 4;
+    background: #303c31;
+  }
+  .evaluation-card:nth-child(2) { grid-column: span 4; }
+  .evaluation-card:nth-child(3) { grid-column: span 4; border-inline-end: 0; }
+  .evaluation-card:nth-child(n + 4) {
+    grid-column: span 6;
+    min-height: 19rem;
+    border-top: 1px solid rgba(235, 222, 207, .23);
+  }
+  .evaluation-card:nth-child(5) { border-inline-end: 0; }
+  .evaluation-card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .evaluation-card__meta span {
+    color: #dfad8e;
+    font-size: .72rem;
+    font-weight: 850;
+    letter-spacing: .1em;
+  }
+  .evaluation-card__meta b {
+    padding: .25rem .5rem;
+    border: 1px solid rgba(235, 222, 207, .28);
+    color: #d7cfc3;
+    font-size: .6rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .evaluation-card__market {
+    margin: clamp(2.5rem, 4vw, 4rem) 0 .7rem;
+    color: #c5bbae;
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .075em;
+    text-transform: uppercase;
+  }
+  .evaluation-card h3 {
+    max-width: 15ch;
+    margin: 0;
+    color: #f4eee5;
+    font-size: clamp(1.45rem, 2vw, 2rem);
+    line-height: 1.12;
+  }
+  .evaluation-card__text {
+    max-width: 47ch;
+    margin: 1rem 0 0;
+    color: #d2c9bd;
+    font-size: .95rem;
+    line-height: 1.7;
+  }
+  .evaluation-card ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .45rem;
+    margin: auto 0 0;
+    padding: 1.5rem 0 0;
+    list-style: none;
+  }
+  .evaluation-card li {
+    padding: .38rem .55rem;
+    border: 1px solid rgba(235, 222, 207, .23);
+    color: #e3dbd0;
+    font-size: .7rem;
+    line-height: 1.25;
+  }
+  .commercial-evaluations__footer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2rem;
+    align-items: end;
+    padding-top: clamp(2rem, 4vw, 3rem);
+  }
+  .commercial-evaluations__footer p {
+    max-width: 75ch;
+    margin: 0;
+    color: #c7bdb0;
+    font-size: .88rem;
+    line-height: 1.7;
+  }
+  .commercial-evaluations__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: .65rem;
+    min-height: 44px;
+    border-bottom: 1px solid #dfad8e;
+    color: #f1b28e;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .commercial-evaluations__cta:hover { color: #fff3e9; }
+  @media (max-width: 950px) {
+    .commercial-evaluations__heading { grid-template-columns: 1fr; gap: 1.5rem; }
+    .commercial-evaluations__heading .section-label { margin-top: 0; }
+    .evaluation-card, .evaluation-card--lead, .evaluation-card:nth-child(2), .evaluation-card:nth-child(3) { grid-column: span 6; }
+    .evaluation-card:nth-child(2) { border-inline-end: 0; }
+    .evaluation-card:nth-child(3) { border-top: 1px solid rgba(235, 222, 207, .23); }
+  }
+  @media (max-width: 620px) {
+    .commercial-evaluations { padding-block: 4rem; }
+    .evaluation-grid { grid-template-columns: 1fr; }
+    .evaluation-card, .evaluation-card--lead, .evaluation-card:nth-child(2), .evaluation-card:nth-child(3), .evaluation-card:nth-child(n + 4) {
+      grid-column: auto;
+      min-height: 0;
+      border-inline-end: 0;
+      border-top: 1px solid rgba(235, 222, 207, .23);
+    }
+    .evaluation-card:first-child { border-top: 0; }
+    .evaluation-card__market { margin-top: 2.25rem; }
+    .commercial-evaluations__footer { grid-template-columns: 1fr; gap: 1.25rem; }
+    .commercial-evaluations__cta { justify-self: start; }
+  }
+</style>

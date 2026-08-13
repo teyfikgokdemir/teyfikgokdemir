@@ -47,6 +47,12 @@ Halı ve tekstil kaldırılmadı; ana sayfada daha doğru bir ağırlıkla, **se
 
 Yeni görseller CTSEG deposundan kişisel sitenin `public/images` alanına alınarak site içinde sunuluyor. Yedi dil varyantında üretim derlemesi, SEO denetimi, premium kontrolü ve `git diff --check` başarıyla tamamlandı.
 
+## Devam eden ticari değerlendirmeler
+
+Ana sayfaya, kesinleşmiş anlaşma veya müşteri listesi izlenimi vermeden beş güncel uluslararası çalışma hattını anlatan yeni bir bölüm eklendi. Biyoyakıt ve enerji hammaddesi tedarik koridoru, ambalajlı bitkisel yağ ihracatı, İran–Türkiye kuruyemiş ve kuru meyve ithalat koordinasyonu, Türkiye menşeli tek kullanımlık eldivenlerin bölgesel dağıtımı ve Avrupa pazarı için ayçiçek yağı ilk temas/teklif çerçevesi; ürün, belge, teklif ve teslim kararlarının nasıl ele alındığını gösterir.
+
+Bölümde karşı taraf adları, miktarlar, ödeme şartları, ticari sonuçlar veya garanti ifadeleri bulunmaz. Görünür gizlilik notu, bu içeriğin sonuçlanmış anlaşma, garanti edilen tedarik veya kamuya açıklanmış müşteri listesi olmadığını açıklar. Beş çalışma kartı, yedi dilde sunulur ve CTSEG iletişim sayfasına yönlendiren sakin bir dönüşüm bağlantısıyla biter. Otomatik denetim, hem her ana sayfada beş kartın ve gizlilik notunun bulunmasını hem de Türkçe sayfada hassas miktar/ülke bilgisinin metne sızmamasını kontrol eder.
+
 ## SEO/GEO/AEO/AIO için hâlâ gerekenler
 
 Teknik temel artık güçlü olsa da arama görünürlüğü yalnızca etiket ve şemadan oluşmaz. Google, AI Overviews ve AI Mode için ayrı bir işaretleme veya özel teknik gereksinim olmadığını; mevcut teknik SEO, taranabilirlik, iç bağlantılar, iyi sayfa deneyimi, metinsel içerik ve görünür içerikle uyumlu yapılandırılmış verinin esas olduğunu belirtiyor [3]. Bu nedenle `llms.txt` yardımcı bir makine-okunabilir kaynak olarak korunabilir ancak tek başına sıralama veya AI alıntısı sağlamaz.

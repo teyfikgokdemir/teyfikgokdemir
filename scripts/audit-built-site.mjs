@@ -177,6 +177,15 @@ const tradeEntryContracts = {
   sq:{focusLinks:['https://ctseg.com.tr/en/insights/vegetable-oil-sourcing-rfq-checklist/','https://ctseg.com.tr/en/insights/nuts-dried-fruit-quality-document-check/'],specialistLinks:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
   fa:{focusLinks:['https://ctseg.com.tr/en/insights/vegetable-oil-sourcing-rfq-checklist/','https://ctseg.com.tr/en/insights/nuts-dried-fruit-quality-document-check/'],specialistLinks:['https://ctseg.com.tr/fa/sourcing/فرش-ایرانی/','https://ctseg.com.tr/fa/sourcing/فرش-ابریشم-دستباف/','https://ctseg.com.tr/fa/sourcing/تامین-عمده-منسوجات/']}
 };
+const commercialEvaluationContracts = {
+  tr: 'Bu bölüm sonuçlanmış anlaşma, garanti edilen tedarik veya kamuya açıklanmış müşteri listesi değildir.',
+  en: 'This section is not a list of concluded agreements, guaranteed supply or publicly disclosed customers.',
+  ru: 'Этот раздел не является перечнем заключённых соглашений, гарантированных поставок или публично раскрытых клиентов.',
+  mk: 'Овој дел не е листа на склучени договори, гарантирани набавки или јавно објавени клиенти.',
+  sr: 'Ovaj odeljak nije lista zaključenih ugovora, garantovanog snabdevanja ili javno objavljenih klijenata.',
+  sq: 'Ky seksion nuk është listë marrëveshjesh të përfunduara, furnizimesh të garantuara ose klientësh të publikuar.',
+  fa: 'این بخش فهرست قراردادهای نهایی، تأمین تضمین‌شده یا مشتریان اعلام‌شده عمومی نیست.'
+};
 const mythbornContracts = {
   tr:{status:'Aktif girişim',region:'Uluslararası',description:'Tarot, Katina, astroloji ve kişisel keşif deneyimlerini çok dilli dijital bir platformda birleştiren bağımsız tüketici markası.'},
   en:{status:'Active venture',region:'International',description:'An independent multilingual consumer brand bringing together Tarot, Katina, astrology and personal discovery experiences in one digital platform.'},
@@ -202,6 +211,10 @@ for (const [lang,route] of [['tr','/'],['en','/en/'],['ru','/ru/'],['mk','/mk/']
   if ((page.html.match(/data-specialist-link=/g) ?? []).length !== 3) errors.push(`${route}: üç ikincil uzmanlık CTA bağlantısı bekleniyor.`);
   for (const href of [...tradeContract.focusLinks, ...tradeContract.specialistLinks]) if (!page.html.includes(`href="${encodeURI(href)}"`) && !page.html.includes(`href="${href}"`)) errors.push(`${route}: ticari CTA hedefi eksik (${href}).`);
   for (const image of ['/images/ctseg-vegetable-oils-food-editorial.webp','/images/ctseg-iranian-pistachios-premium.webp']) if (!page.html.includes(image)) errors.push(`${route}: ticari odak görseli eksik (${image}).`);
+  if (!page.html.includes('data-commercial-evaluations')) errors.push(`${route}: devam eden ticari değerlendirmeler bölümü eksik.`);
+  if ((page.html.match(/data-commercial-evaluation(?=\s|=|>)/g) ?? []).length !== 5) errors.push(`${route}: beş anonim ticari değerlendirme kartı bekleniyor.`);
+  if (!page.html.includes('data-commercial-disclaimer') || !page.html.includes(commercialEvaluationContracts[lang])) errors.push(`${route}: ticari gizlilik notu eksik.`);
+  if (route === '/' && /120[.,]000|100\s*ton|Güney Kore|İspanya/i.test(page.html)) errors.push(`${route}: hassas ticari ayrıntı kamuya açık metne sızmış.`);
   const mythbornContract = mythbornContracts[lang];
   for (const expected of [mythbornContract.status,mythbornContract.region,mythbornContract.description]) if (!page.html.includes(expected)) errors.push(`${route}: Mythborn yerelleştirmesi eksik (${expected}).`);
   if (!page.html.includes('href="https://mythborn.co/"')) errors.push(`${route}: Mythborn kartı canlı trailing-slash hedefini kullanmıyor.`);
