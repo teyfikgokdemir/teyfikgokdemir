@@ -5,6 +5,8 @@ import { extname, join, resolve } from 'node:path';
 import { chromium } from 'playwright-core';
 
 const executablePath = [
+  '/usr/bin/chromium',
+  '/usr/bin/google-chrome',
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
@@ -50,7 +52,8 @@ try{
   for(const locale of locales){
     for(const width of widths){
       const page=await browser.newPage({viewport:{width,height:width<500?900:1100},reducedMotion:'reduce'});
-      const response=await page.goto(`http://127.0.0.1:4323/${locale}/`,{waitUntil:'networkidle'});
+      const homePath=locale==='tr'?'/' : `/${locale}/`;
+      const response=await page.goto(`http://127.0.0.1:4323${homePath}`,{waitUntil:'networkidle'});
       const faMobile=locale==='fa'&&width<=430;
       let faMobileResult=null;
       if(faMobile){
@@ -60,7 +63,7 @@ try{
           const hero=rect(document.querySelector('.hero'));
           const containers=[...document.querySelectorAll('.hero.shell,#ctseg .shell,.founder-trade>.shell,#focus>.shell,#ventures>.shell,.section>.shell.split,#contact>.shell')];
           const headings=[...document.querySelectorAll('h1,h2')];
-          const ctas=[...document.querySelectorAll('.actions a,.sector-link,.fa-producer-strategy__actions a')];
+          const ctas=[...document.querySelectorAll('.hero-actions a,.trade-focus-card__link,.specialist-areas__links a')];
           return {
             gutters:containers.map(element=>({selector:element.className,left:rect(element).left,right:innerWidth-rect(element).right})),
             headings:headings.map(element=>({text:element.textContent.trim().slice(0,32),left:rect(element).left,right:rect(element).right,width:rect(element).width})),
@@ -78,11 +81,11 @@ try{
         if(width===320||width===390)await page.screenshot({path:resolve('.artifacts/visual',`fa-${width}-hero.png`)});
       }
       await page.locator('.founder-trade').scrollIntoViewIfNeeded();
-      await page.locator('.founder-trade__editorial img').evaluate(image=>image.complete?true:new Promise(resolvePromise=>image.addEventListener('load',()=>resolvePromise(true),{once:true})));
+      await page.locator('.trade-focus-card__media img').first().evaluate(image=>image.complete?true:new Promise(resolvePromise=>image.addEventListener('load',()=>resolvePromise(true),{once:true})));
       const result=await page.evaluate(({locale,targets,mythbornDescriptions})=>{
         const section=document.querySelector('.founder-trade');
-        const links=[...section.querySelectorAll('[data-sector-link]')];
-        const image=section.querySelector('.founder-trade__editorial img');
+        const links=[...section.querySelectorAll('[data-specialist-link]')];
+        const image=section.querySelector('.trade-focus-card__media img');
         const arrows=[...links].map(link=>link.querySelector('bdi'));
         const mythbornCard=[...document.querySelectorAll('#ventures a')].find(link=>new URL(link.href).hostname==='mythborn.co');
         const mythbornBox=mythbornCard?.getBoundingClientRect();
@@ -121,9 +124,9 @@ try{
       results.push(`${locale}-${width}: overflow=${result.overflow}px, links=${result.links.length}, dir=${result.dir}`);
       if(faMobile){
         const captureTargets=width===390?[
-          ['.founder-trade__grid','fa-390-carpet-textile.png'],
-          ['[data-fa-producer-strategy]','fa-390-producer-exporter.png'],
-          ['footer','fa-390-footer.png']
+          ['.trade-focus-grid','fa-390-carpet-textile.png'],
+          ['.specialist-areas','fa-390-specialist-areas.png'],
+          ['.site-footer','fa-390-footer.png']
         ]:[];
         for(const [selector,file] of captureTargets){
           await page.locator(selector).scrollIntoViewIfNeeded();
