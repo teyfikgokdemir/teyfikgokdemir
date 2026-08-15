@@ -678,6 +678,17 @@ const legalCopy = {
 
 const legal = legalCopy[locale] ?? legalCopy.en;
 const faq = homeFaq[locale];
+const contactFormCopy = {
+  tr: { intro: 'İlk değerlendirmeyi hızlandırmak için ürün, pazar ve operasyon bilgilerini paylaşın.', product: 'Ürün veya hizmet', market: 'Hedef pazar', volume: 'Tahmini hacim / MOQ', company: 'Şirket', email: 'E-posta', message: 'Talebiniz ve önemli koşullar', submit: 'Talep taslağını e-posta ile gönder', note: 'Form gönderildiğinde varsayılan e-posta uygulamanız açılır; bilgileriniz bu site üzerinde saklanmaz.', required: 'Bu alan zorunludur.' },
+  en: { intro: 'Share the product, market and operational context to make the first assessment more useful.', product: 'Product or service', market: 'Target market', volume: 'Estimated volume / MOQ', company: 'Company', email: 'Email', message: 'Requirement and key conditions', submit: 'Send requirement draft by email', note: 'Submitting opens your default email app; your details are not stored on this site.', required: 'This field is required.' },
+  ru: { intro: 'Укажите продукт, рынок и операционные условия, чтобы ускорить первичную оценку.', product: 'Продукт или услуга', market: 'Целевой рынок', volume: 'Ориентировочный объём / MOQ', company: 'Компания', email: 'Электронная почта', message: 'Запрос и ключевые условия', submit: 'Отправить запрос по электронной почте', note: 'Отправка открывает почтовое приложение; данные не сохраняются на этом сайте.', required: 'Это поле обязательно.' },
+  mk: { intro: 'Споделете ги производот, пазарот и оперативните услови за побрза првична процена.', product: 'Производ или услуга', market: 'Целен пазар', volume: 'Проценет обем / MOQ', company: 'Компанија', email: 'Е-пошта', message: 'Барање и клучни услови', submit: 'Испратете барање по е-пошта', note: 'Испраќањето ја отвора вашата е-пошта; податоците не се зачувуваат на оваа страница.', required: 'Ова поле е задолжително.' },
+  sr: { intro: 'Podelite proizvod, tržište i operativne uslove kako biste ubrzali prvu procenu.', product: 'Proizvod ili usluga', market: 'Ciljno tržište', volume: 'Procenjeni obim / MOQ', company: 'Kompanija', email: 'E-pošta', message: 'Zahtev i ključni uslovi', submit: 'Pošaljite zahtev e-poštom', note: 'Slanje otvara vašu e-poštu; podaci se ne čuvaju na ovom sajtu.', required: 'Ovo polje je obavezno.' },
+  sq: { intro: 'Ndani produktin, tregun dhe kushtet operative për ta bërë vlerësimin fillestar më të dobishëm.', product: 'Produkt ose shërbim', market: 'Tregu i synuar', volume: 'Vëllimi i parashikuar / MOQ', company: 'Kompania', email: 'Email', message: 'Kërkesa dhe kushtet kryesore', submit: 'Dërgo kërkesën me email', note: 'Dërgimi hap aplikacionin tuaj të emailit; të dhënat nuk ruhen në këtë faqe.', required: 'Kjo fushë është e detyrueshme.' },
+  fa: { intro: 'برای ارزیابی اولیه بهتر، محصول، بازار و شرایط عملیاتی را ارسال کنید.', product: 'محصول یا خدمت', market: 'بازار هدف', volume: 'حجم تقریبی / MOQ', company: 'شرکت', email: 'ایمیل', message: 'درخواست و شرایط مهم', submit: 'ارسال پیش‌نویس درخواست با ایمیل', note: 'ارسال، برنامه ایمیل پیش‌فرض شما را باز می‌کند؛ اطلاعات در این سایت ذخیره نمی‌شود.', required: 'این فیلد الزامی است.' },
+} as const;
+
+const formCopy = contactFormCopy[locale as keyof typeof contactFormCopy] ?? contactFormCopy.en;
 const displayedYear = (title: string, year: string) =>
   title === 'QCT Studio' || title === 'QCT Commerce' ? '2025' : year;
 ---
@@ -862,11 +873,27 @@ const displayedYear = (title: string, year: string) =>
 
   <section class="section contact-section story-stage--olive" id="contact" aria-labelledby="contact-title">
     <div class="shell">
-      <div class="contact-card" data-reveal="section">
-        <p class="section-label">{copy.contact.label}</p>
-        <h2 id="contact-title">{copy.contact.title}</h2>
-        <p class="section-lead">{copy.contact.body}</p>
-        <a class="button primary" href={'mailto:' + site.email} aria-label={copy.contact.action + ': ' + site.email}>{site.email}</a>
+      <div class="contact-card contact-card--with-form" data-reveal="section">
+        <div class="contact-card__intro">
+          <p class="section-label">{copy.contact.label}</p>
+          <h2 id="contact-title">{copy.contact.title}</h2>
+          <p class="section-lead">{copy.contact.body}</p>
+          <a class="contact-email" href={'mailto:' + site.email} aria-label={copy.contact.action + ': ' + site.email}>{site.email}</a>
+        </div>
+        <form class="commercial-request-form" data-commercial-request-form data-recipient={site.email}>
+          <p class="form-intro">{formCopy.intro}</p>
+          <div class="form-grid">
+            <label><span>{formCopy.product} *</span><input name="product" required aria-required="true" autocomplete="off" /></label>
+            <label><span>{formCopy.market} *</span><input name="market" required aria-required="true" autocomplete="off" /></label>
+            <label><span>{formCopy.volume}</span><input name="volume" autocomplete="off" /></label>
+            <label><span>{formCopy.company}</span><input name="company" autocomplete="organization" /></label>
+            <label class="form-field--full"><span>{formCopy.email} *</span><input type="email" name="email" required aria-required="true" autocomplete="email" /></label>
+            <label class="form-field--full"><span>{formCopy.message} *</span><textarea name="message" rows="5" required aria-required="true"></textarea></label>
+          </div>
+          <button class="button primary" type="submit">{formCopy.submit}</button>
+          <p class="form-note">{formCopy.note}</p>
+          <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+        </form>
       </div>
     </div>
   </section>
@@ -875,6 +902,31 @@ const displayedYear = (title: string, year: string) =>
 <Footer copy={copy} locale={locale} />
 <nav class="legal-links" aria-label="Legal"><a href="/privacy-policy/">{legal.privacy}</a><a href="/kvkk/">{legal.kvkk}</a><a href="/terms/">{legal.terms}</a></nav>
 <FloatingActions locale={locale} />
+
+<script>
+  const requestForm = document.querySelector('[data-commercial-request-form]');
+  const formStatus = document.querySelector('[data-form-status]');
+  requestForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (!(form instanceof HTMLFormElement)) return;
+    if (!form.reportValidity()) return;
+    const values = new FormData(form);
+    const subject = `Commercial requirement — ${values.get('product') || 'new enquiry'}`;
+    const body = [
+      `Product or service: ${values.get('product') || ''}`,
+      `Target market: ${values.get('market') || ''}`,
+      `Estimated volume / MOQ: ${values.get('volume') || ''}`,
+      `Company: ${values.get('company') || ''}`,
+      `Email: ${values.get('email') || ''}`,
+      '',
+      `Requirement and key conditions:\n${values.get('message') || ''}`,
+    ].join('\n');
+    const recipient = form.dataset.recipient || 'info@teyfikgokdemir.com';
+    window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    if (formStatus) formStatus.textContent = 'Your email draft is ready.';
+  });
+</script>
 
 <style>
   .positioning-strip {
@@ -1505,6 +1557,26 @@ const displayedYear = (title: string, year: string) =>
     background: transparent;
   }
   .contact-card .section-lead { color: var(--muted); }
+  .contact-card--with-form {
+    max-width: 1180px;
+    display: grid;
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
+  }
+  .contact-card__intro { position: sticky; top: calc(var(--header-height) + 1.5rem); }
+  .contact-email { display: inline-flex; margin-top: 1.5rem; color: var(--text); font-weight: 800; text-decoration: underline; text-underline-offset: .25rem; }
+  .commercial-request-form { display: grid; gap: 1rem; }
+  .form-intro, .form-note, .form-status { margin: 0; color: var(--muted); line-height: 1.6; }
+  .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .commercial-request-form label { display: grid; gap: .45rem; color: var(--text); font-size: .82rem; font-weight: 750; letter-spacing: .025em; }
+  .commercial-request-form label span { color: var(--muted); }
+  .commercial-request-form input, .commercial-request-form textarea { width: 100%; box-sizing: border-box; border: 1px solid var(--line-strong); border-radius: 6px; padding: .8rem .9rem; color: var(--text); background: rgba(15, 22, 17, .32); font: inherit; }
+  .commercial-request-form textarea { resize: vertical; min-height: 8rem; }
+  .commercial-request-form input:focus, .commercial-request-form textarea:focus { outline: 3px solid rgba(214, 184, 120, .45); outline-offset: 2px; border-color: var(--text); }
+  .form-field--full { grid-column: 1 / -1; }
+  .commercial-request-form .button { justify-self: start; margin-top: .35rem; }
+  .form-status { min-height: 1.5em; color: #f0c99e; }
   .legal-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem 1.5rem; padding: 1.25rem 1.5rem 2rem; background: var(--surface-dark); border-top: 1px solid #51483f; }
   .legal-links { --text: #f3eee6; --muted: #c9bfb2; }
   .legal-links a { min-height: 44px; display: inline-flex; align-items: center; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; }
@@ -1517,6 +1589,8 @@ const displayedYear = (title: string, year: string) =>
     .hero h1 { max-width: 24ch; }
   }
   @media (max-width: 900px) {
+    .contact-card--with-form { grid-template-columns: 1fr; gap: 2.5rem; }
+    .contact-card__intro { position: static; }
     .hero { width: min(100% - 2rem, var(--max)); grid-template-columns: 1fr; }
     .hero-media { min-height: 520px; }
     .ctseg-featured__panel { grid-template-columns: 1fr; }
@@ -1527,6 +1601,9 @@ const displayedYear = (title: string, year: string) =>
     .common-questions__intro h2 { max-width: 15ch; }
   }
   @media (max-width: 560px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .form-field--full { grid-column: auto; }
+    .commercial-request-form .button { width: 100%; }
     .hero { width: min(100% - 1.25rem, var(--max)); }
     .hero h1 { font-size: clamp(2.55rem, 11vw, 3.45rem); line-height: var(--leading-display); letter-spacing: var(--tracking-display); }
     .hero-media { min-height: 420px; }

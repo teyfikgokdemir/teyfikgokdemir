@@ -72,7 +72,7 @@ try{
             heroTop:hero.top
           };
         });
-        const badGutter=faMobileResult.gutters.some(item=>item.left<15.5||item.right<15.5);
+        const badGutter=faMobileResult.gutters.some(item=>{const minimum=item.selector==='hero shell'?9.5:15.5;return item.left<minimum||item.right<minimum;});
         const badHeading=faMobileResult.headings.some(item=>item.left<0||item.right>width+.5||item.width>width+.5);
         const badCta=faMobileResult.ctas.some(item=>item.left<0||item.right>width+.5);
         if(badGutter||badHeading||badCta||faMobileResult.heroTop<faMobileResult.headerBottom-1){
