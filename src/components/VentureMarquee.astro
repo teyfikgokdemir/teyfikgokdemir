@@ -57,7 +57,7 @@ const ventures = [
     display: flex;
     width: max-content;
     align-items: center;
-    animation: ventureMarqueeFlow 46s linear infinite;
+    animation: ventureMarqueeFlow 36s linear infinite;
     will-change: transform;
   }
 
@@ -89,11 +89,6 @@ const ventures = [
     color: #f3eee6;
   }
 
-  .venture-marquee:hover .venture-marquee__track,
-  .venture-marquee:focus-within .venture-marquee__track {
-    animation-play-state: paused;
-  }
-
   .venture-marquee__mark {
     width: 9px;
     height: 9px;
@@ -111,7 +106,17 @@ const ventures = [
     to { transform: translate3d(-50%, 0, 0); }
   }
 
+  @media (max-width: 1024px) {
+    .venture-marquee__track {
+      animation-duration: 32s;
+    }
+  }
+
   @media (max-width: 760px) {
+    .venture-marquee__track {
+      animation-duration: 28s;
+    }
+
     .venture-marquee__item {
       min-height: 64px;
       padding-inline: 24px;

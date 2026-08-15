@@ -11,6 +11,7 @@
     "audit": "node scripts/audit-built-site.mjs",
     "indexnow:submit": "node scripts/indexnow-submit.mjs",
     "check:responsive": "node scripts/check-responsive.mjs",
+    "check:marquee": "node scripts/check-marquee-motion.mjs",
     "sitemap": "node scripts/generate-seo-artifacts.mjs --public",
     "test:seo": "npm run audit",
     "verify:premium": "node scripts/verify-premium-upgrade.mjs",
