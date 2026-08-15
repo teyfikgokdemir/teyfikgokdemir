@@ -880,8 +880,12 @@ const displayedYear = (title: string, year: string) =>
           <p class="section-lead">{copy.contact.body}</p>
           <a class="contact-email" href={'mailto:' + site.email} aria-label={copy.contact.action + ': ' + site.email}>{site.email}</a>
         </div>
-        <form class="commercial-request-form" data-commercial-request-form data-recipient={site.email}>
+        <form class="commercial-request-form" data-commercial-request-form data-recipient={site.email} data-ctseg-contact={localeCtsegLinks.contact} data-form-locale={locale}>
           <p class="form-intro">{formCopy.intro}</p>
+          <div class="form-trap" aria-hidden="true" hidden>
+            <label for="website">Website</label>
+            <input id="website" name="website" tabindex="-1" autocomplete="off" />
+          </div>
           <div class="form-grid">
             <label><span>{formCopy.product} *</span><input name="product" required aria-required="true" autocomplete="off" /></label>
             <label><span>{formCopy.market} *</span><input name="market" required aria-required="true" autocomplete="off" /></label>
@@ -891,6 +895,7 @@ const displayedYear = (title: string, year: string) =>
             <label class="form-field--full"><span>{formCopy.message} *</span><textarea name="message" rows="5" required aria-required="true"></textarea></label>
           </div>
           <button class="button primary" type="submit">{formCopy.submit}</button>
+          <a class="form-ctseg-link" href={localeCtsegLinks.contact} target="_blank" rel="noopener noreferrer">{localPositioning.ctseg.secondary} <span aria-hidden="true">↗</span></a>
           <p class="form-note">{formCopy.note}</p>
           <p class="form-status" data-form-status role="status" aria-live="polite"></p>
         </form>
@@ -906,11 +911,35 @@ const displayedYear = (title: string, year: string) =>
 <script>
   const requestForm = document.querySelector('[data-commercial-request-form]');
   const formStatus = document.querySelector('[data-form-status]');
+  const trackFormEvent = (name, form) => {
+    if (typeof window.gtag !== 'function') return;
+    window.gtag('event', name, {
+      form_id: 'commercial_request',
+      locale: form?.dataset.formLocale || document.documentElement.lang,
+      transport_type: 'beacon',
+    });
+  };
+  document.querySelectorAll('a[href="#contact"]').forEach((link) => {
+    link.addEventListener('click', () => trackFormEvent('contact_cta_click', requestForm));
+  });
+  requestForm?.querySelectorAll('input, textarea').forEach((field) => {
+    field.addEventListener('focus', () => {
+      if (requestForm.dataset.formStarted) return;
+      requestForm.dataset.formStarted = 'true';
+      trackFormEvent('form_start', requestForm);
+    }, { once: true });
+  });
   requestForm?.addEventListener('submit', (event) => {
     event.preventDefault();
     const form = event.currentTarget;
     if (!(form instanceof HTMLFormElement)) return;
     if (!form.reportValidity()) return;
+    const trap = form.elements.namedItem('website');
+    if (trap instanceof HTMLInputElement && trap.value.trim()) {
+      if (formStatus) formStatus.textContent = 'Your request could not be submitted.';
+      trackFormEvent('form_blocked', form);
+      return;
+    }
     const values = new FormData(form);
     const subject = `Commercial requirement — ${values.get('product') || 'new enquiry'}`;
     const body = [
@@ -923,6 +952,8 @@ const displayedYear = (title: string, year: string) =>
       `Requirement and key conditions:\n${values.get('message') || ''}`,
     ].join('\n');
     const recipient = form.dataset.recipient || 'info@teyfikgokdemir.com';
+    trackFormEvent('generate_lead', form);
+    trackFormEvent('mailto_open', form);
     window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     if (formStatus) formStatus.textContent = 'Your email draft is ready.';
   });
@@ -1567,6 +1598,9 @@ const displayedYear = (title: string, year: string) =>
   .contact-card__intro { position: sticky; top: calc(var(--header-height) + 1.5rem); }
   .contact-email { display: inline-flex; margin-top: 1.5rem; color: var(--text); font-weight: 800; text-decoration: underline; text-underline-offset: .25rem; }
   .commercial-request-form { display: grid; gap: 1rem; }
+  .form-trap { display: none !important; }
+  .form-ctseg-link { display: inline-flex; align-items: center; gap: .35rem; color: var(--text); font-weight: 800; text-decoration: underline; text-underline-offset: .25rem; }
+  .form-ctseg-link:hover { color: #f0c99e; }
   .form-intro, .form-note, .form-status { margin: 0; color: var(--muted); line-height: 1.6; }
   .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
   .commercial-request-form label { display: grid; gap: .45rem; color: var(--text); font-size: .82rem; font-weight: 750; letter-spacing: .025em; }
