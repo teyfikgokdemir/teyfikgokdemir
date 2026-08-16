@@ -1,0 +1,145 @@
+---
+import ContentPage from './ContentPage.astro';
+import { site } from '../data/site';
+import type { Locale } from '../i18n/locales';
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const locales: Locale[] = ['tr', 'en', 'ru', 'fa', 'mk', 'sr', 'sq'];
+const pathnameFor = (item: Locale) => item === 'tr' ? '/instagram/tedarik/' : `/${item}/instagram/tedarik/`;
+const siteUrl = (item: Locale) => site.origin + pathnameFor(item);
+const alternates = Object.fromEntries([
+  ...locales.map((item) => [item, siteUrl(item)]),
+  ['x-default', siteUrl('en')],
+]);
+
+const copy = {
+  tr: {
+    title: 'Ticari Fırsat Kontrol Listesi | Teyfik Gökdemir', description: 'Bir ticari fırsatı değerlendirmeden önce ürün, pazar, tedarikçi ve ticari şartlar için sorulması gereken beş temel soru.', eyebrow: 'Instagram’dan gelenler için · Ticari karar çerçevesi', heading: 'Bir ticari fırsat gerçekten hazır mı?', lead: 'Güçlü görünen her fırsat uygulanabilir değildir. Ürün, pazar, karşı taraf ve ticari şartları aynı çerçevede değerlendirmek için aşağıdaki beş soruyla başlayabilirsin.', opening: ['Bir fırsatın heyecan verici görünmesi, onun ticari olarak hazır olduğu anlamına gelmez. İlk değerlendirme; doğru ürünü, doğru alıcıyı, doğrulanabilir karşı tarafı ve uygulanabilir şartları aynı masada buluşturmalıdır.', 'Bu liste, Instagram’daki ikinci paylaşımın devamıdır. Her soruya net bir cevap veremiyorsan, karar vermeden önce eksik veriyi tamamlaman gerekir.'], sectionLabel: 'ÖN KONTROL', sectionTitle: 'Karar vermeden önce beş soru.', sectionLead: 'Bu sorular bir teklifin iyi veya kötü olduğunu tek başına belirlemez. Ama hangi bilginin eksik olduğunu ve bir sonraki araştırma adımını görünür hâle getirir.', decisionLabel: 'KARAR NOKTASI', decisionTitle: 'Eksik olan veri mi, koordinasyon mu?', decisionText: 'Ürün ve pazar belli olduğu hâlde tedarikçi, belge, teklif veya teslim modeli netleşmiyorsa konu yalnızca fiyat araştırması değildir. Doğrulama, karşılaştırma ve taraflar arası koordinasyon birlikte ele alınmalıdır.', ctseg: 'CTSEG’e ticari talep gönder ↗', whatsapp: 'Kısa bir mesaj yaz', returnLabel: 'DEVAM ET', returnTitle: 'Bir sonraki soruyu Instagram’da konuşalım.', returnText: 'Bu kontrol listesindeki beş maddeden hangisi senin işinde en çok zaman kaybettiriyor? Cevabını paylaşmak veya sonraki içeriği görmek için Instagram profiline dönebilirsin.', instagram: '@teyfikgokdemir Instagram profiline dön ↗', whatsappText: 'Merhaba Teyfik, Instagram’daki ticari fırsat kontrol listesinden ulaşıyorum. Konuşmak istediğim konu: ', checks: [['Ürün net mi?', 'Teknik özellik, kalite seviyesi, ambalaj, minimum sipariş miktarı ve kullanım amacı açık değilse teklifler karşılaştırılabilir olmaz.', 'Ürün tanımı ve şartname'], ['Pazar ve alıcı belli mi?', 'Hedef ülke, alıcı tipi, talep sinyali, rekabet ve pazara giriş koşulları varsayımla değil, araştırmayla ortaya konmalı.', 'Hedef pazar ve alıcı profili'], ['Tedarikçi doğrulandı mı?', 'Kapasite, üretim gerçekliği, kalite standardı, belgeler, geçmiş ve teslim kabiliyeti birlikte kontrol edilmeli.', 'Doğrulanabilir karşı taraf'], ['Ticari şartlar karşılaştırılabilir mi?', 'Fiyat tek başına karar verdirmez. Ödeme, teslim, belge, lojistik, kur ve risk başlıkları aynı çerçevede ele alınmalı.', 'Karşılaştırılabilir teklif'], ['Sonraki adım gerçekten belli mi?', 'Numune, RFQ, doğrulama, müzakere veya pilot sipariş gibi bir sonraki adımın sorumlusu ve zamanı net olmalı.', 'Uygulanabilir aksiyon']],
+  },
+  en: {
+    title: 'Trade Opportunity Checklist | Teyfik Gökdemir', description: 'Five questions to ask about the product, market, supplier and commercial terms before acting on a trade opportunity.', eyebrow: 'For visitors from Instagram · Commercial decision framework', heading: 'Is the trade opportunity really ready?', lead: 'A promising opportunity is not always executable. Start with five questions that bring product, market, counterparty and commercial terms into one frame.', opening: ['An opportunity looking exciting does not mean it is commercially ready. The first assessment must put the right product, buyer, verifiable counterparty and workable terms on the same table.', 'This checklist continues the second Instagram post. If one answer is unclear, complete the missing evidence before making a decision.'], sectionLabel: 'FIRST CHECK', sectionTitle: 'Five questions before you decide.', sectionLead: 'These questions do not decide whether an offer is good or bad on their own. They make missing information and the next research step visible.', decisionLabel: 'DECISION POINT', decisionTitle: 'Is the gap data or coordination?', decisionText: 'If the product and market are clear but the supplier, documents, offer or delivery model are not, the issue is more than price research. Verification, comparison and coordination need to be handled together.', ctseg: 'Send a trade request to CTSEG ↗', whatsapp: 'Write a short message', returnLabel: 'KEEP GOING', returnTitle: 'Let’s discuss the next question on Instagram.', returnText: 'Which of these five points creates the most delay in your work? Return to the Instagram profile to share your answer or see the next post.', instagram: 'Return to @teyfikgokdemir on Instagram ↗', whatsappText: 'Hello Teyfik, I am reaching you from the Instagram trade opportunity checklist. I would like to discuss: ', checks: [['Is the product clear?', 'If specifications, quality level, packaging, minimum order and intended use are unclear, offers cannot be compared.', 'Product definition and specification'], ['Are the market and buyer clear?', 'Target country, buyer type, demand signal, competition and market-entry conditions must come from research, not assumptions.', 'Target market and buyer profile'], ['Has the supplier been verified?', 'Capacity, production reality, quality standard, documents, track record and delivery ability must be checked together.', 'Verifiable counterparty'], ['Can the commercial terms be compared?', 'Price alone is not a decision. Payment, delivery, documents, logistics, currency and risk must be assessed together.', 'Comparable offer'], ['Is the next step clear?', 'The owner and timing of the next step—sample, RFQ, verification, negotiation or pilot order—must be clear.', 'Executable action']],
+  },
+  ru: {
+    title: 'Проверка торговой возможности | Teyfik Gökdemir', description: 'Пять вопросов для компаний, которые ищут проверенных поставщиков и хотят безопасно начать закупки в Турции.', eyebrow: 'Для посетителей из Instagram · Практика коммерческого решения', heading: 'Ищете поставщика в Турции? Сначала проверьте возможность.', lead: 'Если вы ищете продукт, производителя или покупателя в Турции, красивого предложения недостаточно. Перед оплатой и заказом проверьте пять коммерческих оснований.', opening: ['Эта страница предназначена для компаний, которым нужно быстрее перейти от интереса к проверяемому торговому запросу. Правильный продукт, рынок, контрагент и условия должны быть рассмотрены вместе.', 'Если хотя бы на один вопрос нет ясного ответа, сначала соберите недостающие данные. CTSEG может помочь структурировать запрос к поставщику, покупателю или целевому рынку в Турции.'], sectionLabel: 'ПЕРВИЧНАЯ ПРОВЕРКА', sectionTitle: 'Пять вопросов до первого платежа.', sectionLead: 'Это не общая теория и не гарантия сделки. Это короткая рамка, которая показывает, какие данные нужно закрыть до следующего коммерческого шага.', decisionLabel: 'СЛЕДУЮЩИЙ ШАГ', decisionTitle: 'Вам нужен поставщик, покупатель или проверка запроса?', decisionText: 'Когда продукт и рынок понятны, но поставщик, документы, цена или доставка остаются неясными, нужен не ещё один случайный запрос цены. Нужна проверяемая коммерческая структура.', ctseg: 'Отправить запрос в CTSEG ↗', whatsapp: 'Написать короткое сообщение', returnLabel: 'ПРОДОЛЖИТЬ', returnTitle: 'Следующий вопрос разберём в Instagram.', returnText: 'Какой из пяти пунктов чаще всего задерживает ваши закупки или выход на рынок? Вернитесь в профиль Instagram и поделитесь номером.', instagram: 'Вернуться в Instagram @teyfikgokdemir ↗', whatsappText: 'Здравствуйте, Тейфик. Я пришёл из Instagram по чек-листу торговой возможности. Хотел бы обсудить: ', checks: [['Продукт описан точно?', 'Без спецификации, стандарта качества, упаковки, MOQ и назначения нельзя честно сравнить предложения.', 'Спецификация продукта'], ['Рынок и покупатель определены?', 'Целевая страна, тип покупателя, сигнал спроса и условия входа должны быть подтверждены исследованием.', 'Целевой рынок и покупатель'], ['Поставщик проверен?', 'Мощность, реальное производство, документы, качество, опыт и доставка должны проверяться вместе.', 'Проверяемый контрагент'], ['Условия сделки сопоставимы?', 'Цена — только один параметр. Сравните оплату, поставку, документы, логистику, валюту и риски.', 'Сопоставимое предложение'], ['Следующий шаг назначен?', 'Ответственный и срок для образца, RFQ, проверки, переговоров или пилотной партии должны быть определены.', 'Исполнимое действие']],
+  },
+  fa: {
+    title: 'چک‌لیست ارزیابی فرصت تجاری | Teyfik Gökdemir', description: 'پنج سؤال برای شرکت‌هایی که به دنبال تأمین‌کننده قابل اتکا در ترکیه و ساختن یک درخواست تجاری قابل بررسی هستند.', eyebrow: 'برای بازدیدکنندگان اینستاگرام · چارچوب تصمیم تجاری', heading: 'به دنبال تأمین‌کننده در ترکیه هستید؟ اول فرصت را بررسی کنید.', lead: 'اگر به دنبال محصول، تولیدکننده یا خریدار در ترکیه هستید، یک پیشنهاد جذاب کافی نیست. پیش از پرداخت و سفارش، پنج پایه تجاری را بررسی کنید.', opening: ['این صفحه برای شرکت‌هایی طراحی شده است که می‌خواهند از علاقه اولیه به یک درخواست تجاری قابل بررسی برسند. محصول، بازار، طرف مقابل و شرایط معامله باید هم‌زمان دیده شوند.', 'اگر پاسخ یکی از سؤال‌ها روشن نیست، ابتدا اطلاعات ناقص را تکمیل کنید. CTSEG می‌تواند درخواست شما برای یافتن تأمین‌کننده، خریدار یا بازار هدف در ترکیه را ساختاردهی و پیگیری کند.'], sectionLabel: 'بررسی اولیه', sectionTitle: 'پنج سؤال پیش از اولین پرداخت.', sectionLead: 'این فهرست تضمین معامله نیست؛ بلکه نشان می‌دهد پیش از گام تجاری بعدی کدام اطلاعات باید تکمیل شود.', decisionLabel: 'گام بعدی', decisionTitle: 'به تأمین‌کننده، خریدار یا ساختار تجاری نیاز دارید؟', decisionText: 'وقتی محصول و بازار مشخص است اما تأمین‌کننده، اسناد، قیمت یا تحویل روشن نیست، یک استعلام قیمت دیگر کافی نیست. به ساختار تجاری قابل بررسی و هماهنگی میان طرف‌ها نیاز دارید.', ctseg: 'ارسال درخواست تجاری به CTSEG ↗', whatsapp: 'ارسال پیام کوتاه', returnLabel: 'ادامه دهید', returnTitle: 'سؤال بعدی را در اینستاگرام دنبال کنید.', returnText: 'کدام‌یک از این پنج مورد بیشتر روند خرید یا ورود به بازار را در کار شما کند می‌کند؟ برای پاسخ یا دیدن محتوای بعدی به پروفایل اینستاگرام برگردید.', instagram: 'بازگشت به اینستاگرام @teyfikgokdemir ↗', whatsappText: 'سلام تیفیک، از طریق چک‌لیست فرصت تجاری در اینستاگرام با شما آشنا شدم. موضوعی که می‌خواهم بررسی کنم: ', checks: [['محصول دقیقاً مشخص است؟', 'بدون مشخصات فنی، سطح کیفیت، بسته‌بندی، حداقل سفارش و کاربرد، مقایسه پیشنهادها قابل اتکا نیست.', 'تعریف و مشخصات محصول'], ['بازار و خریدار مشخص است؟', 'کشور هدف، نوع خریدار، نشانه تقاضا و شرایط ورود باید با پژوهش تأیید شود، نه با حدس.', 'بازار هدف و پروفایل خریدار'], ['تأمین‌کننده اعتبارسنجی شده است؟', 'ظرفیت، تولید واقعی، اسناد، کیفیت، سابقه و توان تحویل باید در کنار هم بررسی شوند.', 'طرف تجاری قابل بررسی'], ['شرایط تجاری قابل مقایسه است؟', 'قیمت تنها یک شاخص است. پرداخت، تحویل، اسناد، لجستیک، ارز و ریسک را با هم مقایسه کنید.', 'پیشنهاد قابل مقایسه'], ['گام بعدی روشن است؟', 'مسئول و زمان نمونه، RFQ، اعتبارسنجی، مذاکره یا سفارش آزمایشی باید مشخص باشد.', 'اقدام قابل اجرا']],
+  },
+  mk: {
+    title: 'Контролна листа за трговска можност | Teyfik Gökdemir', description: 'Пет прашања за производот, пазарот, добавувачот и условите пред да донесете трговска одлука.', eyebrow: 'За посетители од Instagram · Рамка за комерцијална одлука', heading: 'Дали трговската можност е навистина подготвена?', lead: 'Добрата можност не е секогаш изводлива. Започнете со пет прашања што ги поврзуваат производот, пазарот, партнерот и условите.', opening: ['Возбудлива можност не значи дека е комерцијално подготвена. Производот, купувачот, проверливиот партнер и условите мора да се разгледаат заедно.', 'Оваа листа е продолжение на втората Instagram објава. Ако одговорот на едно прашање не е јасен, прво надополнете ги податоците.'], sectionLabel: 'ПРВА ПРОВЕРКА', sectionTitle: 'Пет прашања пред одлуката.', sectionLead: 'Прашањата покажуваат кои информации недостасуваат и кој е следниот чекор за истражување.', decisionLabel: 'ОДЛУКА', decisionTitle: 'Недостасуваат податоци или координација?', decisionText: 'Кога производот и пазарот се јасни, но добавувачот, документите, понудата или испораката не се, потребни се проверка, споредба и координација.', ctseg: 'Испратете барање до CTSEG ↗', whatsapp: 'Напишете кратка порака', returnLabel: 'ПРОДОЛЖИ', returnTitle: 'Следното прашање е на Instagram.', returnText: 'Која од петте точки најмногу го забавува вашиот процес? Вратете се на Instagram профилот и споделете го бројот.', instagram: 'Назад на Instagram @teyfikgokdemir ↗', whatsappText: 'Здраво Тефик, доаѓам од Instagram контролната листа за трговска можност. Би сакал да разговарам за: ', checks: [['Производот е јасен?', 'Без спецификација, квалитет, пакување, минимална нарачка и намена, понудите не може да се споредат.', 'Спецификација на производот'], ['Пазарот и купувачот се јасни?', 'Целната земја, типот на купувач и сигналот на побарувачката мора да се истражат.', 'Целен пазар и купувач'], ['Добавувачот е проверен?', 'Капацитетот, производството, документите, квалитетот и испораката се проверуваат заедно.', 'Проверлив партнер'], ['Условите се споредливи?', 'Цената не е доволна. Споредете плаќање, испорака, документи, логистика и ризик.', 'Споредлива понуда'], ['Следниот чекор е јасен?', 'Одговорното лице и рокот за примерок, RFQ, проверка или пробна нарачка мора да бидат јасни.', 'Изводлива акција']],
+  },
+  sr: {
+    title: 'Kontrolna lista trgovinske prilike | Teyfik Gökdemir', description: 'Pet pitanja o proizvodu, tržištu, dobavljaču i uslovima pre donošenja trgovinske odluke.', eyebrow: 'Za posetioce sa Instagrama · Okvir za poslovnu odluku', heading: 'Da li je trgovinska prilika zaista spremna?', lead: 'Dobra prilika nije uvek izvodljiva. Počnite sa pet pitanja koja povezuju proizvod, tržište, partnera i komercijalne uslove.', opening: ['Uzbudljiva prilika ne znači da je komercijalno spremna. Proizvod, kupac, proverljiva strana i uslovi moraju se posmatrati zajedno.', 'Ova lista je nastavak druge Instagram objave. Ako jedan odgovor nije jasan, prvo dopunite podatke.'], sectionLabel: 'PRVA PROVERA', sectionTitle: 'Pet pitanja pre odluke.', sectionLead: 'Pitanja pokazuju koji podaci nedostaju i koji je sledeći korak istraživanja.', decisionLabel: 'TAČKA ODLUKE', decisionTitle: 'Nedostaju podaci ili koordinacija?', decisionText: 'Kada su proizvod i tržište jasni, ali dobavljač, dokumenti, ponuda ili isporuka nisu, potrebne su provera, poređenje i koordinacija.', ctseg: 'Pošaljite zahtev CTSEG-u ↗', whatsapp: 'Napišite kratku poruku', returnLabel: 'NASTAVITE', returnTitle: 'Sledeće pitanje je na Instagramu.', returnText: 'Koja od pet tačaka najviše usporava vaš proces? Vratite se na Instagram profil i podelite broj.', instagram: 'Nazad na Instagram @teyfikgokdemir ↗', whatsappText: 'Zdravo Teyfik, dolazim sa Instagram kontrolne liste trgovinske prilike. Želeo bih da razgovaram o: ', checks: [['Da li je proizvod jasan?', 'Bez specifikacije, kvaliteta, pakovanja, minimalne količine i namene ponude se ne mogu porediti.', 'Specifikacija proizvoda'], ['Da li su tržište i kupac jasni?', 'Ciljna zemlja, tip kupca i signal tražnje moraju biti potvrđeni istraživanjem.', 'Ciljno tržište i kupac'], ['Da li je dobavljač proveren?', 'Kapacitet, proizvodnja, dokumenti, kvalitet i isporuka proveravaju se zajedno.', 'Proverljiva strana'], ['Da li su uslovi uporedivi?', 'Cena nije dovoljna. Poredite plaćanje, isporuku, dokumenta, logistiku i rizik.', 'Uporediva ponuda'], ['Da li je sledeći korak jasan?', 'Odgovorna osoba i rok za uzorak, RFQ, proveru ili probnu porudžbinu moraju biti jasni.', 'Izvodljiva akcija']],
+  },
+  sq: {
+    title: 'Lista e kontrollit për një mundësi tregtare | Teyfik Gökdemir', description: 'Pesë pyetje për produktin, tregun, furnizuesin dhe kushtet përpara një vendimi tregtar.', eyebrow: 'Për vizitorët nga Instagrami · Kornizë për vendim tregtar', heading: 'A është vërtet gati mundësia tregtare?', lead: 'Një mundësi premtuese nuk është gjithmonë e zbatueshme. Nisni me pesë pyetje që lidhin produktin, tregun, palën tjetër dhe kushtet.', opening: ['Një mundësi emocionuese nuk do të thotë se është gati për tregti. Produkti, blerësi, pala e verifikueshme dhe kushtet duhet të shihen së bashku.', 'Kjo listë vazhdon postimin e dytë në Instagram. Nëse një përgjigje nuk është e qartë, plotësoni të dhënat para vendimit.'], sectionLabel: 'KONTROLLI I PARË', sectionTitle: 'Pesë pyetje para vendimit.', sectionLead: 'Pyetjet tregojnë se cilat të dhëna mungojnë dhe cili është hapi i ardhshëm i kërkimit.', decisionLabel: 'PIKA E VENDIMIT', decisionTitle: 'Mungojnë të dhënat apo koordinimi?', decisionText: 'Kur produkti dhe tregu janë të qarta, por furnizuesi, dokumentet, oferta ose dorëzimi jo, duhen verifikim, krahasim dhe koordinim.', ctseg: 'Dërgoni kërkesë te CTSEG ↗', whatsapp: 'Shkruani një mesazh të shkurtër', returnLabel: 'VAZHDONI', returnTitle: 'Pyetja tjetër është në Instagram.', returnText: 'Cila nga pesë pikat e ngadalëson më shumë procesin tuaj? Kthehuni te profili në Instagram dhe ndani numrin.', instagram: 'Kthehuni te Instagrami @teyfikgokdemir ↗', whatsappText: 'Përshëndetje Teyfik, po ju kontaktoj nga lista e kontrollit të mundësisë tregtare në Instagram. Dua të flas për: ', checks: [['A është produkti i qartë?', 'Pa specifikim, cilësi, paketim, sasi minimale dhe përdorim, ofertat nuk krahasohen.', 'Specifikimi i produktit'], ['A janë të qarta tregu dhe blerësi?', 'Vendi i synuar, lloji i blerësit dhe sinjali i kërkesës duhet të konfirmohen me kërkim.', 'Tregu dhe blerësi'], ['A është furnizuesi i verifikuar?', 'Kapaciteti, prodhimi, dokumentet, cilësia dhe dorëzimi kontrollohen së bashku.', 'Palë e verifikueshme'], ['A janë kushtet të krahasueshme?', 'Çmimi nuk mjafton. Krahasoni pagesën, dorëzimin, dokumentet, logjistikën dhe rrezikun.', 'Ofertë e krahasueshme'], ['A është i qartë hapi tjetër?', 'Përgjegjësi dhe afati për mostër, RFQ, verifikim ose porosi pilot duhet të jenë të qarta.', 'Veprim i zbatueshëm']],
+  },
+} as const;
+
+const strings = copy[locale];
+const campaign = 'trade_checklist';
+const tracked = (url: string, content: string) => {
+  const target = new URL(url);
+  target.searchParams.set('utm_source', 'instagram');
+  target.searchParams.set('utm_medium', 'post');
+  target.searchParams.set('utm_campaign', campaign);
+  target.searchParams.set('utm_content', content);
+  return target.toString();
+};
+const ctsegBase = locale === 'tr' ? 'https://ctseg.com.tr/tr/iletisim/' : locale === 'fa' ? 'https://ctseg.com.tr/fa/tamin-beynolmelali-iran/' : 'https://ctseg.com.tr/en/';
+const ctsegUrl = tracked(ctsegBase, 'second_post_ctseg');
+const instagramUrl = `https://www.instagram.com/teyfikgokdemir/?utm_source=website&utm_medium=referral&utm_campaign=instagram_growth&utm_content=trade_checklist`;
+const whatsappUrl = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(strings.whatsappText)}`;
+const pageSchema = {
+  '@type': 'HowTo',
+  '@id': siteUrl(locale) + '#howto',
+  name: strings.title,
+  description: strings.description,
+  url: siteUrl(locale),
+  inLanguage: locale,
+  isPartOf: { '@id': site.origin + '/#website' },
+  author: { '@id': site.origin + '/#person' },
+  step: strings.checks.map(([name, text], index) => ({ '@type': 'HowToStep', position: index + 1, name, text })),
+};
+---
+
+<ContentPage locale={locale} title={strings.title} description={strings.description} pathname={pathnameFor(locale)} alternates={alternates} pageSchema={pageSchema} eyebrow={strings.eyebrow} heading={strings.heading} lead={strings.lead}>
+  <div class="trade-checklist" dir={locale === 'fa' ? 'rtl' : 'ltr'}>
+    <section class="answer-block trade-checklist__opening">
+      <p><strong>{strings.opening[0]}</strong></p>
+      <p>{strings.opening[1]}</p>
+    </section>
+    <section aria-labelledby="trade-checklist-title">
+      <div class="section-heading">
+        <p class="section-label">{strings.sectionLabel}</p>
+        <h2 id="trade-checklist-title">{strings.sectionTitle}</h2>
+        <p>{strings.sectionLead}</p>
+      </div>
+      <div class="trade-checklist-grid">
+        {strings.checks.map(([title, text, signal], index) => (
+          <article class="trade-check-card">
+            <span class="trade-check-card__number">{String(index + 1).padStart(2, '0')}</span>
+            <h3>{title}</h3>
+            <p>{text}</p>
+            <span class="trade-check-card__signal">{signal}</span>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section class="trade-checklist__decision" aria-labelledby="trade-decision-title">
+      <p class="section-label">{strings.decisionLabel}</p>
+      <h2 id="trade-decision-title">{strings.decisionTitle}</h2>
+      <p>{strings.decisionText}</p>
+      <div class="trade-checklist__actions">
+        <a class="button button--primary" href={ctsegUrl} data-trade-route="ctseg">{strings.ctseg}</a>
+        <a class="button button--secondary" href={whatsappUrl} data-trade-route="whatsapp">{strings.whatsapp}</a>
+      </div>
+    </section>
+    <section class="trade-checklist__return" aria-labelledby="trade-return-title">
+      <p class="section-label">{strings.returnLabel}</p>
+      <h2 id="trade-return-title">{strings.returnTitle}</h2>
+      <p>{strings.returnText}</p>
+      <a class="text-link" href={instagramUrl} data-trade-route="instagram_profile">{strings.instagram}</a>
+    </section>
+  </div>
+</ContentPage>
+
+<script is:inline>
+  document.querySelectorAll('[data-trade-route]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const destination = link.getAttribute('data-trade-route') || 'unknown';
+      if (typeof window.gtag === 'function') window.gtag('event', 'instagram_trade_checklist_click', { destination, source: 'instagram', medium: 'post', campaign: 'trade_checklist', content: 'second_post' });
+    });
+  });
+</script>
+
+<style>
+  .trade-checklist { display: grid; gap: 4rem; }
+  .trade-checklist__opening { display: grid; gap: 1rem; }
+  .trade-checklist__opening p { margin: 0; }
+  .trade-checklist-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .trade-check-card { display: grid; gap: .85rem; min-height: 260px; padding: 1.5rem; border: 1px solid var(--border); border-radius: 1rem; background: var(--surface); }
+  .trade-check-card:nth-child(2) { background: #e1e6df; }
+  .trade-check-card:nth-child(3) { background: #e8dfd2; }
+  .trade-check-card:nth-child(4) { background: #eadbd4; }
+  .trade-check-card:nth-child(5) { background: #dddbe5; }
+  .trade-check-card__number { color: var(--accent); font-size: .78rem; font-weight: 850; letter-spacing: .14em; }
+  .trade-check-card h3 { margin: 0; font-size: clamp(1.45rem, 2.5vw, 2rem); }
+  .trade-check-card p { margin: 0; color: var(--text-muted); line-height: 1.75; }
+  .trade-check-card__signal { align-self: end; color: var(--accent); font-size: .82rem; font-weight: 800; }
+  .trade-checklist__decision { padding: clamp(2rem, 5vw, 3.5rem); border-radius: 1rem; background: var(--surface-dark); color: #f3eee6; }
+  .trade-checklist__decision h2, .trade-checklist__return h2 { margin-top: 0; }
+  .trade-checklist__decision h2 { color: #f3eee6; }
+  .trade-checklist__decision p:not(.section-label) { max-width: 760px; color: #d2c8bc; line-height: 1.8; }
+  .trade-checklist__decision .section-label { color: var(--accent-coral); }
+  .trade-checklist__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
+  .button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: .85rem 1.2rem; border-radius: 999px; font-weight: 850; text-decoration: none !important; }
+  .button--primary { background: var(--accent-coral); color: #211c18 !important; }
+  .button--secondary { border: 1px solid #d2c8bc; color: #f3eee6 !important; }
+  .trade-checklist__return { padding-top: 1rem; border-top: 1px solid var(--border); }
+  .trade-checklist__return p:not(.section-label) { max-width: 720px; color: var(--text-muted); line-height: 1.8; }
+  .text-link { color: var(--accent); font-weight: 850; text-decoration: underline; text-underline-offset: .2em; }
+  [dir="rtl"] .trade-checklist-card, [dir="rtl"] .trade-checklist__decision, [dir="rtl"] .trade-checklist__return { text-align: right; }
+  @media (max-width: 680px) { .trade-checklist-grid { grid-template-columns: 1fr; } .trade-check-card { min-height: 0; } .trade-checklist__actions { display: grid; } .button { width: 100%; } }
+</style>

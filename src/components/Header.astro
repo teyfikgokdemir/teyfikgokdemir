@@ -282,7 +282,7 @@ const expertiseSubItems = {
         </div>
       </div>
 
-      <div class="nav-item-dropdown" data-dropdown>
+      <div class="nav-item-dropdown nav-item-dropdown--contact" data-dropdown>
         <button class="dropdown-trigger" type="button" aria-expanded="false" aria-haspopup="true" aria-controls={`contact-menu-${locale}`}>
           <span>{navLabels.contact}</span>
           <svg class="dropdown-arrow" width="9" height="5" viewBox="0 0 9 5" fill="none" aria-hidden="true">
@@ -426,12 +426,13 @@ const expertiseSubItems = {
   .header-panel {
     display: flex !important;
     align-items: center !important;
-    gap: clamp(1.5rem, 3vw, 3rem) !important;
+    gap: clamp(1.35rem, 2.4vw, 2.5rem) !important;
+    overflow: visible !important;
   }
   .header-panel nav {
     display: flex !important;
     align-items: center !important;
-    gap: clamp(1.2rem, 2.2vw, 2rem) !important;
+    gap: clamp(1rem, 1.8vw, 1.65rem) !important;
   }
   .header-panel nav a,
   .dropdown-trigger {
@@ -468,54 +469,74 @@ const expertiseSubItems = {
   .dropdown-menu {
     position: absolute !important;
     top: calc(100% + 0.85rem) !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    min-width: 210px !important;
-    padding: 0.4rem 0 !important;
-    background: #211c18 !important;
-    border: 1px solid rgba(201, 191, 178, 0.25) !important;
-    border-radius: 6px !important;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4) !important;
-    display: none;
+    left: 0 !important;
+    transform: translateY(8px) scale(.98) !important;
+    transform-origin: top left !important;
+    min-width: 250px !important;
+    padding: .55rem !important;
+    background: rgba(33, 28, 24, .98) !important;
+    border: 1px solid rgba(201, 191, 178, .22) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 24px 54px rgba(0, 0, 0, .32), 0 4px 14px rgba(0, 0, 0, .18) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
     flex-direction: column !important;
     z-index: 100 !important;
+    transition: opacity 180ms ease, transform 180ms cubic-bezier(.2, .75, .25, 1), visibility 180ms ease !important;
   }
-  .dropdown-trigger[aria-expanded="true"] + .dropdown-menu {
-    display: flex !important;
+  .nav-item-dropdown--contact .dropdown-menu {
+    right: 0 !important;
+    left: auto !important;
+    transform-origin: top right !important;
+  }
+  .dropdown-trigger[aria-expanded="true"] + .dropdown-menu,
+  .nav-item-dropdown:hover .dropdown-menu {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: translateY(0) scale(1) !important;
   }
   @media (hover: hover) and (pointer: fine) {
     .nav-item-dropdown:hover .dropdown-menu {
-      display: flex !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
     }
   }
   .dropdown-link {
-    padding: 0.55rem 1rem !important;
+    padding: .78rem .85rem !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 0.15rem !important;
+    gap: .24rem !important;
     text-align: left !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-    transition: background 150ms ease !important;
+    border-radius: 9px !important;
+    border-bottom: 0 !important;
+    transition: background 150ms ease, transform 150ms ease !important;
   }
   .dropdown-link:last-child {
     border-bottom: none !important;
   }
   .dropdown-link:hover,
   .dropdown-link:focus-visible {
-    background: rgba(201, 191, 178, 0.08) !important;
+    background: rgba(201, 191, 178, .11) !important;
+    transform: translateX(2px) !important;
   }
   .dropdown-link__title {
-    font-size: 0.86rem !important;
-    font-weight: 600 !important;
+    font-size: .84rem !important;
+    font-weight: 750 !important;
+    letter-spacing: .01em !important;
     color: #f3eee6 !important;
   }
   .dropdown-link__desc {
-    font-size: 0.73rem !important;
+    max-width: 28ch !important;
+    font-size: .7rem !important;
     font-weight: 400 !important;
+    line-height: 1.45 !important;
     color: #a99d8f !important;
   }
-  .contact-menu { min-width: 280px !important; }
-  .contact-menu .dropdown-link__desc { line-height: 1.4 !important; }
+  .contact-menu { min-width: 300px !important; }
+  .contact-menu .dropdown-link__desc { max-width: none !important; line-height: 1.4 !important; }
   .dropdown-trigger:focus-visible { outline: 2px solid #d78263 !important; outline-offset: 5px !important; }
 
   /* Language Selector Dropdown */
@@ -598,9 +619,18 @@ const expertiseSubItems = {
       transform: none !important;
       box-shadow: none !important;
       border: none !important;
+      border-radius: 0 !important;
       background: transparent !important;
-      padding-left: 1rem !important;
+      padding: .2rem 0 .4rem 1rem !important;
       min-width: 0 !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+    .dropdown-trigger[aria-expanded="true"] + .dropdown-menu {
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
     }
     .contact-menu { min-width: 0 !important; }
     .dropdown-link { min-height: 44px !important; }
