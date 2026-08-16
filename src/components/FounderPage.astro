@@ -15,13 +15,13 @@ interface Props { locale: Locale; }
 const { locale } = Astro.props;
 
 const positioningStrip = {
-  tr: ['Kurucu', 'Uluslararası Ticaret', 'Stratejik Tedarik', 'B2B', 'Dijital Görünürlük'],
-  en: ['Founder', 'International Trade', 'Strategic Sourcing', 'B2B', 'Digital Visibility'],
-  ru: ['Основатель', 'Международная торговля', 'Стратегические закупки', 'B2B', 'Цифровая видимость'],
-  mk: ['Основач', 'Меѓународна трговија', 'Стратешко снабдување', 'B2B', 'Дигитална видливост'],
-  sr: ['Osnivač', 'Međunarodna trgovina', 'Strateška nabavka', 'B2B', 'Digitalna vidljivost'],
-  sq: ['Themelues', 'Tregti Ndërkombëtare', 'Furnizim Strategjik', 'B2B', 'Dukshmëri Digjitale'],
-  fa: ['بنیان‌گذار', 'تجارت بین‌المللی', 'تأمین راهبردی', 'B2B', 'دیده‌شدن دیجیتال'],
+  tr: ['Kurucu', 'CTSEG · Ana ticari yapı', 'Uluslararası Ticaret', 'Stratejik Tedarik'],
+  en: ['Founder', 'CTSEG · Main operating company', 'International Trade', 'Strategic Sourcing'],
+  ru: ['Основатель', 'CTSEG · Главная коммерческая структура', 'Международная торговля', 'Стратегические закупки'],
+  mk: ['Основач', 'CTSEG · Главна оперативна структура', 'Меѓународна трговија', 'Стратешко снабдување'],
+  sr: ['Osnivač', 'CTSEG · Glavna poslovna struktura', 'Međunarodna trgovina', 'Strateška nabavka'],
+  sq: ['Themelues', 'CTSEG · Struktura kryesore tregtare', 'Tregti Ndërkombëtare', 'Furnizim Strategjik'],
+  fa: ['بنیان‌گذار', 'CTSEG · ساختار اصلی تجاری', 'تجارت بین‌المللی', 'تأمین راهبردی'],
 } as const;
 
 const currentStrip = positioningStrip[locale as keyof typeof positioningStrip] ?? positioningStrip.en;
@@ -971,7 +971,7 @@ const displayedYear = (title: string, year: string) =>
     width: min(1340px, calc(100% - 3rem));
     margin-inline: auto;
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
   .positioning-strip span {
     display: flex;
