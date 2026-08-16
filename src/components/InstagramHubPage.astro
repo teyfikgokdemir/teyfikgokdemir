@@ -1,0 +1,330 @@
+---
+import ContentPage from './ContentPage.astro';
+import { site } from '../data/site';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const campaign = 'founder_profile';
+const pathname = locale === 'tr' ? '/instagram/' : `/${locale}/instagram/`;
+const routeFor = (item: Locale | 'x-default') => {
+  if (item === 'x-default') return site.origin + '/en/instagram/';
+  return site.origin + (item === 'tr' ? '/instagram/' : `/${item}/instagram/`);
+};
+const alternates = {
+  tr: routeFor('tr'),
+  en: routeFor('en'),
+  ru: routeFor('ru'),
+  fa: routeFor('fa'),
+  mk: routeFor('mk'),
+  sr: routeFor('sr'),
+  sq: routeFor('sq'),
+  'x-default': routeFor('x-default'),
+};
+
+const copy = {
+  tr: {
+    title: 'Teyfik Gökdemir | Markalar, Ticaret ve Dijital Büyüme',
+    description: 'Teyfik Gökdemir’in Instagram profilinden CTSEG, QCT Commerce, QCT Studio, Phiaderm ve Mythborn çalışmalarına ulaşın.',
+    eyebrow: 'Instagram’dan gelenler için',
+    heading: 'Ticaret, dijital satış ve kurucu projelerim.',
+    lead: 'Uluslararası ticaret, dijital büyüme ve marka geliştirme çalışmalarımı aşağıdaki başlıklardan keşfedebilirsin. Her bağlantı, ilgili proje ve iletişim yoluna yönlendirir.',
+    introKicker: 'TEYFİK GÖKDEMİR · KURUCUNUN ÇALIŞMA MASASI',
+    introTitle: 'Tek bir profil, farklı ticari yollar.',
+    introText: 'Bu sayfa, Instagram’da gördüğün içerikleri ilgili projeye bağlar. Dijital satış ve e-ticaret için QCT Commerce’e; tedarik, alıcı ve pazar arayışı için CTSEG’e; Balkanlar’daki dijital projeler için QCT Studio’ya ulaşabilirsin.',
+    gridLabel: 'Projeler ve iletişim yolları',
+    contactKicker: 'DOĞRUDAN İLETİŞİM',
+    contactTitle: 'Ne üzerine konuşmak istersin?',
+    contactText: 'Kısa bir mesaj yeterli. Mevcut işini, hedef pazarını veya çözmek istediğin dijital darboğazı yaz; doğru başlangıç noktasını birlikte netleştirelim.',
+    whatsapp: 'WhatsApp’tan yaz',
+    note: 'Bağlantılar, Instagram bio trafiğini ve hangi projenin ilgi çektiğini anlamaya yardımcı olacak şekilde ölçümlenir.',
+    destinations: [
+      ['DİJİTAL SATIŞ SİSTEMLERİ', 'QCT Commerce', 'E-ticaret, çok dilli web, görünürlük ve satış otomasyonu için Türkiye odaklı ticari sistemler.', 'Dijital projen için yaz', 'qct-commerce', 'commerce'],
+      ['ULUSLARARASI TİCARET', 'CTSEG', 'Ürün, tedarikçi, alıcı ve hedef pazar değerlendirmesini doğrulanabilir ticari verilerle yapılandıran koordinasyon platformu.', 'Ticari talep gönder', 'ctseg', 'trade'],
+      ['BALKANLARDA DİJİTAL BÜYÜME', 'QCT Studio', 'Balkanlar’daki işletmeler için web, e-ticaret, WhatsApp Commerce, SEO ve AI destekli dijital sistemler.', 'Projeni paylaş', 'qct-studio', 'studio'],
+      ['PORTFÖY · GÜZELLİK MARKASI', 'Phiaderm', 'Daha sade ve premium bir alışveriş deneyimi için hazırlanan güzellik markası. Açılış ve erken erişim duyuruları burada.', 'Erken erişime katıl', 'phiaderm', 'beauty'],
+      ['PORTFÖY · DİJİTAL ÜRÜN', 'Mythborn', 'Tarot, astroloji ve sembolik farkındalık için çok dilli bir dijital keşif alanı.', 'Mythborn’u keşfet', 'mythborn', 'myth'],
+    ],
+  },
+  en: {
+    title: 'Teyfik Gökdemir | Brands, Trade and Digital Growth',
+    description: 'Explore CTSEG, QCT Commerce, QCT Studio, Phiaderm and Mythborn from Teyfik Gökdemir’s Instagram profile.',
+    eyebrow: 'For visitors from Instagram',
+    heading: 'Trade, digital commerce and founder-led ventures.',
+    lead: 'Explore my work across international trade, digital growth and brand building. Each link takes you to the relevant project and next step.',
+    introKicker: 'TEYFIK GÖKDEMIR · THE FOUNDER’S WORKBENCH',
+    introTitle: 'One profile, different commercial paths.',
+    introText: 'This page connects what you see on Instagram to the relevant project. Reach QCT Commerce for digital commerce, CTSEG for sourcing and markets, and QCT Studio for digital growth across the Balkans.',
+    gridLabel: 'Projects and contact paths',
+    contactKicker: 'DIRECT CONTACT',
+    contactTitle: 'What would you like to discuss?',
+    contactText: 'A short message is enough. Share your business, target market or digital bottleneck and we will clarify the right starting point together.',
+    whatsapp: 'Write on WhatsApp',
+    note: 'Links are measured to understand Instagram bio traffic and which project attracts interest.',
+    destinations: [
+      ['DIGITAL COMMERCE SYSTEMS', 'QCT Commerce', 'Digital commerce, multilingual web, search visibility and sales automation for growing businesses.', 'Discuss your digital project', 'qct-commerce', 'commerce'],
+      ['INTERNATIONAL TRADE', 'CTSEG', 'A coordination platform for product, supplier, buyer and target-market evaluation with verifiable commercial information.', 'Send a trade request', 'ctseg', 'trade'],
+      ['DIGITAL GROWTH IN THE BALKANS', 'QCT Studio', 'Web, ecommerce, WhatsApp Commerce, SEO and AI-assisted digital systems for businesses across the Balkans.', 'Share your project', 'qct-studio', 'studio'],
+      ['PORTFOLIO · BEAUTY BRAND', 'Phiaderm', 'A beauty brand built around a simpler, more premium shopping experience. Opening and early-access updates live here.', 'Join early access', 'phiaderm', 'beauty'],
+      ['PORTFOLIO · DIGITAL PRODUCT', 'Mythborn', 'A multilingual digital discovery space for tarot, astrology and symbolic self-reflection.', 'Explore Mythborn', 'mythborn', 'myth'],
+    ],
+  },
+  ru: {
+    title: 'Teyfik Gökdemir | Бренды, торговля и цифровой рост',
+    description: 'Познакомьтесь с CTSEG, QCT Commerce, QCT Studio, Phiaderm и Mythborn через Instagram-профиль Teyfik Gökdemir.',
+    eyebrow: 'Для посетителей из Instagram',
+    heading: 'Торговля, цифровые продажи и проекты основателя.',
+    lead: 'Здесь собраны мои проекты в международной торговле, цифровом росте и развитии брендов. Каждая ссылка ведёт к нужному проекту и следующему шагу.',
+    introKicker: 'TEYFIK GÖKDEMIR · РАБОЧИЙ СТОЛ ОСНОВАТЕЛЯ',
+    introTitle: 'Один профиль — разные коммерческие направления.',
+    introText: 'Эта страница связывает контент Instagram с нужным проектом. Для цифровых продаж обращайтесь в QCT Commerce, для поставок и рынков — в CTSEG, а для цифрового роста на Балканах — в QCT Studio.',
+    gridLabel: 'Проекты и контакты',
+    contactKicker: 'ПРЯМОЙ КОНТАКТ',
+    contactTitle: 'О чём вы хотели бы поговорить?',
+    contactText: 'Достаточно короткого сообщения. Опишите бизнес, целевой рынок или цифровое узкое место — вместе определим правильную отправную точку.',
+    whatsapp: 'Написать в WhatsApp',
+    note: 'Ссылки размечены, чтобы понимать трафик из bio Instagram и интерес к каждому проекту.',
+    destinations: [
+      ['СИСТЕМЫ ЦИФРОВЫХ ПРОДАЖ', 'QCT Commerce', 'Цифровая торговля, многоязычный web, видимость и автоматизация продаж для растущих компаний.', 'Обсудить цифровой проект', 'qct-commerce', 'commerce'],
+      ['МЕЖДУНАРОДНАЯ ТОРГОВЛЯ', 'CTSEG', 'Координационная платформа для оценки товаров, поставщиков, покупателей и целевых рынков на основе проверяемых данных.', 'Отправить торговый запрос', 'ctseg', 'trade'],
+      ['ЦИФРОВОЙ РОСТ НА БАЛКАНАХ', 'QCT Studio', 'Web, ecommerce, WhatsApp Commerce, SEO и AI-системы для компаний на Балканах.', 'Рассказать о проекте', 'qct-studio', 'studio'],
+      ['ПОРТФЕЛЬ · БРЕНД КРАСОТЫ', 'Phiaderm', 'Бренд красоты с простым и премиальным опытом покупки. Здесь публикуются новости открытия и раннего доступа.', 'Получить ранний доступ', 'phiaderm', 'beauty'],
+      ['ПОРТФЕЛЬ · ЦИФРОВОЙ ПРОДУКТ', 'Mythborn', 'Многоязычное цифровое пространство для таро, астрологии и символического самопознания.', 'Открыть Mythborn', 'mythborn', 'myth'],
+    ],
+  },
+  fa: {
+    title: 'Teyfik Gökdemir | برندها، تجارت و رشد دیجیتال',
+    description: 'از طریق پروفایل اینستاگرام Teyfik Gökdemir با CTSEG، QCT Commerce، QCT Studio، Phiaderm و Mythborn آشنا شوید.',
+    eyebrow: 'برای بازدیدکنندگان اینستاگرام',
+    heading: 'تجارت، فروش دیجیتال و پروژه‌های بنیان‌گذار.',
+    lead: 'پروژه‌های من در تجارت بین‌المللی، رشد دیجیتال و توسعه برند را از مسیرهای زیر دنبال کنید. هر لینک شما را به پروژه و گام بعدی مرتبط می‌رساند.',
+    introKicker: 'TEYFIK GÖKDEMIR · میز کار بنیان‌گذار',
+    introTitle: 'یک پروفایل، مسیرهای تجاری متفاوت.',
+    introText: 'این صفحه محتوای اینستاگرام را به پروژه مربوط متصل می‌کند. برای تجارت دیجیتال به QCT Commerce، برای تأمین و بازارها به CTSEG و برای رشد دیجیتال در بالکان به QCT Studio بروید.',
+    gridLabel: 'پروژه‌ها و مسیرهای ارتباطی',
+    contactKicker: 'ارتباط مستقیم',
+    contactTitle: 'درباره چه موضوعی گفت‌وگو کنیم؟',
+    contactText: 'یک پیام کوتاه کافی است. کسب‌وکار، بازار هدف یا گلوگاه دیجیتال خود را بنویسید تا نقطه شروع مناسب را با هم مشخص کنیم.',
+    whatsapp: 'ارسال پیام در واتساپ',
+    note: 'لینک‌ها برای اندازه‌گیری ترافیک bio اینستاگرام و علاقه به هر پروژه علامت‌گذاری شده‌اند.',
+    destinations: [
+      ['سیستم‌های فروش دیجیتال', 'QCT Commerce', 'تجارت دیجیتال، وب چندزبانه، دیده‌شدن و خودکارسازی فروش برای کسب‌وکارهای در حال رشد.', 'گفت‌وگو درباره پروژه دیجیتال', 'qct-commerce', 'commerce'],
+      ['تجارت بین‌المللی', 'CTSEG', 'پلتفرم هماهنگی برای ارزیابی محصول، تأمین‌کننده، خریدار و بازار هدف با اطلاعات تجاری قابل بررسی.', 'ارسال درخواست تجاری', 'ctseg', 'trade'],
+      ['رشد دیجیتال در بالکان', 'QCT Studio', 'وب، تجارت الکترونیک، WhatsApp Commerce، SEO و سیستم‌های دیجیتال مبتنی بر AI برای کسب‌وکارهای بالکان.', 'معرفی پروژه', 'qct-studio', 'studio'],
+      ['پورتفولیو · برند زیبایی', 'Phiaderm', 'برند زیبایی با تجربه خرید ساده‌تر و ممتازتر. اخبار افتتاح و دسترسی زودهنگام در اینجا منتشر می‌شود.', 'عضویت در دسترسی زودهنگام', 'phiaderm', 'beauty'],
+      ['پورتفولیو · محصول دیجیتال', 'Mythborn', 'فضایی دیجیتال و چندزبانه برای تاروت، طالع‌بینی و خودشناسی نمادین.', 'کشف Mythborn', 'mythborn', 'myth'],
+    ],
+  },
+  mk: {
+    title: 'Teyfik Gökdemir | Брендови, трговија и дигитален раст',
+    description: 'Истражете ги CTSEG, QCT Commerce, QCT Studio, Phiaderm и Mythborn преку Instagram профилот на Teyfik Gökdemir.',
+    eyebrow: 'За посетители од Instagram',
+    heading: 'Трговија, дигитална продажба и проекти на основачот.',
+    lead: 'Истражете ја мојата работа во меѓународната трговија, дигиталниот раст и развојот на брендови. Секоја врска води кон соодветниот проект и следниот чекор.',
+    introKicker: 'TEYFIK GÖKDEMIR · РАБОТНА МАСА НА ОСНОВАЧОТ',
+    introTitle: 'Еден профил, различни комерцијални насоки.',
+    introText: 'Оваа страница ја поврзува содржината од Instagram со соодветниот проект. За дигитална трговија посетете го QCT Commerce, за набавки и пазари CTSEG, а за дигитален раст на Балканот QCT Studio.',
+    gridLabel: 'Проекти и контактни патеки',
+    contactKicker: 'ДИРЕКТЕН КОНТАКТ',
+    contactTitle: 'За што би сакале да разговараме?',
+    contactText: 'Доволна е кратка порака. Споделете го бизнисот, целниот пазар или дигиталниот проблем и заедно ќе ја одредиме вистинската почетна точка.',
+    whatsapp: 'Пишете на WhatsApp',
+    note: 'Врските се означени за мерење на Instagram bio сообраќајот и интересот за секој проект.',
+    destinations: [
+      ['ДИГИТАЛНИ ПРОДАЖНИ СИСТЕМИ', 'QCT Commerce', 'Дигитална трговија, повеќејазичен web, видливост и автоматизација на продажбата.', 'Разговарајте за проектот', 'qct-commerce', 'commerce'],
+      ['МЕЃУНАРОДНА ТРГОВИЈА', 'CTSEG', 'Координациска платформа за проценка на производи, добавувачи, купувачи и пазари со проверливи податоци.', 'Испратете трговско барање', 'ctseg', 'trade'],
+      ['ДИГИТАЛЕН РАСТ НА БАЛКАНОТ', 'QCT Studio', 'Web, ecommerce, WhatsApp Commerce, SEO и AI дигитални системи за бизниси на Балканот.', 'Споделете го проектот', 'qct-studio', 'studio'],
+      ['ПОРТФОЛИО · БРЕНД ЗА УБАВИНА', 'Phiaderm', 'Бренд за убавина со поедноставно и премиум искуство при купување. Новости за отворање и раниот пристап се објавуваат тука.', 'Приклучете се за раниот пристап', 'phiaderm', 'beauty'],
+      ['ПОРТФОЛИО · ДИГИТАЛЕН ПРОИЗВОД', 'Mythborn', 'Повеќејазичен дигитален простор за тарот, астрологија и симболично самоистражување.', 'Истражете го Mythborn', 'mythborn', 'myth'],
+    ],
+  },
+  sr: {
+    title: 'Teyfik Gökdemir | Brendovi, trgovina i digitalni rast',
+    description: 'Istražite CTSEG, QCT Commerce, QCT Studio, Phiaderm i Mythborn kroz Instagram profil Teyfik Gökdemira.',
+    eyebrow: 'Za posetioce sa Instagrama',
+    heading: 'Trgovina, digitalna prodaja i projekti osnivača.',
+    lead: 'Istražite moj rad u međunarodnoj trgovini, digitalnom rastu i razvoju brendova. Svaka veza vodi do relevantnog projekta i sledećeg koraka.',
+    introKicker: 'TEYFIK GÖKDEMIR · RADNI STO OSNIVAČA',
+    introTitle: 'Jedan profil, različiti poslovni pravci.',
+    introText: 'Ova stranica povezuje sadržaj sa Instagrama sa odgovarajućim projektom. Za digitalnu trgovinu posetite QCT Commerce, za nabavku i tržišta CTSEG, a za digitalni rast na Balkanu QCT Studio.',
+    gridLabel: 'Projekti i kontakt putevi',
+    contactKicker: 'DIREKTAN KONTAKT',
+    contactTitle: 'O čemu želite da razgovaramo?',
+    contactText: 'Dovoljna je kratka poruka. Podelite posao, ciljano tržište ili digitalno usko grlo i zajedno ćemo odrediti pravi početak.',
+    whatsapp: 'Pišite na WhatsApp',
+    note: 'Veze su označene kako bismo razumeli Instagram bio saobraćaj i interesovanje za svaki projekat.',
+    destinations: [
+      ['SISTEMI DIGITALNE PRODAJE', 'QCT Commerce', 'Digitalna trgovina, višejezički web, vidljivost i automatizacija prodaje za rastuće firme.', 'Razgovarajte o projektu', 'qct-commerce', 'commerce'],
+      ['MEĐUNARODNA TRGOVINA', 'CTSEG', 'Koordinaciona platforma za procenu proizvoda, dobavljača, kupaca i ciljnih tržišta na osnovu proverljivih podataka.', 'Pošaljite trgovinski zahtev', 'ctseg', 'trade'],
+      ['DIGITALNI RAST NA BALKANU', 'QCT Studio', 'Web, ecommerce, WhatsApp Commerce, SEO i AI digitalni sistemi za poslovanja na Balkanu.', 'Podelite projekat', 'qct-studio', 'studio'],
+      ['PORTFOLIO · BREND LEPOTE', 'Phiaderm', 'Brend lepote sa jednostavnijim i premium iskustvom kupovine. Novosti o otvaranju i ranom pristupu objavljuju se ovde.', 'Pridružite se ranom pristupu', 'phiaderm', 'beauty'],
+      ['PORTFOLIO · DIGITALNI PROIZVOD', 'Mythborn', 'Višejezički digitalni prostor za tarot, astrologiju i simboličko samoistraživanje.', 'Istražite Mythborn', 'mythborn', 'myth'],
+    ],
+  },
+  sq: {
+    title: 'Teyfik Gökdemir | Marka, tregti dhe rritje digjitale',
+    description: 'Eksploroni CTSEG, QCT Commerce, QCT Studio, Phiaderm dhe Mythborn përmes profilit Instagram të Teyfik Gökdemir.',
+    eyebrow: 'Për vizitorët nga Instagrami',
+    heading: 'Tregti, shitje digjitale dhe projekte të themeluesit.',
+    lead: 'Eksploroni punën time në tregtinë ndërkombëtare, rritjen digjitale dhe zhvillimin e markave. Çdo lidhje ju çon te projekti dhe hapi përkatës.',
+    introKicker: 'TEYFIK GÖKDEMIR · TAVOLINA E PUNËS SË THEMELUESIT',
+    introTitle: 'Një profil, drejtime të ndryshme tregtare.',
+    introText: 'Kjo faqe lidh përmbajtjen e Instagramit me projektin përkatës. Për tregti digjitale vizitoni QCT Commerce, për furnizim dhe tregje CTSEG, ndërsa për rritje digjitale në Ballkan QCT Studio.',
+    gridLabel: 'Projektet dhe rrugët e kontaktit',
+    contactKicker: 'KONTAKT I DREJTPËRDREJTË',
+    contactTitle: 'Për çfarë dëshironi të flasim?',
+    contactText: 'Mjafton një mesazh i shkurtër. Ndani biznesin, tregun e synuar ose pengesën digjitale dhe së bashku do të përcaktojmë pikën e duhur të nisjes.',
+    whatsapp: 'Shkruani në WhatsApp',
+    note: 'Lidhjet janë shënuar për të kuptuar trafikun nga Instagram bio dhe interesin për çdo projekt.',
+    destinations: [
+      ['SISTEME SHITJESH DIGJITALE', 'QCT Commerce', 'Tregti digjitale, web shumëgjuhësh, dukshmëri dhe automatizim shitjesh për bizneset në rritje.', 'Flisni për projektin', 'qct-commerce', 'commerce'],
+      ['TREGTI NDËRKOMBËTARE', 'CTSEG', 'Platformë koordinimi për vlerësimin e produkteve, furnizuesve, blerësve dhe tregjeve të synuara me të dhëna të verifikueshme.', 'Dërgoni kërkesë tregtare', 'ctseg', 'trade'],
+      ['RRITJE DIGJITALE NË BALLKAN', 'QCT Studio', 'Web, ecommerce, WhatsApp Commerce, SEO dhe sisteme digjitale me AI për bizneset në Ballkan.', 'Ndani projektin', 'qct-studio', 'studio'],
+      ['PORTOFOLIO · MARKË BUKURIE', 'Phiaderm', 'Markë bukurie me një përvojë më të thjeshtë dhe premium blerjeje. Njoftimet e hapjes dhe aksesit të hershëm publikohen këtu.', 'Bashkohuni në aksesin e hershëm', 'phiaderm', 'beauty'],
+      ['PORTOFOLIO · PRODUKT DIGJITAL', 'Mythborn', 'Hapësirë digjitale shumëgjuhëshe për tarot, astrologji dhe vetëzbulim simbolik.', 'Eksploroni Mythborn', 'mythborn', 'myth'],
+    ],
+  },
+};
+
+const strings = copy[locale] ?? copy.en;
+const ctsegUrls: Partial<Record<Locale, string>> = {
+  tr: 'https://ctseg.com.tr/tr/iletisim/',
+  fa: 'https://ctseg.com.tr/fa/tamin-beynolmelali-iran/',
+};
+const baseDestinations: Record<string, string> = {
+  'qct-commerce': 'https://qctcommerce.com/iletisim/',
+  ctseg: ctsegUrls[locale] ?? 'https://ctseg.com.tr/en/',
+  'qct-studio': 'https://qctstudio.com/contact/',
+  phiaderm: 'https://www.phiaderm.com.tr/password',
+  mythborn: 'https://mythborn.co/',
+};
+const tracked = (url: string, content: string) => {
+  const target = new URL(url);
+  target.searchParams.set('utm_source', 'instagram');
+  target.searchParams.set('utm_medium', 'bio');
+  target.searchParams.set('utm_campaign', campaign);
+  target.searchParams.set('utm_content', content);
+  return target.toString();
+};
+const destinations = strings.destinations.map(([eyebrow, title, text, cta, key, tone]) => ({
+  eyebrow,
+  title,
+  text,
+  cta,
+  key,
+  tone,
+  href: tracked(baseDestinations[key], key),
+}));
+const title = strings.title;
+const description = strings.description;
+const pageSchema = {
+  '@type': 'CollectionPage',
+  '@id': site.origin + pathname + '#collection',
+  name: title,
+  description,
+  url: site.origin + pathname,
+  inLanguage: locale,
+  isPartOf: { '@id': site.origin + '/#website' },
+  about: { '@id': site.origin + '/#person' },
+};
+const whatsappText = locale === 'tr'
+  ? 'Merhaba Teyfik, Instagram profilinden ulaşıyorum. Konum: '
+  : 'Hello Teyfik, I am reaching you from your Instagram profile. Topic: ';
+const whatsappHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(whatsappText)}`;
+---
+
+<ContentPage
+  locale={locale}
+  title={title}
+  description={description}
+  pathname={pathname}
+  eyebrow={strings.eyebrow}
+  heading={strings.heading}
+  lead={strings.lead}
+  pageSchema={pageSchema}
+  alternates={alternates}
+>
+  <div class="instagram-hub">
+    <section class="instagram-hub-intro" aria-labelledby="instagram-hub-title">
+      <p class="instagram-hub-kicker">{strings.introKicker}</p>
+      <h2 id="instagram-hub-title">{strings.introTitle}</h2>
+      <p>{strings.introText}</p>
+    </section>
+
+    <div class="instagram-hub-grid" aria-label={strings.gridLabel}>
+      {destinations.map((item, index) => (
+        <a
+          class:list={['instagram-hub-card', `instagram-hub-card--${item.tone}`, { 'instagram-hub-card--featured': index === 0 }]}
+          href={item.href}
+          data-instagram-route={item.key}
+        >
+          <span class="instagram-hub-card__eyebrow">{item.eyebrow}</span>
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+          <span class="instagram-hub-card__cta">{item.cta} <span aria-hidden="true">↗</span></span>
+        </a>
+      ))}
+    </div>
+
+    <section class="instagram-hub-contact" aria-labelledby="instagram-hub-contact-title">
+      <p class="instagram-hub-kicker">{strings.contactKicker}</p>
+      <h2 id="instagram-hub-contact-title">{strings.contactTitle}</h2>
+      <p>{strings.contactText}</p>
+      <a class="instagram-hub-contact__button" href={whatsappHref} data-instagram-route="whatsapp">
+        {strings.whatsapp}
+      </a>
+    </section>
+
+    <p class="instagram-hub-note">{strings.note}</p>
+  </div>
+</ContentPage>
+
+<script is:inline>
+  document.querySelectorAll('[data-instagram-route]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const destination = link.getAttribute('data-instagram-route') || 'unknown';
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'instagram_hub_click', {
+          destination,
+          source: 'instagram',
+          medium: 'bio',
+          campaign: 'founder_profile',
+        });
+      }
+    });
+  });
+</script>
+
+<style>
+  :global(.instagram-hub) { display: grid; gap: clamp(2.5rem, 6vw, 5rem); }
+  :global(.instagram-hub-intro) { max-width: 760px; }
+  :global(.instagram-hub-kicker) { margin: 0 0 .9rem; color: #8a432c; font-size: .74rem; font-weight: 850; letter-spacing: .16em; line-height: 1.4; text-transform: uppercase; }
+  :global(.instagram-hub h2) { margin: 0 0 1.1rem; color: var(--text); font-size: clamp(2rem, 4vw, 3.25rem); }
+  :global(.instagram-hub-intro p:not(.instagram-hub-kicker)), :global(.instagram-hub-contact p:not(.instagram-hub-kicker)) { margin: 0; color: var(--muted); font-size: 1.05rem; line-height: 1.8; }
+  :global(.instagram-hub-grid) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  :global(.instagram-hub-card) { display: flex; min-height: 270px; flex-direction: column; padding: clamp(1.4rem, 3vw, 2rem); border: 1px solid rgba(67, 78, 72, .55); border-radius: 1.15rem; background: var(--scene-mineral); color: var(--text); text-decoration: none !important; transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
+  :global(.instagram-hub-card:hover) { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 18px 42px rgba(33, 28, 24, .12); }
+  :global(.instagram-hub-card--featured) { border-color: var(--accent); background: var(--scene-olive); color: #f3eee6; }
+  :global(.instagram-hub-card--featured .instagram-hub-card__eyebrow), :global(.instagram-hub-card--featured p) { color: #d9cfc3; }
+  :global(.instagram-hub-card--featured .instagram-hub-card__cta) { color: var(--accent-coral); }
+  :global(.instagram-hub-card--trade) { background: #e8dfd2; }
+  :global(.instagram-hub-card--studio) { background: #e1e6df; }
+  :global(.instagram-hub-card--beauty) { background: #eadbd4; }
+  :global(.instagram-hub-card--myth) { background: #dddbe5; }
+  :global(.instagram-hub-card__eyebrow) { color: #7b746b; font-size: .7rem; font-weight: 850; letter-spacing: .12em; line-height: 1.45; }
+  :global(.instagram-hub-card h3) { margin: 1.7rem 0 .7rem; font-size: clamp(1.55rem, 3vw, 2.25rem); line-height: 1.05; }
+  :global(.instagram-hub-card p) { margin: 0; color: #625c54; font-size: .96rem; line-height: 1.7; }
+  :global(.instagram-hub-card__cta) { display: inline-flex; align-items: center; gap: .35rem; margin-top: auto; padding-top: 1.4rem; color: var(--accent); font-size: .9rem; font-weight: 850; }
+  :global(.instagram-hub-contact) { padding: clamp(2rem, 5vw, 3.5rem); border-radius: 1rem; background: var(--surface-dark); color: #f3eee6; }
+  :global(.instagram-hub-contact h2) { color: #f3eee6; }
+  :global(.instagram-hub-contact p:not(.instagram-hub-kicker)) { max-width: 700px; color: #d2c8bc; }
+  :global(.instagram-hub-contact .instagram-hub-kicker) { color: var(--accent-coral); }
+  :global(.instagram-hub-contact__button) { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; margin-top: 1.5rem; padding: .85rem 1.3rem; border: 1px solid var(--accent-coral); border-radius: 999px; background: var(--accent-coral); color: #211c18 !important; font-weight: 850; text-decoration: none !important; }
+  :global(.instagram-hub-contact__button:hover) { background: #e69a7c; }
+  :global(.instagram-hub-note) { margin: -1.5rem 0 0; color: var(--muted); font-size: .82rem; line-height: 1.65; }
+  :global(html[lang="fa"] .instagram-hub-card__cta) { flex-direction: row-reverse; }
+  @media (max-width: 680px) { :global(.instagram-hub-grid) { grid-template-columns: 1fr; } :global(.instagram-hub-card) { min-height: 240px; } :global(.instagram-hub-contact__button) { width: 100%; } }
+</style>

@@ -1,0 +1,14 @@
+---
+import InstagramHubPage from '../../components/InstagramHubPage.astro';
+import { locales, type Locale } from '../../i18n/locales';
+
+export function getStaticPaths() {
+  return locales
+    .filter((locale) => locale !== 'tr')
+    .map((locale) => ({ params: { lang: locale } }));
+}
+
+const locale = Astro.params.lang as Locale;
+---
+
+<InstagramHubPage locale={locale} />
