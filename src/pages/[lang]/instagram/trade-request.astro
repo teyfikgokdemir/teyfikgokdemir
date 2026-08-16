@@ -1,0 +1,13 @@
+---
+import TradeRequestPage from '../../../components/TradeRequestPage.astro';
+import { locales, isLocale, type Locale } from '../../../i18n/locales';
+
+export function getStaticPaths() {
+  return locales.filter((lang) => lang !== 'tr').map((lang) => ({ params: { lang }, props: { locale: lang } }));
+}
+
+const locale = (Astro.props.locale ?? Astro.params.lang) as Locale;
+if (!isLocale(locale) || locale === 'tr') throw new Error('Unsupported locale');
+---
+
+<TradeRequestPage locale={locale} />

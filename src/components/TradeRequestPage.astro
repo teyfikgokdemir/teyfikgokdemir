@@ -1,0 +1,112 @@
+---
+import ContentPage from './ContentPage.astro';
+import { site } from '../data/site';
+import type { Locale } from '../i18n/locales';
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const locales: Locale[] = ['tr', 'en', 'ru', 'fa', 'mk', 'sr', 'sq'];
+const pathnameFor = (item: Locale) => item === 'tr' ? '/instagram/trade-request/' : `/${item}/instagram/trade-request/`;
+const siteUrl = (item: Locale) => site.origin + pathnameFor(item);
+const alternates = Object.fromEntries([...locales.map((item) => [item, siteUrl(item)]), ['x-default', siteUrl('en')]]);
+const ctsegLocale = locale === 'tr' ? 'tr' : locale === 'fa' ? 'fa' : 'en';
+const ctsegBase = `https://ctseg.com.tr/${ctsegLocale}`;
+
+const copy = {
+  tr: { title: 'Ticari Talep Merkezi | Teyfik Gökdemir', description: 'Türkiye ile ticaret için doğru ticari talep yolunu seçin: tedarikçi arayın veya ürününüz için alıcı ve pazar bulun.', eyebrow: 'Instagram’dan gelenler için · Ticari talep', heading: 'Türkiye ile ticaret yapmak istiyorsanız doğru taleple başlayın.', lead: 'İki farklı ticari ihtiyaç, iki farklı başlangıç noktası. İhtiyacınızı seçin; ürün, pazar ve karşı taraf için doğru CTSEG akışına geçin.', intro: 'Tedarikçi mi arıyorsun, yoksa ürünün için alıcı ve pazar mı? Kısa ve açık bir talep, doğru ticari görüşmenin ilk adımıdır.', buyerTitle: 'Tedarikçi arıyorum', buyerText: 'Türkiye’den belirli bir ürün, üretici veya tedarikçi arıyorsan ürün, miktar, hedef pazar ve teslim beklentini paylaş.', buyerCta: 'Tedarikçi talebi gönder ↗', supplierTitle: 'Alıcı ve pazar arıyorum', supplierText: 'Üretici veya ihracatçıysan ürünün, kapasiten, belgelerin ve hedef pazarlarınla uygun alıcıları ve pazara giriş fırsatlarını anlat.', supplierCta: 'Alıcı ve pazar talebi gönder ↗', proofTitle: 'İyi bir ticari talep ne içerir?', proofText: 'Ürünü, miktarı, hedef ülkeyi, mevcut belgeleri, teslim beklentisini ve bir sonraki adımı açıkça yaz. Eksik bilgi, yanlış eşleşme ve zaman kaybı yaratır.', proofItems: ['Ürün veya kategori', 'Miktar ve teknik beklenti', 'Kaynak veya hedef ülke', 'Belge ve kalite ihtiyacı', 'Tercih edilen teslim modeli'], finalTitle: 'Talebini seç ve ilk adımı at.', finalText: 'Doğru niyetle başlayan kısa bir mesaj, ticari değerlendirmeyi hızlandırır.', whatsappBuyer: 'Merhaba CTSEG, Türkiye’den tedarikçi arıyorum. Ürün/kategori: … Hedef pazar: … Kısa detay: …', whatsappSupplier: 'Merhaba CTSEG, ürünüm için alıcı ve pazar arıyorum. Ürün: … Kaynak ülke: … Hedef pazar: …', instagram: 'Instagram’a dön ↗' },
+  en: { title: 'Trade Request Centre | Teyfik Gökdemir', description: 'Choose the right trade request path: find a supplier in Türkiye or find buyers and markets for your product.', eyebrow: 'For visitors from Instagram · Trade request', heading: 'If you want to trade with Türkiye, start with the right request.', lead: 'Two commercial needs require two different starting points. Choose yours and move to the right CTSEG flow for product, market and counterparty coordination.', intro: 'Are you looking for a supplier, or buyers and markets for your product? A clear request is the first step to a useful commercial conversation.', buyerTitle: 'I need a supplier', buyerText: 'Looking for a product, producer or supplier from Türkiye? Share the product, quantity, target market and delivery expectations.', buyerCta: 'Send a supplier request ↗', supplierTitle: 'I need buyers and markets', supplierText: 'Are you a producer or exporter? Share your product, capacity, documents and target markets to explore suitable buyers and market-entry paths.', supplierCta: 'Send a buyer/market request ↗', proofTitle: 'What makes a useful trade request?', proofText: 'State the product, quantity, target country, available documents, delivery expectations and next step. Missing inputs create wrong matches and delay.', proofItems: ['Product or category', 'Quantity and specification', 'Origin or target country', 'Quality and document needs', 'Preferred delivery model'], finalTitle: 'Choose your path and take the first step.', finalText: 'A short message with the right intent makes commercial assessment faster.', whatsappBuyer: 'Hello CTSEG, I am looking for a supplier from Türkiye. Product/category: … Target market: … Brief details: …', whatsappSupplier: 'Hello CTSEG, I am looking for buyers and markets for my product. Product: … Origin country: … Target market: …', instagram: 'Return to Instagram ↗' },
+  ru: { title: 'Коммерческий запрос для Турции | Teyfik Gökdemir', description: 'Выберите коммерческий путь: найти поставщика в Турции или найти покупателей и рынки для своего продукта.', eyebrow: 'Для посетителей из Instagram · Коммерческий запрос', heading: 'Хотите работать с Турцией? Начните с правильного запроса.', lead: 'Две разные задачи — два разных первых шага. Выберите свой путь, чтобы передать CTSEG понятный запрос по продукту, рынку и контрагенту.', intro: 'Вам нужен поставщик в Турции или покупатели и рынок для вашего продукта? Чёткий запрос ускоряет первый полезный разговор.', buyerTitle: 'Я ищу поставщика в Турции', buyerText: 'Укажите продукт, объём, целевой рынок и условия поставки. CTSEG поможет структурировать запрос к подходящим производителям и поставщикам.', buyerCta: 'Запросить поставщика ↗', supplierTitle: 'Я ищу покупателей и рынок', supplierText: 'Если вы производитель или экспортёр, опишите продукт, мощность, документы и рынки, на которые хотите выйти. Так проще найти подходящий путь развития.', supplierCta: 'Запросить покупателей и рынок ↗', proofTitle: 'Что должно быть в хорошем запросе?', proofText: 'Название продукта, объём, целевая страна, документы, условия поставки и следующий шаг. Неполные данные создают неверные совпадения и задержки.', proofItems: ['Продукт или категория', 'Объём и спецификация', 'Страна происхождения или цель', 'Качество и документы', 'Предпочтительная доставка'], finalTitle: 'Выберите направление и отправьте первый запрос.', finalText: 'Короткое сообщение с правильным намерением помогает быстрее перейти к коммерческой оценке.', whatsappBuyer: 'Здравствуйте, CTSEG. Я ищу поставщика в Турции. Продукт/категория: … Целевой рынок: … Кратко: …', whatsappSupplier: 'Здравствуйте, CTSEG. Я ищу покупателей и рынок для продукта. Продукт: … Страна происхождения: … Целевой рынок: …', instagram: 'Вернуться в Instagram ↗' },
+  fa: { title: 'مرکز درخواست تجاری برای ترکیه | Teyfik Gökdemir', description: 'مسیر تجاری مناسب را انتخاب کنید: تأمین‌کننده در ترکیه پیدا کنید یا برای محصول خود خریدار و بازار بیابید.', eyebrow: 'برای بازدیدکنندگان اینستاگرام · درخواست تجاری', heading: 'برای تجارت با ترکیه، درخواست درست را از همین‌جا شروع کنید.', lead: 'دو نیاز تجاری، دو نقطه شروع متفاوت. مسیر خود را انتخاب کنید تا درخواست شما به جریان درست CTSEG برای محصول، بازار و طرف تجاری برسد.', intro: 'به دنبال تأمین‌کننده در ترکیه هستید یا برای محصول خود خریدار و بازار می‌خواهید؟ یک درخواست روشن، اولین قدم برای گفت‌وگوی تجاری مفید است.', buyerTitle: 'به دنبال تأمین‌کننده هستم', buyerText: 'محصول، مقدار، بازار هدف و شرایط تحویل را بنویسید. CTSEG به ساختاردهی درخواست و هماهنگی با تولیدکننده یا تأمین‌کننده مناسب کمک می‌کند.', buyerCta: 'ارسال درخواست تأمین‌کننده ↗', supplierTitle: 'به دنبال خریدار و بازار هستم', supplierText: 'اگر تولیدکننده یا صادرکننده هستید، محصول، ظرفیت، اسناد و بازارهای هدف خود را معرفی کنید تا مسیر مناسب برای یافتن خریدار و ورود به بازار بررسی شود.', supplierCta: 'ارسال درخواست خریدار و بازار ↗', proofTitle: 'یک درخواست تجاری خوب چه چیزهایی دارد؟', proofText: 'محصول، مقدار، کشور هدف، اسناد موجود، شرایط تحویل و گام بعدی را روشن بنویسید. اطلاعات ناقص باعث تطبیق اشتباه و اتلاف زمان می‌شود.', proofItems: ['محصول یا گروه کالا', 'مقدار و مشخصات', 'کشور مبدأ یا هدف', 'نیازهای کیفیت و اسناد', 'مدل تحویل ترجیحی'], finalTitle: 'مسیر خود را انتخاب و اولین قدم را بردارید.', finalText: 'یک پیام کوتاه با نیت تجاری روشن، ارزیابی را سریع‌تر می‌کند.', whatsappBuyer: 'سلام CTSEG، به دنبال تأمین‌کننده در ترکیه هستم. محصول/حوزه: … بازار هدف: … توضیح کوتاه: …', whatsappSupplier: 'سلام CTSEG، برای محصول خود به دنبال خریدار و بازار هستم. محصول: … کشور مبدأ: … بازار هدف: …', instagram: 'بازگشت به اینستاگرام ↗' },
+  mk: { title: 'Центар за трговско барање | Teyfik Gökdemir', description: 'Изберете трговски пат: добавувач во Турција или купувачи и пазари за вашиот производ.', eyebrow: 'За посетители од Instagram · Трговско барање', heading: 'Сакате трговија со Турција? Започнете со јасно барање.', lead: 'Изберете дали барате добавувач или купувачи и пазари за вашиот производ.', intro: 'Јасното барање е првиот чекор кон корисен комерцијален разговор.', buyerTitle: 'Барам добавувач', buyerText: 'Споделете производ, количина, целен пазар и услови за испорака.', buyerCta: 'Испратете барање за добавувач ↗', supplierTitle: 'Барам купувачи и пазари', supplierText: 'Споделете производ, капацитет, документи и целни пазари.', supplierCta: 'Испратете барање за купувачи ↗', proofTitle: 'Што содржи добро барање?', proofText: 'Производ, количина, целна земја, документи, испорака и следен чекор.', proofItems: ['Производ или категорија', 'Количина и спецификација', 'Земја на потекло или цел', 'Квалитет и документи', 'Модел на испорака'], finalTitle: 'Изберете пат и направете прв чекор.', finalText: 'Кратка порака со јасна цел го забрзува процесот.', whatsappBuyer: 'Здраво CTSEG, барам добавувач од Турција. Производ: … Пазар: …', whatsappSupplier: 'Здраво CTSEG, барам купувачи и пазар за мојот производ. Производ: … Пазар: …', instagram: 'Назад на Instagram ↗' },
+  sr: { title: 'Centar za trgovinski zahtev | Teyfik Gökdemir', description: 'Izaberite trgovinski put: dobavljač u Turskoj ili kupci i tržišta za vaš proizvod.', eyebrow: 'Za posetioce sa Instagrama · Trgovinski zahtev', heading: 'Želite trgovinu sa Turskom? Počnite jasnim zahtevom.', lead: 'Izaberite da li tražite dobavljača ili kupce i tržišta za svoj proizvod.', intro: 'Jasan zahtev je prvi korak ka korisnom poslovnom razgovoru.', buyerTitle: 'Tražim dobavljača', buyerText: 'Podelite proizvod, količinu, ciljno tržište i uslove isporuke.', buyerCta: 'Pošaljite zahtev za dobavljača ↗', supplierTitle: 'Tražim kupce i tržišta', supplierText: 'Podelite proizvod, kapacitet, dokumenta i ciljna tržišta.', supplierCta: 'Pošaljite zahtev za kupce ↗', proofTitle: 'Šta sadrži dobar zahtev?', proofText: 'Proizvod, količina, ciljna zemlja, dokumenti, isporuka i sledeći korak.', proofItems: ['Proizvod ili kategorija', 'Količina i specifikacija', 'Zemlja porekla ili cilj', 'Kvalitet i dokumenta', 'Model isporuke'], finalTitle: 'Izaberite put i napravite prvi korak.', finalText: 'Kratka poruka sa jasnom namerom ubrzava proces.', whatsappBuyer: 'Zdravo CTSEG, tražim dobavljača iz Turske. Proizvod: … Tržište: …', whatsappSupplier: 'Zdravo CTSEG, tražim kupce i tržište za svoj proizvod. Proizvod: … Tržište: …', instagram: 'Nazad na Instagram ↗' },
+  sq: { title: 'Qendra e kërkesës tregtare | Teyfik Gökdemir', description: 'Zgjidhni rrugën tregtare: furnizues në Turqi ose blerës dhe tregje për produktin tuaj.', eyebrow: 'Për vizitorët nga Instagrami · Kërkesë tregtare', heading: 'Dëshironi të tregtoni me Turqinë? Filloni me kërkesë të qartë.', lead: 'Zgjidhni nëse kërkoni furnizues apo blerës dhe tregje për produktin tuaj.', intro: 'Një kërkesë e qartë është hapi i parë drejt një bisede të dobishme tregtare.', buyerTitle: 'Kërkoj furnizues', buyerText: 'Ndani produktin, sasinë, tregun e synuar dhe kushtet e dorëzimit.', buyerCta: 'Dërgoni kërkesë për furnizues ↗', supplierTitle: 'Kërkoj blerës dhe tregje', supplierText: 'Ndani produktin, kapacitetin, dokumentet dhe tregjet e synuara.', supplierCta: 'Dërgoni kërkesë për blerës ↗', proofTitle: 'Çfarë përmban një kërkesë e mirë?', proofText: 'Produkt, sasi, vend i synuar, dokumente, dorëzim dhe hapi tjetër.', proofItems: ['Produkt ose kategori', 'Sasi dhe specifikim', 'Vend origjine ose synimi', 'Cilësi dhe dokumente', 'Model dorëzimi'], finalTitle: 'Zgjidhni rrugën dhe bëni hapin e parë.', finalText: 'Një mesazh i shkurtër me qëllim të qartë e shpejton procesin.', whatsappBuyer: 'Përshëndetje CTSEG, po kërkoj furnizues nga Turqia. Produkti: … Tregu: …', whatsappSupplier: 'Përshëndetje CTSEG, po kërkoj blerës dhe treg për produktin tim. Produkti: … Tregu: …', instagram: 'Kthehuni në Instagram ↗' },
+} as const;
+
+const strings = copy[locale];
+const campaign = 'trade_intent';
+const tracked = (url: string, content: string) => { const target = new URL(url); target.searchParams.set('utm_source', 'instagram'); target.searchParams.set('utm_medium', 'post'); target.searchParams.set('utm_campaign', campaign); target.searchParams.set('utm_content', content); return target.toString(); };
+const baseContact = `${ctsegBase}/contact/`;
+const buyerUrl = tracked(`${baseContact}?intent=buyer_request`, `${locale}_buyer`);
+const supplierUrl = tracked(`${baseContact}?intent=supplier_market_entry`, `${locale}_supplier`);
+const whatsapp = (text: string, content: string) => `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}&utm_source=instagram&utm_medium=post&utm_campaign=${campaign}&utm_content=${content}`;
+const instagramUrl = `https://www.instagram.com/teyfikgokdemir/?utm_source=website&utm_medium=referral&utm_campaign=instagram_growth&utm_content=trade_intent_${locale}`;
+const pageSchema = { '@type': 'CollectionPage', '@id': siteUrl(locale) + '#trade-request', name: strings.title, description: strings.description, url: siteUrl(locale), inLanguage: locale, isPartOf: { '@id': site.origin + '/#website' }, about: { '@id': site.origin + '/#person' } };
+---
+
+<ContentPage locale={locale} title={strings.title} description={strings.description} pathname={pathnameFor(locale)} alternates={alternates} pageSchema={pageSchema} eyebrow={strings.eyebrow} heading={strings.heading} lead={strings.lead}>
+  <div class="trade-request" dir={locale === 'fa' ? 'rtl' : 'ltr'}>
+    <section class="answer-block trade-request__intro"><p><strong>{strings.intro}</strong></p></section>
+    <section aria-labelledby="trade-intent-title">
+      <div class="trade-request__intent-grid">
+        <a class="trade-intent-card trade-intent-card--buyer" href={buyerUrl} data-intent="buyer">
+          <span class="trade-intent-card__eyebrow">01 · {locale === 'fa' ? 'برای خریداران' : locale === 'ru' ? 'ДЛЯ ПОКУПАТЕЛЕЙ' : 'FOR BUYERS'}</span>
+          <h2 id="trade-intent-title">{strings.buyerTitle}</h2>
+          <p>{strings.buyerText}</p>
+          <span class="trade-intent-card__cta">{strings.buyerCta}</span>
+        </a>
+        <a class="trade-intent-card trade-intent-card--supplier" href={supplierUrl} data-intent="supplier">
+          <span class="trade-intent-card__eyebrow">02 · {locale === 'fa' ? 'برای تولیدکنندگان' : locale === 'ru' ? 'ДЛЯ ПРОИЗВОДИТЕЛЕЙ' : 'FOR PRODUCERS'}</span>
+          <h2>{strings.supplierTitle}</h2>
+          <p>{strings.supplierText}</p>
+          <span class="trade-intent-card__cta">{strings.supplierCta}</span>
+        </a>
+      </div>
+    </section>
+    <section class="trade-request__proof" aria-labelledby="trade-proof-title">
+      <p class="section-label">{locale === 'fa' ? 'درخواست قابل بررسی' : locale === 'ru' ? 'ПРОВЕРЯЕМЫЙ ЗАПРОС' : 'A CLEAR REQUEST'}</p>
+      <h2 id="trade-proof-title">{strings.proofTitle}</h2>
+      <p>{strings.proofText}</p>
+      <div class="trade-request__proof-grid">{strings.proofItems.map((item, index) => <span><b>{String(index + 1).padStart(2, '0')}</b>{item}</span>)}</div>
+    </section>
+    <section class="trade-request__final" aria-labelledby="trade-final-title">
+      <p class="section-label">{locale === 'fa' ? 'گام بعدی' : locale === 'ru' ? 'СЛЕДУЮЩИЙ ШАГ' : 'NEXT STEP'}</p>
+      <h2 id="trade-final-title">{strings.finalTitle}</h2>
+      <p>{strings.finalText}</p>
+      <div class="trade-request__actions">
+        <a class="button button--primary" href={whatsapp(strings.whatsappBuyer, `${locale}_buyer`)} data-intent="whatsapp_buyer">{strings.buyerCta}</a>
+        <a class="button button--secondary" href={whatsapp(strings.whatsappSupplier, `${locale}_supplier`)} data-intent="whatsapp_supplier">{strings.supplierCta}</a>
+      </div>
+      <a class="text-link" href={instagramUrl} data-intent="instagram_profile">{strings.instagram}</a>
+    </section>
+  </div>
+</ContentPage>
+
+<script is:inline>
+  document.querySelectorAll('[data-intent]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const intent = link.getAttribute('data-intent') || 'unknown';
+      if (typeof window.gtag === 'function') window.gtag('event', 'trade_intent_click', { intent, source: 'instagram', medium: 'post', campaign: 'trade_intent' });
+    });
+  });
+</script>
+
+<style>
+  .trade-request { display: grid; gap: 4rem; }
+  .trade-request__intro p { margin: 0; max-width: 780px; }
+  .trade-request__intent-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .trade-intent-card { display: flex; min-height: 340px; flex-direction: column; padding: clamp(1.6rem, 4vw, 2.6rem); border: 1px solid var(--border); border-radius: 1.25rem; color: var(--text); text-decoration: none !important; transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; }
+  .trade-intent-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 20px 44px rgba(33, 28, 24, .14); }
+  .trade-intent-card--buyer { background: #e8dfd2; }
+  .trade-intent-card--supplier { background: #d9ddd5; }
+  .trade-intent-card__eyebrow { color: var(--accent); font-size: .72rem; font-weight: 850; letter-spacing: .13em; }
+  .trade-intent-card h2 { margin: 2.4rem 0 .9rem; max-width: 14ch; font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1.05; }
+  .trade-intent-card p { max-width: 46ch; margin: 0; color: var(--text-muted); line-height: 1.75; }
+  .trade-intent-card__cta { margin-top: auto; padding-top: 1.5rem; color: var(--accent); font-weight: 850; }
+  .trade-request__proof { padding: clamp(2rem, 5vw, 3.5rem); border-radius: 1rem; background: var(--surface-dark); color: #f3eee6; }
+  .trade-request__proof h2, .trade-request__final h2 { margin-top: 0; }
+  .trade-request__proof h2 { color: #f3eee6; }
+  .trade-request__proof p:not(.section-label) { max-width: 760px; color: #d2c8bc; line-height: 1.8; }
+  .trade-request__proof .section-label, .trade-request__final .section-label { color: var(--accent-coral); }
+  .trade-request__proof-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .55rem; margin-top: 1.5rem; }
+  .trade-request__proof-grid span { display: grid; gap: .55rem; padding: 1rem; border: 1px solid rgba(243, 238, 230, .18); border-radius: .8rem; color: #d2c8bc; font-size: .86rem; line-height: 1.5; }
+  .trade-request__proof-grid b { color: var(--accent-coral); font-size: .76rem; letter-spacing: .12em; }
+  .trade-request__final { padding-top: 1rem; border-top: 1px solid var(--border); }
+  .trade-request__final p:not(.section-label) { max-width: 720px; color: var(--text-muted); line-height: 1.8; }
+  .trade-request__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin: 1.5rem 0; }
+  .button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: .85rem 1.2rem; border-radius: 999px; font-weight: 850; text-decoration: none !important; }
+  .button--primary { background: var(--accent-coral); color: #211c18 !important; }
+  .button--secondary { border: 1px solid var(--border); color: var(--text) !important; }
+  .text-link { color: var(--accent); font-weight: 850; text-decoration: underline; text-underline-offset: .2em; }
+  [dir="rtl"] .trade-request__proof, [dir="rtl"] .trade-request__final, [dir="rtl"] .trade-intent-card { text-align: right; }
+  @media (max-width: 760px) { .trade-request__intent-grid { grid-template-columns: 1fr; } .trade-intent-card { min-height: 290px; } .trade-request__proof-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .trade-request__actions { display: grid; } .button { width: 100%; } }
+</style>
