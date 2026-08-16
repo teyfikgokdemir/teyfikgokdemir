@@ -1,0 +1,184 @@
+---
+import ContentPage from '../../components/ContentPage.astro';
+import { site } from '../../data/site';
+
+const locale = 'tr';
+const pathname = '/instagram/tedarikci-dogrulama/';
+const canonical = site.origin + pathname;
+const campaign = 'supplier_verification';
+const tracked = (url: string, content: string) => {
+  const target = new URL(url);
+  target.searchParams.set('utm_source', 'instagram');
+  target.searchParams.set('utm_medium', 'post');
+  target.searchParams.set('utm_campaign', campaign);
+  target.searchParams.set('utm_content', content);
+  return target.toString();
+};
+const ctsegUrl = tracked('https://ctseg.com.tr/tr/iletisim/', 'third_post_ctseg');
+const tradeChecklistUrl = tracked(`${site.origin}/instagram/tedarik/`, 'from_supplier_verification');
+const instagramUrl = 'https://www.instagram.com/teyfikgokdemir/?utm_source=website&utm_medium=referral&utm_campaign=instagram_growth&utm_content=supplier_verification';
+const whatsappText = encodeURIComponent('Merhaba Teyfik, Instagram’daki tedarikçi doğrulama içeriğinden ulaşıyorum. Konuşmak istediğim konu: ');
+const whatsappUrl = `https://wa.me/${site.whatsapp}?text=${whatsappText}`;
+const title = 'Tedarikçi Doğrulama: 5 Kırmızı Bayrak | Teyfik Gökdemir';
+const description = 'Tedarikçi doğrulamada araştırmayı derinleştirmeyi gerektiren beş risk sinyali: şirket bilgileri, teklif, belgeler, kapasite ve ödeme baskısı.';
+const pageSchema = {
+  '@type': 'HowTo',
+  '@id': canonical + '#howto',
+  name: title,
+  description,
+  url: canonical,
+  inLanguage: locale,
+  isPartOf: { '@id': site.origin + '/#website' },
+  author: { '@id': site.origin + '/#person' },
+  step: [
+    { '@type': 'HowToStep', position: 1, name: 'Şirket bilgilerini doğrula', text: 'Şirket kaydı, adres, yetkili kişi ve üretim tesisi bilgilerinin birbirini doğrulayıp doğrulamadığını kontrol et.' },
+    { '@type': 'HowToStep', position: 2, name: 'Teklifi toplam çerçevede karşılaştır', text: 'Fiyatı ürün standardı, miktar, ödeme, teslim ve belge kapsamıyla birlikte değerlendir.' },
+    { '@type': 'HowToStep', position: 3, name: 'Belge ve numuneyi kaynağına kadar izle', text: 'Sertifika, analiz, menşe, ürün spesifikasyonu ve numune bilgilerinin doğrulanabilirliğini kontrol et.' },
+    { '@type': 'HowToStep', position: 4, name: 'Kapasite ve teslim modelini netleştir', text: 'Stok, üretim süresi, minimum sipariş, sevkiyat noktası ve teslim şeklini yazılı olarak netleştir.' },
+    { '@type': 'HowToStep', position: 5, name: 'Ödeme baskısını araştırma sinyali olarak gör', text: 'Doğrulama tamamlanmadan ödeme baskısı varsa karar standardını düşürme ve eksik kanıtları tamamla.' },
+  ],
+};
+const signals = [
+  {
+    number: '01',
+    title: 'Şirket bilgileri doğrulanamıyor',
+    text: 'Adres, şirket kaydı, üretim tesisi, yetkili kişi veya iletişim kanalları birbirini doğrulamıyorsa araştırmayı derinleştir. Web sitesi olması tek başına üretim kabiliyetinin kanıtı değildir.',
+    action: 'Kimliği ve üretim gerçekliğini kontrol et.',
+    tone: 'signal-card--rust',
+  },
+  {
+    number: '02',
+    title: 'Teklif gerçek dışı derecede iyi görünüyor',
+    text: 'Piyasanın çok altında fiyat, belirsiz ürün standardı veya açıklanmayan teslim koşulları birlikte görülüyorsa yalnızca fiyata odaklanma.',
+    action: 'Toplam ticari çerçeveyi karşılaştır.',
+    tone: 'signal-card--sand',
+  },
+  {
+    number: '03',
+    title: 'Belgeler veya numuneler doğrulanamıyor',
+    text: 'Sertifika, analiz, menşe, ürün spesifikasyonu veya numune bilgisi kaynağına kadar izlenemiyorsa teklif tamamlanmış sayılmaz.',
+    action: 'Belgenin varlığını değil, doğrulanabilirliğini kontrol et.',
+    tone: 'signal-card--sage',
+  },
+  {
+    number: '04',
+    title: 'Kapasite ve teslim modeli belirsiz',
+    text: 'Üretim kapasitesi, stok, minimum sipariş miktarı, üretim süresi, sevkiyat noktası ve teslim şekli net değilse fiyatın uygulanabilirliğini ölçemezsin.',
+    action: 'Teklifin arkasındaki operasyonu sor.',
+    tone: 'signal-card--lavender',
+  },
+  {
+    number: '05',
+    title: 'Doğrulama tamamlanmadan baskı kuruluyor',
+    text: 'Acele ödeme, belirsiz banka hesabı, sürekli değişen ticari şartlar veya temel sorulara kaçamak cevaplar daha dikkatli ilerleme sinyalidir.',
+    action: 'Baskı arttıkça doğrulama standardını düşürme.',
+    tone: 'signal-card--olive',
+  },
+];
+---
+
+<ContentPage
+  locale={locale}
+  title={title}
+  description={description}
+  pathname={pathname}
+  alternates={{ tr: canonical, 'x-default': canonical }}
+  pageSchema={pageSchema}
+  eyebrow="Instagram’dan gelenler için · Tedarikçi doğrulama"
+  heading="Bir tedarikçiyi doğrularken gördüğüm 5 risk sinyali."
+  lead="Aşağıdaki başlıklar kesin suçlama değildir. Her biri, karar vermeden önce araştırmayı derinleştirmek ve daha fazla kanıt istemek için bir uyarı sinyalidir."
+>
+  <div class="supplier-verification">
+    <section class="answer-block supplier-verification__opening">
+      <p><strong>Bir tedarikçinin güvenilirliğini yalnızca web sitesine veya fiyat teklifine bakarak anlayamazsın.</strong> Karşı tarafı, ürünü, kaliteyi, kapasiteyi, belgeleri, ticari şartları ve teslim modelini aynı çerçevede değerlendirmek gerekir.</p>
+      <p>Bu sayfa, Instagram’daki üçüncü paylaşımın devamıdır. Tek bir sinyal tek başına kesin hüküm oluşturmaz; ancak eksik kanıtları tamamlamadan ilerlememek için yeterli olabilir.</p>
+    </section>
+
+    <section aria-labelledby="supplier-signals-title">
+      <div class="section-heading">
+        <p class="section-label">ARAŞTIRMA SİNYALLERİ</p>
+        <h2 id="supplier-signals-title">Beş kırmızı bayrak, beş doğrulama sorusu.</h2>
+        <p>Her başlıkta amacın karşı tarafı etiketlemek değil, ticari kararın dayandığı kanıtları güçlendirmek olmalı.</p>
+      </div>
+
+      <div class="supplier-signal-grid">
+        {signals.map((item) => (
+          <article class:list={['supplier-signal-card', item.tone]}>
+            <span class="supplier-signal-card__number">{item.number}</span>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+            <span class="supplier-signal-card__action">{item.action}</span>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="supplier-verification__decision" aria-labelledby="supplier-decision-title">
+      <p class="section-label">KARAR STANDARDI</p>
+      <h2 id="supplier-decision-title">Ödeme veya siparişten önce kanıtı tamamla.</h2>
+      <p>Eksik bilgi varsa önce dur, sonra bilgiyi bağımsız kaynaklarla karşılaştır. Ürün, karşı taraf, belge, fiyat ve teslim modelini aynı dosyada topla. Doğrulanamayan noktaları açıkça işaretle ve sonraki adımı buna göre belirle.</p>
+      <div class="supplier-verification__actions">
+        <a class="button button--primary" href={ctsegUrl} data-supplier-route="ctseg">CTSEG’e ticari talep gönder ↗</a>
+        <a class="button button--secondary" href={whatsappUrl} data-supplier-route="whatsapp">Kısa bir mesaj yaz</a>
+      </div>
+    </section>
+
+    <section class="supplier-verification__related" aria-labelledby="supplier-related-title">
+      <p class="section-label">SERİYİ TAKİP ET</p>
+      <h2 id="supplier-related-title">Ticari fırsat kontrol listesine dön.</h2>
+      <p>Bir fırsatı değerlendirmeden önce ürün, pazar, tedarikçi, ticari şartlar ve sonraki adım için hazırladığım beş soruluk kontrol listesini de inceleyebilirsin.</p>
+      <div class="supplier-verification__related-links">
+        <a class="text-link" href={tradeChecklistUrl} data-supplier-route="trade_checklist">Ticari fırsat kontrol listesi ↗</a>
+        <a class="text-link" href={instagramUrl} data-supplier-route="instagram_profile">@teyfikgokdemir Instagram profiline dön ↗</a>
+      </div>
+    </section>
+  </div>
+</ContentPage>
+
+<script is:inline>
+  document.querySelectorAll('[data-supplier-route]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const destination = link.getAttribute('data-supplier-route') || 'unknown';
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'instagram_supplier_verification_click', {
+          destination,
+          source: 'instagram',
+          medium: 'post',
+          campaign: 'supplier_verification',
+          content: 'third_post',
+        });
+      }
+    });
+  });
+</script>
+
+<style>
+  .supplier-verification { display: grid; gap: 4rem; }
+  .supplier-verification__opening { display: grid; gap: 1rem; }
+  .supplier-verification__opening p { margin: 0; }
+  .supplier-signal-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .supplier-signal-card { display: grid; gap: .85rem; min-height: 286px; padding: 1.5rem; border: 1px solid var(--border); border-radius: 1rem; background: var(--surface); }
+  .signal-card--rust { background: #eadbd4; }
+  .signal-card--sand { background: #e8dfd2; }
+  .signal-card--sage { background: #e1e6df; }
+  .signal-card--lavender { background: #dddbe5; }
+  .signal-card--olive { background: #d9ddd5; }
+  .supplier-signal-card__number { color: var(--accent); font-size: .78rem; font-weight: 850; letter-spacing: .14em; }
+  .supplier-signal-card h3 { margin: 0; font-size: clamp(1.35rem, 2.5vw, 1.95rem); line-height: 1.1; }
+  .supplier-signal-card p { margin: 0; color: var(--text-muted); line-height: 1.75; }
+  .supplier-signal-card__action { align-self: end; color: var(--accent); font-size: .84rem; font-weight: 850; }
+  .supplier-verification__decision { padding: clamp(2rem, 5vw, 3.5rem); border-radius: 1rem; background: var(--surface-dark); color: #f3eee6; }
+  .supplier-verification__decision h2 { margin-top: 0; color: #f3eee6; }
+  .supplier-verification__decision p:not(.section-label) { max-width: 760px; color: #d2c8bc; line-height: 1.8; }
+  .supplier-verification__decision .section-label { color: var(--accent-coral); }
+  .supplier-verification__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
+  .button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: .85rem 1.2rem; border-radius: 999px; font-weight: 850; text-decoration: none !important; }
+  .button--primary { background: var(--accent-coral); color: #211c18 !important; }
+  .button--secondary { border: 1px solid #d2c8bc; color: #f3eee6 !important; }
+  .supplier-verification__related { padding-top: 1rem; border-top: 1px solid var(--border); }
+  .supplier-verification__related h2 { margin-top: 0; }
+  .supplier-verification__related p:not(.section-label) { max-width: 740px; color: var(--text-muted); line-height: 1.8; }
+  .supplier-verification__related-links { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; }
+  .text-link { color: var(--accent); font-weight: 850; text-decoration: underline; text-underline-offset: .2em; }
+  @media (max-width: 680px) { .supplier-signal-grid { grid-template-columns: 1fr; } .supplier-signal-card { min-height: 0; } .supplier-verification__actions { display: grid; } .button { width: 100%; } .supplier-verification__related-links { display: grid; } }
+</style>
