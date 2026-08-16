@@ -1,0 +1,173 @@
+---
+import ContentPage from '../../components/ContentPage.astro';
+import { site } from '../../data/site';
+
+const locale = 'tr';
+const pathname = '/instagram/tedarik/';
+const canonical = site.origin + pathname;
+const campaign = 'trade_checklist';
+const tracked = (url: string, content: string) => {
+  const target = new URL(url);
+  target.searchParams.set('utm_source', 'instagram');
+  target.searchParams.set('utm_medium', 'post');
+  target.searchParams.set('utm_campaign', campaign);
+  target.searchParams.set('utm_content', content);
+  return target.toString();
+};
+const ctsegUrl = tracked('https://ctseg.com.tr/tr/iletisim/', 'second_post_ctseg');
+const instagramUrl = 'https://www.instagram.com/teyfikgokdemir/?utm_source=website&utm_medium=referral&utm_campaign=instagram_growth&utm_content=trade_checklist';
+const whatsappText = encodeURIComponent('Merhaba Teyfik, Instagram’daki ticari fırsat kontrol listesinden ulaşıyorum. Konuşmak istediğim konu: ');
+const whatsappUrl = `https://wa.me/${site.whatsapp}?text=${whatsappText}`;
+const title = 'Ticari Fırsat Kontrol Listesi | Teyfik Gökdemir';
+const description = 'Bir ticari fırsatı değerlendirmeden önce ürün, pazar, tedarikçi ve ticari şartlar için sorulması gereken beş temel soru.';
+const pageSchema = {
+  '@type': 'HowTo',
+  '@id': canonical + '#howto',
+  name: title,
+  description,
+  url: canonical,
+  inLanguage: locale,
+  isPartOf: { '@id': site.origin + '/#website' },
+  author: { '@id': site.origin + '/#person' },
+  step: [
+    { '@type': 'HowToStep', position: 1, name: 'Ürünü netleştir', text: 'Teknik özellik, kalite, ambalaj, minimum sipariş ve kullanım amacını yazılı hâle getir.' },
+    { '@type': 'HowToStep', position: 2, name: 'Pazarı ve alıcıyı tanımla', text: 'Hedef ülke, alıcı tipi, talep sinyali ve rekabet varsayımlarını araştır.' },
+    { '@type': 'HowToStep', position: 3, name: 'Tedarikçiyi doğrula', text: 'Kapasite, belge, kalite, üretim gerçekliği ve teslim kabiliyetini kontrol et.' },
+    { '@type': 'HowToStep', position: 4, name: 'Ticari şartları karşılaştır', text: 'Fiyatın yanında ödeme, teslim, belge, lojistik ve riskleri birlikte değerlendir.' },
+    { '@type': 'HowToStep', position: 5, name: 'Sonraki adımı belirle', text: 'Eksik veriyi tamamla ve fırsatı uygulanabilir bir ticari talebe dönüştür.' },
+  ],
+};
+const checks = [
+  {
+    number: '01',
+    title: 'Ürün net mi?',
+    text: 'Teknik özellik, kalite seviyesi, ambalaj, minimum sipariş miktarı ve kullanım amacı açık değilse teklifler karşılaştırılabilir olmaz.',
+    signal: 'Ürün tanımı ve şartname',
+  },
+  {
+    number: '02',
+    title: 'Pazar ve alıcı belli mi?',
+    text: 'Hedef ülke, alıcı tipi, talep sinyali, rekabet ve pazara giriş koşulları varsayımla değil, araştırmayla ortaya konmalı.',
+    signal: 'Hedef pazar ve alıcı profili',
+  },
+  {
+    number: '03',
+    title: 'Tedarikçi doğrulandı mı?',
+    text: 'Kapasite, üretim gerçekliği, kalite standardı, belgeler, geçmiş ve teslim kabiliyeti birlikte kontrol edilmeli.',
+    signal: 'Doğrulanabilir karşı taraf',
+  },
+  {
+    number: '04',
+    title: 'Ticari şartlar karşılaştırılabilir mi?',
+    text: 'Fiyat tek başına karar verdirmez. Ödeme, teslim, belge, lojistik, kur ve risk başlıkları aynı çerçevede ele alınmalı.',
+    signal: 'Karşılaştırılabilir teklif',
+  },
+  {
+    number: '05',
+    title: 'Sonraki adım gerçekten belli mi?',
+    text: 'Numune, RFQ, doğrulama, müzakere veya pilot sipariş gibi bir sonraki adımın sorumlusu ve zamanı net olmalı.',
+    signal: 'Uygulanabilir aksiyon',
+  },
+];
+---
+
+<ContentPage
+  locale={locale}
+  title={title}
+  description={description}
+  pathname={pathname}
+  alternates={{ tr: canonical, 'x-default': canonical }}
+  pageSchema={pageSchema}
+  eyebrow="Instagram’dan gelenler için · Ticari karar çerçevesi"
+  heading="Bir ticari fırsat gerçekten hazır mı?"
+  lead="Güçlü görünen her fırsat uygulanabilir değildir. Ürün, pazar, karşı taraf ve ticari şartları aynı çerçevede değerlendirmek için aşağıdaki beş soruyla başlayabilirsin."
+>
+  <div class="trade-checklist">
+    <section class="answer-block trade-checklist__opening">
+      <p><strong>Bir fırsatın heyecan verici görünmesi, onun ticari olarak hazır olduğu anlamına gelmez.</strong> İlk değerlendirme; doğru ürünü, doğru alıcıyı, doğrulanabilir karşı tarafı ve uygulanabilir şartları aynı masada buluşturmalıdır.</p>
+      <p>Bu liste, Instagram’daki ikinci paylaşımın devamıdır. Her soruya net bir cevap veremiyorsan, karar vermeden önce eksik veriyi tamamlaman gerekir.</p>
+    </section>
+
+    <section aria-labelledby="trade-checklist-title">
+      <div class="section-heading">
+        <p class="section-label">ÖN KONTROL</p>
+        <h2 id="trade-checklist-title">Karar vermeden önce beş soru.</h2>
+        <p>Bu sorular bir teklifin iyi veya kötü olduğunu tek başına belirlemez. Ama hangi bilginin eksik olduğunu ve bir sonraki araştırma adımını görünür hâle getirir.</p>
+      </div>
+
+      <div class="trade-checklist-grid">
+        {checks.map((item) => (
+          <article class="trade-check-card">
+            <span class="trade-check-card__number">{item.number}</span>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+            <span class="trade-check-card__signal">{item.signal}</span>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="trade-checklist__decision" aria-labelledby="trade-decision-title">
+      <p class="section-label">KARAR NOKTASI</p>
+      <h2 id="trade-decision-title">Eksik olan veri mi, koordinasyon mu?</h2>
+      <p>Ürün ve pazar belli olduğu hâlde tedarikçi, belge, teklif veya teslim modeli netleşmiyorsa konu yalnızca fiyat araştırması değildir. Doğrulama, karşılaştırma ve taraflar arası koordinasyon birlikte ele alınmalıdır.</p>
+      <div class="trade-checklist__actions">
+        <a class="button button--primary" href={ctsegUrl} data-trade-route="ctseg">CTSEG’e ticari talep gönder ↗</a>
+        <a class="button button--secondary" href={whatsappUrl} data-trade-route="whatsapp">Kısa bir mesaj yaz</a>
+      </div>
+    </section>
+
+    <section class="trade-checklist__return" aria-labelledby="trade-return-title">
+      <p class="section-label">DEVAM ET</p>
+      <h2 id="trade-return-title">Bir sonraki soruyu Instagram’da konuşalım.</h2>
+      <p>Bu kontrol listesindeki beş maddeden hangisi senin işinde en çok zaman kaybettiriyor? Cevabını paylaşmak veya sonraki içeriği görmek için Instagram profiline dönebilirsin.</p>
+      <a class="text-link" href={instagramUrl} data-trade-route="instagram_profile">@teyfikgokdemir Instagram profiline dön ↗</a>
+    </section>
+  </div>
+</ContentPage>
+
+<script is:inline>
+  document.querySelectorAll('[data-trade-route]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const destination = link.getAttribute('data-trade-route') || 'unknown';
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'instagram_trade_checklist_click', {
+          destination,
+          source: 'instagram',
+          medium: 'post',
+          campaign: 'trade_checklist',
+          content: 'second_post',
+        });
+      }
+    });
+  });
+</script>
+
+<style>
+  .trade-checklist { display: grid; gap: 4rem; }
+  .trade-checklist__opening { display: grid; gap: 1rem; }
+  .trade-checklist__opening p { margin: 0; }
+  .trade-checklist-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .trade-check-card { display: grid; gap: .85rem; min-height: 260px; padding: 1.5rem; border: 1px solid var(--border); border-radius: 1rem; background: var(--surface); }
+  .trade-check-card:nth-child(2) { background: #e1e6df; }
+  .trade-check-card:nth-child(3) { background: #e8dfd2; }
+  .trade-check-card:nth-child(4) { background: #eadbd4; }
+  .trade-check-card:nth-child(5) { background: #dddbe5; }
+  .trade-check-card__number { color: var(--accent); font-size: .78rem; font-weight: 850; letter-spacing: .14em; }
+  .trade-check-card h3 { margin: 0; font-size: clamp(1.45rem, 2.5vw, 2rem); }
+  .trade-check-card p { margin: 0; color: var(--text-muted); line-height: 1.75; }
+  .trade-check-card__signal { align-self: end; color: var(--accent); font-size: .82rem; font-weight: 800; }
+  .trade-checklist__decision { padding: clamp(2rem, 5vw, 3.5rem); border-radius: 1rem; background: var(--surface-dark); color: #f3eee6; }
+  .trade-checklist__decision h2, .trade-checklist__return h2 { margin-top: 0; }
+  .trade-checklist__decision h2 { color: #f3eee6; }
+  .trade-checklist__decision p:not(.section-label) { max-width: 760px; color: #d2c8bc; line-height: 1.8; }
+  .trade-checklist__decision .section-label { color: var(--accent-coral); }
+  .trade-checklist__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
+  .button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: .85rem 1.2rem; border-radius: 999px; font-weight: 850; text-decoration: none !important; }
+  .button--primary { background: var(--accent-coral); color: #211c18 !important; }
+  .button--secondary { border: 1px solid #d2c8bc; color: #f3eee6 !important; }
+  .trade-checklist__return { padding-top: 1rem; border-top: 1px solid var(--border); }
+  .trade-checklist__return p:not(.section-label) { max-width: 720px; color: var(--text-muted); line-height: 1.8; }
+  .text-link { color: var(--accent); font-weight: 850; text-decoration: underline; text-underline-offset: .2em; }
+  @media (max-width: 680px) { .trade-checklist-grid { grid-template-columns: 1fr; } .trade-check-card { min-height: 0; } .trade-checklist__actions { display: grid; } .button { width: 100%; } }
+</style>
