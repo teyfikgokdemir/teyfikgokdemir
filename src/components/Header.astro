@@ -1,6 +1,7 @@
 ---
 import { localeNames, locales, type Locale } from '../i18n/locales';
 import type { SiteContent } from '../i18n/content';
+import { site } from '../data/site';
 
 interface Props {
   locale: Locale | 'fa';
@@ -110,6 +111,16 @@ const navLabels = locale === 'fa'
 const a11y = locale === 'fa'
   ? { language:'انتخاب زبان', menuOpen:'باز کردن منو', menuClose:'بستن منو' }
   : copy.a11y;
+
+const panelLabels = ({
+  tr: { services: 'Hizmetler', approach: 'Yaklaşım', start: 'Birlikte çalışalım', email: 'E-posta gönder' },
+  en: { services: 'Services', approach: 'Approach', start: 'Start a conversation', email: 'Send an email' },
+  ru: { services: 'Проекты', approach: 'Подход', start: 'Обсудить задачу', email: 'Написать по email' },
+  mk: { services: 'Потфати', approach: 'Пристап', start: 'Да разговараме', email: 'Испрати email' },
+  sr: { services: 'Poduhvati', approach: 'Pristup', start: 'Započnimo razgovor', email: 'Pošalji email' },
+  sq: { services: 'Sipërmarrjet', approach: 'Qasja', start: 'Nisni një bisedë', email: 'Dërgo email' },
+  fa: { services: 'ساختارها', approach: 'رویکرد', start: 'شروع گفتگو', email: 'ارسال ایمیل' },
+}[locale] || { services: 'Services', approach: 'Approach', start: 'Start a conversation', email: 'Send an email' });
 
 const ctsegUrl = locale === 'tr'
   ? 'https://ctseg.com.tr/'
@@ -239,13 +250,13 @@ const expertiseSubItems = {
   <div class="header-panel" id="site-navigation">
     <nav aria-label="Main Navigation">
       <div class="nav-item-dropdown" data-dropdown>
-        <button class="dropdown-trigger" type="button" aria-expanded="false">
-          <span>{navLabels.ventures}</span>
+        <button class="dropdown-trigger" type="button" aria-expanded="false" aria-haspopup="true" aria-controls={`services-menu-${locale}`}>
+          <span>{panelLabels.services}</span>
           <svg class="dropdown-arrow" width="9" height="5" viewBox="0 0 9 5" fill="none" aria-hidden="true">
             <path d="M1 1L4.5 4L8 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        <div class="dropdown-menu">
+        <div class="dropdown-menu" id={`services-menu-${locale}`}>
           {ventureSubItems.map((item) => (
             <a href={item.url} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined} class="dropdown-link">
               <span class="dropdown-link__title">{item.name}</span>
@@ -256,13 +267,13 @@ const expertiseSubItems = {
       </div>
 
       <div class="nav-item-dropdown" data-dropdown>
-        <button class="dropdown-trigger" type="button" aria-expanded="false">
-          <span>{navLabels.expertise}</span>
+        <button class="dropdown-trigger" type="button" aria-expanded="false" aria-haspopup="true" aria-controls={`approach-menu-${locale}`}>
+          <span>{panelLabels.approach}</span>
           <svg class="dropdown-arrow" width="9" height="5" viewBox="0 0 9 5" fill="none" aria-hidden="true">
             <path d="M1 1L4.5 4L8 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        <div class="dropdown-menu">
+        <div class="dropdown-menu" id={`approach-menu-${locale}`}>
           {expertiseSubItems.map((item) => (
             <a href={item.url} class="dropdown-link">
               <span class="dropdown-link__title">{item.name}</span>
@@ -271,20 +282,38 @@ const expertiseSubItems = {
         </div>
       </div>
 
+      <div class="nav-item-dropdown" data-dropdown>
+        <button class="dropdown-trigger" type="button" aria-expanded="false" aria-haspopup="true" aria-controls={`contact-menu-${locale}`}>
+          <span>{navLabels.contact}</span>
+          <svg class="dropdown-arrow" width="9" height="5" viewBox="0 0 9 5" fill="none" aria-hidden="true">
+            <path d="M1 1L4.5 4L8 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="dropdown-menu contact-menu" id={`contact-menu-${locale}`}>
+          <a href={sectionUrl('contact')} class="dropdown-link">
+            <span class="dropdown-link__title">{panelLabels.start}</span>
+            <span class="dropdown-link__desc">{copy.contact.title}</span>
+          </a>
+          <a href={`mailto:${site.directEmail}`} class="dropdown-link">
+            <span class="dropdown-link__title">{panelLabels.email}</span>
+            <span class="dropdown-link__desc">{site.directEmail}</span>
+          </a>
+        </div>
+      </div>
+
       <a href={reflexUrl} aria-current={isReflexPage ? 'page' : undefined}>Reflex</a>
       <a href={blogUrl}>{blogLabel}</a>
       <a href={sectionUrl('journey')}>{aboutLabel}</a>
-      <a href={sectionUrl('contact')}>{navLabels.contact}</a>
     </nav>
 
     <div class="nav-item-dropdown lang-dropdown" data-dropdown>
-      <button class="dropdown-trigger lang-trigger" type="button" aria-expanded="false" aria-label={`${a11y.language}: ${locale.toUpperCase()}`}>
+      <button class="dropdown-trigger lang-trigger" type="button" aria-expanded="false" aria-haspopup="true" aria-controls={`language-menu-${locale}`} aria-label={`${a11y.language}: ${locale.toUpperCase()}`}>
         <span class="lang-trigger__code">{locale.toUpperCase()}</span>
         <svg class="dropdown-arrow" width="9" height="5" viewBox="0 0 9 5" fill="none" aria-hidden="true">
           <path d="M1 1L4.5 4L8 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-      <div class="dropdown-menu lang-menu">
+      <div class="dropdown-menu lang-menu" id={`language-menu-${locale}`}>
         {locales.map((item) => (
           <a
             href={languageUrls?.[item] ?? localeUrl(item)}
@@ -317,6 +346,7 @@ const expertiseSubItems = {
   }
 
   // Dropdown interactivity
+  let lastOpenTrigger = null;
   document.querySelectorAll('[data-dropdown]').forEach((dropdown) => {
     const trigger = dropdown.querySelector('.dropdown-trigger');
     if (!trigger) return;
@@ -331,6 +361,15 @@ const expertiseSubItems = {
       });
 
       trigger.setAttribute('aria-expanded', String(!open));
+      lastOpenTrigger = open ? null : trigger;
+    });
+  });
+
+  document.querySelectorAll('.header-panel a').forEach((link) => {
+    link.addEventListener('click', () => {
+      panel?.classList.remove('is-open');
+      toggle?.setAttribute('aria-expanded', 'false');
+      toggle?.setAttribute('aria-label', toggle?.dataset.openLabel || 'Open menu');
     });
   });
 
@@ -345,6 +384,11 @@ const expertiseSubItems = {
       document.querySelectorAll('[data-dropdown] .dropdown-trigger').forEach((trigger) => {
         trigger.setAttribute('aria-expanded', 'false');
       });
+      panel?.classList.remove('is-open');
+      toggle?.setAttribute('aria-expanded', 'false');
+      toggle?.setAttribute('aria-label', toggle?.dataset.openLabel || 'Open menu');
+      lastOpenTrigger?.focus();
+      lastOpenTrigger = null;
     }
   });
 </script>
@@ -436,9 +480,13 @@ const expertiseSubItems = {
     flex-direction: column !important;
     z-index: 100 !important;
   }
-  .dropdown-trigger[aria-expanded="true"] + .dropdown-menu,
-  .nav-item-dropdown:hover .dropdown-menu {
+  .dropdown-trigger[aria-expanded="true"] + .dropdown-menu {
     display: flex !important;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .nav-item-dropdown:hover .dropdown-menu {
+      display: flex !important;
+    }
   }
   .dropdown-link {
     padding: 0.55rem 1rem !important;
@@ -452,7 +500,8 @@ const expertiseSubItems = {
   .dropdown-link:last-child {
     border-bottom: none !important;
   }
-  .dropdown-link:hover {
+  .dropdown-link:hover,
+  .dropdown-link:focus-visible {
     background: rgba(201, 191, 178, 0.08) !important;
   }
   .dropdown-link__title {
@@ -465,6 +514,9 @@ const expertiseSubItems = {
     font-weight: 400 !important;
     color: #a99d8f !important;
   }
+  .contact-menu { min-width: 280px !important; }
+  .contact-menu .dropdown-link__desc { line-height: 1.4 !important; }
+  .dropdown-trigger:focus-visible { outline: 2px solid #d78263 !important; outline-offset: 5px !important; }
 
   /* Language Selector Dropdown */
   .lang-dropdown {
@@ -548,6 +600,12 @@ const expertiseSubItems = {
       border: none !important;
       background: transparent !important;
       padding-left: 1rem !important;
+      min-width: 0 !important;
     }
+    .contact-menu { min-width: 0 !important; }
+    .dropdown-link { min-height: 44px !important; }
+    .dropdown-link__desc { max-width: 42ch !important; }
+    .header-panel nav .nav-item-dropdown { width: 100%; }
+    .header-panel nav .dropdown-trigger { justify-content: space-between; width: 100%; min-height: 48px; }
   }
 </style>

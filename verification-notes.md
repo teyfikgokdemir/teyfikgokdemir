@@ -1,0 +1,7 @@
+# Teyfik Header Verification
+
+The production preview build renders the new localized disclosure navigation on `/en/`. The header now exposes compact Services, Approach and Contact buttons, while Reflex, Insights and About remain direct navigation links. Services opens CTSEG, QCT Studio, QCT Commerce and Mythborn commercial/venture destinations with descriptions. Approach retains the international trade, strategic sourcing, digital commerce and AI-search visibility routes. Contact opens a direct conversation CTA and the existing direct email address.
+
+The visible desktop preview preserved the founder hero, portrait, CTA hierarchy and editorial spacing. The Services panel opened from the header without changing the hero layout. The panel uses real links and localized labels; the generated menu IDs and `aria-controls` values are locale-scoped. Escape closes the active disclosure and restores focus to the last trigger; selecting a link closes the mobile header panel.
+
+Build/audit status: `npm run build`, `npm run audit` and `npm run test:seo` passed. `npm run check:marquee` and `npm run verify:premium` passed. The repository's existing responsive script emits successful viewport records but currently exits before its final summary in this environment; no false-status or overflow failure was found in its captured log, so this is treated as an infrastructure/script completion issue rather than a layout failure.
