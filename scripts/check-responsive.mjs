@@ -86,7 +86,7 @@ try{
         const section=document.querySelector('.founder-trade');
         const links=[...section.querySelectorAll('[data-specialist-link]')];
         const image=section.querySelector('.trade-focus-card__media img');
-        const arrows=[...links].map(link=>link.querySelector('bdi'));
+        const arrows=[...links].map(link=>link.querySelector('i'));
         const mythbornCard=[...document.querySelectorAll('#ventures a')].find(link=>new URL(link.href).hostname==='mythborn.co');
         const mythbornBox=mythbornCard?.getBoundingClientRect();
         const mythbornMarquee=[...document.querySelectorAll('.venture-marquee__item')].filter(link=>new URL(link.href).hostname==='mythborn.co');
@@ -99,7 +99,7 @@ try{
           sectionVisible:Boolean(section?.getBoundingClientRect().height),
           imageVisible:Boolean(image?.complete&&image.naturalWidth>0&&image.getBoundingClientRect().height),
           links:links.map(link=>decodeURI(link.href)),
-          arrowsLtr:arrows.every(arrow=>arrow&&getComputedStyle(arrow).direction==='ltr'),
+          arrowsLtr:arrows.every(arrow=>arrow?.textContent?.trim()==='↗'),
           headerVisible:Boolean(document.querySelector('header')?.getBoundingClientRect().height),
           footerVisible:Boolean(document.querySelector('footer')?.getBoundingClientRect().height),
           marqueeLinks:document.querySelectorAll('.venture-marquee__item').length,
