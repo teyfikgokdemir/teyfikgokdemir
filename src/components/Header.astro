@@ -219,6 +219,7 @@ const expertiseSubItems = {
 }[locale] || expertiseSubItems.en;
 
 ---
+<div class="mobile-menu-backdrop" hidden></div>
 <header class="site-header">
   <a class="brand" href={currentHomePath} aria-label="Teyfik Gökdemir">
     <picture class="brand__mark">
@@ -340,17 +341,38 @@ const expertiseSubItems = {
 <script is:inline>
   const toggle = document.querySelector('.menu-toggle');
   const panel = document.querySelector('.header-panel');
-  const backdrop = document.querySelector('[data-menu-backdrop]');
+  const backdrop = document.querySelector('[data-menu-backdrop], .mobile-menu-backdrop');
   let lastMenuFocus = null;
+  let scrollPosition = 0;
 
   const closeMobileMenu = (restoreFocus = false) => {
     panel?.classList.remove('is-open');
     toggle?.setAttribute('aria-expanded', 'false');
-    toggle?.setAttribute('aria-label', toggle?.dataset.openLabel || 'Open menu');
-    backdrop?.classList.remove('is-visible');
-    document.body.classList.remove('menu-is-open');
+    if (toggle?.dataset?.openLabel) toggle.setAttribute('aria-label', toggle.dataset.openLabel);
+    if (backdrop) {
+      backdrop.classList.remove('is-visible');
+      backdrop.hidden = true;
+    }
+    document.body.classList.remove('menu-is-open', 'has-open-menu');
+    document.body.style.top = '';
+    window.scrollTo(0, scrollPosition);
     if (restoreFocus && lastMenuFocus instanceof HTMLElement) lastMenuFocus.focus();
     lastMenuFocus = null;
+  };
+
+  const openMobileMenu = () => {
+    if (!toggle || toggle.getAttribute('aria-expanded') === 'true') return;
+    scrollPosition = window.scrollY;
+    lastMenuFocus = document.activeElement;
+    toggle.setAttribute('aria-expanded', 'true');
+    panel?.classList.add('is-open');
+    if (backdrop) {
+      backdrop.classList.add('is-visible');
+      backdrop.hidden = false;
+    }
+    document.body.style.top = `-${scrollPosition}px`;
+    document.body.classList.add('menu-is-open', 'has-open-menu');
+    if (toggle?.dataset?.closeLabel) toggle.setAttribute('aria-label', toggle.dataset.closeLabel);
   };
 
   if (toggle && panel) {
@@ -358,18 +380,15 @@ const expertiseSubItems = {
       const open = toggle.getAttribute('aria-expanded') === 'true';
       if (open) {
         closeMobileMenu();
-        return;
+      } else {
+        openMobileMenu();
       }
-      lastMenuFocus = document.activeElement;
-      toggle.setAttribute('aria-expanded', 'true');
-      panel.classList.add('is-open');
-      backdrop?.classList.add('is-visible');
-      document.body.classList.add('menu-is-open');
-      toggle.setAttribute('aria-label', toggle.dataset.closeLabel || 'Close menu');
     });
   }
 
-  backdrop?.addEventListener('click', () => closeMobileMenu());
+  if (backdrop) {
+    backdrop.addEventListener('click', () => closeMobileMenu());
+  }
 
   // Dropdown interactivity
   let lastOpenTrigger = null;
@@ -407,25 +426,41 @@ const expertiseSubItems = {
         trigger.setAttribute('aria-expanded', 'false');
       });
       closeMobileMenu(true);
-      lastOpenTrigger?.focus();
-      lastOpenTrigger = null;
+      if (lastOpenTrigger) {
+        lastOpenTrigger.focus();
+        lastOpenTrigger = null;
+      }
     }
   });
 </script>
 
 <style is:global>
+  .mobile-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  body.has-open-menu {
+    overflow: hidden;
+    overscroll-behavior: none;
+    position: fixed;
+    width: 100%;
+  }
+
   .site-header {
-    height: 86px !important;
-    min-height: 86px !important;
-    padding-inline: clamp(1.5rem, 4vw, 3.5rem) !important;
-    background: #211c18 !important;
-    border-bottom: 1px solid rgba(201, 191, 178, 0.15) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    position: sticky !important;
-    top: 0 !important;
-    z-index: 1000 !important;
+    height: 86px;
+    min-height: 86px;
+    padding-inline: clamp(1.5rem, 4vw, 3.5rem);
+    background: #211c18;
+    border-bottom: 1px solid rgba(201, 191, 178, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
   }
   
   /* Compact branding area */
@@ -637,7 +672,7 @@ const expertiseSubItems = {
   .lang-link.is-active .lang-link__code {
     color: #d78263 !important;
   }
-  @media (max-width: 990px) {
+  @media (max-width: 1100px) {
     .brand {
       max-width: 140px !important;
     }
