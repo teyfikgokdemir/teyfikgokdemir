@@ -96,31 +96,22 @@ const aboutLabel = aboutLabels[locale];
 const aiVisibilityLabel = aiVisibilityLabels[locale];
 
 const navLabels = locale === 'fa'
-  ? {
-      ventures: 'ساختارها',
-      expertise: 'تخصص',
-      journey: 'درباره من',
-      contact: 'تماس',
-    }
-  : {
-      ventures: copy.nav?.ventures || 'Girişimler',
-      expertise: copy.nav?.expertise || 'Uzmanlık',
-      journey: aboutLabel,
-      contact: copy.nav?.contact || 'İletişim',
-    };
+  ? { ventures: 'ساختارها', expertise: 'تخصص', journey: 'درباره من', contact: 'تماس' }
+  : { ventures: copy.nav?.ventures || 'Girişimler', expertise: copy.nav?.expertise || 'Uzmanlık', journey: aboutLabel, contact: copy.nav?.contact || 'İletişim' };
+
 const a11y = locale === 'fa'
   ? { language:'انتخاب زبان', menuOpen:'باز کردن منو', menuClose:'بستن منو' }
   : copy.a11y;
 
 const panelLabels = ({
-  tr: { services: 'Hizmetler', approach: 'Yaklaşım', start: 'Birlikte çalışalım', email: 'E-posta gönder' },
-  en: { services: 'Services', approach: 'Approach', start: 'Start a conversation', email: 'Send an email' },
+  tr: { services: 'Hizmetler', approach: 'Uzmanlık', start: 'Birlikte çalışalım', email: 'E-posta gönder' },
+  en: { services: 'Services', approach: 'Expertise', start: 'Start a conversation', email: 'Send an email' },
   ru: { services: 'Проекты', approach: 'Подход', start: 'Обсудить задачу', email: 'Написать по email' },
   mk: { services: 'Потфати', approach: 'Пристап', start: 'Да разговараме', email: 'Испрати email' },
   sr: { services: 'Poduhvati', approach: 'Pristup', start: 'Započnimo razgovor', email: 'Pošalji email' },
   sq: { services: 'Sipërmarrjet', approach: 'Qasja', start: 'Nisni një bisedë', email: 'Dërgo email' },
   fa: { services: 'ساختارها', approach: 'رویکرد', start: 'شروع گفتگو', email: 'ارسال ایمیل' },
-}[locale] || { services: 'Services', approach: 'Approach', start: 'Start a conversation', email: 'Send an email' });
+}[locale] || { services: 'Services', approach: 'Expertise', start: 'Start a conversation', email: 'Send an email' });
 
 const ctsegUrl = locale === 'tr'
   ? 'https://ctseg.com.tr/'
@@ -128,95 +119,19 @@ const ctsegUrl = locale === 'tr'
     ? 'https://ctseg.com.tr/fa/tamin-beynolmelali-iran/'
     : 'https://ctseg.com.tr/en/';
 
-const ventureSubItems = {
-  tr: [
-    { name: 'CTSEG', desc: 'Ana Ticaret ve Tedarik', url: ctsegUrl, external: true },
-    { name: 'QCT Studio', desc: 'Dijital ve Teknoloji', url: 'https://qctstudio.com', external: true },
-    { name: 'QCT Commerce', desc: 'Dijital Ticaret', url: 'https://qctcommerce.com', external: true },
-    { name: 'Mythborn', desc: 'Tüketici Markası', url: 'https://mythborn.co', external: true },
-  ],
-  en: [
-    { name: 'CTSEG', desc: 'Principal Trade & Sourcing', url: ctsegUrl, external: true },
-    { name: 'QCT Studio', desc: 'Digital & Technology', url: 'https://qctstudio.com', external: true },
-    { name: 'QCT Commerce', desc: 'Digital Commerce', url: 'https://qctcommerce.com', external: true },
-    { name: 'Mythborn', desc: 'Consumer Brand', url: 'https://mythborn.co', external: true },
-  ],
-  ru: [
-    { name: 'CTSEG', desc: 'Торговля и закупки', url: ctsegUrl, external: true },
-    { name: 'QCT Studio', desc: 'Цифровые технологии', url: 'https://qctstudio.com', external: true },
-    { name: 'QCT Commerce', desc: 'Цифровая коммерция', url: 'https://qctcommerce.com', external: true },
-    { name: 'Mythborn', desc: 'Потребительский бренд', url: 'https://mythborn.co', external: true },
-  ],
-  mk: [
-    { name: 'CTSEG', desc: 'Главна трговија и снабдување', url: ctsegUrl, external: true },
-    { name: 'QCT Studio', desc: 'Дигитална технологија', url: 'https://qctstudio.com', external: true },
-    { name: 'QCT Commerce', desc: 'Дигитална трговија', url: 'https://qctcommerce.com', external: true },
-    { name: 'Mythborn', desc: 'Потрошувачки бренд', url: 'https://mythborn.co', external: true },
-  ],
-  sr: [
-    { name: 'CTSEG', desc: 'Glavna trgovina i nabavka', url: ctsegUrl, external: true },
-    { name: 'QCT Studio', desc: 'Digitalne tehnologije', url: 'https://qctstudio.com', external: true },
-    { name: 'QCT Commerce', desc: 'Digitalna trgovina', url: 'https://qctcommerce.com', external: true },
-    { name: 'Mythborn', desc: 'Potrošački brend', url: 'https://mythborn.co', external: true },
-  ],
-  sq: [
-    { name: 'CTSEG', desc: 'Tregti & Furnizim Kryesor', url: ctsegUrl, external: true },
-    { name: 'QCT Studio', desc: 'Teknologji & Digjitale', url: 'https://qctstudio.com', external: true },
-    { name: 'QCT Commerce', desc: 'Tregti Digjitale', url: 'https://qctcommerce.com', external: true },
-    { name: 'Mythborn', desc: 'Markë Konsumatore', url: 'https://mythborn.co', external: true },
-  ],
-  fa: [
-    { name: 'CTSEG', desc: 'تجارت و تأمین اصلی', url: ctsegUrl, external: true },
-    { name: 'QCT Studio', desc: 'فناوری و دیجیتال', url: 'https://qctstudio.com', external: true },
-    { name: 'QCT Commerce', desc: 'تجارت دیجیتال', url: 'https://qctcommerce.com', external: true },
-    { name: 'Mythborn', desc: 'برند مصرف‌کننده', url: 'https://mythborn.co', external: true },
-  ]
-}[locale] || ventureSubItems.en;
+const ventureSubItems = [
+  { name: 'CTSEG', desc: locale === 'tr' ? 'Uluslararası Ticaret ve Tedarik' : 'International Trade & Sourcing', url: ctsegUrl, external: true },
+  { name: 'QCT Studio', desc: locale === 'tr' ? 'Balkanlar Dijital ve Yazılım' : 'Balkan Digital & Software', url: 'https://qctstudio.com', external: true },
+  { name: 'QCT Commerce', desc: locale === 'tr' ? 'E-Ticaret ve Büyüme Sistemleri' : 'E-Commerce & Digital Growth', url: 'https://qctcommerce.com', external: true },
+  { name: 'Reflex Medical', desc: locale === 'tr' ? 'Medikal Tedarik ve İhracat' : 'Medical Sourcing & Export', url: reflexUrl, external: false },
+];
 
-const expertiseSubItems = {
-  tr: [
-    { name: 'Uluslararası Ticaret', url: sectionUrl('expertise') },
-    { name: 'Stratejik Tedarik', url: sectionUrl('expertise') },
-    { name: 'Dijital Ticaret & Büyüme', url: sectionUrl('expertise') },
-    { name: aiVisibilityLabel, url: aiVisibilityUrl },
-  ],
-  en: [
-    { name: 'International Trade', url: sectionUrl('expertise') },
-    { name: 'Strategic Sourcing', url: sectionUrl('expertise') },
-    { name: 'Digital Commerce & Growth', url: sectionUrl('expertise') },
-    { name: aiVisibilityLabel, url: aiVisibilityUrl },
-  ],
-  ru: [
-    { name: 'Международная торговля', url: sectionUrl('expertise') },
-    { name: 'Стратегические закупки', url: sectionUrl('expertise') },
-    { name: 'Цифровая коммерция и рост', url: sectionUrl('expertise') },
-    { name: aiVisibilityLabel, url: aiVisibilityUrl },
-  ],
-  mk: [
-    { name: 'Меѓународна трговија', url: sectionUrl('expertise') },
-    { name: 'Стратешко снабдување', url: sectionUrl('expertise') },
-    { name: 'Дигитална трговија и раст', url: sectionUrl('expertise') },
-    { name: aiVisibilityLabel, url: aiVisibilityUrl },
-  ],
-  sr: [
-    { name: 'Međunarodna trgovina', url: sectionUrl('expertise') },
-    { name: 'Strateška nabavka', url: sectionUrl('expertise') },
-    { name: 'Digitalna trgovina i rast', url: sectionUrl('expertise') },
-    { name: aiVisibilityLabel, url: aiVisibilityUrl },
-  ],
-  sq: [
-    { name: 'Tregti Ndërkombëtare', url: sectionUrl('expertise') },
-    { name: 'Furnizim Strategjik', url: sectionUrl('expertise') },
-    { name: 'Tregti Digjitale & Rritje', url: sectionUrl('expertise') },
-    { name: aiVisibilityLabel, url: aiVisibilityUrl },
-  ],
-  fa: [
-    { name: 'تجارت بین‌المللی', url: sectionUrl('expertise') },
-    { name: 'تأمین راهبردی', url: sectionUrl('expertise') },
-    { name: 'تجارت دیجیتال و رشد', url: sectionUrl('expertise') },
-    { name: aiVisibilityLabel, url: aiVisibilityUrl },
-  ]
-}[locale] || expertiseSubItems.en;
+const expertiseSubItems = [
+  { name: locale === 'tr' ? 'Uluslararası Ticaret' : 'International Trade', url: sectionUrl('expertise') },
+  { name: locale === 'tr' ? 'Stratejik Tedarik' : 'Strategic Sourcing', url: sectionUrl('expertise') },
+  { name: locale === 'tr' ? 'Dijital Ticaret & Büyüme' : 'Digital Commerce & Growth', url: sectionUrl('expertise') },
+  { name: aiVisibilityLabel, url: aiVisibilityUrl },
+];
 
 const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa'];
 ---
@@ -225,6 +140,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
 
 <header class="site-header">
   <div class="header-container">
+    <!-- Brand Logo -->
     <a class="brand" href={currentHomePath} aria-label="Teyfik Gökdemir">
       <picture class="brand__mark">
         <source media="(max-width: 760px)" srcset="/brand/teyfik-gokdemir-monogram.webp" type="image/webp" />
@@ -240,126 +156,175 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       </picture>
     </a>
 
+    <!-- Hamburger Toggle (Mobile Only) -->
     <button
       class="menu-toggle"
       type="button"
       aria-expanded="false"
-      aria-controls="site-navigation"
-      data-open-label={a11y.menuOpen}
-      data-close-label={a11y.menuClose}
-      aria-label={a11y.menuOpen}
+      aria-controls="mobile-navigation"
       data-menu-toggle
+      aria-label={a11y.menuOpen}
     >
       <span></span><span></span><span></span>
     </button>
 
-    <div class="header-panel" id="site-navigation" aria-hidden="true">
-      <div class="mobile-nav-head">
-        <div class="mobile-nav-brand">
-          <span class="mobile-nav-title">TEYFİK GÖKDEMİR</span>
-          <span class="mobile-nav-subtitle">{locale === 'en' ? 'MAIN MENU' : 'ANA MENÜ'}</span>
-        </div>
-        <button class="mobile-nav-close" type="button" aria-label={a11y.menuClose} data-mobile-close>
-          <span aria-hidden="true">✕</span>
+    <!-- Desktop Navigation Bar (Desktop Only) -->
+    <nav class="desktop-nav" aria-label="Desktop Navigation">
+      <div class="desktop-nav-item" data-dropdown>
+        <button class="desktop-nav-btn dropdown-trigger" type="button" aria-expanded="false">
+          <span>{panelLabels.services}</span>
+          <svg width="9" height="5" viewBox="0 0 9 5" fill="none"><path d="M1 1L4.5 4L8 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
+        <div class="desktop-dropdown-menu dropdown-menu">
+          {ventureSubItems.map((item) => (
+            <a href={item.url} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined} class="desktop-dropdown-link">
+              <strong>{item.name}</strong>
+              <small>{item.desc}</small>
+            </a>
+          ))}
+        </div>
       </div>
 
-      <nav class="main-nav-content" aria-label="Main Navigation">
-        <!-- Card Section 1: Language Switcher (Mythborn Grid Style) -->
-        <div class="myth-card myth-card--lang">
-          <div class="myth-card__head">
-            <span class="myth-card__title">🌐 {a11y.language.toUpperCase()}</span>
-            <span class="myth-card__badge">GLOBAL</span>
-          </div>
-          <div class="myth-lang-grid">
-            {allLocales.map((item) => (
-              <a
-                href={languageUrls?.[item] ?? localeUrl(item)}
-                lang={item}
-                hreflang={item}
-                aria-current={item === locale ? 'page' : undefined}
-                class:list={['myth-lang-item', { 'is-active': item === locale }]}
-              >
-                <span class="myth-lang-code">{item.toUpperCase()}</span>
-                <span class="myth-lang-name">{nativeLanguageNames[item]}</span>
+      <div class="desktop-nav-item" data-dropdown>
+        <button class="desktop-nav-btn dropdown-trigger" type="button" aria-expanded="false">
+          <span>{panelLabels.approach}</span>
+          <svg width="9" height="5" viewBox="0 0 9 5" fill="none"><path d="M1 1L4.5 4L8 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="desktop-dropdown-menu dropdown-menu">
+          {expertiseSubItems.map((item) => (
+            <a href={item.url} class="desktop-dropdown-link">
+              <strong>{item.name}</strong>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <a href={reflexUrl} class="desktop-nav-link" aria-current={isReflexPage ? 'page' : undefined}>Reflex</a>
+      <a href={blogUrl} class="desktop-nav-link">{blogLabel}</a>
+      <a href={sectionUrl('journey')} class="desktop-nav-link">{aboutLabel}</a>
+      <a href={sectionUrl('contact')} class="desktop-nav-link">{navLabels.contact}</a>
+
+      <!-- Desktop Language Dropdown -->
+      <div class="desktop-nav-item lang-item" data-dropdown>
+        <button class="desktop-nav-btn lang-btn dropdown-trigger" type="button" aria-expanded="false">
+          <span>{locale.toUpperCase()}</span>
+          <svg width="9" height="5" viewBox="0 0 9 5" fill="none"><path d="M1 1L4.5 4L8 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="desktop-dropdown-menu lang-menu dropdown-menu">
+          {locales.map((item) => (
+            <a href={languageUrls?.[item] ?? localeUrl(item)} class:list={['desktop-lang-link', { active: item === locale }]}>
+              <span>{nativeLanguageNames[item]}</span>
+              <strong>{item.toUpperCase()}</strong>
+            </a>
+          ))}
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Mobile Navigation Panel (Mobile Only) -->
+  <div class="mobile-panel" id="mobile-navigation" aria-hidden="true">
+    <div class="mobile-panel-head">
+      <div class="mobile-panel-brand">
+        <span class="mobile-panel-title">TEYFİK GÖKDEMİR</span>
+        <span class="mobile-panel-subtitle">{locale === 'en' ? 'MAIN MENU' : 'ANA MENÜ'}</span>
+      </div>
+      <button class="mobile-panel-close" type="button" aria-label={a11y.menuClose} data-mobile-close>
+        <span aria-hidden="true">✕</span>
+      </button>
+    </div>
+
+    <div class="mobile-panel-body">
+      <!-- Mythborn Card 1: Language Switcher -->
+      <div class="myth-card">
+        <div class="myth-card-header">
+          <span class="myth-card-title">🌐 {a11y.language.toUpperCase()}</span>
+          <span class="myth-card-tag">GLOBAL</span>
+        </div>
+        <div class="myth-lang-grid">
+          {allLocales.map((item) => (
+            <a
+              href={languageUrls?.[item] ?? localeUrl(item)}
+              lang={item}
+              hreflang={item}
+              aria-current={item === locale ? 'page' : undefined}
+              class:list={['myth-lang-btn', { active: item === locale }]}
+            >
+              <span class="code">{item.toUpperCase()}</span>
+              <span class="name">{nativeLanguageNames[item]}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Mythborn Card 2: Services / Yapılanma -->
+      <div class="myth-card" data-dropdown>
+        <button class="myth-card-trigger dropdown-trigger" type="button" aria-expanded="false">
+          <span>{panelLabels.services}</span>
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="myth-card-content dropdown-menu">
+          <div class="myth-sub-grid">
+            {ventureSubItems.map((item) => (
+              <a href={item.url} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined} class="myth-sub-item">
+                <strong class="title">{item.name}</strong>
+                <span class="desc">{item.desc}</span>
               </a>
             ))}
           </div>
         </div>
+      </div>
 
-        <!-- Card Section 2: Services / Yapılanma -->
-        <div class="myth-card" data-dropdown>
-          <button class="myth-card__trigger dropdown-trigger" type="button" aria-expanded="false">
-            <span>{panelLabels.services}</span>
-            <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
-              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <div class="myth-card__body dropdown-menu">
-            <div class="myth-grid-2">
-              {ventureSubItems.map((item) => (
-                <a href={item.url} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined} class="myth-grid-item">
-                  <span class="myth-grid-item__name">{item.name}</span>
-                  <span class="myth-grid-item__desc">{item.desc}</span>
-                </a>
-              ))}
-            </div>
+      <!-- Mythborn Card 3: Approach / Uzmanlık -->
+      <div class="myth-card" data-dropdown>
+        <button class="myth-card-trigger dropdown-trigger" type="button" aria-expanded="false">
+          <span>{panelLabels.approach}</span>
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="myth-card-content dropdown-menu">
+          <div class="myth-sub-list">
+            {expertiseSubItems.map((item) => (
+              <a href={item.url} class="myth-sub-link">
+                <span>{item.name}</span>
+              </a>
+            ))}
           </div>
         </div>
+      </div>
 
-        <!-- Card Section 3: Approach / Uzmanlık -->
-        <div class="myth-card" data-dropdown>
-          <button class="myth-card__trigger dropdown-trigger" type="button" aria-expanded="false">
-            <span>{panelLabels.approach}</span>
-            <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
-              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <div class="myth-card__body dropdown-menu">
-            <div class="myth-list">
-              {expertiseSubItems.map((item) => (
-                <a href={item.url} class="myth-list-item">
-                  <span>{item.name}</span>
-                </a>
-              ))}
-            </div>
-          </div>
+      <!-- Mythborn Card 4: Quick Navigation -->
+      <div class="myth-card">
+        <div class="myth-card-header">
+          <span class="myth-card-title">{locale === 'tr' ? 'HIZLI ERİŞİM' : 'NAVIGATION'}</span>
         </div>
-
-        <!-- Card Section 4: Navigation Links -->
-        <div class="myth-card myth-card--links">
-          <div class="myth-card__head">
-            <span class="myth-card__title">{locale === 'tr' ? 'HIZLI ERİŞİM' : 'NAVIGATION'}</span>
-          </div>
-          <div class="myth-grid-2">
-            <a href={reflexUrl} class="myth-grid-item myth-grid-item--highlight" aria-current={isReflexPage ? 'page' : undefined}>
-              <span class="myth-grid-item__name">Reflex</span>
-              <span class="myth-grid-item__desc">Medical Sourcing</span>
-            </a>
-            <a href={blogUrl} class="myth-grid-item">
-              <span class="myth-grid-item__name">{blogLabel}</span>
-              <span class="myth-grid-item__desc">Analysis & Articles</span>
-            </a>
-            <a href={sectionUrl('journey')} class="myth-grid-item">
-              <span class="myth-grid-item__name">{aboutLabel}</span>
-              <span class="myth-grid-item__desc">Background</span>
-            </a>
-            <a href={sectionUrl('contact')} class="myth-grid-item">
-              <span class="myth-grid-item__name">{navLabels.contact}</span>
-              <span class="myth-grid-item__desc">Direct Connect</span>
-            </a>
-          </div>
+        <div class="myth-sub-grid">
+          <a href={reflexUrl} class="myth-sub-item myth-sub-item--highlight" aria-current={isReflexPage ? 'page' : undefined}>
+            <strong class="title">Reflex</strong>
+            <span class="desc">Medical Sourcing</span>
+          </a>
+          <a href={blogUrl} class="myth-sub-item">
+            <strong class="title">{blogLabel}</strong>
+            <span class="desc">Analysis & Articles</span>
+          </a>
+          <a href={sectionUrl('journey')} class="myth-sub-item">
+            <strong class="title">{aboutLabel}</strong>
+            <span class="desc">Background</span>
+          </a>
+          <a href={sectionUrl('contact')} class="myth-sub-item">
+            <strong class="title">{navLabels.contact}</strong>
+            <span class="desc">Direct Connect</span>
+          </a>
         </div>
-      </nav>
+      </div>
     </div>
   </div>
 </header>
 
 <script is:inline>
-  const toggle = document.querySelector('.menu-toggle');
-  const panel = document.querySelector('.header-panel');
+  const toggle = document.querySelector('[data-menu-toggle]');
+  const panel = document.querySelector('.mobile-panel');
   const closeButton = document.querySelector('[data-mobile-close]');
-  const backdrop = document.querySelector('[data-menu-backdrop], .mobile-menu-backdrop');
+  const backdrop = document.querySelector('[data-menu-backdrop]');
   let previousFocus = null;
   let previousScroll = 0;
 
@@ -370,9 +335,8 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     toggle?.setAttribute('aria-expanded', 'false');
     panel.classList.remove('is-open');
     panel.setAttribute('aria-hidden', 'true');
-    if (toggle?.dataset?.openLabel) toggle.setAttribute('aria-label', toggle.dataset.openLabel);
     if (backdrop) backdrop.hidden = true;
-    document.body.classList.remove('has-open-menu', 'menu-is-open');
+    document.body.classList.remove('has-open-menu');
     window.scrollTo(0, previousScroll);
     if (previousFocus instanceof HTMLElement) previousFocus.focus({ preventScroll: true });
   };
@@ -385,8 +349,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     panel?.classList.add('is-open');
     panel?.setAttribute('aria-hidden', 'false');
     if (backdrop) backdrop.hidden = false;
-    document.body.classList.add('has-open-menu', 'menu-is-open');
-    if (toggle?.dataset?.closeLabel) toggle.setAttribute('aria-label', toggle.dataset.closeLabel);
+    document.body.classList.add('has-open-menu');
     closeButton?.focus();
   };
 
@@ -401,8 +364,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
   closeButton?.addEventListener('click', closeMobileMenu);
   backdrop?.addEventListener('click', closeMobileMenu);
 
-  // Dropdown interactivity
-  let lastOpenTrigger = null;
+  // Dropdowns (Desktop & Mobile)
   document.querySelectorAll('[data-dropdown]').forEach((dropdown) => {
     const trigger = dropdown.querySelector('.dropdown-trigger');
     if (!trigger) return;
@@ -410,18 +372,14 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     trigger.addEventListener('click', (e) => {
       e.stopPropagation();
       const open = trigger.getAttribute('aria-expanded') === 'true';
-      
-      // Close other dropdowns
       document.querySelectorAll('[data-dropdown] .dropdown-trigger').forEach((other) => {
         if (other !== trigger) other.setAttribute('aria-expanded', 'false');
       });
-
       trigger.setAttribute('aria-expanded', String(!open));
-      lastOpenTrigger = open ? null : trigger;
     });
   });
 
-  document.querySelectorAll('.header-panel a').forEach((link) => {
+  document.querySelectorAll('.mobile-panel a').forEach((link) => {
     link.addEventListener('click', () => closeMobileMenu());
   });
 
@@ -432,11 +390,11 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
   });
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && panel?.classList.contains('is-open')) {
+    if (e.key === 'Escape') {
       document.querySelectorAll('[data-dropdown] .dropdown-trigger').forEach((trigger) => {
         trigger.setAttribute('aria-expanded', 'false');
       });
-      closeMobileMenu();
+      if (panel?.classList.contains('is-open')) closeMobileMenu();
     }
     if (e.key === 'Tab' && panel?.classList.contains('is-open')) {
       const items = focusable();
@@ -456,12 +414,13 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
 </script>
 
 <style is:global>
+  /* Backdrop & Scroll Lock */
   .mobile-menu-backdrop {
     position: fixed !important;
     inset: 0 !important;
     z-index: 135 !important;
-    background: rgba(0, 0, 0, 0.65) !important;
-    backdrop-filter: blur(4px) !important;
+    background: rgba(0, 0, 0, 0.72) !important;
+    backdrop-filter: blur(6px) !important;
   }
   .mobile-menu-backdrop[hidden] {
     display: none !important;
@@ -472,12 +431,11 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     overscroll-behavior: none !important;
   }
 
-  /* Desktop Header Styling */
+  /* Sticky Desktop Header */
   .site-header {
     height: 80px;
-    background: rgba(25, 21, 18, 0.94);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(201, 191, 178, 0.12);
+    background: #191512;
+    border-bottom: 1px solid rgba(201, 191, 178, 0.15);
     position: sticky;
     top: 0;
     z-index: 110;
@@ -499,7 +457,6 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     display: inline-flex;
     align-items: center;
     text-decoration: none;
-    line-height: 1;
   }
 
   .brand__mark img {
@@ -514,190 +471,151 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     display: none;
   }
 
-  .header-panel {
+  /* Desktop Navigation Styling */
+  .desktop-nav {
     display: flex;
     align-items: center;
+    gap: 1.25rem;
   }
 
-  .main-nav-content {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+  .desktop-nav-link {
+    color: #c9bfb2;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 180ms ease;
   }
 
-  /* Mythborn Card System */
-  .myth-card {
-    background: transparent;
+  .desktop-nav-link:hover,
+  .desktop-nav-link[aria-current="page"] {
+    color: #ffffff;
+  }
+
+  .desktop-nav-item {
     position: relative;
   }
 
-  .myth-card__trigger {
+  .desktop-nav-btn {
     background: transparent;
     border: none;
-    color: #e5ded4;
-    font-size: 0.92rem;
+    color: #c9bfb2;
+    font-size: 0.9rem;
     font-weight: 600;
-    padding: 8px 12px;
+    padding: 6px 10px;
     border-radius: 8px;
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     transition: all 180ms ease;
   }
 
-  .myth-card__trigger:hover,
-  .myth-card__trigger[aria-expanded="true"] {
+  .desktop-nav-btn:hover,
+  .desktop-nav-btn[aria-expanded="true"] {
     color: #ffffff;
     background: rgba(201, 191, 178, 0.08);
   }
 
-  .dropdown-arrow {
-    transition: transform 200ms ease;
-  }
-
-  .myth-card__trigger[aria-expanded="true"] .dropdown-arrow {
-    transform: rotate(180deg);
-  }
-
-  .myth-card__body {
+  .desktop-dropdown-menu {
     position: absolute;
     top: calc(100% + 10px);
     left: 0;
-    min-width: 320px;
-    background: rgba(22, 18, 15, 0.98);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(201, 191, 178, 0.15);
-    border-radius: 16px;
-    padding: 12px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    min-width: 260px;
+    background: #1c1815;
+    border: 1px solid rgba(201, 191, 178, 0.2);
+    border-radius: 14px;
+    padding: 10px;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
     display: none;
+    flex-direction: column;
+    gap: 4px;
     z-index: 120;
   }
 
-  .myth-card__trigger[aria-expanded="true"] + .myth-card__body {
-    display: block;
+  .desktop-nav-btn[aria-expanded="true"] + .desktop-dropdown-menu {
+    display: flex;
   }
 
-  .myth-grid-2 {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-
-  .myth-grid-item {
+  .desktop-dropdown-link {
     display: flex;
     flex-direction: column;
-    padding: 10px 12px;
-    border-radius: 10px;
-    background: rgba(201, 191, 178, 0.04);
-    border: 1px solid rgba(201, 191, 178, 0.08);
+    padding: 8px 12px;
+    border-radius: 8px;
     text-decoration: none;
-    transition: all 180ms ease;
+    background: transparent;
+    transition: background 150ms ease;
   }
 
-  .myth-grid-item:hover {
-    background: rgba(201, 191, 178, 0.12);
-    border-color: rgba(215, 130, 99, 0.4);
+  .desktop-dropdown-link:hover {
+    background: rgba(201, 191, 178, 0.1);
   }
 
-  .myth-grid-item__name {
+  .desktop-dropdown-link strong {
     font-size: 0.88rem;
-    font-weight: 700;
     color: #ffffff;
   }
 
-  .myth-grid-item__desc {
+  .desktop-dropdown-link small {
     font-size: 0.75rem;
     color: rgba(201, 191, 178, 0.7);
-    margin-top: 2px;
   }
 
-  .myth-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  .lang-item .desktop-dropdown-menu {
+    min-width: 180px;
+    right: 0;
+    left: auto;
   }
 
-  .myth-list-item {
-    padding: 10px 14px;
-    border-radius: 10px;
-    background: rgba(201, 191, 178, 0.04);
-    color: #ffffff;
-    font-size: 0.88rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: background 180ms ease;
-  }
-
-  .myth-list-item:hover {
-    background: rgba(201, 191, 178, 0.12);
-  }
-
-  /* Desktop Language Dropdown */
-  .myth-card--lang .myth-card__head {
-    display: none;
-  }
-
-  .myth-lang-grid {
+  .desktop-lang-link {
     display: flex;
     align-items: center;
-    gap: 4px;
-  }
-
-  .myth-lang-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 6px 10px;
+    justify-content: space-between;
+    padding: 8px 12px;
     border-radius: 8px;
-    background: rgba(201, 191, 178, 0.05);
-    border: 1px solid rgba(201, 191, 178, 0.1);
     color: #c9bfb2;
     text-decoration: none;
-    font-size: 0.78rem;
-    font-weight: 700;
-    transition: all 180ms ease;
+    font-size: 0.84rem;
+    transition: background 150ms ease, color 150ms ease;
   }
 
-  .myth-lang-item:hover,
-  .myth-lang-item.is-active {
-    background: #d78263;
-    border-color: #d78263;
-    color: #ffffff;
+  .desktop-lang-link:hover,
+  .desktop-lang-link.active {
+    background: rgba(215, 130, 99, 0.2);
+    color: #d78263;
   }
 
-  .myth-lang-name {
+  /* Mobile Panel Styling (Mobile Only) */
+  .mobile-panel {
     display: none;
   }
 
-  .myth-card--links .myth-card__head {
-    display: none;
-  }
-
-  /* MOBILE LAYOUT (MYTHBORN CARD CONTAINER ARCHITECTURE) */
   @media (max-width: 1000px) {
-    .menu-toggle {
-      display: grid;
-      place-items: center;
-      width: 44px;
-      height: 44px;
-      padding: 8px;
-      border: 1px solid rgba(201, 191, 178, 0.2);
-      border-radius: 12px;
-      background: rgba(201, 191, 178, 0.08);
-      cursor: pointer;
-    }
-    .menu-toggle span {
-      display: block;
-      width: 20px;
-      height: 2px;
-      margin: 2px 0;
-      background: #ffffff;
-      border-radius: 2px;
+    .desktop-nav {
+      display: none !important;
     }
 
-    .header-panel {
+    .menu-toggle {
+      display: grid !important;
+      place-items: center !important;
+      width: 44px !important;
+      height: 44px !important;
+      padding: 8px !important;
+      border: 1px solid rgba(201, 191, 178, 0.25) !important;
+      border-radius: 10px !important;
+      background: rgba(201, 191, 178, 0.08) !important;
+      cursor: pointer !important;
+    }
+
+    .menu-toggle span {
+      display: block !important;
+      width: 20px !important;
+      height: 2px !important;
+      margin: 2px 0 !important;
+      background: #ffffff !important;
+      border-radius: 2px !important;
+    }
+
+    .mobile-panel {
       position: fixed !important;
       inset: 0 !important;
       z-index: 140 !important;
@@ -717,108 +635,112 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease !important;
     }
 
-    .header-panel.is-open {
+    .mobile-panel.is-open {
       opacity: 1 !important;
       visibility: visible !important;
       pointer-events: auto !important;
       transform: translateY(0) !important;
     }
 
-    .mobile-nav-head {
+    .mobile-panel-head {
       display: flex !important;
       align-items: center !important;
       justify-content: space-between !important;
       padding-bottom: 12px !important;
-      border-bottom: 1px solid rgba(201, 191, 178, 0.15) !important;
+      border-bottom: 1px solid rgba(201, 191, 178, 0.2) !important;
     }
 
-    .mobile-nav-brand {
+    .mobile-panel-brand {
       display: flex;
       flex-direction: column;
     }
 
-    .mobile-nav-title {
-      font-size: 0.9rem;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      color: #ffffff;
+    .mobile-panel-title {
+      font-size: 0.9rem !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.06em !important;
+      color: #ffffff !important;
     }
 
-    .mobile-nav-subtitle {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      color: #d78263;
+    .mobile-panel-subtitle {
+      font-size: 0.7rem !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.1em !important;
+      color: #d78263 !important;
     }
 
-    .mobile-nav-close {
+    .mobile-panel-close {
       width: 44px !important;
       height: 44px !important;
       display: grid !important;
       place-items: center !important;
-      border: 1px solid rgba(201, 191, 178, 0.25) !important;
-      border-radius: 12px !important;
-      background: rgba(201, 191, 178, 0.08) !important;
+      border: 1px solid rgba(201, 191, 178, 0.3) !important;
+      border-radius: 10px !important;
+      background: rgba(201, 191, 178, 0.12) !important;
       color: #ffffff !important;
       font-size: 20px !important;
       cursor: pointer !important;
     }
 
-    .main-nav-content {
+    .mobile-panel-body {
       display: flex !important;
       flex-direction: column !important;
-      gap: 14px !important;
+      gap: 12px !important;
       width: 100% !important;
     }
 
-    /* Mythborn Mobile Cards */
+    /* Mythborn Mobile Card Containers */
     .myth-card {
-      background: rgba(255, 255, 255, 0.03) !important;
-      border: 1px solid rgba(201, 191, 178, 0.12) !important;
+      background: rgba(201, 191, 178, 0.06) !important;
+      border: 1px solid rgba(201, 191, 178, 0.15) !important;
       border-radius: 16px !important;
       padding: 14px !important;
     }
 
-    .myth-card__head {
+    .myth-card-header {
       display: flex !important;
       align-items: center !important;
       justify-content: space-between !important;
       margin-bottom: 10px !important;
     }
 
-    .myth-card__title {
+    .myth-card-title {
       font-size: 0.72rem !important;
       font-weight: 800 !important;
       letter-spacing: 0.12em !important;
-      color: rgba(201, 191, 178, 0.6) !important;
+      color: rgba(243, 238, 230, 0.7) !important;
     }
 
-    .myth-card__badge {
+    .myth-card-tag {
       font-size: 0.65rem !important;
       font-weight: 700 !important;
-      letter-spacing: 0.08em !important;
       padding: 2px 6px !important;
       border-radius: 6px !important;
-      background: rgba(215, 130, 99, 0.2) !important;
+      background: rgba(215, 130, 99, 0.25) !important;
       color: #d78263 !important;
     }
 
-    .myth-card__trigger {
+    .myth-card-trigger {
       width: 100% !important;
+      display: flex !important;
+      align-items: center !important;
       justify-content: space-between !important;
-      padding: 6px 0 !important;
-      font-size: 0.95rem !important;
-      font-weight: 700 !important;
-      color: #ffffff !important;
-    }
-
-    .myth-card__body {
-      position: static !important;
-      min-width: 0 !important;
       background: transparent !important;
       border: none !important;
-      box-shadow: none !important;
-      padding: 10px 0 0 0 !important;
+      color: #ffffff !important;
+      font-size: 0.95rem !important;
+      font-weight: 700 !important;
+      padding: 4px 0 !important;
+      cursor: pointer !important;
+    }
+
+    .myth-card-content {
+      display: none !important;
+      margin-top: 10px !important;
+    }
+
+    .myth-card-trigger[aria-expanded="true"] + .myth-card-content {
+      display: block !important;
     }
 
     .myth-lang-grid {
@@ -827,29 +749,86 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       gap: 8px !important;
     }
 
-    .myth-lang-item {
+    .myth-lang-btn {
+      display: flex !important;
       flex-direction: column !important;
-      padding: 8px 4px !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 10px 4px !important;
+      border-radius: 12px !important;
+      border: 1px solid rgba(201, 191, 178, 0.2) !important;
+      background: rgba(201, 191, 178, 0.08) !important;
+      color: #ffffff !important;
+      text-decoration: none !important;
       text-align: center !important;
     }
 
-    .myth-lang-name {
-      display: block !important;
+    .myth-lang-btn.active {
+      background: #d78263 !important;
+      border-color: #d78263 !important;
+      color: #ffffff !important;
+    }
+
+    .myth-lang-btn .code {
+      font-size: 0.82rem !important;
+      font-weight: 800 !important;
+    }
+
+    .myth-lang-btn .name {
       font-size: 0.65rem !important;
-      font-weight: 500 !important;
-      opacity: 0.8 !important;
+      opacity: 0.85 !important;
       margin-top: 2px !important;
     }
 
-    .myth-card--links .myth-card__head {
+    .myth-sub-grid {
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 8px !important;
+    }
+
+    .myth-sub-item {
       display: flex !important;
+      flex-direction: column !important;
+      padding: 10px 12px !important;
+      border-radius: 12px !important;
+      background: rgba(201, 191, 178, 0.08) !important;
+      border: 1px solid rgba(201, 191, 178, 0.15) !important;
+      text-decoration: none !important;
+    }
+
+    .myth-sub-item .title {
+      font-size: 0.88rem !important;
+      font-weight: 700 !important;
+      color: #ffffff !important;
+    }
+
+    .myth-sub-item .desc {
+      font-size: 0.72rem !important;
+      color: rgba(243, 238, 230, 0.65) !important;
+      margin-top: 2px !important;
+    }
+
+    .myth-sub-list {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 6px !important;
+    }
+
+    .myth-sub-link {
+      display: block !important;
+      padding: 10px 12px !important;
+      border-radius: 10px !important;
+      background: rgba(201, 191, 178, 0.08) !important;
+      color: #ffffff !important;
+      font-size: 0.88rem !important;
+      font-weight: 600 !important;
+      text-decoration: none !important;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .header-panel,
-    .mobile-menu-backdrop,
-    .dropdown-menu {
+    .mobile-panel,
+    .mobile-menu-backdrop {
       transition: none !important;
     }
   }
