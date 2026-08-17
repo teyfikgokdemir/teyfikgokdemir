@@ -222,12 +222,11 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     </nav>
   </div>
 
-  <!-- Mobile Navigation Panel (High Contrast Crystal-Clear Mythborn Cards) -->
+  <!-- Mobile Navigation Panel (Crisp Sharp High-Contrast Cards - Zero Blur) -->
   <div class="mobile-panel" id="mobile-navigation" aria-hidden="true">
     <div class="mobile-panel-head">
       <div class="mobile-panel-brand">
-        <span class="mobile-panel-title">TEYFİK GÖKDEMİR</span>
-        <span class="mobile-panel-subtitle">{locale === 'en' ? 'MAIN MENU' : 'ANA MENÜ'}</span>
+        <span class="mobile-panel-title">teyfikgokdemir</span>
       </div>
       <button class="mobile-panel-close" type="button" aria-label={a11y.menuClose} data-mobile-close>
         <span aria-hidden="true">✕</span>
@@ -238,7 +237,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       <!-- Mythborn Card 1: DİL SEÇİMİ / LANGUAGE -->
       <div class="myth-card">
         <div class="myth-card-head">
-          <span class="myth-card-title">🌐 DİL SEÇİMİ</span>
+          <span class="myth-card-title">DİL</span>
           <span class="myth-card-badge">GLOBAL</span>
         </div>
         <div class="myth-lang-grid">
@@ -260,8 +259,8 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       <!-- Mythborn Card 2: GİRİŞİMLER VE YAPILANMA -->
       <div class="myth-card">
         <div class="myth-card-head">
-          <span class="myth-card-title">🏢 {panelLabels.services.toUpperCase()}</span>
-          <span class="myth-card-badge">GİRİŞİMLER</span>
+          <span class="myth-card-title">{panelLabels.services.toUpperCase()}</span>
+          <span class="myth-card-badge">OPERASYON</span>
         </div>
         <div class="myth-card-grid">
           {ventureSubItems.map((item) => (
@@ -276,7 +275,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       <!-- Mythborn Card 3: UZMANLIK ALANLARI -->
       <div class="myth-card">
         <div class="myth-card-head">
-          <span class="myth-card-title">🎯 {panelLabels.approach.toUpperCase()}</span>
+          <span class="myth-card-title">{panelLabels.approach.toUpperCase()}</span>
           <span class="myth-card-badge">STRATEJİ</span>
         </div>
         <div class="myth-card-grid">
@@ -292,7 +291,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       <!-- Mythborn Card 4: HIZLI ERİŞİM -->
       <div class="myth-card">
         <div class="myth-card-head">
-          <span class="myth-card-title">📌 {locale === 'tr' ? 'HIZLI ERİŞİM' : 'NAVIGATION'}</span>
+          <span class="myth-card-title">{locale === 'tr' ? 'HIZLI ERİŞİM' : 'NAVIGATION'}</span>
           <span class="myth-card-badge">MENÜ</span>
         </div>
         <div class="myth-card-grid">
@@ -412,13 +411,15 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
 </script>
 
 <style is:global>
-  /* Backdrop & Scroll Lock */
+  /* Backdrop & Scroll Lock - Zero Blur to Prevent Safari Fog */
   .mobile-menu-backdrop {
     position: fixed !important;
     inset: 0 !important;
     z-index: 135 !important;
-    background: rgba(0, 0, 0, 0.85) !important;
-    backdrop-filter: blur(10px) !important;
+    background: rgba(0, 0, 0, 0.95) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
   }
   .mobile-menu-backdrop[hidden] {
     display: none !important;
@@ -582,7 +583,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     color: #d78263;
   }
 
-  /* Mobile Panel Styling (High-Contrast Solid Cards) */
+  /* Mobile Panel Styling (Zero-Blur Ultra-Crisp Sharp Contrast) */
   .mobile-panel {
     display: none;
   }
@@ -598,9 +599,9 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       width: 44px !important;
       height: 44px !important;
       padding: 8px !important;
-      border: 1px solid #57483d !important;
+      border: 1.5px solid #4d3d57 !important;
       border-radius: 12px !important;
-      background: #2a241f !important;
+      background: #251d30 !important;
       cursor: pointer !important;
     }
 
@@ -619,7 +620,10 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       z-index: 140 !important;
       width: 100% !important;
       height: 100dvh !important;
-      background: #191512 !important;
+      background: #120e17 !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      filter: none !important;
       overflow-y: auto !important;
       overscroll-behavior: contain !important;
       padding: 16px 16px 40px !important;
@@ -645,7 +649,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       align-items: center !important;
       justify-content: space-between !important;
       padding-bottom: 12px !important;
-      border-bottom: 1px solid #4a3e35 !important;
+      border-bottom: 1.5px solid #362947 !important;
     }
 
     .mobile-panel-brand {
@@ -655,17 +659,10 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
 
     .mobile-panel-title {
       font-family: Georgia, serif !important;
-      font-size: 1.15rem !important;
+      font-size: 1.18rem !important;
       font-weight: 700 !important;
       letter-spacing: 0.04em !important;
       color: #ffffff !important;
-    }
-
-    .mobile-panel-subtitle {
-      font-size: 0.72rem !important;
-      font-weight: 600 !important;
-      letter-spacing: 0.1em !important;
-      color: #d78263 !important;
     }
 
     .mobile-panel-close {
@@ -673,9 +670,9 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       height: 48px !important;
       display: grid !important;
       place-items: center !important;
-      border: 1px solid #57483d !important;
+      border: 1.5px solid #4d3d57 !important;
       border-radius: 12px !important;
-      background: #2a241f !important;
+      background: #251d30 !important;
       color: #ffffff !important;
       font-size: 22px !important;
       cursor: pointer !important;
@@ -688,12 +685,15 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       width: 100% !important;
     }
 
-    /* High-Contrast Solid Cards */
+    /* Crisp Solid Mythborn Cards */
     .myth-card {
-      background: #27211b !important;
-      border: 1px solid #4a3e35 !important;
+      background: #1c1625 !important;
+      border: 1.5px solid #3d314e !important;
       border-radius: 18px !important;
       padding: 16px !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+      filter: none !important;
+      -webkit-backdrop-filter: none !important;
     }
 
     .myth-card-head {
@@ -704,10 +704,10 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     }
 
     .myth-card-title {
-      font-size: 0.76rem !important;
+      font-size: 0.78rem !important;
       font-weight: 800 !important;
       letter-spacing: 0.12em !important;
-      color: #f3eee6 !important;
+      color: #ffffff !important;
       text-transform: uppercase !important;
     }
 
@@ -716,7 +716,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       font-weight: 800 !important;
       padding: 3px 8px !important;
       border-radius: 6px !important;
-      background: #d78263 !important;
+      background: #7952b3 !important;
       color: #ffffff !important;
     }
 
@@ -733,16 +733,16 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       justify-content: center !important;
       padding: 10px 4px !important;
       border-radius: 12px !important;
-      border: 1px solid #57483d !important;
-      background: #352e28 !important;
+      border: 1.5px solid #4f4066 !important;
+      background: #282035 !important;
       color: #ffffff !important;
       text-decoration: none !important;
       text-align: center !important;
     }
 
     .myth-lang-item.active {
-      background: #d78263 !important;
-      border-color: #d78263 !important;
+      background: #7952b3 !important;
+      border-color: #9d6ee8 !important;
       color: #ffffff !important;
     }
 
@@ -754,8 +754,9 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
 
     .myth-lang-item .name {
       font-size: 0.68rem !important;
-      color: #d9cebe !important;
+      color: #e3d7ff !important;
       margin-top: 2px !important;
+      font-weight: 600 !important;
     }
 
     .myth-card-grid {
@@ -769,30 +770,31 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       flex-direction: column !important;
       padding: 12px !important;
       border-radius: 12px !important;
-      background: #352e28 !important;
-      border: 1px solid #57483d !important;
+      background: #282035 !important;
+      border: 1.5px solid #4f4066 !important;
       text-decoration: none !important;
       transition: background 150ms ease, border-color 150ms ease !important;
     }
 
     .myth-card-item:hover,
     .myth-card-item:focus-visible {
-      background: #443b34 !important;
-      border-color: #d78263 !important;
+      background: #392e4a !important;
+      border-color: #9d6ee8 !important;
     }
 
     .myth-card-item .item-title {
       font-size: 0.92rem !important;
-      font-weight: 700 !important;
+      font-weight: 800 !important;
       color: #ffffff !important;
       line-height: 1.25 !important;
     }
 
     .myth-card-item .item-desc {
       font-size: 0.75rem !important;
-      color: #d9cebe !important;
+      color: #e3d7ff !important;
       margin-top: 3px !important;
       line-height: 1.3 !important;
+      font-weight: 500 !important;
     }
   }
 
