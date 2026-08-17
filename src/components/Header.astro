@@ -127,10 +127,10 @@ const ventureSubItems = [
 ];
 
 const expertiseSubItems = [
-  { name: locale === 'tr' ? 'Uluslararası Ticaret' : 'International Trade', url: sectionUrl('expertise') },
-  { name: locale === 'tr' ? 'Stratejik Tedarik' : 'Strategic Sourcing', url: sectionUrl('expertise') },
-  { name: locale === 'tr' ? 'Dijital Ticaret & Büyüme' : 'Digital Commerce & Growth', url: sectionUrl('expertise') },
-  { name: aiVisibilityLabel, url: aiVisibilityUrl },
+  { name: locale === 'tr' ? 'Uluslararası Ticaret' : 'International Trade', desc: 'Cross-Border Operations', url: sectionUrl('expertise') },
+  { name: locale === 'tr' ? 'Stratejik Tedarik' : 'Strategic Sourcing', desc: 'Supplier Verification & RFQ', url: sectionUrl('expertise') },
+  { name: locale === 'tr' ? 'Dijital Ticaret & Büyüme' : 'Digital Commerce & Growth', desc: 'E-Commerce Infrastructure', url: sectionUrl('expertise') },
+  { name: aiVisibilityLabel, desc: 'GEO, AEO & AI Search', url: aiVisibilityUrl },
 ];
 
 const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa'];
@@ -168,7 +168,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       <span></span><span></span><span></span>
     </button>
 
-    <!-- Desktop Navigation Bar (Desktop Only) -->
+    <!-- Desktop Navigation Bar (Desktop Only - UNTOUCHED) -->
     <nav class="desktop-nav" aria-label="Desktop Navigation">
       <div class="desktop-nav-item" data-dropdown>
         <button class="desktop-nav-btn dropdown-trigger" type="button" aria-expanded="false">
@@ -222,12 +222,11 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     </nav>
   </div>
 
-  <!-- Mobile Navigation Panel (Mobile Only) -->
+  <!-- Mobile Navigation Panel (Exact Mythborn Card Grid Architecture) -->
   <div class="mobile-panel" id="mobile-navigation" aria-hidden="true">
     <div class="mobile-panel-head">
       <div class="mobile-panel-brand">
-        <span class="mobile-panel-title">TEYFİK GÖKDEMİR</span>
-        <span class="mobile-panel-subtitle">{locale === 'en' ? 'MAIN MENU' : 'ANA MENÜ'}</span>
+        <span class="mobile-panel-title">teyfikgokdemir</span>
       </div>
       <button class="mobile-panel-close" type="button" aria-label={a11y.menuClose} data-mobile-close>
         <span aria-hidden="true">✕</span>
@@ -235,11 +234,11 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     </div>
 
     <div class="mobile-panel-body">
-      <!-- Mythborn Card 1: Language Switcher -->
+      <!-- Mythborn Card 1: DİL SEÇİMİ / LANGUAGE -->
       <div class="myth-card">
-        <div class="myth-card-header">
-          <span class="myth-card-title">🌐 {a11y.language.toUpperCase()}</span>
-          <span class="myth-card-tag">GLOBAL</span>
+        <div class="myth-card-head">
+          <span class="myth-card-title">DİL</span>
+          <span class="myth-card-badge">GLOBAL</span>
         </div>
         <div class="myth-lang-grid">
           {allLocales.map((item) => (
@@ -248,7 +247,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
               lang={item}
               hreflang={item}
               aria-current={item === locale ? 'page' : undefined}
-              class:list={['myth-lang-btn', { active: item === locale }]}
+              class:list={['myth-lang-item', { active: item === locale }]}
             >
               <span class="code">{item.toUpperCase()}</span>
               <span class="name">{nativeLanguageNames[item]}</span>
@@ -257,62 +256,60 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
         </div>
       </div>
 
-      <!-- Mythborn Card 2: Services / Yapılanma -->
-      <div class="myth-card" data-dropdown>
-        <button class="myth-card-trigger dropdown-trigger" type="button" aria-expanded="false">
-          <span>{panelLabels.services}</span>
-          <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <div class="myth-card-content dropdown-menu">
-          <div class="myth-sub-grid">
-            {ventureSubItems.map((item) => (
-              <a href={item.url} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined} class="myth-sub-item">
-                <strong class="title">{item.name}</strong>
-                <span class="desc">{item.desc}</span>
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <!-- Mythborn Card 3: Approach / Uzmanlık -->
-      <div class="myth-card" data-dropdown>
-        <button class="myth-card-trigger dropdown-trigger" type="button" aria-expanded="false">
-          <span>{panelLabels.approach}</span>
-          <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <div class="myth-card-content dropdown-menu">
-          <div class="myth-sub-list">
-            {expertiseSubItems.map((item) => (
-              <a href={item.url} class="myth-sub-link">
-                <span>{item.name}</span>
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <!-- Mythborn Card 4: Quick Navigation -->
+      <!-- Mythborn Card 2: GİRİŞİMLER VE YAPILANMA -->
       <div class="myth-card">
-        <div class="myth-card-header">
-          <span class="myth-card-title">{locale === 'tr' ? 'HIZLI ERİŞİM' : 'NAVIGATION'}</span>
+        <div class="myth-card-head">
+          <span class="myth-card-title">{panelLabels.services.toUpperCase()}</span>
+          <span class="myth-card-badge">OPERASYON</span>
         </div>
-        <div class="myth-sub-grid">
-          <a href={reflexUrl} class="myth-sub-item myth-sub-item--highlight" aria-current={isReflexPage ? 'page' : undefined}>
-            <strong class="title">Reflex</strong>
-            <span class="desc">Medical Sourcing</span>
+        <div class="myth-card-grid">
+          {ventureSubItems.map((item) => (
+            <a href={item.url} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined} class="myth-card-item">
+              <strong class="item-title">{item.name}</strong>
+              <span class="item-desc">{item.desc}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Mythborn Card 3: UZMANLIK ALANLARI -->
+      <div class="myth-card">
+        <div class="myth-card-head">
+          <span class="myth-card-title">{panelLabels.approach.toUpperCase()}</span>
+          <span class="myth-card-badge">STRATEJİ</span>
+        </div>
+        <div class="myth-card-grid">
+          {expertiseSubItems.map((item) => (
+            <a href={item.url} class="myth-card-item">
+              <strong class="item-title">{item.name}</strong>
+              <span class="item-desc">{item.desc}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Mythborn Card 4: HIZLI ERİŞİM -->
+      <div class="myth-card">
+        <div class="myth-card-head">
+          <span class="myth-card-title">{locale === 'tr' ? 'HIZLI ERİŞİM' : 'NAVIGATION'}</span>
+          <span class="myth-card-badge">MENÜ</span>
+        </div>
+        <div class="myth-card-grid">
+          <a href={reflexUrl} class="myth-card-item myth-card-item--highlight" aria-current={isReflexPage ? 'page' : undefined}>
+            <strong class="item-title">Reflex</strong>
+            <span class="item-desc">Medical Sourcing</span>
           </a>
-          <a href={blogUrl} class="myth-sub-item">
-            <strong class="title">{blogLabel}</strong>
-            <span class="desc">Analysis & Articles</span>
+          <a href={blogUrl} class="myth-card-item">
+            <strong class="item-title">{blogLabel}</strong>
+            <span class="item-desc">Analysis & Articles</span>
           </a>
-          <a href={sectionUrl('journey')} class="myth-sub-item">
-            <strong class="title">{aboutLabel}</strong>
-            <span class="desc">Background</span>
+          <a href={sectionUrl('journey')} class="myth-card-item">
+            <strong class="item-title">{aboutLabel}</strong>
+            <span class="item-desc">Background</span>
           </a>
-          <a href={sectionUrl('contact')} class="myth-sub-item">
-            <strong class="title">{navLabels.contact}</strong>
-            <span class="desc">Direct Connect</span>
+          <a href={sectionUrl('contact')} class="myth-card-item">
+            <strong class="item-title">{navLabels.contact}</strong>
+            <span class="item-desc">Direct Connect</span>
           </a>
         </div>
       </div>
@@ -364,15 +361,15 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
   closeButton?.addEventListener('click', closeMobileMenu);
   backdrop?.addEventListener('click', closeMobileMenu);
 
-  // Dropdowns (Desktop & Mobile)
-  document.querySelectorAll('[data-dropdown]').forEach((dropdown) => {
+  // Desktop Dropdowns
+  document.querySelectorAll('.desktop-nav [data-dropdown]').forEach((dropdown) => {
     const trigger = dropdown.querySelector('.dropdown-trigger');
     if (!trigger) return;
 
     trigger.addEventListener('click', (e) => {
       e.stopPropagation();
       const open = trigger.getAttribute('aria-expanded') === 'true';
-      document.querySelectorAll('[data-dropdown] .dropdown-trigger').forEach((other) => {
+      document.querySelectorAll('.desktop-nav [data-dropdown] .dropdown-trigger').forEach((other) => {
         if (other !== trigger) other.setAttribute('aria-expanded', 'false');
       });
       trigger.setAttribute('aria-expanded', String(!open));
@@ -384,14 +381,14 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
   });
 
   document.addEventListener('click', () => {
-    document.querySelectorAll('[data-dropdown] .dropdown-trigger').forEach((trigger) => {
+    document.querySelectorAll('.desktop-nav [data-dropdown] .dropdown-trigger').forEach((trigger) => {
       trigger.setAttribute('aria-expanded', 'false');
     });
   });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      document.querySelectorAll('[data-dropdown] .dropdown-trigger').forEach((trigger) => {
+      document.querySelectorAll('.desktop-nav [data-dropdown] .dropdown-trigger').forEach((trigger) => {
         trigger.setAttribute('aria-expanded', 'false');
       });
       if (panel?.classList.contains('is-open')) closeMobileMenu();
@@ -419,8 +416,8 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     position: fixed !important;
     inset: 0 !important;
     z-index: 135 !important;
-    background: rgba(0, 0, 0, 0.72) !important;
-    backdrop-filter: blur(6px) !important;
+    background: rgba(0, 0, 0, 0.75) !important;
+    backdrop-filter: blur(8px) !important;
   }
   .mobile-menu-backdrop[hidden] {
     display: none !important;
@@ -471,7 +468,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     display: none;
   }
 
-  /* Desktop Navigation Styling */
+  /* Desktop Navigation Styling (UNTOUCHED & CLEAN) */
   .desktop-nav {
     display: flex;
     align-items: center;
@@ -584,7 +581,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     color: #d78263;
   }
 
-  /* Mobile Panel Styling (Mobile Only) */
+  /* Mobile Panel Styling (Mythborn Benchmark Standard) */
   .mobile-panel {
     display: none;
   }
@@ -600,9 +597,9 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       width: 44px !important;
       height: 44px !important;
       padding: 8px !important;
-      border: 1px solid rgba(201, 191, 178, 0.25) !important;
-      border-radius: 10px !important;
-      background: rgba(201, 191, 178, 0.08) !important;
+      border: 1px solid rgba(255, 255, 255, 0.18) !important;
+      border-radius: 12px !important;
+      background: rgba(255, 255, 255, 0.06) !important;
       cursor: pointer !important;
     }
 
@@ -621,13 +618,13 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       z-index: 140 !important;
       width: 100% !important;
       height: 100dvh !important;
-      background: #14110e !important;
+      background: #0e0b12 !important;
       overflow-y: auto !important;
       overscroll-behavior: contain !important;
-      padding: 16px 16px 36px !important;
+      padding: 16px 16px 40px !important;
       display: flex !important;
       flex-direction: column !important;
-      gap: 16px !important;
+      gap: 14px !important;
       opacity: 0 !important;
       visibility: hidden !important;
       pointer-events: none !important;
@@ -647,100 +644,67 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       align-items: center !important;
       justify-content: space-between !important;
       padding-bottom: 12px !important;
-      border-bottom: 1px solid rgba(201, 191, 178, 0.2) !important;
-    }
-
-    .mobile-panel-brand {
-      display: flex;
-      flex-direction: column;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
     }
 
     .mobile-panel-title {
-      font-size: 0.9rem !important;
-      font-weight: 800 !important;
-      letter-spacing: 0.06em !important;
-      color: #ffffff !important;
-    }
-
-    .mobile-panel-subtitle {
-      font-size: 0.7rem !important;
+      font-family: Georgia, serif !important;
+      font-size: 1.15rem !important;
       font-weight: 600 !important;
-      letter-spacing: 0.1em !important;
-      color: #d78263 !important;
+      letter-spacing: 0.04em !important;
+      color: #ffffff !important;
     }
 
     .mobile-panel-close {
-      width: 44px !important;
-      height: 44px !important;
+      width: 48px !important;
+      height: 48px !important;
       display: grid !important;
       place-items: center !important;
-      border: 1px solid rgba(201, 191, 178, 0.3) !important;
-      border-radius: 10px !important;
-      background: rgba(201, 191, 178, 0.12) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      border-radius: 12px !important;
+      background: rgba(255, 255, 255, 0.06) !important;
       color: #ffffff !important;
-      font-size: 20px !important;
+      font-size: 22px !important;
       cursor: pointer !important;
     }
 
     .mobile-panel-body {
       display: flex !important;
       flex-direction: column !important;
-      gap: 12px !important;
+      gap: 14px !important;
       width: 100% !important;
     }
 
-    /* Mythborn Mobile Card Containers */
+    /* Mythborn Card Container */
     .myth-card {
-      background: rgba(201, 191, 178, 0.06) !important;
-      border: 1px solid rgba(201, 191, 178, 0.15) !important;
-      border-radius: 16px !important;
-      padding: 14px !important;
+      background: rgba(255, 255, 255, 0.03) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-radius: 18px !important;
+      padding: 16px !important;
     }
 
-    .myth-card-header {
+    .myth-card-head {
       display: flex !important;
       align-items: center !important;
       justify-content: space-between !important;
-      margin-bottom: 10px !important;
+      margin-bottom: 12px !important;
     }
 
     .myth-card-title {
       font-size: 0.72rem !important;
       font-weight: 800 !important;
       letter-spacing: 0.12em !important;
-      color: rgba(243, 238, 230, 0.7) !important;
+      color: rgba(255, 255, 255, 0.5) !important;
+      text-transform: uppercase !important;
     }
 
-    .myth-card-tag {
+    .myth-card-badge {
       font-size: 0.65rem !important;
       font-weight: 700 !important;
-      padding: 2px 6px !important;
+      padding: 3px 8px !important;
       border-radius: 6px !important;
-      background: rgba(215, 130, 99, 0.25) !important;
-      color: #d78263 !important;
-    }
-
-    .myth-card-trigger {
-      width: 100% !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      background: transparent !important;
-      border: none !important;
-      color: #ffffff !important;
-      font-size: 0.95rem !important;
-      font-weight: 700 !important;
-      padding: 4px 0 !important;
-      cursor: pointer !important;
-    }
-
-    .myth-card-content {
-      display: none !important;
-      margin-top: 10px !important;
-    }
-
-    .myth-card-trigger[aria-expanded="true"] + .myth-card-content {
-      display: block !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+      color: rgba(255, 255, 255, 0.7) !important;
     }
 
     .myth-lang-grid {
@@ -749,80 +713,72 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       gap: 8px !important;
     }
 
-    .myth-lang-btn {
+    .myth-lang-item {
       display: flex !important;
       flex-direction: column !important;
       align-items: center !important;
       justify-content: center !important;
       padding: 10px 4px !important;
       border-radius: 12px !important;
-      border: 1px solid rgba(201, 191, 178, 0.2) !important;
-      background: rgba(201, 191, 178, 0.08) !important;
-      color: #ffffff !important;
+      border: 1px solid rgba(255, 255, 255, 0.06) !important;
+      background: rgba(255, 255, 255, 0.04) !important;
+      color: rgba(255, 255, 255, 0.8) !important;
       text-decoration: none !important;
       text-align: center !important;
     }
 
-    .myth-lang-btn.active {
-      background: #d78263 !important;
-      border-color: #d78263 !important;
+    .myth-lang-item.active {
+      background: rgba(255, 255, 255, 0.16) !important;
+      border-color: rgba(255, 255, 255, 0.28) !important;
       color: #ffffff !important;
     }
 
-    .myth-lang-btn .code {
-      font-size: 0.82rem !important;
+    .myth-lang-item .code {
+      font-size: 0.84rem !important;
       font-weight: 800 !important;
     }
 
-    .myth-lang-btn .name {
+    .myth-lang-item .name {
       font-size: 0.65rem !important;
-      opacity: 0.85 !important;
+      color: rgba(255, 255, 255, 0.55) !important;
       margin-top: 2px !important;
     }
 
-    .myth-sub-grid {
+    .myth-card-grid {
       display: grid !important;
       grid-template-columns: repeat(2, 1fr) !important;
       gap: 8px !important;
     }
 
-    .myth-sub-item {
+    .myth-card-item {
       display: flex !important;
       flex-direction: column !important;
-      padding: 10px 12px !important;
+      padding: 12px !important;
       border-radius: 12px !important;
-      background: rgba(201, 191, 178, 0.08) !important;
-      border: 1px solid rgba(201, 191, 178, 0.15) !important;
+      background: rgba(255, 255, 255, 0.04) !important;
+      border: 1px solid rgba(255, 255, 255, 0.06) !important;
       text-decoration: none !important;
+      transition: background 150ms ease, border-color 150ms ease !important;
     }
 
-    .myth-sub-item .title {
+    .myth-card-item:hover,
+    .myth-card-item:focus-visible {
+      background: rgba(255, 255, 255, 0.09) !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+    }
+
+    .myth-card-item .item-title {
       font-size: 0.88rem !important;
       font-weight: 700 !important;
       color: #ffffff !important;
+      line-height: 1.25 !important;
     }
 
-    .myth-sub-item .desc {
+    .myth-card-item .item-desc {
       font-size: 0.72rem !important;
-      color: rgba(243, 238, 230, 0.65) !important;
-      margin-top: 2px !important;
-    }
-
-    .myth-sub-list {
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 6px !important;
-    }
-
-    .myth-sub-link {
-      display: block !important;
-      padding: 10px 12px !important;
-      border-radius: 10px !important;
-      background: rgba(201, 191, 178, 0.08) !important;
-      color: #ffffff !important;
-      font-size: 0.88rem !important;
-      font-weight: 600 !important;
-      text-decoration: none !important;
+      color: rgba(255, 255, 255, 0.55) !important;
+      margin-top: 3px !important;
+      line-height: 1.3 !important;
     }
   }
 
