@@ -492,7 +492,8 @@ const expertiseSubItems = {
     left: 0 !important;
     transform: translateY(8px) scale(.98) !important;
     transform-origin: top left !important;
-    min-width: 250px !important;
+    min-width: 320px !important;
+    display: flex !important;
     padding: .55rem !important;
     background: rgba(33, 28, 24, .98) !important;
     border: 1px solid rgba(201, 191, 178, .22) !important;
@@ -555,8 +556,26 @@ const expertiseSubItems = {
     line-height: 1.45 !important;
     color: #a99d8f !important;
   }
-  .contact-menu { min-width: 300px !important; }
-  .contact-menu .dropdown-link__desc { max-width: none !important; line-height: 1.4 !important; }
+  .contact-menu {
+    min-width: 390px !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: .3rem !important;
+    padding: .65rem !important;
+  }
+  .contact-menu .dropdown-link:first-child {
+    grid-column: 1 / -1 !important;
+    padding-bottom: .85rem !important;
+    border-bottom: 1px solid rgba(201, 191, 178, .16) !important;
+  }
+  .contact-menu .dropdown-link:not(:first-child) {
+    min-width: 0 !important;
+  }
+  .contact-menu .dropdown-link__desc {
+    max-width: none !important;
+    line-height: 1.4 !important;
+    overflow-wrap: anywhere !important;
+  }
   .dropdown-trigger:focus-visible { outline: 2px solid #d78263 !important; outline-offset: 5px !important; }
 
   /* Language Selector Dropdown */
@@ -652,7 +671,16 @@ const expertiseSubItems = {
       visibility: visible !important;
       pointer-events: auto !important;
     }
-    .contact-menu { min-width: 0 !important; }
+        .contact-menu {
+      min-width: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 0 !important;
+    }
+    .contact-menu .dropdown-link:first-child {
+      grid-column: auto !important;
+      border-bottom: 1px solid rgba(201, 191, 178, .08) !important;
+    }
     .dropdown-link { min-height: 44px !important; }
     .dropdown-link__desc { max-width: 42ch !important; }
     .header-panel nav .nav-item-dropdown { width: 100%; }
