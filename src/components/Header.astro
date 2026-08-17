@@ -218,130 +218,141 @@ const expertiseSubItems = {
   ]
 }[locale] || expertiseSubItems.en;
 
+const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa'];
 ---
-<div class="mobile-menu-backdrop" hidden></div>
+
+<div class="mobile-menu-backdrop" data-menu-backdrop hidden></div>
+
 <header class="site-header">
-  <a class="brand" href={currentHomePath} aria-label="Teyfik Gökdemir">
-    <picture class="brand__mark">
-      <source media="(max-width: 760px)" srcset="/brand/teyfik-gokdemir-monogram.webp" type="image/webp" />
-      <source media="(max-width: 760px)" srcset="/brand/teyfik-gokdemir-monogram.png" type="image/png" />
-      <source srcset="/brand/teyfik-gokdemir-primary.webp" type="image/webp" />
-      <img
-        src="/brand/teyfik-gokdemir-primary.png"
-        width="705"
-        height="203"
-        alt="Teyfik Gökdemir"
-        decoding="async"
-      />
-    </picture>
-  </a>
+  <div class="header-container">
+    <a class="brand" href={currentHomePath} aria-label="Teyfik Gökdemir">
+      <picture class="brand__mark">
+        <source media="(max-width: 760px)" srcset="/brand/teyfik-gokdemir-monogram.webp" type="image/webp" />
+        <source media="(max-width: 760px)" srcset="/brand/teyfik-gokdemir-monogram.png" type="image/png" />
+        <source srcset="/brand/teyfik-gokdemir-primary.webp" type="image/webp" />
+        <img
+          src="/brand/teyfik-gokdemir-primary.png"
+          width="705"
+          height="203"
+          alt="Teyfik Gökdemir"
+          decoding="async"
+        />
+      </picture>
+    </a>
 
-  <button
-    class="menu-toggle"
-    type="button"
-    aria-expanded="false"
-    aria-controls="site-navigation"
-    data-open-label={a11y.menuOpen}
-    data-close-label={a11y.menuClose}
-    aria-label={a11y.menuOpen}
-  >
-    <span></span><span></span><span></span>
-  </button>
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-navigation"
+      data-open-label={a11y.menuOpen}
+      data-close-label={a11y.menuClose}
+      aria-label={a11y.menuOpen}
+      data-menu-toggle
+    >
+      <span></span><span></span><span></span>
+    </button>
 
-  <div class="header-panel" id="site-navigation" aria-hidden="true">
-    <div class="mobile-nav-head">
-      <span class="mobile-nav-title">{locale === 'en' ? 'MENU' : 'MENÜ'}</span>
-      <button class="mobile-nav-close" type="button" aria-label={a11y.menuClose} data-mobile-close>
-        <span aria-hidden="true">✕</span>
-      </button>
-    </div>
-    <nav aria-label="Main Navigation">
-      <div class="nav-item-dropdown" data-dropdown>
-        <button class="dropdown-trigger" type="button" aria-expanded="false" aria-haspopup="true" aria-controls={`services-menu-${locale}`}>
-          <span>{panelLabels.services}</span>
-          <svg class="dropdown-arrow" width="9" height="5" viewBox="0 0 9 5" fill="none" aria-hidden="true">
-            <path d="M1 1L4.5 4L8 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+    <div class="header-panel" id="site-navigation" aria-hidden="true">
+      <div class="mobile-nav-head">
+        <div class="mobile-nav-brand">
+          <span class="mobile-nav-title">TEYFİK GÖKDEMİR</span>
+          <span class="mobile-nav-subtitle">{locale === 'en' ? 'MAIN MENU' : 'ANA MENÜ'}</span>
+        </div>
+        <button class="mobile-nav-close" type="button" aria-label={a11y.menuClose} data-mobile-close>
+          <span aria-hidden="true">✕</span>
         </button>
-        <div class="dropdown-menu" id={`services-menu-${locale}`}>
-          {ventureSubItems.map((item) => (
-            <a href={item.url} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined} class="dropdown-link">
-              <span class="dropdown-link__title">{item.name}</span>
-              <span class="dropdown-link__desc">{item.desc}</span>
+      </div>
+
+      <nav class="main-nav-content" aria-label="Main Navigation">
+        <!-- Card Section 1: Language Switcher (Mythborn Grid Style) -->
+        <div class="myth-card myth-card--lang">
+          <div class="myth-card__head">
+            <span class="myth-card__title">🌐 {a11y.language.toUpperCase()}</span>
+            <span class="myth-card__badge">GLOBAL</span>
+          </div>
+          <div class="myth-lang-grid">
+            {allLocales.map((item) => (
+              <a
+                href={languageUrls?.[item] ?? localeUrl(item)}
+                lang={item}
+                hreflang={item}
+                aria-current={item === locale ? 'page' : undefined}
+                class:list={['myth-lang-item', { 'is-active': item === locale }]}
+              >
+                <span class="myth-lang-code">{item.toUpperCase()}</span>
+                <span class="myth-lang-name">{nativeLanguageNames[item]}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <!-- Card Section 2: Services / Yapılanma -->
+        <div class="myth-card" data-dropdown>
+          <button class="myth-card__trigger dropdown-trigger" type="button" aria-expanded="false">
+            <span>{panelLabels.services}</span>
+            <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="myth-card__body dropdown-menu">
+            <div class="myth-grid-2">
+              {ventureSubItems.map((item) => (
+                <a href={item.url} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined} class="myth-grid-item">
+                  <span class="myth-grid-item__name">{item.name}</span>
+                  <span class="myth-grid-item__desc">{item.desc}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Section 3: Approach / Uzmanlık -->
+        <div class="myth-card" data-dropdown>
+          <button class="myth-card__trigger dropdown-trigger" type="button" aria-expanded="false">
+            <span>{panelLabels.approach}</span>
+            <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="myth-card__body dropdown-menu">
+            <div class="myth-list">
+              {expertiseSubItems.map((item) => (
+                <a href={item.url} class="myth-list-item">
+                  <span>{item.name}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Section 4: Navigation Links -->
+        <div class="myth-card myth-card--links">
+          <div class="myth-card__head">
+            <span class="myth-card__title">{locale === 'tr' ? 'HIZLI ERİŞİM' : 'NAVIGATION'}</span>
+          </div>
+          <div class="myth-grid-2">
+            <a href={reflexUrl} class="myth-grid-item myth-grid-item--highlight" aria-current={isReflexPage ? 'page' : undefined}>
+              <span class="myth-grid-item__name">Reflex</span>
+              <span class="myth-grid-item__desc">Medical Sourcing</span>
             </a>
-          ))}
-        </div>
-      </div>
-
-      <div class="nav-item-dropdown" data-dropdown>
-        <button class="dropdown-trigger" type="button" aria-expanded="false" aria-haspopup="true" aria-controls={`approach-menu-${locale}`}>
-          <span>{panelLabels.approach}</span>
-          <svg class="dropdown-arrow" width="9" height="5" viewBox="0 0 9 5" fill="none" aria-hidden="true">
-            <path d="M1 1L4.5 4L8 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <div class="dropdown-menu" id={`approach-menu-${locale}`}>
-          {expertiseSubItems.map((item) => (
-            <a href={item.url} class="dropdown-link">
-              <span class="dropdown-link__title">{item.name}</span>
+            <a href={blogUrl} class="myth-grid-item">
+              <span class="myth-grid-item__name">{blogLabel}</span>
+              <span class="myth-grid-item__desc">Analysis & Articles</span>
             </a>
-          ))}
+            <a href={sectionUrl('journey')} class="myth-grid-item">
+              <span class="myth-grid-item__name">{aboutLabel}</span>
+              <span class="myth-grid-item__desc">Background</span>
+            </a>
+            <a href={sectionUrl('contact')} class="myth-grid-item">
+              <span class="myth-grid-item__name">{navLabels.contact}</span>
+              <span class="myth-grid-item__desc">Direct Connect</span>
+            </a>
+          </div>
         </div>
-      </div>
-
-      <div class="nav-item-dropdown nav-item-dropdown--contact" data-dropdown>
-        <button class="dropdown-trigger" type="button" aria-expanded="false" aria-haspopup="true" aria-controls={`contact-menu-${locale}`}>
-          <span>{navLabels.contact}</span>
-          <svg class="dropdown-arrow" width="9" height="5" viewBox="0 0 9 5" fill="none" aria-hidden="true">
-            <path d="M1 1L4.5 4L8 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <div class="dropdown-menu contact-menu" id={`contact-menu-${locale}`}>
-          <a href={sectionUrl('contact')} class="dropdown-link">
-            <span class="dropdown-link__title">{panelLabels.start}</span>
-            <span class="dropdown-link__desc">{copy.contact.title}</span>
-          </a>
-          <a href={`mailto:${site.directEmail}`} class="dropdown-link">
-            <span class="dropdown-link__title">{panelLabels.email}</span>
-            <span class="dropdown-link__desc">{site.directEmail}</span>
-          </a>
-          <a href={`https://t.me/${site.telegram}`} class="dropdown-link" target="_blank" rel="noopener noreferrer">
-            <span class="dropdown-link__title">Telegram</span>
-            <span class="dropdown-link__desc">@{site.telegram}</span>
-          </a>
-        </div>
-      </div>
-
-      <a href={reflexUrl} aria-current={isReflexPage ? 'page' : undefined}>Reflex</a>
-      <a href={blogUrl}>{blogLabel}</a>
-      <a href={sectionUrl('journey')}>{aboutLabel}</a>
-    </nav>
-
-    <div class="nav-item-dropdown lang-dropdown" data-dropdown>
-      <button class="dropdown-trigger lang-trigger" type="button" aria-expanded="false" aria-haspopup="true" aria-controls={`language-menu-${locale}`} aria-label={`${a11y.language}: ${locale.toUpperCase()}`}>
-        <span class="lang-trigger__code">{locale.toUpperCase()}</span>
-        <svg class="dropdown-arrow" width="9" height="5" viewBox="0 0 9 5" fill="none" aria-hidden="true">
-          <path d="M1 1L4.5 4L8 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-      <div class="dropdown-menu lang-menu" id={`language-menu-${locale}`}>
-        {locales.map((item) => (
-          <a
-            href={languageUrls?.[item] ?? localeUrl(item)}
-            lang={item}
-            hreflang={item}
-            aria-current={item === locale ? 'page' : undefined}
-            class:list={['dropdown-link', 'lang-link', { 'is-active': item === locale }]}
-            title={localeNames[item]}
-          >
-            <span class="lang-link__name">{nativeLanguageNames[item]}</span>
-            <span class="lang-link__code">{item.toUpperCase()}</span>
-          </a>
-        ))}
-      </div>
+      </nav>
     </div>
   </div>
-  <div class="mobile-menu-backdrop" data-menu-backdrop hidden></div>
 </header>
 
 <script is:inline>
@@ -449,172 +460,389 @@ const expertiseSubItems = {
     position: fixed !important;
     inset: 0 !important;
     z-index: 135 !important;
-    background: rgba(0, 0, 0, 0.58) !important;
+    background: rgba(0, 0, 0, 0.65) !important;
+    backdrop-filter: blur(4px) !important;
   }
   .mobile-menu-backdrop[hidden] {
     display: none !important;
   }
 
-  body.has-open-menu, body.menu-is-open {
+  body.has-open-menu {
     overflow: hidden !important;
     overscroll-behavior: none !important;
   }
 
+  /* Desktop Header Styling */
   .site-header {
-    height: 86px;
-    min-height: 86px;
-    padding-inline: clamp(1.5rem, 4vw, 3.5rem);
-    background: #211c18;
-    border-bottom: 1px solid rgba(201, 191, 178, 0.15);
+    height: 80px;
+    background: rgba(25, 21, 18, 0.94);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(201, 191, 178, 0.12);
+    position: sticky;
+    top: 0;
+    z-index: 110;
+    display: flex;
+    align-items: center;
+  }
+
+  .header-container {
+    width: 100%;
+    max-width: 1320px;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 3vw, 2.5rem);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: relative;
-    z-index: 110;
   }
 
-  .mobile-nav-head {
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    line-height: 1;
+  }
+
+  .brand__mark img {
+    height: 38px !important;
+    width: auto !important;
+    max-width: 220px !important;
+    object-fit: contain !important;
+    display: block !important;
+  }
+
+  .menu-toggle {
     display: none;
   }
 
-  @media (max-width: 1100px) {
-    .site-header {
-      position: sticky !important;
-      top: 0 !important;
-      z-index: 110 !important;
+  .header-panel {
+    display: flex;
+    align-items: center;
+  }
+
+  .main-nav-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* Mythborn Card System */
+  .myth-card {
+    background: transparent;
+    position: relative;
+  }
+
+  .myth-card__trigger {
+    background: transparent;
+    border: none;
+    color: #e5ded4;
+    font-size: 0.92rem;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 180ms ease;
+  }
+
+  .myth-card__trigger:hover,
+  .myth-card__trigger[aria-expanded="true"] {
+    color: #ffffff;
+    background: rgba(201, 191, 178, 0.08);
+  }
+
+  .dropdown-arrow {
+    transition: transform 200ms ease;
+  }
+
+  .myth-card__trigger[aria-expanded="true"] .dropdown-arrow {
+    transform: rotate(180deg);
+  }
+
+  .myth-card__body {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    min-width: 320px;
+    background: rgba(22, 18, 15, 0.98);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(201, 191, 178, 0.15);
+    border-radius: 16px;
+    padding: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 120;
+  }
+
+  .myth-card__trigger[aria-expanded="true"] + .myth-card__body {
+    display: block;
+  }
+
+  .myth-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .myth-grid-item {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(201, 191, 178, 0.04);
+    border: 1px solid rgba(201, 191, 178, 0.08);
+    text-decoration: none;
+    transition: all 180ms ease;
+  }
+
+  .myth-grid-item:hover {
+    background: rgba(201, 191, 178, 0.12);
+    border-color: rgba(215, 130, 99, 0.4);
+  }
+
+  .myth-grid-item__name {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .myth-grid-item__desc {
+    font-size: 0.75rem;
+    color: rgba(201, 191, 178, 0.7);
+    margin-top: 2px;
+  }
+
+  .myth-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .myth-list-item {
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(201, 191, 178, 0.04);
+    color: #ffffff;
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 180ms ease;
+  }
+
+  .myth-list-item:hover {
+    background: rgba(201, 191, 178, 0.12);
+  }
+
+  /* Desktop Language Dropdown */
+  .myth-card--lang .myth-card__head {
+    display: none;
+  }
+
+  .myth-lang-grid {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .myth-lang-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: rgba(201, 191, 178, 0.05);
+    border: 1px solid rgba(201, 191, 178, 0.1);
+    color: #c9bfb2;
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-weight: 700;
+    transition: all 180ms ease;
+  }
+
+  .myth-lang-item:hover,
+  .myth-lang-item.is-active {
+    background: #d78263;
+    border-color: #d78263;
+    color: #ffffff;
+  }
+
+  .myth-lang-name {
+    display: none;
+  }
+
+  .myth-card--links .myth-card__head {
+    display: none;
+  }
+
+  /* MOBILE LAYOUT (MYTHBORN CARD CONTAINER ARCHITECTURE) */
+  @media (max-width: 1000px) {
+    .menu-toggle {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      padding: 8px;
+      border: 1px solid rgba(201, 191, 178, 0.2);
+      border-radius: 12px;
+      background: rgba(201, 191, 178, 0.08);
+      cursor: pointer;
     }
-    .brand {
-      max-width: 140px !important;
+    .menu-toggle span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      margin: 2px 0;
+      background: #ffffff;
+      border-radius: 2px;
     }
-    .brand__mark img {
-      max-width: 130px !important;
-      max-height: 48px !important;
-      width: auto !important;
-      height: auto !important;
-      object-fit: contain !important;
-    }
-    .mobile-nav-head {
-      position: sticky !important;
-      top: 0 !important;
-      z-index: 2 !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      margin-bottom: 16px !important;
-      padding-bottom: 12px !important;
-      border-bottom: 1px solid rgba(201, 191, 178, 0.15) !important;
-      background: #191512 !important;
-    }
-    .mobile-nav-title {
-      font-size: 0.85rem !important;
-      font-weight: 700 !important;
-      letter-spacing: 0.08em !important;
-      text-transform: uppercase !important;
-      color: #c9bfb2 !important;
-    }
-    .mobile-nav-close {
-      width: 48px !important;
-      height: 48px !important;
-      display: grid !important;
-      place-items: center !important;
-      border: 1px solid rgba(201, 191, 178, 0.25) !important;
-      border-radius: 12px !important;
-      background: rgba(201, 191, 178, 0.08) !important;
-      color: #f3eee6 !important;
-      font-size: 20px !important;
-      cursor: pointer !important;
-      transition: background 180ms ease, border-color 180ms ease !important;
-    }
-    .mobile-nav-close:hover, .mobile-nav-close:focus-visible {
-      background: rgba(215, 130, 99, 0.2) !important;
-      border-color: #d78263 !important;
-    }
+
     .header-panel {
       position: fixed !important;
       inset: 0 !important;
       z-index: 140 !important;
       width: 100% !important;
       height: 100dvh !important;
-      max-height: 100dvh !important;
+      background: #14110e !important;
       overflow-y: auto !important;
       overscroll-behavior: contain !important;
+      padding: 16px 16px 36px !important;
       display: flex !important;
       flex-direction: column !important;
-      gap: .5rem !important;
-      padding: calc(14px + env(safe-area-inset-top, 0px)) 18px calc(24px + env(safe-area-inset-bottom, 0px)) !important;
-      background: rgba(25, 21, 18, 0.995) !important;
-      backdrop-filter: blur(18px) !important;
-      border-radius: 0 !important;
-      border: none !important;
-      box-shadow: none !important;
+      gap: 16px !important;
       opacity: 0 !important;
       visibility: hidden !important;
       pointer-events: none !important;
-      transform: translateY(-10px) !important;
+      transform: translateY(-8px) !important;
       transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease !important;
     }
+
     .header-panel.is-open {
       opacity: 1 !important;
       visibility: visible !important;
       pointer-events: auto !important;
       transform: translateY(0) !important;
     }
-    .header-panel nav {
+
+    .mobile-nav-head {
       display: flex !important;
-      flex-direction: column !important;
-      gap: .25rem !important;
-      width: 100% !important;
-    }
-    .header-panel nav > a,
-    .header-panel nav .dropdown-trigger,
-    .lang-trigger {
-      width: 100% !important;
-      min-height: 48px !important;
-      padding: .75rem .85rem !important;
+      align-items: center !important;
       justify-content: space-between !important;
-      border-bottom: 1px solid rgba(201, 191, 178, .12) !important;
-      border-radius: 10px !important;
-      background: rgba(201, 191, 178, 0.04) !important;
+      padding-bottom: 12px !important;
+      border-bottom: 1px solid rgba(201, 191, 178, 0.15) !important;
     }
-    .dropdown-menu {
-      position: static !important;
-      transform: none !important;
-      box-shadow: none !important;
-      border: none !important;
-      border-radius: 0 !important;
-      background: transparent !important;
-      padding: .2rem 0 .4rem .85rem !important;
-      min-width: 0 !important;
-      opacity: 0 !important;
-      visibility: hidden !important;
-      pointer-events: none !important;
-      display: none !important;
+
+    .mobile-nav-brand {
+      display: flex;
+      flex-direction: column;
     }
-    .dropdown-trigger[aria-expanded="true"] + .dropdown-menu {
+
+    .mobile-nav-title {
+      font-size: 0.9rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      color: #ffffff;
+    }
+
+    .mobile-nav-subtitle {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: #d78263;
+    }
+
+    .mobile-nav-close {
+      width: 44px !important;
+      height: 44px !important;
+      display: grid !important;
+      place-items: center !important;
+      border: 1px solid rgba(201, 191, 178, 0.25) !important;
+      border-radius: 12px !important;
+      background: rgba(201, 191, 178, 0.08) !important;
+      color: #ffffff !important;
+      font-size: 20px !important;
+      cursor: pointer !important;
+    }
+
+    .main-nav-content {
       display: flex !important;
-      opacity: 1 !important;
-      visibility: visible !important;
-      pointer-events: auto !important;
-    }
-    .contact-menu {
-      min-width: 0 !important;
-      display: none !important;
       flex-direction: column !important;
-      gap: 0 !important;
-    }
-    .contact-menu .dropdown-link:first-child {
-      grid-column: auto !important;
-      border-bottom: 1px solid rgba(201, 191, 178, .08) !important;
-    }
-    .dropdown-link { min-height: 44px !important; }
-    .lang-dropdown {
+      gap: 14px !important;
       width: 100% !important;
     }
-    .header-panel.is-open {
-      opacity: 1 !important;
-      visibility: visible !important;
-      pointer-events: auto !important;
-      transform: translateY(0) !important;
+
+    /* Mythborn Mobile Cards */
+    .myth-card {
+      background: rgba(255, 255, 255, 0.03) !important;
+      border: 1px solid rgba(201, 191, 178, 0.12) !important;
+      border-radius: 16px !important;
+      padding: 14px !important;
+    }
+
+    .myth-card__head {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      margin-bottom: 10px !important;
+    }
+
+    .myth-card__title {
+      font-size: 0.72rem !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.12em !important;
+      color: rgba(201, 191, 178, 0.6) !important;
+    }
+
+    .myth-card__badge {
+      font-size: 0.65rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.08em !important;
+      padding: 2px 6px !important;
+      border-radius: 6px !important;
+      background: rgba(215, 130, 99, 0.2) !important;
+      color: #d78263 !important;
+    }
+
+    .myth-card__trigger {
+      width: 100% !important;
+      justify-content: space-between !important;
+      padding: 6px 0 !important;
+      font-size: 0.95rem !important;
+      font-weight: 700 !important;
+      color: #ffffff !important;
+    }
+
+    .myth-card__body {
+      position: static !important;
+      min-width: 0 !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 10px 0 0 0 !important;
+    }
+
+    .myth-lang-grid {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 8px !important;
+    }
+
+    .myth-lang-item {
+      flex-direction: column !important;
+      padding: 8px 4px !important;
+      text-align: center !important;
+    }
+
+    .myth-lang-name {
+      display: block !important;
+      font-size: 0.65rem !important;
+      font-weight: 500 !important;
+      opacity: 0.8 !important;
+      margin-top: 2px !important;
+    }
+
+    .myth-card--links .myth-card__head {
+      display: flex !important;
     }
   }
 
