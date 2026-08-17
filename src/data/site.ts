@@ -5,6 +5,7 @@ export const site = {
   directEmail: 'teyfik@teyfikgokdemir.com',
   phone: '+90 545 678 26 55',
   whatsapp: '905456782655',
+  telegram: 'teyfikgokdemir',
   images: {
     hero: {
       path: '/images/teyfik-gokdemir-founder-720.webp',
