@@ -136,8 +136,6 @@ const expertiseSubItems = [
 const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa'];
 ---
 
-<div class="mobile-menu-backdrop" data-menu-backdrop hidden></div>
-
 <header class="site-header">
   <div class="header-container">
     <!-- Brand Logo -->
@@ -220,97 +218,97 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
         </div>
       </div>
     </nav>
-  </div>
 
-  <!-- Mobile Navigation Panel (Ultra High Contrast Bright Cards & Text) -->
-  <div class="mobile-panel" id="mobile-navigation" aria-hidden="true">
-    <div class="mobile-panel-head">
-      <div class="mobile-panel-brand">
-        <span class="mobile-panel-title">teyfikgokdemir</span>
-      </div>
-      <button class="mobile-panel-close" type="button" aria-label={a11y.menuClose} data-mobile-close>
-        <span aria-hidden="true">✕</span>
-      </button>
-    </div>
-
-    <div class="mobile-panel-body">
-      <!-- Mythborn Card 1: DİL SEÇİMİ / LANGUAGE -->
-      <div class="myth-card">
-        <div class="myth-card-head">
-          <span class="myth-card-title">DİL</span>
-          <span class="myth-card-badge">GLOBAL</span>
+    <!-- Mobile Navigation Panel (Full Screen Modal - z-index 99999) -->
+    <div class="mobile-panel" id="mobile-navigation" aria-hidden="true">
+      <div class="mobile-panel-head">
+        <div class="mobile-panel-brand">
+          <span class="mobile-panel-title">teyfikgokdemir</span>
         </div>
-        <div class="myth-lang-grid">
-          {allLocales.map((item) => (
-            <a
-              href={languageUrls?.[item] ?? localeUrl(item)}
-              lang={item}
-              hreflang={item}
-              aria-current={item === locale ? 'page' : undefined}
-              class:list={['myth-lang-item', { active: item === locale }]}
-            >
-              <span class="code">{item.toUpperCase()}</span>
-              <span class="name">{nativeLanguageNames[item]}</span>
+        <button class="mobile-panel-close" type="button" aria-label={a11y.menuClose} data-mobile-close>
+          <span aria-hidden="true">✕</span>
+        </button>
+      </div>
+
+      <div class="mobile-panel-body">
+        <!-- Mythborn Card 1: DİL SEÇİMİ / LANGUAGE -->
+        <div class="myth-card">
+          <div class="myth-card-head">
+            <span class="myth-card-title">DİL</span>
+            <span class="myth-card-badge">GLOBAL</span>
+          </div>
+          <div class="myth-lang-grid">
+            {allLocales.map((item) => (
+              <a
+                href={languageUrls?.[item] ?? localeUrl(item)}
+                lang={item}
+                hreflang={item}
+                aria-current={item === locale ? 'page' : undefined}
+                class:list={['myth-lang-item', { active: item === locale }]}
+              >
+                <span class="code">{item.toUpperCase()}</span>
+                <span class="name">{nativeLanguageNames[item]}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <!-- Mythborn Card 2: GİRİŞİMLER VE YAPILANMA -->
+        <div class="myth-card">
+          <div class="myth-card-head">
+            <span class="myth-card-title">{panelLabels.services.toUpperCase()}</span>
+            <span class="myth-card-badge">OPERASYON</span>
+          </div>
+          <div class="myth-card-grid">
+            {ventureSubItems.map((item) => (
+              <a href={item.url} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined} class="myth-card-item">
+                <strong class="item-title">{item.name}</strong>
+                <span class="item-desc">{item.desc}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <!-- Mythborn Card 3: UZMANLIK ALANLARI -->
+        <div class="myth-card">
+          <div class="myth-card-head">
+            <span class="myth-card-title">{panelLabels.approach.toUpperCase()}</span>
+            <span class="myth-card-badge">STRATEJİ</span>
+          </div>
+          <div class="myth-card-grid">
+            {expertiseSubItems.map((item) => (
+              <a href={item.url} class="myth-card-item">
+                <strong class="item-title">{item.name}</strong>
+                <span class="item-desc">{item.desc}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <!-- Mythborn Card 4: HIZLI ERİŞİM -->
+        <div class="myth-card">
+          <div class="myth-card-head">
+            <span class="myth-card-title">{locale === 'tr' ? 'HIZLI ERİŞİM' : 'NAVIGATION'}</span>
+            <span class="myth-card-badge">MENÜ</span>
+          </div>
+          <div class="myth-card-grid">
+            <a href={reflexUrl} class="myth-card-item myth-card-item--highlight" aria-current={isReflexPage ? 'page' : undefined}>
+              <strong class="item-title">Reflex</strong>
+              <span class="item-desc">Medical Sourcing</span>
             </a>
-          ))}
-        </div>
-      </div>
-
-      <!-- Mythborn Card 2: GİRİŞİMLER VE YAPILANMA -->
-      <div class="myth-card">
-        <div class="myth-card-head">
-          <span class="myth-card-title">{panelLabels.services.toUpperCase()}</span>
-          <span class="myth-card-badge">OPERASYON</span>
-        </div>
-        <div class="myth-card-grid">
-          {ventureSubItems.map((item) => (
-            <a href={item.url} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined} class="myth-card-item">
-              <strong class="item-title">{item.name}</strong>
-              <span class="item-desc">{item.desc}</span>
+            <a href={blogUrl} class="myth-card-item">
+              <strong class="item-title">{blogLabel}</strong>
+              <span class="item-desc">Analysis & Articles</span>
             </a>
-          ))}
-        </div>
-      </div>
-
-      <!-- Mythborn Card 3: UZMANLIK ALANLARI -->
-      <div class="myth-card">
-        <div class="myth-card-head">
-          <span class="myth-card-title">{panelLabels.approach.toUpperCase()}</span>
-          <span class="myth-card-badge">STRATEJİ</span>
-        </div>
-        <div class="myth-card-grid">
-          {expertiseSubItems.map((item) => (
-            <a href={item.url} class="myth-card-item">
-              <strong class="item-title">{item.name}</strong>
-              <span class="item-desc">{item.desc}</span>
+            <a href={sectionUrl('journey')} class="myth-card-item">
+              <strong class="item-title">{aboutLabel}</strong>
+              <span class="item-desc">Background</span>
             </a>
-          ))}
-        </div>
-      </div>
-
-      <!-- Mythborn Card 4: HIZLI ERİŞİM -->
-      <div class="myth-card">
-        <div class="myth-card-head">
-          <span class="myth-card-title">{locale === 'tr' ? 'HIZLI ERİŞİM' : 'NAVIGATION'}</span>
-          <span class="myth-card-badge">MENÜ</span>
-        </div>
-        <div class="myth-card-grid">
-          <a href={reflexUrl} class="myth-card-item myth-card-item--highlight" aria-current={isReflexPage ? 'page' : undefined}>
-            <strong class="item-title">Reflex</strong>
-            <span class="item-desc">Medical Sourcing</span>
-          </a>
-          <a href={blogUrl} class="myth-card-item">
-            <strong class="item-title">{blogLabel}</strong>
-            <span class="item-desc">Analysis & Articles</span>
-          </a>
-          <a href={sectionUrl('journey')} class="myth-card-item">
-            <strong class="item-title">{aboutLabel}</strong>
-            <span class="item-desc">Background</span>
-          </a>
-          <a href={sectionUrl('contact')} class="myth-card-item">
-            <strong class="item-title">{navLabels.contact}</strong>
-            <span class="item-desc">Direct Connect</span>
-          </a>
+            <a href={sectionUrl('contact')} class="myth-card-item">
+              <strong class="item-title">{navLabels.contact}</strong>
+              <span class="item-desc">Direct Connect</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -321,7 +319,6 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
   const toggle = document.querySelector('[data-menu-toggle]');
   const panel = document.querySelector('.mobile-panel');
   const closeButton = document.querySelector('[data-mobile-close]');
-  const backdrop = document.querySelector('[data-menu-backdrop]');
   let previousFocus = null;
   let previousScroll = 0;
 
@@ -332,7 +329,6 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     toggle?.setAttribute('aria-expanded', 'false');
     panel.classList.remove('is-open');
     panel.setAttribute('aria-hidden', 'true');
-    if (backdrop) backdrop.hidden = true;
     document.body.classList.remove('has-open-menu');
     window.scrollTo(0, previousScroll);
     if (previousFocus instanceof HTMLElement) previousFocus.focus({ preventScroll: true });
@@ -345,7 +341,6 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     toggle.setAttribute('aria-expanded', 'true');
     panel?.classList.add('is-open');
     panel?.setAttribute('aria-hidden', 'false');
-    if (backdrop) backdrop.hidden = false;
     document.body.classList.add('has-open-menu');
     closeButton?.focus();
   };
@@ -359,7 +354,6 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
   }
 
   closeButton?.addEventListener('click', closeMobileMenu);
-  backdrop?.addEventListener('click', closeMobileMenu);
 
   // Desktop Dropdowns
   document.querySelectorAll('.desktop-nav [data-dropdown]').forEach((dropdown) => {
@@ -411,20 +405,6 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
 </script>
 
 <style is:global>
-  /* Backdrop & Scroll Lock */
-  .mobile-menu-backdrop {
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 135 !important;
-    background: rgba(0, 0, 0, 0.92) !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    filter: none !important;
-  }
-  .mobile-menu-backdrop[hidden] {
-    display: none !important;
-  }
-
   body.has-open-menu {
     overflow: hidden !important;
     overscroll-behavior: none !important;
@@ -583,7 +563,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     color: #d78263;
   }
 
-  /* Mobile Panel Styling (Ultra Bright High-Contrast Warm Creme Theme) */
+  /* Mobile Panel Styling (Standalone Full Screen Modal z-index 99999) */
   .mobile-panel {
     display: none;
   }
@@ -617,7 +597,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
     .mobile-panel {
       position: fixed !important;
       inset: 0 !important;
-      z-index: 140 !important;
+      z-index: 99999 !important;
       width: 100% !important;
       height: 100dvh !important;
       background: #181512 !important;
@@ -644,7 +624,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       transform: translateY(0) !important;
     }
 
-    /* FORCE ALL TEXT INSIDE MOBILE PANEL TO BE ULTRA BRIGHT LIGHT CREME AND WHITE */
+    /* ABSOLUTE FORCE COLOR OVERRIDES */
     .mobile-panel,
     .mobile-panel *,
     .mobile-panel a,
@@ -696,7 +676,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
       width: 100% !important;
     }
 
-    /* Ultra Bright Warm Cards */
+    /* Solid Ultra-Bright Cards */
     .mobile-panel .myth-card {
       background: #26201b !important;
       border: 1.5px solid #4a3e35 !important;
@@ -808,8 +788,7 @@ const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa']
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .mobile-panel,
-    .mobile-menu-backdrop {
+    .mobile-panel {
       transition: none !important;
     }
   }
