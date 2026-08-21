@@ -56,9 +56,10 @@ fs.writeFileSync(path.join(dist, 'sitemap-index.xml'), [
   '</sitemapindex>',
   '',
 ].join('\n'), 'utf8');
-if (process.argv.includes('--public')) {
-  fs.writeFileSync(path.join(root, 'public', 'sitemap.xml'), sitemap, 'utf8');
-  fs.writeFileSync(path.join(root, 'public', 'sitemap-index.xml'), [
+const publicDir = path.join(root, 'public');
+if (fs.existsSync(publicDir)) {
+  fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap, 'utf8');
+  fs.writeFileSync(path.join(publicDir, 'sitemap-index.xml'), [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     `  <sitemap><loc>${origin}/sitemap.xml</loc></sitemap>`,
