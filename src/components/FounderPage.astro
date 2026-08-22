@@ -844,6 +844,8 @@ const legalCopy = {
   sr: { privacy: 'Politika privatnosti i kolačića', kvkk: 'Obaveštenje o zaštiti podataka', terms: 'Uslovi korišćenja' },
   sq: { privacy: 'Politika e Privatësisë dhe Cookies', kvkk: 'Njoftim për Mbrojtjen e të Dhënave', terms: 'Kushtet e Përdorimit' },
   fa: { privacy: 'سیاست حریم خصوصی و کوکی‌ها', kvkk: 'اطلاعیه حفاظت از داده‌ها', terms: 'شرایط استفاده' },
+  zh: { privacy: '隐私与 Cookie 政策', kvkk: '数据保护与合规告知', terms: '使用条款' },
+  vi: { privacy: 'Chính sách Bảo mật & Cookie', kvkk: 'Thông báo Bảo vệ Dữ liệu', terms: 'Điều khoản Sử dụng' },
 } as const;
 
 const legal = legalCopy[locale] ?? legalCopy.en;
@@ -856,6 +858,8 @@ const contactFormCopy = {
   sr: { intro: 'Podelite proizvod, tržište i operativne uslove kako biste ubrzali prvu procenu.', product: 'Proizvod ili usluga', market: 'Ciljno tržište', volume: 'Procenjeni obim / MOQ', company: 'Kompanija', email: 'E-pošta', message: 'Zahtev i ključni uslovi', submit: 'Pošaljite zahtev e-poštom', note: 'Slanje otvara vašu e-poštu; podaci se ne čuvaju na ovom sajtu.', required: 'Ovo polje je obavezno.' },
   sq: { intro: 'Ndani produktin, tregun dhe kushtet operative për ta bërë vlerësimin fillestar më të dobishëm.', product: 'Produkt ose shërbim', market: 'Tregu i synuar', volume: 'Vëllimi i parashikuar / MOQ', company: 'Kompania', email: 'Email', message: 'Kërkesa dhe kushtet kryesore', submit: 'Dërgo kërkesën me email', note: 'Dërgimi hap aplikacionin tuaj të emailit; të dhënat nuk ruhen në këtë faqe.', required: 'Kjo fushë është e detyrueshme.' },
   fa: { intro: 'برای ارزیابی اولیه بهتر، محصول، بازار و شرایط عملیاتی را ارسال کنید.', product: 'محصول یا خدمت', market: 'بازار هدف', volume: 'حجم تقریبی / MOQ', company: 'شرکت', email: 'ایمیل', message: 'درخواست و شرایط مهم', submit: 'ارسال پیش‌نویس درخواست با ایمیل', note: 'ارسال، برنامه ایمیل پیش‌فرض شما را باز می‌کند؛ اطلاعات در این سایت ذخیره نمی‌شود.', required: 'این فیلد الزامی است.' },
+  zh: { intro: '请提供具体产品规格、目标市场与运营背景信息，以便我们高效开展首次商业评估。', product: '采购产品或服务', market: '目标进出口市场', volume: '预估采购量 / 起订量 (MOQ)', company: '企业名称', email: '商务邮箱', message: '具体需求与核心商业条款', submit: '通过邮件发送需求草案', note: '提交表单将调起您的默认邮件客户端；您的任何商业信息均不会在此网站存储。', required: '此项为必填项。' },
+  vi: { intro: 'Chia sẻ thông tin sản phẩm, thị trường và bối cảnh vận hành để việc đánh giá ban đầu hiệu quả nhất.', product: 'Sản phẩm hoặc dịch vụ', market: 'Thị trường mục tiêu', volume: 'Sản lượng dự kiến / MOQ', company: 'Tên doanh nghiệp', email: 'Email liên hệ', message: 'Nhu cầu chi tiết & điều kiện trọng yếu', submit: 'Gửi bản thảo yêu cầu qua email', note: 'Gửi biểu mẫu sẽ mở ứng dụng email mặc định của bạn; thông tin của bạn không lưu trữ trên website này.', required: 'Trường này là bắt buộc.' },
 } as const;
 
 const formCopy = contactFormCopy[locale as keyof typeof contactFormCopy] ?? contactFormCopy.en;
@@ -1053,7 +1057,22 @@ const displayedYear = (title: string, year: string) =>
           <p class="section-lead">{copy.contact.body}</p>
           <a class="contact-email" href={'mailto:' + site.email} aria-label={copy.contact.action + ': ' + site.email}>{site.email}</a>
         </div>
-        <form class="commercial-request-form" data-commercial-request-form data-recipient={site.email} data-ctseg-contact={localeCtsegLinks.contact} data-form-locale={locale}>
+        <form
+          class="commercial-request-form"
+          data-commercial-request-form
+          data-recipient={site.email}
+          data-ctseg-contact={localeCtsegLinks.contact}
+          data-form-locale={locale}
+          data-subject-prefix={locale === 'tr' ? 'Ticari talep' : locale === 'zh' ? '商业采购与贸易需求' : locale === 'vi' ? 'Yêu cầu thương mại' : locale === 'ru' ? 'Коммерческий запрос' : locale === 'mk' ? 'Комерцијално барање' : locale === 'sr' ? 'Komercijalni zahtev' : locale === 'sq' ? 'Kërkesë tregtare' : locale === 'fa' ? 'درخواست تجاری' : 'Commercial requirement'}
+          data-label-product={formCopy.product}
+          data-label-market={formCopy.market}
+          data-label-volume={formCopy.volume}
+          data-label-company={formCopy.company}
+          data-label-email={formCopy.email}
+          data-label-message={formCopy.message}
+          data-msg-success={locale === 'tr' ? 'E-posta taslağınız hazır.' : locale === 'zh' ? '您的邮件草案已准备就绪。' : locale === 'vi' ? 'Bản thảo email của bạn đã sẵn sàng.' : locale === 'ru' ? 'Черновик письма готов.' : locale === 'mk' ? 'Вашиот нацрт за е-пошта е подготвен.' : locale === 'sr' ? 'Vaš nacrt e-pošte je spreman.' : locale === 'sq' ? 'Drafti juaj i emailit është gati.' : locale === 'fa' ? 'پیش‌نویس ایمیل شما آماده است.' : 'Your email draft is ready.'}
+          data-msg-error={locale === 'tr' ? 'Talebiniz iletilemedi.' : locale === 'zh' ? '请求发送失败。' : locale === 'vi' ? 'Không thể gửi yêu cầu của bạn.' : locale === 'ru' ? 'Не удалось отправить запрос.' : locale === 'mk' ? 'Барањето не можеше да се испрати.' : locale === 'sr' ? 'Zahtev nije mogao biti poslat.' : locale === 'sq' ? 'Kërkesa nuk mund të dërgohej.' : locale === 'fa' ? 'درخواست ارسال نشد.' : 'Your request could not be submitted.'}
+        >
           <p class="form-intro">{formCopy.intro}</p>
           <div class="form-trap" aria-hidden="true" hidden>
             <label for="website">Website</label>
@@ -1109,26 +1128,33 @@ const displayedYear = (title: string, year: string) =>
     if (!form.reportValidity()) return;
     const trap = form.elements.namedItem('website');
     if (trap instanceof HTMLInputElement && trap.value.trim()) {
-      if (formStatus) formStatus.textContent = 'Your request could not be submitted.';
+      if (formStatus) formStatus.textContent = form.dataset.msgError || '';
       trackFormEvent('form_blocked', form);
       return;
     }
     const values = new FormData(form);
-    const subject = `Commercial requirement — ${values.get('product') || 'new enquiry'}`;
+    const subjectPrefix = form.dataset.subjectPrefix || '';
+    const productLabel = form.dataset.labelProduct || '';
+    const marketLabel = form.dataset.labelMarket || '';
+    const volumeLabel = form.dataset.labelVolume || '';
+    const companyLabel = form.dataset.labelCompany || '';
+    const emailLabel = form.dataset.labelEmail || '';
+    const messageLabel = form.dataset.labelMessage || '';
+    const subject = subjectPrefix ? `${subjectPrefix} — ${values.get('product') || ''}` : `${values.get('product') || ''}`;
     const body = [
-      `Product or service: ${values.get('product') || ''}`,
-      `Target market: ${values.get('market') || ''}`,
-      `Estimated volume / MOQ: ${values.get('volume') || ''}`,
-      `Company: ${values.get('company') || ''}`,
-      `Email: ${values.get('email') || ''}`,
+      `${productLabel}: ${values.get('product') || ''}`,
+      `${marketLabel}: ${values.get('market') || ''}`,
+      `${volumeLabel}: ${values.get('volume') || ''}`,
+      `${companyLabel}: ${values.get('company') || ''}`,
+      `${emailLabel}: ${values.get('email') || ''}`,
       '',
-      `Requirement and key conditions:\n${values.get('message') || ''}`,
+      `${messageLabel}:\n${values.get('message') || ''}`,
     ].join('\n');
     const recipient = form.dataset.recipient || 'info@teyfikgokdemir.com';
     trackFormEvent('generate_lead', form);
     trackFormEvent('mailto_open', form);
     window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    if (formStatus) formStatus.textContent = 'Your email draft is ready.';
+    if (formStatus) formStatus.textContent = form.dataset.msgSuccess || '';
   });
 </script>
 

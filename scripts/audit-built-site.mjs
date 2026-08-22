@@ -191,7 +191,7 @@ const commercialEvaluationContracts = {
   sq: 'Ky seksion nuk është listë marrëveshjesh të përfunduara, furnizimesh të garantuara ose klientësh të publikuar.',
   fa: 'این بخش فهرست قراردادهای نهایی، تأمین تضمین‌شده یا مشتریان اعلام‌شده عمومی نیست.',
   zh: '本部分内容不构成已签署的确定协议、保证供货承诺或公开披露的客户名录。',
-  vi: 'Bu bölüm sonuçlanmış anlaşma, garanti edilen tedarik veya kamuya açıklanmış müşteri listesi değildir.'
+  vi: 'Mục này không phải là danh sách các thỏa thuận đã hoàn tất, nguồn cung được đảm bảo hay danh sách khách hàng công khai.'
 };
 const mythbornContracts = {
   tr:{status:'Aktif girişim',region:'Uluslararası',description:'Tarot, Katina, astroloji ve kişisel keşif deneyimlerini çok dilli dijital bir platformda birleştiren bağımsız tüketici markası.'},
@@ -201,7 +201,7 @@ const mythbornContracts = {
   sr:{status:'Aktivan poduhvat',region:'Međunarodno',description:'Nezavisan višejezični potrošački brend koji na jednoj digitalnoj platformi objedinjuje iskustva tarota, Katine, astrologije i ličnog otkrivanja.'},
   sq:{status:'Sipërmarrje aktive',region:'Ndërkombëtare',description:'Një markë e pavarur shumëgjuhëshe për konsumatorët, që bashkon në një platformë digjitale përvoja të Tarotit, Katinës, astrologjisë dhe zbulimit personal.'},
   fa:{status:'برند فعال و مستقل',region:'بین‌المللی',description:'یک برند مستقل و چندزبانه برای تجربه‌های تاروت، کاتینا، طالع‌بینی و خودشناسی در یک پلتفرم دیجیتال.'},
-  zh:{status:'在运营项目',region:'全球化',description:'融合塔罗、卡蒂娜、占星与象征符号探索的多语言独立数字产品与消费者品牌。'},
+  zh:{status:'独立品牌',region:'全球市场',description:'融合塔罗、卡蒂娜、占星与个人探索的多语言独立数字消费品牌。'},
   vi:{status:'Đang hoạt động',region:'Quốc tế',description:'Thương hiệu tiêu dùng số độc lập kết hợp các trải nghiệm Tarot, Katina, chiêm tinh và khám phá cá nhân trên nền tảng kỹ thuật số đa ngôn ngữ.'}
 };
 const obsoleteMythbornCopy = [
@@ -212,7 +212,7 @@ const obsoleteMythbornCopy = [
   'Sipërmarrje e re në zhvillim si ekosistem',
   'برند و اکوسیستم محصول و تجارت بین‌المللی در حال توسعه'
 ];
-for (const [lang,route] of [['tr','/'],['en','/en/'],['ru','/ru/'],['mk','/mk/'],['sr','/sr/'],['sq','/sq/'],['fa','/fa/'],['vi','/vi/']]) {
+for (const [lang,route] of [['tr','/'],['en','/en/'],['ru','/ru/'],['mk','/mk/'],['sr','/sr/'],['sq','/sq/'],['fa','/fa/'],['zh','/zh/'],['vi','/vi/']]) {
   const page = pageByRoute.get(route);
   if (!page) { errors.push(`${route}: locale ana sayfası eksik.`); continue; }
   const tradeContract = tradeEntryContracts[lang];

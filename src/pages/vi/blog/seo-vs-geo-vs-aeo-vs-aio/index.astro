@@ -1,0 +1,101 @@
+---
+import ContentPage from '../../../../components/ContentPage.astro';
+import { site } from '../../../../data/site';
+
+const title = 'SEO, GEO, AEO & AIO: Hướng dẫn Phân biệt & Thực thi Thực tế | Teyfik Gökdemir';
+const description = 'Hiểu rõ sự khác biệt giữa SEO, GEO, AEO và AIO, cách các lĩnh vực này giao thoa và phương pháp xây dựng hệ thống hiển thị tìm kiếm và AI nhất quán.';
+const pathname = '/vi/blog/seo-vs-geo-vs-aeo-vs-aio/';
+const canonical = site.origin + pathname;
+const published = '2026-07-23';
+const modified = '2026-07-23';
+
+const articleSchema = {
+  '@type': 'Article',
+  '@id': canonical + '#article',
+  headline: 'SEO vs GEO vs AEO vs AIO: Vai trò và Phạm vi Thực tế của Từng Lĩnh vực',
+  description,
+  url: canonical,
+  mainEntityOfPage: canonical,
+  datePublished: published,
+  dateModified: modified,
+  inLanguage: 'vi-VN',
+  author: { '@id': site.origin + '/#person' },
+  publisher: { '@id': site.origin + '/#person' },
+  isPartOf: { '@id': site.origin + '/#website' },
+  about: [
+    'Tối ưu hóa Công cụ Tìm kiếm (SEO)',
+    'Tối ưu hóa Công cụ Tạo sinh (GEO)',
+    'Tối ưu hóa Công cụ Trả lời (AEO)',
+    'Tối ưu hóa Trí tuệ Nhân tạo (AIO)',
+  ],
+};
+
+const alternates = {
+  en: site.origin + '/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  tr: site.origin + '/blog/seo-geo-aeo-aio-farklari/',
+  sq: site.origin + '/sq/blog/dallimet-seo-geo-aeo-aio/',
+  mk: site.origin + '/mk/blog/razliki-seo-geo-aeo-aio/',
+  sr: site.origin + '/sr/blog/razlike-seo-geo-aeo-aio/',
+  zh: site.origin + '/zh/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  vi: site.origin + '/vi/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  'x-default': site.origin + '/blog/seo-vs-geo-vs-aeo-vs-aio/',
+};
+---
+<ContentPage
+  locale="vi"
+  title={title}
+  description={description}
+  pathname={pathname}
+  alternates={alternates}
+  ogType="article"
+  pageSchema={articleSchema}
+  eyebrow="Cẩm nang Hiển thị Tìm kiếm & AI"
+  heading="SEO, GEO, AEO và AIO: Vai trò và trách nhiệm thực tế của từng lĩnh vực."
+  lead="Các khái niệm này giao thoa nhưng không thể thay thế cho nhau. Câu hỏi đúng không phải là từ viết tắt nào sẽ thay thế SEO, mà là cách từng lĩnh vực đóng góp vào một hệ thống tiếp cận và tìm kiếm nhất quán."
+  articleMeta={{
+    published,
+    modified,
+    readingTime: '8 phút đọc',
+    label: 'Teyfik Gökdemir',
+  }}
+>
+  <div class="answer-block">
+    <p><strong>SEO</strong> cải thiện khả năng tiếp cận và thứ hạng trên công cụ tìm kiếm truyền thống. <strong>GEO</strong> nâng cao khả năng hiểu và giá trị trích dẫn của nội dung cho các hệ thống AI tạo sinh. <strong>AEO</strong> giúp nội dung dễ dàng được trích xuất thành câu trả lời trực tiếp. <strong>AIO</strong> điều phối tổng thể hệ thống website, thực thể và nội dung cho khả năng tìm kiếm được hỗ trợ bởi AI.</p>
+  </div>
+
+  <h2>Sự khác biệt cốt lõi</h2>
+
+  <p>Cả bốn lĩnh vực đều giải quyết các khía cạnh khác nhau của cùng một bài toán thương mại: làm thế nào để doanh nghiệp được tìm thấy, được hiểu chính xác và xây dựng niềm tin khi khách hàng tìm kiếm thông tin.</p>
+
+  <div class="content-grid">
+    <article class="content-card">
+      <h3>SEO</h3>
+      <p>Khả năng thu thập dữ liệu kỹ thuật, đáp ứng ý định tìm kiếm (search intent), mức độ liên quan của nội dung, cấu trúc liên kết nội bộ, thẩm quyền tên miền và hiệu suất trên công cụ tìm kiếm truyền thống.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>GEO</h3>
+      <p>Tài liệu nguồn rõ ràng, mối quan hệ thực thể, dữ liệu thực chứng và thông tin có cấu trúc để các mô hình ngôn ngữ lớn (LLM) dễ dàng giải thích và trích dẫn.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>AEO</h3>
+      <p>Câu trả lời trực tiếp, định nghĩa rõ ràng câu hỏi, giải thích súc tích và cấu trúc dữ liệu phù hợp cho việc trích xuất câu trả lời tức thì.</p>
+    </article>
+
+    <article class="content-card">
+      <h3>AIO</h3>
+      <p>Tầng vận hành mở rộng kết nối SEO kỹ thuật, dữ liệu thực thể, thiết kế nội dung, đo lường và hệ thống khám phá bằng AI.</p>
+    </article>
+  </div>
+
+  <h2>SEO vẫn là nền tảng cốt lõi</h2>
+
+  <p>Khả năng hiển thị trên AI không làm mất đi nhu cầu về các trang web có thể thu thập thông tin dễ dàng, URL Canonical chuẩn mực, tốc độ tải trang cao, liên kết nội bộ hữu ích và nội dung thỏa mãn ý định tìm kiếm thực sự. Một hệ thống tạo sinh không thể sử dụng đáng tin cậy những thông tin mà nó không thể truy cập hoặc không thể hiểu được.</p>
+
+  <p>Đó là lý do tại sao việc thay thế SEO bằng một từ viết tắt mới là cách tiếp cận sai lầm. GEO và AEO là phần mở rộng của hệ thống tiếp cận; chúng không xóa bỏ nền tảng kỹ thuật sẵn có.</p>
+
+  <h2>Giá trị thực tế của GEO</h2>
+
+  <p>GEO trở nên quan trọng khi người dùng nhận được các câu trả lời tổng hợp thay vì một danh sách liên kết đơn thuần. Trong môi trường đó, nội dung phải truyền đạt các dữ kiện thực tế, mối quan hệ logic và chuyên môn sâu sắc một cách rõ ràng để được AI hiểu đúng và trích dẫn làm nguồn tham chiếu tin cậy.</p>
+</ContentPage>
