@@ -218,7 +218,7 @@ const positioning = {
     ctseg: {
       label: 'Ana ticari yapı',
       kicker: 'Kurucusu tarafından yönetilen stratejik ticaret platformu',
-      title: 'CTSEG Sanayi ve Ticaret Limited Şirketi',
+      title: 'CTSEG',
       body: 'CTSEG; şirketlerin doğru ürün, üretici, tedarikçi ve pazar kararlarını daha güvenilir verilerle almasına yardımcı olan stratejik tedarik ve uluslararası ticaret platformudur.',
       founder: 'Teyfik Gökdemir, CTSEG’in kurucusu olarak araştırma, doğrulama, ticari yapılandırma ve operasyon koordinasyonunu tek karar çerçevesinde birleştirir.',
       services: ['Stratejik tedarik', 'Tedarikçi bulma ve doğrulama', 'Uluslararası ticaret danışmanlığı', 'Ürün ve pazar araştırması', 'Ticari operasyon koordinasyonu', 'Türkiye ile uluslararası pazarlar arasında iş geliştirme'],
@@ -632,7 +632,7 @@ const positioning = {
     ctseg: {
       label: 'شرکت اصلی تجاری',
       kicker: 'پلتفرم تجارت استراتژیک تحت مدیریت بنیان‌گذار',
-      title: 'CTSEG (شرکت صنایع و تجارت با مسئولیت محدود)',
+      title: 'CTSEG',
       body: 'CTSEG پلتفرم تأمین راهبردی و تجارت بین‌المللی است که به شرکت‌ها کمک می‌کند تصمیم‌های مطمئن‌تری درباره محصول، تولیدکننده، تأمین‌کننده و بازار اتخاذ کنند.',
       founder: 'تیفیک گوکدمیر به عنوان بنیان‌گذار، پژوهش، اعتبارسنجی، ساختاردهی تجاری و هماهنگی عملیاتی را در یک چارچوب تصمیم‌گیری واحد یکپارچه می‌کند.',
       services: ['تأمین راهبردی', 'شناسایی و اعتبارسنجی تأمین‌کننده', 'مشاوره تجارت بین‌الملل', 'پژوهش محصول و بازار', 'هماهنگی عملیات تجاری', 'توسعه تجارت میان ترکیه و بازارهای بین‌المللی'],
@@ -701,7 +701,7 @@ const positioning = {
     ctseg: {
       label: '核心商业实体',
       kicker: '创始人亲自主理的战略贸易平台',
-      title: 'CTSEG（工业与贸易有限责任公司）',
+      title: 'CTSEG',
       body: 'CTSEG 是专注于战略采购与国际贸易落地的综合平台，协助企业在产品选择、制造商对接、供应商核验及目标市场准入决策中获得可靠的数据与实操支持。',
       founder: '作为创始人，Teyfik Gökdemir 将供应链调研、合规核验、商业架构与跨境运营落地统筹于统一的高效决策闭环中。',
       services: ['战略采购与寻源', '供应商背景与合规核验', '国际贸易与跨国商务咨询', '产品与本土市场调研', '贸易全流程运营与清关物流协调', '中国与土耳其及国际市场双向业务拓展'],
@@ -898,8 +898,7 @@ const displayedYear = (title: string, year: string) =>
       <div class="ctseg-featured__identity" data-ctseg-layer="identity">
         <img src={site.images.ctseg.path} width={site.images.ctseg.width} height={site.images.ctseg.height} alt="CTSEG" loading="lazy" decoding="async" />
         <p class="section-label">{localPositioning.ctseg.label}</p>
-        <p class="ctseg-featured__kicker">{localPositioning.ctseg.kicker}</p>
-        <h2 id="ctseg-title">{localPositioning.ctseg.title}</h2>
+        <h2 id="ctseg-title">{localPositioning.ctseg.kicker}</h2>
         <p class="section-lead">{localPositioning.ctseg.body}</p>
         <p class="ctseg-featured__founder">{localPositioning.ctseg.founder}</p>
         <div class="ctseg-featured__actions">
