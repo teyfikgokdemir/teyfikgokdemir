@@ -685,7 +685,7 @@ export const content = {
     intro: {
       label: '创始人视角',
       title: '从商业调研到运营落地的务实合作模式。',
-      body: '我们将产品调研、市场准入、供应商核验、询报价管理、商业谈判、跨境支付、物流清关及数字化可见性整合为统一闭环。作为创始人，我的核心目标是将不确定的商业机遇转化为条理清晰、风险可控、切实可行的商业架构。',
+      body: '我们将产品调研、市场准入、供应商核验、询报价管理、商业谈判、跨境支付、物流清关及数字化可见性整合为统一闭环。作为创始人，我的核心目标是将不确定的商业机遇，转化为权责清晰、风险可控且切实可行的落地合作方案。',
       areas: ['国际贸易', '战略采购', '供应商核验', '市场拓展', '数字化贸易', 'AI 商业调研'],
     },
     ventures: {
@@ -693,7 +693,7 @@ export const content = {
       title: 'CTSEG 为核心商业实体，协同业务构建多维能力支撑。',
       lead: 'CTSEG 是战略采购与国际贸易的核心运营实体；QCT Studio 提供数字化与技术开发能力，QCT Commerce 负责土耳其本地数字化分销布局，Mythborn 则为独立消费者品牌。',
       items: [
-        { name: 'QCT Studio', description: '面向巴尔干及区域企业的数字增长机构，提供多语言网站、电商系统、SEO/GEO 搜索可见性与 AI 自动化系统。', status: '运营中实体', region: '巴尔干地区', url: 'https://qctstudio.com', aria: '访问 QCT Studio 官方网站' },
+        { name: 'QCT Studio', description: '面向巴尔干及欧洲区域企业的数字化技术开发与出海增长服务商，提供多语言独立站、电商系统、SEO/GEO 搜索可见性与 AI 自动化系统。', status: '运营中实体', region: '巴尔干地区', url: 'https://qctstudio.com', aria: '访问 QCT Studio 官方网站' },
         { name: 'QCT Commerce', description: '面向土耳其本土制造企业与批发商的数字化贸易、全渠道电商落地与直接销售拓展实体。', status: '运营中实体', region: '土耳其', url: 'https://qctcommerce.com', aria: '访问 QCT Commerce 官方网站', image: 'commerce' },
         { name: 'Mythborn', description: '融合塔罗、卡蒂娜、占星与个人探索的多语言独立数字消费品牌。', status: '独立品牌', region: '全球市场', url: 'https://mythborn.co/', aria: '访问 Mythborn 官方网站' },
         { name: 'Sales Intelligence Systems', description: '用于潜在客户调研、商机线索识别、企业画像分析与销售流程准备的 AI 销售智能系统。', status: '内部系统', region: '销售运营', aria: '了解销售智能系统' },
@@ -726,7 +726,7 @@ export const content = {
       ],
     },
     method: {
-      label: '工作模式',
+      label: '运作模式',
       title: '直截了当、注重实据、契合实际运营规律。',
       lead: '每一个商业项目都遵循严谨流程：消除主观假设，厘清合作各方权责，明确可执行的下一步行动。',
       steps: [
@@ -745,7 +745,7 @@ export const content = {
       label: '战略商业洽谈',
       title: '共同探讨产品定位、市场准入或供应链合作决策。',
       body: '如需在创始人层面进行战略评估、探讨土耳其市场开拓或建立直接商业合作，欢迎直接与我联系。具体的采购执行与贸易业务将由 CTSEG 统一承接推进。',
-      action: '发送邮件',
+      action: '发送商务邮件',
     },
     footer: { rights: '© 2026 Teyfik Gökdemir. 保留所有权利。', links: '官方认证链接' },
     images: {

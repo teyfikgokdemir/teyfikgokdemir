@@ -2403,7 +2403,7 @@ export const posts: BlogPost[] = [
   "updated": "2026-08-08",
   "readingMinutes": 9,
   "title": {
-    "zh": "现代 B2B 产品独立站：为何它必须超越传统的静态 PDF 宣传册",
+    "zh": "现代 B2B 产品独立站：为何它必须超越传统的静态 PDF 产品手册",
     "ru": "Почему B2B-сайт продукта должен быть больше чем просто каталогом",
     "tr": "B2B Ürün Web Sitesi Katalogdan Daha Fazlası Olmalı",
     "en": "A B2B Product Website Must Be More Than a Catalogue",

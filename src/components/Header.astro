@@ -73,7 +73,7 @@ const aboutLabels: Record<Locale | 'fa', string> = {
   mk: 'За мене',
   sr: 'O meni',
   fa: 'درباره من',
-  zh: '关于我',
+  zh: '创始人简介',
 };
 
 const aiVisibilityLabels: Record<Locale | 'fa', string> = {
@@ -118,7 +118,7 @@ const panelLabels = ({
   sr: { services: 'Poduhvati', approach: 'Pristup', start: 'Započnimo razgovor', email: 'Pošalji email' },
   sq: { services: 'Sipërmarrjet', approach: 'Qasja', start: 'Nisni një bisedë', email: 'Dërgo email' },
   fa: { services: 'ساختارها', approach: 'رویکرد', start: 'شروع گفتگو', email: 'ارسال ایمیل' },
-  zh: { services: '核心业务', approach: '专业方法', start: '开启合作交流', email: '发送电子邮件' },
+  zh: { services: '核心业务', approach: '运作体系', start: '开启商务对接', email: '发送商务邮件' },
 }[locale] || { services: 'Services', approach: 'Expertise', start: 'Start a conversation', email: 'Send an email' });
 
 const ctsegUrl = locale === 'tr'
@@ -128,20 +128,20 @@ const ctsegUrl = locale === 'tr'
     : 'https://ctseg.com.tr/en/';
 
 const ventureSubItems = [
-  { name: 'CTSEG', desc: locale === 'tr' ? 'Uluslararası Ticaret ve Tedarik' : 'International Trade & Sourcing', url: ctsegUrl, external: true },
-  { name: 'QCT Studio', desc: locale === 'tr' ? 'Balkanlar Dijital ve Yazılım' : 'Balkan Digital & Software', url: 'https://qctstudio.com', external: true },
-  { name: 'QCT Commerce', desc: locale === 'tr' ? 'E-Ticaret ve Büyüme Sistemleri' : 'E-Commerce & Digital Growth', url: 'https://qctcommerce.com', external: true },
-  { name: 'Reflex Medical', desc: locale === 'tr' ? 'Medikal Tedarik ve İhracat' : 'Medical Sourcing & Export', url: reflexUrl, external: false },
+  { name: 'CTSEG', desc: locale === 'tr' ? 'Uluslararası Ticaret ve Tedarik' : locale === 'zh' ? '国际贸易与战略采购' : 'International Trade & Sourcing', url: ctsegUrl, external: true },
+  { name: 'QCT Studio', desc: locale === 'tr' ? 'Balkanlar Dijital ve Yazılım' : locale === 'zh' ? '欧洲数字化与技术开发' : 'Balkan Digital & Software', url: 'https://qctstudio.com', external: true },
+  { name: 'QCT Commerce', desc: locale === 'tr' ? 'E-Ticaret ve Büyüme Sistemleri' : locale === 'zh' ? '数字化贸易与分销系统' : 'E-Commerce & Digital Growth', url: 'https://qctcommerce.com', external: true },
+  { name: 'Reflex Medical', desc: locale === 'tr' ? 'Medikal Tedarik ve İhracat' : locale === 'zh' ? '防护手套供应链与出口' : 'Medical Sourcing & Export', url: reflexUrl, external: false },
 ];
 
 const expertiseSubItems = [
-  { name: locale === 'tr' ? 'Uluslararası Ticaret' : 'International Trade', desc: 'Cross-Border Operations', url: sectionUrl('expertise') },
-  { name: locale === 'tr' ? 'Stratejik Tedarik' : 'Strategic Sourcing', desc: 'Supplier Verification & RFQ', url: sectionUrl('expertise') },
-  { name: locale === 'tr' ? 'Dijital Ticaret & Büyüme' : 'Digital Commerce & Growth', desc: 'E-Commerce Infrastructure', url: sectionUrl('expertise') },
+  { name: locale === 'tr' ? 'Uluslararası Ticaret' : locale === 'zh' ? '国际贸易' : 'International Trade', desc: locale === 'zh' ? '跨境商业运营与落地' : 'Cross-Border Operations', url: sectionUrl('expertise') },
+  { name: locale === 'tr' ? 'Stratejik Tedarik' : locale === 'zh' ? '战略采购' : 'Strategic Sourcing', desc: locale === 'zh' ? '供应商核验与 RFQ 比价' : 'Supplier Verification & RFQ', url: sectionUrl('expertise') },
+  { name: locale === 'tr' ? 'Dijital Ticaret & Büyüme' : locale === 'zh' ? '数字化贸易与增长' : 'Digital Commerce & Growth', desc: locale === 'zh' ? 'B2B 数字化分销体系' : 'E-Commerce Infrastructure', url: sectionUrl('expertise') },
   { name: aiVisibilityLabel, desc: 'GEO, AEO & AI Search', url: aiVisibilityUrl },
 ];
 
-const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa'];
+const allLocales: (Locale | 'fa')[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh'];
 ---
 
 <header class="site-header">
