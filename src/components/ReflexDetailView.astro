@@ -11,10 +11,10 @@ interface Props {
 }
 
 const { product, locale } = Astro.props;
-const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa' | 'zh';
+const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa' | 'zh' | 'vi';
 const i18n = product.i18n[lang] || product.i18n.tr;
 
-const detailText = {
+const detailTextMap: Record<string, any> = {
   tr: {
     backToCatalog: '← Tüm Reflex Ürün Portföyüne Dön',
     overviewTitle: 'Ürün Hakkında Genel Bakış',
@@ -148,6 +148,25 @@ const detailText = {
     endustriyelKullanim: 'کاربرد صنعتی',
     genelPaket: 'بسته‌بندی کارتن',
   },
+  vi: {
+    backToCatalog: '← Quay lại Danh mục Sản phẩm Reflex',
+    overviewTitle: 'Tổng quan & Định vị Sản phẩm',
+    featuresTitle: 'Đặc tính Cốt lõi & Ưu thế Hiệu năng',
+    applicationsTitle: 'Ứng dụng Thực tế & Ngành nghề Mục tiêu',
+    galleryTitle: 'Bộ sưu tập Hình ảnh & Bao bì Sản phẩm',
+    relatedTitle: 'Các Dòng Sản phẩm Khác của Reflex',
+    quoteTitle: 'Nhận Báo giá B2B & Xuất khẩu',
+    quoteDesc: 'Hỗ trợ mua sỉ theo hộp, thùng carton, pallet hoặc đóng container, hỗ trợ gia công nhãn riêng (Private Label).',
+    quoteBtn: 'Gửi yêu cầu Báo giá & Cung ứng',
+    faqTitle: 'Câu hỏi Thường gặp (FAQ)',
+    homeBreadcrumb: 'Trang chủ',
+    kutuIci: 'Số lượng / Hộp',
+    koliIci: 'Số lượng / Thùng',
+    paletIci: 'Số lượng / Pallet',
+    kutuOlcusu: 'Kích thước Hộp',
+    endustriyelKullanim: 'Công nghiệp & Thương mại',
+    genelPaket: 'Đóng gói Thùng tiêu chuẩn',
+  },
   zh: {
     backToCatalog: '← 返回 Reflex 产品全系列',
     overviewTitle: '产品概览与核心定位',
@@ -167,7 +186,8 @@ const detailText = {
     endustriyelKullanim: '工业及商用',
     genelPaket: '标准外箱包装',
   },
-}[lang] || detailText.tr;
+};
+const detailText = detailTextMap[lang] || detailTextMap.tr;
 
 const translateQty = (val: string) => {
   if (!val) return val;
@@ -177,6 +197,7 @@ const translateQty = (val: string) => {
   if (lang === 'sq') return val.replace(/Adet/g, 'copë').replace(/Kutu/g, 'kuti').replace(/Koli/g, 'kartona');
   if (lang === 'fa') return val.replace(/Adet/g, 'عدد').replace(/Kutu/g, 'جعبه').replace(/Koli/g, 'کارتن');
   if (lang === 'zh') return val.replace(/Adet/g, '只').replace(/Kutu/g, '盒').replace(/Koli/g, '箱');
+  if (lang === 'vi') return val.replace(/Adet/g, 'chiếc').replace(/Kutu/g, 'hộp').replace(/Koli/g, 'thùng');
   return val;
 };
 

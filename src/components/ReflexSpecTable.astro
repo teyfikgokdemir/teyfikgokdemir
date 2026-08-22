@@ -8,9 +8,9 @@ interface Props {
 }
 
 const { product, locale } = Astro.props;
-const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa' | 'zh';
+const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa' | 'zh' | 'vi';
 
-const labels = {
+const labelsMap: Record<string, any> = {
   tr: {
     specsTitle: 'Teknik Özellikler',
     material: 'Hammadde / Malzeme',
@@ -179,6 +179,30 @@ const labels = {
     boxBarcode: 'بارکد جعبه',
     cartonBarcode: 'بارکد کارتن',
   },
+  vi: {
+    specsTitle: 'Thông số Kỹ thuật & Tiêu chuẩn Sản phẩm',
+    material: 'Nguyên liệu / Vật liệu',
+    powder: 'Tình trạng Bột',
+    latex: 'Thành phần Latex',
+    silicone: 'Thành phần Silicone',
+    sterility: 'Độ vô trùng',
+    foodContact: 'Tuân thủ Tiếp xúc Thực phẩm',
+    yes: 'Có / Hoàn toàn phù hợp',
+    no: 'Không',
+    colors: 'Màu sắc Có sẵn',
+    sizes: 'Kích cỡ Có sẵn',
+    variantsTitle: 'Quy cách Đóng gói & Vận tải',
+    color: 'Màu sắc',
+    size: 'Kích cỡ',
+    productCode: 'Mã Sản phẩm',
+    boxQty: 'Số lượng / Hộp',
+    cartonQty: 'Số lượng / Thùng',
+    palletQty: 'Số lượng / Pallet',
+    boxDim: 'Kích thước Hộp',
+    cartonDim: 'Kích thước Thùng',
+    boxBarcode: 'Mã vạch Hộp (EAN)',
+    cartonBarcode: 'Mã vạch Thùng (EAN)',
+  },
   zh: {
     specsTitle: '技术参数与产品规格',
     material: '原材料 / 材质',
@@ -203,26 +227,27 @@ const labels = {
     boxBarcode: '内盒条码 (EAN)',
     cartonBarcode: '外箱条码 (EAN)',
   },
-}[lang] || labels.tr;
+};
+const labels = labelsMap[lang] || labelsMap.tr;
 
 const i18n = product.i18n[lang] || product.i18n.tr;
 
 const translateColor = (col: string) => {
   const map: Record<string, Record<string, string>> = {
-    'Siyah': { tr: 'Siyah', en: 'Black', mk: 'Црна', sr: 'Crna', sq: 'E Zezë', fa: 'مشکی', zh: '黑色' },
-    'Şeffaf': { tr: 'Şeffaf', en: 'Clear', mk: 'Проѕирна', sr: 'Providna', sq: 'Transparente', fa: 'شفاف', zh: '透明' },
-    'Mavi': { tr: 'Mavi', en: 'Blue', mk: 'Сина', sr: 'Plava', sq: 'Blu', fa: 'آبی', zh: '蓝色' },
-    'Mor': { tr: 'Mor', en: 'Purple', mk: 'Виолетова', sr: 'Ljubičasta', sq: 'Vjollcë', fa: 'بنفش', zh: '紫色' },
-    'Yeşil': { tr: 'Yeşil', en: 'Green', mk: 'Зелена', sr: 'Zelena', sq: 'Jeshile', fa: 'سبز', zh: '绿色' },
-    'Pembe': { tr: 'Pembe', en: 'Pink', mk: 'Розева', sr: 'Roze', sq: 'Rozë', fa: 'صورتی', zh: '粉色' },
-    'Krem': { tr: 'Krem', en: 'Cream', mk: 'Крем', sr: 'Krem', sq: 'Krem', fa: 'کرم', zh: '米白' }
+    'Siyah': { tr: 'Siyah', en: 'Black', mk: 'Црна', sr: 'Crna', sq: 'E Zezë', fa: 'مشکی', zh: '黑色', vi: 'Đen' },
+    'Şeffaf': { tr: 'Şeffaf', en: 'Clear', mk: 'Проѕирна', sr: 'Providna', sq: 'Transparente', fa: 'شفاف', zh: '透明', vi: 'Trong suốt' },
+    'Mavi': { tr: 'Mavi', en: 'Blue', mk: 'Сина', sr: 'Plava', sq: 'Blu', fa: 'آبی', zh: '蓝色', vi: 'Xanh dương' },
+    'Mor': { tr: 'Mor', en: 'Purple', mk: 'Виолетова', sr: 'Ljubičasta', sq: 'Vjollcë', fa: 'بنفش', zh: '紫色', vi: 'Tím' },
+    'Yeşil': { tr: 'Yeşil', en: 'Green', mk: 'Зелена', sr: 'Zelena', sq: 'Jeshile', fa: 'سبز', zh: '绿色', vi: 'Xanh lá' },
+    'Pembe': { tr: 'Pembe', en: 'Pink', mk: 'Розева', sr: 'Roze', sq: 'Rozë', fa: 'صورتی', zh: '粉色', vi: 'Hồng' },
+    'Krem': { tr: 'Krem', en: 'Cream', mk: 'Крем', sr: 'Krem', sq: 'Krem', fa: 'کرم', zh: '米白', vi: 'Màu kem' }
   };
   return map[col]?.[lang] || col;
 };
 
 const translateSize = (sz: string) => {
   const map: Record<string, Record<string, string>> = {
-    'Çocuk Standart': { tr: 'Çocuk Standart', en: 'Kids Standard', mk: 'Детски стандард', sr: 'Dečiji standard', sq: 'Fëmijë Standard', fa: 'استاندارد کودک', zh: '儿童通用标准' }
+    'Çocuk Standart': { tr: 'Çocuk Standart', en: 'Kids Standard', mk: 'Детски стандард', sr: 'Dečiji standard', sq: 'Fëmijë Standard', fa: 'استاندارد کودک', zh: '儿童通用标准', vi: 'Tiêu chuẩn Trẻ em' }
   };
   return map[sz]?.[lang] || sz;
 };
@@ -235,15 +260,16 @@ const translateQty = (val: string) => {
   if (lang === 'sq') return val.replace(/Adet/g, 'copë').replace(/Kutu/g, 'kuti').replace(/Koli/g, 'kartona');
   if (lang === 'fa') return val.replace(/Adet/g, 'عدد').replace(/Kutu/g, 'جعبه').replace(/Koli/g, 'کارتن');
   if (lang === 'zh') return val.replace(/Adet/g, '只').replace(/Kutu/g, '盒').replace(/Koli/g, '箱');
+  if (lang === 'vi') return val.replace(/Adet/g, 'chiếc').replace(/Kutu/g, 'hộp').replace(/Koli/g, 'thùng');
   return val;
 };
 const translateSpec = (val: string) => {
   if (!val) return val;
   const map: Record<string, Record<string, string>> = {
-    'Pudrasız': { tr: 'Pudrasız', en: 'Powder-Free', mk: 'Без пудра', sr: 'Bez pudera', sq: 'Pa pluhur', fa: 'بدون پودر', zh: '无粉 (Powder-Free)' },
-    'Lateks İçermez': { tr: 'Lateks İçermez', en: 'Latex-Free', mk: 'Без латекс', sr: 'Bez lateksa', sq: 'Pa lateks', fa: 'بدون لاتکس', zh: '不含乳胶 (Latex-Free)' },
-    'Silikon İçermez': { tr: 'Silikon İçermez', en: 'Silicone-Free', mk: 'Без силикон', sr: 'Bez silikona', sq: 'Pa silikon', fa: 'بدون سیلیکون', zh: '不含硅油 (Silicone-Free)' },
-    'Non-Steril': { tr: 'Non-Steril', en: 'Non-Sterile', mk: 'Нон-стерилно', sr: 'Non-sterilno', sq: 'Jo-sterile', fa: 'غیر استریل', zh: '非灭菌 (Non-Sterile)' },
+    'Pudrasız': { tr: 'Pudrasız', en: 'Powder-Free', mk: 'Без пудра', sr: 'Bez pudera', sq: 'Pa pluhur', fa: 'بدون پودر', zh: '无粉 (Powder-Free)', vi: 'Không bột (Powder-Free)' },
+    'Lateks İçermez': { tr: 'Lateks İçermez', en: 'Latex-Free', mk: 'Без латекс', sr: 'Bez lateksa', sq: 'Pa lateks', fa: 'بدون لاتکس', zh: '不含乳胶 (Latex-Free)', vi: 'Không chứa Latex (Latex-Free)' },
+    'Silikon İçermez': { tr: 'Silikon İçermez', en: 'Silicone-Free', mk: 'Без силикон', sr: 'Bez silikona', sq: 'Pa silikon', fa: 'بدون سیلیکون', zh: '不含硅油 (Silicone-Free)', vi: 'Không chứa Silicone (Silicone-Free)' },
+    'Non-Steril': { tr: 'Non-Steril', en: 'Non-Sterile', mk: 'Нон-стерилно', sr: 'Non-sterilno', sq: 'Jo-sterile', fa: 'غیر استریل', zh: '非灭菌 (Non-Sterile)', vi: 'Không vô trùng (Non-Sterile)' },
   };
   return map[val]?.[lang] || val;
 };

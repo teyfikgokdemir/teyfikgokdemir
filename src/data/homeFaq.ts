@@ -197,17 +197,42 @@ export const homeFaq: Record<Locale | 'fa', HomeFaqContent> = {
       },
     ],
   },
+  vi: {
+    eyebrow: 'Khung làm việc',
+    title: 'Các câu hỏi thương mại thường gặp.',
+    lead: 'Đánh giá ban đầu tích hợp các yếu tố sản phẩm, thị trường, đối tác và thực tế vận hành trong cùng một khung ra quyết định.',
+    items: [
+      {
+        question: 'Các dự án thương mại quốc tế và thu mua chiến lược được cấu trúc như thế nào?',
+        answer: 'Quy trình bắt đầu bằng nghiên cứu sản phẩm và thị trường, xác minh nhà cung cấp, so sánh báo giá và điều khoản thương mại, đánh giá rủi ro và xác định bước hành động khả thi tiếp theo. Các luồng cung ứng và thương mại vận hành được cấu trúc thông qua CTSEG.',
+      },
+      {
+        question: 'Sự khác biệt giữa trang web cá nhân này và CTSEG là gì?',
+        answer: 'Trang web này trình bày góc nhìn nhà sáng lập, các lĩnh vực chuyên môn và mô hình làm việc của Teyfik Gökdemir. CTSEG là tổ chức thương mại trọng tâm phụ trách thu mua chiến lược, xác minh nhà cung cấp, xử lý RFQ, báo giá, hồ sơ chứng từ và điều phối logistics.',
+      },
+      {
+        question: 'Những loại cơ hội thương mại nào có thể được đánh giá?',
+        answer: 'Phạm vi đánh giá bao gồm kết nối sản phẩm – thị trường, nghiên cứu nhà sản xuất và nhà cung cấp, phát triển kinh doanh quốc tế, thu mua bán buôn, gia công nhãn hiệu riêng (Private Label) và điều phối hoạt động thương mại xuyên biên giới.',
+      },
+      {
+        question: 'Những thông tin nào cần thiết cho cuộc trao đổi đầu tiên?',
+        answer: 'Mô tả sản phẩm hoặc dịch vụ, thị trường mục tiêu, sản lượng dự kiến, tình trạng cung ứng hoặc bán hàng hiện tại, kế hoạch thời gian và các ràng buộc kỹ thuật hoặc thương mại sẽ giúp quá trình đánh giá ban đầu đạt hiệu quả cao nhất.',
+      },
+    ],
+  },
 };
 
-export const faqSchema = (locale: Locale | 'fa', origin = 'https://teyfikgokdemir.com') => ({
-  '@type': 'FAQPage',
-  '@id': `${origin}${locale === 'tr' ? '/' : `/${locale}/`}#questions`,
-  mainEntity: homeFaq[locale].items.map((item) => ({
-    '@type': 'Question',
-    name: item.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: item.answer,
-    },
-  })),
-});
+export function faqSchema(locale: Locale | 'fa') {
+  const content = homeFaq[locale] || homeFaq.tr;
+  return {
+    '@type': 'FAQPage',
+    mainEntity: content.items.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  };
+}

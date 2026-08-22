@@ -114,6 +114,24 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+    vi: {
+      "name": "Găng tay Hybrid TPE FLEX Hi-Tech",
+      "tagline": "Công nghệ Hybrid thế hệ mới",
+      "description": "Giải pháp thay thế kinh tế cho latex và nitrile. Kết cấu mềm mại, độ co giãn cao và không chứa bột.",
+      "features": [
+            "Không chứa Latex",
+            "Không bột",
+            "Phù hợp thực phẩm",
+            "Độ đàn hồi cao"
+      ],
+      "applications": [
+            "Chế biến thực phẩm",
+            "Dịch vụ ăn uống",
+            "Vệ sinh công nghiệp",
+            "Sử dụng hàng ngày"
+      ],
+      "materialName": "TPE (Thermoplastic Elastomer)"
+},
       zh: {
         "name": "Flex Hi-Tech 高弹防护手套",
         "tagline": "新一代复合高弹 TPE 技术，卓越拉伸性能与高灵敏触感。",
@@ -508,6 +526,24 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+    vi: {
+      "name": "Găng tay trẻ em trong suốt FLEX Kids",
+      "tagline": "Kích cỡ chuyên dụng cho trẻ em (3-9 tuổi)",
+      "description": "Găng tay an toàn không chứa latex thiết kế cho hoạt động thủ công, trường học và tiếp xúc thực phẩm của trẻ nhỏ.",
+      "features": [
+            "Không chứa Latex",
+            "Dành riêng cho trẻ 3-9 tuổi",
+            "An toàn tiếp xúc thực phẩm",
+            "Chống bám bẩn"
+      ],
+      "applications": [
+            "Trường mầm non & tiểu học",
+            "Vẽ tranh & thủ công",
+            "Tiếp xúc thực phẩm",
+            "Hoạt động dã ngoại"
+      ],
+      "materialName": "TPE không chứa Latex"
+},
       zh: {
         "name": "Flex Kids 儿童专属防护手套",
         "tagline": "专为儿童手型量身定制的卫生防护与创意活动手套。",
@@ -924,6 +960,24 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+    vi: {
+      "name": "Găng tay không bột WINLYEX",
+      "tagline": "Chuẩn mực không bột sạch sẽ & ngăn mùi",
+      "description": "Găng tay bảo hộ tiêu chuẩn giúp ngăn ngừa lây nhiễm chéo và mùi trong quá trình chuẩn bị thực phẩm và vệ sinh.",
+      "features": [
+            "Không bột",
+            "Kháng mùi",
+            "Đa năng",
+            "Bảo vệ tay thoải mái"
+      ],
+      "applications": [
+            "Bếp thương mại",
+            "Dịch vụ dọn phòng",
+            "Chế biến thực phẩm nguội",
+            "Vệ sinh nhẹ"
+      ],
+      "materialName": "TPE không bột cao cấp"
+},
       zh: {
         "name": "Winlyex 无粉乙烯基防护手套",
         "tagline": "经典无粉 PVC 材质，严谨质控，通用型高性价比之选。",
@@ -1340,6 +1394,24 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+    vi: {
+      "name": "Găng tay Thermo Vinyl Siêu Dày WINLYEX Extra",
+      "tagline": "Độ dày vượt trội & Bảo vệ hóa chất",
+      "description": "Công thức thermo vinyl tăng cường độ dày mang lại khả năng kháng hóa chất cao và giảm 70% lượng khí thải carbon.",
+      "features": [
+            "Siêu bền dai",
+            "Giảm 70% phát thải carbon",
+            "Rào cản bảo vệ cao",
+            "Chống rách"
+      ],
+      "applications": [
+            "Vệ sinh công nghiệp nặng",
+            "Pha chế hóa chất nhẹ",
+            "Bảo trì",
+            "Nông nghiệp & Làm vườn"
+      ],
+      "materialName": "Hợp chất Thermo Vinyl Composite"
+},
       zh: {
         "name": "Winlyex 热成型乙烯基手套",
         "tagline": "热压一体成型工艺，高阻隔性，适合大批量消耗场景。",
@@ -1751,6 +1823,24 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+    vi: {
+      "name": "Găng tay khám bệnh MEDILEX (Healthy Touch)",
+      "tagline": "Khám lâm sàng và chăm sóc sức khỏe",
+      "description": "Găng tay khám không tiệt trùng được thiết kế chuyên biệt cho môi trường thăm khám lâm sàng và y tế.",
+      "features": [
+            "Kiểm tra theo chứng từ",
+            "Thẩm định theo thị trường",
+            "Không tiệt trùng",
+            "Cảm giác xúc giác tốt"
+      ],
+      "applications": [
+            "Phòng khám đa khoa",
+            "Chăm sóc bệnh nhân",
+            "Xét nghiệm & Lấy mẫu",
+            "Chăm sóc nha khoa"
+      ],
+      "materialName": "Hỗn hợp Polymer y tế / TPE"
+},
       zh: {
         "name": "Medilex 医用及卫生级 TPE 手套",
         "tagline": "严苛卫生级标准制造，高抗拉伸强韧度，专为健康与检查设计。",
@@ -2166,6 +2256,24 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+    vi: {
+      "name": "Găng tay đa năng FLOREX",
+      "tagline": "Thiết kế co giãn & Cảm giác mềm mại",
+      "description": "Găng tay bảo hộ đa dụng tiện lợi cho hộ gia đình, dịch vụ ăn uống và vệ sinh tổng hợp.",
+      "features": [
+            "Mềm mại thoải mái",
+            "Đa bề mặt",
+            "Chi phí kinh tế",
+            "Nhiều màu sắc"
+      ],
+      "applications": [
+            "Hộ gia đình",
+            "Nhà hàng & Quán cà phê",
+            "Vệ sinh văn phòng",
+            "Thẩm mỹ & Spa"
+      ],
+      "materialName": "Hỗn hợp Polymer co giãn"
+},
       zh: {
         "name": "Florex 多功能彩色防护手套",
         "tagline": "缤纷多色区分管理，出众弹性，美容美发与餐饮首选。",
@@ -2579,6 +2687,24 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+    vi: {
+      "name": "Găng tay nhạy cảm Copolymer SLIMFIT",
+      "tagline": "Thoáng khí & Chống mồ hôi tay",
+      "description": "Phát triển với công nghệ thoáng khí giúp chống bí mồ hôi tay trong khi vẫn duy trì cảm giác cầm nắm xúc giác chính xác.",
+      "features": [
+            "Thoáng khí",
+            "Chống mồ hôi tay",
+            "Tái chế 100%",
+            "Ôm sát ngón tay"
+      ],
+      "applications": [
+            "Lắp ráp điện tử",
+            "Thao tác tinh xảo",
+            "Chia chọn thực phẩm",
+            "Thẩm mỹ viện"
+      ],
+      "materialName": "Copolymer không bột"
+},
       zh: {
         "name": "Slimfit 共聚物轻薄贴合手套",
         "tagline": "微米级共聚物材料，超轻薄裸感体验，高灵敏触觉反馈。",

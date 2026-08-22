@@ -5,7 +5,7 @@ import type { Locale } from '../i18n/locales';
 
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
-const locales: Locale[] = ['tr', 'en', 'ru', 'fa', 'mk', 'sr', 'sq', 'zh'];
+const locales: Locale[] = ['tr', 'en', 'ru', 'fa', 'mk', 'sr', 'sq', 'zh', 'vi'];
 const pathnameFor = (item: Locale) => item === 'tr' ? '/instagram/tedarikci-dogrulama/' : `/${item}/instagram/tedarikci-dogrulama/`;
 const siteUrl = (item: Locale) => site.origin + pathnameFor(item);
 const alternates = Object.fromEntries([...locales.map((item) => [item, siteUrl(item)]), ['x-default', siteUrl('en')]]);
@@ -31,6 +31,38 @@ const copy = {
   },
   sq: {
     title: 'Verifikimi i furnizuesit: 5 sinjale rreziku | Teyfik Gökdemir', description: 'Pesë sinjale rreziku gjatë verifikimit të kompanisë, ofertës, dokumenteve, kapacitetit dhe pagesës.', eyebrow: 'Për vizitorët nga Instagrami · Verifikimi i furnizuesit', heading: 'Po verifikoni një furnizues? Këto 5 sinjale kërkojnë më shumë kontroll.', lead: 'Këto nuk janë akuza. Janë sinjale që kërkojnë më shumë prova përpara vendimit.', opening: ['Një faqe web dhe një çmim i ulët nuk mjaftojnë për të vlerësuar furnizuesin. Kontrolloni së bashku palën, produktin, dokumentet, kapacitetin, kushtet dhe dorëzimin.', 'Kjo faqe vazhdon postimin e tretë në Instagram. Një sinjal nuk është përfundim, por tregon se ku mungojnë provat.'], sectionLabel: 'SINJALE PËR VERIFIKIM', sectionTitle: 'Pesë sinjale rreziku para pagesës.', sectionLead: 'Qëllimi është ta mbështesni vendimin tregtar në informacione të verifikueshme.', decisionLabel: 'STANDARDI TREGTAR', decisionTitle: 'Përfundoni verifikimin para porosisë.', decisionText: 'Mblidhni të dhënat për kompaninë, produktin, dokumentet, çmimin dhe dorëzimin në një vend. Mos vazhdoni me pika të paverifikuara.', ctseg: 'Dërgoni kërkesë te CTSEG ↗', whatsapp: 'Shkruani një mesazh të shkurtër', relatedLabel: 'HAPI TJETËR', relatedTitle: 'Kthehuni te lista e kontrollit tregtar.', relatedText: 'Rishikoni pesë pyetjet për produktin, tregun, furnizuesin, kushtet dhe hapin tjetër.', related: 'Hapni listën e kontrollit ↗', instagram: 'Kthehuni te Instagrami @teyfikgokdemir ↗', whatsappText: 'Përshëndetje Teyfik, po ju kontaktoj nga përmbajtja e Instagramit për verifikimin e furnizuesit. Dua të flas për: ', signals: [['Të dhënat e kompanisë nuk verifikohen', 'Adresa, regjistrimi, fabrika dhe personi i kontaktit duhet të përputhen.', 'Kontrolloni identitetin dhe prodhimin.'], ['Oferta është shumë e mirë', 'Çmimi jashtëzakonisht i ulët ose kushtet e paqarta kërkojnë kontroll shtesë.', 'Krahasoni të gjithë kuadrin tregtar.'], ['Dokumentet ose mostrat nuk gjurmohen', 'Certifikatat, analizat dhe mostrat duhet të kenë një burim të verifikueshëm.', 'Kontrolloni burimin.'], ['Kapaciteti dhe dorëzimi nuk janë të qarta', 'Stoku, MOQ, koha e prodhimit dhe kushtet e dorëzimit duhet të jenë të qarta.', 'Pyetni për operacionin pas ofertës.'], ['Ka presion para verifikimit', 'Pagesa urgjente, kushtet që ndryshojnë ose përgjigjet e paqarta kërkojnë kujdes.', 'Mos e ulni standardin nën presion.']],
+  },
+  vi: {
+    title: 'Xác minh nhà cung cấp: 5 Tín hiệu rủi ro | Teyfik Gökdemir',
+    description: 'Năm tín hiệu cảnh báo rủi ro cần kiểm tra kỹ lưỡng khi thẩm định nhà cung cấp: thông tin doanh nghiệp, báo giá bất thường, tính xác thực của chứng từ, công suất và áp lực thanh toán.',
+    eyebrow: 'Dành cho khách từ Instagram · Xác minh nhà cung cấp',
+    heading: 'Năm tín hiệu rủi ro tôi chú trọng khi xác minh nhà cung cấp.',
+    lead: 'Đây không phải là lời quy chụp, mà là tín hiệu cảnh báo bạn cần yêu cầu thêm bằng chứng xác thực trước khi thanh toán hoặc ký hợp đồng.',
+    opening: [
+      'Không thể đánh giá độ tin cậy của nhà cung cấp chỉ qua trang web hay bảng báo giá. Đối tác, sản phẩm, chất lượng, năng lực, chứng từ và mô hình giao hàng cần được đánh giá đồng bộ.',
+      'Trang này nối tiếp chia sẻ thứ ba trên Instagram. Một tín hiệu đơn lẻ chưa phải là kết luận cuối cùng, nhưng đủ để bạn tạm dừng và bổ sung bằng chứng trước khi tiến hành.'
+    ],
+    sectionLabel: 'TÍN HIỆU NGHIÊN CỨU',
+    sectionTitle: 'Năm cờ đỏ, năm câu hỏi xác minh.',
+    sectionLead: 'Mục tiêu là củng cố bằng chứng thực tế cho quyết định thương mại của bạn.',
+    decisionLabel: 'CHUẨN MỰC QUYẾT ĐỊNH',
+    decisionTitle: 'Hoàn thiện bằng chứng trước khi đặt hàng hoặc thanh toán.',
+    decisionText: 'Nếu thiếu thông tin, hãy tạm dừng và đối chiếu với các nguồn độc lập. Tập hợp thông tin về sản phẩm, đối tác, chứng từ, giá cả và mô hình giao hàng trong cùng một hồ sơ.',
+    ctseg: 'Gửi yêu cầu thương mại tới CTSEG ↗',
+    whatsapp: 'Gửi tin nhắn ngắn gọn',
+    relatedLabel: 'THEO DÕI CHUỖI BÀI',
+    relatedTitle: 'Quay lại danh mục kiểm tra cơ hội thương mại.',
+    relatedText: 'Xem lại năm câu hỏi về sản phẩm, thị trường, nhà cung cấp, điều khoản và bước tiếp theo trước khi đánh giá một cơ hội.',
+    related: 'Mở danh mục kiểm tra ↗',
+    instagram: 'Quay lại Instagram @teyfikgokdemir ↗',
+    whatsappText: 'Xin chào Teyfik, tôi liên hệ từ nội dung xác minh nhà cung cấp trên Instagram. Chủ đề muốn trao đổi: ',
+    signals: [
+      ['Thông tin công ty không thể xác minh', 'Nếu địa chỉ, đăng ký kinh doanh, cơ sở sản xuất, người đại diện hoặc kênh liên lạc không khớp nhau, hãy đào sâu nghiên cứu.', 'Kiểm tra pháp nhân và năng lực thực tế.'],
+      ['Báo giá tốt một cách bất thường', 'Mức giá thấp hơn hẳn thị trường đi kèm quy cách sản phẩm mơ hồ hoặc điều kiện giao hàng không rõ ràng cần được xem xét cẩn trọng.', 'So sánh toàn bộ khung thương mại.'],
+      ['Chứng từ hoặc mẫu thử không thể truy xuất nguồn gốc', 'Nếu chứng chỉ, kết quả phân tích, xuất xứ, thông số kỹ thuật hoặc mẫu thử không thể truy nguyên nguồn gốc, hồ sơ chưa hoàn tất.', 'Kiểm tra tính có thể xác minh.'],
+      ['Năng lực sản xuất và mô hình giao nhận mơ hồ', 'Nếu công suất, tồn kho, MOQ, thời gian sản xuất, điểm xuất hàng và điều kiện giao hàng không rõ ràng thì không thể đo lường tính khả thi của giá.', 'Hỏi rõ quy trình vận hành đằng sau.'],
+      ['Bị thúc ép thanh toán trước khi hoàn tất xác minh', 'Yêu cầu thanh toán vội vã, tài khoản ngân hàng không rõ ràng hoặc né tránh các câu hỏi then chốt là tín hiệu cần thận trọng.', 'Không hạ thấp chuẩn mực xác minh dưới áp lực.']
+    ]
   },
   zh: {
     title: '国际供应商核验：5 大风险预警信号 | Teyfik Gökdemir',

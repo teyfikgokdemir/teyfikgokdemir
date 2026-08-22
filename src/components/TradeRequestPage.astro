@@ -5,11 +5,11 @@ import type { Locale } from '../i18n/locales';
 
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
-const locales: Locale[] = ['tr', 'en', 'ru', 'fa', 'mk', 'sr', 'sq', 'zh'];
+const locales: Locale[] = ['tr', 'en', 'ru', 'fa', 'mk', 'sr', 'sq', 'zh', 'vi'];
 const pathnameFor = (item: Locale) => item === 'tr' ? '/instagram/trade-request/' : `/${item}/instagram/trade-request/`;
 const siteUrl = (item: Locale) => site.origin + pathnameFor(item);
 const alternates = Object.fromEntries([...locales.map((item) => [item, siteUrl(item)]), ['x-default', siteUrl('en')]]);
-const ctsegLocale = locale === 'tr' ? 'tr' : locale === 'fa' ? 'fa' : 'en';
+const ctsegLocale = locale === 'tr' ? 'tr' : locale === 'fa' ? 'fa' : locale === 'zh' ? 'zh' : locale === 'vi' ? 'vi' : 'en';
 const ctsegBase = `https://ctseg.com.tr/${ctsegLocale}`;
 
 const copy = {
@@ -20,6 +20,28 @@ const copy = {
   mk: { title: 'Центар за трговско барање | Teyfik Gökdemir', description: 'Изберете трговски пат: добавувач во Турција или купувачи и пазари за вашиот производ.', eyebrow: 'За посетители од Instagram · Трговско барање', heading: 'Сакате трговија со Турција? Започнете со јасно барање.', lead: 'Изберете дали барате добавувач или купувачи и пазари за вашиот производ.', intro: 'Јасното барање е првиот чекор кон корисен комерцијален разговор.', buyerTitle: 'Барам добавувач', buyerText: 'Споделете производ, количина, целен пазар и услови за испорака.', buyerCta: 'Испратете барање за добавувач ↗', supplierTitle: 'Барам купувачи и пазари', supplierText: 'Споделете производ, капацитет, документи и целни пазари.', supplierCta: 'Испратете барање за купувачи ↗', proofTitle: 'Што содржи добро барање?', proofText: 'Производ, количина, целна земја, документи, испорака и следен чекор.', proofItems: ['Производ или категорија', 'Количина и спецификација', 'Земја на потекло или цел', 'Квалитет и документи', 'Модел на испорака'], finalTitle: 'Изберете пат и направете прв чекор.', finalText: 'Кратка порака со јасна цел го забрзува процесот.', whatsappBuyer: 'Здраво CTSEG, барам добавувач од Турција. Производ: … Пазар: …', whatsappSupplier: 'Здраво CTSEG, барам купувачи и пазар за мојот производ. Производ: … Пазар: …', instagram: 'Назад на Instagram ↗' },
   sr: { title: 'Centar za trgovinski zahtev | Teyfik Gökdemir', description: 'Izaberite trgovinski put: dobavljač u Turskoj ili kupci i tržišta za vaš proizvod.', eyebrow: 'Za posetioce sa Instagrama · Trgovinski zahtev', heading: 'Želite trgovinu sa Turskom? Počnite jasnim zahtevom.', lead: 'Izaberite da li tražite dobavljača ili kupce i tržišta za svoj proizvod.', intro: 'Jasan zahtev je prvi korak ka korisnom poslovnom razgovoru.', buyerTitle: 'Tražim dobavljača', buyerText: 'Podelite proizvod, količinu, ciljno tržište i uslove isporuke.', buyerCta: 'Pošaljite zahtev za dobavljača ↗', supplierTitle: 'Tražim kupce i tržišta', supplierText: 'Podelite proizvod, kapacitet, dokumenta i ciljna tržišta.', supplierCta: 'Pošaljite zahtev za kupce ↗', proofTitle: 'Šta sadrži dobar zahtev?', proofText: 'Proizvod, količina, ciljna zemlja, dokumenti, isporuka i sledeći korak.', proofItems: ['Proizvod ili kategorija', 'Količina i specifikacija', 'Zemlja porekla ili cilj', 'Kvalitet i dokumenta', 'Model isporuke'], finalTitle: 'Izaberite put i napravite prvi korak.', finalText: 'Kratka poruka sa jasnom namerom ubrzava proces.', whatsappBuyer: 'Zdravo CTSEG, tražim dobavljača iz Turske. Proizvod: … Tržište: …', whatsappSupplier: 'Zdravo CTSEG, tražim kupce i tržište za svoj proizvod. Proizvod: … Tržište: …', instagram: 'Nazad na Instagram ↗' },
   sq: { title: 'Qendra e kërkesës tregtare | Teyfik Gökdemir', description: 'Zgjidhni rrugën tregtare: furnizues në Turqi ose blerës dhe tregje për produktin tuaj.', eyebrow: 'Për vizitorët nga Instagrami · Kërkesë tregtare', heading: 'Dëshironi të tregtoni me Turqinë? Filloni me kërkesë të qartë.', lead: 'Zgjidhni nëse kërkoni furnizues apo blerës dhe tregje për produktin tuaj.', intro: 'Një kërkesë e qartë është hapi i parë drejt një bisede të dobishme tregtare.', buyerTitle: 'Kërkoj furnizues', buyerText: 'Ndani produktin, sasinë, tregun e synuar dhe kushtet e dorëzimit.', buyerCta: 'Dërgoni kërkesë për furnizues ↗', supplierTitle: 'Kërkoj blerës dhe tregje', supplierText: 'Ndani produktin, kapacitetin, dokumentet dhe tregjet e synuara.', supplierCta: 'Dërgoni kërkesë për blerës ↗', proofTitle: 'Çfarë përmban një kërkesë e mirë?', proofText: 'Produkt, sasi, vend i synuar, dokumente, dorëzim dhe hapi tjetër.', proofItems: ['Produkt ose kategori', 'Sasi dhe specifikim', 'Vend origjine ose synimi', 'Cilësi dhe dokumente', 'Model dorëzimi'], finalTitle: 'Zgjidhni rrugën dhe bëni hapin e parë.', finalText: 'Një mesazh i shkurtër me qëllim të qartë e shpejton procesin.', whatsappBuyer: 'Përshëndetje CTSEG, po kërkoj furnizues nga Turqia. Produkti: … Tregu: …', whatsappSupplier: 'Përshëndetje CTSEG, po kërkoj blerës dhe treg për produktin tim. Produkti: … Tregu: …', instagram: 'Kthehuni në Instagram ↗' },
+  vi: {
+    title: 'Trung tâm tiếp nhận yêu cầu thương mại | Teyfik Gökdemir',
+    description: 'Lựa chọn đúng hướng tiếp cận thương mại với Thổ Nhĩ Kỳ: tìm kiếm nhà cung cấp hoặc mở rộng thị trường và tìm người mua cho sản phẩm của bạn.',
+    eyebrow: 'Dành cho khách từ Instagram · Yêu cầu thương mại',
+    heading: 'Bắt đầu giao thương với Thổ Nhĩ Kỳ từ một yêu cầu chuẩn xác.',
+    lead: 'Hai nhu cầu thương mại khác nhau cần hai điểm khởi đầu khác nhau. Chọn nhu cầu của bạn để chuyển sang quy trình CTSEG tương ứng.',
+    intro: 'Bạn đang tìm kiếm nhà cung cấp, hay tìm kiếm người mua và thị trường cho sản phẩm của mình? Một yêu cầu rõ ràng là bước đầu tiên cho cuộc trao đổi hữu ích.',
+    buyerTitle: 'Tôi đang tìm kiếm nhà cung cấp',
+    buyerText: 'Nếu bạn đang tìm kiếm một sản phẩm, nhà sản xuất hoặc nguồn hàng từ Thổ Nhĩ Kỳ, hãy chia sẻ thông tin sản phẩm, sản lượng, thị trường mục tiêu và kỳ vọng giao hàng.',
+    buyerCta: 'Gửi yêu cầu tìm nhà cung cấp ↗',
+    supplierTitle: 'Tôi đang tìm kiếm người mua & thị trường',
+    supplierText: 'Nếu bạn là nhà sản xuất hoặc doanh nghiệp xuất khẩu, hãy giới thiệu sản phẩm, năng lực, chứng từ và thị trường mục tiêu để cùng tìm kiếm đối tác phù hợp.',
+    supplierCta: 'Gửi yêu cầu mở rộng thị trường ↗',
+    proofTitle: 'Một yêu cầu thương mại hiệu quả gồm những gì?',
+    proofText: 'Nêu rõ tên sản phẩm, số lượng, quốc gia mục tiêu, chứng từ hiện có, kỳ vọng giao hàng và bước tiếp theo. Thông tin thiếu hụt sẽ gây nhầm lẫn và mất thời gian.',
+    proofItems: ['Sản phẩm hoặc danh mục', 'Số lượng và thông số kỹ thuật', 'Quốc gia xuất xứ hoặc mục tiêu', 'Nhu cầu chất lượng và chứng từ', 'Mô hình giao nhận ưu tiên'],
+    finalTitle: 'Chọn định hướng và thực hiện bước đầu tiên.',
+    finalText: 'Một thông điệp ngắn gọn với mục đích rõ ràng sẽ giúp quá trình đánh giá thương mại diễn ra nhanh chóng.',
+    whatsappBuyer: 'Xin chào CTSEG, tôi đang tìm nhà cung cấp từ Thổ Nhĩ Kỳ. Sản phẩm: … Thị trường mục tiêu: … Chi tiết ngắn gọn: …',
+    whatsappSupplier: 'Xin chào CTSEG, tôi đang tìm người mua và thị trường cho sản phẩm. Sản phẩm: … Quốc gia xuất xứ: … Thị trường mục tiêu: …',
+    instagram: 'Quay lại Instagram ↗'
+  },
   zh: {
     title: '跨境商业需求对接中心 | Teyfik Gökdemir',
     description: '选择精准的商业对接路径：寻找土耳其优质制造商与供应商，或为您的产品拓展土耳其及周边分销市场。',

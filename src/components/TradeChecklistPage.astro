@@ -5,7 +5,7 @@ import type { Locale } from '../i18n/locales';
 
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
-const locales: Locale[] = ['tr', 'en', 'ru', 'fa', 'mk', 'sr', 'sq', 'zh'];
+const locales: Locale[] = ['tr', 'en', 'ru', 'fa', 'mk', 'sr', 'sq', 'zh', 'vi'];
 const pathnameFor = (item: Locale) => item === 'tr' ? '/instagram/tedarik/' : `/${item}/instagram/tedarik/`;
 const siteUrl = (item: Locale) => site.origin + pathnameFor(item);
 const alternates = Object.fromEntries([
@@ -34,6 +34,37 @@ const copy = {
   },
   sq: {
     title: 'Lista e kontrollit për një mundësi tregtare | Teyfik Gökdemir', description: 'Pesë pyetje për produktin, tregun, furnizuesin dhe kushtet përpara një vendimi tregtar.', eyebrow: 'Për vizitorët nga Instagrami · Kornizë për vendim tregtar', heading: 'A është vërtet gati mundësia tregtare?', lead: 'Një mundësi premtuese nuk është gjithmonë e zbatueshme. Nisni me pesë pyetje që lidhin produktin, tregun, palën tjetër dhe kushtet.', opening: ['Një mundësi emocionuese nuk do të thotë se është gati për tregti. Produkti, blerësi, pala e verifikueshme dhe kushtet duhet të shihen së bashku.', 'Kjo listë vazhdon postimin e dytë në Instagram. Nëse një përgjigje nuk është e qartë, plotësoni të dhënat para vendimit.'], sectionLabel: 'KONTROLLI I PARË', sectionTitle: 'Pesë pyetje para vendimit.', sectionLead: 'Pyetjet tregojnë se cilat të dhëna mungojnë dhe cili është hapi i ardhshëm i kërkimit.', decisionLabel: 'PIKA E VENDIMIT', decisionTitle: 'Mungojnë të dhënat apo koordinimi?', decisionText: 'Kur produkti dhe tregu janë të qarta, por furnizuesi, dokumentet, oferta ose dorëzimi jo, duhen verifikim, krahasim dhe koordinim.', ctseg: 'Dërgoni kërkesë te CTSEG ↗', whatsapp: 'Shkruani një mesazh të shkurtër', returnLabel: 'VAZHDONI', returnTitle: 'Pyetja tjetër është në Instagram.', returnText: 'Cila nga pesë pikat e ngadalëson më shumë procesin tuaj? Kthehuni te profili në Instagram dhe ndani numrin.', instagram: 'Kthehuni te Instagrami @teyfikgokdemir ↗', whatsappText: 'Përshëndetje Teyfik, po ju kontaktoj nga lista e kontrollit të mundësisë tregtare në Instagram. Dua të flas për: ', checks: [['A është produkti i qartë?', 'Pa specifikim, cilësi, paketim, sasi minimale dhe përdorim, ofertat nuk krahasohen.', 'Specifikimi i produktit'], ['A janë të qarta tregu dhe blerësi?', 'Vendi i synuar, lloji i blerësit dhe sinjali i kërkesës duhet të konfirmohen me kërkim.', 'Tregu dhe blerësi'], ['A është furnizuesi i verifikuar?', 'Kapaciteti, prodhimi, dokumentet, cilësia dhe dorëzimi kontrollohen së bashku.', 'Palë e verifikueshme'], ['A janë kushtet të krahasueshme?', 'Çmimi nuk mjafton. Krahasoni pagesën, dorëzimin, dokumentet, logjistikën dhe rrezikun.', 'Ofertë e krahasueshme'], ['A është i qartë hapi tjetër?', 'Përgjegjësi dhe afati për mostër, RFQ, verifikim ose porosi pilot duhet të jenë të qarta.', 'Veprim i zbatueshëm']],
+  },
+  vi: {
+    title: 'Danh mục kiểm tra cơ hội thương mại | Teyfik Gökdemir',
+    description: 'Năm câu hỏi cốt lõi về sản phẩm, thị trường, nhà cung cấp và điều khoản thương mại trước khi đưa ra quyết định kinh doanh.',
+    eyebrow: 'Dành cho khách từ Instagram · Khung ra quyết định thương mại',
+    heading: 'Cơ hội thương mại đã thực sự sẵn sàng chưa?',
+    lead: 'Một cơ hội đầy hứa hẹn không phải lúc nào cũng khả thi. Hãy bắt đầu với năm câu hỏi đưa sản phẩm, thị trường, đối tác và điều khoản thương mại vào cùng một khung đánh giá.',
+    opening: [
+      'Một cơ hội có vẻ hấp dẫn không có nghĩa là nó đã sẵn sàng về mặt thương mại. Đánh giá ban đầu phải kết nối đúng sản phẩm, đúng người mua, đối tác có thể xác minh và các điều khoản khả thi.',
+      'Danh mục này là phần nối tiếp chia sẻ trên Instagram. Nếu chưa có câu trả lời rõ ràng cho bất kỳ câu hỏi nào, hãy bổ sung dữ liệu còn thiếu trước khi quyết định.'
+    ],
+    sectionLabel: 'KIỂM TRA BAN ĐẦU',
+    sectionTitle: 'Năm câu hỏi trước khi đưa ra quyết định.',
+    sectionLead: 'Những câu hỏi này giúp làm rõ thông tin nào còn thiếu và xác định bước nghiên cứu tiếp theo.',
+    decisionLabel: 'ĐIỂM RA QUYẾT ĐỊNH',
+    decisionTitle: 'Điểm nghẽn là dữ liệu hay sự điều phối?',
+    decisionText: 'Nếu sản phẩm và thị trường đã rõ nhưng nhà cung cấp, chứng từ, báo giá hoặc mô hình giao nhận chưa rõ, vấn đề không chỉ là nghiên cứu giá. Cần kết hợp xác minh, so sánh và điều phối đối tác.',
+    ctseg: 'Gửi yêu cầu thương mại tới CTSEG ↗',
+    whatsapp: 'Gửi tin nhắn ngắn gọn',
+    returnLabel: 'TIẾP TỤC',
+    returnTitle: 'Cùng thảo luận câu hỏi tiếp theo trên Instagram.',
+    returnText: 'Trong năm điểm này, điểm nào khiến công việc của bạn mất nhiều thời gian nhất? Quay lại Instagram để chia sẻ câu trả lời của bạn.',
+    instagram: 'Quay lại Instagram @teyfikgokdemir ↗',
+    whatsappText: 'Xin chào Teyfik, tôi liên hệ từ danh mục kiểm tra cơ hội thương mại trên Instagram. Chủ đề muốn trao đổi: ',
+    checks: [
+      ['Sản phẩm đã rõ ràng chưa?', 'Nếu thông số kỹ thuật, mức chất lượng, quy cách đóng gói, MOQ và mục đích sử dụng chưa rõ ràng thì không thể so sánh các báo giá.', 'Quy cách & Đặc tính sản phẩm'],
+      ['Thị trường và người mua đã xác định chưa?', 'Quốc gia mục tiêu, phân khúc người mua, tín hiệu nhu cầu và rào cản gia nhập thị trường phải dựa trên nghiên cứu thực tế.', 'Thị trường mục tiêu & Hồ sơ người mua'],
+      ['Nhà cung cấp đã được xác minh chưa?', 'Công suất, năng lực sản xuất thực tế, chứng chỉ chất lượng, hồ sơ pháp lý và khả năng giao hàng phải được kiểm tra đồng bộ.', 'Đối tác có thể xác minh'],
+      ['Điều khoản thương mại có thể so sánh được không?', 'Giá cả đơn thuần chưa đủ để ra quyết định. Thanh toán, giao hàng, chứng từ, logistics và rủi ro phải được đánh giá cùng nhau.', 'Báo giá có thể so sánh'],
+      ['Bước tiếp theo đã thực sự rõ ràng chưa?', 'Người chịu trách nhiệm và thời hạn cho việc gửi mẫu, phát hành RFQ, xác minh, đàm phán hoặc đặt đơn hàng thử nghiệm phải được xác định rõ.', 'Hành động khả thi']
+    ]
   },
   zh: {
     title: '商业机会评估清单 | Teyfik Gökdemir',

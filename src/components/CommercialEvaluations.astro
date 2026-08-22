@@ -1,5 +1,5 @@
 ---
-type Lang = 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa' | 'zh';
+type Lang = 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa' | 'zh' | 'vi';
 
 type Evaluation = {
   market: string;
@@ -191,6 +191,46 @@ const copy: Record<Lang, Copy> = {
     ],
     cta: '与 CTSEG 沟通您的采购或贸易需求',
   },
+  vi: {
+    label: 'Các đánh giá thương mại đang tiến hành',
+    title: 'Các tuyến dự án phát triển kết nối các thị trường.',
+    lead: 'Các lĩnh vực này đại diện cho các dự án thương mại quốc tế đang triển khai, tích hợp toàn diện các yếu tố sản phẩm, đối tác, chứng từ, báo giá và giao nhận thực tế.',
+    status: 'Đang trong giai đoạn đánh giá',
+    disclaimer: 'Bu bölüm sonuçlanmış anlaşma, garanti edilen tedarik veya kamuya açıklanmış müşteri listesi değildir. Phần này không cấu thành thỏa thuận đã ký kết, cam kết cung ứng bảo đảm hoặc danh sách khách hàng công khai. Thương mại bảo mật được tôn trọng tối đa.',
+    evaluations: [
+      {
+        market: 'Châu Á · Năng lượng & Nguyên liệu',
+        title: 'Hành lang cung ứng nhiên liệu sinh học',
+        text: 'Đánh giá sản lượng nguyên liệu năng lượng, tính tương thích kỹ thuật, nguồn gốc xuất xứ, mô hình giao hàng và tính sẵn sàng của đối tác trong một khung thương mại thống nhất.',
+        signals: ['Khung kỹ thuật & Sản phẩm', 'Hành lang cung ứng', 'Mô hình giao hàng'],
+      },
+      {
+        market: 'Thị trường tuyển chọn · Dầu thực vật',
+        title: 'Xuất khẩu dầu hướng dương đóng gói',
+        text: 'Kết nối thông số kỹ thuật, nhãn mác, MOQ, cơ cấu báo giá và điều kiện thị trường đích cho sản phẩm đóng chai PET hoặc thùng thiếc.',
+        signals: ['Bao bì & Nhãn mác', 'RFQ & Báo giá', 'Tính phù hợp thị trường'],
+      },
+      {
+        market: 'Iran ↔ Thổ Nhĩ Kỳ · Thương mại thực phẩm',
+        title: 'Nhập khẩu hạt và trái cây sấy khô',
+        text: 'Thiết lập luồng cung ứng khả thi dựa trên phân hạng sản phẩm, nguồn gốc, cỡ hạt, mẫu đối chứng, phân tích lô hàng, bao bì và chứng từ nhập khẩu.',
+        signals: ['Chất lượng & Phân tích', 'Truy xuất nguồn gốc', 'Điều phối nhập khẩu'],
+      },
+      {
+        market: 'Thổ Nhĩ Kỳ → Thị trường khu vực · Vệ sinh y tế',
+        title: 'Phân phối găng tay dùng một lần',
+        text: 'Cấu trúc ứng dụng sản phẩm, hồ sơ chứng từ, hồ sơ người mua, mô hình phân phối và các tiếp xúc thương mại ban đầu cho danh mục REFLEX.',
+        signals: ['Ứng dụng sản phẩm', 'Chứng chỉ chất lượng', 'Mô hình phân phối'],
+      },
+      {
+        market: 'Châu Âu · Dầu thực vật',
+        title: 'Tiếp xúc ban đầu & Khung báo giá',
+        text: 'Làm rõ nhu cầu của người mua, quy cách đóng gói, giả định giá và điều kiện giao hàng trong đánh giá ban đầu cho xuất khẩu dầu hướng dương.',
+        signals: ['Nhu cầu người mua', 'Kỷ luật báo giá', 'Bước hành động thương mại tiếp theo'],
+      },
+    ],
+    cta: 'Trao đổi về một cơ hội thương mại',
+  },
 };
 
 const contactLinks: Record<Lang, string> = {
@@ -202,6 +242,7 @@ const contactLinks: Record<Lang, string> = {
   sq: 'https://ctseg.com.tr/en/contact/',
   fa: 'https://ctseg.com.tr/fa/contact/',
   zh: 'https://ctseg.com.tr/en/contact/',
+  vi: 'https://ctseg.com.tr/vi/contact/',
 };
 
 const text = copy[locale];

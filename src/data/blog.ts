@@ -1,4 +1,4 @@
-export const blogLocales = ['en', 'tr', 'ru', 'mk', 'sr', 'sq', 'fa', 'zh'] as const;
+export const blogLocales = ['en', 'tr', 'ru', 'mk', 'sr', 'sq', 'fa', 'zh', 'vi'] as const;
 export type BlogLocale = (typeof blogLocales)[number];
 
 export const localeMeta: Record<BlogLocale, { name: string; dir: 'ltr' | 'rtl'; blog: string; home: string; read: string; related: string; published: string; description: string; eyebrow: string; expertise: string }> = {
@@ -10,6 +10,7 @@ export const localeMeta: Record<BlogLocale, { name: string; dir: 'ltr' | 'rtl'; 
   sq: { name: 'Shqip', dir: 'ltr', blog: 'Analiza', home: 'Kryefaqja', read: 'Lexo artikullin', related: 'Analiza të lidhura', published: 'Publikuar', description: 'Analiza praktike për furnizimin strategjik, prokurimin, verifikimin e furnitorëve dhe tregtinë ndërkombëtare.', eyebrow: 'Tregti Ndërkombëtare dhe Furnizim Strategjik', expertise: 'Eksploroni ekspertizën në tregti dhe furnizim strategjik' },
   fa: { name: 'فارسی', dir: 'rtl', blog: 'بینش‌ها', home: 'خانه', read: 'مطالعه مقاله', related: 'مطالب مرتبط', published: 'تاریخ انتشار', description: 'بینش‌های عملی درباره تأمین راهبردی، خرید، اعتبارسنجی تأمین‌کننده و عملیات تجارت بین‌المللی.', eyebrow: 'تجارت بین‌المللی و تأمین راهبردی', expertise: 'تخصص تجارت بین‌المللی و تأمین راهبردی را بررسی کنید' },
   zh: { name: '中文', dir: 'ltr', blog: '商业洞察', home: '首页', read: '阅读全文', related: '相关文章', published: '发布日期', description: '关于战略采购、供应链核验、工厂实地调研及跨境国际贸易实战洞察。', eyebrow: '国际贸易与战略采购', expertise: '探索国际贸易与战略采购专业体系' },
+  vi: { name: 'Tiếng Việt', dir: 'ltr', blog: 'Góc nhìn & Bài viết', home: 'Trang chủ', read: 'Đọc bài viết', related: 'Bài viết liên quan', published: 'Ngày đăng', description: 'Những góc nhìn thực tiễn về thu mua chiến lược, thẩm định nhà máy và vận hành thương mại quốc tế.', eyebrow: 'Thương mại quốc tế & Thu mua chiến lược', expertise: 'Khám phá chuyên môn thương mại quốc tế và thu mua' },
 };
 
 export interface BlogSection { heading: string; paragraphs: string[]; bullets?: string[] }
@@ -32,6 +33,7 @@ export const posts: BlogPost[] = [
   "readingMinutes": 9,
   "title": {
     "zh": "TPE、乙烯基与共聚物手套：B2B 采购与技术决策指南",
+    "vi": "Găng tay TPE, Vinyl và Copolymer: Cẩm nang mua sỉ B2B",
     "ru": "ТПЭ, виниловые и сополимерные перчатки: Руководство B2B-закупок",
     "tr": "TPE, Vinil ve Kopolimer Eldiven: B2B Alım Rehberi",
     "en": "TPE, Vinyl and Copolymer Gloves: B2B Buying Guide",
@@ -42,6 +44,7 @@ export const posts: BlogPost[] = [
   },
   "description": {
     "zh": "对比 TPE、热成型乙烯基及共聚物一次性手套的材料特性、技术指标、食品级合规性及 Reflex 产品矩阵采购指南。",
+    "vi": "So sánh chi tiết đặc tính vật liệu, thông số kỹ thuật, mức độ tuân thủ an toàn thực phẩm giữa găng tay TPE, Thermo Vinyl và Copolymer cùng danh mục sản phẩm Reflex.",
     "ru": "Сравнение материалов ТПЭ, термовинила и сополимерных одноразовых перчаток для B2B-закупок, технический чек-лист и портфель продуктов Reflex.",
     "tr": "B2B tek kullanımlık eldiven alımında TPE, termo vinil ve kopolimer malzemelerin karşılaştırması, teknik kontrol listesi ve Reflex ürün portföyü tedarik rehberi.",
     "en": "A technical B2B purchasing guide comparing TPE, thermo vinyl and copolymer disposable gloves, key evaluation criteria and the Reflex product portfolio.",
@@ -52,6 +55,7 @@ export const posts: BlogPost[] = [
   },
   "intro": {
     "zh": "在 B2B 一次性防护手套采购中，单纯追求低单价往往会带来拉伸撕裂、贴合度差或食品接触不合规的隐性成本。针对食品加工、医疗护理、酒店餐饮及工业清洁等不同场景，深入理解 TPE、热成型乙烯基与共聚物 (Copolymer) 的物理性能与成本边界，是构建高韧性供应链的关键。",
+    "vi": "Trong mua sắm găng tay dùng một lần B2B, việc chỉ tập trung vào đơn giá có thể dẫn đến lựa chọn sai vật liệu và phát sinh chi phí tiềm ẩn do rách, khó thao tác hoặc không đáp ứng chuẩn an toàn thực phẩm. Để phục vụ chế biến thực phẩm, y tế, dịch vụ ăn uống và vệ sinh công nghiệp, việc thấu hiểu hiệu suất cơ lý và giới hạn chi phí của TPE, Thermo Vinyl và Copolymer là chìa khóa xây dựng chuỗi cung ứng bền vững.",
     "ru": "Фокусирование исключительно на цене за единицу при B2B-закупках одноразовых перчаток может привести к неверному выбору материала и операционным сбоям. Грамотное решение требует оценки структуры материала, эластичности, санитарных норм, размеров, упаковки и стабильности поставок.",
     "tr": "B2B tek kullanımlık eldiven alımında yalnızca birim fiyata odaklanmak, hatalı malzeme seçimine ve operasyonel aksaklıklara yol açabilir. Doğru satın alma kararı; malzeme yapısı, esneklik, hijyen standartları, beden aralığı, ambalaj düzeni, lojistik hacimler ve tedarik sürekliliği birlikte değerlendirildiğinde verilir.",
     "en": "Focusing solely on unit price in B2B disposable glove purchasing can lead to incorrect material selection and operational disruptions. A sound procurement decision requires evaluating material structure, elasticity, hygiene compliance, sizing, packaging density, logistics volumes, and supply continuity together.",
@@ -61,6 +65,43 @@ export const posts: BlogPost[] = [
     "fa": "تمرکز صرف بر قیمت واحد در خرید عمده دستکش‌های یک‌بارمصرف می‌تواند به انتخاب نادرست ماده و اختلالات عملیاتی منجر شود. تصمیم درست نیازمند ارزیابی ساختار ماده، انعطاف‌پذیری، استانداردها، بسته‌بندی، لجستیک و تداوم تأمین است."
   },
   "sections": {
+    "vi": [
+      {
+            "heading": "1. So sánh đặc tính vật liệu: TPE, Vinyl và Copolymer",
+            "paragraphs": [
+                  "TPE (Thermoplastic Elastomer) sở hữu độ co giãn vượt trội và cảm giác mềm mại thân thiện với da tay, không chứa protein gây dị ứng latex, là lựa chọn lý tưởng cho tiếp xúc thực phẩm nhiều dầu mỡ và đeo trong thời gian dài.",
+                  "Vinyl (PVC) thông thường có kết cấu ổn định nhưng độ dẻo giảm ở nhiệt độ thấp; trong khi Thermo Vinyl với công nghệ màng ép nhiệt cải tiến mang lại độ bền cơ học cao cùng chi phí tiêu hao đặc biệt kinh tế cho các đơn hàng khối lượng lớn.",
+                  "Copolymer hướng tới trải nghiệm siêu mỏng nhẹ, mang lại độ nhạy xúc giác chính xác cao, đặc biệt phù hợp cho các dây chuyền lắp ráp chi tiết hoặc chia chọn thức ăn nhanh."
+            ]
+      },
+      {
+            "heading": "2. Tiêu chuẩn không bột (Powder-Free) và tuân thủ tiếp xúc thực phẩm",
+            "paragraphs": [
+                  "Ngành chế biến và phân phối thực phẩm áp dụng các quy định quốc tế nghiêm ngặt đối với vật liệu tiếp xúc trực tiếp. Găng tay có bột mang rủi ro lây nhiễm chéo vào sản phẩm, do đó chuẩn không bột (Powder-Free) đã trở thành quy tắc bắt buộc.",
+                  "Đối với môi trường chế biến thịt, bánh ngọt và dầu mỡ, công thức sản xuất phải đảm bảo khả năng chống thẩm thấu chất béo và không thôi nhiễm bất kỳ phụ gia hóa dẻo độc hại nào."
+            ]
+      },
+      {
+            "heading": "3. Xu hướng thay thế nitrile truyền thống bằng các giải pháp kinh tế",
+            "paragraphs": [
+                  "Găng tay nitrile truyền thống thường có biến động giá lớn và chi phí cao. Trong khi đó, các tác vụ vệ sinh, phân loại thực phẩm và dịch vụ ăn uống thông thường không đòi hỏi khả năng chống hóa chất đậm đặc.",
+                  "Việc ứng dụng TPE cao cấp hoặc Copolymer giúp doanh nghiệp tiết kiệm 30% đến 50% chi phí vật tư tiêu hao định kỳ mà vẫn đáp ứng 100% tiêu chuẩn vệ sinh an toàn."
+            ]
+      },
+      {
+            "heading": "4. Danh mục kiểm tra thu mua B2B: Quy cách, MOQ và tối ưu logistics",
+            "paragraphs": [
+                  "Khi đặt hàng khối lượng lớn, bên thu mua cần làm rõ: quy cách đóng hộp (thường 100 cái/hộp), quy cách thùng carton (như 20 hộp/thùng, tương đương 2.000 cái), số lớp xếp pallet và tỷ lệ lấp đầy container.",
+                  "Kích thước bao bì chuẩn hóa giúp tối ưu không gian vận chuyển container đường biển và đường bộ, giảm thiểu tối đa chi phí logistics trên từng đơn vị sản phẩm."
+            ]
+      },
+      {
+            "heading": "5. Hướng dẫn lựa chọn trong danh mục sản phẩm Reflex",
+            "paragraphs": [
+                  "Dòng sản phẩm Reflex đáp ứng đa dạng yêu cầu: Flex Hi-Tech chuyên dụng cho thực phẩm và y tế; Flex Kids cho trẻ em; Winlyex tối ưu chi phí với Thermo Vinyl; Medilex đạt chuẩn khám bệnh; Florex phân màu chống nhiễm khuẩn; và Slimfit mang lại cảm giác đeo nhẹ nhàng chính xác."
+            ]
+      }
+],
     "zh": [
       {
             "heading": "1. 材料特性对比：TPE、乙烯基与共聚物",
@@ -1138,6 +1179,7 @@ export const posts: BlogPost[] = [
   "readingMinutes": 8,
   "title": {
     "zh": "食品企业一次性手套选型指南：合规、安全与成本控制",
+    "vi": "Găng tay cho ngành thực phẩm: Hướng dẫn chọn mua B2B",
     "ru": "Руководство по выбору одноразовых перчаток для пищевого сектора",
     "tr": "Gıda İşletmeleri İçin Tek Kullanımlık Eldiven Seçim Rehberi",
     "en": "Disposable Glove Selection Guide for Food Businesses",
@@ -1148,6 +1190,7 @@ export const posts: BlogPost[] = [
   },
   "description": {
     "zh": "面向食品加工厂、大型餐饮连锁及商超烘焙的一次性手套采购决策框架，涵盖无粉合规、防交叉污染及分色管理。",
+    "vi": "Phân tích chuyên sâu về quy định tiếp xúc thực phẩm, phân vùng chống nhiễm bẩn chéo và tối ưu hóa chi phí tiêu hao trong ngành F&B và chế biến thực phẩm.",
     "ru": "Стандарты пищевой безопасности, сертификация контакта с пищевыми продуктами, выбор ТПЭ и виниловых перчаток для HoReCa и фабрик.",
     "tr": "Restoranlar, catering, gıda üretim tesisleri ve profesyonel mutfaklar için gıda temasına uygun pudrasız, latekssiz ve silikonsuz tek kullanımlık eldiven seçim rehberi.",
     "en": "A practical disposable glove selection guide for restaurants, catering, food processing plants and professional kitchens focusing on food-safe, powder-free solutions.",
@@ -1158,6 +1201,7 @@ export const posts: BlogPost[] = [
   },
   "intro": {
     "zh": "在食品加工与餐饮服务中，手套不仅是阻隔微生物的第一道防线，更是直接影响操作效率与合规审计的关键耗材。不同工位对防滑抓握、耐油脂穿透及耐撕裂度的要求截然不同。",
+    "vi": "Trong ngành chế biến thực phẩm và chuỗi nhà hàng, an toàn vệ sinh và kiểm soát chi phí luôn là hai ưu tiên hàng đầu. Lựa chọn đúng chủng loại găng tay dùng một lần giúp loại bỏ nguy cơ thôi nhiễm hóa chất độc hại vào thực phẩm đồng thời giảm thiểu đáng kể chi phí vận hành hàng tháng.",
     "ru": "В сфере общественного питания и пищевой промышленности гигиена и соответствие нормативам пищевого контакта имеют решающее значение. В этом руководстве рассматриваются ключевые параметры выбора одноразовых перчаток.",
     "tr": "Gıda sektöründe çalışan işletmeler için doğru tek kullanımlık eldiveni seçmek; gıda güvenliği, hijyen sürekliliği ve operasyon hızı açısından kritik öneme sahiptir. Pudrasız, latekssiz, silikonsuz ve doğru beden/renk dağılımı ile planlanan eldiven tedariği işletme risklerini minimize eder.",
     "en": "Choosing the right disposable glove in the food industry is crucial for food safety, continuous hygiene, and operational efficiency. Powder-free, latex-free, silicone-free glove procurement planned with correct sizing and color-coding minimizes operational risks.",
@@ -1167,6 +1211,42 @@ export const posts: BlogPost[] = [
     "fa": "انتخاب دستکش یک‌بارمصرف مناسب در صنعت غذا برای حفظ بهداشت، ایمنی مواد غذایی و سرعت عملیات حیاتی است. تأمین دستکش‌های بدون پودر و لاتکس ریسک‌های بهداشتی را به حداقل می‌رساند."
   },
   "sections": {
+    "vi": [
+      {
+            "heading": "1. Các tiêu chuẩn quốc tế về vật liệu tiếp xúc thực phẩm (Food Contact Compliance)",
+            "paragraphs": [
+                  "Găng tay sử dụng trong ngành thực phẩm phải tuân thủ nghiêm ngặt các chứng nhận an toàn thực phẩm quốc tế, không chứa chất hóa dẻo phthalate độc hại và không giải phóng tạp chất khi tiếp xúc với môi trường axit hoặc dầu mỡ.",
+                  "Việc kiểm tra giấy chứng nhận hợp chuẩn và báo cáo kiểm nghiệm định kỳ là yêu cầu bắt buộc trước khi đưa vào dây chuyền chế biến quy mô công nghiệp."
+            ]
+      },
+      {
+            "heading": "2. Cơ chế phân màu và mã hóa khu vực để ngăn ngừa lây nhiễm chéo",
+            "paragraphs": [
+                  "Áp dụng quy tắc mã hóa màu sắc (ví dụ: găng tay màu xanh dương cho chế biến thủy hải sản, màu trong suốt cho sơ chế rau củ, màu đen cho phục vụ bàn) giúp kiểm soát trực quan nguy cơ nhiễm khuẩn chéo theo tiêu chuẩn HACCP.",
+                  "Đặc biệt, găng tay màu xanh dương có khả năng nhận diện cao, dễ dàng phát hiện mảnh vụn nếu chẳng may bị rách trong quá trình chế biến."
+            ]
+      },
+      {
+            "heading": "3. Độ bám và khả năng kháng dầu mỡ trong môi trường chế biến ướt",
+            "paragraphs": [
+                  "Bề mặt găng tay được xử lý nhám nhẹ (micro-textured) giúp nhân viên thao tác cầm nắm dao kéo và khay thực phẩm trơn trượt một cách an toàn và vững chắc.",
+                  "Khả năng chống thẩm thấu dầu mỡ của TPE cao cấp giúp duy trì rào cản vệ sinh suốt ca làm việc mà không làm suy giảm độ bền cơ học."
+            ]
+      },
+      {
+            "heading": "4. Bài toán tối ưu hóa tổng chi phí sở hữu (TCO) cho chuỗi cung ứng thực phẩm",
+            "paragraphs": [
+                  "Đối với các chuỗi nhà hàng hoặc nhà máy đóng gói có mức tiêu thụ hàng chục nghìn đôi găng tay mỗi tháng, việc tối ưu hóa tỷ lệ hư hao và giá thành thu mua trực tiếp từ nhà máy mang lại khoản tiết kiệm ngân sách rất lớn.",
+                  "Ký kết hợp đồng cung ứng định kỳ với lịch giao hàng theo từng quý giúp ổn định chi phí đầu vào và giảm tải không gian lưu kho."
+            ]
+      },
+      {
+            "heading": "5. Giải pháp găng tay Reflex chuyên dụng cho ngành ẩm thực và chế biến",
+            "paragraphs": [
+                  "Reflex cung cấp giải pháp đóng gói chuyên biệt cho ngành thực phẩm với hộp rút tiện lợi, nhãn mác rõ ràng và nguồn cung ứng ổn định từ nhà máy sản xuất hiện đại tại Thổ Nhĩ Kỳ."
+            ]
+      }
+],
       "ru": [
     {
         "heading": "Стандарты безопасности пищевых продуктов и спецификации перчаток",
@@ -1858,6 +1938,7 @@ export const posts: BlogPost[] = [
   "readingMinutes": 9,
   "title": {
     "zh": "国际 B2B 贸易选品：产品入选商业产品矩阵的 10 步评估模型",
+    "vi": "Đánh giá sản phẩm cho danh mục B2B quốc tế",
     "ru": "Оценка продуктов для международных B2B-портфелей",
     "tr": "Bir Ürünü Uluslararası B2B Portföye Almadan Önce Nelere Bakarım?",
     "en": "Evaluating Products for International B2B Portfolios",
@@ -1868,6 +1949,7 @@ export const posts: BlogPost[] = [
   },
   "description": {
     "zh": "从源头工厂核验、技术参数公差、包装合规到离岸物流装载率，系统拆解国际 B2B 贸易产品的准入评估全流程。",
+    "vi": "Khung phương pháp luận thực tiễn để đánh giá tiềm năng xuất khẩu, năng lực nhà máy, tính pháp lý của chứng từ COA và rủi ro thương mại quốc tế.",
     "ru": "Критерии отбора товаров для трансграничной торговли: мощности производителей, сертификация, маржинальность и надежность поставок.",
     "tr": "Uluslararası ticarette bir ürünü portföye alırken üretici doğrulamadan teknik veriye, lojistikten pazara giriş yapısına kadar uyguladığım 10 adımlı ticari değerlendirme disiplini.",
     "en": "A founder perspective on the 10-step commercial evaluation framework used to assess manufacturer reliability, product data, logistics structure and B2B demand before portfolio integration.",
@@ -1878,6 +1960,7 @@ export const posts: BlogPost[] = [
   },
   "intro": {
     "zh": "在跨境 B2B 贸易中，仅凭一张精美的样品照片或低廉的报价就仓促上架产品，是导致后期交付违约的最常见诱因。成熟的贸易运营必须建立在涵盖生产、合规、物流与商业条款的严密评估体系之上。",
+    "vi": "Việc đưa một sản phẩm mới vào danh mục phân phối quốc tế đòi hỏi nhiều hơn một bản báo giá hấp dẫn. Để đảm bảo tính bền vững của các thương vụ B2B xuyên biên giới, nhà nhập khẩu và đơn vị điều phối thương mại phải thẩm định toàn diện từ năng lực dây chuyền, chứng nhận hợp chuẩn đến tính ổn định của chuỗi logistics.",
     "ru": "Формирование эффективного B2B-портфеля требует глубокого аудита фабрик, проверки стандартов качества, анализа логистики и постоянного контроля цепочки поставок.",
     "tr": "Uluslararası B2B ticarette bir ürünü yalnızca görseli güzel olduğu, trend göründüğü veya ilk birim fiyatı cazip geldiği için portföye almak en yaygın operasyonel hatalardan biridir. Ticari kararlar; üretici güvenilirliği, doğrulanabilir veri, ambalaj standardı, lojistik hacmi ve sürdürülebilir tedarik yapısı bir bütün olarak değerlendirildiğinde başarıya ulaşır.",
     "en": "In international B2B trade, adopting a product into a portfolio simply because it looks good or offers an appealing initial unit price is a frequent operational mistake. Commercial success requires evaluating manufacturer credibility, verifiable technical data, packaging standards, logistics density, and repeatable supply structures together.",
@@ -1887,6 +1970,42 @@ export const posts: BlogPost[] = [
     "fa": "افزودن یک محصول به پرتفوی تجاری بین‌المللی صرفاً به دلیل ظاهر جذاب یا قیمت اولیه پایین، یکی از رایج‌ترین اشتباهات عملیاتی است. موفقیت تجاری نیازمند اعتبارسنجی تولیدکننده، داده‌های فنی، بسته‌بندی، لجستیک و تداوم تأمین است."
   },
   "sections": {
+    "vi": [
+      {
+            "heading": "1. Đánh giá tính tương thích giữa sản phẩm và thị trường mục tiêu (Product-Market Fit)",
+            "paragraphs": [
+                  "Phân tích kỹ lưỡng các tiêu chuẩn kỹ thuật, thị hiếu tiêu dùng, rào cản thuế quan và mức độ cạnh tranh tại thị trường đích trước khi quyết định đầu tư thương mại.",
+                  "Một sản phẩm thành công tại thị trường nội địa cần được điều chỉnh quy cách đóng gói, ngôn ngữ nhãn mác để phù hợp với quy định pháp lý của nước nhập khẩu."
+            ]
+      },
+      {
+            "heading": "2. Thẩm định pháp lý và năng lực thực tế của nhà máy sản xuất",
+            "paragraphs": [
+                  "Tiến hành xác minh giấy phép kinh doanh, công suất thiết kế thực tế, quy trình kiểm soát chất lượng nội bộ (QA/QC) và tính ổn định tài chính của nhà sản xuất.",
+                  "Kiểm tra thực địa hoặc thông qua mạng lưới đại diện uy tín tại địa phương giúp loại trừ nguy cơ hợp tác với các đơn vị trung gian không đủ năng lực."
+            ]
+      },
+      {
+            "heading": "3. Rà soát hồ sơ kỹ thuật, chứng chỉ xuất xưởng và kết quả phân tích COA",
+            "paragraphs": [
+                  "Chứng chỉ phân tích chất lượng (Certificate of Analysis - COA) và báo cáo thử nghiệm của bên thứ ba độc lập là căn cứ pháp lý quan trọng nhất để thông quan và phân phối.",
+                  "Mỗi lô hàng xuất khẩu cần được đối chiếu nghiêm ngặt giữa thông số ghi trên COA và mẫu sản phẩm thực tế."
+            ]
+      },
+      {
+            "heading": "4. Phân tích cấu trúc chi phí Incoterms và rủi ro chuỗi logistics quốc tế",
+            "paragraphs": [
+                  "Định giá chính xác theo các điều kiện Incoterms (FOB, CIF, DAP) bao gồm chi phí đóng gói xuất khẩu, cước vận tải biển/hàng không, bảo hiểm hàng hóa và thủ tục hải quan hai đầu.",
+                  "Xây dựng các phương án dự phòng cho tuyến vận tải để giảm thiểu tác động từ biến động cước tàu và thời gian lưu bãi cảng."
+            ]
+      },
+      {
+            "heading": "5. Xây dựng thỏa thuận thương mại bảo vệ lợi ích và duy trì quan hệ dài hạn",
+            "paragraphs": [
+                  "Hợp đồng thương mại quốc tế cần quy định rõ ràng về quy chuẩn nghiệm thu, điều khoản thanh toán (L/C, T/T), cơ chế xử lý khiếu nại và cam kết bảo mật thương mại."
+            ]
+      }
+],
     "zh": [
       {
             "heading": "1. 工厂实际产能与车间排产稳定性评估",
@@ -2404,6 +2523,7 @@ export const posts: BlogPost[] = [
   "readingMinutes": 9,
   "title": {
     "zh": "现代 B2B 产品独立站：为何它必须超越传统的静态 PDF 产品手册",
+    "vi": "Website sản phẩm B2B: Không chỉ là danh mục tĩnh",
     "ru": "Почему B2B-сайт продукта должен быть больше чем просто каталогом",
     "tr": "B2B Ürün Web Sitesi Katalogdan Daha Fazlası Olmalı",
     "en": "A B2B Product Website Must Be More Than a Catalogue",
@@ -2414,6 +2534,7 @@ export const posts: BlogPost[] = [
   },
   "description": {
     "zh": "探讨如何将静态企业宣传册升级为具备结构化参数、搜索引擎深度抓取与 AI 智能检索可见性的数字化商业转化中枢。",
+    "vi": "Chiến lược chuyển đổi website B2B thành công cụ thẩm định thương mại, minh bạch thông số kỹ thuật và tạo dựng niềm tin cho người mua quốc tế.",
     "ru": "Превращение цифрового ресурса в эффективный инструмент продаж: спецификации, обработка RFQ, сертификаты и доверие байеров.",
     "tr": "B2B dijital ticarette PDF katalogların ötesine geçerek ürün verisini, varyantları, ambalaj bilgilerini ve SEO/GEO/AEO/AIO yapısını aranabilir ticari sistemlere dönüştürme rehberi.",
     "en": "How B2B companies turn static PDF catalogues into structured, searchable digital product systems optimized for search engines and AI discovery.",
@@ -2424,6 +2545,7 @@ export const posts: BlogPost[] = [
   },
   "intro": {
     "zh": "传统贸易企业往往习惯于向海外买家发送几十兆大小的静态 PDF 产品目录。但在人工智能与即时决策时代，国际采购决策者与 AI 检索代理需要的是结构化、多语言且随时可验证的数字化数据系统。",
+    "vi": "Một trang web sản phẩm B2B hiện đại không thể chỉ dừng lại ở việc đăng tải hình ảnh và mô tả sơ sài. Người mua hàng quốc tế và các bộ phận thu mua chuyên nghiệp tìm kiếm dữ liệu kỹ thuật có thể kiểm chứng, quy cách đóng gói chính xác và quy trình RFQ minh bạch trước khi bắt đầu liên hệ.",
     "ru": "Современные B2B-байеры и дистрибьюторы ожидают от сайта поставщика исчерпывающих технических спецификаций, доступных сертификатов и понятного процесса оформления RFQ.",
     "tr": "Geleneksel B2B ticarette ürün sunumu genellikle statik PDF kataloglara veya basılı broşürlere dayanır. Ancak günümüz kurumsal alıcıları ve arama sistemleri; hızlı erişilebilir, doğrulanabilir teknik veri içeren, çok dilli ve aranabilir dijital ürün yapıları talep etmektedir. B2B web sitesi bir broşür değil, satın alma kararını kolaylaştıran ticari bir bilgi sistemidir.",
     "en": "Traditional B2B trade product presentation often relies on static PDF catalogues or printed brochures. However, modern institutional buyers and automated search engines demand rapidly accessible, verifiable technical data formatted into structured, multilingual digital product systems. A B2B website is not a brochure; it is a commercial decision system.",
@@ -2433,6 +2555,42 @@ export const posts: BlogPost[] = [
     "fa": "ارائه традиционный B2B غالباً متکی بر کاتالوگ‌های پی‌دی‌اف ایستا است. اما خریداران امروز و موتورهای هوش مصنوعی نیازمند داده‌های ساختاریافته، چندزبانه و قابل اعتبارسنجی هستند."
   },
   "sections": {
+    "vi": [
+      {
+            "heading": "1. Cung cấp đầy đủ thông số kỹ thuật và tài liệu chứng nhận có thể tải về",
+            "paragraphs": [
+                  "Khách hàng doanh nghiệp đưa ra quyết định dựa trên thông số cụ thể: thành phần vật liệu, kích thước chi tiết, tiêu chuẩn kiểm định và bản thông số an toàn vật liệu (MSDS).",
+                  "Việc cho phép tải về tài liệu kỹ thuật và catalogue PDF chính thức giúp đẩy nhanh quá trình trình duyệt nội bộ của đối tác."
+            ]
+      },
+      {
+            "heading": "2. Minh bạch quy cách đóng gói, dung tích thùng và thông số xếp pallet",
+            "paragraphs": [
+                  "Dữ liệu logistics chính xác như số lượng cái/hộp, kích thước thùng carton, trọng lượng gộp và số thùng trên mỗi pallet giúp nhà nhập khẩu chủ động tính toán chi phí vận chuyển và tối ưu hóa diện tích kho bãi.",
+                  "Sự minh bạch ngay trên website thể hiện năng lực vận hành chuyên nghiệp của doanh nghiệp xuất khẩu."
+            ]
+      },
+      {
+            "heading": "3. Tối ưu hóa biểu mẫu yêu cầu báo giá (RFQ) theo tiêu chuẩn thương mại quốc tế",
+            "paragraphs": [
+                  "Biểu mẫu RFQ hiệu quả cần thu thập đúng các thông tin cốt lõi: số lượng dự kiến, điều kiện Incoterms mong muốn, cảng đến và các yêu cầu gia công thương hiệu riêng (OEM/Private Label).",
+                  "Quy trình tiếp nhận và phản hồi RFQ tự động hóa giúp nâng cao tỷ lệ chuyển đổi cơ hội thương mại."
+            ]
+      },
+      {
+            "heading": "4. Tối ưu hóa cấu trúc dữ liệu cho các công cụ tìm kiếm và AI Assistant (GEO/AEO)",
+            "paragraphs": [
+                  "Ứng dụng Schema Markup (Product, Organization, FAQPage) và tối ưu hóa cho các mô hình AI tạo sinh (GEO/AEO) giúp sản phẩm xuất hiện chuẩn xác khi khách hàng quốc tế tìm kiếm nhà cung cấp qua AI.",
+                  "Cung cấp thông tin có cấu trúc rõ ràng giúp các công cụ tìm kiếm hiểu đúng về thực thể và năng lực của doanh nghiệp."
+            ]
+      },
+      {
+            "heading": "5. Biến website thành điểm neo tin cậy cho quá trình thẩm định đối tác",
+            "paragraphs": [
+                  "Một website được đầu tư bài bản, đa ngôn ngữ chuẩn mực và cung cấp đầy đủ thông tin pháp lý đóng vai trò là chứng thực số mạnh mẽ cho uy tín thương hiệu trên trường quốc tế."
+            ]
+      }
+],
     "zh": [
       {
             "heading": "1. 静态 PDF 目录在现代商业搜索中的致命短板",
@@ -2870,32 +3028,26 @@ export const posts: BlogPost[] = [
   {
     slug: 'strategic-sourcing-vs-procurement', date: '2026-07-25', updated: '2026-07-25', readingMinutes: 7,
     title: {
-    "zh": "战略采购 vs 战术采购：核心区别与企业跨境供应链价值创造",
-      zh: "战略采购 (Sourcing) 与运营采购 (Procurement)：核心区别与协同机制",
-      zh: "为什么 B2B 产品网站不应只是静态产品目录：构建决策赋能平台",
-      zh: "如何评估跨国 B2B 贸易产品：从市场需求到供应链可行性",
-      zh: "食品企业一次性手套选型全指南：卫生合规、耐用性与成本控制",
-      ru: 'Стратегические закупки и операционное снабжение: В чем разница?',
-      en: 'Strategic Sourcing vs Procurement: What Is the Difference?',
       tr: 'Stratejik Tedarik ve Satın Alma Arasındaki Fark Nedir?',
+      en: 'Strategic Sourcing vs Procurement: What Is the Difference?',
+      ru: 'Стратегические закупки и операционное снабжение: В чем разница?',
       mk: 'Стратешко снабдување наспроти набавка: Која е разликата?',
       sr: 'Strateško snabdevanje i nabavka: Koja je razlika?',
       sq: 'Furnizimi Strategjik kundrejt Prokurimit: Cili është ndryshimi?',
-      fa: 'تأمین راهبردی در برابر خرید: تفاوت چیست؟',
+      fa: 'تأمین راهبردی در برابر خرید عملیاتی: تفاوت در چیست؟',
+      zh: '战略采购 vs 战术采购：核心区别与企业跨境供应链价值创造',
+      vi: 'Thu mua chiến lược và Mua hàng tác nghiệp: Khác biệt cốt lõi',
     },
     description: {
-    "zh": "解析战术性事务采购与战略采购的核心边界，掌握如何通过端到端供应链协同与全面成本控制为企业构建长期竞争壁垒。",
-      zh: "深度解析战略寻源与日常采购执行的本质差异，阐述企业如何构建权责清晰、高效协同的现代供应链决策体系。",
-      zh: "如何将传统产品展示站升级为具备专业参数透明度、技术选型指引与高效商业转化能力的 B2B 决策平台。",
-      zh: "系统化产品评估方法论：分析产品契合度、制造壁垒、物流容积率、合规认证与长期商业回报模型。",
-      zh: "深入分析食品加工厂、大型中央厨房、餐饮连锁与烘焙企业如何针对不同作业环节科学选型 TPE、乙烯基及共聚物手套。",
-      ru: 'Разбор различий между стратегическим поиском поставщиков (sourcing) и операционным снабжением (procurement) в международном B2B-бизнесе.',
-      en: 'A practical explanation of how strategic sourcing differs from procurement, where each process begins, and how companies can connect them.',
-      tr: 'Stratejik tedarik ile satın alma arasındaki farkı, süreçlerin nerede başladığını ve şirketlerin bu iki yapıyı nasıl bağlayabileceğini açıklayan pratik rehber.',
-      mk: 'Практично објаснување за разликата меѓу стратешкото снабдување и набавката и како компаниите можат да ги поврзат.',
-      sr: 'Praktično objašnjenje razlike između strateškog snabdevanja i nabavke i načina na koji ih kompanije mogu povezati.',
-      sq: 'Shpjegim praktik i ndryshimit mes furnizimit strategjik dhe prokurimit dhe mënyrës si kompanitë mund t’i lidhin.',
-      fa: 'راهنمایی عملی درباره تفاوت تأمین راهبردی و خرید و چگونگی اتصال این دو فرایند در شرکت‌ها.',
+      tr: 'Operasyonel satın alma ile stratejik tedarik arasındaki farklar, toplam sahip olma maliyeti (TCO) ve tedarik zinciri dayanıklılığı.',
+      en: 'The core differences between tactical purchasing and strategic sourcing, total cost of ownership (TCO) and building supply-chain resilience.',
+      ru: 'Различия между операционными закупками и стратегическим сорсингом, совокупная стоимость владения (TCO) и устойчивость поставок.',
+      mk: 'Разликите меѓу тактичката набавка и стратешкото снабдување, вкупните трошоци на сопственост (TCO) и отпорноста на снабдувачкиот синџир.',
+      sr: 'Razlike između taktičke nabavke i strateškog snabdevanja, ukupni troškovi vlasništva (TCO) i otpornost lanca snabdevanja.',
+      sq: 'Dallimet midis blerjes taktike dhe furnizimit strategjik, kostoja totale e pronësisë (TCO) dhe qëndrueshmëria e zinxhirit të furnizimit.',
+      fa: 'تفاوت‌های اساسی میان خرید روزمره و تأمین استراتژیک، هزینه کل مالکیت (TCO) و ایجاد پایداری در زنجیره تأمین.',
+      zh: '深度解析跨境商业中常规采购与战略采购的核心差异，从总拥有成本 (TCO)、供应商深度尽调到供应链韧性构建。',
+      vi: 'Phân tích sự khác biệt giữa mua hàng tác nghiệp và thu mua chiến lược trong thương mại quốc tế, quản trị chi phí TCO và giảm thiểu rủi ro.',
     },
     intro: {
     "zh": "许多企业将采购简单等同于日常询价与下达订单。但战术性采购关注的是单笔交易的价格谈判，而战略采购则是在全局视角下对供应链生态、风险控制、产能储备与产品全生命周期成本进行系统化设计。",
@@ -2912,6 +3064,29 @@ export const posts: BlogPost[] = [
       fa: 'خرید، جریان سفارش‌ها را پیش می‌برد. تأمین راهبردی مشخص می‌کند چه چیزی، از چه کسی، با چه مدل تجاری و با چه سطح ریسکی خریداری شود.',
     },
     sections: {
+      vi: [
+        {
+          heading: '1. Mua hàng tác nghiệp và Thu mua chiến lược',
+          paragraphs: [
+            'Mua hàng tác nghiệp (Procurement) tập trung vào các giao dịch ngắn hạn: phát hành đơn hàng PO, theo dõi tiến độ giao nhận và xử lý hóa đơn thanh toán.',
+            'Thu mua chiến lược (Strategic Sourcing) là hoạt động phân tích thị trường, đánh giá năng lực công nghệ và cấu trúc chi phí của nhà sản xuất để thiết lập mối quan hệ hợp tác dài hạn.'
+          ]
+        },
+        {
+          heading: '2. Bẫy đơn giá và Tổng chi phí sở hữu (TCO)',
+          paragraphs: [
+            'Một báo giá xuất xưởng FOB thấp có thể nhanh chóng bị vô hiệu hóa bởi tỷ lệ lỗi sản phẩm cao, chậm trễ logistics, chi phí lưu kho hoặc bất đồng kiểm định chất lượng.',
+            'Mô hình TCO tính toán toàn bộ chi phí từ khâu nghiên cứu, kiểm thử mẫu, chứng từ xuất nhập khẩu đến lưu thông nội địa.'
+          ]
+        },
+        {
+          heading: '3. Thẩm định đối tác và Quản trị rủi ro chuỗi cung ứng',
+          paragraphs: [
+            'Trước khi ký kết hợp đồng thương mại lớn, bên mua cần xác minh tính chính danh của pháp nhân, năng lực tài chính, tiêu chuẩn sản xuất ISO/CE và lịch sử xuất khẩu thực tế của nhà máy.',
+            'Việc kiểm tra độc lập tại chỗ giúp loại bỏ các trung gian không rõ ràng và đảm bảo cam kết chất lượng đồng đều trên từng lô hàng.'
+          ]
+        }
+      ],
       zh: [
         {
                 "heading": "1. 采购是执行，战略采购是商业决策体系",
@@ -3045,9 +3220,28 @@ export const posts: BlogPost[] = [
   },
   {
     slug: 'how-to-evaluate-an-international-supplier', date: '2026-07-23', updated: '2026-07-23', readingMinutes: 8,
-    title: { ru: 'Как оценивать международных поставщиков: Чек-лист аудита', en: 'How to Evaluate an International Supplier', tr: 'Uluslararası Bir Tedarikçi Nasıl Değerlendirilir?', mk: 'Како да оцените меѓународен добавувач', sr: 'Kako proceniti međunarodnog dobavljača', sq: 'Si të vlerësoni një furnitor ndërkombëtar', fa: 'چگونه یک تأمین‌کننده بین‌المللی را ارزیابی کنیم؟', zh: '如何系统化评估国际供应商：全流程尽调与风控指南' },
+    title: {
+      tr: 'Uluslararası Bir Tedarikçi Nasıl Değerlendirilir?',
+      en: 'How to Evaluate an International Supplier',
+      ru: 'Как оценивать международных поставщиков: Чек-лист аудита',
+      mk: 'Како да оцените меѓународен добавувач',
+      sr: 'Kako proceniti međunarodnog dobavljača',
+      sq: 'Si të vlerësoni një furnitor ndërkombëtar',
+      fa: 'چگونه یک تأمین‌کننده بین‌المللی را ارزیابی کنیم؟',
+      zh: '如何系统化评估国际供应商：全流程尽调与风控指南',
+      vi: 'Phương pháp đánh giá và thẩm định nhà cung cấp quốc tế',
+    },
     description: {
-    "zh": "涵盖法人主体真实性核验、车间设备产能调研、质量认证真伪核查及跨境商业条款谈判的实战尽调框架。", ru: 'Методология оценки зарубежных производств, аудит фабрик, проверка финансовой стабильности и контроль качества продукции.', en: 'A practical supplier evaluation framework covering legal identity, capability, quality, capacity, commercial terms and delivery risk.', tr: 'Hukuki kimlik, yetkinlik, kalite, kapasite, ticari koşullar ve teslimat riskini kapsayan pratik tedarikçi değerlendirme çerçevesi.', mk: 'Практична рамка за правен идентитет, способност, квалитет, капацитет и ризик.', sr: 'Praktičan okvir za pravni identitet, sposobnost, kvalitet, kapacitet i rizik.', sq: 'Kornizë praktike për identitetin ligjor, aftësinë, cilësinë, kapacitetin dhe rrezikun.', fa: 'چارچوبی عملی برای هویت حقوقی، توانمندی، کیفیت، ظرفیت، شرایط تجاری و ریسک تحویل.', zh: '涵盖法律资质、实际产能、质量体系、商业条款及交付风险的系统化供应商尽职调查框架。' },
+      tr: 'Uluslararası tedarikçi değerlendirmesinde 5 temel adım: şirket kimliği, üretim kapasitesi, kalite belgeleri, referanslar ve ticari şartlar.',
+      en: 'A practical 5-step framework for evaluating international suppliers: legal identity, manufacturing capacity, quality certificates, references and commercial terms.',
+      ru: 'Методология оценки зарубежных производств, аудит фабрик, проверка финансовой стабильности и контроль качества продукции.',
+      mk: 'Практична рамка во 5 чекори за евалуација на меѓународни добавувачи: правен идентитет, капацитет, сертификати, референци и услови.',
+      sr: 'Praktičan okvir u 5 koraka za procenu međunarodnih dobavljača: pravni identitet, kapacitet, sertifikati, reference i komercijalni uslovi.',
+      sq: 'Kornizë praktike me 5 hapa për vlerësimin e furnitorëve ndërkombëtarë: identiteti ligjor, kapaciteti, certifikatat, referencat dhe kushtet tregtare.',
+      fa: 'چارچوب عملی ۵ مرحله‌ای برای ارزیابی تأمین‌کنندگان بین‌المللی: هویت حقوقی، ظرفیت تولید، گواهی‌های کیفیت، سوابق و شرایط تجاری.',
+      zh: '涵盖法人主体真实性核验、车间设备产能调研、质量认证真伪核查及跨境商业条款谈判的实战尽调框架。',
+      vi: 'Quy trình 5 bước xác minh năng lực nhà sản xuất nước ngoài, kiểm tra chứng chỉ chất lượng, công suất thực tế và điều khoản thanh toán.',
+    },
     intro: {
     "zh": "在国际贸易中，供应商违约或提供劣质产品往往会给企业造成巨大的经济损失与品牌声誉打击。建立一套标准化、可交叉印证的供应商评估与尽职调查流程，是每一位跨境贸易操盘手必须掌握的专业基本功。", ru: 'Оценка международного поставщика требует комплексного подхода: от проверки юридического статуса и производственных мощностей до контроля качества упаковки и логистических цепочек.', en: 'A polished website and a competitive quotation do not prove that a supplier can deliver consistently. International supplier evaluation must combine documentary checks, operational evidence and a controlled commercial test.', tr: 'Profesyonel bir web sitesi ve rekabetçi teklif, tedarikçinin sürekli ve güvenilir teslimat yapabildiğini kanıtlamaz. Uluslararası tedarikçi değerlendirmesi; belge kontrolünü, operasyonel kanıtı ve kontrollü ticari testi birlikte yürütmelidir.', mk: 'Професионална веб-страница и конкурентна понуда не докажуваат сигурна испорака. Потребни се документи, оперативни докази и контролиран тест.', sr: 'Profesionalan sajt i konkurentna ponuda ne dokazuju pouzdanu isporuku. Potrebni su dokumenti, operativni dokazi i kontrolisani test.', sq: 'Një faqe profesionale dhe një ofertë konkurruese nuk provojnë furnizim të qëndrueshëm. Duhen dokumente, prova operative dhe test i kontrolluar.', fa: 'وب‌سایت حرفه‌ای و قیمت رقابتی، توان تحویل پایدار را ثابت نمی‌کند. ارزیابی باید اسناد، شواهد عملیاتی و آزمون تجاری کنترل‌شده را ترکیب کند.', zh: '精美的企业网站和看似极具竞争力的报价单并不能保证供应商具备可靠的持续交付能力。专业的跨国供应商评估必须结合单证核验、生产车间实地证据与可控的商业试单。' },
     sections: Object.fromEntries(blogLocales.map((l) => [l, [
@@ -3060,9 +3254,28 @@ export const posts: BlogPost[] = [
   },
   {
     slug: 'rfq-process-comparable-supplier-quotes', date: '2026-07-24', updated: '2026-07-24', readingMinutes: 6,
-    title: { ru: 'Процесс RFQ: Как получать сопоставимые коммерческие предложения', en: 'The RFQ Process: How to Get Comparable Supplier Quotes', tr: 'RFQ Süreci: Karşılaştırılabilir Tedarikçi Teklifleri Nasıl Alınır?', mk: 'RFQ процес: Како да добиете споредливи понуди', sr: 'RFQ proces: Kako dobiti uporedive ponude', sq: 'Procesi RFQ: Si të merrni oferta të krahasueshme', fa: 'فرایند RFQ: چگونه پیشنهادهای قابل مقایسه دریافت کنیم؟', zh: 'RFQ 询价流程实战：如何获取具备可比性的供应商报价' },
+    title: {
+      tr: 'RFQ Süreci: Karşılaştırılabilir Tedarikçi Teklifleri Nasıl Alınır?',
+      en: 'The RFQ Process: How to Get Comparable Supplier Quotes',
+      ru: 'Процесс RFQ: Как получать сопоставимые коммерческие предложения',
+      mk: 'RFQ процес: Како да добиете споредливи понуди',
+      sr: 'RFQ proces: Kako dobiti uporedive ponude',
+      sq: 'Procesi RFQ: Si të merrni oferta të krahasueshme',
+      fa: 'فرایند RFQ: چگونه پیشنهادهای قابل مقایسه دریافت کنیم؟',
+      zh: 'RFQ 询价流程实战：如何获取具备可比性的供应商报价',
+      vi: 'Quy trình RFQ chuẩn để thu được báo giá có thể so sánh',
+    },
     description: {
-    "zh": "通过标准化询价清单、清晰贸易术语 (Incoterms) 与工艺公差说明，杜绝模糊报价，获得可直接横向比对的高质量报价单。", ru: 'Практическое руководство по составлению запроса котировок (RFQ), структурированию спецификаций и получению сравнимых коммерческих условий от зарубежных фабрик.', en: 'A clear RFQ framework for specifications, volumes, Incoterms, quality, payment, timing and quote comparison.', tr: 'Şartname, hacim, Incoterms, kalite, ödeme, zamanlama ve teklif karşılaştırması için net RFQ çerçevesi.', mk: 'Јасна RFQ рамка за спецификации, количини, Incoterms, квалитет, плаќање и споредба.', sr: 'Jasan RFQ okvir za specifikacije, količine, Incoterms, kvalitet, plaćanje i poređenje.', sq: 'Kornizë e qartë RFQ për specifikime, sasi, Incoterms, cilësi, pagesë dhe krahasim.', fa: 'چارچوبی روشن برای مشخصات، حجم، اینکوترمز، کیفیت، پرداخت، زمان‌بندی و مقایسه پیشنهادها.', zh: '构建涵盖技术规格、采购批量、Incoterms 贸易术语、质量标准、结算账期及比价模型的标准 RFQ 体系。' },
+      tr: 'Karşılaştırılabilir tedarikçi teklifleri almak için RFQ hazırlama rehberi: şartname netliği, Incoterms seçimi, ödeme vadeleri ve değerlendirme matrisi.',
+      en: 'A step-by-step guide to running an effective RFQ process: specification clarity, Incoterms alignment, payment terms, and creating a comparable evaluation matrix.',
+      ru: 'Практическое руководство по составлению запроса котировок (RFQ), структурированию спецификаций и получению сравнимых предложений.',
+      mk: 'Чекор-по-чекор водич за успешен RFQ процес: јасност на спецификациите, Incoterms, услови за плаќање и матрица за споредба.',
+      sr: 'Vodič za uspešan RFQ proces: jasnost specifikacija, Incoterms, uslovi plaćanja i matrica za upoređivanje ponuda.',
+      sq: 'Udhëzues hap pas hapi për një proces efektiv RFQ: qartësia e specifikimeve, Incoterms, kushtet e pagesës dhe matrica e krahasimit.',
+      fa: 'راهنمای گام‌به‌گام برای فرایند مؤثر RFQ: شفافیت مشخصات فنی، هماهنگی Incoterms، شرایط پرداخت و ایجاد ماتریس مقایسه.',
+      zh: '通过标准化询价清单、清晰贸易术语 (Incoterms) 与工艺公差说明，杜绝模糊报价，获得可直接横向比对的高质量报价单。',
+      vi: 'Hướng dẫn xây dựng tài liệu yêu cầu báo giá (RFQ) chuẩn xác, chuẩn hóa thông số kỹ thuật và tạo lập cơ sở so sánh báo giá công bằng.',
+    },
     intro: {
     "zh": "向多家供应商群发模糊的询价邮件，通常只会收到口径不一、条件各异且无法直接对比的无效报价。标准化的 RFQ (Request for Quotation) 流程是获取透明、准确、可比商业报价的前提。", ru: 'Правильно составленный RFQ (Request for Quotation) исключает скрытые расходы и позволяет объективно сравнивать котировки от разных производителей.', en: 'An RFQ is not a message asking “best price?”. It is a controlled information package that forces suppliers to quote the same commercial scenario.', tr: 'RFQ, “en iyi fiyatınız nedir?” mesajı değildir. Tedarikçilerin aynı ticari senaryoya göre teklif vermesini sağlayan kontrollü bir bilgi paketidir.', mk: 'RFQ не е порака со прашање за „најдобра цена“, туку контролиран пакет што создава исти услови за понуда.', sr: 'RFQ nije poruka sa pitanjem za „najbolju cenu“, već kontrolisan paket koji stvara iste uslove za ponudu.', sq: 'RFQ nuk është mesazh për “çmimin më të mirë”, por paketë e kontrolluar që krijon të njëjtat kushte oferte.', fa: 'RFQ پیام «بهترین قیمت چیست؟» نیست؛ بسته اطلاعاتی کنترل‌شده‌ای است که همه تأمین‌کنندگان را وادار می‌کند یک سناریوی یکسان را قیمت‌گذاری کنند.', zh: 'RFQ 绝非一句简单的“请报最低价”。它是一套标准化的信息输入包，促使所有候选供应商基于完全相同的商业与技术情境进行精准报价。' },
     sections: Object.fromEntries(blogLocales.map((l) => [l, [

@@ -1,0 +1,61 @@
+---
+import ContentPage from '../../components/ContentPage.astro';
+import { site } from '../../data/site';
+
+const title = 'Hiển thị tìm kiếm AI: Phân tích thực tiễn SEO, GEO, AEO & AIO | Teyfik Gökdemir';
+const description = 'Xây dựng hệ thống hiển thị toàn diện cho công cụ tìm kiếm và AI tạo sinh, giúp doanh nghiệp được truy xuất chính xác và trích dẫn uy tín trong kỷ nguyên AI.';
+const pathname = '/vi/ai-search-visibility/';
+const canonical = site.origin + pathname;
+
+const faq = [
+  {
+    question: 'Khả năng hiển thị tìm kiếm AI (AI Search Visibility) là gì?',
+    answer: 'Đó là năng lực tổng thể của doanh nghiệp hoặc thương hiệu trong việc được tìm kiếm chính xác, hiểu sâu và trích dẫn như một nguồn thông tin đáng tin cậy trên các công cụ tìm kiếm truyền thống, nền tảng AI đối thoại và hệ thống RAG.',
+  },
+  {
+    question: 'GEO (Tối ưu hóa công cụ tạo sinh) khác gì so với SEO truyền thống?',
+    answer: 'SEO truyền thống tập trung vào thứ hạng từ khóa và thu thập trang SERP; trong khi GEO tập trung vào việc cung cấp mật độ dữ kiện cao, quan hệ thực thể rõ ràng và ngữ cảnh có cấu trúc cho các mô hình ngôn ngữ lớn (LLM).',
+  },
+  {
+    question: 'Cấu hình tệp llms.txt có đảm bảo được AI trích dẫn ưu tiên không?',
+    answer: 'Không. Tệp llms.txt cung cấp ngữ cảnh toàn cảnh có cấu trúc cho bot AI, nhưng việc trích dẫn phụ thuộc vào tính xác thực, độ chính xác của dữ kiện và tính độc bản của nội dung cốt lõi.',
+  },
+];
+
+const alternates = {
+  en: site.origin + '/ai-search-visibility/',
+  tr: site.origin + '/yapay-zeka-arama-gorunurlugu/',
+  ru: site.origin + '/ru/ai-search-visibility/',
+  sq: site.origin + '/sq/dukshmeria-ne-kerkimin-ai/',
+  mk: site.origin + '/mk/vidlivost-vo-ai-prebaruvanje/',
+  sr: site.origin + '/sr/vidljivost-u-ai-pretrazi/',
+  fa: site.origin + '/fa/مشاهده-پذیری-در-جستجوی-هوش-مصنوعی/',
+  zh: site.origin + '/zh/ai-search-visibility/',
+  vi: site.origin + '/vi/ai-search-visibility/',
+  'x-default': site.origin + '/yapay-zeka-arama-gorunurlugu/',
+};
+---
+
+<ContentPage
+  locale="vi"
+  title={title}
+  description={description}
+  eyebrow="Hiển thị tìm kiếm AI"
+  heading="Định vị doanh nghiệp của bạn được khám phá rõ ràng và trích dẫn uy tín trong kỷ nguyên AI"
+  lead="Chiến lược hiển thị thương mại tích hợp Tối ưu hóa công cụ tạo sinh (GEO), Tối ưu hóa công cụ trả lời (AEO) và SEO truyền thống."
+  pathname={pathname}
+  alternates={alternates}
+  faq={faq}
+>
+  <section class="prose">
+    <h2>Tại sao khả năng hiển thị tìm kiếm AI lại quan trọng vào lúc này?</h2>
+    <p>Ngày càng nhiều nhà ra quyết định mua sắm B2B quốc tế và khách hàng doanh nghiệp sử dụng các công cụ AI tạo sinh như ChatGPT, Claude, Perplexity để tìm kiếm nhà cung cấp, đối chiếu thông số kỹ thuật và thẩm định uy tín chuỗi cung ứng.</p>
+    <h2>Bốn trụ cột của khả năng hiển thị tìm kiếm trong kỷ nguyên AI</h2>
+    <ul>
+      <li><strong>SEO (Search Engine Optimization):</strong> Khả năng truy cập kỹ thuật, độ sâu lập chỉ mục và nền tảng quyền hạn tìm kiếm truyền thống.</li>
+      <li><strong>GEO (Generative Engine Optimization):</strong> Trình bày có cấu trúc quan hệ thực thể và mật độ dữ kiện phục vụ mô hình ngôn ngữ lớn.</li>
+      <li><strong>AEO (Answer Engine Optimization):</strong> Cấu trúc hỏi đáp trực diện và trích xuất dữ liệu trả lời thẳng thắn các câu hỏi mua sắm trọng tâm.</li>
+      <li><strong>AIO (AI Optimization):</strong> Tối ưu hóa tổng thể tài sản kỹ thuật số kết nối dữ liệu nền tảng, giao thức kỹ thuật và hệ sinh thái tương tác AI.</li>
+    </ul>
+  </section>
+</ContentPage>

@@ -8,9 +8,9 @@ interface Props {
 }
 
 const { locale } = Astro.props;
-const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa' | 'zh';
+const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa' | 'zh' | 'vi';
 
-const landingText = {
+const landingTextMap: Record<string, any> = {
   tr: {
     heroTag: 'Reflex Plastik · B2B Eldiven Çözümleri',
     heroTitle: 'Profesyonel Eldiven Sistemleri & Hijyen Teknolojileri',
@@ -102,6 +102,19 @@ const landingText = {
     quoteDesc: 'برای سفارش‌های عمده، پالت و همکاری‌های توزیع منطقه‌ای مستقیماً با تیم تجاری ما تماس بگیرید.',
     quoteBtn: 'تماس با تیم تجاری',
   },
+  vi: {
+    heroTag: 'Reflex Plastik · Hệ thống Găng tay B2B',
+    heroTitle: 'Hệ thống Găng tay Chuyên dụng & Giải pháp Vệ sinh B2B',
+    heroLead: 'Cung ứng số lượng lớn và ổn định qua 7 dòng sản phẩm chuyên biệt cho chế biến thực phẩm, nhà hàng khách sạn, y tế, chăm sóc sắc đẹp và bảo trì công nghiệp.',
+    primaryCta: 'Khám phá Toàn bộ Danh mục',
+    secondaryCta: 'Yêu cầu Báo giá B2B',
+    whyTitle: 'Tại sao nên chọn Danh mục Reflex?',
+    whyLead: 'Vật liệu đàn hồi thế hệ mới mang lại hiệu năng cao, chi phí tối ưu và an toàn thực phẩm vượt trội so với găng tay Nitrile và Vinyl truyền thống.',
+    applicationsTitle: 'Lĩnh vực Ứng dụng Trọng điểm',
+    quoteTitle: 'Yêu cầu Báo giá Mua sỉ B2B & Xuất khẩu',
+    quoteDesc: 'Liên hệ trực tiếp với bộ phận thương mại của chúng tôi để nhận báo giá theo container/pallet, gia công nhãn riêng (Private Label) hoặc hợp tác phân phối khu vực.',
+    quoteBtn: 'Liên hệ Bộ phận Thương mại',
+  },
   zh: {
     heroTag: 'Reflex Plastik · B2B 一次性防护手套体系',
     heroTitle: '专业 B2B 防护手套系统与工业卫生解决方案',
@@ -115,9 +128,10 @@ const landingText = {
     quoteDesc: '直接联系我们的商务团队，咨询整柜/托盘采购方案、OEM / 贴牌定制 (Private Label) 或区域分销合作。',
     quoteBtn: '联系商务团队',
   },
-}[lang] || landingText.tr;
+};
+const landingText = landingTextMap[lang] || landingTextMap.tr;
 
-const whyCards = {
+const whyCardsMap: Record<string, any> = {
   tr: [
     { icon: '⚡', title: 'Hibrit TPE Teknolojisi', desc: 'PVC ve Nitril eldivenlere kıyasla daha fazla esneklik, pürüzsüz doku ve üstün çevre dostu yapı.' },
     { icon: '🛡️', title: '%100 Gıda Uyumu & Hipoalerjenik', desc: 'Kokusuz, tatsız, silikon ve lateks içermeyen yapısı ile alerji riskini sıfıra indiren güvenli temas.' },
@@ -153,14 +167,20 @@ const whyCards = {
     { icon: '🛡️', title: '۱۰۰٪ ایمن برای مواد غذایی و ضد حساسیت', desc: 'فرمول بدون بو، بدون طعم، بدون لاتکس و سیلیکون برای ریسک حساسیت صفر.' },
     { icon: '💰', title: 'بهینه‌سازی هزینه و زنجیره تامین', desc: 'مزیت هزینه بالا نسبت به دستکش‌های سنتی همراه با موجودی بالا برای تامین B2B.' }
   ],
+  vi: [
+    { icon: '⚡', title: 'Công nghệ TPE đàn hồi Hybrid', desc: 'Độ co giãn vượt trội và bề mặt êm ái hơn hẳn so với găng tay vinyl và cao su tổng hợp thông thường.' },
+    { icon: '🛡️', title: '100% An toàn Thực phẩm & Không dị ứng', desc: 'Công thức không mùi, không vị, không chứa latex và silicone giúp triệt tiêu hoàn toàn nguy cơ dị ứng da.' },
+    { icon: '💰', title: 'Tối ưu Chi phí & Chuỗi cung ứng', desc: 'Lợi thế giá thành rõ rệt so với găng tay truyền thống cùng nguồn tồn kho B2B sẵn sàng cung ứng lớn.' }
+  ],
   zh: [
     { icon: '⚡', title: '复合高弹 TPE 技术', desc: '相比传统 PVC 与丁腈手套具备更出色的拉伸回弹性、细腻触感与环境友好特性。' },
     { icon: '🛡️', title: '100% 食品级接触 & 防过敏', desc: '无异味、无味道、不含天然乳胶与硅油，从源头杜绝过敏风险，确保安全接触。' },
     { icon: '💰', title: '显著的成本与供货优势', desc: '相较传统同类产品具备显著的采购成本优势，生产周期短，B2B 常备库存充足。' }
   ],
-}[lang] || whyCards.en;
+};
+const whyCards = whyCardsMap[lang] || whyCardsMap.en;
 
-const applications = {
+const applicationsMap: Record<string, any> = {
   tr: [
     { name: 'Gıda Üretimi & Servis', icon: '🍽️' },
     { name: 'Muayene & Sıhhi Temas', icon: '🩺' },
@@ -210,6 +230,13 @@ const applications = {
     { name: 'سالن‌های زیبایی و سلامت', icon: '✨' },
     { name: 'صنعتی و کاربردهای عمومی', icon: '⚙️' }
   ],
+  vi: [
+    { name: 'Chế biến Thực phẩm & Dịch vụ Ăn uống', icon: '🍽️' },
+    { name: 'Khám bệnh & Vệ sinh Y tế', icon: '🩺' },
+    { name: 'Vệ sinh & Bảo trì Công nghiệp', icon: '🧹' },
+    { name: 'Thẩm mỹ viện & Chăm sóc Sắc đẹp', icon: '✨' },
+    { name: 'Công nghiệp & Thao tác Tổng hợp', icon: '⚙️' }
+  ],
   zh: [
     { name: '食品加工与餐饮服务', icon: '🍽️' },
     { name: '卫生检查与医疗防护', icon: '🩺' },
@@ -217,9 +244,10 @@ const applications = {
     { name: '美容美发与个人护理', icon: '✨' },
     { name: '工业维护与日常防护', icon: '⚙️' }
   ],
-}[lang] || applications.en;
+};
+const applications = applicationsMap[lang] || applicationsMap.en;
 
-const sectionTitles = {
+const sectionTitlesMap: Record<string, any> = {
   tr: { badge: 'Reflex Ürün Grubu', title: '7 Uzman Ürün Ailesi', lead: 'Her biri belirli kullanım ihtiyaçları, hijyen standartları ve et kalınlığı için geliştirilmiş profesyonel eldiven çözümleri.', whyBadge: 'Temel Avantajlar', appsBadge: 'Sektörler ve Kullanım Alanları' },
   en: { badge: 'Reflex Product Line', title: '7 Specialized Product Families', lead: 'Professional disposable glove solutions engineered for specialized hygiene standards, materials, and tactile requirements.', whyBadge: 'Core Advantages', appsBadge: 'Industries & Use Cases' },
   ru: { badge: 'Линейка продуктов Reflex', title: '7 специализированных семейств продуктов', lead: 'Профессиональные одноразовые перчатки, разработанные для специализированных гигиенических стандартов, материалов и требований к чувствительности.', whyBadge: 'Основные преимущества', appsBadge: 'Отрасли и применение' },
@@ -228,7 +256,9 @@ const sectionTitles = {
   sq: { badge: 'Linja e Produkteve Reflex', title: '7 Familje Specializuara Produktesh', lead: 'Zgjidhje profesionale dorezash me një përdorim të projektuara për standarde të veçanta higjienike, materiale dhe ndjeshmëri.', whyBadge: 'Avantazhet kryesore', appsBadge: 'Industritë dhe përdorimi' },
   fa: { badge: 'سبد محصولات رفلکس', title: '۷ خانواده محصول تخصصی', lead: 'دستکش‌های یک‌بارمصرف حرفه‌ای طراحی‌شده برای استانداردهای بهداشتی، متریال و ضخامت‌های مختلف.', whyBadge: 'مزایای اصلی', appsBadge: 'صنایع و کاربردها' },
   zh: { badge: 'Reflex 产品系列', title: '7 大专业产品家族', lead: '针对严苛卫生标准、特定材料厚度与操作手感量身定制的专业一次性防护手套解决方案。', whyBadge: '核心竞争优势', appsBadge: '应用行业与场景' },
-}[lang] || sectionTitles.en;
+  vi: { badge: 'Dòng sản phẩm Reflex', title: '7 Dòng sản phẩm Chuyên biệt', lead: 'Giải pháp găng tay dùng một lần chuyên dụng được thiết kế cho các tiêu chuẩn vệ sinh, vật liệu và độ chính xác thao tác cao.', whyBadge: 'Ưu thế Cốt lõi', appsBadge: 'Ngành nghề & Lĩnh vực Ứng dụng' },
+};
+const sectionTitles = sectionTitlesMap[lang] || sectionTitlesMap.en;
 
 const heroMainProduct = reflexProducts.find(p => p.slug === 'florex') || reflexProducts[0];
 ---

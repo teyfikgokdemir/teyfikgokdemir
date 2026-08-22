@@ -77,7 +77,7 @@ const jsonLd = {
         addressLocality: 'İstanbul',
         addressCountry: 'TR',
       },
-      knowsAbout: locale === 'fa' ? [
+            knowsAbout: locale === 'fa' ? [
         'تجارت بین‌المللی',
         'تأمین راهبردی',
         'هماهنگی تجاری بین‌المللی',
@@ -91,7 +91,7 @@ const jsonLd = {
         'توسعه بازار',
         'عملیات فرامرزی',
         'فرش ایرانی',
-        'فرش ابریشم دستباف',
+        'فرش ابریشم دستbaf',
         'تأمین عمده منسوجات',
         'تولید با برند اختصاصی',
         'پژوهش مبتنی بر هوش مصنوعی',
@@ -112,6 +112,23 @@ const jsonLd = {
         '波斯手工地毯与真丝地毯',
         '大宗纺织品供应链与 Private Label',
         'AI 辅助商业调研与销售智能',
+      ] : locale === 'vi' ? [
+        'Thương mại quốc tế',
+        'Thu mua chiến lược & Chuỗi cung ứng',
+        'Điều phối thương mại quốc tế',
+        'Nghiên cứu & Xác minh nhà cung cấp',
+        'Kết nối người mua và nhà sản xuất',
+        'Phát triển kênh phân phối',
+        'Nghiên cứu chuỗi cung ứng chuyên sâu',
+        'Quy trình RFQ và so sánh báo giá',
+        'Đàm phán thương mại quốc tế',
+        'Mở rộng thị trường Thổ Nhĩ Kỳ & Quốc tế',
+        'Vận hành thương mại và logistics xuất nhập khẩu',
+        'Thu mua nguyên liệu thực phẩm và dầu thực vật số lượng lớn',
+        'Nông sản & Hạt cao cấp xuất khẩu',
+        'Găng tay dùng một lần & Vật tư y tế REFLEX',
+        'Dệt may bán buôn & Nhãn hiệu riêng (Private Label)',
+        'Ứng dụng AI trong nghiên cứu thương mại và tình báo bán hàng',
       ] : [
         'International Trade',
         'Strategic Sourcing',
@@ -131,7 +148,7 @@ const jsonLd = {
         'Wholesale Textile Sourcing',
         'Private Label Textiles',
       ],
-      sameAs: [site.links.github, site.links.linkedin, site.links.instagram],
+      sameAs: [site.links.github, site.links.linkedin, site.links.instagram, 'https://t.me/teyfikgokdemir'],
     },
     {
       '@type': 'Organization',
@@ -173,7 +190,7 @@ const jsonLd = {
       url: canonical,
       name: title,
       description,
-      inLanguage: locale === 'zh' ? 'zh-CN' : locale,
+      inLanguage: locale === 'zh' ? 'zh-CN' : locale === 'vi' ? 'vi-VN' : locale,
       isPartOf: { '@id': site.origin + '/#website' },
       about: { '@id': site.origin + '/#person' },
       primaryImageOfPage: {
@@ -188,7 +205,7 @@ const jsonLd = {
 };
 ---
 <!doctype html>
-<html lang={locale === 'zh' ? 'zh-CN' : locale} dir={locale === 'fa' ? 'rtl' : 'ltr'}>
+<html lang={locale === 'zh' ? 'zh-CN' : locale === 'vi' ? 'vi-VN' : locale} dir={locale === 'fa' ? 'rtl' : 'ltr'}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

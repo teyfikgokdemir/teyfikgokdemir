@@ -1,5 +1,5 @@
 ---
-type Lang = 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa' | 'zh';
+type Lang = 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa' | 'zh' | 'vi';
 
 type FocusCard = {
   eyebrow: string;
@@ -268,6 +268,36 @@ const copy: Record<Lang, TradeFocusCopy> = {
     ],
     note: '本个人网站阐述创始人的商业理念与架构。具体商业询价、方案报价、样品寄送、供应商实地核验与跨境运营均由 CTSEG 统一承办。',
   },
+  vi: {
+    label: 'Chuyên môn nhà sáng lập · Thực thi bởi CTSEG',
+    title: 'Dữ liệu sản phẩm, điều khoản thương mại và thực thi trong cung ứng thực phẩm.',
+    lead: 'Thông qua CTSEG, Teyfik Gökdemir kết nối việc thu mua dầu hướng dương cũng như các loại hạt và trái cây sấy khô vào cùng một đánh giá thương mại: đặc tính kỹ thuật, nghiên cứu nhà sản xuất, so sánh báo giá và mô hình giao hàng.',
+    oil: {
+      eyebrow: 'Dầu thực vật · Thu mua B2B',
+      title: 'Thu mua dầu hướng dương',
+      text: 'Để có báo giá chuẩn xác cho các chương trình hàng không thương hiệu hoặc gia công nhãn riêng (private label), chủng loại sản phẩm, độ tinh luyện, mục đích sử dụng, bao bì đóng gói và phạm vi giao hàng cần được xác định rõ ràng.',
+      checks: ['Đặc tính kỹ thuật sản phẩm và mục đích sử dụng', 'Bao bì chai PET hoặc thùng thiếc, nhãn mác và MOQ', 'Chứng chỉ COA, hồ sơ lô/xuất xứ, thanh toán và mô hình giao nhận'],
+      cta: 'Xem cẩm nang RFQ dầu thực vật',
+      alt: 'CTSEG ayçiçek yağı ve bitkisel gıda tedarik görseli',
+    },
+    nuts: {
+      eyebrow: 'Nông sản chất lượng cao · Thu mua B2B',
+      title: 'Các loại hạt và trái cây sấy khô',
+      text: 'Đối với hạt dẻ cười, hạnh nhân, óc chó, chà là và trái cây khô tuyển chọn, cấp độ sản phẩm được đánh giá đồng bộ cùng nguồn gốc xuất xứ, kích cỡ hạt, mẫu đối chứng, phân tích kiểm nghiệm và khả năng truy xuất nguồn gốc.',
+      checks: ['Chủng loại, nguồn gốc, mùa vụ thu hoạch và phân hạng chất lượng', 'Phân tích từng lô hàng, chứng nhận COA và đối chiếu mẫu thực tế', 'Quy cách bao bì, thông tin lô và chứng từ thị trường đích'],
+      cta: 'Xem cẩm nang chất lượng các loại hạt',
+      alt: 'CTSEG İran menşeli Antep fıstığı ve kuruyemiş tedarik görseli',
+    },
+    specialistLabel: 'Lĩnh vực chuyên môn tuyển chọn',
+    specialistTitle: 'Thảm và dệt may; không phải lĩnh vực đại trà mà là chuyên môn sâu sắc.',
+    specialistLead: 'Đánh giá sản phẩm chi tiết cho thảm Ba Tư, thảm lụa dệt tay và dệt may bán buôn được tiếp tục tại các trang chuyên đề của CTSEG.',
+    specialists: [
+      { title: 'Thảm thủ công', cta: 'Khám phá lĩnh vực' },
+      { title: 'Thảm lụa dệt tay', cta: 'Khám phá lĩnh vực' },
+      { title: 'Dệt may bán buôn', cta: 'Khám phá lĩnh vực' },
+    ],
+    note: 'Trang web cá nhân này trình bày góc nhìn nhà sáng lập. Các yêu cầu thương mại, báo giá, hàng mẫu, xác minh nhà cung cấp và điều phối vận hành được thực hiện qua CTSEG.',
+  },
 };
 
 const guides = {
@@ -322,10 +352,15 @@ const specialistLinks: Record<Lang, string[]> = {
     'https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/',
     'https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/',
   ],
+
+  vi: [
+    'https://ctseg.com.tr/en/sourcing/iranian-carpets/',
+    'https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/',
+    'https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/',
+  ],
 };
 
-const text = copy[locale];
-const guideLinks = guides[locale === 'tr' ? 'tr' : 'default'];
+const text = copy[locale];const guideLinks = guides[locale === 'tr' ? 'tr' : 'default'];
 ---
 
 <section class="founder-trade" data-locale={locale} aria-labelledby="founder-trade-title">

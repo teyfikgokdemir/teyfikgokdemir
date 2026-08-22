@@ -23,6 +23,7 @@ const positioningStrip = {
   sq: ['Themelues', 'CTSEG · Struktura kryesore tregtare', 'Tregti Ndërkombëtare', 'Furnizim Strategjik'],
   fa: ['بنیان‌گذار', 'CTSEG · ساختار اصلی تجاری', 'تجارت بین‌المللی', 'تأمین راهبردی'],
   zh: ['创始人', 'CTSEG · 核心商业实体', '国际贸易', '战略采购'],
+  vi: ['Nhà sáng lập', 'CTSEG · Đơn vị thương mại trọng tâm', 'Thương mại quốc tế', 'Thu mua chiến lược'],
 } as const;
 
 const currentStrip = positioningStrip[locale as keyof typeof positioningStrip] ?? positioningStrip.en;
@@ -77,6 +78,12 @@ const ctsegLinks = {
     services: 'https://ctseg.com.tr/en/services/',
     contact: 'https://ctseg.com.tr/en/contact/',
     reflex: 'https://ctseg.com.tr/en/trade-products/reflex-disposable-gloves/',
+  },
+  vi: {
+    home: 'https://ctseg.com.tr/vi/',
+    services: 'https://ctseg.com.tr/vi/services/',
+    contact: 'https://ctseg.com.tr/vi/contact/',
+    reflex: 'https://ctseg.com.tr/vi/trade-products/reflex-disposable-gloves/',
   },
 } as const;
 
@@ -136,6 +143,14 @@ const reflexCopy = {
     badges: ['CE 2841 & ISO 9001', '۷ خانواده محصول', 'تأمین صادرات عمده', 'Private Label'],
     ctaInternal: 'بررسی پرتفوی B2B دستکش‌های REFLEX',
     ctaExternal: 'صفحه رسمی محصول در CTSEG',
+  },
+  vi: {
+    kicker: 'CTSEG Danh mục sản phẩm nổi bật',
+    title: 'REFLEX Găng tay dùng một lần & Khám bệnh',
+    description: 'Danh mục găng tay nitrile, TPE không latex, thermo vinyl và copolymer cho y tế, công nghiệp, thực phẩm và vệ sinh. 7 dòng sản phẩm chuyên dụng, cung ứng xuất khẩu số lượng lớn và nhãn hiệu riêng (Private Label).',
+    badges: ['CE 2841 & ISO 9001', '7 Dòng sản phẩm', 'Cung ứng xuất khẩu', 'Private Label'],
+    ctaInternal: 'Khám phá Portfolio B2B REFLEX',
+    ctaExternal: 'Trang sản phẩm chính thức CTSEG',
   },
   zh: {
     kicker: 'CTSEG 重点产品矩阵',
@@ -700,6 +715,75 @@ const positioning = {
       text: 'QCT Studio 提供数字化出海技术与全链路建站支持，QCT Commerce 负责土耳其本土的数字化全渠道分销。Mythborn 为专注于塔罗与个人探索的独立品牌。这些业务构成了多维度的专业支持体系，与 CTSEG 的核心商业地位相辅相成。',
     },
   },
+  vi: {
+    hero: {
+      eyebrow: 'Nhà sáng lập · Thương mại quốc tế · Thu mua chiến lược',
+      title: 'Kết nối đúng sản phẩm, đúng thị trường và đúng mô hình vận hành trong thương mại quốc tế.',
+      description: 'Hợp nhất mạng lưới nhà cung cấp, vận hành thương mại, thương mại số và hệ thống nghiên cứu ứng dụng AI giữa Thổ Nhĩ Kỳ và thị trường quốc tế dưới góc nhìn của nhà ra quyết định.',
+      primary: 'Tìm hiểu về CTSEG',
+      secondary: 'Trao đổi với Teyfik Gökdemir',
+      summary: 'Teyfik Gökdemir là nhà sáng lập CTSEG. Ông cấu trúc các cơ hội thương mại thông qua nghiên cứu, xác minh, điều phối và hệ thống tăng trưởng thực tế.',
+    },
+    intro: {
+      label: 'Góc nhìn nhà sáng lập',
+      title: 'Mô hình làm việc trực tiếp chuyển hóa cơ hội thương mại từ nghiên cứu sang vận hành.',
+      body: 'Chúng tôi tích hợp nghiên cứu sản phẩm và thị trường với xác minh nhà cung cấp, quản lý báo giá, đàm phán thương mại, thanh toán, logistics và hiển thị số. Với vai trò nhà sáng lập, mục tiêu của tôi là chuyển đổi một cơ hội chưa rõ ràng thành cấu trúc thương mại khả thi và có thể kiểm soát.',
+      areas: ['Thương mại quốc tế', 'Thu mua chiến lược', 'Xác minh nhà cung cấp', 'Phát triển thị trường', 'Thương mại số', 'Nghiên cứu ứng dụng AI'],
+    },
+    ventures: {
+      label: 'Cấu trúc thương mại và doanh nghiệp',
+      title: 'CTSEG là đơn vị thương mại trọng tâm; các doanh nghiệp khác đóng vai trò bổ trợ năng lực.',
+      lead: 'CTSEG là nền tảng vận hành cốt lõi cho thu mua chiến lược và thương mại quốc tế. QCT Studio cung cấp năng lực công nghệ và dịch vụ số, QCT Commerce phụ trách thương mại số tại Thổ Nhĩ Kỳ, và Mythborn là thương hiệu tiêu dùng độc lập.',
+    },
+    expertise: {
+      title: 'Chuyên môn kết nối các quyết định thương mại với nghiên cứu, xác minh và thực thi.',
+      lead: 'Đây không phải danh mục dịch vụ quảng cáo mà là kỷ luật làm việc chuyên nghiệp để thẩm định và triển khai các cơ hội thương mại quốc tế.',
+      groups: [
+        { title: 'Thương mại quốc tế', items: ['Đánh giá cơ hội xuất nhập khẩu', 'Kết nối sản phẩm – thị trường', 'Điều phối người mua và nhà sản xuất', 'Đàm phán thương mại', 'Phát triển kinh doanh xuyên biên giới'] },
+        { title: 'Thu mua chiến lược & Xác minh', items: ['Nghiên cứu nhà sản xuất và nhà cung ứng', 'Xác minh năng lực nhà cung cấp', 'Phân tích giá và công suất', 'Kiểm tra chất lượng và chứng từ', 'Quy trình RFQ và so sánh báo giá'] },
+        { title: 'Tăng trưởng thương mại & Phát triển thị trường', items: ['Chiến lược gia nhập thị trường', 'Nghiên cứu sản phẩm và thị trường', 'Điều phối vận hành thương mại', 'Thương mại số B2B', 'Hệ thống bán hàng trực tiếp'] },
+        { title: 'Hệ thống số & AI', items: ['Quy trình nghiên cứu chuỗi cung ứng', 'Tình báo bán hàng', 'Phân tích doanh nghiệp và cơ hội', 'Quản trị tri thức', 'Chuẩn hóa quy trình vận hành'] },
+      ],
+    },
+    method: {
+      label: 'Phương thức làm việc',
+      title: 'Trực diện, dựa trên dữ liệu thực chứng và gắn liền với thực tế vận hành.',
+      lead: 'Mỗi dự án đều loại bỏ các giả định chủ quan, làm rõ các bên liên quan và xác định bước đi thực thi tiếp theo.',
+      steps: [
+        { title: 'Nghiên cứu', description: 'Hệ thống hóa thông tin sản phẩm, thị trường, nhà sản xuất và tín hiệu nhu cầu qua nguồn dữ liệu tin cậy.' },
+        { title: 'Xác minh', description: 'Đối chiếu nhà cung cấp, công suất, chất lượng, hồ sơ chứng từ, giá cả và điều khoản thương mại.' },
+        { title: 'Cấu trúc hóa', description: 'Chuyển đổi báo giá, rủi ro, thanh toán, logistics và kế hoạch gia nhập thị trường thành khung ra quyết định.' },
+        { title: 'Điều phối', description: 'Quản trị trực tiếp và minh bạch các bước thực thi trọng yếu giữa các bên và bộ phận vận hành.' },
+      ],
+    },
+    regional: {
+      label: 'Tầm nhìn quốc tế',
+      title: 'Kết nối năng lực thương mại của Thổ Nhĩ Kỳ với thị trường quốc tế.',
+      body: 'Tôi kết nối năng lực sản xuất và cung ứng tại Thổ Nhĩ Kỳ với nhu cầu khu vực và toàn cầu, đồng thời đưa các cơ hội sản phẩm, người mua từ các thị trường khác về Thổ Nhĩ Kỳ. Mỗi cơ hội đều được đánh giá dựa trên thực tế sản phẩm, đối tác, tuân thủ pháp lý, thanh toán, rủi ro và logistics.',
+    },
+    contact: {
+      label: 'Trao đổi thương mại chiến lược',
+      title: 'Cùng làm rõ một quyết định về sản phẩm, thị trường hoặc thu mua.',
+      body: 'Liên hệ trực tiếp để có đánh giá chiến lược ở cấp độ nhà sáng lập, phát triển kinh doanh quốc tế hoặc thiết lập quan hệ hợp tác trực tiếp. Các yêu cầu vận hành thu mua và thương mại được cấu trúc qua CTSEG.',
+      action: 'Gửi email trao đổi',
+    },
+    ctseg: {
+      label: 'Đơn vị thương mại trọng tâm',
+      kicker: 'Nền tảng thương mại chiến lược do nhà sáng lập trực tiếp điều hành',
+      title: 'CTSEG',
+      body: 'CTSEG là nền tảng thu mua chiến lược và thương mại quốc tế giúp các doanh nghiệp đưa ra quyết định chính xác hơn về sản phẩm, nhà sản xuất, nhà cung ứng và thị trường.',
+      founder: 'Với vai trò nhà sáng lập, Teyfik Gökdemir hợp nhất nghiên cứu, xác minh, cấu trúc thương mại và điều phối vận hành vào một khung ra quyết định duy nhất.',
+      services: ['Thu mua chiến lược', 'Tìm kiếm và xác minh nhà cung cấp', 'Tư vấn thương mại quốc tế', 'Nghiên cứu sản phẩm và thị trường', 'Điều phối vận hành thương mại', 'Phát triển kinh doanh giữa Thổ Nhĩ Kỳ và thị trường quốc tế'],
+      primary: 'Khám phá dịch vụ CTSEG',
+      secondary: 'Trao đổi về nhu cầu thu mua',
+    },
+    journey: { year: '2026', title: 'CTSEG', description: 'Đơn vị thương mại trọng tâm cho thu mua chiến lược, xác minh nhà cung cấp và vận hành thương mại quốc tế.' },
+    ecosystem: {
+      label: 'Doanh nghiệp hỗ trợ',
+      title: 'Năng lực kỹ thuật số và các tầng kinh doanh độc lập.',
+      text: 'QCT Studio cung cấp năng lực công nghệ và dịch vụ số, QCT Commerce phụ trách thương mại số tại Thổ Nhĩ Kỳ. Mythborn là thương hiệu tiêu dùng độc lập. Các mảng này bổ trợ chuyên môn vững chắc mà không thay thế vai trò thương mại chính của CTSEG.',
+    },
+  },
 } as const;
 
 const localPositioning = positioning[locale as keyof typeof positioning] ?? positioning.en;
@@ -716,6 +800,7 @@ const operationalSystemsLabel = {
   sq: 'Sisteme digjitale dhe operacionale të asistuara nga AI',
   fa: 'سیستم‌های عملیاتی دیجیتال و هوش مصنوعی',
   zh: '数字化与 AI 商业运营系统',
+  vi: 'Hệ thống vận hành số và hỗ trợ bởi AI',
 } as const;
 const journeyItems = [localPositioning.journey, ...baseCopy.journey.items]
   .sort((left, right) => {

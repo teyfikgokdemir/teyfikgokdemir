@@ -19,6 +19,7 @@ const footerText = {
   sq: { connect: 'Lidhje', ventures: 'Organizata', contact: 'Kontakt', position: 'Themelues i CTSEG · Tregti ndërkombëtare dhe furnizim strategjik.' },
   fa: { connect: 'ارتباطات', ventures: 'سازمان‌ها', contact: 'تماس', position: 'بنیان‌گذار CTSEG · هماهنگ‌کننده تجاری تولیدکنندگان ایرانی با بازارهای بین‌المللی.' },
   zh: { connect: '社交连接', ventures: '商业实体', contact: '联系我们', position: 'CTSEG 创始人 · 国际贸易与战略采购落地系统。' },
+  vi: { connect: 'Liên kết', ventures: 'Dự án & Doanh nghiệp', contact: 'Liên hệ', position: 'Nhà sáng lập CTSEG · Hệ thống thương mại quốc tế và thu mua chiến lược.' },
 } as const;
 
 const footer = footerText[locale] ?? footerText.en;
@@ -27,13 +28,18 @@ const socialLinks = [
   ['LinkedIn', site.links.linkedin],
   ['Instagram', site.links.instagram],
   ['GitHub', site.links.github],
+  ['Telegram', 'https://t.me/teyfikgokdemir'],
 ] as const;
 
 const ctsegUrl = locale === 'tr'
   ? 'https://ctseg.com.tr/'
   : locale === 'fa'
     ? 'https://ctseg.com.tr/fa/tamin-beynolmelali-iran/'
-    : 'https://ctseg.com.tr/en/';
+    : locale === 'zh'
+      ? 'https://ctseg.com.tr/zh/'
+      : locale === 'vi'
+        ? 'https://ctseg.com.tr/vi/'
+        : 'https://ctseg.com.tr/en/';
 
 const ventureLinks = [
   ['CTSEG', ctsegUrl],
