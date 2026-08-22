@@ -22,6 +22,7 @@ const positioningStrip = {
   sr: ['Osnivač', 'CTSEG · Glavna poslovna struktura', 'Međunarodna trgovina', 'Strateška nabavka'],
   sq: ['Themelues', 'CTSEG · Struktura kryesore tregtare', 'Tregti Ndërkombëtare', 'Furnizim Strategjik'],
   fa: ['بنیان‌گذار', 'CTSEG · ساختار اصلی تجاری', 'تجارت بین‌المللی', 'تأمین راهبردی'],
+  zh: ['创始人', 'CTSEG · 核心商业实体', '国际贸易', '战略采购'],
 } as const;
 
 const currentStrip = positioningStrip[locale as keyof typeof positioningStrip] ?? positioningStrip.en;
@@ -70,6 +71,12 @@ const ctsegLinks = {
     services: 'https://ctseg.com.tr/fa/services/',
     contact: 'https://ctseg.com.tr/fa/contact/',
     reflex: 'https://ctseg.com.tr/fa/trade-products/',
+  },
+  zh: {
+    home: 'https://ctseg.com.tr/en/',
+    services: 'https://ctseg.com.tr/en/services/',
+    contact: 'https://ctseg.com.tr/en/contact/',
+    reflex: 'https://ctseg.com.tr/en/trade-products/reflex-disposable-gloves/',
   },
 } as const;
 
@@ -129,6 +136,14 @@ const reflexCopy = {
     badges: ['CE 2841 & ISO 9001', '۷ خانواده محصول', 'تأمین صادرات عمده', 'Private Label'],
     ctaInternal: 'بررسی پرتفوی B2B دستکش‌های REFLEX',
     ctaExternal: 'صفحه رسمی محصول در CTSEG',
+  },
+  zh: {
+    kicker: 'CTSEG 重点产品矩阵',
+    title: 'REFLEX 一次性及医用防护手套',
+    description: '面向医疗、工业、食品加工及卫生领域的丁腈、无乳胶 TPE、热塑乙烯基及共聚物一次性手套产品线。7 大专业产品系列，充足的大宗 B2B 现货与出口供应能力，支持品牌定制 (Private Label)。',
+    badges: ['CE 2841 与 ISO 9001 认证', '7 大产品系列', '大宗出口直供', '支持 Private Label'],
+    ctaInternal: '浏览 REFLEX B2B 产品矩阵',
+    ctaExternal: 'CTSEG 官方产品页面',
   },
 } as const;
 
@@ -616,6 +631,75 @@ const positioning = {
       text: 'QCT Studio توانمندی‌های دیجیتال و فناوری را فراهم می‌کند و QCT Commerce ساختار تجارت دیجیتال ترکیه است. Mythborn برند مستقل مصرف‌کننده با تمرکز بر تاروت، کاتینا و طالع‌بینی است. هیچ‌یک جایگزین نقش اصلی تجاری CTSEG نیستند.',
     },
   },
+  zh: {
+    hero: {
+      eyebrow: '创始人 · 国际贸易 · 战略采购',
+      title: '在国际贸易中，连接合适的产品、目标市场与务实的商业运营。',
+      description: '立足土耳其与国际市场，我以企业决策者视角，整合供应链网络、商业运营、数字化贸易与 AI 辅助调研。',
+      primary: '了解 CTSEG',
+      secondary: '与 Teyfik Gökdemir 交流',
+      summary: 'Teyfik Gökdemir 是 CTSEG Sanayi ve Ticaret Limited Şirketi 创始人，专注于通过深度调研、严谨核验、资源协调和可落地的增长系统构建国际商业机会。',
+    },
+    intro: {
+      label: '创始人视角',
+      title: '从商业调研到运营落地的直接合作模式。',
+      body: '我们将产品调研、市场准入、供应商核验、询报价管理、商业谈判、跨境支付、物流清关及数字化可见性整合为统一闭环。作为创始人，我的核心目标是将不确定的商业机遇转化为条理清晰、风险可控、切实可行的商业架构。',
+      areas: ['国际贸易', '战略采购', '供应商核验', '市场拓展', '数字化贸易', 'AI 商业调研'],
+    },
+    ventures: {
+      label: '商业架构与实体',
+      title: 'CTSEG 为核心商业实体，协同业务构建多维能力支撑。',
+      lead: 'CTSEG 是战略采购与国际贸易的核心运营实体；QCT Studio 提供数字化与技术开发能力，QCT Commerce 负责土耳其本地数字化分销布局，Mythborn 则为独立消费者品牌。',
+    },
+    expertise: {
+      title: '将商业决策建立在扎实调研、严格核验与严谨执行之上。',
+      lead: '这不是空洞的服务包装，而是用于评估、推进和落地跨国商业合作的专业工作准则。',
+      groups: [
+        { title: '国际贸易', items: ['进出口商机评估', '产品与市场匹配', '买家与制造商对接', '跨境商业谈判', '跨国业务拓展'] },
+        { title: '战略采购与核验', items: ['制造商与供应链调研', '供应商资质与合规核验', '价格与产能综合分析', '质量标准与认证文件核查', 'RFQ 询价与比价流程'] },
+        { title: '商业拓展与市场落地', items: ['土耳其市场进入策略', '产品与本土需求调研', '商业运营全流程协调', 'B2B 数字化贸易', '分销与直销体系建设'] },
+        { title: '数字化与 AI 商业系统', items: ['供应链调研工作流', '销售情报与市场信号', '企业背景与机会分析', '知识管理与标准流程', '跨部门运营协同'] },
+      ],
+    },
+    method: {
+      label: '工作模式',
+      title: '直截了当、注重实据、契合实际运营规律。',
+      lead: '每一个商业项目都遵循严谨流程：消除主观假设，厘清合作各方权责，明确可执行的下一步行动。',
+      steps: [
+        { title: '调研', description: '通过可靠渠道系统梳理产品特性、目标市场、制造商背景及需求信号。' },
+        { title: '核验', description: '对比供应商资质、实际产能、质检报告、合规文件、真实价格及商业条款。' },
+        { title: '架构', description: '将报价方案、潜在风险、结算方式、国际物流与准入策略转化为清晰决策模型。' },
+        { title: '协同', description: '直接、透明地统筹推进合作双方及运营各环节的关键执行节点。' },
+      ],
+    },
+    regional: {
+      label: '国际视野',
+      title: '连接土耳其商业潜能与国际市场的桥梁。',
+      body: '我们致力于将土耳其的制造业产能与采购优势对接给区域和全球买家，同时也协助中国及海外优质企业、品牌和产品顺利进入土耳其市场。每一个商业机会都综合考量产品契合度、合作方资质、法律合规、外汇结算、风险控制及物流现实。',
+    },
+    contact: {
+      label: '战略商业洽谈',
+      title: '共同探讨产品定位、市场准入或供应链合作决策。',
+      body: '如需在创始人层面进行战略评估、探讨土耳其市场开拓或建立直接商业合作，欢迎直接与我联系。具体的采购执行与贸易业务将由 CTSEG 统一承接推进。',
+      action: '发送邮件',
+    },
+    ctseg: {
+      label: '核心商业实体',
+      kicker: '创始人亲自主理的战略贸易平台',
+      title: 'CTSEG (Sanayi ve Ticaret Limited Şirketi)',
+      body: 'CTSEG 是专注于战略采购与国际贸易落地的综合平台，协助企业在产品选择、制造商对接、供应商核验及目标市场准入决策中获得可靠的数据与实操支持。',
+      founder: '作为创始人，Teyfik Gökdemir 将供应链调研、合规核验、商业架构与跨境运营落地统筹于统一的高效决策闭环中。',
+      services: ['战略采购与寻源', '供应商背景与合规核验', '国际贸易与跨国商务咨询', '产品与本土市场调研', '贸易全流程运营与清关物流协调', '中国与土耳其及国际市场双向业务拓展'],
+      primary: '了解 CTSEG 服务体系',
+      secondary: '提交采购或贸易需求',
+    },
+    journey: { year: '2026', title: 'CTSEG', description: '战略采购、供应商核验与跨国贸易运营的核心商业平台。' },
+    ecosystem: {
+      label: '支撑性实体与系统',
+      title: '数字化技术赋能与独立业务布局。',
+      text: 'QCT Studio 提供数字化出海技术与全链路建站支持，QCT Commerce 负责土耳其本土的数字化全渠道分销。Mythborn 为专注于塔罗与个人探索的独立品牌。这些业务构成了多维度的专业支持体系，与 CTSEG 的核心商业地位相辅相成。',
+    },
+  },
 } as const;
 
 const localPositioning = positioning[locale as keyof typeof positioning] ?? positioning.en;
@@ -631,6 +715,7 @@ const operationalSystemsLabel = {
   sr: 'Digitalni i operativni sistemi podržani AI tehnologijom',
   sq: 'Sisteme digjitale dhe operacionale të asistuara nga AI',
   fa: 'سیستم‌های عملیاتی دیجیتال و هوش مصنوعی',
+  zh: '数字化与 AI 商业运营系统',
 } as const;
 const journeyItems = [localPositioning.journey, ...baseCopy.journey.items]
   .sort((left, right) => {

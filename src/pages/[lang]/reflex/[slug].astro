@@ -9,7 +9,7 @@ import { reflexProducts, getReflexProductBySlug } from '../../../data/reflexProd
 import { site } from '../../../data/site';
 
 export function getStaticPaths() {
-  const languages: (Locale | 'fa')[] = ['en', 'ru', 'mk', 'sr', 'sq', 'fa'];
+  const languages: (Locale | 'fa')[] = ['en', 'ru', 'mk', 'sr', 'sq', 'fa', 'zh'];
   const paths = [];
 
   for (const lang of languages) {
@@ -32,7 +32,7 @@ if (!product) {
   throw new Error(`Product not found for slug: ${slug}`);
 }
 
-const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa';
+const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa' | 'zh';
 const i18n = product.i18n[lang] || product.i18n.tr;
 const copy = content[locale as Locale] || content.tr;
 
@@ -45,6 +45,7 @@ const alternates: Record<string, string> = {
   sr: `${site.origin}/sr/reflex/${product.slug}/`,
   sq: `${site.origin}/sq/reflex/${product.slug}/`,
   fa: `${site.origin}/fa/reflex/${product.slug}/`,
+  zh: `${site.origin}/zh/reflex/${product.slug}/`,
   'x-default': `${site.origin}/reflex/${product.slug}/`,
 };
 
@@ -56,6 +57,7 @@ const langBrandTitles: Record<string, string> = {
   sr: 'Reflex Plastik B2B Portfolio',
   sq: 'Portofoli B2B Reflex Plastik',
   fa: 'پرتفوی B2B رفلکس پلاستیک',
+  zh: 'Reflex Plastik B2B 产品矩阵',
 };
 
 const brandTitle = langBrandTitles[locale] || langBrandTitles.tr;

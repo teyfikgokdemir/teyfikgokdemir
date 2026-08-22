@@ -1,5 +1,5 @@
 ---
-type Lang = 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa';
+type Lang = 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa' | 'zh';
 
 type Evaluation = {
   market: string;
@@ -176,6 +176,21 @@ const copy: Record<Lang, Copy> = {
     ],
     cta: 'درخواست تجاری خود را با CTSEG در میان بگذارید',
   },
+  zh: {
+    label: '进行中的商业评估与合作线索',
+    title: '跨国市场间持续深化的业务推进管线。',
+    lead: '这些业务代表当前正在推进的国际贸易评估：将产品规格、合作各方背景、合规单证、方案报价及交付实际全面统筹研判。',
+    status: '评估推进中',
+    disclaimer: '本板块并非已公开的协议成果、兜底供货保证或已披露客户名单。在严格恪守商业保密原则的前提下，概括呈现我们的专业工作范畴与决策准则。',
+    evaluations: [
+      { market: '亚洲 · 能源与工业原料', title: '生物燃料供应链通道', text: '针对能源工业原料的供货规模、技术参数适配、原产地溯源、跨境交付模式及合作各方履约准备进行系统评估。', signals: ['产品与技术标准', '原料供应通道', '交付与履约模型'] },
+      { market: '重点市场 · 植物油脂', title: '精装葵花籽油出口业务', text: '针对 PET 瓶装或铁桶装食用油，协调统一技术指标、定制标签、起订量 (MOQ)、阶梯报价与目标市场准入条件。', signals: ['包装与标签合规', 'RFQ 询价与报价', '目标市场准入'] },
+      { market: '中国 ↔ 土耳其及区域 · 综合贸易', title: '大宗原产地干果与特产进口', text: '依据品质等级、产地溯源、规格筛选、样品化验、批次质检、防潮包装及进口清关单证构建可落地的常态化供应。', signals: ['品质与化验分析', '批次溯源管理', '清关物流协调'] },
+      { market: '土耳其 → 区域市场 · 医疗卫生', title: 'REFLEX 一次性手套渠道分销', text: '针对 REFLEX 防护手套系列，统筹产品应用场景、认证资质、采购商画像、区域分销网络及商务接洽。', signals: ['产品应用匹配', '合规认证资质', '渠道分销模型'] },
+      { market: '欧洲及中东 · 大宗粮油', title: '商务接洽与标准化报价框架', text: '在初次评估阶段明确买家核心诉求、包装规格、基准价格假设及国际贸易术语 (Incoterms) 交付条件。', signals: ['采购方核心诉求', '报价与核算纪律', '商务执行推进'] },
+    ],
+    cta: '与 CTSEG 沟通您的采购或贸易需求',
+  },
 };
 
 const contactLinks: Record<Lang, string> = {
@@ -186,6 +201,7 @@ const contactLinks: Record<Lang, string> = {
   sr: 'https://ctseg.com.tr/en/contact/',
   sq: 'https://ctseg.com.tr/en/contact/',
   fa: 'https://ctseg.com.tr/fa/contact/',
+  zh: 'https://ctseg.com.tr/en/contact/',
 };
 
 const text = copy[locale];

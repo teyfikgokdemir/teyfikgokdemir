@@ -24,6 +24,7 @@ const aiVisibilityUrls: Record<Locale | 'fa', string> = {
   mk: '/mk/vidlivost-vo-ai-prebaruvanje/',
   sr: '/sr/vidljivost-u-ai-pretrazi/',
   fa: '/fa/مشاهده-پذیری-در-جستجوی-هوش-مصنوعی/',
+  zh: '/zh/ai-search-visibility/',
 };
 
 const blogUrls: Record<Locale | 'fa', string> = {
@@ -34,6 +35,7 @@ const blogUrls: Record<Locale | 'fa', string> = {
   mk: '/mk/blog/',
   sr: '/sr/blog/',
   fa: '/fa/blog/',
+  zh: '/zh/blog/',
 };
 
 const reflexUrls: Record<Locale | 'fa', string> = {
@@ -44,6 +46,7 @@ const reflexUrls: Record<Locale | 'fa', string> = {
   mk: '/mk/reflex/',
   sr: '/sr/reflex/',
   fa: '/fa/reflex/',
+  zh: '/zh/reflex/',
 };
 
 const reflexUrl = reflexUrls[locale];
@@ -59,6 +62,7 @@ const blogLabels: Record<Locale | 'fa', string> = {
   mk: 'Увид',
   sr: 'Uvidi',
   fa: 'بینش‌ها',
+  zh: '商业洞察',
 };
 
 const aboutLabels: Record<Locale | 'fa', string> = {
@@ -69,6 +73,7 @@ const aboutLabels: Record<Locale | 'fa', string> = {
   mk: 'За мене',
   sr: 'O meni',
   fa: 'درباره من',
+  zh: '关于我',
 };
 
 const aiVisibilityLabels: Record<Locale | 'fa', string> = {
@@ -79,6 +84,7 @@ const aiVisibilityLabels: Record<Locale | 'fa', string> = {
   mk: 'АИ Пребарување',
   sr: 'AI Vidljivost',
   fa: 'دیده‌شدن در هوش مصنوعی',
+  zh: 'AI 搜索可见性',
 };
 
 const nativeLanguageNames: Record<Locale | 'fa', string> = {
@@ -89,6 +95,7 @@ const nativeLanguageNames: Record<Locale | 'fa', string> = {
   sr: 'Srpski',
   sq: 'Shqip',
   fa: 'فارسی',
+  zh: '中文',
 };
 
 const blogLabel = blogLabels[locale];
@@ -111,6 +118,7 @@ const panelLabels = ({
   sr: { services: 'Poduhvati', approach: 'Pristup', start: 'Započnimo razgovor', email: 'Pošalji email' },
   sq: { services: 'Sipërmarrjet', approach: 'Qasja', start: 'Nisni një bisedë', email: 'Dërgo email' },
   fa: { services: 'ساختارها', approach: 'رویکرد', start: 'شروع گفتگو', email: 'ارسال ایمیل' },
+  zh: { services: '核心业务', approach: '专业方法', start: '开启合作交流', email: '发送电子邮件' },
 }[locale] || { services: 'Services', approach: 'Expertise', start: 'Start a conversation', email: 'Send an email' });
 
 const ctsegUrl = locale === 'tr'

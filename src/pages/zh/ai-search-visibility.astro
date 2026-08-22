@@ -1,0 +1,60 @@
+---
+import ContentPage from '../../components/ContentPage.astro';
+import { site } from '../../data/site';
+
+const title = 'AI 搜索可见性：SEO、GEO、AEO 与 AIO 实战解析 | Teyfik Gökdemir';
+const description = '系统化构建现代企业的搜索引擎与生成式 AI 可见性体系，让品牌在 AI 时代被精准检索、理解与权威引用。';
+const pathname = '/zh/ai-search-visibility/';
+const canonical = site.origin + pathname;
+
+const faq = [
+  {
+    question: '什么是 AI 搜索可见性 (AI Search Visibility)？',
+    answer: '它是企业或品牌在传统搜索引擎、对话式 AI 平台及大语言模型检索增强生成 (RAG) 体系中，被准确检索、深度理解并作为可信信源引用的综合能力。',
+  },
+  {
+    question: 'GEO (生成式引擎优化) 与传统 SEO 有何区别？',
+    answer: '传统 SEO 侧重于关键词排名与传统 SERP 页面抓取；而 GEO 侧重于为大语言模型提供高事实密度、清晰实体关系与结构化上下文，提高被 AI 引用合成的概率。',
+  },
+  {
+    question: '配置 llms.txt 文件是否能保证被 AI 优先引用？',
+    answer: '不能。llms.txt 文件为大模型爬虫提供了清晰的结构化全景上下文，但最终引用与否仍取决于核心内容的权威性、事实准确度与信息独特性。',
+  },
+];
+
+const alternates = {
+  en: site.origin + '/ai-search-visibility/',
+  tr: site.origin + '/yapay-zeka-arama-gorunurlugu/',
+  ru: site.origin + '/ru/ai-search-visibility/',
+  sq: site.origin + '/sq/dukshmeria-ne-kerkimin-ai/',
+  mk: site.origin + '/mk/vidlivost-vo-ai-prebaruvanje/',
+  sr: site.origin + '/sr/vidljivost-u-ai-pretrazi/',
+  fa: site.origin + '/fa/مشاهده-پذیری-در-جستجوی-هوش-مصنوعی/',
+  zh: site.origin + '/zh/ai-search-visibility/',
+  'x-default': site.origin + '/yapay-zeka-arama-gorunurlugu/',
+};
+---
+
+<ContentPage
+  locale="zh"
+  title={title}
+  description={description}
+  eyebrow="AI 搜索可见性"
+  heading="让您的企业在 AI 与智能算法时代被清晰发现与权威引用"
+  lead="融合生成式引擎优化 (GEO)、问答引擎优化 (AEO) 与传统搜索引擎优化 (SEO) 的一体化商业可见性战略。"
+  pathname={pathname}
+  alternates={alternates}
+  faq={faq}
+>
+  <section class="prose">
+    <h2>为什么 AI 搜索可见性在当下至关重要？</h2>
+    <p>越来越多的跨国 B2B 采购决策者与商业客户正在通过 ChatGPT、Claude、Perplexity 等生成式 AI 工具寻找供应商、对比产品规格与评估供应链信誉。</p>
+    <h2>AI 时代搜索可见性的四大支柱</h2>
+    <ul>
+      <li><strong>SEO (Search Engine Optimization):</strong> 传统搜索的技术可访问性、索引深度与权威基础。</li>
+      <li><strong>GEO (Generative Engine Optimization):</strong> 面向大语言模型的内容事实密度与实体关系结构化呈现。</li>
+      <li><strong>AEO (Answer Engine Optimization):</strong> 直击用户核心采购提问的清晰问答与数据提炼结构。</li>
+      <li><strong>AIO (AI Optimization):</strong> 连接底层数据、技术协议与 AI 交互体系的全局数字化资产优化。</li>
+    </ul>
+  </section>
+</ContentPage>

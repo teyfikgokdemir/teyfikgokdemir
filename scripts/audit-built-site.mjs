@@ -105,7 +105,7 @@ for (const file of htmlFiles) {
   else titleOwners.set(title, route);
   if (descriptionOwners.has(description)) errors.push(`${route}: description tekrar ediyor.`);
   else descriptionOwners.set(description, route);
-  if (!['tr', 'en', 'ru', 'mk', 'sr', 'sq', 'fa'].includes(lang)) errors.push(`${route}: geçersiz html lang (${lang}).`);
+  if (!['tr', 'en', 'ru', 'mk', 'sr', 'sq', 'fa', 'zh-CN', 'zh'].includes(lang)) errors.push(`${route}: geçersiz html lang (${lang}).`);
   if ((html.match(/<h1\b/gi) ?? []).length !== 1) errors.push(`${route}: tam bir H1 bekleniyor.`);
   for (const block of html.matchAll(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
     try { JSON.parse(block[1]); } catch { errors.push(`${route}: geçersiz JSON-LD.`); }
@@ -127,13 +127,16 @@ for (const file of htmlFiles) {
 
 for (const page of pageByRoute.values()) {
   if (!page.indexable || page.alternates.size === 0) continue;
-  if (!page.alternates.has(page.lang)) errors.push(`${page.route}: self hreflang (${page.lang}) eksik.`);
+  const selfHreflang = page.lang === 'zh-CN' ? 'zh' : page.lang;
+  if (!page.alternates.has(selfHreflang)) errors.push(`${page.route}: self hreflang (${selfHreflang}) eksik.`);
   if (!page.alternates.has('x-default')) errors.push(`${page.route}: x-default eksik.`);
   for (const [language, href] of page.alternates) {
     const targetRoute = routeFromUrl(href);
     const target = pageByRoute.get(targetRoute);
     if (!target?.indexable) errors.push(`${page.route}: hreflang hedefi indexlenebilir değil (${language}: ${href}).`);
-    if (language !== 'x-default' && target && normalizedUrl(target.alternates.get(page.lang)) !== normalizedUrl(page.canonical)) {
+    const expectedSelfHreflang = target?.lang === 'zh-CN' ? 'zh' : target?.lang;
+    const targetAlternateHref = target?.alternates.get(selfHreflang);
+    if (language !== 'x-default' && target && normalizedUrl(targetAlternateHref) !== normalizedUrl(page.canonical)) {
       errors.push(`${page.route}: hreflang karşılığı yok (${language}: ${targetRoute}).`);
     }
   }
@@ -175,7 +178,8 @@ const tradeEntryContracts = {
   mk:{focusLinks:['https://ctseg.com.tr/en/insights/vegetable-oil-sourcing-rfq-checklist/','https://ctseg.com.tr/en/insights/nuts-dried-fruit-quality-document-check/'],specialistLinks:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
   sr:{focusLinks:['https://ctseg.com.tr/en/insights/vegetable-oil-sourcing-rfq-checklist/','https://ctseg.com.tr/en/insights/nuts-dried-fruit-quality-document-check/'],specialistLinks:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
   sq:{focusLinks:['https://ctseg.com.tr/en/insights/vegetable-oil-sourcing-rfq-checklist/','https://ctseg.com.tr/en/insights/nuts-dried-fruit-quality-document-check/'],specialistLinks:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']},
-  fa:{focusLinks:['https://ctseg.com.tr/en/insights/vegetable-oil-sourcing-rfq-checklist/','https://ctseg.com.tr/en/insights/nuts-dried-fruit-quality-document-check/'],specialistLinks:['https://ctseg.com.tr/fa/sourcing/فرش-ایرانی/','https://ctseg.com.tr/fa/sourcing/فرش-ابریشم-دستباف/','https://ctseg.com.tr/fa/sourcing/تامین-عمده-منسوجات/']}
+  fa:{focusLinks:['https://ctseg.com.tr/en/insights/vegetable-oil-sourcing-rfq-checklist/','https://ctseg.com.tr/en/insights/nuts-dried-fruit-quality-document-check/'],specialistLinks:['https://ctseg.com.tr/fa/sourcing/فرش-ایرانی/','https://ctseg.com.tr/fa/sourcing/فرش-ابریشم-دستباف/','https://ctseg.com.tr/fa/sourcing/تامین-عمده-منسوجات/']},
+  zh:{focusLinks:['https://ctseg.com.tr/en/insights/vegetable-oil-sourcing-rfq-checklist/','https://ctseg.com.tr/en/insights/nuts-dried-fruit-quality-document-check/'],specialistLinks:['https://ctseg.com.tr/en/sourcing/iranian-carpets/','https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/','https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/']}
 };
 const commercialEvaluationContracts = {
   tr: 'Bu bölüm sonuçlanmış anlaşma, garanti edilen tedarik veya kamuya açıklanmış müşteri listesi değildir.',
@@ -184,7 +188,8 @@ const commercialEvaluationContracts = {
   mk: 'Овој дел не е листа на склучени договори, гарантирани набавки или јавно објавени клиенти.',
   sr: 'Ovaj odeljak nije lista zaključenih ugovora, garantovanog snabdevanja ili javno objavljenih klijenata.',
   sq: 'Ky seksion nuk është listë marrëveshjesh të përfunduara, furnizimesh të garantuara ose klientësh të publikuar.',
-  fa: 'این بخش فهرست قراردادهای نهایی، تأمین تضمین‌شده یا مشتریان اعلام‌شده عمومی نیست.'
+  fa: 'این بخش فهرست قراردادهای نهایی، تأمین تضمین‌شده یا مشتریان اعلام‌شده عمومی نیست.',
+  zh: '本部分内容不构成已签署的确定协议、保证供货承诺或公开披露的客户名录。'
 };
 const mythbornContracts = {
   tr:{status:'Aktif girişim',region:'Uluslararası',description:'Tarot, Katina, astroloji ve kişisel keşif deneyimlerini çok dilli dijital bir platformda birleştiren bağımsız tüketici markası.'},
@@ -193,7 +198,8 @@ const mythbornContracts = {
   mk:{status:'Активен потфат',region:'Меѓународно',description:'Независен повеќејазичен потрошувачки бренд што на една дигитална платформа ги обединува искуствата со тарот, Катина, астрологија и лично самооткривање.'},
   sr:{status:'Aktivan poduhvat',region:'Međunarodno',description:'Nezavisan višejezični potrošački brend koji na jednoj digitalnoj platformi objedinjuje iskustva tarota, Katine, astrologije i ličnog otkrivanja.'},
   sq:{status:'Sipërmarrje aktive',region:'Ndërkombëtare',description:'Një markë e pavarur shumëgjuhëshe për konsumatorët, që bashkon në një platformë digjitale përvoja të Tarotit, Katinës, astrologjisë dhe zbulimit personal.'},
-  fa:{status:'برند فعال و مستقل',region:'بین‌المللی',description:'یک برند مستقل و چندزبانه برای تجربه‌های تاروت، کاتینا، طالع‌بینی و خودشناسی در یک پلتفرم دیجیتال.'}
+  fa:{status:'برند فعال و مستقل',region:'بین‌المللی',description:'یک برند مستقل و چندزبانه برای تجربه‌های تاروت، کاتینا، طالع‌بینی و خودشناسی در یک پلتفرم دیجیتال.'},
+  zh:{status:'在运营项目',region:'全球化',description:'融合塔罗、卡蒂娜、占星与象征符号探索的多语言独立数字产品与消费者品牌。'}
 };
 const obsoleteMythbornCopy = [
   'Uluslararası pazara yönelik marka, ürün ve dijital ticaret ekosistemi',

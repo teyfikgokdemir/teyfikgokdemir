@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { product, locale } = Astro.props;
-const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa';
+const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa' | 'zh';
 
 const labels = {
   tr: {
@@ -178,27 +178,51 @@ const labels = {
     cartonDim: 'ابعاد کارتن',
     boxBarcode: 'بارکد جعبه',
     cartonBarcode: 'بارکد کارتن',
-  }
+  },
+  zh: {
+    specsTitle: '技术参数与产品规格',
+    material: '原材料 / 材质',
+    powder: '有粉 / 无粉状态',
+    latex: '乳胶成分',
+    silicone: '硅油成分',
+    sterility: '灭菌状态',
+    foodContact: '食品接触合规',
+    yes: '是 / 完全符合标准',
+    no: '否',
+    colors: '可选颜色',
+    sizes: '可选尺码',
+    variantsTitle: '包装与物流规格',
+    color: '颜色',
+    size: '尺码',
+    productCode: '产品货号',
+    boxQty: '单盒装量',
+    cartonQty: '外箱装量',
+    palletQty: '单托盘装量',
+    boxDim: '内盒尺寸',
+    cartonDim: '外箱尺寸',
+    boxBarcode: '内盒条码 (EAN)',
+    cartonBarcode: '外箱条码 (EAN)',
+  },
 }[lang] || labels.tr;
 
 const i18n = product.i18n[lang] || product.i18n.tr;
 
 const translateColor = (col: string) => {
   const map: Record<string, Record<string, string>> = {
-    'Siyah': { tr: 'Siyah', en: 'Black', mk: 'Црна', sr: 'Crna', sq: 'E Zezë', fa: 'مشکی' },
-    'Şeffaf': { tr: 'Şeffaf', en: 'Clear', mk: 'Проѕирна', sr: 'Providna', sq: 'Transparente', fa: 'شفاف' },
-    'Mavi': { tr: 'Mavi', en: 'Blue', mk: 'Сина', sr: 'Plava', sq: 'Blu', fa: 'آبی' },
-    'Mor': { tr: 'Mor', en: 'Purple', mk: 'Виолетова', sr: 'Ljubičasta', sq: 'Vjollcë', fa: 'بنفش' },
-    'Yeşil': { tr: 'Yeşil', en: 'Green', mk: 'Зелена', sr: 'Zelena', sq: 'Jeshile', fa: 'سبز' },
-    'Pembe': { tr: 'Pembe', en: 'Pink', mk: 'Розева', sr: 'Roze', sq: 'Rozë', fa: 'صورتی' },
-    'Krem': { tr: 'Krem', en: 'Cream', mk: 'Крем', sr: 'Krem', sq: 'Krem', fa: 'کرم' }
+    'Siyah': { tr: 'Siyah', en: 'Black', mk: 'Црна', sr: 'Crna', sq: 'E Zezë', fa: 'مشکی', zh: '黑色' },
+    'Şeffaf': { tr: 'Şeffaf', en: 'Clear', mk: 'Проѕирна', sr: 'Providna', sq: 'Transparente', fa: 'شفاف', zh: '透明' },
+    'Mavi': { tr: 'Mavi', en: 'Blue', mk: 'Сина', sr: 'Plava', sq: 'Blu', fa: 'آبی', zh: '蓝色' },
+    'Mor': { tr: 'Mor', en: 'Purple', mk: 'Виолетова', sr: 'Ljubičasta', sq: 'Vjollcë', fa: 'بنفش', zh: '紫色' },
+    'Yeşil': { tr: 'Yeşil', en: 'Green', mk: 'Зелена', sr: 'Zelena', sq: 'Jeshile', fa: 'سبز', zh: '绿色' },
+    'Pembe': { tr: 'Pembe', en: 'Pink', mk: 'Розева', sr: 'Roze', sq: 'Rozë', fa: 'صورتی', zh: '粉色' },
+    'Krem': { tr: 'Krem', en: 'Cream', mk: 'Крем', sr: 'Krem', sq: 'Krem', fa: 'کرم', zh: '米白' }
   };
   return map[col]?.[lang] || col;
 };
 
 const translateSize = (sz: string) => {
   const map: Record<string, Record<string, string>> = {
-    'Çocuk Standart': { tr: 'Çocuk Standart', en: 'Kids Standard', mk: 'Детски стандард', sr: 'Dečiji standard', sq: 'Fëmijë Standard', fa: 'استاندارد کودک' }
+    'Çocuk Standart': { tr: 'Çocuk Standart', en: 'Kids Standard', mk: 'Детски стандард', sr: 'Dečiji standard', sq: 'Fëmijë Standard', fa: 'استاندارد کودک', zh: '儿童通用标准' }
   };
   return map[sz]?.[lang] || sz;
 };
@@ -210,15 +234,16 @@ const translateQty = (val: string) => {
   if (lang === 'sr') return val.replace(/Adet/g, 'komada').replace(/Kutu/g, 'kutija').replace(/Koli/g, 'kartona');
   if (lang === 'sq') return val.replace(/Adet/g, 'copë').replace(/Kutu/g, 'kuti').replace(/Koli/g, 'kartona');
   if (lang === 'fa') return val.replace(/Adet/g, 'عدد').replace(/Kutu/g, 'جعبه').replace(/Koli/g, 'کارتن');
+  if (lang === 'zh') return val.replace(/Adet/g, '只').replace(/Kutu/g, '盒').replace(/Koli/g, '箱');
   return val;
 };
 const translateSpec = (val: string) => {
   if (!val) return val;
   const map: Record<string, Record<string, string>> = {
-    'Pudrasız': { tr: 'Pudrasız', en: 'Powder-Free', mk: 'Без пудра', sr: 'Bez pudera', sq: 'Pa pluhur', fa: 'بدون پودر' },
-    'Lateks İçermez': { tr: 'Lateks İçermez', en: 'Latex-Free', mk: 'Без латекс', sr: 'Bez lateksa', sq: 'Pa lateks', fa: 'بدون لاتکس' },
-    'Silikon İçermez': { tr: 'Silikon İçermez', en: 'Silicone-Free', mk: 'Без силикон', sr: 'Bez silikona', sq: 'Pa silikon', fa: 'بدون سیلیکون' },
-    'Non-Steril': { tr: 'Non-Steril', en: 'Non-Sterile', mk: 'Нон-стерилно', sr: 'Non-sterilno', sq: 'Jo-sterile', fa: 'غیر استریل' },
+    'Pudrasız': { tr: 'Pudrasız', en: 'Powder-Free', mk: 'Без пудра', sr: 'Bez pudera', sq: 'Pa pluhur', fa: 'بدون پودر', zh: '无粉 (Powder-Free)' },
+    'Lateks İçermez': { tr: 'Lateks İçermez', en: 'Latex-Free', mk: 'Без латекс', sr: 'Bez lateksa', sq: 'Pa lateks', fa: 'بدون لاتکس', zh: '不含乳胶 (Latex-Free)' },
+    'Silikon İçermez': { tr: 'Silikon İçermez', en: 'Silicone-Free', mk: 'Без силикон', sr: 'Bez silikona', sq: 'Pa silikon', fa: 'بدون سیلیکون', zh: '不含硅油 (Silicone-Free)' },
+    'Non-Steril': { tr: 'Non-Steril', en: 'Non-Sterile', mk: 'Нон-стерилно', sr: 'Non-sterilno', sq: 'Jo-sterile', fa: 'غیر استریل', zh: '非灭菌 (Non-Sterile)' },
   };
   return map[val]?.[lang] || val;
 };

@@ -5,7 +5,7 @@ import type { Locale } from '../i18n/locales';
 
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
-const locales: Locale[] = ['tr', 'en', 'ru', 'fa', 'mk', 'sr', 'sq'];
+const locales: Locale[] = ['tr', 'en', 'ru', 'fa', 'mk', 'sr', 'sq', 'zh'];
 const pathnameFor = (item: Locale) => item === 'tr' ? '/instagram/tedarik/' : `/${item}/instagram/tedarik/`;
 const siteUrl = (item: Locale) => site.origin + pathnameFor(item);
 const alternates = Object.fromEntries([
@@ -34,6 +34,37 @@ const copy = {
   },
   sq: {
     title: 'Lista e kontrollit për një mundësi tregtare | Teyfik Gökdemir', description: 'Pesë pyetje për produktin, tregun, furnizuesin dhe kushtet përpara një vendimi tregtar.', eyebrow: 'Për vizitorët nga Instagrami · Kornizë për vendim tregtar', heading: 'A është vërtet gati mundësia tregtare?', lead: 'Një mundësi premtuese nuk është gjithmonë e zbatueshme. Nisni me pesë pyetje që lidhin produktin, tregun, palën tjetër dhe kushtet.', opening: ['Një mundësi emocionuese nuk do të thotë se është gati për tregti. Produkti, blerësi, pala e verifikueshme dhe kushtet duhet të shihen së bashku.', 'Kjo listë vazhdon postimin e dytë në Instagram. Nëse një përgjigje nuk është e qartë, plotësoni të dhënat para vendimit.'], sectionLabel: 'KONTROLLI I PARË', sectionTitle: 'Pesë pyetje para vendimit.', sectionLead: 'Pyetjet tregojnë se cilat të dhëna mungojnë dhe cili është hapi i ardhshëm i kërkimit.', decisionLabel: 'PIKA E VENDIMIT', decisionTitle: 'Mungojnë të dhënat apo koordinimi?', decisionText: 'Kur produkti dhe tregu janë të qarta, por furnizuesi, dokumentet, oferta ose dorëzimi jo, duhen verifikim, krahasim dhe koordinim.', ctseg: 'Dërgoni kërkesë te CTSEG ↗', whatsapp: 'Shkruani një mesazh të shkurtër', returnLabel: 'VAZHDONI', returnTitle: 'Pyetja tjetër është në Instagram.', returnText: 'Cila nga pesë pikat e ngadalëson më shumë procesin tuaj? Kthehuni te profili në Instagram dhe ndani numrin.', instagram: 'Kthehuni te Instagrami @teyfikgokdemir ↗', whatsappText: 'Përshëndetje Teyfik, po ju kontaktoj nga lista e kontrollit të mundësisë tregtare në Instagram. Dua të flas për: ', checks: [['A është produkti i qartë?', 'Pa specifikim, cilësi, paketim, sasi minimale dhe përdorim, ofertat nuk krahasohen.', 'Specifikimi i produktit'], ['A janë të qarta tregu dhe blerësi?', 'Vendi i synuar, lloji i blerësit dhe sinjali i kërkesës duhet të konfirmohen me kërkim.', 'Tregu dhe blerësi'], ['A është furnizuesi i verifikuar?', 'Kapaciteti, prodhimi, dokumentet, cilësia dhe dorëzimi kontrollohen së bashku.', 'Palë e verifikueshme'], ['A janë kushtet të krahasueshme?', 'Çmimi nuk mjafton. Krahasoni pagesën, dorëzimin, dokumentet, logjistikën dhe rrezikun.', 'Ofertë e krahasueshme'], ['A është i qartë hapi tjetër?', 'Përgjegjësi dhe afati për mostër, RFQ, verifikim ose porosi pilot duhet të jenë të qarta.', 'Veprim i zbatueshëm']],
+  },
+  zh: {
+    title: '商业机会评估清单 | Teyfik Gökdemir',
+    description: '在推进一项跨境商业机会前，针对产品、目标市场、供应商及交易条款必须核实的五个核心问题。',
+    eyebrow: '来自 Instagram 读者 · 商业决策框架',
+    heading: '这项商业机会真的准备好了吗？',
+    lead: '看似前景广阔的机会并不一定具备可执行性。从以下五个核心问题开始，将产品、市场、合作方与商业条款置于同一框架下审视。',
+    opening: [
+      '一个机会看起来令人兴奋，并不意味着它在商业上已经就绪。初期的专业评估必须确保正确的产品、真实的买家、经得起核验的合作方以及切实可行的商务条款汇聚在同一谈判桌前。',
+      '这份清单是 Instagram 商业分享的延伸。如果你对其中任何一个问题无法给出明确的答案，在做出实质性决策前务必先补齐缺失的关键证据。'
+    ],
+    sectionLabel: '前期核验',
+    sectionTitle: '做出决策前的五个关键问题。',
+    sectionLead: '这些问题本身并不能单方面判定一份提议的好坏，但它们能清晰暴露出哪些关键信息仍有缺失，并明确下一步调研的方向。',
+    decisionLabel: '决策节点',
+    decisionTitle: '缺失的是数据，还是跨国协同？',
+    decisionText: '当产品和目标市场已经明确，但供应商资质、合规单证、报价结构或交付模型依然模糊时，问题往往不仅仅是缺少价格调研，而是需要将背景核验、方案比选与跨国商务协调整合推进。',
+    ctseg: '向 CTSEG 提交商业合作需求 ↗',
+    whatsapp: '发送 WhatsApp 咨询',
+    returnLabel: '继续探索',
+    returnTitle: '让我们在 Instagram 上探讨下一个商业议题。',
+    returnText: '在这份检查清单的五个维度中，哪一项在您的实际业务中耗费了最多时间？欢迎返回 Instagram 个人主页交流您的看法或获取最新商业洞察。',
+    instagram: '返回 @teyfikgokdemir Instagram 主页 ↗',
+    whatsappText: '您好 Teyfik，我通过 Instagram 商业机会评估清单与您联系。我想探讨的商业议题是：',
+    checks: [
+      ['产品定义与规格是否明确？', '如果技术规格、质量公差、包装形态、最低起订量及具体应用场景不清晰，不同供应商的报价将无法进行有效横向对比。', '产品定义与技术规格'],
+      ['目标市场与买家画像是否清晰？', '目标销往国家、采购商类型、真实需求信号、竞争格局及准入条件必须基于扎实的市场调研，而非主观假设。', '目标市场与买家画像'],
+      ['供应商是否经过深度实地核验？', '工厂实际产能、设备工装、质量管理体系、合规证书、历史信誉及综合交付履约能力必须进行多维度交叉核实。', '经核验的真实合作方'],
+      ['商务条款是否具备横向可比性？', '表面单价不能作为唯一决策依据。结算方式、交付港口、单证流、国际物流、汇率波动及违约责任必须综合考量。', '可比的标准化报价'],
+      ['后续落地的下一步行动是否清晰？', '样品签样、标准 RFQ 询价、背景调查、商务谈判或小批量试单等后续推进环节，必须明确责任人与时间节点。', '可落地的执行行动']
+    ]
   },
 } as const;
 

@@ -114,6 +114,50 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+      zh: {
+        "name": "Flex Hi-Tech 高弹防护手套",
+        "tagline": "新一代复合高弹 TPE 技术，卓越拉伸性能与高灵敏触感。",
+        "description": "Flex Hi-Tech 采用新一代复合 TPE (热塑性弹性体) 技术，作为传统丁腈与 PVC 手套的高环保、高性价比替代方案而研发。人体工学贴合设计紧密包裹手掌与手指，无异味无味道配方，在食品深加工及严苛卫生操作中表现出色。",
+        "materialName": "TPE (热塑性弹性体)",
+        "powderStatus": "无粉",
+        "latexStatus": "不含乳胶",
+        "siliconeStatus": "不含硅油",
+        "sterilityStatus": "非灭菌",
+        "foodContactLabel": "是 / 完全符合食品接触标准",
+        "features": [
+                "贴合手型与指部的人体工学设计",
+                "触感极其柔软、无异味、亲肤配方",
+                "100% 适用于油性及易滑食品接触",
+                "高拉伸弹性与优异抗撕裂强度",
+                "不含乳胶与硅油，有效降低过敏风险",
+                "生产周期短，具备显著采购成本优势"
+        ],
+        "applications": [
+                "食品深加工与餐饮分餐",
+                "精细卫生与清洁作业",
+                "HoReCa 酒店餐饮连锁",
+                "美容美发与个人护理",
+                "通用工业接触与日常防护"
+        ],
+        "faq": [
+                {
+                        "question": "Flex Hi-Tech 手套采用什么材质，是否无粉？",
+                        "answer": "Flex Hi-Tech 采用新一代高弹复合 TPE (热塑性弹性体) 材质制成，全系列为无粉、不含乳胶、不含硅油配方。"
+                },
+                {
+                        "question": "Flex Hi-Tech 是否符合直接接触食品标准？",
+                        "answer": "是的，100% 符合食品级接触标准，无异味无味道，特别适合处理油性及易滑食材。"
+                },
+                {
+                        "question": "有哪些可选颜色与尺码规格？",
+                        "answer": "提供黑色、透明和蓝色三种颜色，尺码覆盖 S、M、L 和 XL。"
+                },
+                {
+                        "question": "包装与托盘装载规格是怎样的？",
+                        "answer": "标准包装为每盒 100 只，每箱 20 盒 (共 2,000 只/箱)，单托盘装载 70 箱。"
+                }
+        ]
+},
       ru: {
         "name": "Reflex Flex Hi-Tech",
         "tagline": "Перчатки премиум-класса из эластичного ТПЭ",
@@ -464,6 +508,44 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+      zh: {
+        "name": "Flex Kids 儿童专属防护手套",
+        "tagline": "专为儿童手型量身定制的卫生防护与创意活动手套。",
+        "description": "Flex Kids 专为儿童娇嫩手型量身研发，采用 100% 安全无毒、不含乳胶及有害添加剂的复合 TPE 材质。在学校手工作业、食品烹饪体验及日常卫生防护中提供舒适安心的贴合保护。",
+        "materialName": "TPE (热塑性弹性体)",
+        "powderStatus": "无粉",
+        "latexStatus": "不含乳胶",
+        "siliconeStatus": "不含硅油",
+        "sterilityStatus": "非灭菌",
+        "foodContactLabel": "是 / 完全符合标准",
+        "features": [
+                "专为儿童手掌比例优化的贴合版型",
+                "食品级安全标准，无气味无化学残留",
+                "无粉不含乳胶，呵护儿童敏感肌肤",
+                "柔软高弹，不影响握笔与精细手工操作",
+                "彩色趣味设计，提高儿童佩戴意愿"
+        ],
+        "applications": [
+                "儿童美术与手工实践课堂",
+                "烘焙亲子体验与食品制作",
+                "学校与幼儿园卫生日常",
+                "儿童游乐场与探索活动"
+        ],
+        "faq": [
+                {
+                        "question": "Flex Kids 适合什么年龄段的儿童？",
+                        "answer": "专为学龄前及学龄期儿童手型比例设计，版型贴合舒适。"
+                },
+                {
+                        "question": "材质对儿童皮肤是否安全？",
+                        "answer": "采用 100% 食品级安全 TPE 材质，无毒无味，不含天然乳胶与硅油，防止过敏。"
+                },
+                {
+                        "question": "包装规格如何？",
+                        "answer": "每盒 100 只，每箱 20 盒，单托盘 70 箱。"
+                }
+        ]
+},
       ru: {
         "name": "Reflex Flex Kids",
         "tagline": "Гигиеничные одноразовые перчатки ТПЭ специального детского размера",
@@ -842,6 +924,40 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+      zh: {
+        "name": "Winlyex 无粉乙烯基防护手套",
+        "tagline": "经典无粉 PVC 材质，严谨质控，通用型高性价比之选。",
+        "description": "Winlyex 无粉手套选用高纯度 PVC 原料制成，具备出色的防尘隔离与平滑穿戴体验。广泛应用于食品零售、轻工业流水线与日常清洁防护。",
+        "materialName": "PVC (聚氯乙烯)",
+        "powderStatus": "无粉",
+        "latexStatus": "不含乳胶",
+        "siliconeStatus": "不含硅油",
+        "sterilityStatus": "非灭菌",
+        "foodContactLabel": "是 / 适用于常规食品",
+        "features": [
+                "表面平滑无粉，穿脱顺畅",
+                "不含天然乳胶，防止乳胶过敏反应",
+                "优异的防潮与轻度化学品阻隔性",
+                "严谨的批次质控与包装密封性",
+                "大宗采购经济适用"
+        ],
+        "applications": [
+                "超市生鲜与熟食零售",
+                "餐饮备料与轻度清洁",
+                "实验室轻度检查",
+                "电子元器件轻工组装"
+        ],
+        "faq": [
+                {
+                        "question": "Winlyex 无粉手套的主要材质是什么？",
+                        "answer": "采用优质聚氯乙烯 (PVC / Vinyl) 树脂原料，经现代化无粉工艺精制而成。"
+                },
+                {
+                        "question": "是否容易引起过敏？",
+                        "answer": "不含天然乳胶蛋白，对于乳胶敏感人群极为安全友好。"
+                }
+        ]
+},
       ru: {
         "name": "Reflex Winlyex Pudrasız",
         "tagline": "Неопудренные виниловые перчатки повышенной прочности",
@@ -1224,6 +1340,36 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+      zh: {
+        "name": "Winlyex 热成型乙烯基手套",
+        "tagline": "热压一体成型工艺，高阻隔性，适合大批量消耗场景。",
+        "description": "Winlyex 热成型乙烯基手套通过精密热压密封工艺成型，具有优良的防渗漏阻隔性能和极具竞争力的批量采购成本。",
+        "materialName": "热成型 PVC / 乙烯基",
+        "powderStatus": "无粉",
+        "latexStatus": "不含乳胶",
+        "siliconeStatus": "不含硅油",
+        "sterilityStatus": "非灭菌",
+        "foodContactLabel": "是 / 完全符合标准",
+        "features": [
+                "热压封边工艺，无漏水隐患",
+                "经济实惠，专为高周转消耗场景设计",
+                "无粉配方，避免残留污染",
+                "易于快速抽取佩戴",
+                "大批量托盘现货储备"
+        ],
+        "applications": [
+                "快餐连锁与外卖打包",
+                "生鲜市场与肉禽处理",
+                "保洁服务与垃圾清理",
+                "农业采摘与初级分选"
+        ],
+        "faq": [
+                {
+                        "question": "热成型手套与常规浸胶手套有什么区别？",
+                        "answer": "热成型手套采用膜材热压熔接工艺，厚度均匀、阻隔性好且单位成本更低，特别适合高频次更换场景。"
+                }
+        ]
+},
       ru: {
         "name": "Reflex Winlyex Termo Vinil",
         "tagline": "Термовиниловые перчатки с повышенной термостойкостью и эластичностью",
@@ -1605,6 +1751,40 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+      zh: {
+        "name": "Medilex 医用及卫生级 TPE 手套",
+        "tagline": "严苛卫生级标准制造，高抗拉伸强韧度，专为健康与检查设计。",
+        "description": "Medilex 采用高纯度医用级 TPE 配方制造，严格遵循国际卫生标准。质地柔软细腻且具备极高韧性，适用于医疗机构常规检查、护理及实验室日常卫生防护。",
+        "materialName": "医用级 TPE",
+        "powderStatus": "无粉",
+        "latexStatus": "不含乳胶",
+        "siliconeStatus": "不含硅油",
+        "sterilityStatus": "非灭菌",
+        "foodContactLabel": "是 / 符合食品与卫生标准",
+        "features": [
+                "医用级洁净制造工艺与标准",
+                "极佳的触觉感知度与抗拉伸断裂性能",
+                "100% 不含蛋白质乳胶过敏原",
+                "双向左右手通用设计，快速更换",
+                "多重国际质量认证合规"
+        ],
+        "applications": [
+                "诊所与体检中心常规检查",
+                "医护日常辅助与护理",
+                "牙科及诊疗准备",
+                "制药与生物实验室辅助"
+        ],
+        "faq": [
+                {
+                        "question": "Medilex 手套是否适用于医疗检查？",
+                        "answer": "适用于非灭菌常规体检、基础护理、口腔卫生辅助及实验室日常操作。"
+                },
+                {
+                        "question": "与天然乳胶手套相比有何优势？",
+                        "answer": "彻底杜绝 I 型乳胶过敏反应，无粉无气味，储存稳定期更长。"
+                }
+        ]
+},
       ru: {
         "name": "Reflex Medilex",
         "tagline": "Гигиенические виниловые перчатки медицинского и смотрового назначения",
@@ -1986,6 +2166,40 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+      zh: {
+        "name": "Florex 多功能彩色防护手套",
+        "tagline": "缤纷多色区分管理，出众弹性，美容美发与餐饮首选。",
+        "description": "Florex 彩色 TPE 系列提供多种亮丽色彩选择，便于企业实施 HACCP 分区交叉污染控制管理。高回弹性能与潮流视觉体验，深受专业沙龙与高端餐饮青睐。",
+        "materialName": "彩色高弹 TPE",
+        "powderStatus": "无粉",
+        "latexStatus": "不含乳胶",
+        "siliconeStatus": "不含硅油",
+        "sterilityStatus": "非灭菌",
+        "foodContactLabel": "是 / 100% 安全接触",
+        "features": [
+                "多色可选（黑/蓝/紫/绿/粉），支持色标分区管理",
+                "超柔软贴合配方，长时间佩戴舒适不易疲劳",
+                "防滑表面纹理，湿滑环境下抓握稳固",
+                "无粉低过敏原，保护操作者双手",
+                "提升终端服务形象与专业感"
+        ],
+        "applications": [
+                "美容美发沙龙与染发护发",
+                "星级酒店与主题餐饮厨房",
+                "纹身与美甲艺术工作室",
+                "高端零售展陈与分拣"
+        ],
+        "faq": [
+                {
+                        "question": "Florex 为什么提供多种颜色？",
+                        "answer": "多色系统便于在食品加工和大型厨房中按区域分色管理，有效防止交叉污染；同时满足沙龙美观需求。"
+                },
+                {
+                        "question": "颜色是否会发生迁移或脱色？",
+                        "answer": "颜料在原材料聚合阶段熔融混合，化学性能稳定，与食物和水接触不会发生色素脱落。"
+                }
+        ]
+},
       ru: {
         "name": "Reflex Florex",
         "tagline": "Универсальные хозяйственные и профессиональные перчатки",
@@ -2365,6 +2579,36 @@ export const reflexProducts: ReflexProduct[] = [
       }
     ],
     i18n: {
+      zh: {
+        "name": "Slimfit 共聚物轻薄贴合手套",
+        "tagline": "微米级共聚物材料，超轻薄裸感体验，高灵敏触觉反馈。",
+        "description": "Slimfit 采用先进共聚物 (Copolymer) 聚合技术制造，具有超越传统塑料手套的轻薄厚度与惊人贴合度，为精密装配与精细餐饮操作带来近乎裸手的操作灵敏度。",
+        "materialName": "共聚物 (Copolymer)",
+        "powderStatus": "无粉",
+        "latexStatus": "不含乳胶",
+        "siliconeStatus": "不含硅油",
+        "sterilityStatus": "非灭菌",
+        "foodContactLabel": "是 / 完全符合标准",
+        "features": [
+                "极致轻薄裸感贴合，操作灵敏度极高",
+                "微米级均匀厚度控制，兼具防漏阻隔",
+                "无粉无味，环保可降解配方",
+                "超低包装体积，极大降低跨境运输仓储成本",
+                "高性价比的大批量替代方案"
+        ],
+        "applications": [
+                "寿司制作与精细点心烘焙",
+                "精密电子元件组装与质检",
+                "光学仪器与钟表维护",
+                "高频次快速更换的零售柜台"
+        ],
+        "faq": [
+                {
+                        "question": "共聚物材料有哪些核心特点？",
+                        "answer": "Slimfit 共聚物材料延展性极好，触感非常轻薄，贴手度远超普通 PE 手套，且单重更轻，显著节省运输物流成本。"
+                }
+        ]
+},
       ru: {
         "name": "Reflex Slimfit Copolymer",
         "tagline": "Тонкие и высокочувствительные сополимерные перчатки",

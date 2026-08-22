@@ -5,7 +5,7 @@ import type { Locale } from '../i18n/locales';
 
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
-const locales: Locale[] = ['tr', 'en', 'ru', 'fa', 'mk', 'sr', 'sq'];
+const locales: Locale[] = ['tr', 'en', 'ru', 'fa', 'mk', 'sr', 'sq', 'zh'];
 const pathnameFor = (item: Locale) => item === 'tr' ? '/instagram/tedarikci-dogrulama/' : `/${item}/instagram/tedarikci-dogrulama/`;
 const siteUrl = (item: Locale) => site.origin + pathnameFor(item);
 const alternates = Object.fromEntries([...locales.map((item) => [item, siteUrl(item)]), ['x-default', siteUrl('en')]]);
@@ -31,6 +31,38 @@ const copy = {
   },
   sq: {
     title: 'Verifikimi i furnizuesit: 5 sinjale rreziku | Teyfik Gökdemir', description: 'Pesë sinjale rreziku gjatë verifikimit të kompanisë, ofertës, dokumenteve, kapacitetit dhe pagesës.', eyebrow: 'Për vizitorët nga Instagrami · Verifikimi i furnizuesit', heading: 'Po verifikoni një furnizues? Këto 5 sinjale kërkojnë më shumë kontroll.', lead: 'Këto nuk janë akuza. Janë sinjale që kërkojnë më shumë prova përpara vendimit.', opening: ['Një faqe web dhe një çmim i ulët nuk mjaftojnë për të vlerësuar furnizuesin. Kontrolloni së bashku palën, produktin, dokumentet, kapacitetin, kushtet dhe dorëzimin.', 'Kjo faqe vazhdon postimin e tretë në Instagram. Një sinjal nuk është përfundim, por tregon se ku mungojnë provat.'], sectionLabel: 'SINJALE PËR VERIFIKIM', sectionTitle: 'Pesë sinjale rreziku para pagesës.', sectionLead: 'Qëllimi është ta mbështesni vendimin tregtar në informacione të verifikueshme.', decisionLabel: 'STANDARDI TREGTAR', decisionTitle: 'Përfundoni verifikimin para porosisë.', decisionText: 'Mblidhni të dhënat për kompaninë, produktin, dokumentet, çmimin dhe dorëzimin në një vend. Mos vazhdoni me pika të paverifikuara.', ctseg: 'Dërgoni kërkesë te CTSEG ↗', whatsapp: 'Shkruani një mesazh të shkurtër', relatedLabel: 'HAPI TJETËR', relatedTitle: 'Kthehuni te lista e kontrollit tregtar.', relatedText: 'Rishikoni pesë pyetjet për produktin, tregun, furnizuesin, kushtet dhe hapin tjetër.', related: 'Hapni listën e kontrollit ↗', instagram: 'Kthehuni te Instagrami @teyfikgokdemir ↗', whatsappText: 'Përshëndetje Teyfik, po ju kontaktoj nga përmbajtja e Instagramit për verifikimin e furnizuesit. Dua të flas për: ', signals: [['Të dhënat e kompanisë nuk verifikohen', 'Adresa, regjistrimi, fabrika dhe personi i kontaktit duhet të përputhen.', 'Kontrolloni identitetin dhe prodhimin.'], ['Oferta është shumë e mirë', 'Çmimi jashtëzakonisht i ulët ose kushtet e paqarta kërkojnë kontroll shtesë.', 'Krahasoni të gjithë kuadrin tregtar.'], ['Dokumentet ose mostrat nuk gjurmohen', 'Certifikatat, analizat dhe mostrat duhet të kenë një burim të verifikueshëm.', 'Kontrolloni burimin.'], ['Kapaciteti dhe dorëzimi nuk janë të qarta', 'Stoku, MOQ, koha e prodhimit dhe kushtet e dorëzimit duhet të jenë të qarta.', 'Pyetni për operacionin pas ofertës.'], ['Ka presion para verifikimit', 'Pagesa urgjente, kushtet që ndryshojnë ose përgjigjet e paqarta kërkojnë kujdes.', 'Mos e ulni standardin nën presion.']],
+  },
+  zh: {
+    title: '国际供应商核验：5 大风险预警信号 | Teyfik Gökdemir',
+    description: '在推进跨境采购时需要深度背景核查的五大风险信号：企业信息真实性、异常低价、单证溯源、实际产能与急迫催款。',
+    eyebrow: '来自 Instagram 读者 · 供应商背景核验',
+    heading: '核验跨国供应商时我重点关注的 5 大风险信号。',
+    lead: '以下内容并非无端指控，而是提示您在付款或签约前必须要求更坚实的佐证材料并启动深度尽调的预警信号。',
+    opening: [
+      '仅凭一个漂亮的英文网站或一份报价单，无法判断供应商的真实履约能力。必须将法人主体、产品参数、质量体系、设备产能、单证溯源、商务条款及交付模型置于同一框架下综合审视。',
+      '本页面是 Instagram 分享的延伸。单一异常信号虽不构成最终定论，但足以要求我们在补齐关键证据之前保持谨慎。'
+    ],
+    sectionLabel: '核验预警',
+    sectionTitle: '五大警示红线，五项核验原则。',
+    sectionLead: '核验的目的不是盲目贴标签，而是为了让每一项商业决策都建立在真实、可验证的证据基础之上。',
+    decisionLabel: '决策标准',
+    decisionTitle: '在付款或下达量产订单前必须补齐证据链。',
+    decisionText: '若关键信息存在缺失，先暂停决策，通过独立可信的多方渠道交叉求证。将产品标准、合同主体、检测单证、到岸价格与物流模型汇总为完整档案。',
+    ctseg: '向 CTSEG 提交商业合作需求 ↗',
+    whatsapp: '发送 WhatsApp 咨询',
+    relatedLabel: '系列内容',
+    relatedTitle: '返回商业机会评估清单。',
+    relatedText: '回顾涵盖产品定义、目标市场、供应商核验、商务条款及后续落地的五步商业机会评估清单。',
+    related: '查看商业机会评估清单 ↗',
+    instagram: '返回 @teyfikgokdemir Instagram 主页 ↗',
+    whatsappText: '您好 Teyfik，我通过 Instagram 供应商核验内容与您联系。我想探讨的议题是：',
+    signals: [
+      ['企业工商与主体信息无法交叉印证', '如果实际经营地址、商业登记证、生产车间归属、法定代表人或联络渠道互相矛盾，必须启动深度背景尽调。', '核实法定主体与真实生产设施。'],
+      ['报价异常过低，好得令人难以置信', '远低于合理成本区间的报价，通常伴随着模糊的质量公差、隐蔽的附加费用或不可控的交付陷阱。', '对综合商业条款与到岸总成本进行横向比对。'],
+      ['检测单证、资质证书或样品无法追溯', '如果出厂质检报告 (COA)、原产地证或样品来源无法在官方出具机构或实验室数据库中查询核实，方案视同不完整。', '核查单证的可溯源性与真实性，而非仅看文件存在。'],
+      ['实际产能与交付履约模型模糊不清', '若常备库存、最低起订量 (MOQ)、生产周期、装运港口及交货方式未作明确书面约定，则无法准确评估执行可行性。', '穿透了解报价背后的实际车间排产与运营。'],
+      ['在核验完成前频繁施加催款压力', '以“锁定价格”或“保留产能”为由急迫催促付款、要求向不明第三方账户转账或回避关键技术提问，均为高危信号。', '在外部压力面前绝不降低核验底线标准。']
+    ]
   },
 } as const;
 

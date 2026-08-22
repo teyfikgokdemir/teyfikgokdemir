@@ -11,7 +11,7 @@ interface Props {
 }
 
 const { product, locale } = Astro.props;
-const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa';
+const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa' | 'zh';
 const i18n = product.i18n[lang] || product.i18n.tr;
 
 const detailText = {
@@ -138,16 +138,35 @@ const detailText = {
     relatedTitle: 'سایر محصولات رفلکس',
     quoteTitle: 'دریافت پیش‌فاکتور و استعلام قیمت',
     quoteDesc: 'برای سفارش‌های عمده و کانتینری با تیم تجاری ما تماس بگیرید.',
-    quoteBtn: 'ارسال درخواست قیمت',
-    faqTitle: 'پرسش‌های متداول (SSS)',
-    homeBreadcrumb: 'صفحه اصلی',
+    quoteBtn: 'ثبت درخواست استعلام قیمت',
+    faqTitle: 'پرسش‌های متداول (FAQ)',
+    homeBreadcrumb: 'خانه',
     kutuIci: 'تعداد در جعبه',
     koliIci: 'تعداد در کارتن',
     paletIci: 'مقدار پالت',
     kutuOlcusu: 'ابعاد جعبه',
     endustriyelKullanim: 'کاربرد صنعتی',
     genelPaket: 'بسته‌بندی کارتن',
-  }
+  },
+  zh: {
+    backToCatalog: '← 返回 Reflex 产品全系列',
+    overviewTitle: '产品概览与核心定位',
+    featuresTitle: '核心特性与性能优势',
+    applicationsTitle: '适用场景与目标行业',
+    galleryTitle: '产品实物与包装图库',
+    relatedTitle: 'Reflex 其他手套产品系列',
+    quoteTitle: '获取该产品的批发与采购报价',
+    quoteDesc: '支持按盒、箱、托盘或集装箱整柜采购，支持 Private Label 自有品牌定制。欢迎获取即时报价与物流方案。',
+    quoteBtn: '提交采购与报价需求',
+    faqTitle: '常见问题解答 (FAQ)',
+    homeBreadcrumb: '首页',
+    kutuIci: '单盒装量',
+    koliIci: '外箱装量',
+    paletIci: '单托盘装量',
+    kutuOlcusu: '内盒规格',
+    endustriyelKullanim: '工业及商用',
+    genelPaket: '标准外箱包装',
+  },
 }[lang] || detailText.tr;
 
 const translateQty = (val: string) => {
@@ -157,6 +176,7 @@ const translateQty = (val: string) => {
   if (lang === 'sr') return val.replace(/Adet/g, 'komada').replace(/Kutu/g, 'kutija').replace(/Koli/g, 'kartona');
   if (lang === 'sq') return val.replace(/Adet/g, 'copë').replace(/Kutu/g, 'kuti').replace(/Koli/g, 'kartona');
   if (lang === 'fa') return val.replace(/Adet/g, 'عدد').replace(/Kutu/g, 'جعبه').replace(/Koli/g, 'کارتن');
+  if (lang === 'zh') return val.replace(/Adet/g, '只').replace(/Kutu/g, '盒').replace(/Koli/g, '箱');
   return val;
 };
 

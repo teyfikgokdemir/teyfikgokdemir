@@ -2,7 +2,7 @@
 import type { Locale } from '../i18n/locales';
 import { site } from '../data/site';
 
-type SupportedLocale = Locale | 'fa';
+type SupportedLocale = Locale | 'fa' | 'zh';
 
 interface Props {
   locale: SupportedLocale;
@@ -18,6 +18,7 @@ const messages: Record<SupportedLocale, string> = {
   mk: 'Здраво Тејфик, ве контактирам преку вашата веб-страница.',
   sr: 'Zdravo Teyfik, kontaktiram vas putem vašeg sajta.',
   fa: 'سلام آقای تیفیک، از طریق وب‌سایت شما تماس می‌گیرم.',
+  zh: '您好 Teyfik，我通过您的个人网站与您联系。',
 };
 
 const labels: Record<SupportedLocale, { whatsapp: string; top: string }> = {
@@ -28,6 +29,7 @@ const labels: Record<SupportedLocale, { whatsapp: string; top: string }> = {
   mk: { whatsapp: 'Контактирајте преку WhatsApp', top: 'Назад на врвот' },
   sr: { whatsapp: 'Kontakt putem WhatsApp-a', top: 'Nazad na vrh' },
   fa: { whatsapp: 'تماس با تیفیک در واتس‌اپ', top: 'بازگشت به بالای صفحه' },
+  zh: { whatsapp: '通过 WhatsApp 联系 Teyfik', top: '返回顶部' },
 };
 
 const whatsappUrl =

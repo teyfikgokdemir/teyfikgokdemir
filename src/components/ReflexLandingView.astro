@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { locale } = Astro.props;
-const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa';
+const lang = (locale || 'tr') as 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa' | 'zh';
 
 const landingText = {
   tr: {
@@ -101,7 +101,20 @@ const landingText = {
     quoteTitle: 'استعلام قیمت عمده B2B و صادرات',
     quoteDesc: 'برای سفارش‌های عمده، پالت و همکاری‌های توزیع منطقه‌ای مستقیماً با تیم تجاری ما تماس بگیرید.',
     quoteBtn: 'تماس با تیم تجاری',
-  }
+  },
+  zh: {
+    heroTag: 'Reflex Plastik · B2B 一次性防护手套体系',
+    heroTitle: '专业 B2B 防护手套系统与工业卫生解决方案',
+    heroLead: '涵盖 7 大专业产品系列，面向食品加工、餐饮连锁、医疗卫生、美容美发及工业维护领域提供高产能、高稳定性的可靠大宗供应。',
+    primaryCta: '浏览全系列产品',
+    secondaryCta: '获取 B2B 批发报价',
+    whyTitle: '为什么选择 Reflex 手套产品？',
+    whyLead: '采用新一代环保高弹体配方，为传统丁腈与 PVC 手套提供兼具优异触感、高性价比与食品安全标准的理想替代方案。',
+    applicationsTitle: '重点行业应用场景',
+    quoteTitle: '获取 B2B 批发报价与出口合作咨询',
+    quoteDesc: '直接联系我们的商务团队，咨询整柜/托盘采购方案、Private Label 自有品牌定制或区域分销合作。',
+    quoteBtn: '联系商务团队',
+  },
 }[lang] || landingText.tr;
 
 const whyCards = {
@@ -139,7 +152,12 @@ const whyCards = {
     { icon: '⚡', title: 'فناوری تی‌پی‌ای هیبریدی', desc: 'کشش بیشتر و بافت نرم‌تر در مقایسه с وینیل و نیتریل.' },
     { icon: '🛡️', title: '۱۰۰٪ ایمن برای مواد غذایی و ضد حساسیت', desc: 'فرمول بدون بو، بدون طعم، بدون لاتکس و سیلیکون برای ریسک حساسیت صفر.' },
     { icon: '💰', title: 'بهینه‌سازی هزینه و زنجیره تامین', desc: 'مزیت هزینه بالا نسبت به دستکش‌های سنتی همراه با موجودی بالا برای تامین B2B.' }
-  ]
+  ],
+  zh: [
+    { icon: '⚡', title: '复合高弹 TPE 技术', desc: '相比传统 PVC 与丁腈手套具备更出色的拉伸回弹性、细腻触感与环境友好特性。' },
+    { icon: '🛡️', title: '100% 食品级接触 & 防过敏', desc: '无异味、无味道、不含天然乳胶与硅油，从源头杜绝过敏风险，确保安全接触。' },
+    { icon: '💰', title: '显著的成本与供货优势', desc: '相较传统同类产品具备显著的采购成本优势，生产周期短，B2B 常备库存充足。' }
+  ],
 }[lang] || whyCards.en;
 
 const applications = {
@@ -191,7 +209,14 @@ const applications = {
     { name: 'نظافت و بهداشت عمومی', icon: '🧹' },
     { name: 'سالن‌های زیبایی و سلامت', icon: '✨' },
     { name: 'صنعتی و کاربردهای عمومی', icon: '⚙️' }
-  ]
+  ],
+  zh: [
+    { name: '食品加工与餐饮服务', icon: '🍽️' },
+    { name: '卫生检查与医疗防护', icon: '🩺' },
+    { name: '商业保洁与环境卫生', icon: '🧹' },
+    { name: '美容美发与个人护理', icon: '✨' },
+    { name: '工业维护与日常防护', icon: '⚙️' }
+  ],
 }[lang] || applications.en;
 
 const sectionTitles = {
@@ -201,7 +226,8 @@ const sectionTitles = {
   mk: { badge: 'Reflex производи', title: '7 специјализирани категории производи', lead: 'Професионални решенија за ракавици за еднократна употреба развиени за посебни хигиенски стандарди, материјали и прецизност.', whyBadge: 'Основни предности', appsBadge: 'Индустрии и употреба' },
   sr: { badge: 'Reflex proizvodi', title: '7 specijalizovanih kategorija proizvoda', lead: 'Profesionalna rešenja za rukavice za jednokratnu upotrebu razvijena za posebne higijenske standarde, materijale i preciznost.', whyBadge: 'Osnovne prednosti', appsBadge: 'Industrije i upotreba' },
   sq: { badge: 'Linja e Produkteve Reflex', title: '7 Familje Specializuara Produktesh', lead: 'Zgjidhje profesionale dorezash me një përdorim të projektuara për standarde të veçanta higjienike, materiale dhe ndjeshmëri.', whyBadge: 'Avantazhet kryesore', appsBadge: 'Industritë dhe përdorimi' },
-  fa: { badge: 'سبد محصولات رفلکس', title: '۷ خانواده محصول تخصصی', lead: 'دستکش‌های یک‌بارمصرف حرفه‌ای طراحی‌شده برای استانداردهای بهداشتی، متریال و ضخامت‌های مختلف.', whyBadge: 'مزایای اصلی', appsBadge: 'صنایع و کاربردها' }
+  fa: { badge: 'سبد محصولات رفلکس', title: '۷ خانواده محصول تخصصی', lead: 'دستکش‌های یک‌بارمصرف حرفه‌ای طراحی‌شده برای استانداردهای بهداشتی، متریال و ضخامت‌های مختلف.', whyBadge: 'مزایای اصلی', appsBadge: 'صنایع و کاربردها' },
+  zh: { badge: 'Reflex 产品系列', title: '7 大专业产品家族', lead: '针对严苛卫生标准、特定材料厚度与操作手感量身定制的专业一次性防护手套解决方案。', whyBadge: '核心竞争优势', appsBadge: '应用行业与场景' },
 }[lang] || sectionTitles.en;
 
 const heroMainProduct = reflexProducts.find(p => p.slug === 'florex') || reflexProducts[0];

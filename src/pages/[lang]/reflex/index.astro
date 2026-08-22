@@ -8,7 +8,7 @@ import { locales, type Locale } from '../../../i18n/locales';
 import { site } from '../../../data/site';
 
 export function getStaticPaths() {
-  const languages: (Locale | 'fa')[] = ['en', 'ru', 'mk', 'sr', 'sq', 'fa'];
+  const languages: (Locale | 'fa')[] = ['en', 'ru', 'mk', 'sr', 'sq', 'fa', 'zh'];
   return languages.map((lang) => ({ params: { lang } }));
 }
 
@@ -23,6 +23,7 @@ const seoTitles: Record<string, string> = {
   sr: 'Reflex Rukavice Za Jednokratnu Upotrebu | Teyfik Gökdemir B2B',
   sq: 'Doreza Njëpërdorimëshe Reflex | Teyfik Gökdemir B2B',
   fa: 'دستکش‌های یک‌بارمصرف رفلکس | تیفیک گوکدمیر',
+  zh: 'Reflex 一次性防护手套解决方案 | Teyfik Gökdemir B2B 产品矩阵',
 };
 
 const seoDescriptions: Record<string, string> = {
@@ -33,6 +34,7 @@ const seoDescriptions: Record<string, string> = {
   sr: 'Profesionalne rukavice Reflex: Flex Hi-Tech, Flex Kids, Winlyex Bez Pudera, Winlyex Termo Vinil, Medilex, Florex i Slimfit Copolymer.',
   sq: 'Doreza profesionale Reflex: Flex Hi-Tech, Flex Kids, Winlyex Pa Pluhur, Winlyex Termo Vinil, Medilex, Florex dhe Slimfit Copolymer.',
   fa: 'محصولات دستکش رفلکس شامل Flex Hi-Tech، Flex Kids، Winlyex، Medilex، Florex و Slimfit Copolymer.',
+  zh: 'Reflex 专业防护手套全系列：Flex Hi-Tech、Flex Kids、Winlyex 无粉、Winlyex 热成型乙烯基、Medilex、Florex 及 Slimfit Copolymer。',
 };
 
 const pagePath = `/${locale}/reflex/`;
@@ -44,6 +46,7 @@ const alternates: Record<string, string> = {
   sr: `${site.origin}/sr/reflex/`,
   sq: `${site.origin}/sq/reflex/`,
   fa: `${site.origin}/fa/reflex/`,
+  zh: `${site.origin}/zh/reflex/`,
   'x-default': `${site.origin}/reflex/`,
 };
 

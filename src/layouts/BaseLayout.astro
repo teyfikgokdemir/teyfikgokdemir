@@ -95,6 +95,23 @@ const jsonLd = {
         'تأمین عمده منسوجات',
         'تولید با برند اختصاصی',
         'پژوهش مبتنی بر هوش مصنوعی',
+      ] : locale === 'zh' ? [
+        '国际贸易',
+        '战略采购与供应链',
+        '国际商业落地协调',
+        '供应商背景与合规核验',
+        '买家与制造商精准对接',
+        '全渠道分销体系建设',
+        '供应链深度调研',
+        'RFQ 询报价与比价管理',
+        '跨境商务谈判',
+        '土耳其与国际市场拓展',
+        '跨国贸易与清关物流协同',
+        '大宗植物油与食品原料采购',
+        '高品质坚果与特产进口',
+        '波斯手工地毯与真丝地毯',
+        '大宗纺织品供应链与 Private Label',
+        'AI 辅助商业调研与销售智能',
       ] : [
         'International Trade',
         'Strategic Sourcing',
@@ -156,7 +173,7 @@ const jsonLd = {
       url: canonical,
       name: title,
       description,
-      inLanguage: locale,
+      inLanguage: locale === 'zh' ? 'zh-CN' : locale,
       isPartOf: { '@id': site.origin + '/#website' },
       about: { '@id': site.origin + '/#person' },
       primaryImageOfPage: {
@@ -171,7 +188,7 @@ const jsonLd = {
 };
 ---
 <!doctype html>
-<html lang={locale} dir={locale === 'fa' ? 'rtl' : 'ltr'}>
+<html lang={locale === 'zh' ? 'zh-CN' : locale} dir={locale === 'fa' ? 'rtl' : 'ltr'}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -211,7 +228,7 @@ const jsonLd = {
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Teyfik Gökdemir" />
-    <meta property="og:locale" content={locale} />
+    <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : locale} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
@@ -345,6 +362,12 @@ const jsonLd = {
   html[lang="fa"] h2,
   html[lang="fa"] h3 {
     font-family: "Noto Naskh Arabic", Tahoma, "Segoe UI", sans-serif;
+  }
+  html[lang="zh-CN"] h1,
+  html[lang="zh-CN"] h2,
+  html[lang="zh-CN"] h3,
+  html[lang="zh-CN"] body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Segoe UI", sans-serif;
   }
   h2 {
     margin: 0 0 1.25rem;

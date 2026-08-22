@@ -1,0 +1,100 @@
+---
+import ContentPage from '../../../../components/ContentPage.astro';
+import { site } from '../../../../data/site';
+
+const title = 'SEO、GEO、AEO 与 AIO 深度解析与实战指南 | Teyfik Gökdemir';
+const description = '系统理解 SEO、GEO、AEO 与 AIO 的核心职责与边界，掌握如何构建统一且高效的搜索引擎与生成式 AI 可见性体系。';
+const pathname = '/zh/blog/seo-vs-geo-vs-aeo-vs-aio/';
+const canonical = site.origin + pathname;
+const published = '2026-07-23';
+const modified = '2026-07-23';
+
+const articleSchema = {
+  '@type': 'Article',
+  '@id': canonical + '#article',
+  headline: 'SEO、GEO、AEO 与 AIO 的核心区别与落地指南',
+  description,
+  url: canonical,
+  mainEntityOfPage: canonical,
+  datePublished: published,
+  dateModified: modified,
+  inLanguage: 'zh-CN',
+  author: { '@id': site.origin + '/#person' },
+  publisher: { '@id': site.origin + '/#person' },
+  isPartOf: { '@id': site.origin + '/#website' },
+  about: [
+    '搜索引擎优化 (SEO)',
+    '生成式引擎优化 (GEO)',
+    '问答引擎优化 (AEO)',
+    'AI 优化 (AIO)',
+  ],
+};
+
+const alternates = {
+  en: site.origin + '/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  tr: site.origin + '/blog/seo-geo-aeo-aio-farklari/',
+  sq: site.origin + '/sq/blog/dallimet-seo-geo-aeo-aio/',
+  mk: site.origin + '/mk/blog/razliki-seo-geo-aeo-aio/',
+  sr: site.origin + '/sr/blog/razlike-seo-geo-aeo-aio/',
+  zh: site.origin + '/zh/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  'x-default': site.origin + '/blog/seo-vs-geo-vs-aeo-vs-aio/',
+};
+---
+<ContentPage
+  locale="zh"
+  title={title}
+  description={description}
+  pathname={pathname}
+  alternates={alternates}
+  ogType="article"
+  pageSchema={articleSchema}
+  eyebrow="搜索可见性专业指南"
+  heading="SEO、GEO、AEO 与 AIO：各学科的核心职责与协同落地。"
+  lead="这些概念相互交叉，但绝非简单替代。关键不在于争论哪个新词会取代 SEO，而在于如何让各学科协同构建出清晰且具备商业转化力的发现体系。"
+  articleMeta={{
+    published,
+    modified,
+    readingTime: '8 分钟阅读',
+    label: 'Teyfik Gökdemir',
+  }}
+>
+  <div class="answer-block">
+    <p><strong>SEO</strong> 提升企业在传统搜索引擎中的抓取与排名；<strong>GEO</strong> 提升内容在生成式 AI 模型中的可理解性与事实引用价值；<strong>AEO</strong> 使得内容更易被对话式系统直接提取为精确答案；<strong>AIO</strong> 则统筹全局技术架构、实体图谱与内容生态以赋能 AI 智能搜索。</p>
+  </div>
+
+  <h2>核心差异解析</h2>
+
+  <p>这四个学科共同服务于同一个核心商业命题：当潜在客户或采购决策者检索相关信息时，企业如何能够被精准发现、深度理解并建立信任。</p>
+
+  <div class="content-grid">
+    <article class="content-card">
+      <h3>SEO</h3>
+      <p>技术可访问性、搜索意图匹配、内容相关性、内部链接架构、域名权威度与传统搜索表现。</p>
+    </article>
+
+    <article class="content-card">
+      <h3>GEO</h3>
+      <p>权威信源材料、清晰实体关系、数据论据支撑与易于大语言模型归纳引用的结构化信息。</p>
+    </article>
+
+    <article class="content-card">
+      <h3>AEO</h3>
+      <p>直截了当的问答响应、明确的问题定义、精炼的概念阐述与适合直接答案提取的模块结构。</p>
+    </article>
+
+    <article class="content-card">
+      <h3>AIO</h3>
+      <p>统筹技术 SEO、知识图谱实体、内容设计、数据监测与 AI 搜索全生态的全局运营中枢。</p>
+    </article>
+  </div>
+
+  <h2>SEO 始终是底层基石</h2>
+
+  <p>AI 时代的可见性并不会削弱对页面可抓取性、规范 Canonical URL、极速加载性能、合理内链以及满足真实搜索意图的高质量内容的需求。生成式大模型无法稳定使用其无法抓取或无法解析的信息。</p>
+
+  <p>因此，用新词否定 SEO 是错误的认知框架。GEO 与 AEO 是对搜索发现体系的延伸与升级，而非取代其技术底座。</p>
+
+  <h2>GEO 的核心价值与落地</h2>
+
+  <p>当用户获得的不再是一串简单的搜索结果链接，而是 AI 综合多方信源生成的答案时，GEO 的重要性便凸显出来。在这种环境下，内容必须具备极高清晰度的事实、逻辑关系与专业见地，才能被模型准确理解并作为首选信源引用。</p>
+</ContentPage>

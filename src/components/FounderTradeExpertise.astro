@@ -1,5 +1,5 @@
 ---
-type Lang = 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa';
+type Lang = 'tr' | 'en' | 'ru' | 'mk' | 'sr' | 'sq' | 'fa' | 'zh';
 
 type FocusCard = {
   eyebrow: string;
@@ -238,6 +238,36 @@ const copy: Record<Lang, TradeFocusCopy> = {
     ],
     note: 'این وب‌سایت شخصی رویکرد بنیان‌گذار را توضیح می‌دهد. درخواست تجاری، پیشنهاد، نمونه، اعتبارسنجی تأمین‌کننده و هماهنگی عملیات از طریق CTSEG انجام می‌شود.',
   },
+  zh: {
+    label: '创始人专业领域 · CTSEG 商业落地',
+    title: '在大宗食品采购中，产品标准、商务条款与实际执行必须统一权衡。',
+    lead: '通过 CTSEG，Teyfik Gökdemir 将葵花籽油以及原产地坚果与干果采购整合为系统化的商业评估流程：明确产品规格、深入调研制造商、严谨对比报价并构建稳妥的交付模型。',
+    oil: {
+      eyebrow: '植物油类 · B2B 采购',
+      title: '葵花籽油大宗采购',
+      text: '无论是白标 (Unbranded) 还是自有品牌 (Private Label) 项目，只有在产品等级、精炼程度、用途、包装形式及交付范围完全清晰的前提下，才能形成真正具备可比性的报价。',
+      checks: ['产品技术规格与目标用途', 'PET 瓶或铁桶包装、定制标签与 MOQ', '质检证书 (COA)、批次溯源、结算与交付模式'],
+      cta: '查看植物油 RFQ 采购指南',
+      alt: 'CTSEG 葵花籽油与植物食品大宗采购',
+    },
+    nuts: {
+      eyebrow: '特色原产地产品 · B2B 采购',
+      title: '高品质坚果与精选干果',
+      text: '针对开心果、杏仁、核桃、椰枣及精选干果，我们将产品等级、产地溯源、物理规格、实验室化验、防潮包装及合规凭据纳入统一评估。',
+      checks: ['品种、原产地、采收期与品质等级', '按批次检测报告、COA 与样品核验', '高阻隔包装、批号追溯与目标市场通关文件'],
+      cta: '查看坚果品质核验指南',
+      alt: 'CTSEG 特色坚果与干果大宗采购',
+    },
+    specialistLabel: '特色专项领域',
+    specialistTitle: '手工地毯与高品质纺织品；并非泛化业务，而是深耕的特色专长。',
+    specialistLead: '关于波斯地毯、手工打结真丝地毯以及大宗纺织品供应链的深度评估，可通过 CTSEG 专属业务板块持续推进。',
+    specialists: [
+      { title: '波斯手工地毯', cta: '了解专项领域' },
+      { title: '手工打结真丝地毯', cta: '了解专项领域' },
+      { title: '大宗纺织品供应链', cta: '了解专项领域' },
+    ],
+    note: '本个人网站阐述创始人的商业理念与架构。具体商业询价、方案报价、样品寄送、供应商实地核验与跨境运营均由 CTSEG 统一承办。',
+  },
 };
 
 const guides = {
@@ -286,6 +316,11 @@ const specialistLinks: Record<Lang, string[]> = {
     'https://ctseg.com.tr/fa/sourcing/فرش-ایرانی/',
     'https://ctseg.com.tr/fa/sourcing/فرش-ابریشم-دستباف/',
     'https://ctseg.com.tr/fa/sourcing/تامین-عمده-منسوجات/',
+  ],
+  zh: [
+    'https://ctseg.com.tr/en/sourcing/iranian-carpets/',
+    'https://ctseg.com.tr/en/sourcing/hand-knotted-silk-carpets/',
+    'https://ctseg.com.tr/en/sourcing/wholesale-textile-sourcing/',
   ],
 };
 
