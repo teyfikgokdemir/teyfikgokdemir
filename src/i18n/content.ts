@@ -680,7 +680,7 @@ export const content = {
       description: '以企业决策者视角，整合土耳其与国际市场的供应链资源、商业运营流程、数字化贸易体系与 AI 辅助商业调研。',
       primary: '了解 CTSEG',
       secondary: '与 Teyfik Gökdemir 交流',
-      summary: 'Teyfik Gökdemir 是 CTSEG Sanayi ve Ticaret Limited Şirketi 创始人，专注于通过深度调研、严谨核验、资源协调和可落地的增长系统构建国际商业机会。',
+      summary: 'Teyfik Gökdemir 是 CTSEG（工业与贸易有限责任公司）创始人，专注于通过深度调研、严谨核验、资源协调和可落地的增长系统构建国际商业机会。',
     },
     intro: {
       label: '创始人视角',
