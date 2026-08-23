@@ -86,8 +86,14 @@ async function cloudflareTraffic(site: Site, env: Env) {
         countryTotals.set(name, current);
       }
     }
-    const countries = Array.from(countryTotals, ([country, metrics]) => ({ country, ...metrics }))
-      .sort((a, b) => b.requests - a.requests).slice(0, 10);
+    const totalCountryRequests = Array.from(countryTotals.values()).reduce((sum, item) => sum + item.requests, 0);
+    const totalCountryBytes = Array.from(countryTotals.values()).reduce((sum, item) => sum + item.bytes, 0);
+    const countries = Array.from(countryTotals, ([country, metrics]) => ({
+      country,
+      ...metrics,
+      requestShare: totalCountryRequests ? (metrics.requests / totalCountryRequests) * 100 : 0,
+      bytesShare: totalCountryBytes ? (metrics.bytes / totalCountryBytes) * 100 : 0,
+    })).sort((a, b) => b.requests - a.requests).slice(0, 15);
     return {
       ok: true,
       available: true,
