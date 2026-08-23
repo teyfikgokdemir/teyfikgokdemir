@@ -98,6 +98,19 @@ async function cloudflareTraffic(site: Site, env: Env) {
     })).sort((a, b) => b.requests - a.requests).slice(0, 15);
     const uniqueVisitors7d = (zone?.sevenDays || []).reduce((sum, group) => sum + (group.uniq?.uniques || 0), 0);
     const uniqueVisitors30d = (zone?.thirtyDays || []).reduce((sum, group) => sum + (group.uniq?.uniques || 0), 0);
+    const sourceQuery = `query($zoneTag:String!, $since:Time!, $until:Time!) { viewer { zones(filter:{zoneTag:$zoneTag}) { sources:httpRequestsAdaptiveGroups(limit:12, filter:{datetime_geq:$since, datetime_lt:$until, requestSource:"eyeball"}, orderBy:[count_DESC]) { count sum { visits edgeResponseBytes } dimensions { clientRefererHost } } } } }`;
+    const sourceResponse = await fetch('https://api.cloudflare.com/client/v4/graphql', {
+      method: 'POST',
+      headers: { authorization: `Bearer ${env.CF_API_TOKEN}`, 'content-type': 'application/json' },
+      body: JSON.stringify({ query: sourceQuery, variables: { zoneTag: site.zoneTag, since: since.toISOString(), until: until.toISOString() } }),
+    });
+    const sourcePayload = await sourceResponse.json() as { data?: { viewer?: { zones?: Array<{ sources?: Array<{ count?: number; sum?: { visits?: number; edgeResponseBytes?: number }; dimensions?: { clientRefererHost?: string } }> }> } }; errors?: Array<{ message?: string }> };
+    const sources = sourceResponse.ok && !sourcePayload.errors?.length ? (sourcePayload.data?.viewer?.zones?.[0]?.sources || []).map((item) => ({
+      host: item.dimensions?.clientRefererHost || 'Direct / bilinmeyen',
+      requests: item.count || 0,
+      visits: item.sum?.visits || 0,
+      bytes: item.sum?.edgeResponseBytes || 0,
+    })) : [];
     return {
       ok: true,
       available: true,
@@ -110,6 +123,7 @@ async function cloudflareTraffic(site: Site, env: Env) {
         uniqueVisitors30d,
       },
       countries,
+      sources,
       hourly: groups.map((group) => ({ at: group.dimensions?.datetime, requests: group.sum?.requests || 0, uniqueVisitors: group.uniq?.uniques || 0 })),
     };
   } catch {
