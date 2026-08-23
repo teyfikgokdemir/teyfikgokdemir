@@ -14,54 +14,29 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
     <meta name="robots" content="noindex, nofollow">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            color-scheme: dark;
-        }
+        :root { color-scheme: dark; }
         body {
             background-color: #030712;
             color: #f3f4f6;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            overflow-x: hidden;
         }
-        /* Background photo grid mosaic */
-        .bg-mosaic {
+        .bg-overlay {
             position: fixed;
             inset: 0;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-            gap: 1rem;
-            padding: 1.5rem;
-            opacity: 0.18;
-            filter: blur(8px);
+            background: radial-gradient(circle at center, rgba(3, 7, 18, 0.85) 0%, rgba(3, 7, 18, 0.98) 100%),
+                        url('/images/cansu/wedding_entrance.webp') no-repeat center center/cover;
             z-index: 0;
             pointer-events: none;
         }
-        .bg-mosaic img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 1rem;
-        }
-        .overlay {
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(circle at center, rgba(3, 7, 18, 0.75) 0%, rgba(3, 7, 18, 0.95) 100%);
-            z-index: 1;
-            pointer-events: none;
-        }
-        .content-layer {
-            position: relative;
-            z-index: 10;
-        }
+        .content-layer { position: relative; z-index: 10; }
         .glass {
-            background: rgba(15, 23, 42, 0.82);
+            background: rgba(15, 23, 42, 0.88);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(244, 63, 94, 0.2);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(244, 63, 94, 0.25);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
         }
         .hidden { display: none !important; }
         input {
@@ -73,7 +48,6 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             width: 100%;
             box-sizing: border-box;
             outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
             font-size: 1rem;
         }
         input:focus { border-color: #f43f5e; box-shadow: 0 0 15px rgba(244, 63, 94, 0.3); }
@@ -87,55 +61,43 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             width: 100%;
             cursor: pointer;
             box-shadow: 0 10px 25px -5px rgba(244, 63, 94, 0.4);
-            transition: opacity 0.2s, transform 0.1s;
             font-size: 1rem;
         }
-        button.btn-primary:hover { opacity: 0.95; transform: translateY(-1px); }
+        button.btn-primary:hover { opacity: 0.95; }
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 1.25rem 1.5rem; text-align: left; border-bottom: 1px solid #1e293b; }
-        th { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; background: rgba(2, 6, 23, 0.6); letter-spacing: 0.05em; }
+        th { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; background: rgba(2, 6, 23, 0.6); }
         tr:hover { background: rgba(30, 41, 59, 0.4); }
     </style>
 </head>
 <body>
-    <!-- Background Mosaic of Memories -->
-    <div class="bg-mosaic">
-        <img src="/images/cansu/uF2GI.jpg" alt="Cansu">
-        <img src="/images/cansu/wedding_reels.webp" alt="Wedding">
-        <img src="/images/cansu/couple_reels_new_1.webp" alt="Couple">
-        <img src="/images/cansu/business_luxury_8.webp" alt="Luxury">
-        <img src="/images/cansu/wedding_entrance.webp" alt="Entrance">
-        <img src="/images/cansu/lifestyle_vacation_4.webp" alt="Vacation">
-        <img src="/images/cansu/wedding_concept_1.webp" alt="Concept">
-        <img src="/images/cansu/uF2GI.jpg" alt="Cansu">
-    </div>
-    <div class="overlay"></div>
+    <div class="bg-overlay"></div>
 
     <!-- Auth Guard Modal -->
     <div id="auth-modal" class="content-layer" style="position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 1rem;">
-        <div class="glass rounded-2xl p-8" style="max-width: 28rem; width: 100%;">
+        <div class="glass rounded-2xl p-8" style="max-width: 28rem; width: 100%; border-radius: 1rem;">
             <div style="text-align: center; margin-bottom: 2rem;">
                 <div style="display: inline-flex; align-items: center; justify-content: center; width: 5rem; height: 5rem; border-radius: 9999px; background: rgba(244, 63, 94, 0.15); color: #f43f5e; margin-bottom: 1.25rem; font-size: 2rem; border: 1px solid rgba(244, 63, 94, 0.3);">
-                    <i class="fa-solid fa-heart animate-pulse"></i>
+                    <i class="fa-solid fa-heart"></i>
                 </div>
-                <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0; background: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Cansu & Teyfik Özel Paneli</h2>
-                <p style="color: #94a3b8; font-size: 0.875rem; margin-top: 0.5rem;">Lütfen özel erişim şifrenizi girin.</p>
+                <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0; color: #fb7185;">Cansu & Teyfik Özel Paneli</h2>
+                <p style="color: #94a3b8; font-size: 0.875rem; margin-top: 0.5rem;">Lütfen özel şifrenizi girin (cansu2026).</p>
             </div>
-            <form onsubmit="handleAuth(event)" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <form id="login-form" style="display: flex; flex-direction: column; gap: 1.25rem;">
                 <div>
-                    <input type="password" id="admin-pass" placeholder="Özel Şifre (cansu2026)" required autocomplete="current-password">
+                    <input type="password" id="admin-pass" placeholder="Özel Şifre" required>
                 </div>
                 <button type="submit" class="btn-primary">
                     Sisteme Giriş Yap
                 </button>
             </form>
-            <p id="auth-error" style="color: #f87171; font-size: 0.8rem; text-align: center; margin-top: 1rem; display: none;"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Geçersiz şifre! Tekrar deneyin.</p>
+            <p id="auth-error" style="color: #f87171; font-size: 0.8rem; text-align: center; margin-top: 1rem; display: none;">Geçersiz şifre! Tekrar deneyin.</p>
         </div>
     </div>
 
     <!-- Main Dashboard -->
     <div id="dashboard-content" class="content-layer hidden" style="max-width: 80rem; margin: 0 auto; padding: 2rem 1.5rem;">
-        <header style="display: flex; flex-direction: column; md-flex-row; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #1e293b; gap: 1rem;">
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #1e293b; flex-wrap: wrap; gap: 1rem;">
             <div>
                 <h1 style="font-size: 1.875rem; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; margin: 0;">
                     <i class="fa-solid fa-heart text-rose-500"></i> Cansu & Teyfik - Otonom Büyüme Paneli
@@ -146,7 +108,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.1); color: #34d399; font-size: 0.75rem; font-weight: 500; border: 1px solid rgba(52, 211, 153, 0.2);">
                     <span style="width: 0.5rem; height: 0.5rem; border-radius: 9999px; background: #34d399;"></span> Sistem Aktif (0 Hata)
                 </span>
-                <button onclick="lockDashboard()" style="background: #0f172a; border: 1px solid #1e293b; color: #cbd5e1; padding: 0.625rem 1.25rem; border-radius: 0.75rem; font-size: 0.75rem; cursor: pointer; transition: background 0.2s;">
+                <button onclick="lockDashboard()" style="background: #0f172a; border: 1px solid #1e293b; color: #cbd5e1; padding: 0.625rem 1.25rem; border-radius: 0.75rem; font-size: 0.75rem; cursor: pointer;">
                     <i class="fa-solid fa-lock" style="margin-right: 0.35rem;"></i> Kilitle
                 </button>
             </div>
@@ -154,30 +116,30 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
 
         <!-- Stats Grid -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem;">
-            <div class="glass rounded-2xl p-6">
-                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">Toplam Repolar</p>
+            <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
+                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Toplam Repolar</p>
                 <h3 style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">6 Varlık</h3>
-                <p style="color: #34d399; font-size: 0.75rem; margin: 0.5rem 0 0 0;"><i class="fa-solid fa-arrow-up mr-1"></i> %100 Senkronize</p>
+                <p style="color: #34d399; font-size: 0.75rem; margin: 0.5rem 0 0 0;">%100 Senkronize</p>
             </div>
-            <div class="glass rounded-2xl p-6">
-                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">Aktif Workflow</p>
+            <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
+                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Aktif Workflow</p>
                 <h3 style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">24+ Otomasyon</h3>
                 <p style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">CI/CD, SEO, Security</p>
             </div>
-            <div class="glass rounded-2xl p-6">
-                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">Büyüme Motorları</p>
+            <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
+                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Büyüme Motorları</p>
                 <h3 style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">3 Bot</h3>
                 <p style="color: #38bdf8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Lead Bot, Devlog, AI Content</p>
             </div>
-            <div class="glass rounded-2xl p-6">
-                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">Güvenlik Zırhı</p>
+            <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
+                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Güvenlik Zırhı</p>
                 <h3 style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">Aktif</h3>
                 <p style="color: #34d399; font-size: 0.75rem; margin: 0.5rem 0 0 0;">WAF, Origin Pulls, Dependabot</p>
             </div>
         </div>
 
         <!-- Repositories Table -->
-        <div class="glass rounded-2xl overflow-hidden" style="margin-bottom: 3rem;">
+        <div class="glass" style="border-radius: 1rem; overflow: hidden; margin-bottom: 3rem;">
             <div style="padding: 1.5rem 2rem; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="font-weight: 700; font-size: 1.25rem; margin: 0;">Proje Otomasyon Durumları</h3>
                 <span style="color: #94a3b8; font-size: 0.75rem;">Canlı GitHub Actions Entegrasyonu</span>
@@ -190,51 +152,51 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                             <th>Ana Otomasyonlar</th>
                             <th>Çalışma Sıklığı</th>
                             <th>Durum</th>
-                            <th class="text-right">Aksiyon</th>
+                            <th style="text-align: right;">Aksiyon</th>
                         </tr>
                     </thead>
                     <tbody style="font-size: 0.875rem;">
                         <tr>
-                            <td style="font-weight: 500;"><i class="fa-solid fa-globe text-cyan-400" style="margin-right: 0.5rem;"></i> teyfikgokdemir</td>
+                            <td style="font-weight: 500;"><i class="fa-solid fa-globe" style="color: #38bdf8; margin-right: 0.5rem;"></i> teyfikgokdemir</td>
                             <td style="color: #cbd5e1;">Deploy, Security, Maintenance, SEO Ping, AI Content</td>
                             <td style="color: #94a3b8; font-size: 0.75rem;">Push & Günlük</td>
                             <td><span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.1); color: #34d399; font-size: 0.75rem; border: 1px solid rgba(52, 211, 153, 0.2);">Çalışıyor</span></td>
-                            <td class="text-right"><a href="https://github.com/teyfikgokdemir/teyfikgokdemir/actions" target="_blank" style="font-size: 0.75rem; background: #1e293b; color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
+                            <td style="text-align: right;"><a href="https://github.com/teyfikgokdemir/teyfikgokdemir/actions" target="_blank" style="font-size: 0.75rem; background: #1e293b; color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
                         </tr>
                         <tr>
-                            <td style="font-weight: 500;"><i class="fa-solid fa-chart-line text-amber-400" style="margin-right: 0.5rem;"></i> ctseg</td>
+                            <td style="font-weight: 500;"><i class="fa-solid fa-chart-line" style="color: #fbbf24; margin-right: 0.5rem;"></i> ctseg</td>
                             <td style="color: #cbd5e1;">Deploy, Security, B2B Lead Scraper Bot</td>
                             <td style="color: #94a3b8; font-size: 0.75rem;">Push & Pazartesi</td>
                             <td><span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.1); color: #34d399; font-size: 0.75rem; border: 1px solid rgba(52, 211, 153, 0.2);">Çalışıyor</span></td>
-                            <td class="text-right"><a href="https://github.com/teyfikgokdemir/ctseg/actions" target="_blank" style="font-size: 0.75rem; background: #1e293b; color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
+                            <td style="text-align: right;"><a href="https://github.com/teyfikgokdemir/ctseg/actions" target="_blank" style="font-size: 0.75rem; background: #1e293b; color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
                         </tr>
                         <tr>
-                            <td style="font-weight: 500;"><i class="fa-solid fa-gamepad text-purple-400" style="margin-right: 0.5rem;"></i> mythborn</td>
+                            <td style="font-weight: 500;"><i class="fa-solid fa-gamepad" style="color: #c084fc; margin-right: 0.5rem;"></i> mythborn</td>
                             <td style="color: #cbd5e1;">Deploy, Security, Community & Devlog Sync</td>
                             <td style="color: #94a3b8; font-size: 0.75rem;">Push & Çarşamba</td>
                             <td><span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.1); color: #34d399; font-size: 0.75rem; border: 1px solid rgba(52, 211, 153, 0.2);">Çalışıyor</span></td>
-                            <td class="text-right"><a href="https://github.com/teyfikgokdemir/mythborn/actions" target="_blank" style="font-size: 0.75rem; background: #1e293b; color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
+                            <td style="text-align: right;"><a href="https://github.com/teyfikgokdemir/mythborn/actions" target="_blank" style="font-size: 0.75rem; background: #1e293b; color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
                         </tr>
                         <tr>
-                            <td style="font-weight: 500;"><i class="fa-solid fa-palette text-blue-400" style="margin-right: 0.5rem;"></i> qct-studio</td>
+                            <td style="font-weight: 500;"><i class="fa-solid fa-palette" style="color: #60a5fa; margin-right: 0.5rem;"></i> qct-studio</td>
                             <td style="color: #cbd5e1;">Deploy, Security, Link Checker, SEO Ping</td>
                             <td style="color: #94a3b8; font-size: 0.75rem;">Push & Haftalık</td>
                             <td><span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.1); color: #34d399; font-size: 0.75rem; border: 1px solid rgba(52, 211, 153, 0.2);">Çalışıyor</span></td>
-                            <td class="text-right"><a href="https://github.com/teyfikgokdemir/qct-studio/actions" target="_blank" style="font-size: 0.75rem; background: #1e293b; color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
+                            <td style="text-align: right;"><a href="https://github.com/teyfikgokdemir/qct-studio/actions" target="_blank" style="font-size: 0.75rem; background: #1e293b; color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
                         </tr>
                         <tr>
-                            <td style="font-weight: 500;"><i class="fa-solid fa-store text-emerald-400" style="margin-right: 0.5rem;"></i> qct-commerce-tr</td>
+                            <td style="font-weight: 500;"><i class="fa-solid fa-store" style="color: #34d399; margin-right: 0.5rem;"></i> qct-commerce-tr</td>
                             <td style="color: #cbd5e1;">Deploy, Security, Maintenance</td>
                             <td style="color: #94a3b8; font-size: 0.75rem;">Push & Günlük</td>
                             <td><span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.1); color: #34d399; font-size: 0.75rem; border: 1px solid rgba(52, 211, 153, 0.2);">Çalışıyor</span></td>
-                            <td class="text-right"><a href="https://github.com/teyfikgokdemir/qct-commerce-tr/actions" target="_blank" style="font-size: 0.75rem; background: #1e293b; color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
+                            <td style="text-align: right;"><a href="https://github.com/teyfikgokdemir/qct-commerce-tr/actions" target="_blank" style="font-size: 0.75rem; background: #1e293b; color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
                         </tr>
                         <tr>
-                            <td style="font-weight: 500;"><i class="fa-solid fa-building text-rose-400" style="margin-right: 0.5rem;"></i> iran-ahli</td>
+                            <td style="font-weight: 500;"><i class="fa-solid fa-building" style="color: #f87171; margin-right: 0.5rem;"></i> iran-ahli</td>
                             <td style="color: #cbd5e1;">Deploy, Security, Audit</td>
                             <td style="color: #94a3b8; font-size: 0.75rem;">Push & Günlük</td>
                             <td><span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.1); color: #34d399; font-size: 0.75rem; border: 1px solid rgba(52, 211, 153, 0.2);">Çalışıyor</span></td>
-                            <td class="text-right"><a href="https://github.com/teyfikgokdemir/iran-ahli/actions" target="_blank" style="font-size: 0.75rem; background: #1e293b; color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
+                            <td style="text-align: right;"><a href="https://github.com/teyfikgokdemir/iran-ahli/actions" target="_blank" style="font-size: 0.75rem; background: #1e293b; color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -243,9 +205,9 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
     </div>
 
     <script>
-        function handleAuth(event) {
+        document.getElementById('login-form').addEventListener('submit', function(event) {
             event.preventDefault();
-            const pass = document.getElementById('admin-pass').value;
+            const pass = document.getElementById('admin-pass').value.trim();
             if (pass === 'cansu2026') {
                 document.getElementById('auth-modal').style.display = 'none';
                 document.getElementById('dashboard-content').classList.remove('hidden');
@@ -254,19 +216,19 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 const err = document.getElementById('auth-error');
                 err.style.display = 'block';
             }
-        }
+        });
 
         function lockDashboard() {
             localStorage.removeItem('cansu_auth');
             location.reload();
         }
 
-        window.onload = function() {
+        window.addEventListener('DOMContentLoaded', () => {
             if (localStorage.getItem('cansu_auth') === 'true') {
                 document.getElementById('auth-modal').style.display = 'none';
                 document.getElementById('dashboard-content').classList.remove('hidden');
             }
-        }
+        });
     </script>
 </body>
 </html>
