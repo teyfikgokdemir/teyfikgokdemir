@@ -7,7 +7,7 @@ import { faqSchema } from '../../data/homeFaq';
 
 export function getStaticPaths() {
   return locales
-    .filter((lang) => lang !== 'tr' && lang !== 'en' && lang !== 'fa')
+    .filter((lang) => !['tr', 'en', 'fa', 'ru', 'mk', 'sr', 'sq', 'zh', 'vi'].includes(lang))
     .map((lang) => ({ params: { lang } }));
 }
 
