@@ -25,7 +25,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             overflow-x: hidden;
         }
 
-        /* Master Grid Wrapper */
+        /* Master Grid Wrapper for Desktop */
         .page-wrapper {
             display: grid;
             grid-template-columns: 280px 1fr 280px;
@@ -46,6 +46,11 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             gap: 1.5rem;
             align-items: center;
             justify-content: center;
+        }
+
+        /* Mobile specific gallery (hidden on desktop) */
+        .mobile-gallery {
+            display: none;
         }
 
         .polaroid {
@@ -70,7 +75,8 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             display: block;
             border-radius: 3px;
         }
-        /* Specific face focus adjustments for each image */
+
+        /* Precise Face Focus */
         .img-wedding { object-position: 50% 15% !important; }
         .img-sunset { object-position: 50% 25% !important; }
         .img-zarafet { object-position: 50% 15% !important; }
@@ -156,18 +162,38 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         th { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; background: rgba(2, 6, 23, 0.85); }
         tr:hover { background: rgba(30, 41, 59, 0.6); }
 
-        @media (max-width: 1200px) {
+        /* Mobile Optimization: Exactly 2 photos (top and bottom of login card) */
+        @media (max-width: 1100px) {
             .page-wrapper {
                 grid-template-columns: 1fr;
-                padding: 1.5rem;
+                padding: 1rem;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 1.5rem;
             }
             .gallery-side {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
+                display: none;
             }
-            .polaroid { width: 160px; }
-            .polaroid img { height: 130px; }
+            .mobile-gallery {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1.25rem;
+                width: 100%;
+            }
+            .mobile-gallery .polaroid {
+                width: 180px;
+                transform: rotate(0deg) !important;
+            }
+            .mobile-gallery .polaroid img {
+                height: 140px;
+            }
+            .login-card {
+                max-width: 100%;
+                padding: 1.75rem;
+            }
         }
     </style>
 </head>
@@ -177,7 +203,12 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
     <!-- Auth Guard Modal -->
     <div id="auth-modal" class="content-layer">
         <div class="page-wrapper">
-            <!-- Left Gallery Column -->
+            <!-- Mobile Top Photo -->
+            <div class="mobile-gallery">
+                <div class="polaroid" style="--rot: -2deg;"><img src="/images/cansu/wedding_entrance.webp" alt="Wedding" class="img-wedding"><div class="caption">En Mutlu Anımız ❤️</div></div>
+            </div>
+
+            <!-- Left Gallery Column (Desktop) -->
             <div class="gallery-side">
                 <div class="polaroid" style="--rot: -4deg;"><img src="/images/cansu/wedding_entrance.webp" alt="Wedding" class="img-wedding"><div class="caption">En Mutlu Anımız ❤️</div></div>
                 <div class="polaroid" style="--rot: 3deg;"><img src="/images/cansu/couple_reels_new_1.webp" alt="Coffee" class="img-kahve"><div class="caption">Kahve Keyfi ☕</div></div>
@@ -204,11 +235,16 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 <p id="auth-error" style="color: #f87171; font-size: 0.8rem; text-align: center; margin-top: 1rem; display: none;">Geçersiz şifre! Tekrar deneyin.</p>
             </div>
 
-            <!-- Right Gallery Column -->
+            <!-- Right Gallery Column (Desktop) -->
             <div class="gallery-side">
                 <div class="polaroid" style="--rot: 4deg;"><img src="/images/cansu/wedding_concept_1.webp" alt="Sunset" class="img-sunset"><div class="caption">Gün Batımı 🌅</div></div>
                 <div class="polaroid" style="--rot: -2deg;"><img src="/images/cansu/business_luxury_8.webp" alt="Style" class="img-zarafet"><div class="caption">Zarafet ✨</div></div>
                 <div class="polaroid" style="--rot: 3deg;"><img src="/images/cansu/wedding_reels.webp" alt="Ceremony" class="img-nikah"><div class="caption">Nikah 💍</div></div>
+            </div>
+
+            <!-- Mobile Bottom Photo -->
+            <div class="mobile-gallery">
+                <div class="polaroid" style="--rot: 2deg;"><img src="/images/cansu/wedding_concept_1.webp" alt="Sunset" class="img-sunset"><div class="caption">Gün Batımı 🌅</div></div>
             </div>
         </div>
     </div>
