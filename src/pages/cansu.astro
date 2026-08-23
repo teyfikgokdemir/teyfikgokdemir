@@ -24,45 +24,53 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             min-height: 100vh;
             overflow-x: hidden;
         }
-        /* Scattered Polaroid / Photo Cards Background */
+        /* Crystal Clear Scattered Polaroid Gallery */
         .scattered-gallery {
             position: fixed;
             inset: 0;
-            z-index: 0;
+            z-index: 1;
             pointer-events: none;
             overflow: hidden;
         }
         .polaroid {
             position: absolute;
             background: #ffffff;
-            padding: 10px 10px 30px 10px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            border-radius: 4px;
-            width: 180px;
+            padding: 8px 8px 24px 8px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+            border-radius: 6px;
+            width: 200px;
             transform: rotate(var(--rot, 0deg));
-            opacity: 0.85;
-            transition: transform 0.3s ease;
+            opacity: 0.95;
+            border: 1px solid rgba(255,255,255,0.4);
         }
         .polaroid img {
             width: 100%;
-            height: 220px;
+            height: 240px;
             object-fit: cover;
             display: block;
-            border-radius: 2px;
+            border-radius: 3px;
+        }
+        .polaroid .caption {
+            color: #111827;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 8px;
+            font-family: monospace;
         }
         /* Positions for scattered photos */
-        .p1 { top: 5%; left: 3%; --rot: -8deg; }
-        .p2 { top: 8%; right: 4%; --rot: 12deg; }
-        .p3 { bottom: 8%; left: 5%; --rot: 6deg; }
-        .p4 { bottom: 5%; right: 6%; --rot: -10deg; }
-        .p5 { top: 35%; left: 1%; --rot: 15deg; width: 150px; }
-        .p6 { top: 30%; right: 2%; --rot: -14deg; width: 150px; }
+        .p1 { top: 6%; left: 4%; --rot: -7deg; }
+        .p2 { top: 8%; right: 5%; --rot: 9deg; }
+        .p3 { bottom: 6%; left: 6%; --rot: 5deg; }
+        .p4 { bottom: 5%; right: 6%; --rot: -8deg; }
+        .p5 { top: 32%; left: 1%; --rot: 12deg; width: 170px; }
+        .p6 { top: 30%; right: 2%; --rot: -11deg; width: 170px; }
 
         /* Dashboard crystal clear background */
         .dashboard-bg {
             position: fixed;
             inset: 0;
-            background: linear-gradient(rgba(3, 7, 18, 0.82), rgba(3, 7, 18, 0.92)),
+            background: linear-gradient(rgba(3, 7, 18, 0.85), rgba(3, 7, 18, 0.94)),
                         url('/images/cansu/uF2GI.jpg') no-repeat center center/cover;
             z-index: 0;
             pointer-events: none;
@@ -71,17 +79,16 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         .bg-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(3, 7, 18, 0.7);
-            backdrop-filter: blur(12px);
-            z-index: 1;
+            background: rgba(3, 7, 18, 0.45);
+            z-index: 2;
             pointer-events: none;
         }
         .content-layer { position: relative; z-index: 10; }
         .glass {
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(15, 23, 42, 0.92);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(244, 63, 94, 0.35);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(244, 63, 94, 0.4);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
         }
         .hidden { display: none !important; }
         input {
@@ -111,10 +118,10 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         button.btn-primary:hover { opacity: 0.95; }
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 1.25rem 1.5rem; text-align: left; border-bottom: 1px solid #1e293b; }
-        th { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; background: rgba(2, 6, 23, 0.8); }
+        th { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; background: rgba(2, 6, 23, 0.85); }
         tr:hover { background: rgba(30, 41, 59, 0.6); }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 1200px) {
             .polaroid { display: none; }
         }
     </style>
@@ -122,12 +129,12 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
 <body>
     <!-- Scattered Polaroid Gallery for Login View -->
     <div id="login-bg-elements" class="scattered-gallery">
-        <div class="polaroid p1"><img src="/images/cansu/wedding_entrance.webp" alt="Wedding"><div style="color:#111; font-size:11px; font-weight:bold; text-align:center; margin-top:6px;">En Mutlu Anımız ❤️</div></div>
-        <div class="polaroid p2"><img src="/images/cansu/couple_reels_new_1.webp" alt="Coffee"><div style="color:#111; font-size:11px; font-weight:bold; text-align:center; margin-top:6px;">Kahve Keyfi ☕</div></div>
-        <div class="polaroid p3"><img src="/images/cansu/lifestyle_vacation_4.webp" alt="Reading"><div style="color:#111; font-size:11px; font-weight:bold; text-align:center; margin-top:6px;">Huzur 📖</div></div>
-        <div class="polaroid p4"><img src="/images/cansu/wedding_concept_1.webp" alt="Sunset"><div style="color:#111; font-size:11px; font-weight:bold; text-align:center; margin-top:6px;">Gün Batımı 🌅</div></div>
-        <div class="polaroid p5"><img src="/images/cansu/business_luxury_8.webp" alt="Style"><div style="color:#111; font-size:11px; font-weight:bold; text-align:center; margin-top:6px;">Zarafet ✨</div></div>
-        <div class="polaroid p6"><img src="/images/cansu/wedding_reels.webp" alt="Ceremony"><div style="color:#111; font-size:11px; font-weight:bold; text-align:center; margin-top:6px;">Nikah 💍</div></div>
+        <div class="polaroid p1"><img src="/images/cansu/wedding_entrance.webp" alt="Wedding"><div class="caption">En Mutlu Anımız ❤️</div></div>
+        <div class="polaroid p2"><img src="/images/cansu/couple_reels_new_1.webp" alt="Coffee"><div class="caption">Kahve Keyfi ☕</div></div>
+        <div class="polaroid p3"><img src="/images/cansu/lifestyle_vacation_4.webp" alt="Reading"><div class="caption">Huzur 📖</div></div>
+        <div class="polaroid p4"><img src="/images/cansu/wedding_concept_1.webp" alt="Sunset"><div class="caption">Gün Batımı 🌅</div></div>
+        <div class="polaroid p5"><img src="/images/cansu/business_luxury_8.webp" alt="Style"><div class="caption">Zarafet ✨</div></div>
+        <div class="polaroid p6"><img src="/images/cansu/wedding_reels.webp" alt="Ceremony"><div class="caption">Nikah 💍</div></div>
     </div>
 
     <!-- Dashboard Crystal Clear Background (Hidden initially) -->
