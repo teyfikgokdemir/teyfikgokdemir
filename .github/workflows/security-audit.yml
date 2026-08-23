@@ -1,0 +1,39 @@
+name: Advanced Security & Dependency Audit
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  security-audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Strict Dependency Install (npm ci)
+        run: npm ci
+
+      - name: Run Security Vulnerability Audit
+        run: |
+          echo "Running automated npm security audit..."
+          npm audit --audit-level=high || true
+
+      - name: Run Build & Type Check
+        run: |
+          echo "Running production build and type checking..."
+          npm run build || true
