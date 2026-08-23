@@ -265,8 +265,8 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 <p style="color: #cbd5e1; font-size: 0.875rem; margin-top: 0.35rem;">Cloudflare & GitHub Actions Otomasyon Sağlık ve İzleme Merkezi</p>
             </div>
             <div style="display: flex; align-items: center; gap: 1rem;">
-                <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.2); color: #34d399; font-size: 0.75rem; font-weight: 500; border: 1px solid rgba(52, 211, 153, 0.4);">
-                    <span style="width: 0.5rem; height: 0.5rem; border-radius: 9999px; background: #34d399;"></span> Son doğrulama: 24 Ağustos 2026
+                <span id="live-status" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 9999px; background: rgba(251, 191, 36, 0.2); color: #fbbf24; font-size: 0.75rem; font-weight: 500; border: 1px solid rgba(251, 191, 36, 0.4);">
+                    <span style="width: 0.5rem; height: 0.5rem; border-radius: 9999px; background: currentColor;"></span> Canlı veriler yükleniyor...
                 </span>
                 <button onclick="lockDashboard()" style="background: rgba(15,23,42,0.8); border: 1px solid #334155; color: #cbd5e1; padding: 0.625rem 1.25rem; border-radius: 0.75rem; font-size: 0.75rem; cursor: pointer;">
                     <i class="fa-solid fa-lock" style="margin-right: 0.35rem;"></i> Kilitle
@@ -278,13 +278,13 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem;">
             <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
                 <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Toplam Repolar</p>
-                <h3 style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">6 Varlık</h3>
-                <p style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Cloudflare’da 5 production deploy başarılı</p>
+                <h3 id="site-count" style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">6 Site</h3>
+                <p id="health-summary" style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Canlı sağlık kontrolü bekleniyor</p>
             </div>
             <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
                 <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Aktif Workflow</p>
-                <h3 style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">24+ Workflow</h3>
-                <p style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">CI/CD, SEO, Security</p>
+                <h3 id="workflow-summary" style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">GitHub Actions</h3>
+                <p id="workflow-detail" style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Durum sorgulanıyor</p>
             </div>
             <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
                 <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Büyüme Motorları</p>
@@ -294,15 +294,27 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
                 <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Güvenlik Zırhı</p>
                 <h3 style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">Aktif</h3>
-                <p style="color: #34d399; font-size: 0.75rem; margin: 0.5rem 0 0 0;">WAF, Origin Pulls, Dependabot</p>
+                <p style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Cloudflare Analytics dashboard</p>
             </div>
         </div>
+
+        <!-- Live Data Summary -->
+        <section class="glass" style="border-radius: 1rem; padding: 1.5rem 2rem; margin-bottom: 2.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
+                <div>
+                    <h2 style="font-size:1.15rem; margin:0;">Canlı Site Sağlığı ve GitHub Durumu</h2>
+                    <p id="data-source-note" style="color:#94a3b8; font-size:0.78rem; margin:0.4rem 0 0;">HTTP ve GitHub durumu sayfa açıldığında güncellenir; otomatik yenileme 5 dakikada bir.</p>
+                </div>
+                <button id="refresh-data" type="button" style="background:#1e293b; border:1px solid #475569; color:#e2e8f0; padding:0.55rem 0.9rem; border-radius:0.6rem; cursor:pointer;">Yenile</button>
+            </div>
+            <div id="live-summary-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:0.8rem;"></div>
+        </section>
 
         <!-- Repositories Table -->
         <div class="glass" style="border-radius: 1rem; overflow: hidden; margin-bottom: 3rem;">
             <div style="padding: 1.5rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="font-weight: 700; font-size: 1.25rem; margin: 0;">Proje Otomasyon Durumları</h3>
-                <span style="color: #94a3b8; font-size: 0.75rem;">GitHub Actions durum bağlantıları</span>
+                <span id="last-updated" style="color: #94a3b8; font-size: 0.75rem;">GitHub Actions ve HTTP kontrolleri</span>
             </div>
             <div style="overflow-x: auto;">
                 <table>
@@ -316,42 +328,42 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                         </tr>
                     </thead>
                     <tbody style="font-size: 0.875rem;">
-                        <tr>
+                        <tr data-site="teyfikgokdemir">
                             <td style="font-weight: 500;"><i class="fa-solid fa-globe" style="color: #38bdf8; margin-right: 0.5rem;"></i> teyfikgokdemir</td>
                             <td style="color: #cbd5e1;">Deploy, Security</td>
                             <td style="color: #94a3b8; font-size: 0.75rem;">Push & Günlük</td>
                             <td><span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.2); color: #34d399; font-size: 0.75rem; border: 1px solid rgba(52, 211, 153, 0.4);">Snapshot</span></td>
                             <td style="text-align: right;"><a href="https://github.com/teyfikgokdemir/teyfikgokdemir/actions" target="_blank" style="font-size: 0.75rem; background: rgba(15,23,42,0.8); color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
                         </tr>
-                        <tr>
+                        <tr data-site="ctseg">
                             <td style="font-weight: 500;"><i class="fa-solid fa-chart-line" style="color: #fbbf24; margin-right: 0.5rem;"></i> ctseg</td>
                             <td style="color: #cbd5e1;">Deploy, Security</td>
                             <td style="color: #94a3b8; font-size: 0.75rem;">Push & Pazartesi</td>
                             <td><span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.2); color: #34d399; font-size: 0.75rem; border: 1px solid rgba(52, 211, 153, 0.4);">Snapshot</span></td>
                             <td style="text-align: right;"><a href="https://github.com/teyfikgokdemir/ctseg/actions" target="_blank" style="font-size: 0.75rem; background: rgba(15,23,42,0.8); color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
                         </tr>
-                        <tr>
+                        <tr data-site="mythborn">
                             <td style="font-weight: 500;"><i class="fa-solid fa-gamepad" style="color: #c084fc; margin-right: 0.5rem;"></i> mythborn</td>
                             <td style="color: #cbd5e1;">Deploy, Security, Quality</td>
                             <td style="color: #94a3b8; font-size: 0.75rem;">Push & Çarşamba</td>
                             <td><span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.2); color: #34d399; font-size: 0.75rem; border: 1px solid rgba(52, 211, 153, 0.4);">Snapshot</span></td>
                             <td style="text-align: right;"><a href="https://github.com/teyfikgokdemir/mythborn/actions" target="_blank" style="font-size: 0.75rem; background: rgba(15,23,42,0.8); color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
                         </tr>
-                        <tr>
+                        <tr data-site="qct-studio">
                             <td style="font-weight: 500;"><i class="fa-solid fa-palette" style="color: #60a5fa; margin-right: 0.5rem;"></i> qct-studio</td>
-                            <td style="color: #cbd5e1;">Deploy, Security, Link Checker, SEO Ping</td>
+                            <td style="color: #cbd5e1;">Deploy, Security</td>
                             <td style="color: #94a3b8; font-size: 0.75rem;">Push & Haftalık</td>
                             <td><span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.2); color: #34d399; font-size: 0.75rem; border: 1px solid rgba(52, 211, 153, 0.4);">Snapshot</span></td>
                             <td style="text-align: right;"><a href="https://github.com/teyfikgokdemir/qct-studio/actions" target="_blank" style="font-size: 0.75rem; background: rgba(15,23,42,0.8); color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
                         </tr>
-                        <tr>
+                        <tr data-site="qct-commerce-tr">
                             <td style="font-weight: 500;"><i class="fa-solid fa-store" style="color: #34d399; margin-right: 0.5rem;"></i> qct-commerce-tr</td>
-                            <td style="color: #cbd5e1;">Deploy, Security, Maintenance</td>
+                            <td style="color: #cbd5e1;">Deploy, Security</td>
                             <td style="color: #94a3b8; font-size: 0.75rem;">Push & Günlük</td>
                             <td><span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.2); color: #34d399; font-size: 0.75rem; border: 1px solid rgba(52, 211, 153, 0.4);">Snapshot</span></td>
                             <td style="text-align: right;"><a href="https://github.com/teyfikgokdemir/qct-commerce-tr/actions" target="_blank" style="font-size: 0.75rem; background: rgba(15,23,42,0.8); color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
                         </tr>
-                        <tr>
+                        <tr data-site="iran-ahli">
                             <td style="font-weight: 500;"><i class="fa-solid fa-building" style="color: #f87171; margin-right: 0.5rem;"></i> iran-ahli</td>
                             <td style="color: #cbd5e1;">Deploy, Security, Audit</td>
                             <td style="color: #94a3b8; font-size: 0.75rem;">Push & Günlük</td>
@@ -365,12 +377,63 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
     </div>
 
     <script>
-        document.getElementById('dash-bg-element').classList.remove('hidden');
-        document.getElementById('dashboard-content').classList.remove('hidden');
-        function lockDashboard() {
-            document.getElementById('dash-bg-element').classList.add('hidden');
-            document.getElementById('dashboard-content').classList.add('hidden');
+        const dashboard = document.getElementById('dashboard-content');
+        const bg = document.getElementById('dash-bg-element');
+        const liveStatus = document.getElementById('live-status');
+        const summaryGrid = document.getElementById('live-summary-grid');
+        const refreshButton = document.getElementById('refresh-data');
+        const formatTime = (value) => value ? new Date(value).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'medium' }) : '—';
+        const formatNumber = (value) => typeof value === 'number' ? new Intl.NumberFormat('tr-TR').format(value) : '—';
+        const formatBytes = (value) => typeof value === 'number' ? `${(value / 1024 / 1024).toFixed(1)} MB` : '—';
+        const card = (label, value, detail, tone = '#38bdf8') => `<div style="background:rgba(2,6,23,.55);border:1px solid #1e293b;border-radius:.75rem;padding:1rem"><div style="color:#94a3b8;font-size:.7rem;text-transform:uppercase">${label}</div><strong style="display:block;font-size:1.25rem;margin-top:.35rem;color:${tone}">${value}</strong><small style="display:block;color:#94a3b8;margin-top:.3rem">${detail}</small></div>`;
+        function setLiveState(text, color = '#34d399') {
+            liveStatus.style.color = color;
+            liveStatus.style.borderColor = color;
+            liveStatus.style.background = `${color}22`;
+            liveStatus.lastChild.textContent = ` ${text}`;
         }
+        function lockDashboard() { bg.classList.add('hidden'); dashboard.classList.add('hidden'); }
+        async function loadOverview() {
+            setLiveState('Canlı veriler yükleniyor...', '#fbbf24');
+            try {
+                const response = await fetch('/api/overview', { cache: 'no-store' });
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+                const healthy = data.sites.filter((site) => site.health.ok).length;
+                const failed = data.sites.reduce((sum, site) => sum + (site.github.failed24h || 0), 0);
+                document.getElementById('health-summary').textContent = `${healthy}/${data.sites.length} site erişilebilir`;
+                document.getElementById('workflow-summary').textContent = `${data.sites.length} repo izleniyor`;
+                document.getElementById('workflow-detail').textContent = failed ? `${failed} başarısız run (24 saat)` : 'Son 24 saatte failure yok';
+                summaryGrid.innerHTML = data.sites.map((site) => {
+                    const h = site.health;
+                    const g = site.github;
+                    const tone = h.ok && (!g.latest || g.latest.conclusion === 'success') ? '#34d399' : '#f87171';
+                    const traffic = site.cloudflare?.last24h;
+                    const trafficText = traffic ? `${formatNumber(traffic.requests)} istek · ${formatNumber(traffic.uniqueVisitors)} tekil ziyaret · ${formatBytes(traffic.bytes)}` : 'Cloudflare trafik verisi bekleniyor';
+                    return card(site.name, h.ok ? 'ONLINE' : 'OFFLINE', `${h.status || '—'} · ${h.ms} ms · ${g.latest?.conclusion || 'GitHub veri yok'} · ${trafficText}`, tone);
+                }).join('');
+                data.sites.forEach((site) => {
+                    const row = document.querySelector(`tr[data-site="${site.key}"]`);
+                    if (!row) return;
+                    const statusCell = row.cells[3];
+                    const h = site.health;
+                    const g = site.github;
+                    const ok = h.ok && (!g.latest || g.latest.conclusion === 'success');
+                    statusCell.innerHTML = `<span style="padding:.25rem .75rem;border-radius:9999px;background:${ok ? 'rgba(52,211,153,.2)' : 'rgba(248,113,113,.2)'};color:${ok ? '#34d399' : '#f87171'};font-size:.75rem;border:1px solid ${ok ? 'rgba(52,211,153,.4)' : 'rgba(248,113,113,.4)'}">${ok ? 'Sağlıklı' : 'Kontrol gerekli'}</span><div style="color:#94a3b8;font-size:.7rem;margin-top:.35rem">${h.status || '—'} · ${h.ms} ms</div>`;
+                });
+                document.getElementById('data-source-note').textContent = data.source.cloudflareAnalytics ? 'Cloudflare trafik + HTTP sağlık + GitHub Actions; 5 dakikada bir yenilenir.' : 'HTTP sağlık + GitHub Actions; Cloudflare Analytics secret yapılandırılmadı.';
+                document.getElementById('last-updated').textContent = `Son güncelleme: ${formatTime(data.generatedAt)}`;
+                setLiveState(`Canlı kontrol: ${formatTime(data.generatedAt)}`);
+            } catch (error) {
+                summaryGrid.innerHTML = card('Veri kaynağı', 'ERİŞİLEMİYOR', 'Pages Function henüz yayınlanmamış olabilir', '#f87171');
+                setLiveState('Veri alınamadı', '#f87171');
+            }
+        }
+        bg.classList.remove('hidden');
+        dashboard.classList.remove('hidden');
+        refreshButton.addEventListener('click', loadOverview);
+        loadOverview();
+        setInterval(loadOverview, 5 * 60 * 1000);
     </script>
 </body>
 </html>
