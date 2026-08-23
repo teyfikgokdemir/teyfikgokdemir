@@ -1,15 +1,15 @@
-name: Deploy to Cloudflare Pages
+name: Cloudflare Pages Build Verification
 
 on:
   push:
     branches: [ main, master ]
 
 jobs:
-  deploy:
+  validate:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      deployments: write
+      deployments: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -26,11 +26,5 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Publish to Cloudflare Pages
-        uses: cloudflare/pages-action@1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: 'teyfikgokdemir'
-          directory: 'dist'
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+      # Production deployment is handled by Cloudflare Pages' native GitHub integration.
+      # Keeping deployment in this workflow would create duplicate and conflicting deploys.
