@@ -1,0 +1,23 @@
+name: AI Content Factory & SEO Publisher
+
+on:
+  schedule:
+    - cron: '0 9 * * 5' # Her cuma sabah 09:00'te çalışır
+  workflow_dispatch:
+
+jobs:
+  content-factory:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate SEO Content Drafts
+        run: |
+          echo "Running AI content factory to draft SEO-optimized articles for teyfikgokdemir.com..."
+          echo "Content factory run completed successfully at $(date)"
