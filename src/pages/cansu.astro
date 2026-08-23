@@ -25,7 +25,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             overflow-x: hidden;
         }
 
-        /* Master Grid Wrapper to prevent any overlapping */
+        /* Master Grid Wrapper */
         .page-wrapper {
             display: grid;
             grid-template-columns: 280px 1fr 280px;
@@ -65,11 +65,19 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         }
         .polaroid img {
             width: 100%;
-            height: 170px;
+            height: 180px;
             object-fit: cover;
             display: block;
             border-radius: 3px;
         }
+        /* Specific face focus adjustments for each image */
+        .img-wedding { object-position: 50% 15% !important; }
+        .img-sunset { object-position: 50% 25% !important; }
+        .img-zarafet { object-position: 50% 15% !important; }
+        .img-nikah { object-position: 50% 20% !important; }
+        .img-kahve { object-position: 50% 30% !important; }
+        .img-huzur { object-position: 50% 30% !important; }
+
         .polaroid .caption {
             color: #111827;
             font-size: 11px;
@@ -166,21 +174,21 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
 <body>
     <div class="bg-overlay"></div>
 
-    <!-- Auth Guard Modal with CSS Grid Master Layout -->
+    <!-- Auth Guard Modal -->
     <div id="auth-modal" class="content-layer">
         <div class="page-wrapper">
             <!-- Left Gallery Column -->
             <div class="gallery-side">
-                <div class="polaroid" style="--rot: -4deg;"><img src="/images/cansu/wedding_entrance.webp" alt="Wedding"><div class="caption">En Mutlu Anımız ❤️</div></div>
-                <div class="polaroid" style="--rot: 3deg;"><img src="/images/cansu/couple_reels_new_1.webp" alt="Coffee"><div class="caption">Kahve Keyfi ☕</div></div>
-                <div class="polaroid" style="--rot: -3deg;"><img src="/images/cansu/lifestyle_vacation_4.webp" alt="Reading"><div class="caption">Huzur 📖</div></div>
+                <div class="polaroid" style="--rot: -4deg;"><img src="/images/cansu/wedding_entrance.webp" alt="Wedding" class="img-wedding"><div class="caption">En Mutlu Anımız ❤️</div></div>
+                <div class="polaroid" style="--rot: 3deg;"><img src="/images/cansu/couple_reels_new_1.webp" alt="Coffee" class="img-kahve"><div class="caption">Kahve Keyfi ☕</div></div>
+                <div class="polaroid" style="--rot: -3deg;"><img src="/images/cansu/lifestyle_vacation_4.webp" alt="Reading" class="img-huzur"><div class="caption">Huzur 📖</div></div>
             </div>
 
             <!-- Center Login Card -->
             <div class="login-card">
                 <div style="text-align: center; margin-bottom: 2rem;">
                     <div style="display: inline-flex; align-items: center; justify-content: center; width: 5.5rem; height: 5.5rem; border-radius: 9999px; background: rgba(244, 63, 94, 0.2); color: #f43f5e; margin-bottom: 1.25rem; border: 2px solid #f43f5e; overflow: hidden; box-shadow: 0 10px 25px rgba(244,63,94,0.3);">
-                        <img src="/images/cansu/uF2GI.jpg" alt="Cansu" style="width: 100%; height: 100%; object-fit: cover;">
+                        <img src="/images/cansu/uF2GI.jpg" alt="Cansu" style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%;">
                     </div>
                     <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0; color: #fb7185;">Cansu & Teyfik Özel Paneli</h2>
                     <p style="color: #cbd5e1; font-size: 0.875rem; margin-top: 0.5rem;">Lütfen özel şifrenizi girin (cansu2026).</p>
@@ -198,9 +206,9 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
 
             <!-- Right Gallery Column -->
             <div class="gallery-side">
-                <div class="polaroid" style="--rot: 4deg;"><img src="/images/cansu/wedding_concept_1.webp" alt="Sunset"><div class="caption">Gün Batımı 🌅</div></div>
-                <div class="polaroid" style="--rot: -2deg;"><img src="/images/cansu/business_luxury_8.webp" alt="Style"><div class="caption">Zarafet ✨</div></div>
-                <div class="polaroid" style="--rot: 3deg;"><img src="/images/cansu/wedding_reels.webp" alt="Ceremony"><div class="caption">Nikah 💍</div></div>
+                <div class="polaroid" style="--rot: 4deg;"><img src="/images/cansu/wedding_concept_1.webp" alt="Sunset" class="img-sunset"><div class="caption">Gün Batımı 🌅</div></div>
+                <div class="polaroid" style="--rot: -2deg;"><img src="/images/cansu/business_luxury_8.webp" alt="Style" class="img-zarafet"><div class="caption">Zarafet ✨</div></div>
+                <div class="polaroid" style="--rot: 3deg;"><img src="/images/cansu/wedding_reels.webp" alt="Ceremony" class="img-nikah"><div class="caption">Nikah 💍</div></div>
             </div>
         </div>
     </div>
@@ -214,7 +222,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             <div>
                 <h1 style="font-size: 1.875rem; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; margin: 0;">
                     <span style="display: inline-block; width: 3rem; height: 3rem; border-radius: 9999px; overflow: hidden; border: 2px solid #f43f5e; vertical-align: middle; box-shadow: 0 5px 15px rgba(244,63,94,0.4);">
-                        <img src="/images/cansu/uF2GI.jpg" alt="Cansu" style="width: 100%; height: 100%; object-fit: cover;">
+                        <img src="/images/cansu/uF2GI.jpg" alt="Cansu" style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%;">
                     </span>
                     Cansu & Teyfik - Otonom Büyüme Paneli
                 </h1>
