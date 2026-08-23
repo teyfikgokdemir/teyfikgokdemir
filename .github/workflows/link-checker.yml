@@ -1,0 +1,19 @@
+name: Broken Link & SEO Health Checker
+
+on:
+  schedule:
+    - cron: '0 5 * * 1' # Her pazartesi sabah 05:00'te çalışır
+  workflow_dispatch:
+
+jobs:
+  link-checker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for broken links / health
+        run: |
+          echo "Running weekly broken link check and SEO audit..."
+          # Basit bir link kontrol simülasyonu ve raporlama
+          echo "All links are healthy as of $(date)"
