@@ -62,7 +62,7 @@ async function githubRun(repo: string, env: Env) {
 
 async function cloudflareTraffic(site: Site, env: Env) {
   if (!env.CF_API_TOKEN || !site.zoneTag) return { ok: false, available: false, reason: 'Cloudflare secret yapılandırılmadı' };
-  const query = `query($zoneTag:String!, $date:Date!, $date7:Date!, $date30:Date!, $since:Time!, $until:Time!) { viewer { zones(filter:{zoneTag:$zoneTag}) { daily:httpRequests1dGroups(limit:1, filter:{date_geq:$date}) { sum { requests bytes cachedBytes } uniq { uniques } } sevenDays:httpRequests1dGroups(limit:7, filter:{date_geq:$date7}, orderBy:[date_ASC]) { uniq { uniques } } thirtyDays:httpRequests1dGroups(limit:30, filter:{date_geq:$date30}, orderBy:[date_ASC]) { uniq { uniques } } hourly:httpRequests1hGroups(limit:24, filter:{datetime_geq:$since, datetime_leq:$until}, orderBy:[datetime_ASC]) { dimensions { datetime } sum { requests countryMap { clientCountryName requests bytes } } uniq { uniques } } } } }`;
+  const query = `query($zoneTag:String!, $date:Date!, $date7:Date!, $date30:Date!, $since:Time!, $until:Time!) { viewer { zones(filter:{zoneTag:$zoneTag}) { daily:httpRequests1dGroups(limit:1, filter:{date_geq:$date}) { sum { requests bytes cachedBytes } uniq { uniques } } sevenDays:httpRequests1dGroups(limit:7, filter:{date_geq:$date7}) { uniq { uniques } } thirtyDays:httpRequests1dGroups(limit:30, filter:{date_geq:$date30}) { uniq { uniques } } hourly:httpRequests1hGroups(limit:24, filter:{datetime_geq:$since, datetime_leq:$until}, orderBy:[datetime_ASC]) { dimensions { datetime } sum { requests countryMap { clientCountryName requests bytes } } uniq { uniques } } } } }`;
   try {
     const until = new Date();
     const since = new Date(until.getTime() - 24 * 60 * 60 * 1000);
