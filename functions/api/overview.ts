@@ -1,6 +1,7 @@
 interface Env {
   CF_API_TOKEN?: string;
   CF_ACCOUNT_ID?: string;
+  GITHUB_TOKEN?: string;
 }
 
 type Site = {
@@ -36,10 +37,10 @@ async function checkSite(site: Site) {
   }
 }
 
-async function githubRun(repo: string) {
+async function githubRun(repo: string, env: Env) {
   try {
     const response = await fetch(`https://api.github.com/repos/teyfikgokdemir/${repo}/actions/runs?per_page=10`, {
-      headers: { accept: 'application/vnd.github+json', 'user-agent': 'cansu-dashboard' },
+      headers: { accept: 'application/vnd.github+json', 'user-agent': 'cansu-dashboard', ...(env.GITHUB_TOKEN ? { authorization: `Bearer ${env.GITHUB_TOKEN}` } : {}) },
     });
     if (!response.ok) return { ok: false, error: `GitHub ${response.status}` };
     const data = await response.json() as { workflow_runs?: Array<Record<string, unknown>> };
@@ -92,7 +93,7 @@ async function cloudflareTraffic(site: Site, env: Env) {
 export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
   const [health, github, traffic] = await Promise.all([
     Promise.all(sites.map(checkSite)),
-    Promise.all(sites.map((site) => githubRun(site.repo))),
+    Promise.all(sites.map((site) => githubRun(site.repo, env))),
     Promise.all(sites.map((site) => cloudflareTraffic(site, env))),
   ]);
   const result = sites.map((site, index) => ({ ...site, health: health[index], github: github[index], cloudflare: traffic[index] }));
