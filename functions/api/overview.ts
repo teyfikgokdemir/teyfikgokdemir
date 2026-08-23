@@ -62,16 +62,18 @@ async function githubRun(repo: string, env: Env) {
 
 async function cloudflareTraffic(site: Site, env: Env) {
   if (!env.CF_API_TOKEN || !site.zoneTag) return { ok: false, available: false, reason: 'Cloudflare secret yapılandırılmadı' };
-  const query = `query($zoneTag:String!, $date:Date!, $since:Time!, $until:Time!) { viewer { zones(filter:{zoneTag:$zoneTag}) { daily:httpRequests1dGroups(limit:1, filter:{date_geq:$date}) { sum { requests bytes cachedBytes } uniq { uniques } } hourly:httpRequests1hGroups(limit:24, filter:{datetime_geq:$since, datetime_leq:$until}, orderBy:[datetime_ASC]) { dimensions { datetime } sum { requests countryMap { clientCountryName requests bytes } } uniq { uniques } } } } }`;
+  const query = `query($zoneTag:String!, $date:Date!, $since7:Time!, $since30:Time!, $since:Time!, $until:Time!) { viewer { zones(filter:{zoneTag:$zoneTag}) { daily:httpRequests1dGroups(limit:1, filter:{date_geq:$date}) { sum { requests bytes cachedBytes } uniq { uniques } } sevenDays:httpRequestsAdaptiveGroups(limit:1, filter:{datetime_geq:$since7, datetime_lt:$until}) { uniq { uniques } } thirtyDays:httpRequestsAdaptiveGroups(limit:1, filter:{datetime_geq:$since30, datetime_lt:$until}) { uniq { uniques } } hourly:httpRequests1hGroups(limit:24, filter:{datetime_geq:$since, datetime_leq:$until}, orderBy:[datetime_ASC]) { dimensions { datetime } sum { requests countryMap { clientCountryName requests bytes } } uniq { uniques } } } } }`;
   try {
     const until = new Date();
     const since = new Date(until.getTime() - 24 * 60 * 60 * 1000);
+    const since7 = new Date(until.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const since30 = new Date(until.getTime() - 30 * 24 * 60 * 60 * 1000);
     const response = await fetch('https://api.cloudflare.com/client/v4/graphql', {
       method: 'POST',
       headers: { authorization: `Bearer ${env.CF_API_TOKEN}`, 'content-type': 'application/json' },
-      body: JSON.stringify({ query, variables: { zoneTag: site.zoneTag, date: since.toISOString().slice(0, 10), since: since.toISOString(), until: until.toISOString() } }),
+      body: JSON.stringify({ query, variables: { zoneTag: site.zoneTag, date: since.toISOString().slice(0, 10), since7: since7.toISOString(), since30: since30.toISOString(), since: since.toISOString(), until: until.toISOString() } }),
     });
-    const payload = await response.json() as { data?: { viewer?: { zones?: Array<{ daily?: Array<{ sum?: { requests?: number; bytes?: number; cachedBytes?: number }; uniq?: { uniques?: number } }>; hourly?: Array<{ sum?: { requests?: number; countryMap?: Array<{ clientCountryName?: string; requests?: number; bytes?: number }> }; uniq?: { uniques?: number }; dimensions?: { datetime?: string } }> }> } }; errors?: Array<{ message?: string }> };
+    const payload = await response.json() as { data?: { viewer?: { zones?: Array<{ daily?: Array<{ sum?: { requests?: number; bytes?: number; cachedBytes?: number }; uniq?: { uniques?: number } }>; sevenDays?: Array<{ uniq?: { uniques?: number } }>; thirtyDays?: Array<{ uniq?: { uniques?: number } }>; hourly?: Array<{ sum?: { requests?: number; countryMap?: Array<{ clientCountryName?: string; requests?: number; bytes?: number }> }; uniq?: { uniques?: number }; dimensions?: { datetime?: string } }> }> } }; errors?: Array<{ message?: string }> };
     if (!response.ok || payload.errors?.length) return { ok: false, available: false, reason: payload.errors?.[0]?.message || `Cloudflare ${response.status}` };
     const zone = payload.data?.viewer?.zones?.[0];
     const groups = zone?.hourly || [];
@@ -102,6 +104,8 @@ async function cloudflareTraffic(site: Site, env: Env) {
         bytes: daily?.sum?.bytes || 0,
         cachedBytes: daily?.sum?.cachedBytes || 0,
         uniqueVisitors: daily?.uniq?.uniques || 0,
+        uniqueVisitors7d: zone?.sevenDays?.[0]?.uniq?.uniques || 0,
+        uniqueVisitors30d: zone?.thirtyDays?.[0]?.uniq?.uniques || 0,
       },
       countries,
       hourly: groups.map((group) => ({ at: group.dimensions?.datetime, requests: group.sum?.requests || 0, uniqueVisitors: group.uniq?.uniques || 0 })),

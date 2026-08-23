@@ -140,7 +140,9 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         .analytics-card__status-dot { width: .42rem; height: .42rem; border-radius: 50%; background: currentColor; }
         .analytics-card__metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; }
         .analytics-metric { background: rgba(2,6,23,.58); border: 1px solid rgba(51,65,85,.72); border-radius: .7rem; padding: .65rem .7rem; min-width: 0; }
+        .analytics-metric--period { background: linear-gradient(145deg, rgba(14,116,144,.12), rgba(2,6,23,.58)); border-color: rgba(56,189,248,.2); }
         .analytics-metric__label { color: #64748b; font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+        .analytics-metric--period .analytics-metric__label { color: #7dd3fc; }
         .analytics-metric__value { display: block; color: #f8fafc; font-size: 1rem; font-weight: 750; line-height: 1.25; margin-top: .25rem; overflow-wrap: anywhere; }
         .analytics-card__footer { display: flex; justify-content: space-between; gap: .5rem; color: #64748b; font-size: .66rem; margin-top: .85rem; }
         .analytics-card__footer a { color: #93c5fd; text-decoration: none; }
@@ -347,9 +349,9 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
                 <div>
                     <h2 style="font-size:1.15rem; margin:0;">Ülkelere Göre Trafik</h2>
-                    <p style="color:#94a3b8; font-size:.78rem; margin:.4rem 0 0;">Son 24 saatteki Cloudflare istek ve trafik dağılımı. Tekil ziyaretçi toplamı üst kartlarda gösterilir.</p>
+                    <p style="color:#94a3b8; font-size:.78rem; margin:.4rem 0 0;">Son 24 saatteki Cloudflare istek ve trafik dağılımı. Ziyaretçi trendleri üst site kartlarında gösterilir.</p>
                 </div>
-                <span style="color:#64748b; font-size:.7rem;">İlk 15 ülke · request payı</span>
+                <div style="display:flex; gap:.75rem; align-items:center; flex-wrap:wrap; color:#64748b; font-size:.7rem;"><span>İlk 15 ülke · request payı</span><span style="color:#475569;">Bar uzunluğu: en yüksek ülkeye göre istek yoğunluğu</span></div>
             </div>
             <div id="country-grid" class="country-grid"></div>
         </section>
@@ -434,6 +436,8 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         const getCountryName = (value) => {
             const code = String(value || '').trim().toUpperCase();
             if (!code) return 'Bilinmeyen ülke';
+            const shortNames = { US: 'ABD', GB: 'Birleşik Krallık', AE: 'BAE', KR: 'Güney Kore', RU: 'Rusya', CN: 'Çin', TR: 'Türkiye', DE: 'Almanya', NL: 'Hollanda' };
+            if (shortNames[code]) return shortNames[code];
             try { return countryNames.of(code) || code; } catch { return code; }
         };
         const card = (site) => {
@@ -452,8 +456,10 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 </div>
                 <div class="analytics-card__metrics">
                     <div class="analytics-metric"><span class="analytics-metric__label">İstekler / 24s</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.requests) : '—'}</strong></div>
-                    <div class="analytics-metric"><span class="analytics-metric__label">Tekil ziyaret</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.uniqueVisitors) : '—'}</strong></div>
-                    <div class="analytics-metric"><span class="analytics-metric__label">Trafik</span><strong class="analytics-metric__value">${traffic ? formatBytes(traffic.bytes) : '—'}</strong></div>
+                    <div class="analytics-metric"><span class="analytics-metric__label">Ziyaretçi / 24s</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.uniqueVisitors) : '—'}</strong></div>
+                    <div class="analytics-metric analytics-metric--period"><span class="analytics-metric__label">Ziyaretçi / 7g</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.uniqueVisitors7d) : '—'}</strong></div>
+                    <div class="analytics-metric analytics-metric--period"><span class="analytics-metric__label">Ziyaretçi / 30g</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.uniqueVisitors30d) : '—'}</strong></div>
+                    <div class="analytics-metric"><span class="analytics-metric__label">Trafik / 24s</span><strong class="analytics-metric__value">${traffic ? formatBytes(traffic.bytes) : '—'}</strong></div>
                     <div class="analytics-metric"><span class="analytics-metric__label">Yanıt süresi</span><strong class="analytics-metric__value">${h.ms} ms</strong></div>
                 </div>
                 <div class="analytics-card__footer"><span><i class="fa-solid fa-code-branch" style="margin-right:.3rem"></i>GitHub: ${githubStatus}</span><a href="${site.actions}" target="_blank" rel="noreferrer">Logları aç <i class="fa-solid fa-arrow-up-right-from-square" style="margin-left:.25rem"></i></a></div>
