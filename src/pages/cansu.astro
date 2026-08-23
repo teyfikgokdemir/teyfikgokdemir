@@ -145,17 +145,24 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         .analytics-card__footer { display: flex; justify-content: space-between; gap: .5rem; color: #64748b; font-size: .66rem; margin-top: .85rem; }
         .analytics-card__footer a { color: #93c5fd; text-decoration: none; }
         .analytics-card__footer a:hover { color: #bfdbfe; text-decoration: underline; }
-        .country-section { background: linear-gradient(145deg, rgba(15,23,42,.92), rgba(2,6,23,.94)); border: 1px solid rgba(148,163,184,.16); border-radius: 1rem; padding: 1.35rem 1.5rem; }
-        .country-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: .85rem; }
-        .country-panel { background: rgba(2,6,23,.55); border: 1px solid rgba(51,65,85,.7); border-radius: .8rem; padding: .9rem; }
-        .country-panel__head { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: .75rem; }
-        .country-panel__name { color: #e2e8f0; font-size: .76rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
-        .country-panel__note { color: #64748b; font-size: .65rem; }
-        .country-row { display: grid; grid-template-columns: 1.2fr 1fr auto; align-items: center; gap: .55rem; margin-top: .58rem; }
-        .country-row__name { color: #cbd5e1; font-size: .7rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .country-row__track { height: .35rem; background: #1e293b; border-radius: 9999px; overflow: hidden; }
-        .country-row__bar { height: 100%; background: linear-gradient(90deg, #38bdf8, #818cf8); border-radius: inherit; }
-        .country-row__value { color: #f8fafc; font-size: .68rem; font-variant-numeric: tabular-nums; text-align: right; }
+        .country-section { background: radial-gradient(circle at 12% 0%, rgba(56,189,248,.09), transparent 32%), linear-gradient(145deg, rgba(15,23,42,.96), rgba(2,6,23,.98)); border: 1px solid rgba(148,163,184,.2); border-radius: 1.25rem; padding: 1.55rem 1.65rem; box-shadow: 0 24px 70px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.04); }
+        .country-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+        .country-panel { position: relative; overflow: hidden; background: linear-gradient(160deg, rgba(15,23,42,.86), rgba(2,6,23,.9)); border: 1px solid rgba(100,116,139,.34); border-radius: 1rem; padding: 1.05rem; box-shadow: 0 12px 30px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.035); transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+        .country-panel::before { content: ''; position: absolute; inset: 0 0 auto; height: 2px; background: linear-gradient(90deg, #38bdf8, #818cf8, transparent); opacity: .8; }
+        .country-panel:hover { transform: translateY(-3px); border-color: rgba(96,165,250,.55); box-shadow: 0 18px 40px rgba(0,0,0,.32), 0 0 0 1px rgba(96,165,250,.08); }
+        .country-panel__head { display: flex; align-items: flex-start; justify-content: space-between; gap: .75rem; margin-bottom: .95rem; }
+        .country-panel__name { color: #f8fafc; font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+        .country-panel__summary { color: #64748b; font-size: .64rem; margin-top: .25rem; }
+        .country-panel__badge { color: #bae6fd; background: rgba(14,116,144,.18); border: 1px solid rgba(56,189,248,.25); border-radius: 9999px; padding: .27rem .5rem; font-size: .62rem; font-weight: 800; white-space: nowrap; }
+        .country-row { display: grid; grid-template-columns: 1.35rem 2.1rem minmax(5rem,1fr) auto; align-items: center; gap: .55rem; margin-top: .62rem; }
+        .country-row__rank { color: #64748b; font-size: .62rem; font-weight: 800; text-align: center; }
+        .country-row__name { color: #e2e8f0; font-size: .7rem; font-weight: 700; letter-spacing: .05em; }
+        .country-row__track { height: .42rem; background: linear-gradient(90deg, rgba(30,41,59,.95), rgba(15,23,42,.8)); border: 1px solid rgba(71,85,105,.35); border-radius: 9999px; overflow: hidden; }
+        .country-row__bar { height: 100%; min-width: 3px; background: linear-gradient(90deg, #38bdf8, #818cf8 70%, #c084fc); border-radius: inherit; box-shadow: 0 0 12px rgba(56,189,248,.28); }
+        .country-row__stats { min-width: 4.4rem; text-align: right; }
+        .country-row__value { display: block; color: #f8fafc; font-size: .7rem; font-variant-numeric: tabular-nums; }
+        .country-row__share { display: block; color: #64748b; font-size: .59rem; font-variant-numeric: tabular-nums; margin-top: .12rem; }
+        .country-row__traffic { color: #94a3b8; font-size: .6rem; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
         .country-empty { color: #64748b; font-size: .72rem; padding: .65rem 0 .25rem; }
         @media (max-width: 700px) { .analytics-card__metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } .analytics-card { padding: .9rem; } .country-section { padding: 1rem; } }
         input {
@@ -342,7 +349,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                     <h2 style="font-size:1.15rem; margin:0;">Ülkelere Göre Trafik</h2>
                     <p style="color:#94a3b8; font-size:.78rem; margin:.4rem 0 0;">Son 24 saatteki Cloudflare istek ve trafik dağılımı. Tekil ziyaretçi toplamı üst kartlarda gösterilir.</p>
                 </div>
-                <span style="color:#64748b; font-size:.7rem;">İlk 10 ülke</span>
+                <span style="color:#64748b; font-size:.7rem;">İlk 15 ülke · request payı</span>
             </div>
             <div id="country-grid" class="country-grid"></div>
         </section>
@@ -468,8 +475,9 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 countryGrid.innerHTML = data.sites.map((site) => {
                     const countries = site.cloudflare?.countries || [];
                     const maxRequests = countries[0]?.requests || 1;
-                    const rows = countries.slice(0, 5).map((item) => `<div class="country-row"><span class="country-row__name" title="${item.country}">${item.country}</span><span class="country-row__track"><span class="country-row__bar" style="width:${Math.max(4, Math.round((item.requests / maxRequests) * 100))}%"></span></span><strong class="country-row__value">${formatNumber(item.requests)}</strong></div>`).join('');
-                    return `<article class="country-panel"><div class="country-panel__head"><span class="country-panel__name">${site.name}</span><span class="country-panel__note">request</span></div>${rows || '<div class="country-empty">Cloudflare ülke verisi bekleniyor</div>'}</article>`;
+                    const totalRequests = countries.reduce((sum, item) => sum + (item.requests || 0), 0);
+                    const rows = countries.slice(0, 15).map((item, index) => `<div class="country-row"><span class="country-row__rank">${String(index + 1).padStart(2, '0')}</span><span class="country-row__name" title="${item.country}">${item.country}</span><span class="country-row__track"><span class="country-row__bar" style="width:${Math.max(3, Math.round((item.requests / maxRequests) * 100))}%"></span></span><span class="country-row__stats"><strong class="country-row__value">${formatNumber(item.requests)}</strong><span class="country-row__share">${Number(item.requestShare || (totalRequests ? (item.requests / totalRequests) * 100 : 0)).toFixed(1)}% pay</span></span><span class="country-row__traffic">${formatBytes(item.bytes)}</span></div>`).join('');
+                    return `<article class="country-panel"><div class="country-panel__head"><div><div class="country-panel__name">${site.name}</div><div class="country-panel__summary">${formatNumber(totalRequests)} ülke isteği · 24 saat</div></div><span class="country-panel__badge">TOP 15</span></div>${rows || '<div class="country-empty">Cloudflare ülke verisi bekleniyor</div>'}</article>`;
                 }).join('');
                 data.sites.forEach((site) => {
                     const row = document.querySelector(`tr[data-site="${site.key}"]`);
