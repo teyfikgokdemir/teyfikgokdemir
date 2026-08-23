@@ -11,6 +11,29 @@ const canonical = "https://teyfikgokdemir.com/blog/yapay-zeka-caginda-dijital-ot
     <title>{title}</title>
     <meta name="description" content={description}>
     <link rel="canonical" href={canonical}>
+    <meta name="robots" content="index,follow">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
+    <meta property="og:url" content={canonical}>
+    <meta property="og:image" content="https://teyfikgokdemir.com/brand/teyfik-gokdemir-og.webp">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content={title}>
+    <meta name="twitter:description" content={description}>
+    <meta name="twitter:image" content="https://teyfikgokdemir.com/brand/teyfik-gokdemir-og.webp">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: title,
+      description,
+      url: canonical,
+      image: "https://teyfikgokdemir.com/brand/teyfik-gokdemir-og.webp",
+      datePublished: "2026-08-23",
+      author: { "@type": "Person", name: "Teyfik Gökdemir", url: "https://teyfikgokdemir.com/" },
+      publisher: { "@type": "Person", name: "Teyfik Gökdemir", url: "https://teyfikgokdemir.com/" }
+    })} />
     <style>
         body { background: #030712; color: #f3f4f6; font-family: system-ui, sans-serif; line-height: 1.7; margin: 0; padding: 0; }
         .container { max-width: 800px; margin: 0 auto; padding: 4rem 1.5rem; }
