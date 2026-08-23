@@ -62,7 +62,7 @@ async function githubRun(repo: string, env: Env) {
 
 async function cloudflareTraffic(site: Site, env: Env) {
   if (!env.CF_API_TOKEN || !site.zoneTag) return { ok: false, available: false, reason: 'Cloudflare secret yapılandırılmadı' };
-  const query = `query($zoneTag:String!, $date:Date!, $since:Time!, $until:Time!) { viewer { zones(filter:{zoneTag:$zoneTag}) { daily:httpRequests1dGroups(limit:1, filter:{date_geq:$date}) { sum { requests bytes cachedBytes } uniq { uniques } } hourly:httpRequests1hGroups(limit:24, filter:{datetime_geq:$since, datetime_leq:$until}, orderBy:[datetime_ASC]) { dimensions { datetime } sum { requests } uniq { uniques } } } } }`;
+  const query = `query($zoneTag:String!, $date:Date!, $since:Time!, $until:Time!) { viewer { zones(filter:{zoneTag:$zoneTag}) { daily:httpRequests1dGroups(limit:1, filter:{date_geq:$date}) { sum { requests bytes cachedBytes } uniq { uniques } } hourly:httpRequests1hGroups(limit:24, filter:{datetime_geq:$since, datetime_leq:$until}, orderBy:[datetime_ASC]) { dimensions { datetime } sum { requests countryMap { clientCountryName requests bytes } } uniq { uniques } } } } }`;
   try {
     const until = new Date();
     const since = new Date(until.getTime() - 24 * 60 * 60 * 1000);
@@ -71,11 +71,23 @@ async function cloudflareTraffic(site: Site, env: Env) {
       headers: { authorization: `Bearer ${env.CF_API_TOKEN}`, 'content-type': 'application/json' },
       body: JSON.stringify({ query, variables: { zoneTag: site.zoneTag, date: since.toISOString().slice(0, 10), since: since.toISOString(), until: until.toISOString() } }),
     });
-    const payload = await response.json() as { data?: { viewer?: { zones?: Array<{ daily?: Array<{ sum?: { requests?: number; bytes?: number; cachedBytes?: number }; uniq?: { uniques?: number } }>; hourly?: Array<{ sum?: { requests?: number }; uniq?: { uniques?: number }; dimensions?: { datetime?: string } }> }> } }; errors?: Array<{ message?: string }> };
+    const payload = await response.json() as { data?: { viewer?: { zones?: Array<{ daily?: Array<{ sum?: { requests?: number; bytes?: number; cachedBytes?: number }; uniq?: { uniques?: number } }>; hourly?: Array<{ sum?: { requests?: number; countryMap?: Array<{ clientCountryName?: string; requests?: number; bytes?: number }> }; uniq?: { uniques?: number }; dimensions?: { datetime?: string } }> }> } }; errors?: Array<{ message?: string }> };
     if (!response.ok || payload.errors?.length) return { ok: false, available: false, reason: payload.errors?.[0]?.message || `Cloudflare ${response.status}` };
     const zone = payload.data?.viewer?.zones?.[0];
     const groups = zone?.hourly || [];
     const daily = zone?.daily?.[0];
+    const countryTotals = new Map<string, { requests: number; bytes: number }>();
+    for (const group of groups) {
+      for (const country of group.sum?.countryMap || []) {
+        const name = country.clientCountryName || 'Bilinmiyor';
+        const current = countryTotals.get(name) || { requests: 0, bytes: 0 };
+        current.requests += country.requests || 0;
+        current.bytes += country.bytes || 0;
+        countryTotals.set(name, current);
+      }
+    }
+    const countries = Array.from(countryTotals, ([country, metrics]) => ({ country, ...metrics }))
+      .sort((a, b) => b.requests - a.requests).slice(0, 10);
     return {
       ok: true,
       available: true,
@@ -85,6 +97,7 @@ async function cloudflareTraffic(site: Site, env: Env) {
         cachedBytes: daily?.sum?.cachedBytes || 0,
         uniqueVisitors: daily?.uniq?.uniques || 0,
       },
+      countries,
       hourly: groups.map((group) => ({ at: group.dimensions?.datetime, requests: group.sum?.requests || 0, uniqueVisitors: group.uniq?.uniques || 0 })),
     };
   } catch {

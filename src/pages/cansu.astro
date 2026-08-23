@@ -145,7 +145,19 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         .analytics-card__footer { display: flex; justify-content: space-between; gap: .5rem; color: #64748b; font-size: .66rem; margin-top: .85rem; }
         .analytics-card__footer a { color: #93c5fd; text-decoration: none; }
         .analytics-card__footer a:hover { color: #bfdbfe; text-decoration: underline; }
-        @media (max-width: 700px) { .analytics-card__metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } .analytics-card { padding: .9rem; } }
+        .country-section { background: linear-gradient(145deg, rgba(15,23,42,.92), rgba(2,6,23,.94)); border: 1px solid rgba(148,163,184,.16); border-radius: 1rem; padding: 1.35rem 1.5rem; }
+        .country-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: .85rem; }
+        .country-panel { background: rgba(2,6,23,.55); border: 1px solid rgba(51,65,85,.7); border-radius: .8rem; padding: .9rem; }
+        .country-panel__head { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: .75rem; }
+        .country-panel__name { color: #e2e8f0; font-size: .76rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+        .country-panel__note { color: #64748b; font-size: .65rem; }
+        .country-row { display: grid; grid-template-columns: 1.2fr 1fr auto; align-items: center; gap: .55rem; margin-top: .58rem; }
+        .country-row__name { color: #cbd5e1; font-size: .7rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .country-row__track { height: .35rem; background: #1e293b; border-radius: 9999px; overflow: hidden; }
+        .country-row__bar { height: 100%; background: linear-gradient(90deg, #38bdf8, #818cf8); border-radius: inherit; }
+        .country-row__value { color: #f8fafc; font-size: .68rem; font-variant-numeric: tabular-nums; text-align: right; }
+        .country-empty { color: #64748b; font-size: .72rem; padding: .65rem 0 .25rem; }
+        @media (max-width: 700px) { .analytics-card__metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } .analytics-card { padding: .9rem; } .country-section { padding: 1rem; } }
         input {
             background-color: #020617;
             border: 1px solid #1e293b;
@@ -324,6 +336,17 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             <div id="live-summary-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:1rem;"></div>
         </section>
 
+        <section class="country-section" style="margin-bottom:2.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
+                <div>
+                    <h2 style="font-size:1.15rem; margin:0;">Ülkelere Göre Trafik</h2>
+                    <p style="color:#94a3b8; font-size:.78rem; margin:.4rem 0 0;">Son 24 saatteki Cloudflare istek ve trafik dağılımı. Tekil ziyaretçi toplamı üst kartlarda gösterilir.</p>
+                </div>
+                <span style="color:#64748b; font-size:.7rem;">İlk 10 ülke</span>
+            </div>
+            <div id="country-grid" class="country-grid"></div>
+        </section>
+
         <!-- Repositories Table -->
         <div class="glass" style="border-radius: 1rem; overflow: hidden; margin-bottom: 3rem;">
             <div style="padding: 1.5rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;">
@@ -395,6 +418,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         const bg = document.getElementById('dash-bg-element');
         const liveStatus = document.getElementById('live-status');
         const summaryGrid = document.getElementById('live-summary-grid');
+        const countryGrid = document.getElementById('country-grid');
         const refreshButton = document.getElementById('refresh-data');
         const formatTime = (value) => value ? new Date(value).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'medium' }) : '—';
         const formatNumber = (value) => typeof value === 'number' ? new Intl.NumberFormat('tr-TR').format(value) : '—';
@@ -440,8 +464,12 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 document.getElementById('health-summary').textContent = `${healthy}/${data.sites.length} site erişilebilir`;
                 document.getElementById('workflow-summary').textContent = `${data.sites.length} repo izleniyor`;
                 document.getElementById('workflow-detail').textContent = failed ? `${failed} başarısız run (24 saat)` : 'Son 24 saatte failure yok';
-                summaryGrid.innerHTML = data.sites.map((site) => {
-                    return card(site);
+                summaryGrid.innerHTML = data.sites.map((site) => card(site)).join('');
+                countryGrid.innerHTML = data.sites.map((site) => {
+                    const countries = site.cloudflare?.countries || [];
+                    const maxRequests = countries[0]?.requests || 1;
+                    const rows = countries.slice(0, 5).map((item) => `<div class="country-row"><span class="country-row__name" title="${item.country}">${item.country}</span><span class="country-row__track"><span class="country-row__bar" style="width:${Math.max(4, Math.round((item.requests / maxRequests) * 100))}%"></span></span><strong class="country-row__value">${formatNumber(item.requests)}</strong></div>`).join('');
+                    return `<article class="country-panel"><div class="country-panel__head"><span class="country-panel__name">${site.name}</span><span class="country-panel__note">request</span></div>${rows || '<div class="country-empty">Cloudflare ülke verisi bekleniyor</div>'}</article>`;
                 }).join('');
                 data.sites.forEach((site) => {
                     const row = document.querySelector(`tr[data-site="${site.key}"]`);
@@ -457,6 +485,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 setLiveState(`Canlı kontrol: ${formatTime(data.generatedAt)}`);
             } catch (error) {
                 summaryGrid.innerHTML = `<article class="analytics-card" style="border-top:2px solid #f87171"><div class="analytics-card__name">Veri kaynağı</div><strong class="analytics-card__value" style="display:block;color:#f87171;margin-top:.6rem">ERİŞİLEMİYOR</strong><div style="color:#94a3b8;font-size:.75rem;margin-top:.4rem">Pages Function henüz yayınlanmamış olabilir.</div></article>`;
+                countryGrid.innerHTML = '<div class="country-empty">Ülke verisi alınamadı.</div>';
                 setLiveState('Veri alınamadı', '#f87171');
             }
         }
