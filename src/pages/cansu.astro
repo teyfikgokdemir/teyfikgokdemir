@@ -23,65 +23,65 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             padding: 0;
             min-height: 100vh;
             overflow-x: hidden;
+        }
+
+        /* Master Grid Wrapper to prevent any overlapping */
+        .page-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr 280px;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 2rem;
+            gap: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .gallery-side {
             display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
             align-items: center;
             justify-content: center;
         }
 
-        /* Artistic Scattered Gallery Layer */
-        .artistic-gallery {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            overflow: hidden;
-        }
         .polaroid {
-            position: absolute;
             background: #ffffff;
-            padding: 8px 8px 24px 8px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+            padding: 8px 8px 22px 8px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
             border-radius: 6px;
-            width: 210px;
+            width: 220px;
             transform: rotate(var(--rot, 0deg));
-            transition: transform 0.3s ease;
-            pointer-events: auto;
-            border: 1px solid rgba(255,255,255,0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.3);
         }
         .polaroid:hover {
-            transform: scale(1.05) rotate(0deg) !important;
-            z-index: 50;
-            box-shadow: 0 30px 60px rgba(244,63,94,0.4);
+            transform: scale(1.04) rotate(0deg) !important;
+            z-index: 30;
+            box-shadow: 0 25px 50px rgba(244,63,94,0.4);
         }
         .polaroid img {
             width: 100%;
-            height: 250px;
+            height: 170px;
             object-fit: cover;
             display: block;
             border-radius: 3px;
         }
         .polaroid .caption {
             color: #111827;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             text-align: center;
             margin-top: 8px;
             font-family: monospace;
         }
 
-        /* Exact Artistic Positions */
-        .pos-1 { top: 5%; left: 6%; --rot: -7deg; }
-        .pos-2 { top: 8%; right: 6%; --rot: 8deg; }
-        .pos-3 { bottom: 6%; left: 8%; --rot: 5deg; }
-        .pos-4 { bottom: 5%; right: 8%; --rot: -6deg; }
-        .pos-5 { top: 38%; left: 2%; --rot: -12deg; width: 180px; }
-        .pos-5 img { height: 210px; }
-        .pos-6 { top: 35%; right: 3%; --rot: 10deg; width: 180px; }
-        .pos-6 img { height: 210px; }
-
         /* Center Login Card */
         .login-card {
-            background: rgba(15, 23, 42, 0.94);
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(244, 63, 94, 0.4);
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
@@ -89,7 +89,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             padding: 2.5rem;
             width: 100%;
             max-width: 420px;
-            position: relative;
+            margin: 0 auto;
             z-index: 20;
         }
 
@@ -106,7 +106,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         .bg-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(3, 7, 18, 0.5);
+            background: rgba(3, 7, 18, 0.6);
             z-index: 2;
             pointer-events: none;
         }
@@ -149,42 +149,59 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         tr:hover { background: rgba(30, 41, 59, 0.6); }
 
         @media (max-width: 1200px) {
-            .polaroid { display: none; }
+            .page-wrapper {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+            .gallery-side {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .polaroid { width: 160px; }
+            .polaroid img { height: 130px; }
         }
     </style>
 </head>
 <body>
     <div class="bg-overlay"></div>
 
-    <!-- Artistic Scattered Gallery Layer -->
-    <div id="login-bg-elements" class="artistic-gallery">
-        <div class="polaroid pos-1"><img src="/images/cansu/wedding_entrance.webp" alt="Wedding"><div class="caption">En Mutlu Anımız ❤️</div></div>
-        <div class="polaroid pos-2"><img src="/images/cansu/wedding_concept_1.webp" alt="Sunset"><div class="caption">Gün Batımı 🌅</div></div>
-        <div class="polaroid pos-3"><img src="/images/cansu/lifestyle_vacation_4.webp" alt="Reading"><div class="caption">Huzur 📖</div></div>
-        <div class="polaroid pos-4"><img src="/images/cansu/wedding_reels.webp" alt="Ceremony"><div class="caption">Nikah 💍</div></div>
-        <div class="polaroid pos-5"><img src="/images/cansu/couple_reels_new_1.webp" alt="Coffee"><div class="caption">Kahve Keyfi ☕</div></div>
-        <div class="polaroid pos-6"><img src="/images/cansu/business_luxury_8.webp" alt="Style"><div class="caption">Zarafet ✨</div></div>
-    </div>
-
-    <!-- Auth Guard Modal -->
-    <div id="auth-modal" class="content-layer" style="display: flex; align-items: center; justify-content: center; padding: 1rem; min-height: 100vh;">
-        <div class="login-card">
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <div style="display: inline-flex; align-items: center; justify-content: center; width: 5.5rem; height: 5.5rem; border-radius: 9999px; background: rgba(244, 63, 94, 0.2); color: #f43f5e; margin-bottom: 1.25rem; border: 2px solid #f43f5e; overflow: hidden; box-shadow: 0 10px 25px rgba(244,63,94,0.3);">
-                    <img src="/images/cansu/uF2GI.jpg" alt="Cansu" style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-                <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0; color: #fb7185;">Cansu & Teyfik Özel Paneli</h2>
-                <p style="color: #cbd5e1; font-size: 0.875rem; margin-top: 0.5rem;">Lütfen özel şifrenizi girin (cansu2026).</p>
+    <!-- Auth Guard Modal with CSS Grid Master Layout -->
+    <div id="auth-modal" class="content-layer">
+        <div class="page-wrapper">
+            <!-- Left Gallery Column -->
+            <div class="gallery-side">
+                <div class="polaroid" style="--rot: -4deg;"><img src="/images/cansu/wedding_entrance.webp" alt="Wedding"><div class="caption">En Mutlu Anımız ❤️</div></div>
+                <div class="polaroid" style="--rot: 3deg;"><img src="/images/cansu/couple_reels_new_1.webp" alt="Coffee"><div class="caption">Kahve Keyfi ☕</div></div>
+                <div class="polaroid" style="--rot: -3deg;"><img src="/images/cansu/lifestyle_vacation_4.webp" alt="Reading"><div class="caption">Huzur 📖</div></div>
             </div>
-            <form id="login-form" style="display: flex; flex-direction: column; gap: 1.25rem;">
-                <div>
-                    <input type="password" id="admin-pass" placeholder="Özel Şifre" required>
+
+            <!-- Center Login Card -->
+            <div class="login-card">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 5.5rem; height: 5.5rem; border-radius: 9999px; background: rgba(244, 63, 94, 0.2); color: #f43f5e; margin-bottom: 1.25rem; border: 2px solid #f43f5e; overflow: hidden; box-shadow: 0 10px 25px rgba(244,63,94,0.3);">
+                        <img src="/images/cansu/uF2GI.jpg" alt="Cansu" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0; color: #fb7185;">Cansu & Teyfik Özel Paneli</h2>
+                    <p style="color: #cbd5e1; font-size: 0.875rem; margin-top: 0.5rem;">Lütfen özel şifrenizi girin (cansu2026).</p>
                 </div>
-                <button type="submit" class="btn-primary">
-                    Sisteme Giriş Yap
-                </button>
-            </form>
-            <p id="auth-error" style="color: #f87171; font-size: 0.8rem; text-align: center; margin-top: 1rem; display: none;">Geçersiz şifre! Tekrar deneyin.</p>
+                <form id="login-form" style="display: flex; flex-direction: column; gap: 1.25rem;">
+                    <div>
+                        <input type="password" id="admin-pass" placeholder="Özel Şifre" required>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        Sisteme Giriş Yap
+                    </button>
+                </form>
+                <p id="auth-error" style="color: #f87171; font-size: 0.8rem; text-align: center; margin-top: 1rem; display: none;">Geçersiz şifre! Tekrar deneyin.</p>
+            </div>
+
+            <!-- Right Gallery Column -->
+            <div class="gallery-side">
+                <div class="polaroid" style="--rot: 4deg;"><img src="/images/cansu/wedding_concept_1.webp" alt="Sunset"><div class="caption">Gün Batımı 🌅</div></div>
+                <div class="polaroid" style="--rot: -2deg;"><img src="/images/cansu/business_luxury_8.webp" alt="Style"><div class="caption">Zarafet ✨</div></div>
+                <div class="polaroid" style="--rot: 3deg;"><img src="/images/cansu/wedding_reels.webp" alt="Ceremony"><div class="caption">Nikah 💍</div></div>
+            </div>
         </div>
     </div>
 
@@ -309,7 +326,6 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             const pass = document.getElementById('admin-pass').value.trim();
             if (pass === 'cansu2026') {
                 document.getElementById('auth-modal').style.display = 'none';
-                document.getElementById('login-bg-elements').style.display = 'none';
                 document.getElementById('dash-bg-element').classList.remove('hidden');
                 document.getElementById('dashboard-content').classList.remove('hidden');
                 localStorage.setItem('cansu_auth', 'true');
@@ -327,7 +343,6 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         window.addEventListener('DOMContentLoaded', () => {
             if (localStorage.getItem('cansu_auth') === 'true') {
                 document.getElementById('auth-modal').style.display = 'none';
-                document.getElementById('login-bg-elements').style.display = 'none';
                 document.getElementById('dash-bg-element').classList.remove('hidden');
                 document.getElementById('dashboard-content').classList.remove('hidden');
             }
