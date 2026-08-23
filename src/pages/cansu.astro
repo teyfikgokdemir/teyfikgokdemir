@@ -154,7 +154,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         .country-panel__name { color: #f8fafc; font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
         .country-panel__summary { color: #64748b; font-size: .64rem; margin-top: .25rem; }
         .country-panel__badge { color: #bae6fd; background: rgba(14,116,144,.18); border: 1px solid rgba(56,189,248,.25); border-radius: 9999px; padding: .27rem .5rem; font-size: .62rem; font-weight: 800; white-space: nowrap; }
-        .country-row { display: grid; grid-template-columns: 1.35rem 2.1rem minmax(5rem,1fr) auto; align-items: center; gap: .55rem; margin-top: .62rem; }
+        .country-row { display: grid; grid-template-columns: 1.35rem minmax(6.5rem,1.25fr) minmax(3.5rem,1fr) auto; align-items: center; gap: .55rem; margin-top: .62rem; }
         .country-row__rank { color: #64748b; font-size: .62rem; font-weight: 800; text-align: center; }
         .country-row__name { color: #e2e8f0; font-size: .7rem; font-weight: 700; letter-spacing: .05em; }
         .country-row__track { height: .42rem; background: linear-gradient(90deg, rgba(30,41,59,.95), rgba(15,23,42,.8)); border: 1px solid rgba(71,85,105,.35); border-radius: 9999px; overflow: hidden; }
@@ -430,6 +430,12 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         const formatTime = (value) => value ? new Date(value).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'medium' }) : '—';
         const formatNumber = (value) => typeof value === 'number' ? new Intl.NumberFormat('tr-TR').format(value) : '—';
         const formatBytes = (value) => typeof value === 'number' ? `${(value / 1024 / 1024).toFixed(1)} MB` : '—';
+        const countryNames = new Intl.DisplayNames(['tr-TR'], { type: 'region' });
+        const getCountryName = (value) => {
+            const code = String(value || '').trim().toUpperCase();
+            if (!code) return 'Bilinmeyen ülke';
+            try { return countryNames.of(code) || code; } catch { return code; }
+        };
         const card = (site) => {
             const h = site.health;
             const g = site.github;
@@ -476,7 +482,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                     const countries = site.cloudflare?.countries || [];
                     const maxRequests = countries[0]?.requests || 1;
                     const totalRequests = countries.reduce((sum, item) => sum + (item.requests || 0), 0);
-                    const rows = countries.slice(0, 15).map((item, index) => `<div class="country-row"><span class="country-row__rank">${String(index + 1).padStart(2, '0')}</span><span class="country-row__name" title="${item.country}">${item.country}</span><span class="country-row__track"><span class="country-row__bar" style="width:${Math.max(3, Math.round((item.requests / maxRequests) * 100))}%"></span></span><span class="country-row__stats"><strong class="country-row__value">${formatNumber(item.requests)}</strong><span class="country-row__share">${Number(item.requestShare || (totalRequests ? (item.requests / totalRequests) * 100 : 0)).toFixed(1)}% pay</span></span><span class="country-row__traffic">${formatBytes(item.bytes)}</span></div>`).join('');
+                    const rows = countries.slice(0, 15).map((item, index) => { const countryName = getCountryName(item.country); return `<div class="country-row"><span class="country-row__rank">${String(index + 1).padStart(2, '0')}</span><span class="country-row__name" title="${countryName}">${countryName}</span><span class="country-row__track"><span class="country-row__bar" style="width:${Math.max(3, Math.round((item.requests / maxRequests) * 100))}%"></span></span><span class="country-row__stats"><strong class="country-row__value">${formatNumber(item.requests)}</strong><span class="country-row__share">${Number(item.requestShare || (totalRequests ? (item.requests / totalRequests) * 100 : 0)).toFixed(1)}% pay</span></span><span class="country-row__traffic">${formatBytes(item.bytes)}</span></div>`; }).join('');
                     return `<article class="country-panel"><div class="country-panel__head"><div><div class="country-panel__name">${site.name}</div><div class="country-panel__summary">${formatNumber(totalRequests)} ülke isteği · 24 saat</div></div><span class="country-panel__badge">TOP 15</span></div>${rows || '<div class="country-empty">Cloudflare ülke verisi bekleniyor</div>'}</article>`;
                 }).join('');
                 data.sites.forEach((site) => {
