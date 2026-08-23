@@ -132,6 +132,20 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
         }
         .hidden { display: none !important; }
+        .analytics-card { background: linear-gradient(145deg, rgba(15,23,42,.96), rgba(2,6,23,.96)); border: 1px solid rgba(148,163,184,.16); border-radius: 1rem; padding: 1.15rem; box-shadow: 0 12px 28px rgba(0,0,0,.22); transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; min-width: 0; }
+        .analytics-card:hover { transform: translateY(-3px); border-color: rgba(96,165,250,.45); box-shadow: 0 18px 36px rgba(15,23,42,.55); }
+        .analytics-card__head { display: flex; justify-content: space-between; align-items: flex-start; gap: .75rem; margin-bottom: 1rem; }
+        .analytics-card__name { color: #e2e8f0; font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; overflow-wrap: anywhere; }
+        .analytics-card__status { display: inline-flex; align-items: center; gap: .35rem; border-radius: 9999px; padding: .3rem .55rem; font-size: .63rem; font-weight: 800; letter-spacing: .04em; white-space: nowrap; }
+        .analytics-card__status-dot { width: .42rem; height: .42rem; border-radius: 50%; background: currentColor; }
+        .analytics-card__metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; }
+        .analytics-metric { background: rgba(2,6,23,.58); border: 1px solid rgba(51,65,85,.72); border-radius: .7rem; padding: .65rem .7rem; min-width: 0; }
+        .analytics-metric__label { color: #64748b; font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+        .analytics-metric__value { display: block; color: #f8fafc; font-size: 1rem; font-weight: 750; line-height: 1.25; margin-top: .25rem; overflow-wrap: anywhere; }
+        .analytics-card__footer { display: flex; justify-content: space-between; gap: .5rem; color: #64748b; font-size: .66rem; margin-top: .85rem; }
+        .analytics-card__footer a { color: #93c5fd; text-decoration: none; }
+        .analytics-card__footer a:hover { color: #bfdbfe; text-decoration: underline; }
+        @media (max-width: 700px) { .analytics-card__metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } .analytics-card { padding: .9rem; } }
         input {
             background-color: #020617;
             border: 1px solid #1e293b;
@@ -307,7 +321,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 </div>
                 <button id="refresh-data" type="button" style="background:#1e293b; border:1px solid #475569; color:#e2e8f0; padding:0.55rem 0.9rem; border-radius:0.6rem; cursor:pointer;">Yenile</button>
             </div>
-            <div id="live-summary-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:0.8rem;"></div>
+            <div id="live-summary-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:1rem;"></div>
         </section>
 
         <!-- Repositories Table -->
@@ -385,7 +399,29 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         const formatTime = (value) => value ? new Date(value).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'medium' }) : '—';
         const formatNumber = (value) => typeof value === 'number' ? new Intl.NumberFormat('tr-TR').format(value) : '—';
         const formatBytes = (value) => typeof value === 'number' ? `${(value / 1024 / 1024).toFixed(1)} MB` : '—';
-        const card = (label, value, detail, tone = '#38bdf8') => `<div style="background:rgba(2,6,23,.55);border:1px solid #1e293b;border-radius:.75rem;padding:1rem"><div style="color:#94a3b8;font-size:.7rem;text-transform:uppercase">${label}</div><strong style="display:block;font-size:1.25rem;margin-top:.35rem;color:${tone}">${value}</strong><small style="display:block;color:#94a3b8;margin-top:.3rem">${detail}</small></div>`;
+        const card = (site) => {
+            const h = site.health;
+            const g = site.github;
+            const traffic = site.cloudflare?.last24h;
+            const healthy = h.ok && (!g.latest || g.latest.conclusion === 'success');
+            const tone = healthy ? '#34d399' : '#f87171';
+            const status = healthy ? 'SAĞLIKLI' : 'KONTROL GEREKLİ';
+            const statusBg = healthy ? 'rgba(52,211,153,.12)' : 'rgba(248,113,113,.12)';
+            const githubStatus = g.latest?.conclusion || (g.ok ? 'veri yok' : 'erişilemiyor');
+            return `<article class="analytics-card" style="border-top:2px solid ${tone}">
+                <div class="analytics-card__head">
+                    <div class="analytics-card__name"><i class="fa-solid fa-chart-simple" style="color:#93c5fd;margin-right:.45rem"></i>${site.name}</div>
+                    <span class="analytics-card__status" style="color:${tone};background:${statusBg};border:1px solid ${tone}55"><span class="analytics-card__status-dot"></span>${status}</span>
+                </div>
+                <div class="analytics-card__metrics">
+                    <div class="analytics-metric"><span class="analytics-metric__label">İstekler / 24s</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.requests) : '—'}</strong></div>
+                    <div class="analytics-metric"><span class="analytics-metric__label">Tekil ziyaret</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.uniqueVisitors) : '—'}</strong></div>
+                    <div class="analytics-metric"><span class="analytics-metric__label">Trafik</span><strong class="analytics-metric__value">${traffic ? formatBytes(traffic.bytes) : '—'}</strong></div>
+                    <div class="analytics-metric"><span class="analytics-metric__label">Yanıt süresi</span><strong class="analytics-metric__value">${h.ms} ms</strong></div>
+                </div>
+                <div class="analytics-card__footer"><span><i class="fa-solid fa-code-branch" style="margin-right:.3rem"></i>GitHub: ${githubStatus}</span><a href="${site.actions}" target="_blank" rel="noreferrer">Logları aç <i class="fa-solid fa-arrow-up-right-from-square" style="margin-left:.25rem"></i></a></div>
+            </article>`;
+        };
         function setLiveState(text, color = '#34d399') {
             liveStatus.style.color = color;
             liveStatus.style.borderColor = color;
@@ -405,12 +441,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 document.getElementById('workflow-summary').textContent = `${data.sites.length} repo izleniyor`;
                 document.getElementById('workflow-detail').textContent = failed ? `${failed} başarısız run (24 saat)` : 'Son 24 saatte failure yok';
                 summaryGrid.innerHTML = data.sites.map((site) => {
-                    const h = site.health;
-                    const g = site.github;
-                    const tone = h.ok && (!g.latest || g.latest.conclusion === 'success') ? '#34d399' : '#f87171';
-                    const traffic = site.cloudflare?.last24h;
-                    const trafficText = traffic ? `${formatNumber(traffic.requests)} istek · ${formatNumber(traffic.uniqueVisitors)} tekil ziyaret · ${formatBytes(traffic.bytes)}` : 'Cloudflare trafik verisi bekleniyor';
-                    return card(site.name, h.ok ? 'ONLINE' : 'OFFLINE', `${h.status || '—'} · ${h.ms} ms · ${g.latest?.conclusion || 'GitHub veri yok'} · ${trafficText}`, tone);
+                    return card(site);
                 }).join('');
                 data.sites.forEach((site) => {
                     const row = document.querySelector(`tr[data-site="${site.key}"]`);
@@ -425,7 +456,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 document.getElementById('last-updated').textContent = `Son güncelleme: ${formatTime(data.generatedAt)}`;
                 setLiveState(`Canlı kontrol: ${formatTime(data.generatedAt)}`);
             } catch (error) {
-                summaryGrid.innerHTML = card('Veri kaynağı', 'ERİŞİLEMİYOR', 'Pages Function henüz yayınlanmamış olabilir', '#f87171');
+                summaryGrid.innerHTML = `<article class="analytics-card" style="border-top:2px solid #f87171"><div class="analytics-card__name">Veri kaynağı</div><strong class="analytics-card__value" style="display:block;color:#f87171;margin-top:.6rem">ERİŞİLEMİYOR</strong><div style="color:#94a3b8;font-size:.75rem;margin-top:.4rem">Pages Function henüz yayınlanmamış olabilir.</div></article>`;
                 setLiveState('Veri alınamadı', '#f87171');
             }
         }
