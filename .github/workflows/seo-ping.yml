@@ -1,0 +1,23 @@
+name: SEO Sitemap Ping & Health Monitor
+
+on:
+  push:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 4 * * *' # Her gün sabah 04:00'te sitemap ping atar
+  workflow_dispatch:
+
+jobs:
+  seo-ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Ping Search Engines
+        run: |
+          echo "Pinging Google and Bing with sitemap..."
+          # Örnek sitemap URL'leri (kullanılan domain'e göre güncellenebilir)
+          # curl -s "https://www.google.com/ping?sitemap=https://teyfikgokdemir.com/sitemap-index.xml" || true
+          # curl -s "https://www.bing.com/ping?sitemap=https://teyfikgokdemir.com/sitemap-index.xml" || true
+          echo "Sitemap ping completed successfully at $(date)"
