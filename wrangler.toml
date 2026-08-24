@@ -1,0 +1,6 @@
+name = "teyfikgokdemir"
+compatibility_date = "2026-07-22"
+
+[[kv_namespaces]]
+binding = "CANSU_GSC_TOKENS"
+id = "5f657bb00d264f768ecc0ab729f234cb"
