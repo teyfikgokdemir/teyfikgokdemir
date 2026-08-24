@@ -6,3 +6,5 @@ binding = "CANSU_GSC_TOKENS"
 id = "5f657bb00d264f768ecc0ab729f234cb"
 
 # Force Pages deployment after secret configuration
+
+# Keep the production GSC KV binding explicit
