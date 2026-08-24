@@ -479,6 +479,11 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         const formatTime = (value) => value ? new Date(value).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'medium' }) : '—';
         const formatNumber = (value) => typeof value === 'number' ? new Intl.NumberFormat('tr-TR').format(value) : '—';
         const formatBytes = (value) => typeof value === 'number' ? `${(value / 1024 / 1024).toFixed(1)} MB` : '—';
+        const signalMeta = (signal) => ({
+            high: { label: 'YÜKSEK SİNYAL', color: '#fb7185', bg: 'rgba(251,113,133,.12)' },
+            medium: { label: 'ORTA SİNYAL', color: '#fbbf24', bg: 'rgba(251,191,36,.12)' },
+            low: { label: 'DÜŞÜK SİNYAL', color: '#34d399', bg: 'rgba(52,211,153,.12)' },
+        }[signal?.level] || { label: 'VERİ YOK', color: '#94a3b8', bg: 'rgba(148,163,184,.12)' });
         const countryNames = new Intl.DisplayNames(['tr-TR'], { type: 'region' });
         const getCountryName = (value) => {
             const code = String(value || '').trim().toUpperCase();
@@ -496,17 +501,20 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             const status = healthy ? 'SAĞLIKLI' : 'KONTROL GEREKLİ';
             const statusBg = healthy ? 'rgba(52,211,153,.12)' : 'rgba(248,113,113,.12)';
             const githubStatus = g.latest?.conclusion || (g.ok ? 'veri yok' : 'erişilemiyor');
+            const signal = traffic?.automationSignal;
+            const signalStyle = signalMeta(signal);
             return `<article class="analytics-card" style="border-top:2px solid ${tone}">
                 <div class="analytics-card__head">
                     <div class="analytics-card__name"><i class="fa-solid fa-chart-simple" style="color:#93c5fd;margin-right:.45rem"></i>${site.name}</div>
                     <span class="analytics-card__status" style="color:${tone};background:${statusBg};border:1px solid ${tone}55"><span class="analytics-card__status-dot"></span>${status}</span>
                 </div>
                 <div class="analytics-card__metrics">
-                    <div class="analytics-metric"><span class="analytics-metric__label">İstekler / 24s</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.requests) : '—'}</strong></div>
-                    <div class="analytics-metric"><span class="analytics-metric__label">Ziyaretçi / 24s</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.uniqueVisitors) : '—'}</strong></div>
-                    <div class="analytics-metric analytics-metric--period"><span class="analytics-metric__label">Ziyaretçi / 7g</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.uniqueVisitors7d) : '—'}</strong></div>
-                    <div class="analytics-metric analytics-metric--period"><span class="analytics-metric__label">Ziyaretçi / 30g</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.uniqueVisitors30d) : '—'}</strong></div>
+                    <div class="analytics-metric"><span class="analytics-metric__label">Toplam HTTP istekleri / 24s</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.requests) : '—'}</strong></div>
+                    <div class="analytics-metric"><span class="analytics-metric__label">Tahmini ziyaret / oturum · 24s</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.uniqueVisitors) : '—'}</strong></div>
+                    <div class="analytics-metric analytics-metric--period"><span class="analytics-metric__label">Tahmini ziyaret / oturum · 7g</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.uniqueVisitors7d) : '—'}</strong></div>
+                    <div class="analytics-metric analytics-metric--period"><span class="analytics-metric__label">Tahmini ziyaret / oturum · 30g</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.uniqueVisitors30d) : '—'}</strong></div>
                     <div class="analytics-metric"><span class="analytics-metric__label">Trafik / 24s</span><strong class="analytics-metric__value">${traffic ? formatBytes(traffic.bytes) : '—'}</strong></div>
+                    <div class="analytics-metric"><span class="analytics-metric__label">Otomatik trafik sinyali</span><strong class="analytics-metric__value" style="color:${signalStyle.color};font-size:.78rem">${signalStyle.label}</strong><span class="analytics-metric__hint">${signal ? `${signal.requestPerVisitor} istek/ziyaret · üst ülke ${signal.topCountryShare}%` : '—'}</span></div>
                     <div class="analytics-metric"><span class="analytics-metric__label">Yanıt süresi</span><strong class="analytics-metric__value">${h.ms} ms</strong></div>
                 </div>
                 <div class="analytics-card__footer"><span><i class="fa-solid fa-code-branch" style="margin-right:.3rem"></i>GitHub: ${githubStatus}</span><a href="${site.actions}" target="_blank" rel="noreferrer">Logları aç <i class="fa-solid fa-arrow-up-right-from-square" style="margin-left:.25rem"></i></a></div>

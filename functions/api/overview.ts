@@ -122,6 +122,14 @@ async function cloudflareTraffic(site: Site, env: Env) {
         uniqueVisitors7d,
         uniqueVisitors30d,
       },
+      automationSignal: (() => {
+        const requests = daily?.sum?.requests || groups.reduce((sum, group) => sum + (group.sum?.requests || 0), 0);
+        const visitors = daily?.uniq?.uniques || 0;
+        const requestPerVisitor = visitors ? requests / visitors : 0;
+        const topCountryShare = countries[0]?.requestShare || 0;
+        const score = requestPerVisitor >= 15 || topCountryShare >= 45 ? 'high' : requestPerVisitor >= 8 || topCountryShare >= 25 ? 'medium' : 'low';
+        return { level: score, requestPerVisitor: Number(requestPerVisitor.toFixed(1)), topCountryShare: Number(topCountryShare.toFixed(1)), note: 'Heuristik sinyaldir; kesin bot tespiti değildir.' };
+      })(),
       countries,
       sources,
       hourly: groups.map((group) => ({ at: group.dimensions?.datetime, requests: group.sum?.requests || 0, uniqueVisitors: group.uniq?.uniques || 0 })),
