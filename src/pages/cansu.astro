@@ -501,7 +501,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             const status = healthy ? 'SAĞLIKLI' : 'KONTROL GEREKLİ';
             const statusBg = healthy ? 'rgba(52,211,153,.12)' : 'rgba(248,113,113,.12)';
             const githubStatus = g.latest?.conclusion || (g.ok ? 'veri yok' : 'erişilemiyor');
-            const signal = traffic?.automationSignal;
+            const signal = site.cloudflare?.automationSignal;
             const signalStyle = signalMeta(signal);
             return `<article class="analytics-card" style="border-top:2px solid ${tone}">
                 <div class="analytics-card__head">
