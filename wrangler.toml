@@ -8,3 +8,8 @@ id = "5f657bb00d264f768ecc0ab729f234cb"
 # Force Pages deployment after secret configuration
 
 # Keep the production GSC KV binding explicit
+
+[[d1_databases]]
+binding = "CANSU_ANALYTICS_DB"
+database_name = "cansu-analytics-db"
+database_id = "39ee737c-d1d2-41e5-b8e0-0bb7e0978f0e"
