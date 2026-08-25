@@ -2,6 +2,7 @@ interface Env {
   CF_API_TOKEN?: string;
   CF_ACCOUNT_ID?: string;
   GITHUB_TOKEN?: string;
+  CANSU_ANALYTICS_DB?: D1Database;
 }
 
 type Site = {
@@ -98,19 +99,19 @@ async function cloudflareTraffic(site: Site, env: Env) {
     })).sort((a, b) => b.requests - a.requests).slice(0, 15);
     const uniqueVisitors7d = (zone?.sevenDays || []).reduce((sum, group) => sum + (group.uniq?.uniques || 0), 0);
     const uniqueVisitors30d = (zone?.thirtyDays || []).reduce((sum, group) => sum + (group.uniq?.uniques || 0), 0);
-    const sourceQuery = `query($zoneTag:String!, $since:Time!, $until:Time!) { viewer { zones(filter:{zoneTag:$zoneTag}) { sources:httpRequestsAdaptiveGroups(limit:12, filter:{datetime_geq:$since, datetime_lt:$until, requestSource:"eyeball"}, orderBy:[count_DESC]) { count sum { visits edgeResponseBytes } dimensions { clientRefererHost } } } } }`;
-    const sourceResponse = await fetch('https://api.cloudflare.com/client/v4/graphql', {
-      method: 'POST',
-      headers: { authorization: `Bearer ${env.CF_API_TOKEN}`, 'content-type': 'application/json' },
-      body: JSON.stringify({ query: sourceQuery, variables: { zoneTag: site.zoneTag, since: since.toISOString(), until: until.toISOString() } }),
-    });
-    const sourcePayload = await sourceResponse.json() as { data?: { viewer?: { zones?: Array<{ sources?: Array<{ count?: number; sum?: { visits?: number; edgeResponseBytes?: number }; dimensions?: { clientRefererHost?: string } }> }> } }; errors?: Array<{ message?: string }> };
-    const sources = sourceResponse.ok && !sourcePayload.errors?.length ? (sourcePayload.data?.viewer?.zones?.[0]?.sources || []).map((item) => ({
-      host: item.dimensions?.clientRefererHost || 'Direct / bilinmeyen',
-      requests: item.count || 0,
-      visits: item.sum?.visits || 0,
-      bytes: item.sum?.edgeResponseBytes || 0,
-    })) : [];
+    let sources: Array<{ host: string; requests: number; visits: number; bytes: number }> = [];
+    if (env.CANSU_ANALYTICS_DB) {
+      const previousDay = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+      const sourceRows = await env.CANSU_ANALYTICS_DB.prepare(
+        'SELECT source, SUM(views) AS views FROM source_events WHERE site = ? AND day >= ? GROUP BY source ORDER BY views DESC LIMIT 12',
+      ).bind(site.key, previousDay).all<{ source: string; views: number }>();
+      sources = (sourceRows.results ?? []).map((item) => ({
+        host: item.source || 'Doğrudan / bilinmiyor',
+        requests: Number(item.views || 0),
+        visits: Number(item.views || 0),
+        bytes: 0,
+      }));
+    }
     return {
       ok: true,
       available: true,
