@@ -353,8 +353,8 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             </div>
             <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
                 <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Büyüme Motorları</p>
-                <h3 style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">0 Bot</h3>
-                <p style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Simülasyon botları kaldırıldı</p>
+                <h3 style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">—</h3>
+                <p style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Bot sınıflandırması mevcut Cloudflare erişimiyle doğrulanamıyor.</p>
             </div>
             <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
                 <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Güvenlik Zırhı</p>
@@ -500,7 +500,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             const tone = healthy ? '#34d399' : '#f87171';
             const status = healthy ? 'SAĞLIKLI' : 'KONTROL GEREKLİ';
             const statusBg = healthy ? 'rgba(52,211,153,.12)' : 'rgba(248,113,113,.12)';
-            const githubStatus = g.latest?.conclusion || (g.ok ? 'veri yok' : 'erişilemiyor');
+            const githubStatus = g.errorType === 'authentication' ? 'GitHub bağlantısı doğrulanamadı' : g.errorType === 'repository' ? 'Repository kullanılamıyor' : g.latest?.conclusion || (g.ok ? 'veri yok' : 'erişilemiyor');
             const signal = site.cloudflare?.automationSignal;
             const signalStyle = signalMeta(signal);
             return `<article class="analytics-card" style="border-top:2px solid ${tone}">

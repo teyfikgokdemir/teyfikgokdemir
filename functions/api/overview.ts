@@ -43,7 +43,11 @@ async function githubRun(repo: string, env: Env) {
     const response = await fetch(`https://api.github.com/repos/teyfikgokdemir/${repo}/actions/runs?per_page=10`, {
       headers: { accept: 'application/vnd.github+json', 'user-agent': 'cansu-dashboard', ...(env.GITHUB_TOKEN ? { authorization: `Bearer ${env.GITHUB_TOKEN}` } : {}) },
     });
-    if (!response.ok) return { ok: false, error: `GitHub ${response.status}` };
+    if (!response.ok) {
+      if (response.status === 401 || response.status === 403) return { ok: false, error: 'GitHub authentication failed', errorType: 'authentication', status: response.status };
+      if (response.status === 404) return { ok: false, error: 'Repository unavailable', errorType: 'repository', status: response.status };
+      return { ok: false, error: `GitHub ${response.status}`, errorType: 'api', status: response.status };
+    }
     const data = await response.json() as { workflow_runs?: Array<Record<string, unknown>> };
     const runs = data.workflow_runs ?? [];
     const latest = runs[0];
@@ -57,7 +61,7 @@ async function githubRun(repo: string, env: Env) {
       failed24h,
     };
   } catch {
-    return { ok: false, error: 'GitHub erişilemedi' };
+    return { ok: false, error: 'GitHub erişilemedi', errorType: 'network' };
   }
 }
 
