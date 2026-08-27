@@ -479,6 +479,23 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         const formatTime = (value) => value ? new Date(value).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'medium' }) : '—';
         const formatNumber = (value) => typeof value === 'number' ? new Intl.NumberFormat('tr-TR').format(value) : '—';
         const formatBytes = (value) => typeof value === 'number' ? `${(value / 1024 / 1024).toFixed(1)} MB` : '—';
+        const numericValue = (value) => {
+            const number = Number(value);
+            return Number.isFinite(number) ? number : 0;
+        };
+        const compareText = (left, right) => {
+            const a = String(left ?? '').toLocaleLowerCase('tr-TR');
+            const b = String(right ?? '').toLocaleLowerCase('tr-TR');
+            return a < b ? -1 : a > b ? 1 : 0;
+        };
+        const sortByMetric = (items, metric, secondary) => [...(items || [])].sort((left, right) => {
+            const difference = numericValue(metric(right)) - numericValue(metric(left));
+            return difference || secondary(left, right);
+        });
+        const siteVisitorMetric = (site) => site.cloudflare?.last24h?.uniqueVisitors;
+        const sourceVisitorMetric = (source) => source.visits ?? source.uniqueVisitors ?? source.requests;
+        const countryVisitorMetric = (country) => country.uniqueVisitors ?? country.visits ?? country.requests;
+        const seoClickMetric = (row) => row.clicks;
         const signalMeta = (signal) => ({
             high: { label: 'YÜKSEK SİNYAL', color: '#fb7185', bg: 'rgba(251,113,133,.12)' },
             medium: { label: 'ORTA SİNYAL', color: '#fbbf24', bg: 'rgba(251,191,36,.12)' },
@@ -524,7 +541,8 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         const formatPercent = (value) => `${(Number(value || 0) * 100).toFixed(1)}%`;
         const formatPosition = (value) => Number(value || 0) ? Number(value).toFixed(1) : '—';
         const seoTable = (title, rows, type) => {
-            const body = (rows || []).slice(0, 5).map((row) => `<tr><td title="${escapeHtml(row.value)}">${escapeHtml(row.value)}</td><td>${formatNumber(row.clicks)}</td><td>${formatNumber(row.impressions)}</td><td>${formatPercent(row.ctr)}</td><td>${formatPosition(row.position)}</td></tr>`).join('');
+            const orderedRows = sortByMetric(rows, seoClickMetric, (left, right) => compareText(left.value, right.value));
+            const body = orderedRows.slice(0, 5).map((row) => `<tr><td title="${escapeHtml(row.value)}">${escapeHtml(row.value)}</td><td>${formatNumber(row.clicks)}</td><td>${formatNumber(row.impressions)}</td><td>${formatPercent(row.ctr)}</td><td>${formatPosition(row.position)}</td></tr>`).join('');
             return `<div style="margin-top:1rem;"><div style="color:#7dd3fc;font-size:.65rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;">${title}</div>${body ? `<table class="seo-table"><thead><tr><th>${type === 'query' ? 'Sorgu' : 'Landing page'}</th><th>Tık.</th><th>Göst.</th><th>CTR</th><th>Ort.</th></tr></thead><tbody>${body}</tbody></table>` : '<div class="country-empty">Bu dönem için veri yok</div>'}</div>`;
         };
         async function loadSeo() {
@@ -535,7 +553,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                     seoContent.innerHTML = `<div class="seo-periods"><div class="seo-period"><span class="seo-period__label">Son 7 gün</span><strong class="seo-period__value">Yetkilendirme bekliyor</strong></div><div class="seo-period"><span class="seo-period__label">Son 30 gün</span><strong class="seo-period__value">Yetkilendirme bekliyor</strong></div></div><div style="margin-top:.85rem;"><a class="seo-connect" href="/api/gsc/start"><i class="fa-brands fa-google"></i> Search Console’u bağla</a></div>`;
                     return;
                 }
-                const siteCards = (data.sites || []).map((site) => {
+                const siteCards = sortByMetric(data.sites, (site) => site.periods?.sevenDays?.clicks ?? site.periods?.thirtyDays?.clicks, (left, right) => compareText(left.key, right.key)).map((site) => {
                     if (!site.ok) return `<article class="seo-site"><div class="seo-site__head"><div><div class="seo-site__name">${escapeHtml(site.name)}</div><div class="seo-site__property">${escapeHtml(site.property)}</div></div><span class="seo-panel__badge">VERİ YOK</span></div><div class="country-empty">${escapeHtml(site.error || 'Search Console verisi alınamadı')}</div></article>`;
                     const seven = site.periods?.sevenDays || {};
                     const thirty = site.periods?.thirtyDays || {};
@@ -565,16 +583,17 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 document.getElementById('workflow-summary').textContent = `${data.sites.length} repo izleniyor`;
                 document.getElementById('workflow-detail').textContent = failed ? `${failed} başarısız run (24 saat)` : 'Son 24 saatte failure yok';
                 summaryGrid.innerHTML = data.sites.map((site) => card(site)).join('');
-                sourceGrid.innerHTML = data.sites.map((site) => {
-                    const sources = site.cloudflare?.sources || [];
-                    const sourceRows = sources.slice(0, 8).map((item) => `<div class="source-row"><div><div class="source-row__host" title="${item.host}">${item.host}</div><div class="source-row__meta">${formatNumber(item.requests)} istek · ${formatBytes(item.bytes)}</div></div><strong class="source-row__value">${formatNumber(item.visits)} visit</strong></div>`).join('');
+                const orderedSites = sortByMetric(data.sites, siteVisitorMetric, (left, right) => compareText(left.key, right.key));
+                sourceGrid.innerHTML = orderedSites.map((site) => {
+                    const sources = sortByMetric(site.cloudflare?.sources, sourceVisitorMetric, (left, right) => compareText(left.host, right.host)).slice(0, 8);
+                    const sourceRows = sources.map((item) => `<div class="source-row"><div><div class="source-row__host" title="${item.host}">${item.host}</div><div class="source-row__meta">${formatNumber(item.requests)} istek · ${formatBytes(item.bytes)}</div></div><strong class="source-row__value">${formatNumber(item.visits)} visit</strong></div>`).join('');
                     return `<article class="source-panel"><div class="source-panel__head"><div><div class="source-panel__name">${site.name}</div><div class="source-panel__summary">Son 24 saat · referrer kaynakları</div></div><span class="seo-panel__badge">TOP 12</span></div>${sourceRows || '<div class="country-empty">Kaynak verisi bekleniyor</div>'}</article>`;
                 }).join('');
                 countryGrid.innerHTML = data.sites.map((site) => {
-                    const countries = site.cloudflare?.countries || [];
-                    const maxRequests = countries[0]?.requests || 1;
-                    const totalRequests = countries.reduce((sum, item) => sum + (item.requests || 0), 0);
-                    const rows = countries.slice(0, 15).map((item, index) => { const countryName = getCountryName(item.country); return `<div class="country-row"><span class="country-row__rank">${String(index + 1).padStart(2, '0')}</span><span class="country-row__name" title="${countryName}">${countryName}</span><span class="country-row__track"><span class="country-row__bar" style="width:${Math.max(3, Math.round((item.requests / maxRequests) * 100))}%"></span></span><span class="country-row__stats"><strong class="country-row__value">${formatNumber(item.requests)}</strong><span class="country-row__share">${Number(item.requestShare || (totalRequests ? (item.requests / totalRequests) * 100 : 0)).toFixed(1)}% pay</span></span><span class="country-row__traffic">${formatBytes(item.bytes)}</span></div>`; }).join('');
+                    const countries = sortByMetric(site.cloudflare?.countries, countryVisitorMetric, (left, right) => compareText(left.country, right.country));
+                    const maxRequests = Math.max(1, ...countries.map((item) => numericValue(item.requests)));
+                    const totalRequests = countries.reduce((sum, item) => sum + numericValue(item.requests), 0);
+                    const rows = countries.slice(0, 15).map((item, index) => { const countryName = getCountryName(item.country); return `<div class="country-row"><span class="country-row__rank">${String(index + 1).padStart(2, '0')}</span><span class="country-row__name" title="${countryName}">${countryName}</span><span class="country-row__track"><span class="country-row__bar" style="width:${Math.max(3, Math.round((numericValue(item.requests) / maxRequests) * 100))}%"></span></span><span class="country-row__stats"><strong class="country-row__value">${formatNumber(item.requests)}</strong><span class="country-row__share">${Number(item.requestShare || (totalRequests ? (numericValue(item.requests) / totalRequests) * 100 : 0)).toFixed(1)}% pay</span></span><span class="country-row__traffic">${formatBytes(item.bytes)}</span></div>`; }).join('');
                     return `<article class="country-panel"><div class="country-panel__head"><div><div class="country-panel__name">${site.name}</div><div class="country-panel__summary">${formatNumber(totalRequests)} ülke isteği · 24 saat</div></div><span class="country-panel__badge">TOP 15</span></div>${rows || '<div class="country-empty">Cloudflare ülke verisi bekleniyor</div>'}</article>`;
                 }).join('');
                 data.sites.forEach((site) => {
