@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "playwright-core": "^1.62.1",
-    "sharp": "^0.35.3"
+    "sharp": "^0.35.4"
   },
   "allowScripts": {
     "esbuild@0.28.1": true
