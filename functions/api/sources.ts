@@ -63,6 +63,15 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
 
   if (request.method === 'GET') {
     const url = new URL(request.url);
+    if (url.searchParams.get('action') === 'clean_test') {
+      const testRows = await env.CANSU_ANALYTICS_DB.prepare(
+        "SELECT * FROM source_events WHERE source LIKE '%test%'"
+      ).all();
+      const deleteResult = await env.CANSU_ANALYTICS_DB.prepare(
+        "DELETE FROM source_events WHERE source LIKE '%test%'"
+      ).run();
+      return response({ ok: true, deletedRows: testRows.results ?? [], meta: deleteResult.meta }, 200, origin);
+    }
     const eventSite = clean(url.searchParams.get('event_site'), 40);
     if (eventSite) {
       if (!SITES.has(eventSite)) return response({ ok: false, error: 'Unknown site' }, 400, origin);
