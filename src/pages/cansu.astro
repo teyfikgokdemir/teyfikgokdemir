@@ -25,88 +25,6 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             overflow-x: hidden;
         }
 
-        /* Master Grid Wrapper for Desktop */
-        .page-wrapper {
-            display: grid;
-            grid-template-columns: 280px 1fr 280px;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            max-width: 1500px;
-            margin: 0 auto;
-            padding: 2rem;
-            gap: 2rem;
-            position: relative;
-            z-index: 10;
-        }
-
-        .gallery-side {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Mobile specific gallery (hidden on desktop) */
-        .mobile-gallery {
-            display: none;
-        }
-
-        .polaroid {
-            background: #ffffff;
-            padding: 8px 8px 22px 8px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
-            border-radius: 6px;
-            width: 220px;
-            transform: rotate(var(--rot, 0deg));
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .polaroid:hover {
-            transform: scale(1.04) rotate(0deg) !important;
-            z-index: 30;
-            box-shadow: 0 25px 50px rgba(244,63,94,0.4);
-        }
-        .polaroid img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            display: block;
-            border-radius: 3px;
-        }
-
-        /* Precise Face Focus */
-        .img-wedding { object-position: 50% 15% !important; }
-        .img-sunset { object-position: 50% 25% !important; }
-        .img-zarafet { object-position: 50% 15% !important; }
-        .img-nikah { object-position: 50% 20% !important; }
-        .img-kahve { object-position: 50% 30% !important; }
-        .img-huzur { object-position: 50% 30% !important; }
-
-        .polaroid .caption {
-            color: #111827;
-            font-size: 11px;
-            font-weight: 700;
-            text-align: center;
-            margin-top: 8px;
-            font-family: monospace;
-        }
-
-        /* Center Login Card */
-        .login-card {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(244, 63, 94, 0.4);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
-            border-radius: 1.5rem;
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 420px;
-            margin: 0 auto;
-            z-index: 20;
-        }
-
         /* Dashboard crystal clear background */
         .dashboard-bg {
             position: fixed;
@@ -144,9 +62,14 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         .analytics-metric__label { color: #64748b; font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
         .analytics-metric--period .analytics-metric__label { color: #7dd3fc; }
         .analytics-metric__value { display: block; color: #f8fafc; font-size: 1rem; font-weight: 750; line-height: 1.25; margin-top: .25rem; overflow-wrap: anywhere; }
-        .analytics-card__footer { display: flex; justify-content: space-between; gap: .5rem; color: #64748b; font-size: .66rem; margin-top: .85rem; }
+        .analytics-card__footer { display: flex; justify-content: space-between; gap: .5rem; color: #64748b; font-size: .66rem; margin-top: .85rem; flex-wrap: wrap; }
         .analytics-card__footer a { color: #93c5fd; text-decoration: none; }
         .analytics-card__footer a:hover { color: #bfdbfe; text-decoration: underline; }
+        .analytics-card__commit { color:#94a3b8; font-size:.66rem; margin-top:.5rem; display:flex; gap:.4rem; align-items:baseline; flex-wrap:wrap; overflow:hidden; }
+        .analytics-card__commit a { color:#93c5fd; font-size:.62rem; background:rgba(15,23,42,.7); padding:.15rem .35rem; border-radius:.3rem; flex-shrink:0; text-decoration:none; font-family:monospace; }
+        .analytics-card__commit a:hover { background:rgba(96,165,250,.2); }
+        .analytics-card__commit-msg { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:18rem; }
+        .analytics-card__check { color:#475569; font-size:.6rem; margin-top:.35rem; }
         .country-section { background: radial-gradient(circle at 12% 0%, rgba(56,189,248,.09), transparent 32%), linear-gradient(145deg, rgba(15,23,42,.96), rgba(2,6,23,.98)); border: 1px solid rgba(148,163,184,.2); border-radius: 1.25rem; padding: 1.55rem 1.65rem; box-shadow: 0 24px 70px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.04); }
         .country-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
         .country-panel { position: relative; overflow: hidden; background: linear-gradient(160deg, rgba(15,23,42,.86), rgba(2,6,23,.9)); border: 1px solid rgba(100,116,139,.34); border-radius: 1rem; padding: 1.05rem; box-shadow: 0 12px 30px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.035); transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
@@ -196,151 +119,69 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         .seo-table th:not(:first-child),.seo-table td:not(:first-child) { text-align:right; }
         .seo-connect { display:inline-flex; align-items:center; gap:.4rem; color:#bae6fd; border:1px solid rgba(56,189,248,.3); background:rgba(14,116,144,.18); border-radius:9999px; padding:.45rem .7rem; font-size:.65rem; font-weight:800; text-decoration:none; }
         .seo-connect:hover { background:rgba(14,116,144,.32); }
-        @media (max-width: 700px) { .analytics-card__metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } .analytics-card { padding: .9rem; } .country-section, .insights-section { padding: 1rem; } }
-        input {
-            background-color: #020617;
-            border: 1px solid #1e293b;
-            color: #f3f4f6;
-            padding: 1rem 1.25rem;
-            border-radius: 0.75rem;
-            width: 100%;
-            box-sizing: border-box;
-            outline: none;
-            font-size: 1rem;
-        }
-        input:focus { border-color: #f43f5e; box-shadow: 0 0 15px rgba(244, 63, 94, 0.4); }
-        button.btn-primary {
-            background: linear-gradient(135deg, #f43f5e 0%, #be123c 100%);
-            color: #ffffff;
-            font-weight: 600;
-            padding: 1rem;
-            border-radius: 0.75rem;
-            border: none;
-            width: 100%;
-            cursor: pointer;
-            box-shadow: 0 10px 25px -5px rgba(244, 63, 94, 0.4);
-            font-size: 1rem;
-        }
-        button.btn-primary:hover { opacity: 0.95; }
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 1.25rem 1.5rem; text-align: left; border-bottom: 1px solid #1e293b; }
         th { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; background: rgba(2, 6, 23, 0.85); }
         tr:hover { background: rgba(30, 41, 59, 0.6); }
 
-        /* Mobile Optimization: Exactly 2 photos (top and bottom of login card) */
-        @media (max-width: 1100px) {
-            .page-wrapper {
-                grid-template-columns: 1fr;
-                padding: 1rem;
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                gap: 1.5rem;
-            }
-            .gallery-side {
-                display: none;
-            }
-            .mobile-gallery {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 1.25rem;
-                width: 100%;
-            }
-            .mobile-gallery .polaroid {
-                width: 180px;
-                transform: rotate(0deg) !important;
-            }
-            .mobile-gallery .polaroid img {
-                height: 140px;
-            }
-            .login-card {
-                max-width: 100%;
-                padding: 1.75rem;
-            }
+        /* Responsive — tablet */
+        @media (max-width: 900px) {
+            .country-grid, .source-grid, .seo-sites-grid { grid-template-columns: 1fr; }
+        }
+        /* Responsive — mobile */
+        @media (max-width: 700px) {
+            .analytics-card__metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .analytics-card { padding: .9rem; }
+            .country-section, .insights-section { padding: 1rem; }
+            #dashboard-content { padding: 1rem 0.75rem !important; }
+            #stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: .75rem !important; }
+            #live-summary-grid { grid-template-columns: 1fr !important; }
+            .seo-periods { grid-template-columns: 1fr; }
+            th, td { padding: .75rem .5rem; }
+            .analytics-card__commit-msg { max-width: 10rem; }
+            #refresh-data, #header-refresh { padding: .7rem 1.1rem !important; min-height: 44px; }
+            .dash-header { flex-direction: column !important; align-items: flex-start !important; }
+        }
+        /* Responsive — small phone */
+        @media (max-width: 480px) {
+            #stats-grid { grid-template-columns: 1fr !important; }
+            .analytics-card__metrics { grid-template-columns: 1fr; }
+            .seo-table th, .seo-table td { padding: .35rem .2rem; font-size: .56rem; }
+            .country-row { grid-template-columns: 1.2rem minmax(4rem,1.2fr) minmax(3rem,1fr) auto; gap: .35rem; }
+            .country-row__traffic { display: none; }
         }
     </style>
 </head>
 <body>
     <div class="bg-overlay"></div>
 
-    <!-- Auth Guard Modal -->
-    <div id="auth-modal" class="content-layer hidden">
-        <div class="page-wrapper">
-            <!-- Mobile Top Photo -->
-            <div class="mobile-gallery">
-                <div class="polaroid" style="--rot: -2deg;"><img src="/images/cansu/wedding_entrance.webp" alt="Wedding" class="img-wedding"><div class="caption">En Mutlu Anımız ❤️</div></div>
-            </div>
-
-            <!-- Left Gallery Column (Desktop) -->
-            <div class="gallery-side">
-                <div class="polaroid" style="--rot: -4deg;"><img src="/images/cansu/wedding_entrance.webp" alt="Wedding" class="img-wedding"><div class="caption">En Mutlu Anımız ❤️</div></div>
-                <div class="polaroid" style="--rot: 3deg;"><img src="/images/cansu/couple_reels_new_1.webp" alt="Coffee" class="img-kahve"><div class="caption">Kahve Keyfi ☕</div></div>
-                <div class="polaroid" style="--rot: -3deg;"><img src="/images/cansu/lifestyle_vacation_4.webp" alt="Reading" class="img-huzur"><div class="caption">Huzur 📖</div></div>
-            </div>
-
-            <!-- Center Login Card -->
-            <div class="login-card">
-                <div style="text-align: center; margin-bottom: 2rem;">
-                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 5.5rem; height: 5.5rem; border-radius: 9999px; background: rgba(244, 63, 94, 0.2); color: #f43f5e; margin-bottom: 1.25rem; border: 2px solid #f43f5e; overflow: hidden; box-shadow: 0 10px 25px rgba(244,63,94,0.3);">
-                        <img src="/images/cansu/uF2GI.jpg" alt="Cansu" style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%;">
-                    </div>
-                    <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0; color: #fb7185;">Cansu & Teyfik Özel Paneli</h2>
-                    <p style="color: #cbd5e1; font-size: 0.875rem; margin-top: 0.5rem;">Özel panel doğrudan görüntülenir.</p>
-                </div>
-                <form id="login-form" style="display: flex; flex-direction: column; gap: 1.25rem;">
-                    <div>
-                        <input type="password" id="admin-pass" placeholder="Özel Şifre" required>
-                    </div>
-                    <button type="submit" class="btn-primary">
-                        Sisteme Giriş Yap
-                    </button>
-                </form>
-                <p id="auth-error" style="color: #f87171; font-size: 0.8rem; text-align: center; margin-top: 1rem; display: none;">Geçersiz şifre! Tekrar deneyin.</p>
-            </div>
-
-            <!-- Right Gallery Column (Desktop) -->
-            <div class="gallery-side">
-                <div class="polaroid" style="--rot: 4deg;"><img src="/images/cansu/wedding_concept_1.webp" alt="Sunset" class="img-sunset"><div class="caption">Gün Batımı 🌅</div></div>
-                <div class="polaroid" style="--rot: -2deg;"><img src="/images/cansu/business_luxury_8.webp" alt="Style" class="img-zarafet"><div class="caption">Zarafet ✨</div></div>
-                <div class="polaroid" style="--rot: 3deg;"><img src="/images/cansu/wedding_reels.webp" alt="Ceremony" class="img-nikah"><div class="caption">Nikah 💍</div></div>
-            </div>
-
-            <!-- Mobile Bottom Photo -->
-            <div class="mobile-gallery">
-                <div class="polaroid" style="--rot: 2deg;"><img src="/images/cansu/wedding_concept_1.webp" alt="Sunset" class="img-sunset"><div class="caption">Gün Batımı 🌅</div></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Dashboard Crystal Clear Background (Hidden initially) -->
-    <div id="dash-bg-element" class="dashboard-bg hidden"></div>
+    <!-- Dashboard Crystal Clear Background -->
+    <div id="dash-bg-element" class="dashboard-bg"></div>
 
     <!-- Main Dashboard -->
-    <div id="dashboard-content" class="content-layer hidden" style="max-width: 80rem; margin: 0 auto; padding: 2rem 1.5rem;">
-        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.15); flex-wrap: wrap; gap: 1rem;">
+    <div id="dashboard-content" class="content-layer" style="max-width: 80rem; margin: 0 auto; padding: 2rem 1.5rem;">
+        <header class="dash-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.15); flex-wrap: wrap; gap: 1rem;">
             <div>
                 <h1 style="font-size: 1.875rem; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; margin: 0;">
                     <span style="display: inline-block; width: 3rem; height: 3rem; border-radius: 9999px; overflow: hidden; border: 2px solid #f43f5e; vertical-align: middle; box-shadow: 0 5px 15px rgba(244,63,94,0.4);">
                         <img src="/images/cansu/uF2GI.jpg" alt="Cansu" style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%;">
                     </span>
-                    Cansu & Teyfik - Otonom Büyüme Paneli
+                    Cansu &amp; Teyfik - Otonom Büyüme Paneli
                 </h1>
-                <p style="color: #cbd5e1; font-size: 0.875rem; margin-top: 0.35rem;">Cloudflare & GitHub Actions Otomasyon Sağlık ve İzleme Merkezi</p>
+                <p style="color: #cbd5e1; font-size: 0.875rem; margin-top: 0.35rem;">Cloudflare &amp; GitHub Actions Otomasyon Sağlık ve İzleme Merkezi</p>
             </div>
-            <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
                 <span id="live-status" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 9999px; background: rgba(251, 191, 36, 0.2); color: #fbbf24; font-size: 0.75rem; font-weight: 500; border: 1px solid rgba(251, 191, 36, 0.4);">
                     <span style="width: 0.5rem; height: 0.5rem; border-radius: 9999px; background: currentColor;"></span> Canlı veriler yükleniyor...
                 </span>
-                <button onclick="lockDashboard()" style="background: rgba(15,23,42,0.8); border: 1px solid #334155; color: #cbd5e1; padding: 0.625rem 1.25rem; border-radius: 0.75rem; font-size: 0.75rem; cursor: pointer;">
-                    <i class="fa-solid fa-lock" style="margin-right: 0.35rem;"></i> Kilitle
+                <button id="header-refresh" type="button" style="background: rgba(15,23,42,0.8); border: 1px solid #334155; color: #cbd5e1; padding: 0.625rem 1.25rem; border-radius: 0.75rem; font-size: 0.75rem; cursor: pointer;" title="Verileri yenile">
+                    <i class="fa-solid fa-arrows-rotate" style="margin-right: 0.35rem;"></i> Yenile
                 </button>
             </div>
         </header>
 
         <!-- Stats Grid -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem;">
+        <div id="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem;">
             <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
                 <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Toplam Repolar</p>
                 <h3 id="site-count" style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">6 Site</h3>
@@ -389,7 +230,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         <section class="insights-section" style="margin-bottom:2.5rem;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
                 <div>
-                    <h2 style="font-size:1.15rem; margin:0;">Ziyaretçi Kaynakları & SEO</h2>
+                    <h2 style="font-size:1.15rem; margin:0;">Ziyaretçi Kaynakları &amp; SEO</h2>
                     <p style="color:#94a3b8; font-size:.78rem; margin:.4rem 0 0;">Ziyaretçinin siteye hangi kaynaktan geldiğini ve Search Console bağlandığında hangi aramalardan bulunduğunu gösterir.</p>
                 </div>
                 <div style="display:flex; gap:.75rem; align-items:center; flex-wrap:wrap; color:#64748b; font-size:.7rem;"><span>Cloudflare · canlı</span><span style="color:#475569;">Search Console · bağlantı bekliyor</span></div>
@@ -397,7 +238,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             <div id="source-grid" class="source-grid"></div>
             <div class="seo-panel" style="margin-top:1rem;">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:.75rem; flex-wrap:wrap;"><div><strong style="color:#f8fafc; font-size:.86rem;">Google Search Console performansı</strong><p style="color:#94a3b8; font-size:.7rem; line-height:1.5; margin:.35rem 0 0;">Bağlantı tamamlandığında son 7 gün ve 30 gün için sorgular, tıklamalar, gösterimler, CTR, ortalama pozisyon ve landing page verileri burada görünecek.</p></div><span class="seo-panel__badge">GSC HAZIR</span></div>
-                <div id="seo-content"><div class="seo-periods"><div class="seo-period"><span class="seo-period__label">Son 7 gün</span><strong class="seo-period__value">Bağlantı bekliyor</strong></div><div class="seo-period"><span class="seo-period__label">Son 30 gün</span><strong class="seo-period__value">Bağlantı bekliyor</strong></div></div><div style="margin-top:.85rem;"><a class="seo-connect" href="/api/gsc/start"><i class="fa-brands fa-google"></i> Search Console’u bağla</a></div></div>
+                <div id="seo-content"><div class="seo-periods"><div class="seo-period"><span class="seo-period__label">Son 7 gün</span><strong class="seo-period__value">Bağlantı bekliyor</strong></div><div class="seo-period"><span class="seo-period__label">Son 30 gün</span><strong class="seo-period__value">Bağlantı bekliyor</strong></div></div><div style="margin-top:.85rem;"><a class="seo-connect" href="/api/gsc/start"><i class="fa-brands fa-google"></i> Search Console'u bağla</a></div></div>
             </div>
         </section>
 
@@ -422,42 +263,42 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                         <tr data-site="teyfikgokdemir">
                             <td style="font-weight: 500;"><i class="fa-solid fa-globe" style="color: #38bdf8; margin-right: 0.5rem;"></i> teyfikgokdemir</td>
                             <td style="color: #cbd5e1;">Deploy, Security</td>
-                            <td style="color: #94a3b8; font-size: 0.75rem;">Push & Günlük</td>
+                            <td style="color: #94a3b8; font-size: 0.75rem;">Push &amp; Günlük</td>
                             <td><span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.2); color: #34d399; font-size: 0.75rem; border: 1px solid rgba(52, 211, 153, 0.4);">Snapshot</span></td>
                             <td style="text-align: right;"><a href="https://github.com/teyfikgokdemir/teyfikgokdemir/actions" target="_blank" style="font-size: 0.75rem; background: rgba(15,23,42,0.8); color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
                         </tr>
                         <tr data-site="ctseg">
                             <td style="font-weight: 500;"><i class="fa-solid fa-chart-line" style="color: #fbbf24; margin-right: 0.5rem;"></i> ctseg</td>
                             <td style="color: #cbd5e1;">Deploy, Security</td>
-                            <td style="color: #94a3b8; font-size: 0.75rem;">Push & Pazartesi</td>
+                            <td style="color: #94a3b8; font-size: 0.75rem;">Push &amp; Pazartesi</td>
                             <td><span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.2); color: #34d399; font-size: 0.75rem; border: 1px solid rgba(52, 211, 153, 0.4);">Snapshot</span></td>
                             <td style="text-align: right;"><a href="https://github.com/teyfikgokdemir/ctseg/actions" target="_blank" style="font-size: 0.75rem; background: rgba(15,23,42,0.8); color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
                         </tr>
                         <tr data-site="mythborn">
                             <td style="font-weight: 500;"><i class="fa-solid fa-gamepad" style="color: #c084fc; margin-right: 0.5rem;"></i> mythborn</td>
                             <td style="color: #cbd5e1;">Deploy, Security, Quality</td>
-                            <td style="color: #94a3b8; font-size: 0.75rem;">Push & Çarşamba</td>
+                            <td style="color: #94a3b8; font-size: 0.75rem;">Push &amp; Çarşamba</td>
                             <td><span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.2); color: #34d399; font-size: 0.75rem; border: 1px solid rgba(52, 211, 153, 0.4);">Snapshot</span></td>
                             <td style="text-align: right;"><a href="https://github.com/teyfikgokdemir/mythborn/actions" target="_blank" style="font-size: 0.75rem; background: rgba(15,23,42,0.8); color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
                         </tr>
                         <tr data-site="qct-studio">
                             <td style="font-weight: 500;"><i class="fa-solid fa-palette" style="color: #60a5fa; margin-right: 0.5rem;"></i> qct-studio</td>
                             <td style="color: #cbd5e1;">Deploy, Security</td>
-                            <td style="color: #94a3b8; font-size: 0.75rem;">Push & Haftalık</td>
+                            <td style="color: #94a3b8; font-size: 0.75rem;">Push &amp; Haftalık</td>
                             <td><span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.2); color: #34d399; font-size: 0.75rem; border: 1px solid rgba(52, 211, 153, 0.4);">Snapshot</span></td>
                             <td style="text-align: right;"><a href="https://github.com/teyfikgokdemir/qct-studio/actions" target="_blank" style="font-size: 0.75rem; background: rgba(15,23,42,0.8); color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
                         </tr>
                         <tr data-site="qct-commerce-tr">
                             <td style="font-weight: 500;"><i class="fa-solid fa-store" style="color: #34d399; margin-right: 0.5rem;"></i> qct-commerce-tr</td>
                             <td style="color: #cbd5e1;">Deploy, Security</td>
-                            <td style="color: #94a3b8; font-size: 0.75rem;">Push & Günlük</td>
+                            <td style="color: #94a3b8; font-size: 0.75rem;">Push &amp; Günlük</td>
                             <td><span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.2); color: #34d399; font-size: 0.75rem; border: 1px solid rgba(52, 211, 153, 0.4);">Snapshot</span></td>
                             <td style="text-align: right;"><a href="https://github.com/teyfikgokdemir/qct-commerce-tr/actions" target="_blank" style="font-size: 0.75rem; background: rgba(15,23,42,0.8); color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
                         </tr>
                         <tr data-site="iran-ahli">
                             <td style="font-weight: 500;"><i class="fa-solid fa-building" style="color: #f87171; margin-right: 0.5rem;"></i> iran-ahli</td>
                             <td style="color: #cbd5e1;">Deploy, Security, Audit</td>
-                            <td style="color: #94a3b8; font-size: 0.75rem;">Push & Günlük</td>
+                            <td style="color: #94a3b8; font-size: 0.75rem;">Push &amp; Günlük</td>
                             <td><span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(52, 211, 153, 0.2); color: #34d399; font-size: 0.75rem; border: 1px solid rgba(52, 211, 153, 0.4);">Snapshot</span></td>
                             <td style="text-align: right;"><a href="https://github.com/teyfikgokdemir/iran-ahli/actions" target="_blank" style="font-size: 0.75rem; background: rgba(15,23,42,0.8); color: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; border: 1px solid #334155;">Loglar <i class="fa-solid fa-external-link" style="margin-left: 0.25rem;"></i></a></td>
                         </tr>
@@ -469,13 +310,13 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
 
     <script>
         const dashboard = document.getElementById('dashboard-content');
-        const bg = document.getElementById('dash-bg-element');
         const liveStatus = document.getElementById('live-status');
         const summaryGrid = document.getElementById('live-summary-grid');
         const countryGrid = document.getElementById('country-grid');
         const sourceGrid = document.getElementById('source-grid');
         const seoContent = document.getElementById('seo-content');
         const refreshButton = document.getElementById('refresh-data');
+        const headerRefresh = document.getElementById('header-refresh');
         const formatTime = (value) => value ? new Date(value).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'medium' }) : '—';
         const formatNumber = (value) => typeof value === 'number' ? new Intl.NumberFormat('tr-TR').format(value) : '—';
         const formatBytes = (value) => typeof value === 'number' ? `${(value / 1024 / 1024).toFixed(1)} MB` : '—';
@@ -509,17 +350,21 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             if (shortNames[code]) return shortNames[code];
             try { return countryNames.of(code) || code; } catch { return code; }
         };
+        const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;' }[char]));
         const card = (site) => {
             const h = site.health;
             const g = site.github;
             const traffic = site.cloudflare?.last24h;
-            const healthy = h.ok && (!g.latest || g.latest.conclusion === 'success');
+            const healthy = h.ok && h.ssl?.valid !== false && (!g.latest || g.latest.conclusion === 'success');
             const tone = healthy ? '#34d399' : '#f87171';
             const status = healthy ? 'SAĞLIKLI' : 'KONTROL GEREKLİ';
             const statusBg = healthy ? 'rgba(52,211,153,.12)' : 'rgba(248,113,113,.12)';
             const githubStatus = g.errorType === 'authentication' ? 'GitHub bağlantısı doğrulanamadı' : g.errorType === 'repository' ? 'Repository kullanılamıyor' : g.latest?.conclusion || (g.ok ? 'veri yok' : 'erişilemiyor');
             const signal = site.cloudflare?.automationSignal;
             const signalStyle = signalMeta(signal);
+            const sslColor = h.ssl?.valid ? '#34d399' : '#f87171';
+            const sslText = h.ssl?.valid ? '✓ Geçerli' : (h.ssl?.error || '✗ Sorun');
+            const commitHtml = g.latestCommit ? `<div class="analytics-card__commit"><a href="${escapeHtml(g.latestCommit.url)}" target="_blank" rel="noreferrer" title="Commit'i aç">${escapeHtml(g.latestCommit.sha)}</a><span class="analytics-card__commit-msg" title="${escapeHtml(g.latestCommit.message)}">${escapeHtml(g.latestCommit.message)}</span><span style="color:#475569;flex-shrink:0;">${formatTime(g.latestCommit.date)}</span></div>` : '';
             return `<article class="analytics-card" style="border-top:2px solid ${tone}">
                 <div class="analytics-card__head">
                     <div class="analytics-card__name"><i class="fa-solid fa-chart-simple" style="color:#93c5fd;margin-right:.45rem"></i>${site.name}</div>
@@ -533,11 +378,13 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                     <div class="analytics-metric"><span class="analytics-metric__label">Trafik / 24s</span><strong class="analytics-metric__value">${traffic ? formatBytes(traffic.bytes) : '—'}</strong></div>
                     <div class="analytics-metric"><span class="analytics-metric__label">Otomatik trafik sinyali</span><strong class="analytics-metric__value" style="color:${signalStyle.color};font-size:.78rem">${signalStyle.label}</strong><span class="analytics-metric__hint">${signal ? `${signal.requestPerVisitor} istek/ziyaret · üst ülke ${signal.topCountryShare}%` : '—'}</span></div>
                     <div class="analytics-metric"><span class="analytics-metric__label">Yanıt süresi</span><strong class="analytics-metric__value">${h.ms} ms</strong></div>
+                    <div class="analytics-metric"><span class="analytics-metric__label">SSL / TLS</span><strong class="analytics-metric__value" style="color:${sslColor}">${sslText}</strong></div>
                 </div>
                 <div class="analytics-card__footer"><span><i class="fa-solid fa-code-branch" style="margin-right:.3rem"></i>GitHub: ${githubStatus}</span><a href="${site.actions}" target="_blank" rel="noreferrer">Logları aç <i class="fa-solid fa-arrow-up-right-from-square" style="margin-left:.25rem"></i></a></div>
+                ${commitHtml}
+                <div class="analytics-card__check">HTTP ${h.status || '—'} · Son kontrol: ${formatTime(h.checkedAt)}</div>
             </article>`;
         };
-        const escapeHtml = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '\"':'&quot;', "'":'&#039;' }[char]));
         const formatPercent = (value) => `${(Number(value || 0) * 100).toFixed(1)}%`;
         const formatPosition = (value) => Number(value || 0) ? Number(value).toFixed(1) : '—';
         const seoTable = (title, rows, type) => {
@@ -546,21 +393,25 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             return `<div style="margin-top:1rem;"><div style="color:#7dd3fc;font-size:.65rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;">${title}</div>${body ? `<table class="seo-table"><thead><tr><th>${type === 'query' ? 'Sorgu' : 'Landing page'}</th><th>Tık.</th><th>Göst.</th><th>CTR</th><th>Ort.</th></tr></thead><tbody>${body}</tbody></table>` : '<div class="country-empty">Bu dönem için veri yok</div>'}</div>`;
         };
         async function loadSeo() {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), 15000);
             try {
-                const response = await fetch('/api/gsc/seo', { cache: 'no-store' });
+                const response = await fetch('/api/gsc/seo', { cache: 'no-store', signal: controller.signal });
+                clearTimeout(timer);
                 const data = await response.json();
                 if (!data.connected) {
-                    seoContent.innerHTML = `<div class="seo-periods"><div class="seo-period"><span class="seo-period__label">Son 7 gün</span><strong class="seo-period__value">Yetkilendirme bekliyor</strong></div><div class="seo-period"><span class="seo-period__label">Son 30 gün</span><strong class="seo-period__value">Yetkilendirme bekliyor</strong></div></div><div style="margin-top:.85rem;"><a class="seo-connect" href="/api/gsc/start"><i class="fa-brands fa-google"></i> Search Console’u bağla</a></div>`;
+                    seoContent.innerHTML = `<div class="seo-periods"><div class="seo-period"><span class="seo-period__label">Son 7 gün</span><strong class="seo-period__value">Yetkilendirme bekliyor</strong></div><div class="seo-period"><span class="seo-period__label">Son 30 gün</span><strong class="seo-period__value">Yetkilendirme bekliyor</strong></div></div><div style="margin-top:.85rem;"><a class="seo-connect" href="/api/gsc/start"><i class="fa-brands fa-google"></i> Search Console'u bağla</a></div>`;
                     return;
                 }
                 const siteCards = sortByMetric(data.sites, (site) => site.periods?.sevenDays?.clicks ?? site.periods?.thirtyDays?.clicks, (left, right) => compareText(left.key, right.key)).map((site) => {
                     if (!site.ok) return `<article class="seo-site"><div class="seo-site__head"><div><div class="seo-site__name">${escapeHtml(site.name)}</div><div class="seo-site__property">${escapeHtml(site.property)}</div></div><span class="seo-panel__badge">VERİ YOK</span></div><div class="country-empty">${escapeHtml(site.error || 'Search Console verisi alınamadı')}</div></article>`;
                     const seven = site.periods?.sevenDays || {};
                     const thirty = site.periods?.thirtyDays || {};
-                    return `<article class="seo-site"><div class="seo-site__head"><div><div class="seo-site__name">${escapeHtml(site.name)}</div><div class="seo-site__property">${escapeHtml(site.property)}</div></div><span class="seo-panel__badge">CANLI RAPOR</span></div><div class="seo-periods"><div class="seo-period"><span class="seo-period__label">7 gün · tıklama</span><strong class="seo-period__value">${formatNumber(seven.clicks)}</strong><span class="seo-row-note">${formatNumber(seven.impressions)} gösterim · ${formatPercent(seven.ctr)}</span></div><div class="seo-period"><span class="seo-period__label">30 gün · tıklama</span><strong class="seo-period__value">${formatNumber(thirty.clicks)}</strong><span class="seo-row-note">${formatNumber(thirty.impressions)} gösterim · ${formatPercent(thirty.ctr)}</span></div></div><div style="color:#64748b;font-size:.62rem;margin-top:.65rem;">Ort. konum: 7g ${formatPosition(seven.position)} · 30g ${formatPosition(thirty.position)}</div>${seoTable('En iyi sorgular · 30 gün', site.topQueries, 'query')}${seoTable('En iyi landing page’ler · 30 gün', site.topPages, 'page')}</article>`;
+                    return `<article class="seo-site"><div class="seo-site__head"><div><div class="seo-site__name">${escapeHtml(site.name)}</div><div class="seo-site__property">${escapeHtml(site.property)}</div></div><span class="seo-panel__badge">CANLI RAPOR</span></div><div class="seo-periods"><div class="seo-period"><span class="seo-period__label">7 gün · tıklama</span><strong class="seo-period__value">${formatNumber(seven.clicks)}</strong><span class="seo-row-note">${formatNumber(seven.impressions)} gösterim · ${formatPercent(seven.ctr)}</span></div><div class="seo-period"><span class="seo-period__label">30 gün · tıklama</span><strong class="seo-period__value">${formatNumber(thirty.clicks)}</strong><span class="seo-row-note">${formatNumber(thirty.impressions)} gösterim · ${formatPercent(thirty.ctr)}</span></div></div><div style="color:#64748b;font-size:.62rem;margin-top:.65rem;">Ort. konum: 7g ${formatPosition(seven.position)} · 30g ${formatPosition(thirty.position)}</div>${seoTable('En iyi sorgular · 30 gün', site.topQueries, 'query')}${seoTable("En iyi landing page'ler · 30 gün", site.topPages, 'page')}</article>`;
                 }).join('');
                 seoContent.innerHTML = `<div style="color:#64748b;font-size:.65rem;margin-top:1rem;">Son Search Console verisi: ${escapeHtml(data.dataThrough || '—')} · Google verileri genellikle birkaç gün gecikmeli gelir.</div><div class="seo-sites-grid">${siteCards}</div>`;
             } catch {
+                clearTimeout(timer);
                 seoContent.innerHTML = '<div class="country-empty">Search Console verisi şu anda alınamadı.</div>';
             }
         }
@@ -570,16 +421,19 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             liveStatus.style.background = `${color}22`;
             liveStatus.lastChild.textContent = ` ${text}`;
         }
-        function lockDashboard() { bg.classList.add('hidden'); dashboard.classList.add('hidden'); }
         async function loadOverview() {
             setLiveState('Canlı veriler yükleniyor...', '#fbbf24');
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), 15000);
             try {
-                const response = await fetch('/api/overview', { cache: 'no-store' });
+                const response = await fetch('/api/overview', { cache: 'no-store', signal: controller.signal });
+                clearTimeout(timer);
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
                 const healthy = data.sites.filter((site) => site.health.ok).length;
+                const sslValid = data.sites.filter((site) => site.health.ssl?.valid).length;
                 const failed = data.sites.reduce((sum, site) => sum + (site.github.failed24h || 0), 0);
-                document.getElementById('health-summary').textContent = `${healthy}/${data.sites.length} site erişilebilir`;
+                document.getElementById('health-summary').textContent = `${healthy}/${data.sites.length} site erişilebilir · ${sslValid} SSL geçerli`;
                 document.getElementById('workflow-summary').textContent = `${data.sites.length} repo izleniyor`;
                 document.getElementById('workflow-detail').textContent = failed ? `${failed} başarısız run (24 saat)` : 'Son 24 saatte failure yok';
                 summaryGrid.innerHTML = data.sites.map((site) => card(site)).join('');
@@ -603,24 +457,26 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                     const h = site.health;
                     const g = site.github;
                     const ok = h.ok && (!g.latest || g.latest.conclusion === 'success');
-                    statusCell.innerHTML = `<span style="padding:.25rem .75rem;border-radius:9999px;background:${ok ? 'rgba(52,211,153,.2)' : 'rgba(248,113,113,.2)'};color:${ok ? '#34d399' : '#f87171'};font-size:.75rem;border:1px solid ${ok ? 'rgba(52,211,153,.4)' : 'rgba(248,113,113,.4)'}">${ok ? 'Sağlıklı' : 'Kontrol gerekli'}</span><div style="color:#94a3b8;font-size:.7rem;margin-top:.35rem">${h.status || '—'} · ${h.ms} ms</div>`;
+                    statusCell.innerHTML = `<span style="padding:.25rem .75rem;border-radius:9999px;background:${ok ? 'rgba(52,211,153,.2)' : 'rgba(248,113,113,.2)'};color:${ok ? '#34d399' : '#f87171'};font-size:.75rem;border:1px solid ${ok ? 'rgba(52,211,153,.4)' : 'rgba(248,113,113,.4)'}">${ok ? 'Sağlıklı' : 'Kontrol gerekli'}</span><div style="color:#94a3b8;font-size:.7rem;margin-top:.35rem">${h.status || '—'} · ${h.ms} ms${h.ssl?.valid ? ' · SSL ✓' : ''}</div>`;
                 });
                 document.getElementById('data-source-note').textContent = data.source.cloudflareAnalytics ? 'Cloudflare trafik + HTTP sağlık + GitHub Actions; 5 dakikada bir yenilenir.' : 'HTTP sağlık + GitHub Actions; Cloudflare Analytics secret yapılandırılmadı.';
                 document.getElementById('last-updated').textContent = `Son güncelleme: ${formatTime(data.generatedAt)}`;
                 setLiveState(`Canlı kontrol: ${formatTime(data.generatedAt)}`);
             } catch (error) {
-                summaryGrid.innerHTML = `<article class="analytics-card" style="border-top:2px solid #f87171"><div class="analytics-card__name">Veri kaynağı</div><strong class="analytics-card__value" style="display:block;color:#f87171;margin-top:.6rem">ERİŞİLEMİYOR</strong><div style="color:#94a3b8;font-size:.75rem;margin-top:.4rem">Pages Function henüz yayınlanmamış olabilir.</div></article>`;
+                clearTimeout(timer);
+                const isTimeout = error?.name === 'AbortError';
+                summaryGrid.innerHTML = `<article class="analytics-card" style="border-top:2px solid #f87171"><div class="analytics-card__name">Veri kaynağı</div><strong class="analytics-card__value" style="display:block;color:#f87171;margin-top:.6rem">${isTimeout ? 'ZAMAN AŞIMI' : 'ERİŞİLEMİYOR'}</strong><div style="color:#94a3b8;font-size:.75rem;margin-top:.4rem">${isTimeout ? 'API 15 saniye içinde yanıt vermedi.' : 'Pages Function henüz yayınlanmamış olabilir.'}</div></article>`;
                 countryGrid.innerHTML = '<div class="country-empty">Ülke verisi alınamadı.</div>';
                 sourceGrid.innerHTML = '<div class="country-empty">Kaynak verisi alınamadı.</div>';
-                setLiveState('Veri alınamadı', '#f87171');
+                setLiveState(isTimeout ? 'Zaman aşımı' : 'Veri alınamadı', '#f87171');
             }
         }
-        bg.classList.remove('hidden');
-        dashboard.classList.remove('hidden');
-        refreshButton.addEventListener('click', loadOverview);
+        function refreshAll() { loadOverview(); loadSeo(); }
+        refreshButton.addEventListener('click', refreshAll);
+        headerRefresh.addEventListener('click', refreshAll);
         loadOverview();
         loadSeo();
-        setInterval(() => { loadOverview(); loadSeo(); }, 5 * 60 * 1000);
+        setInterval(refreshAll, 5 * 60 * 1000);
     </script>
 </body>
 </html>
