@@ -10,6 +10,7 @@ const ORIGINS = new Set([
   'https://qctstudio.com',
   'https://qctcommerce.com',
   'https://iran-ahli.pages.dev',
+  'https://atelierpersia.com',
 ]);
 
 const cors = (origin: string | null) => ({
