@@ -194,8 +194,8 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             </div>
             <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
                 <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Büyüme Motorları</p>
-                <h3 style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">—</h3>
-                <p style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Bot sınıflandırması mevcut Cloudflare erişimiyle doğrulanamıyor.</p>
+                <h3 id="bot-summary-title" style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">5 Aktif Site</h3>
+                <p id="bot-summary-detail" style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Resmi Bot API'si Enterprise gerektirir; otonom sinyal kartlarda izleniyor.</p>
             </div>
             <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
                 <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Güvenlik Zırhı</p>
@@ -433,9 +433,12 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 const healthy = data.sites.filter((site) => site.health.ok).length;
                 const sslValid = data.sites.filter((site) => site.health.ssl?.valid).length;
                 const failed = data.sites.reduce((sum, site) => sum + (site.github.failed24h || 0), 0);
+                const cfActive = data.sites.filter((site) => site.cloudflare?.available).length;
                 document.getElementById('health-summary').textContent = `${healthy}/${data.sites.length} site erişilebilir · ${sslValid} SSL geçerli`;
                 document.getElementById('workflow-summary').textContent = `${data.sites.length} repo izleniyor`;
                 document.getElementById('workflow-detail').textContent = failed ? `${failed} başarısız run (24 saat)` : 'Son 24 saatte failure yok';
+                document.getElementById('bot-summary-title').textContent = `${cfActive} Aktif Motor`;
+                document.getElementById('bot-summary-detail').textContent = `Resmi Bot API'si Enterprise gerektirir; kartlarda otonom sinyal izleniyor.`;
                 summaryGrid.innerHTML = data.sites.map((site) => card(site)).join('');
                 const orderedSites = sortByMetric(data.sites, siteVisitorMetric, (left, right) => compareText(left.key, right.key));
                 sourceGrid.innerHTML = orderedSites.map((site) => {
