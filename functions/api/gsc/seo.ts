@@ -59,7 +59,18 @@ function summary(rows: SearchRow[]) {
 }
 
 function topRows(rows: SearchRow[], type: 'query' | 'page') {
-  return rows.slice(0, 10).map((row) => ({
+  const sorted = [...rows].sort((a, b) => {
+    const clickDiff = (b.clicks || 0) - (a.clicks || 0);
+    if (clickDiff !== 0) return clickDiff;
+    const impDiff = (b.impressions || 0) - (a.impressions || 0);
+    if (impDiff !== 0) return impDiff;
+    const ctrDiff = (b.ctr || 0) - (a.ctr || 0);
+    if (ctrDiff !== 0) return ctrDiff;
+    const posA = a.position || 999;
+    const posB = b.position || 999;
+    return posA - posB;
+  });
+  return sorted.slice(0, 10).map((row) => ({
     value: row.keys?.[0] || (type === 'query' ? 'Bilinmeyen sorgu' : 'Bilinmeyen sayfa'),
     clicks: row.clicks || 0,
     impressions: row.impressions || 0,

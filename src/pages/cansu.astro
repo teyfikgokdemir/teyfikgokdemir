@@ -329,14 +329,86 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             const b = String(right ?? '').toLocaleLowerCase('tr-TR');
             return a < b ? -1 : a > b ? 1 : 0;
         };
-        const sortByMetric = (items, metric, secondary) => [...(items || [])].sort((left, right) => {
-            const difference = numericValue(metric(right)) - numericValue(metric(left));
-            return difference || secondary(left, right);
+        const sortOverviewSites = (items) => [...(items || [])].sort((a, b) => {
+            const aSuspended = a.key === 'iran-ahli';
+            const bSuspended = b.key === 'iran-ahli';
+            if (aSuspended !== bSuspended) return aSuspended ? 1 : -1;
+
+            const aHealthy = a.health?.ok && a.health?.ssl?.valid !== false;
+            const bHealthy = b.health?.ok && b.health?.ssl?.valid !== false;
+            if (aHealthy !== bHealthy) return aHealthy ? -1 : 1;
+
+            const aVisits = numericValue(a.cloudflare?.last24h?.uniqueVisitors);
+            const bVisits = numericValue(b.cloudflare?.last24h?.uniqueVisitors);
+            if (bVisits !== aVisits) return bVisits - aVisits;
+
+            const aReqs = numericValue(a.cloudflare?.last24h?.requests);
+            const bReqs = numericValue(b.cloudflare?.last24h?.requests);
+            if (bReqs !== aReqs) return bReqs - aReqs;
+
+            const aMs = numericValue(a.health?.ms);
+            const bMs = numericValue(b.health?.ms);
+            if (aMs && bMs && aMs !== bMs) return aMs - bMs;
+
+            return compareText(a.name, b.name);
         });
-        const siteVisitorMetric = (site) => site.cloudflare?.last24h?.uniqueVisitors;
-        const sourceVisitorMetric = (source) => source.visits ?? source.uniqueVisitors ?? source.requests;
-        const countryVisitorMetric = (country) => country.uniqueVisitors ?? country.visits ?? country.requests;
-        const seoClickMetric = (row) => row.clicks;
+
+        const sortSources = (items) => [...(items || [])].sort((a, b) => {
+            const aVisits = numericValue(a.visits ?? a.uniqueVisitors ?? a.requests);
+            const bVisits = numericValue(b.visits ?? b.uniqueVisitors ?? b.requests);
+            if (bVisits !== aVisits) return bVisits - aVisits;
+
+            const aReqs = numericValue(a.requests);
+            const bReqs = numericValue(b.requests);
+            if (bReqs !== aReqs) return bReqs - aReqs;
+
+            return compareText(a.host, b.host);
+        });
+
+        const sortCountries = (items) => [...(items || [])].sort((a, b) => {
+            const aReqs = numericValue(a.requests ?? a.uniqueVisitors ?? a.visits);
+            const bReqs = numericValue(b.requests ?? b.uniqueVisitors ?? b.visits);
+            if (bReqs !== aReqs) return bReqs - aReqs;
+
+            const aBytes = numericValue(a.bytes);
+            const bBytes = numericValue(b.bytes);
+            if (bBytes !== aBytes) return bBytes - aBytes;
+
+            return compareText(a.country, b.country);
+        });
+
+        const sortSeoRows = (items) => [...(items || [])].sort((a, b) => {
+            const aClicks = numericValue(a.clicks);
+            const bClicks = numericValue(b.clicks);
+            if (bClicks !== aClicks) return bClicks - aClicks;
+
+            const aImp = numericValue(a.impressions);
+            const bImp = numericValue(b.impressions);
+            if (bImp !== aImp) return bImp - aImp;
+
+            const aCtr = numericValue(a.ctr);
+            const bCtr = numericValue(b.ctr);
+            if (bCtr !== aCtr) return bCtr - aCtr;
+
+            const aPos = numericValue(a.position) || 999;
+            const bPos = numericValue(b.position) || 999;
+            if (aPos !== bPos) return aPos - bPos;
+
+            return compareText(a.value, b.value);
+        });
+
+        const sortGscSites = (items) => [...(items || [])].sort((a, b) => {
+            const aClicks = numericValue(a.periods?.thirtyDays?.clicks ?? a.periods?.sevenDays?.clicks);
+            const bClicks = numericValue(b.periods?.thirtyDays?.clicks ?? b.periods?.sevenDays?.clicks);
+            if (bClicks !== aClicks) return bClicks - aClicks;
+
+            const aImp = numericValue(a.periods?.thirtyDays?.impressions ?? a.periods?.sevenDays?.impressions);
+            const bImp = numericValue(b.periods?.thirtyDays?.impressions ?? b.periods?.sevenDays?.impressions);
+            if (bImp !== aImp) return bImp - aImp;
+
+            return compareText(a.key, b.key);
+        });
+
         const signalMeta = (signal) => ({
             high: { label: 'YÜKSEK SİNYAL', color: '#fb7185', bg: 'rgba(251,113,133,.12)' },
             medium: { label: 'ORTA SİNYAL', color: '#fbbf24', bg: 'rgba(251,191,36,.12)' },
@@ -388,7 +460,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         const formatPercent = (value) => `${(Number(value || 0) * 100).toFixed(1)}%`;
         const formatPosition = (value) => Number(value || 0) ? Number(value).toFixed(1) : '—';
         const seoTable = (title, rows, type) => {
-            const orderedRows = sortByMetric(rows, seoClickMetric, (left, right) => compareText(left.value, right.value));
+            const orderedRows = sortSeoRows(rows);
             const body = orderedRows.slice(0, 5).map((row) => `<tr><td title="${escapeHtml(row.value)}">${escapeHtml(row.value)}</td><td>${formatNumber(row.clicks)}</td><td>${formatNumber(row.impressions)}</td><td>${formatPercent(row.ctr)}</td><td>${formatPosition(row.position)}</td></tr>`).join('');
             return `<div style="margin-top:1rem;"><div style="color:#7dd3fc;font-size:.65rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;">${title}</div>${body ? `<table class="seo-table"><thead><tr><th>${type === 'query' ? 'Sorgu' : 'Landing page'}</th><th>Tık.</th><th>Göst.</th><th>CTR</th><th>Ort.</th></tr></thead><tbody>${body}</tbody></table>` : '<div class="country-empty">Bu dönem için veri yok</div>'}</div>`;
         };
@@ -403,7 +475,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                     seoContent.innerHTML = `<div class="seo-periods"><div class="seo-period"><span class="seo-period__label">Son 7 gün</span><strong class="seo-period__value">Yetkilendirme bekliyor</strong></div><div class="seo-period"><span class="seo-period__label">Son 30 gün</span><strong class="seo-period__value">Yetkilendirme bekliyor</strong></div></div><div style="margin-top:.85rem;"><a class="seo-connect" href="/api/gsc/start"><i class="fa-brands fa-google"></i> Search Console'u bağla</a></div>`;
                     return;
                 }
-                const siteCards = sortByMetric(data.sites, (site) => site.periods?.sevenDays?.clicks ?? site.periods?.thirtyDays?.clicks, (left, right) => compareText(left.key, right.key)).map((site) => {
+                const siteCards = sortGscSites(data.sites).map((site) => {
                     if (!site.ok) return `<article class="seo-site"><div class="seo-site__head"><div><div class="seo-site__name">${escapeHtml(site.name)}</div><div class="seo-site__property">${escapeHtml(site.property)}</div></div><span class="seo-panel__badge">VERİ YOK</span></div><div class="country-empty">${escapeHtml(site.error || 'Search Console verisi alınamadı')}</div></article>`;
                     const seven = site.periods?.sevenDays || {};
                     const thirty = site.periods?.thirtyDays || {};
@@ -439,23 +511,26 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 document.getElementById('workflow-detail').textContent = failed ? `${failed} başarısız run (24 saat)` : 'Son 24 saatte failure yok';
                 document.getElementById('bot-summary-title').textContent = `${cfActive} Aktif Motor`;
                 document.getElementById('bot-summary-detail').textContent = `Resmi Bot API'si Enterprise gerektirir; kartlarda otonom sinyal izleniyor.`;
-                summaryGrid.innerHTML = data.sites.map((site) => card(site)).join('');
-                const orderedSites = sortByMetric(data.sites, siteVisitorMetric, (left, right) => compareText(left.key, right.key));
-                sourceGrid.innerHTML = orderedSites.map((site) => {
-                    const sources = sortByMetric(site.cloudflare?.sources, sourceVisitorMetric, (left, right) => compareText(left.host, right.host)).slice(0, 8);
-                    const sourceRows = sources.map((item) => `<div class="source-row"><div><div class="source-row__host" title="${item.host}">${item.host}</div><div class="source-row__meta">${formatNumber(item.requests)} istek · ${formatBytes(item.bytes)}</div></div><strong class="source-row__value">${formatNumber(item.visits)} visit</strong></div>`).join('');
+                
+                const sortedSites = sortOverviewSites(data.sites);
+                summaryGrid.innerHTML = sortedSites.map((site) => card(site)).join('');
+                sourceGrid.innerHTML = sortedSites.map((site) => {
+                    const sortedSources = sortSources(site.cloudflare?.sources).slice(0, 8);
+                    const sourceRows = sortedSources.map((item) => `<div class="source-row"><div><div class="source-row__host" title="${item.host}">${item.host}</div><div class="source-row__meta">${formatNumber(item.requests)} istek · ${formatBytes(item.bytes)}</div></div><strong class="source-row__value">${formatNumber(item.visits)} visit</strong></div>`).join('');
                     return `<article class="source-panel"><div class="source-panel__head"><div><div class="source-panel__name">${site.name}</div><div class="source-panel__summary">Son 24 saat · referrer kaynakları</div></div><span class="seo-panel__badge">TOP 12</span></div>${sourceRows || '<div class="country-empty">Kaynak verisi bekleniyor</div>'}</article>`;
                 }).join('');
-                countryGrid.innerHTML = data.sites.map((site) => {
-                    const countries = sortByMetric(site.cloudflare?.countries, countryVisitorMetric, (left, right) => compareText(left.country, right.country));
-                    const maxRequests = Math.max(1, ...countries.map((item) => numericValue(item.requests)));
-                    const totalRequests = countries.reduce((sum, item) => sum + numericValue(item.requests), 0);
-                    const rows = countries.slice(0, 15).map((item, index) => { const countryName = getCountryName(item.country); return `<div class="country-row"><span class="country-row__rank">${String(index + 1).padStart(2, '0')}</span><span class="country-row__name" title="${countryName}">${countryName}</span><span class="country-row__track"><span class="country-row__bar" style="width:${Math.max(3, Math.round((numericValue(item.requests) / maxRequests) * 100))}%"></span></span><span class="country-row__stats"><strong class="country-row__value">${formatNumber(item.requests)}</strong><span class="country-row__share">${Number(item.requestShare || (totalRequests ? (numericValue(item.requests) / totalRequests) * 100 : 0)).toFixed(1)}% pay</span></span><span class="country-row__traffic">${formatBytes(item.bytes)}</span></div>`; }).join('');
+                countryGrid.innerHTML = sortedSites.map((site) => {
+                    const sortedCountries = sortCountries(site.cloudflare?.countries);
+                    const maxRequests = Math.max(1, ...sortedCountries.map((item) => numericValue(item.requests)));
+                    const totalRequests = sortedCountries.reduce((sum, item) => sum + numericValue(item.requests), 0);
+                    const rows = sortedCountries.slice(0, 15).map((item, index) => { const countryName = getCountryName(item.country); return `<div class="country-row"><span class="country-row__rank">${String(index + 1).padStart(2, '0')}</span><span class="country-row__name" title="${countryName}">${countryName}</span><span class="country-row__track"><span class="country-row__bar" style="width:${Math.max(3, Math.round((numericValue(item.requests) / maxRequests) * 100))}%"></span></span><span class="country-row__stats"><strong class="country-row__value">${formatNumber(item.requests)}</strong><span class="country-row__share">${Number(item.requestShare || (totalRequests ? (numericValue(item.requests) / totalRequests) * 100 : 0)).toFixed(1)}% pay</span></span><span class="country-row__traffic">${formatBytes(item.bytes)}</span></div>`; }).join('');
                     return `<article class="country-panel"><div class="country-panel__head"><div><div class="country-panel__name">${site.name}</div><div class="country-panel__summary">${formatNumber(totalRequests)} ülke isteği · 24 saat</div></div><span class="country-panel__badge">TOP 15</span></div>${rows || '<div class="country-empty">Cloudflare ülke verisi bekleniyor</div>'}</article>`;
                 }).join('');
-                data.sites.forEach((site) => {
+                const tbody = document.querySelector('tbody');
+                sortedSites.forEach((site) => {
                     const row = document.querySelector(`tr[data-site="${site.key}"]`);
                     if (!row) return;
+                    if (tbody) tbody.appendChild(row);
                     const statusCell = row.cells[3];
                     const h = site.health;
                     const g = site.github;
