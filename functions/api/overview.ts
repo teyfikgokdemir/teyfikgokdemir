@@ -163,6 +163,17 @@ async function cloudflareTraffic(site: Site, env: Env) {
         bytes: 0,
       }));
     }
+    if (sources.length === 0) {
+      const totalReqs = daily?.sum?.requests || groups.reduce((sum, group) => sum + (group.sum?.requests || 0), 0);
+      if (totalReqs > 0) {
+        sources = [{
+          host: 'Doğrudan / bilinmiyor',
+          requests: totalReqs,
+          visits: daily?.uniq?.uniques || 0,
+          bytes: 0,
+        }];
+      }
+    }
     return {
       ok: true,
       available: true,
