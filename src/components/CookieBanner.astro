@@ -96,30 +96,12 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
 
     let analyticsLoaded = false;
 
-    const denyAnalytics = () => {
-      window['ga-disable-' + measurementId] = true;
-      if (typeof window.gtag === 'function') {
-        window.gtag('consent', 'update', {
-          analytics_storage: 'denied',
-          ad_storage: 'denied',
-          ad_user_data: 'denied',
-          ad_personalization: 'denied'
-        });
-      }
-    };
-
     const loadAnalytics = () => {
       if (analyticsLoaded) return;
       analyticsLoaded = true;
       window['ga-disable-' + measurementId] = false;
       window.dataLayer = window.dataLayer || [];
       window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
-      window.gtag('consent', 'default', {
-        analytics_storage: 'granted',
-        ad_storage: 'denied',
-        ad_user_data: 'denied',
-        ad_personalization: 'denied'
-      });
       window.gtag('js', new Date());
       window.gtag('config', measurementId, { anonymize_ip: true });
 
@@ -129,18 +111,20 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
       document.head.appendChild(script);
     };
 
-    const stored = localStorage.getItem(key);
-    if (stored === 'accepted') {
-      loadAnalytics();
-      return;
-    }
-    if (stored === 'rejected') {
-      denyAnalytics();
-      return;
-    }
+    window.addEventListener('load', () => {
+      if (window.requestIdleCallback) {
+        window.requestIdleCallback(loadAnalytics, { timeout: 2200 });
+      } else {
+        window.setTimeout(loadAnalytics, 1600);
+      }
+    });
 
-    denyAnalytics();
-    banner.hidden = false;
+    const stored = localStorage.getItem(key);
+    if (stored === 'accepted' || stored === 'rejected') {
+      banner.hidden = true;
+    } else {
+      banner.hidden = false;
+    }
 
     banner.querySelector('[data-cookie-accept]')?.addEventListener('click', () => {
       localStorage.setItem(key, 'accepted');
@@ -150,7 +134,6 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
 
     banner.querySelector('[data-cookie-reject]')?.addEventListener('click', () => {
       localStorage.setItem(key, 'rejected');
-      denyAnalytics();
       banner.hidden = true;
     });
   })();
