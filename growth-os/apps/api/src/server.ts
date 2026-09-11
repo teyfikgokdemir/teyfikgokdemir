@@ -34,6 +34,34 @@ function compareAudits(previous: AuditPayload | null, current: AuditPayload) {
   };
 }
 
+async function refreshAuditActions(projectId:string, auditId:string, result:AuditPayload) {
+  const client = await pool.connect();
+  try {
+    await client.query('begin');
+    await client.query("update alerts set status='resolved', resolved_at=now() where project_id=$1 and source='audit_engine' and status='open'", [projectId]);
+    await client.query("update recommendations set status='superseded', decided_at=now() where project_id=$1 and source='audit_engine' and status='proposed'", [projectId]);
+
+    for (const issue of result.issues.filter((i) => i.status !== 'pass')) {
+      await client.query(
+        `insert into recommendations(project_id,source,priority,title,rationale,proposed_action,status)
+         values($1,'audit_engine',$2,$3,$4,$5,'proposed')`,
+        [projectId, issue.severity, issue.title, issue.detail, { type:'site_fix', issueKey:issue.key, recommendation:issue.recommendation, auditId }]
+      );
+      if (['critical','high'].includes(issue.severity)) {
+        await client.query(
+          `insert into alerts(project_id,source,severity,title,message,status,payload)
+           values($1,'audit_engine',$2,$3,$4,'open',$5)`,
+          [projectId, issue.severity, issue.title, issue.recommendation, { issueKey:issue.key, auditId }]
+        );
+      }
+    }
+    await client.query('commit');
+  } catch (error) {
+    await client.query('rollback');
+    throw error;
+  } finally { client.release(); }
+}
+
 app.get('/health', (_req, res) => res.json({ ok: true, service: 'growth-os-api', time: new Date().toISOString() }));
 
 app.get('/projects', async (_req, res) => {
@@ -90,11 +118,37 @@ app.get('/projects/:id/recommendations', async (req, res) => {
   res.json(rows);
 });
 
+app.get('/projects/:id/metrics', async (req, res) => {
+  const { rows } = await pool.query(`
+    select provider, external_campaign_id, campaign_name, metric_date, spend, impressions, clicks, conversions,
+           attributed_revenue, crm_revenue, gross_profit
+    from campaign_metrics where project_id=$1 order by metric_date desc, spend desc limit 250`, [req.params.id]);
+  res.json(rows);
+});
+
+app.get('/projects/:id/leads', async (req, res) => {
+  const { rows } = await pool.query(`select id,source,campaign_id,name,email,phone,status,lead_value,won_revenue,owner,created_at,updated_at
+    from crm_leads where project_id=$1 order by created_at desc limit 250`, [req.params.id]);
+  res.json(rows);
+});
+
+app.get('/projects/:id/integrations', async (req, res) => {
+  const { rows } = await pool.query(`select id,provider,account_label,external_account_id,status,mode,last_sync_at,created_at
+    from integrations where project_id=$1 order by provider`, [req.params.id]);
+  res.json(rows);
+});
+
+app.get('/projects/:id/actions', async (req, res) => {
+  const { rows } = await pool.query(`select id,recommendation_id,provider,action_type,status,approved_by,executed_at,created_at
+    from action_log where project_id=$1 order by created_at desc limit 100`, [req.params.id]);
+  res.json(rows);
+});
+
 app.put('/projects/:id/targets', async (req, res) => {
   const schema = z.object({
-    targetRoas:z.number().nonnegative().optional(), breakEvenRoas:z.number().nonnegative().optional(), targetCpa:z.number().nonnegative().optional(),
-    targetMer:z.number().nonnegative().optional(), avgOrderValue:z.number().nonnegative().optional(), grossMarginPct:z.number().min(0).max(1).optional(),
-    returnRatePct:z.number().min(0).max(1).optional(), shippingCost:z.number().nonnegative().optional(), feePct:z.number().min(0).max(1).optional()
+    targetRoas:z.number().nonnegative().nullable().optional(), breakEvenRoas:z.number().nonnegative().nullable().optional(), targetCpa:z.number().nonnegative().nullable().optional(),
+    targetMer:z.number().nonnegative().nullable().optional(), avgOrderValue:z.number().nonnegative().nullable().optional(), grossMarginPct:z.number().min(0).max(1).nullable().optional(),
+    returnRatePct:z.number().min(0).max(1).nullable().optional(), shippingCost:z.number().nonnegative().nullable().optional(), feePct:z.number().min(0).max(1).nullable().optional()
   });
   const parsed = schema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error:'Hedef değerleri geçersiz.' });
@@ -136,6 +190,7 @@ app.post('/audit', async (req, res) => {
     const previousResult = await pool.query('select payload from audits where project_id=$1 order by created_at desc limit 1', [project.id]);
     const previous = previousResult.rows[0]?.payload as AuditPayload | undefined;
     const insert = await pool.query(`insert into audits(project_id, domain, overall_score, seo_score, geo_score, aeo_score, aio_score, ads_readiness_score, payload) values($1,$2,$3,$4,$5,$6,$7,$8,$9) returning id, created_at`, [project.id, result.domain, result.overallScore, result.scores.seo, result.scores.geo, result.scores.aeo, result.scores.aio, result.scores.adsReadiness, result]);
+    await refreshAuditActions(project.id, insert.rows[0].id, result);
     return res.json({ project, audit: { ...result, id: insert.rows[0].id, createdAt: insert.rows[0].created_at }, comparison: compareAudits(previous || null, result) });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Audit başarısız';
