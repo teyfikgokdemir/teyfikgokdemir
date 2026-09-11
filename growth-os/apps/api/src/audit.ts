@@ -1,4 +1,6 @@
 import * as cheerio from 'cheerio';
+import { lookup } from 'node:dns/promises';
+import net from 'node:net';
 
 export type AuditIssue = {
   key: string;
@@ -11,8 +13,48 @@ export type AuditIssue = {
 
 const normalizeDomain = (input: string) => {
   const value = input.trim();
-  return /^https?:\/\//i.test(value) ? value.replace(/\/$/, '') : `https://${value.replace(/\/$/, '')}`;
+  const normalized = /^https?:\/\//i.test(value) ? value : `https://${value}`;
+  const url = new URL(normalized);
+  if (!['http:', 'https:'].includes(url.protocol)) throw new Error('Yalnız HTTP/HTTPS domainleri taranabilir.');
+  url.username = '';
+  url.password = '';
+  url.hash = '';
+  return url.toString().replace(/\/$/, '');
 };
+
+function isPrivateIp(ip: string) {
+  if (net.isIPv4(ip)) {
+    const [a, b] = ip.split('.').map(Number);
+    return a === 10 || a === 127 || a === 0 || (a === 169 && b === 254) || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168);
+  }
+  const value = ip.toLowerCase();
+  return value === '::1' || value.startsWith('fc') || value.startsWith('fd') || value.startsWith('fe80:') || value === '::';
+}
+
+async function assertPublicUrl(rawUrl: string) {
+  const url = new URL(rawUrl);
+  const host = url.hostname.toLowerCase();
+  if (host === 'localhost' || host.endsWith('.localhost') || host.endsWith('.local')) throw new Error('Özel ağ adresleri taranamaz.');
+  if (net.isIP(host)) {
+    if (isPrivateIp(host)) throw new Error('Özel ağ IP adresleri taranamaz.');
+    return;
+  }
+  const resolved = await lookup(host, { all: true, verbatim: true });
+  if (!resolved.length || resolved.some((item) => isPrivateIp(item.address))) throw new Error('Domain güvenli bir public IP adresine çözülmüyor.');
+}
+
+async function safeFetch(rawUrl: string, init: RequestInit = {}, redirects = 0): Promise<Response> {
+  if (redirects > 5) throw new Error('Çok fazla yönlendirme tespit edildi.');
+  await assertPublicUrl(rawUrl);
+  const response = await fetch(rawUrl, { ...init, redirect: 'manual' });
+  if (response.status >= 300 && response.status < 400) {
+    const location = response.headers.get('location');
+    if (!location) return response;
+    const next = new URL(location, rawUrl).toString();
+    return safeFetch(next, init, redirects + 1);
+  }
+  return response;
+}
 
 const scoreFromIssues = (issues: AuditIssue[], keys: string[]) => {
   const selected = issues.filter((issue) => keys.includes(issue.key));
@@ -32,8 +74,7 @@ export async function runAudit(inputDomain: string) {
   const timeout = setTimeout(() => controller.abort(), 15000);
   let response: Response;
   try {
-    response = await fetch(domain, {
-      redirect: 'follow',
+    response = await safeFetch(domain, {
       signal: controller.signal,
       headers: { 'user-agent': 'GrowthOS-AuditBot/0.1 (+private audit)' },
     });
@@ -69,8 +110,8 @@ export async function runAudit(inputDomain: string) {
   const robotsUrl = new URL('/robots.txt', response.url).toString();
   const sitemapUrl = new URL('/sitemap.xml', response.url).toString();
   const [robotsRes, sitemapRes] = await Promise.allSettled([
-    fetch(robotsUrl, { redirect: 'follow' }),
-    fetch(sitemapUrl, { redirect: 'follow' }),
+    safeFetch(robotsUrl),
+    safeFetch(sitemapUrl),
   ]);
   const robotsOk = robotsRes.status === 'fulfilled' && robotsRes.value.ok;
   const sitemapOk = sitemapRes.status === 'fulfilled' && sitemapRes.value.ok;
