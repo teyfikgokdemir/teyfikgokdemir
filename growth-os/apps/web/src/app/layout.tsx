@@ -1,4 +1,5 @@
 import './styles.css';
+import './report.css';
 
 export const metadata = {
   title: 'Growth OS',
