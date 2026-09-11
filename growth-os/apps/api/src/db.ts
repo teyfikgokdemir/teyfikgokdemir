@@ -45,6 +45,15 @@ export async function initDb() {
       unique(project_id, provider, external_account_id)
     );
 
+    create table if not exists oauth_states (
+      state text primary key,
+      project_id uuid not null references projects(id) on delete cascade,
+      provider text not null,
+      return_path text,
+      expires_at timestamptz not null,
+      created_at timestamptz not null default now()
+    );
+
     create table if not exists campaign_metrics (
       id bigserial primary key,
       project_id uuid not null references projects(id) on delete cascade,
@@ -143,5 +152,6 @@ export async function initDb() {
     create index if not exists idx_crm_leads_project_status on crm_leads(project_id, status);
     create index if not exists idx_alerts_project_status on alerts(project_id, status, created_at desc);
     create index if not exists idx_recommendations_project_status on recommendations(project_id, status, created_at desc);
+    create index if not exists idx_oauth_states_expiry on oauth_states(expires_at);
   `);
 }
