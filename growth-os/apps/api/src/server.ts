@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { initDb, pool } from './db.js';
 import { runAudit } from './audit.js';
 import { buildGoogleAuthUrl, discoverGoogleResources, encryptSecret, exchangeGoogleCode } from './google.js';
+import { buildMetaAuthUrl, discoverMetaResources, exchangeMetaCode, exchangeMetaLongLivedToken, metaCredentialMetadata } from './meta.js';
 
 type AuditPayload = Awaited<ReturnType<typeof runAudit>>;
 
@@ -21,7 +22,7 @@ function compareAudits(previous: AuditPayload | null, current: AuditPayload) {
   const newIssues = current.issues.filter((issue) => issue.status !== 'pass' && prevByKey.get(issue.key)?.status === 'pass');
   const regressed = previous.issues.filter((issue) => issue.status === 'pass' && currentByKey.get(issue.key)?.status !== 'pass');
   const scoreDelta = current.overallScore - previous.overallScore;
-  const criticalOpen = current.issues.filter((i) => i.status !== 'pass' && ['critical','high'].includes(i.severity));
+  const criticalOpen = current.issues.filter((i) => issue.status !== 'pass' && ['critical','high'].includes(issue.severity));
   const ready = criticalOpen.length === 0 && current.scores.adsReadiness >= 80 && current.overallScore >= 80;
   return { previousScore:previous.overallScore,currentScore:current.overallScore,scoreDelta,
     fixed:fixed.map(i=>({key:i.key,title:i.title})),stillOpen:stillOpen.map(i=>({key:i.key,title:i.title,severity:i.severity})),newIssues:newIssues.map(i=>({key:i.key,title:i.title,severity:i.severity})),regressed:regressed.map(i=>({key:i.key,title:i.title})),
@@ -100,6 +101,45 @@ app.get('/oauth/google/callback', async (req,res)=>{
 app.get('/projects/:id/integrations/google/resources',async(req,res)=>{
   try { res.json(await discoverGoogleResources(req.params.id)); }
   catch(error){res.status(400).json({error:error instanceof Error?error.message:'Google kaynakları okunamadı.'})}
+});
+
+app.post('/projects/:id/integrations/meta/connect', async (req,res)=>{
+  const project=await pool.query('select id from projects where id=$1',[req.params.id]);
+  if(!project.rows[0]) return res.status(404).json({error:'Proje bulunamadı'});
+  await pool.query("delete from oauth_states where expires_at < now()");
+  const state=crypto.randomBytes(32).toString('base64url');
+  await pool.query("insert into oauth_states(state,project_id,provider,return_path,expires_at) values($1,$2,'meta',$3,now()+interval '10 minutes')",[state,req.params.id,'/?integration=meta']);
+  try { res.json({authUrl:buildMetaAuthUrl(state)}); }
+  catch(error){res.status(503).json({error:error instanceof Error?error.message:'Meta OAuth yapılandırılmamış.'})}
+});
+
+app.get('/oauth/meta/callback', async (req,res)=>{
+  const code=typeof req.query.code==='string'?req.query.code:'';
+  const state=typeof req.query.state==='string'?req.query.state:'';
+  const appBase=process.env.APP_BASE_URL||'http://localhost:3000';
+  if(!code||!state) return res.redirect(`${appBase}/?integration=meta_error&reason=missing_code`);
+  const stateResult=await pool.query("delete from oauth_states where state=$1 and provider='meta' and expires_at>now() returning project_id,return_path",[state]);
+  if(!stateResult.rows[0]) return res.redirect(`${appBase}/?integration=meta_error&reason=invalid_state`);
+  try {
+    const shortToken=await exchangeMetaCode(code);
+    const longToken=await exchangeMetaLongLivedToken(shortToken.access_token!);
+    const resources=await discoverMetaResources(longToken.access_token!);
+    const accounts=((resources.adAccounts as {data?:Array<{id?:string;account_id?:string;name?:string}>})?.data)||[];
+    const profile=resources.profile as {id?:string;name?:string};
+    const label=accounts.length===1?(accounts[0].name||'Meta Ads'):accounts.length>1?`${accounts.length} Meta Ads hesabı`:(profile.name||'Meta Ads');
+    await pool.query(`insert into integrations(project_id,provider,account_label,external_account_id,status,mode,metadata,last_sync_at)
+      values($1,'meta_ads',$2,'oauth_primary','connected','read_only',$3,now())
+      on conflict(project_id,provider,external_account_id) do update set account_label=excluded.account_label,status='connected',mode='read_only',metadata=excluded.metadata,last_sync_at=now()`,
+      [stateResult.rows[0].project_id,label,metaCredentialMetadata(longToken.access_token!,longToken.expires_in,{profile,adAccounts:accounts})]);
+    res.redirect(`${appBase}/?integration=meta_success&project=${stateResult.rows[0].project_id}`);
+  } catch(error){console.error(error);res.redirect(`${appBase}/?integration=meta_error&reason=exchange_failed`)}
+});
+
+app.get('/projects/:id/integrations/meta/resources',async(req,res)=>{
+  const {rows}=await pool.query("select metadata from integrations where project_id=$1 and provider='meta_ads' and status='connected' order by created_at desc limit 1",[req.params.id]);
+  const metadata=rows[0]?.metadata as {profile?:unknown;adAccounts?:unknown}|undefined;
+  if(!metadata) return res.status(404).json({error:'Meta bağlantısı bulunamadı.'});
+  res.json({profile:metadata.profile||null,adAccounts:metadata.adAccounts||[]});
 });
 
 app.put('/projects/:id/targets',async(req,res)=>{
