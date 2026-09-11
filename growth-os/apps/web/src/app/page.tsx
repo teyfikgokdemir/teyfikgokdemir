@@ -103,7 +103,7 @@ export default function Home() {
     <aside className="side">
       <div className="brand"><span>G</span><div><strong>Growth OS</strong><small>Private Control Center</small></div></div>
       <nav>{navItems.map(item=><button key={item.key} className={section===item.key?'active':''} onClick={()=>setSection(item.key)}>{item.label}</button>)}</nav>
-      <div className="stage">Core / Growth Control Center v0.5</div>
+      <div className="stage">Core / Growth Control Center v0.6</div>
     </aside>
 
     <section className="content">
@@ -117,7 +117,7 @@ export default function Home() {
       {error && <div className="error">{error}</div>}
       {moduleLoading && <div className="moduleLoading">Veriler güncelleniyor…</div>}
 
-      {section==='overview' && <OverviewView overview={overview} />}
+      {section==='overview' && <OverviewView overview={overview} projects={projects} audits={audits} alerts={alerts} recommendations={recommendations} onNavigate={setSection} />}
       {section==='projects' && <ProjectsView projects={projects} selected={selectedProject} onSelect={setSelectedProject} />}
       {section==='audit' && <AuditView domain={domain} setDomain={setDomain} submit={submit} loading={loading} audit={audit} comparison={comparison} openIssues={openIssues} criticalCount={criticalCount} mediumCount={mediumCount} verdict={verdict} />}
       {section==='final' && <FinalView comparison={comparison} />}
@@ -131,9 +131,54 @@ export default function Home() {
   </main>;
 }
 
-function OverviewView({overview}:{overview:Overview|null}) {
-  if(!overview) return <div className="empty"><b>Kontrol merkezi hazır.</b> Bir proje seç veya Audit bölümünden yeni domain analizi başlat.</div>;
-  return <section className="growthPanel"><div className="panelTitle"><div><p className="eyebrow">Growth Control Center · Son 30 gün</p><h2>{overview.project.name}</h2></div><span>{overview.project.domain}</span></div><div className="kpiGrid"><Kpi label="Reklam Harcaması" value={money(overview.metrics30d.spend)} /><Kpi label="Atfedilen Ciro" value={money(overview.metrics30d.revenue)} /><Kpi label="Brüt Katkı" value={money(overview.metrics30d.grossProfit)} /><Kpi label="ROAS" value={overview.metrics30d.roas == null ? '—' : overview.metrics30d.roas.toFixed(2)} target={overview.targets?.target_roas ? `Hedef ${overview.targets.target_roas}` : undefined}/><Kpi label="CRM Lead" value={String(overview.crm.total)} note={`${overview.crm.won} kazanıldı`} /><Kpi label="Açık Uyarı" value={String(overview.openAlerts)} note={`${overview.pendingRecommendations} öneri bekliyor`} /></div></section>;
+function OverviewView({overview,projects,audits,alerts,recommendations,onNavigate}:{overview:Overview|null;projects:Project[];audits:AuditRow[];alerts:AlertRow[];recommendations:RecommendationRow[];onNavigate:(section:Section)=>void}) {
+  const latest = audits[0];
+  const avgScore = audits.length ? Math.round(audits.reduce((sum,a)=>sum+a.overall_score,0)/audits.length) : 0;
+  const criticalAlerts = alerts.filter(a=>['critical','high'].includes(a.severity||'')).length;
+  const pending = recommendations.filter(r=>(r.status||'proposed')==='proposed').length;
+  const lastAuditDate = latest?.created_at ? new Date(latest.created_at).toLocaleString('tr-TR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : 'Henüz tarama yok';
+
+  return <div className="dashboardHome">
+    <section className="dashboardHero">
+      <div><p className="eyebrow">Growth OS · Genel Bakış</p><h2>Bugün neye müdahale etmeliyiz?</h2><p>Projeler, audit sonuçları, uyarılar ve büyüme sinyalleri tek merkezde.</p></div>
+      <button className="primaryAction" onClick={()=>onNavigate('audit')}>Yeni Audit Başlat</button>
+    </section>
+
+    <section className="dashboardStats">
+      <div><span>Toplam Proje</span><strong>{projects.length}</strong><small>aktif portföy</small></div>
+      <div><span>Son Audit Skoru</span><strong>{latest ? latest.overall_score : '—'}</strong><small>{lastAuditDate}</small></div>
+      <div><span>Ortalama Skor</span><strong>{audits.length ? avgScore : '—'}</strong><small>{audits.length} audit</small></div>
+      <div><span>Kritik Uyarı</span><strong>{criticalAlerts}</strong><small>{alerts.length} toplam uyarı</small></div>
+      <div><span>Bekleyen Öneri</span><strong>{pending}</strong><small>aksiyon bekliyor</small></div>
+    </section>
+
+    <div className="dashboardGrid">
+      <section className="dashboardMainCard">
+        <div className="dashboardSectionHead"><div><p className="eyebrow">Aktif Proje</p><h3>{overview?.project.name || 'Proje seçilmedi'}</h3></div><button onClick={()=>onNavigate('projects')}>Projeleri Aç</button></div>
+        {overview ? <>
+          <div className="overviewScoreRow">
+            <div className="bigScore"><span>Audit skoru</span><strong>{overview.latestAudit?.overall_score ?? latest?.overall_score ?? '—'}</strong></div>
+            <div className="overviewMini"><span>ROAS</span><strong>{overview.metrics30d.roas == null ? '—' : overview.metrics30d.roas.toFixed(2)}</strong></div>
+            <div className="overviewMini"><span>Brüt Katkı</span><strong>{money(overview.metrics30d.grossProfit)}</strong></div>
+            <div className="overviewMini"><span>CRM Lead</span><strong>{overview.crm.total}</strong></div>
+          </div>
+          <div className="attentionStrip"><span>{overview.openAlerts} açık uyarı</span><span>{overview.pendingRecommendations} bekleyen öneri</span><span>{overview.project.domain}</span></div>
+        </> : <div className="empty">Audit bölümünden ilk projeyi oluştur.</div>}
+      </section>
+
+      <section className="quickActions">
+        <p className="eyebrow">Hızlı Aksiyonlar</p>
+        <button onClick={()=>onNavigate('audit')}><strong>Yeni Audit</strong><span>Yeni site tara veya mevcut projeyi yeniden kontrol et.</span></button>
+        <button onClick={()=>onNavigate('final')}><strong>Final Check</strong><span>Önceki audit ile son durumu karşılaştır.</span></button>
+        <button onClick={()=>onNavigate('recommendations')}><strong>Recommendations</strong><span>Bekleyen iyileştirme önerilerini incele.</span></button>
+      </section>
+    </div>
+
+    <section className="recentAudits">
+      <div className="dashboardSectionHead"><div><p className="eyebrow">Son Aktivite</p><h3>Son auditler</h3></div><button onClick={()=>onNavigate('audit')}>Audit'e Git</button></div>
+      {audits.length===0 ? <div className="empty">Henüz audit geçmişi yok.</div> : <div className="recentAuditList">{audits.slice(0,5).map(a=><article key={a.id}><div><strong>{a.domain}</strong><span>{new Date(a.created_at).toLocaleString('tr-TR')}</span></div><div className="auditScorePill">{a.overall_score}</div></article>)}</div>}
+    </section>
+  </div>;
 }
 
 function ProjectsView({projects,selected,onSelect}:{projects:Project[];selected:Project|null;onSelect:(p:Project)=>void}) {
