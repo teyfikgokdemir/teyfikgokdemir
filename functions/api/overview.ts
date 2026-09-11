@@ -1,5 +1,6 @@
 interface Env {
   CF_API_TOKEN?: string;
+  CF_API_TOKEN_OLIVON?: string;
   CF_ACCOUNT_ID?: string;
   GITHUB_TOKEN?: string;
   CANSU_ANALYTICS_DB?: D1Database;
@@ -21,7 +22,7 @@ const sites: Site[] = [
   { key: 'qct-studio', name: 'qct-studio', url: 'https://qctstudio.com/', repo: 'qct-studio', actions: 'https://github.com/teyfikgokdemir/qct-studio/actions', zoneTag: '44ba26775a815ed1d94f1655e8b830dd' },
   { key: 'qct-commerce-tr', name: 'qct-commerce-tr', url: 'https://qctcommerce.com/', repo: 'qct-commerce-tr', actions: 'https://github.com/teyfikgokdemir/qct-commerce-tr/actions', zoneTag: '851672489bf8dd324e518cf18d3af4c6' },
   { key: 'iran-ahli', name: 'iran-ahli', url: 'https://atelierpersia.com/', repo: 'iran-ahli', actions: 'https://github.com/teyfikgokdemir/iran-ahli/actions' },
-  { key: 'olivon-agency', name: 'olivon-agency', url: 'https://olivon.com.tr/', repo: 'olivon-agency', actions: 'https://github.com/teyfikgokdemir/olivon-agency/actions' },
+  { key: 'olivon-agency', name: 'olivon-agency', url: 'https://olivon.com.tr/', repo: 'olivon-agency', actions: 'https://github.com/teyfikgokdemir/olivon-agency/actions', zoneTag: 'bd2fd5274ec14f49ba3c16f98f8a2cda' },
 ];
 
 const json = (data: unknown, status = 200) => new Response(JSON.stringify(data), {
@@ -110,7 +111,8 @@ async function githubRun(repo: string, env: Env) {
 }
 
 async function cloudflareTraffic(site: Site, env: Env) {
-  if (!env.CF_API_TOKEN || !site.zoneTag) return { ok: false, available: false, reason: 'Cloudflare secret yapılandırılmadı' };
+  const token = site.key === 'olivon-agency' ? env.CF_API_TOKEN_OLIVON : env.CF_API_TOKEN;
+  if (!token || !site.zoneTag) return { ok: false, available: false, reason: 'Cloudflare secret yapılandırılmadı' };
   const query = `query($zoneTag:String!, $date:Date!, $date7:Date!, $date30:Date!, $since:Time!, $until:Time!) { viewer { zones(filter:{zoneTag:$zoneTag}) { daily:httpRequests1dGroups(limit:1, filter:{date_geq:$date}) { sum { requests bytes cachedBytes } uniq { uniques } } sevenDays:httpRequests1dGroups(limit:7, filter:{date_geq:$date7}) { uniq { uniques } } thirtyDays:httpRequests1dGroups(limit:30, filter:{date_geq:$date30}) { uniq { uniques } } hourly:httpRequests1hGroups(limit:24, filter:{datetime_geq:$since, datetime_leq:$until}, orderBy:[datetime_ASC]) { dimensions { datetime } sum { requests countryMap { clientCountryName requests bytes } } uniq { uniques } } } } }`;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 15_000);
@@ -121,7 +123,7 @@ async function cloudflareTraffic(site: Site, env: Env) {
     const since30 = new Date(until.getTime() - 29 * 24 * 60 * 60 * 1000);
     const response = await fetch('https://api.cloudflare.com/client/v4/graphql', {
       method: 'POST',
-      headers: { authorization: `Bearer ${env.CF_API_TOKEN}`, 'content-type': 'application/json' },
+      headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
       body: JSON.stringify({ query, variables: { zoneTag: site.zoneTag, date: since.toISOString().slice(0, 10), date7: since7.toISOString().slice(0, 10), date30: since30.toISOString().slice(0, 10), since: since.toISOString(), until: until.toISOString() } }),
       signal: controller.signal,
     });
