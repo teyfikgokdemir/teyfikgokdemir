@@ -57,7 +57,7 @@ export default function Home() {
     </aside>
 
     <section className="content">
-      <header><div><p className="eyebrow">Growth intelligence + execution</p><h1>Bir domain gir. Ölç. Düzelt. Tekrar doğrula.</h1></div><span className="private">PRIVATE</span></header>
+      <header><div><p className="eyebrow">Growth intelligence + execution</p><h1>Büyümeyi ölç. Açıkları gör. Doğru hamleyi uygula.</h1></div><span className="private">PRIVATE</span></header>
 
       <form className="auditBox" onSubmit={submit}>
         <div><label>Domain</label><input value={domain} onChange={(e)=>setDomain(e.target.value)} placeholder="ornek.com" /></div>
