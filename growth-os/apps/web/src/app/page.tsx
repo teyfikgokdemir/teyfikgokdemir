@@ -39,7 +39,7 @@ export default function Home() {
   const [domain, setDomain] = useState('');
   const [loading, setLoading] = useState(false);
   const [moduleLoading, setModuleLoading] = useState(false);
-  const [connectionLoading, setConnectionLoading] = useState(false);
+  const [connectionLoading, setConnectionLoading] = useState<'google'|'meta'|null>(null);
   const [audit, setAudit] = useState<Audit | null>(null);
   const [comparison, setComparison] = useState<Comparison>(null);
   const [overview, setOverview] = useState<Overview | null>(null);
@@ -109,10 +109,14 @@ export default function Home() {
       const project = projects.find(p=>p.id===projectId);
       if (project) setSelectedProject(project);
     }
-    if (integration==='google_success') setSection('ads');
+    if (integration==='google_success' || integration==='meta_success') setSection('ads');
     if (integration==='google_error') {
       setSection('ads');
       setError('Google bağlantısı tamamlanamadı. OAuth ayarlarını ve Railway değişkenlerini kontrol et.');
+    }
+    if (integration==='meta_error') {
+      setSection('ads');
+      setError('Meta bağlantısı tamamlanamadı. Meta Login izinlerini ve Railway değişkenlerini kontrol et.');
     }
     if (integration) window.history.replaceState({},'',window.location.pathname);
   },[projects]);
@@ -135,7 +139,7 @@ export default function Home() {
 
   async function connectGoogle() {
     if (!selectedProject || connectionLoading) return;
-    setConnectionLoading(true); setError('');
+    setConnectionLoading('google'); setError('');
     try {
       const res = await fetch(`${api}/projects/${selectedProject.id}/integrations/google/connect`,{method:'POST',headers:{'content-type':'application/json'}});
       const data = await res.json();
@@ -143,7 +147,21 @@ export default function Home() {
       window.location.assign(data.authUrl);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Google bağlantısı başlatılamadı.');
-      setConnectionLoading(false);
+      setConnectionLoading(null);
+    }
+  }
+
+  async function connectMeta() {
+    if (!selectedProject || connectionLoading) return;
+    setConnectionLoading('meta'); setError('');
+    try {
+      const res = await fetch(`${api}/projects/${selectedProject.id}/integrations/meta/connect`,{method:'POST',headers:{'content-type':'application/json'}});
+      const data = await res.json();
+      if (!res.ok || !data.authUrl) throw new Error(data.error || 'Meta bağlantısı başlatılamadı.');
+      window.location.assign(data.authUrl);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Meta bağlantısı başlatılamadı.');
+      setConnectionLoading(null);
     }
   }
 
@@ -185,7 +203,7 @@ export default function Home() {
       {section==='projects' && <ProjectsView projects={projects} selected={selectedProject} onSelect={openProject} />}
       {section==='audit' && <AuditView domain={domain} setDomain={setDomain} submit={submit} loading={loading} audit={audit} comparison={comparison} openIssues={openIssues} criticalCount={criticalCount} mediumCount={mediumCount} verdict={verdict} audits={audits} />}
       {section==='final' && <FinalView comparison={comparison} audits={audits} />}
-      {section==='ads' && <AdsView audit={audit} integrations={integrations} onGoogleConnect={connectGoogle} connecting={connectionLoading} />}
+      {section==='ads' && <AdsView audit={audit} integrations={integrations} onGoogleConnect={connectGoogle} onMetaConnect={connectMeta} connecting={connectionLoading} />}
       {section==='analytics' && <AnalyticsView overview={overview} metrics={metrics} />}
       {section==='crm' && <CrmView overview={overview} leads={leads} />}
       {section==='profit' && <ProfitView overview={overview} metrics={metrics} onSave={saveTargets} />}
@@ -231,10 +249,10 @@ function FinalView({comparison,audits}:{comparison:Comparison;audits:AuditRow[]}
   return <><section className={`finalCard ${comparison.readiness}`}><div><p className="eyebrow">Final Check</p><h2>{comparison.readiness==='ready'?'Reklama Hazır':'Düzeltme Devam Etmeli'}</h2><p>{comparison.verdict}</p></div><div className="finalStats"><div><strong>{comparison.previousScore}</strong><span>Önceki</span></div><div><strong>{comparison.currentScore}</strong><span>Şimdi</span></div><div><strong>{comparison.scoreDelta>0?'+':''}{comparison.scoreDelta}</strong><span>Değişim</span></div><div><strong>{comparison.fixed.length}</strong><span>Düzelen</span></div><div><strong>{comparison.stillOpen.length}</strong><span>Açık</span></div><div><strong>{comparison.newIssues.length}</strong><span>Yeni</span></div></div></section><div className="compareColumns"><section><p className="eyebrow">Düzelenler</p>{comparison.fixed.length?comparison.fixed.map(i=><div className="compareRow good" key={i.key}>{i.title}</div>):<div className="mutedEmpty">Henüz düzelme kaydı yok.</div>}</section><section><p className="eyebrow">Açık Kalanlar</p>{comparison.stillOpen.length?comparison.stillOpen.slice(0,12).map(i=><div className="compareRow" key={i.key}><span>{i.title}</span><b>{i.severity}</b></div>):<div className="mutedEmpty">Açık madde yok.</div>}</section></div></>;
 }
 
-function AdsView({audit,integrations,onGoogleConnect,connecting}:{audit:Audit|null;integrations:IntegrationRow[];onGoogleConnect:()=>Promise<void>;connecting:boolean}) {
+function AdsView({audit,integrations,onGoogleConnect,onMetaConnect,connecting}:{audit:Audit|null;integrations:IntegrationRow[];onGoogleConnect:()=>Promise<void>;onMetaConnect:()=>Promise<void>;connecting:'google'|'meta'|null}) {
   const providers=['google_ads','meta_ads','tiktok_ads'];
   const connectedAdsCount = providers.filter(provider=>provider==='google_ads' ? integrations.some(i=>(i.provider==='google_oauth'||i.provider==='google_ads')&&i.status==='connected') : integrations.some(i=>i.provider===provider&&i.status==='connected')).length;
-  return <div className="moduleStack"><section className="moduleHero"><div><p className="eyebrow">Ads Readiness</p><h2>Reklam bütçesinden önce altyapıyı doğrula.</h2><p>Ölçümleme, dönüşüm sinyalleri ve hesap bağlantıları tek görünümde.</p></div><Score label="Ads Ready" value={audit?.scores.adsReadiness||0}/></section><section className="integrationGrid">{providers.map(provider=>{const found=provider==='google_ads'?integrations.find(i=>i.provider==='google_oauth'||i.provider==='google_ads'):integrations.find(i=>i.provider===provider);const label=provider==='google_ads'?'Google Ads':provider==='meta_ads'?'Meta Ads':'TikTok Ads';const connected=found?.status==='connected';return <article key={provider} className={connected?'connected':''}><div className="integrationIcon">{label.slice(0,1)}</div><div><strong>{label}</strong><span>{found?.account_label||'Hesap bağlanmadı'}</span></div>{connected?<em>BAĞLI</em>:provider==='google_ads'?<button className="integrationConnect" onClick={onGoogleConnect} disabled={connecting}>{connecting?'AÇILIYOR…':'BAĞLA'}</button>:<button className="integrationConnect" disabled title="OAuth adapter kurulumu sırada">BAĞLA</button>}</article>})}</section><section className="readinessChecklist"><div><span>Audit skoru</span><b>{audit?.overallScore??'—'}</b></div><div><span>Ads readiness</span><b>{audit?.scores.adsReadiness??'—'}</b></div><div><span>Bağlı hesap</span><b>{connectedAdsCount}/3</b></div></section><div className="moduleFoot">Google connector aktif OAuth akışına bağlıdır. Meta ve TikTok butonları hazır; OAuth adapter'ları devreye alınana kadar pasif tutulur.</div></div>;
+  return <div className="moduleStack"><section className="moduleHero"><div><p className="eyebrow">Ads Readiness</p><h2>Reklam bütçesinden önce altyapıyı doğrula.</h2><p>Ölçümleme, dönüşüm sinyalleri ve hesap bağlantıları tek görünümde.</p></div><Score label="Ads Ready" value={audit?.scores.adsReadiness||0}/></section><section className="integrationGrid">{providers.map(provider=>{const found=provider==='google_ads'?integrations.find(i=>i.provider==='google_oauth'||i.provider==='google_ads'):integrations.find(i=>i.provider===provider);const label=provider==='google_ads'?'Google Ads':provider==='meta_ads'?'Meta Ads':'TikTok Ads';const connected=found?.status==='connected';const onConnect=provider==='google_ads'?onGoogleConnect:provider==='meta_ads'?onMetaConnect:undefined;const loadingKey=provider==='google_ads'?'google':provider==='meta_ads'?'meta':null;return <article key={provider} className={connected?'connected':''}><div className="integrationIcon">{label.slice(0,1)}</div><div><strong>{label}</strong><span>{found?.account_label||'Hesap bağlanmadı'}</span></div>{connected?<em>BAĞLI</em>:onConnect?<button className="integrationConnect" onClick={onConnect} disabled={!!connecting}>{connecting===loadingKey?'AÇILIYOR…':'BAĞLA'}</button>:<button className="integrationConnect" disabled title="OAuth adapter kurulumu sırada">BAĞLA</button>}</article>})}</section><section className="readinessChecklist"><div><span>Audit skoru</span><b>{audit?.overallScore??'—'}</b></div><div><span>Ads readiness</span><b>{audit?.scores.adsReadiness??'—'}</b></div><div><span>Bağlı hesap</span><b>{connectedAdsCount}/3</b></div></section><div className="moduleFoot">Google ve Meta connector'ları aktif OAuth akışına bağlıdır. TikTok connector sıradaki adapter olarak pasif tutulur.</div></div>;
 }
 
 function AnalyticsView({overview,metrics}:{overview:Overview|null;metrics:MetricRow[]}) {
