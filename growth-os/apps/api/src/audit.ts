@@ -11,6 +11,18 @@ export type AuditIssue = {
   recommendation: string;
 };
 
+type PageSample = {
+  url: string;
+  status: number;
+  title: string;
+  description: string;
+  canonical: string;
+  h1Count: number;
+  schemaCount: number;
+  robotsMeta: string;
+  wordCount: number;
+};
+
 const normalizeDomain = (input: string) => {
   const value = input.trim();
   const normalized = /^https?:\/\//i.test(value) ? value : `https://${value}`;
@@ -56,6 +68,58 @@ async function safeFetch(rawUrl: string, init: RequestInit = {}, redirects = 0):
   return response;
 }
 
+function pageSignals(url: string, status: number, html: string): PageSample {
+  const $ = cheerio.load(html);
+  const text = $('body').text().replace(/\s+/g, ' ').trim();
+  return {
+    url,
+    status,
+    title: $('title').first().text().trim(),
+    description: $('meta[name="description"]').attr('content')?.trim() || '',
+    canonical: $('link[rel="canonical"]').attr('href') || '',
+    h1Count: $('h1').length,
+    schemaCount: $('script[type="application/ld+json"]').length,
+    robotsMeta: $('meta[name="robots"]').attr('content') || '',
+    wordCount: text ? text.split(' ').length : 0,
+  };
+}
+
+async function crawlSamples(baseUrl: string, homeHtml: string, limit = 20) {
+  const origin = new URL(baseUrl).origin;
+  const candidates = new Set<string>([baseUrl]);
+  const $ = cheerio.load(homeHtml);
+  $('a[href]').each((_i, el) => {
+    const href = $(el).attr('href');
+    if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('javascript:')) return;
+    try {
+      const u = new URL(href, baseUrl);
+      u.hash = '';
+      if (u.origin !== origin) return;
+      if (!['http:', 'https:'].includes(u.protocol)) return;
+      if (/\.(jpg|jpeg|png|webp|gif|svg|pdf|zip|xml|txt|css|js)(\?|$)/i.test(u.pathname)) return;
+      candidates.add(u.toString().replace(/\/$/, '') || origin);
+    } catch {}
+  });
+
+  const urls = [...candidates].slice(0, limit);
+  const results: PageSample[] = [];
+  for (const url of urls) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000);
+      const res = await safeFetch(url, { signal: controller.signal, headers: { 'user-agent': 'GrowthOS-AuditBot/0.2 (+private audit)' } });
+      clearTimeout(timeout);
+      const type = res.headers.get('content-type') || '';
+      if (!type.includes('text/html')) continue;
+      const html = url === baseUrl ? homeHtml : await res.text();
+      results.push(pageSignals(res.url, res.status, html));
+    } catch {
+      results.push({ url, status: 0, title: '', description: '', canonical: '', h1Count: 0, schemaCount: 0, robotsMeta: '', wordCount: 0 });
+    }
+  }
+  return results;
+}
+
 const scoreFromIssues = (issues: AuditIssue[], keys: string[]) => {
   const selected = issues.filter((issue) => keys.includes(issue.key));
   if (!selected.length) return 100;
@@ -76,7 +140,7 @@ export async function runAudit(inputDomain: string) {
   try {
     response = await safeFetch(domain, {
       signal: controller.signal,
-      headers: { 'user-agent': 'GrowthOS-AuditBot/0.1 (+private audit)' },
+      headers: { 'user-agent': 'GrowthOS-AuditBot/0.2 (+private audit)' },
     });
   } finally {
     clearTimeout(timeout);
@@ -109,12 +173,27 @@ export async function runAudit(inputDomain: string) {
 
   const robotsUrl = new URL('/robots.txt', response.url).toString();
   const sitemapUrl = new URL('/sitemap.xml', response.url).toString();
-  const [robotsRes, sitemapRes] = await Promise.allSettled([
-    safeFetch(robotsUrl),
-    safeFetch(sitemapUrl),
+  const [robotsRes, sitemapRes, sampledPages] = await Promise.all([
+    safeFetch(robotsUrl).catch(() => null),
+    safeFetch(sitemapUrl).catch(() => null),
+    crawlSamples(response.url, html, 20),
   ]);
-  const robotsOk = robotsRes.status === 'fulfilled' && robotsRes.value.ok;
-  const sitemapOk = sitemapRes.status === 'fulfilled' && sitemapRes.value.ok;
+  const robotsOk = Boolean(robotsRes?.ok);
+  const sitemapOk = Boolean(sitemapRes?.ok);
+
+  const titleCounts = new Map<string, number>();
+  const descriptionCounts = new Map<string, number>();
+  sampledPages.forEach((p) => {
+    if (p.title) titleCounts.set(p.title, (titleCounts.get(p.title) || 0) + 1);
+    if (p.description) descriptionCounts.set(p.description, (descriptionCounts.get(p.description) || 0) + 1);
+  });
+  const pagesWithoutTitle = sampledPages.filter((p) => !p.title).length;
+  const pagesWithoutDescription = sampledPages.filter((p) => !p.description).length;
+  const pagesWithoutCanonical = sampledPages.filter((p) => !p.canonical).length;
+  const pagesBadH1 = sampledPages.filter((p) => p.h1Count !== 1).length;
+  const duplicateTitles = [...titleCounts.values()].filter((n) => n > 1).reduce((a,b) => a+b, 0);
+  const duplicateDescriptions = [...descriptionCounts.values()].filter((n) => n > 1).reduce((a,b) => a+b, 0);
+  const noindexPages = sampledPages.filter((p) => /noindex/i.test(p.robotsMeta)).length;
 
   const issues: AuditIssue[] = [];
   const add = (condition: boolean, issue: Omit<AuditIssue, 'status'>) => issues.push({ ...issue, status: condition ? 'pass' : 'fail' });
@@ -136,11 +215,16 @@ export async function runAudit(inputDomain: string) {
   add(tracking.ga4 || tracking.gtm, { key: 'analytics', title: 'Analytics altyapısı', severity: 'high', detail: `GA4:${tracking.ga4} GTM:${tracking.gtm}`, recommendation: 'GA4/GTM ölçüm altyapısını kur ve temel eventleri doğrula.' });
   add(tracking.metaPixel, { key: 'meta', title: 'Meta Pixel', severity: 'medium', detail: tracking.metaPixel ? 'Bulundu' : 'Bulunamadı', recommendation: 'Meta reklamı kullanılacaksa Pixel + CAPI ölçümünü kur.' });
   add(forms > 0 || /sepete ekle|satın al|iletişim|teklif/i.test(text), { key: 'conversion', title: 'Dönüşüm yolu', severity: 'high', detail: `${forms} form`, recommendation: 'Birincil dönüşüm aksiyonunu görünür ve ölçülebilir hale getir.' });
+  add(sampledPages.length >= 2, { key: 'crawl-coverage', title: 'Çoklu sayfa tarama kapsamı', severity: 'medium', detail: `${sampledPages.length} sayfa örneklendi`, recommendation: 'İç link yapısını ve taranabilir sayfa kapsamını güçlendir.' });
+  add(pagesWithoutTitle === 0 && duplicateTitles === 0, { key: 'site-titles', title: 'Site geneli title kalitesi', severity: 'high', detail: `${pagesWithoutTitle} eksik, ${duplicateTitles} tekrar eden title`, recommendation: 'Örneklenen tüm sayfalarda benzersiz title kullan.' });
+  add(pagesWithoutDescription === 0 && duplicateDescriptions === 0, { key: 'site-descriptions', title: 'Site geneli description kalitesi', severity: 'medium', detail: `${pagesWithoutDescription} eksik, ${duplicateDescriptions} tekrar eden description`, recommendation: 'Önemli sayfalarda özgün meta description kullan.' });
+  add(pagesWithoutCanonical === 0, { key: 'site-canonicals', title: 'Site geneli canonical', severity: 'high', detail: `${pagesWithoutCanonical} sayfada canonical eksik`, recommendation: 'Taranan tüm indexlenebilir sayfalarda doğru canonical tanımla.' });
+  add(pagesBadH1 === 0, { key: 'site-h1', title: 'Site geneli H1 yapısı', severity: 'medium', detail: `${pagesBadH1} sayfada H1 sayısı hatalı`, recommendation: 'Her önemli sayfada tek ve anlamlı H1 kullan.' });
 
-  const seoKeys = ['http','title','description','canonical','h1','lang','robots','sitemap','schema','content'];
-  const geoKeys = ['schema','entity','content','canonical','lang'];
-  const aeoKeys = ['aeo','schema','content','h1'];
-  const aioKeys = ['entity','schema','content','aeo','og'];
+  const seoKeys = ['http','title','description','canonical','h1','lang','robots','sitemap','schema','content','crawl-coverage','site-titles','site-descriptions','site-canonicals','site-h1'];
+  const geoKeys = ['schema','entity','content','canonical','lang','site-canonicals'];
+  const aeoKeys = ['aeo','schema','content','h1','site-h1'];
+  const aioKeys = ['entity','schema','content','aeo','og','site-titles'];
   const adsKeys = ['analytics','meta','conversion','viewport','http'];
 
   const seoScore = scoreFromIssues(issues, seoKeys);
@@ -156,6 +240,17 @@ export async function runAudit(inputDomain: string) {
     overallScore,
     scores: { seo: seoScore, geo: geoScore, aeo: aeoScore, aio: aioScore, adsReadiness: adsReadinessScore },
     page: { title, description, canonical, h1Count, lang, wordCount, robotsMeta },
+    site: {
+      sampledCount: sampledPages.length,
+      pagesWithoutTitle,
+      pagesWithoutDescription,
+      pagesWithoutCanonical,
+      pagesBadH1,
+      duplicateTitles,
+      duplicateDescriptions,
+      noindexPages,
+      pages: sampledPages,
+    },
     tracking,
     issues,
   };
