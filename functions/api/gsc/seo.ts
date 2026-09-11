@@ -100,8 +100,8 @@ export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
         return { ...property, ok: false, error: error instanceof Error ? error.message : 'Search Console verisi alınamadı' };
       }
     }));
-    return json({ ok: true, connected: true, generatedAt: new Date().toISOString(), dataThrough: endDate, sites });
+    return json({ ok: true, connected: true, generatedAt: new Date().toISOString(), dataThrough: endDate, sites }, 200);
   } catch (error) {
-    return json({ ok: false, connected: false, error: error instanceof Error ? error.message : 'Search Console erişilemedi' }, 502);
+    return json({ ok: false, connected: false, error: error instanceof Error ? error.message : 'Search Console erişilemedi' }, 200);
   }
 };
