@@ -1,0 +1,42 @@
+name: Growth OS CI
+
+on:
+  push:
+    branches: [growth-os]
+    paths:
+      - 'growth-os/**'
+      - '.github/workflows/growth-os-ci.yml'
+  pull_request:
+    paths:
+      - 'growth-os/**'
+
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: growth-os/apps/api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: growth-os/apps/api/package.json
+      - run: npm install
+      - run: npm run build
+
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: growth-os/apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: growth-os/apps/web/package.json
+      - run: npm install
+      - run: npm run build
