@@ -13,6 +13,7 @@ const properties: PropertyConfig[] = [
   { key: 'mythborn', name: 'mythborn', property: 'sc-domain:mythborn.co' },
   { key: 'qct-studio', name: 'qct-studio', property: 'sc-domain:qctstudio.com' },
   { key: 'qct-commerce-tr', name: 'qct-commerce-tr', property: 'sc-domain:qctcommerce.com' },
+  { key: 'olivon-agency', name: 'olivon-agency', property: 'sc-domain:olivon.com.tr' },
 ];
 
 const json = (data: unknown, status = 200) => new Response(JSON.stringify(data), {
