@@ -15,7 +15,7 @@ type Overview = {
   targets:null|{target_roas:number|null;break_even_roas:number|null;target_cpa:number|null;target_mer:number|null};
 };
 
-const api = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const api = '/api/growth';
 const money = (value:number) => new Intl.NumberFormat('tr-TR',{style:'currency',currency:'TRY',maximumFractionDigits:0}).format(value || 0);
 
 export default function Home() {
@@ -27,14 +27,14 @@ export default function Home() {
   const [error, setError] = useState('');
 
   async function loadOverview(projectId:string) {
-    const res = await fetch(`${api}/projects/${projectId}/overview`);
+    const res = await fetch(`${api}/projects/${projectId}/overview`, { cache:'no-store' });
     if (res.ok) setOverview(await res.json());
   }
 
   async function submit(e: FormEvent) {
     e.preventDefault(); setLoading(true); setError(''); setAudit(null); setComparison(null); setOverview(null);
     try {
-      const res = await fetch(`${api}/audit`, { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({domain}) });
+      const res = await fetch(`${api}/audit`, { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({domain}), cache:'no-store' });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Analiz başarısız');
       setAudit(data.audit); setComparison(data.comparison || null);
