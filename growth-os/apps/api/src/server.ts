@@ -14,16 +14,13 @@ function compareAudits(previous: AuditPayload | null, current: AuditPayload) {
   if (!previous) return null;
   const prevByKey = new Map(previous.issues.map((issue) => [issue.key, issue]));
   const currentByKey = new Map(current.issues.map((issue) => [issue.key, issue]));
-
   const fixed = current.issues.filter((issue) => issue.status === 'pass' && prevByKey.get(issue.key)?.status !== 'pass');
   const stillOpen = current.issues.filter((issue) => issue.status !== 'pass' && prevByKey.get(issue.key)?.status !== 'pass');
   const newIssues = current.issues.filter((issue) => issue.status !== 'pass' && prevByKey.get(issue.key)?.status === 'pass');
   const regressed = previous.issues.filter((issue) => issue.status === 'pass' && currentByKey.get(issue.key)?.status !== 'pass');
-
   const scoreDelta = current.overallScore - previous.overallScore;
   const criticalOpen = current.issues.filter((i) => i.status !== 'pass' && ['critical','high'].includes(i.severity));
   const ready = criticalOpen.length === 0 && current.scores.adsReadiness >= 80 && current.overallScore >= 80;
-
   return {
     previousScore: previous.overallScore,
     currentScore: current.overallScore,
@@ -44,6 +41,32 @@ app.get('/projects', async (_req, res) => {
   res.json(rows);
 });
 
+app.get('/projects/:id/overview', async (req, res) => {
+  const projectId = req.params.id;
+  const [project, audit, alerts, recommendations, metrics, leads, targets] = await Promise.all([
+    pool.query('select * from projects where id=$1', [projectId]),
+    pool.query('select overall_score, seo_score, geo_score, aeo_score, aio_score, ads_readiness_score, created_at from audits where project_id=$1 order by created_at desc limit 1', [projectId]),
+    pool.query("select count(*)::int as count from alerts where project_id=$1 and status='open'", [projectId]),
+    pool.query("select count(*)::int as count from recommendations where project_id=$1 and status='proposed'", [projectId]),
+    pool.query('select coalesce(sum(spend),0)::numeric as spend, coalesce(sum(attributed_revenue),0)::numeric as revenue, coalesce(sum(gross_profit),0)::numeric as gross_profit from campaign_metrics where project_id=$1 and metric_date >= current_date - interval \'30 days\'', [projectId]),
+    pool.query("select count(*)::int as total, count(*) filter (where status='won')::int as won from crm_leads where project_id=$1", [projectId]),
+    pool.query('select * from business_targets where project_id=$1', [projectId])
+  ]);
+  if (!project.rows[0]) return res.status(404).json({ error: 'Proje bulunamadı' });
+  const m = metrics.rows[0];
+  const spend = Number(m.spend || 0);
+  const revenue = Number(m.revenue || 0);
+  res.json({
+    project: project.rows[0],
+    latestAudit: audit.rows[0] || null,
+    openAlerts: alerts.rows[0].count,
+    pendingRecommendations: recommendations.rows[0].count,
+    metrics30d: { spend, revenue, grossProfit:Number(m.gross_profit || 0), roas: spend > 0 ? revenue / spend : null },
+    crm: leads.rows[0],
+    targets: targets.rows[0] || null
+  });
+});
+
 app.get('/projects/:id/audits', async (req, res) => {
   const { rows } = await pool.query('select id, domain, overall_score, seo_score, geo_score, aeo_score, aio_score, ads_readiness_score, created_at from audits where project_id=$1 order by created_at desc', [req.params.id]);
   res.json(rows);
@@ -57,41 +80,63 @@ app.get('/projects/:id/final-check', async (req, res) => {
   return res.json({ comparison: compareAudits(previous || null, current), current, previous: previous || null });
 });
 
+app.get('/projects/:id/alerts', async (req, res) => {
+  const { rows } = await pool.query('select * from alerts where project_id=$1 order by created_at desc limit 100', [req.params.id]);
+  res.json(rows);
+});
+
+app.get('/projects/:id/recommendations', async (req, res) => {
+  const { rows } = await pool.query('select * from recommendations where project_id=$1 order by created_at desc limit 100', [req.params.id]);
+  res.json(rows);
+});
+
+app.put('/projects/:id/targets', async (req, res) => {
+  const schema = z.object({
+    targetRoas:z.number().nonnegative().optional(), breakEvenRoas:z.number().nonnegative().optional(), targetCpa:z.number().nonnegative().optional(),
+    targetMer:z.number().nonnegative().optional(), avgOrderValue:z.number().nonnegative().optional(), grossMarginPct:z.number().min(0).max(1).optional(),
+    returnRatePct:z.number().min(0).max(1).optional(), shippingCost:z.number().nonnegative().optional(), feePct:z.number().min(0).max(1).optional()
+  });
+  const parsed = schema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error:'Hedef değerleri geçersiz.' });
+  const d = parsed.data;
+  const { rows } = await pool.query(`
+    insert into business_targets(project_id,target_roas,break_even_roas,target_cpa,target_mer,avg_order_value,gross_margin_pct,return_rate_pct,shipping_cost,fee_pct)
+    values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+    on conflict(project_id) do update set target_roas=excluded.target_roas,break_even_roas=excluded.break_even_roas,target_cpa=excluded.target_cpa,target_mer=excluded.target_mer,avg_order_value=excluded.avg_order_value,gross_margin_pct=excluded.gross_margin_pct,return_rate_pct=excluded.return_rate_pct,shipping_cost=excluded.shipping_cost,fee_pct=excluded.fee_pct,updated_at=now()
+    returning *`, [req.params.id,d.targetRoas??null,d.breakEvenRoas??null,d.targetCpa??null,d.targetMer??null,d.avgOrderValue??null,d.grossMarginPct??null,d.returnRatePct??null,d.shippingCost??null,d.feePct??null]);
+  res.json(rows[0]);
+});
+
+app.post('/recommendations/:id/approve', async (req, res) => {
+  const approvedBy = z.object({ approvedBy:z.string().min(1) }).safeParse(req.body);
+  if (!approvedBy.success) return res.status(400).json({ error:'Onaylayan kullanıcı gerekli.' });
+  const client = await pool.connect();
+  try {
+    await client.query('begin');
+    const rec = await client.query("update recommendations set status='approved', decided_at=now() where id=$1 and status='proposed' returning *", [req.params.id]);
+    if (!rec.rows[0]) { await client.query('rollback'); return res.status(404).json({ error:'Onaylanabilir öneri bulunamadı.' }); }
+    const log = await client.query(`insert into action_log(project_id,recommendation_id,provider,action_type,status,requested_state,approved_by) values($1,$2,$3,$4,'approved',$5,$6) returning *`, [rec.rows[0].project_id,rec.rows[0].id,rec.rows[0].source,rec.rows[0].proposed_action?.type || 'pending_external_execution',rec.rows[0].proposed_action,approvedBy.data.approvedBy]);
+    await client.query('commit');
+    res.json({ recommendation:rec.rows[0], action:log.rows[0], externalExecution:false });
+  } catch (error) {
+    await client.query('rollback');
+    throw error;
+  } finally { client.release(); }
+});
+
 app.post('/audit', async (req, res) => {
   const parsed = z.object({ domain: z.string().min(3), projectName: z.string().min(1).optional() }).safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: 'Geçerli bir domain girin.' });
-
   try {
     const result = await runAudit(parsed.data.domain);
     const hostname = new URL(result.domain).hostname.replace(/^www\./, '');
     const projectName = parsed.data.projectName || hostname;
-
-    const projectResult = await pool.query(
-      `insert into projects(name, domain) values($1,$2)
-       on conflict(domain) do update set name=excluded.name
-       returning id, name, domain`,
-      [projectName, hostname]
-    );
+    const projectResult = await pool.query(`insert into projects(name, domain) values($1,$2) on conflict(domain) do update set name=excluded.name returning id, name, domain`, [projectName, hostname]);
     const project = projectResult.rows[0];
-
-    const previousResult = await pool.query(
-      'select payload from audits where project_id=$1 order by created_at desc limit 1',
-      [project.id]
-    );
+    const previousResult = await pool.query('select payload from audits where project_id=$1 order by created_at desc limit 1', [project.id]);
     const previous = previousResult.rows[0]?.payload as AuditPayload | undefined;
-
-    const insert = await pool.query(
-      `insert into audits(project_id, domain, overall_score, seo_score, geo_score, aeo_score, aio_score, ads_readiness_score, payload)
-       values($1,$2,$3,$4,$5,$6,$7,$8,$9)
-       returning id, created_at`,
-      [project.id, result.domain, result.overallScore, result.scores.seo, result.scores.geo, result.scores.aeo, result.scores.aio, result.scores.adsReadiness, result]
-    );
-
-    return res.json({
-      project,
-      audit: { ...result, id: insert.rows[0].id, createdAt: insert.rows[0].created_at },
-      comparison: compareAudits(previous || null, result)
-    });
+    const insert = await pool.query(`insert into audits(project_id, domain, overall_score, seo_score, geo_score, aeo_score, aio_score, ads_readiness_score, payload) values($1,$2,$3,$4,$5,$6,$7,$8,$9) returning id, created_at`, [project.id, result.domain, result.overallScore, result.scores.seo, result.scores.geo, result.scores.aeo, result.scores.aio, result.scores.adsReadiness, result]);
+    return res.json({ project, audit: { ...result, id: insert.rows[0].id, createdAt: insert.rows[0].created_at }, comparison: compareAudits(previous || null, result) });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Audit başarısız';
     return res.status(502).json({ error: message });
@@ -102,6 +147,11 @@ app.get('/audits/:id', async (req, res) => {
   const { rows } = await pool.query('select payload, created_at from audits where id=$1', [req.params.id]);
   if (!rows[0]) return res.status(404).json({ error: 'Audit bulunamadı' });
   res.json({ ...rows[0].payload, createdAt: rows[0].created_at });
+});
+
+app.use((error: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error(error);
+  res.status(500).json({ error:'Beklenmeyen sunucu hatası.' });
 });
 
 const port = Number(process.env.PORT || 4000);
