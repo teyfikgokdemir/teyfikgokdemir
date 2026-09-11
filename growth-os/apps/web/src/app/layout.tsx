@@ -1,4 +1,5 @@
 import './styles.css';
+import './modules.css';
 import './report.css';
 
 export const metadata = {
