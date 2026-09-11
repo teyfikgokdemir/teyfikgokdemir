@@ -99,6 +99,11 @@ export default function Home() {
     finally { setLoading(false); }
   }
 
+  function openProject(project:Project) {
+    setSelectedProject(project);
+    setSection('overview');
+  }
+
   return <main className="shell">
     <aside className="side">
       <div className="brand"><span>G</span><div><strong>Growth OS</strong><small>Private Control Center</small></div></div>
@@ -118,7 +123,7 @@ export default function Home() {
       {moduleLoading && <div className="moduleLoading">Veriler güncelleniyor…</div>}
 
       {section==='overview' && <OverviewView overview={overview} projects={projects} audits={audits} alerts={alerts} recommendations={recommendations} onNavigate={setSection} />}
-      {section==='projects' && <ProjectsView projects={projects} selected={selectedProject} onSelect={setSelectedProject} />}
+      {section==='projects' && <ProjectsView projects={projects} selected={selectedProject} onSelect={openProject} />}
       {section==='audit' && <AuditView domain={domain} setDomain={setDomain} submit={submit} loading={loading} audit={audit} comparison={comparison} openIssues={openIssues} criticalCount={criticalCount} mediumCount={mediumCount} verdict={verdict} />}
       {section==='final' && <FinalView comparison={comparison} />}
       {section==='ads' && <SimpleModule title="Ads Readiness" subtitle="Reklam öncesi teknik ve ölçüm hazırlığı" value={audit ? `${audit.scores.adsReadiness}/100` : '—'} note={audit ? (audit.scores.adsReadiness>=80?'Hazır':'Düzeltme gerekli') : 'Önce audit çalıştır'} />}
