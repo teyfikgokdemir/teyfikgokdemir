@@ -18,6 +18,7 @@ export function buildMetaAuthUrl(state:string) {
   url.searchParams.set('client_id', required('META_APP_ID'));
   url.searchParams.set('redirect_uri', required('META_REDIRECT_URI'));
   url.searchParams.set('response_type', 'code');
+  url.searchParams.set('config_id', required('META_CONFIG_ID'));
   url.searchParams.set('scope', META_SCOPES.join(','));
   url.searchParams.set('state', state);
   return url.toString();
@@ -69,6 +70,7 @@ export function metaCredentialMetadata(accessToken:string, expiresIn?:number, ex
     accessTokenEncrypted: encryptSecret(accessToken),
     expiresAt: expiresIn ? new Date(Date.now() + expiresIn * 1000).toISOString() : null,
     scopes: META_SCOPES,
+    configurationId: process.env.META_CONFIG_ID || null,
     connectedAt: new Date().toISOString(),
     ...extra
   };
