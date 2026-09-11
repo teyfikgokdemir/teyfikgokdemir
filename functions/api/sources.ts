@@ -13,6 +13,7 @@ const ORIGINS = new Set([
   'https://atelierpersia.com',
   'https://olivonagency.com',
   'https://olivon.agency',
+  'https://olivon.com.tr',
   'https://olivon-agency.pages.dev',
 ]);
 
