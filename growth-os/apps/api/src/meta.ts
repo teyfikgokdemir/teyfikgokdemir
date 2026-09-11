@@ -9,8 +9,8 @@ function required(name:string) {
 }
 
 function graphBase() {
-  const version = process.env.META_GRAPH_API_VERSION?.trim();
-  return version ? `https://graph.facebook.com/${version}` : 'https://graph.facebook.com';
+  const version = process.env.META_GRAPH_API_VERSION?.trim() || 'v26.0';
+  return `https://graph.facebook.com/${version}`;
 }
 
 export function buildMetaAuthUrl(state:string) {
