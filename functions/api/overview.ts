@@ -21,6 +21,7 @@ const sites: Site[] = [
   { key: 'qct-studio', name: 'qct-studio', url: 'https://qctstudio.com/', repo: 'qct-studio', actions: 'https://github.com/teyfikgokdemir/qct-studio/actions', zoneTag: '44ba26775a815ed1d94f1655e8b830dd' },
   { key: 'qct-commerce-tr', name: 'qct-commerce-tr', url: 'https://qctcommerce.com/', repo: 'qct-commerce-tr', actions: 'https://github.com/teyfikgokdemir/qct-commerce-tr/actions', zoneTag: '851672489bf8dd324e518cf18d3af4c6' },
   { key: 'iran-ahli', name: 'iran-ahli', url: 'https://atelierpersia.com/', repo: 'iran-ahli', actions: 'https://github.com/teyfikgokdemir/iran-ahli/actions' },
+  { key: 'olivon-agency', name: 'olivon-agency', url: 'https://olivonagency.com/', repo: 'olivon-agency', actions: 'https://github.com/teyfikgokdemir/olivon-agency/actions' },
 ];
 
 const json = (data: unknown, status = 200) => new Response(JSON.stringify(data), {

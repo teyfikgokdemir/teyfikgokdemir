@@ -2,7 +2,7 @@ interface Env {
   CANSU_ANALYTICS_DB: D1Database;
 }
 
-const SITES = new Set(['teyfikgokdemir', 'ctseg', 'mythborn', 'qct-studio', 'qct-commerce-tr', 'iran-ahli']);
+const SITES = new Set(['teyfikgokdemir', 'ctseg', 'mythborn', 'qct-studio', 'qct-commerce-tr', 'iran-ahli', 'olivon-agency']);
 const ORIGINS = new Set([
   'https://teyfikgokdemir.com',
   'https://ctseg.com.tr',
@@ -11,6 +11,9 @@ const ORIGINS = new Set([
   'https://qctcommerce.com',
   'https://iran-ahli.pages.dev',
   'https://atelierpersia.com',
+  'https://olivonagency.com',
+  'https://olivon.agency',
+  'https://olivon-agency.pages.dev',
 ]);
 
 const cors = (origin: string | null) => ({
