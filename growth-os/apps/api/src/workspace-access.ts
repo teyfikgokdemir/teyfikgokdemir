@@ -10,8 +10,10 @@ export type WorkspaceActor={
 };
 
 const roleWeight:Record<WorkspaceRole,number>={viewer:1,analyst:2,admin:3,owner:4};
+const uuidPattern=/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
 
 function normalizeEmail(value:string){return value.trim().toLowerCase()}
+function isUuid(value:string){return uuidPattern.test(value)}
 
 async function hasProjectStatusColumn(){
   const {rows}=await pool.query(`
@@ -54,6 +56,7 @@ export function requireRole(actor:WorkspaceActor,minRole:WorkspaceRole){
 }
 
 export async function assertProjectAccess(actor:WorkspaceActor,projectId:string){
+  if(!isUuid(projectId))throw new Error('PROJECT_ID_INVALID');
   const lifecycleReady=await hasProjectStatusColumn();
   const fields=lifecycleReady
     ? 'id,workspace_id,client_id,name,domain,status,archived_at,archived_by'
@@ -88,6 +91,7 @@ export async function listWorkspaceProjects(actor:WorkspaceActor){
 
 export function workspaceErrorStatus(error:unknown){
   const message=error instanceof Error?error.message:'';
+  if(message==='PROJECT_ID_INVALID')return 400;
   if(message==='WORKSPACE_ACCESS_DENIED'||message==='PROJECT_ACCESS_DENIED')return 403;
   if(message==='WORKSPACE_ROLE_DENIED')return 403;
   if(message==='PROJECT_ARCHIVED')return 409;
@@ -96,6 +100,7 @@ export function workspaceErrorStatus(error:unknown){
 
 export function workspaceErrorMessage(error:unknown){
   const message=error instanceof Error?error.message:'';
+  if(message==='PROJECT_ID_INVALID')return 'Geçerli bir proje kimliği gerekli.';
   if(message==='WORKSPACE_ACCESS_DENIED')return 'Bu workspace için aktif üyelik bulunamadı.';
   if(message==='PROJECT_ACCESS_DENIED')return 'Bu projeye erişim yetkiniz yok.';
   if(message==='WORKSPACE_ROLE_DENIED')return 'Bu işlem için rolünüz yeterli değil.';
