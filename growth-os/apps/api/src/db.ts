@@ -73,6 +73,29 @@ export async function initDb() {
       unique(project_id, provider, external_campaign_id, metric_date)
     );
 
+    create table if not exists ads_sync_runs (
+      id uuid primary key default gen_random_uuid(),
+      project_id uuid not null references projects(id) on delete cascade,
+      status text not null default 'running',
+      requested_days integer not null default 30,
+      provider_results jsonb not null default '[]'::jsonb,
+      metrics_written integer not null default 0,
+      alerts_created integer not null default 0,
+      recommendations_created integer not null default 0,
+      started_at timestamptz not null default now(),
+      finished_at timestamptz,
+      error_message text
+    );
+
+    create table if not exists project_execution_policy (
+      project_id uuid primary key references projects(id) on delete cascade,
+      ads_write_enabled boolean not null default false,
+      require_manual_approval boolean not null default true,
+      max_daily_budget_change_pct numeric(8,4),
+      allowed_providers text[] not null default '{}'::text[],
+      updated_at timestamptz not null default now()
+    );
+
     create table if not exists crm_leads (
       id uuid primary key default gen_random_uuid(),
       project_id uuid not null references projects(id) on delete cascade,
@@ -149,6 +172,7 @@ export async function initDb() {
 
     create index if not exists idx_audits_project_created on audits(project_id, created_at desc);
     create index if not exists idx_campaign_metrics_project_date on campaign_metrics(project_id, metric_date desc);
+    create index if not exists idx_ads_sync_runs_project_started on ads_sync_runs(project_id, started_at desc);
     create index if not exists idx_crm_leads_project_status on crm_leads(project_id, status);
     create index if not exists idx_alerts_project_status on alerts(project_id, status, created_at desc);
     create index if not exists idx_recommendations_project_status on recommendations(project_id, status, created_at desc);
