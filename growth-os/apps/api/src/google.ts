@@ -193,7 +193,7 @@ async function merchantCommerceForProject(projectId:string,accessToken:string){
 
   const [productsResponse,issuesResponse]=await Promise.all([
     getJson(`https://merchantapi.googleapis.com/products/v1/${matched.name}/products?pageSize=250`,accessToken) as Promise<MerchantProductsResponse>,
-    getJson(`https://merchantapi.googleapis.com/accounts/v1/${matched.name}/issues?page_size=1000&language_code=tr-TR&time_zone.id=Europe%2FIstanbul`,accessToken) as Promise<MerchantIssuesResponse>
+    getJson(`https://merchantapi.googleapis.com/accounts/v1/${matched.name}/issues?pageSize=100&languageCode=tr-TR&timeZone=Europe%2FIstanbul`,accessToken) as Promise<MerchantIssuesResponse>
   ]);
   const products=productsResponse.products||[];
   const accountIssues=issuesResponse.accountIssues||[];
