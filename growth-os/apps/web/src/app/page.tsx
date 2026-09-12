@@ -203,7 +203,7 @@ export default function Home() {
       {section==='projects' && <ProjectsView projects={projects} selected={selectedProject} onSelect={openProject} />}
       {section==='audit' && <AuditView domain={domain} setDomain={setDomain} submit={submit} loading={loading} audit={audit} comparison={comparison} openIssues={openIssues} criticalCount={criticalCount} mediumCount={mediumCount} verdict={verdict} audits={audits} />}
       {section==='final' && <FinalView comparison={comparison} audits={audits} />}
-      {section==='ads' && <AdsView audit={audit} integrations={integrations} onGoogleConnect={connectGoogle} onMetaConnect={connectMeta} connecting={connectionLoading} />}
+      {section==='ads' && <AdsView projectId={selectedProject?.id||null} audit={audit} integrations={integrations} onGoogleConnect={connectGoogle} onMetaConnect={connectMeta} connecting={connectionLoading} onRefresh={loadProjectModules} />}
       {section==='analytics' && <AnalyticsView overview={overview} metrics={metrics} />}
       {section==='crm' && <CrmView overview={overview} leads={leads} />}
       {section==='profit' && <ProfitView overview={overview} metrics={metrics} onSave={saveTargets} />}
@@ -249,10 +249,60 @@ function FinalView({comparison,audits}:{comparison:Comparison;audits:AuditRow[]}
   return <><section className={`finalCard ${comparison.readiness}`}><div><p className="eyebrow">Final Check</p><h2>{comparison.readiness==='ready'?'Reklama Hazır':'Düzeltme Devam Etmeli'}</h2><p>{comparison.verdict}</p></div><div className="finalStats"><div><strong>{comparison.previousScore}</strong><span>Önceki</span></div><div><strong>{comparison.currentScore}</strong><span>Şimdi</span></div><div><strong>{comparison.scoreDelta>0?'+':''}{comparison.scoreDelta}</strong><span>Değişim</span></div><div><strong>{comparison.fixed.length}</strong><span>Düzelen</span></div><div><strong>{comparison.stillOpen.length}</strong><span>Açık</span></div><div><strong>{comparison.newIssues.length}</strong><span>Yeni</span></div></div></section><div className="compareColumns"><section><p className="eyebrow">Düzelenler</p>{comparison.fixed.length?comparison.fixed.map(i=><div className="compareRow good" key={i.key}>{i.title}</div>):<div className="mutedEmpty">Henüz düzelme kaydı yok.</div>}</section><section><p className="eyebrow">Açık Kalanlar</p>{comparison.stillOpen.length?comparison.stillOpen.slice(0,12).map(i=><div className="compareRow" key={i.key}><span>{i.title}</span><b>{i.severity}</b></div>):<div className="mutedEmpty">Açık madde yok.</div>}</section></div></>;
 }
 
-function AdsView({audit,integrations,onGoogleConnect,onMetaConnect,connecting}:{audit:Audit|null;integrations:IntegrationRow[];onGoogleConnect:()=>Promise<void>;onMetaConnect:()=>Promise<void>;connecting:'google'|'meta'|null}) {
+function AdsView({projectId,audit,integrations,onGoogleConnect,onMetaConnect,connecting,onRefresh}:{projectId:string|null;audit:Audit|null;integrations:IntegrationRow[];onGoogleConnect:()=>Promise<void>;onMetaConnect:()=>Promise<void>;connecting:'google'|'meta'|null;onRefresh:(projectId:string)=>Promise<void>}) {
+  const [googleResources,setGoogleResources]=useState<{ads?:{resourceNames?:string[]};selectedCustomerResourceName?:string;errors?:Record<string,string>}|null>(null);
+  const [metaResources,setMetaResources]=useState<{adAccounts?:Array<{id?:string;account_id?:string;name?:string;currency?:string;timezone_name?:string}>;selectedAdAccountId?:string}|null>(null);
+  const [mappingLoading,setMappingLoading]=useState(false);
   const providers=['google_ads','meta_ads','tiktok_ads'];
-  const connectedAdsCount = providers.filter(provider=>provider==='google_ads' ? integrations.some(i=>(i.provider==='google_oauth'||i.provider==='google_ads')&&i.status==='connected') : integrations.some(i=>i.provider===provider&&i.status==='connected')).length;
-  return <div className="moduleStack"><section className="moduleHero"><div><p className="eyebrow">Ads Readiness</p><h2>Reklam bütçesinden önce altyapıyı doğrula.</h2><p>Ölçümleme, dönüşüm sinyalleri ve hesap bağlantıları tek görünümde.</p></div><Score label="Ads Ready" value={audit?.scores.adsReadiness||0}/></section><section className="integrationGrid">{providers.map(provider=>{const found=provider==='google_ads'?integrations.find(i=>i.provider==='google_oauth'||i.provider==='google_ads'):integrations.find(i=>i.provider===provider);const label=provider==='google_ads'?'Google Ads':provider==='meta_ads'?'Meta Ads':'TikTok Ads';const connected=found?.status==='connected';const onConnect=provider==='google_ads'?onGoogleConnect:provider==='meta_ads'?onMetaConnect:undefined;const loadingKey=provider==='google_ads'?'google':provider==='meta_ads'?'meta':null;return <article key={provider} className={connected?'connected':''}><div className="integrationIcon">{label.slice(0,1)}</div><div><strong>{label}</strong><span>{found?.account_label||'Hesap bağlanmadı'}</span></div>{connected?<em>BAĞLI</em>:onConnect?<button className="integrationConnect" onClick={onConnect} disabled={!!connecting}>{connecting===loadingKey?'AÇILIYOR…':'BAĞLA'}</button>:<button className="integrationConnect" disabled title="OAuth adapter kurulumu sırada">BAĞLA</button>}</article>})}</section><section className="readinessChecklist"><div><span>Audit skoru</span><b>{audit?.overallScore??'—'}</b></div><div><span>Ads readiness</span><b>{audit?.scores.adsReadiness??'—'}</b></div><div><span>Bağlı hesap</span><b>{connectedAdsCount}/3</b></div></section><div className="moduleFoot">Google ve Meta connector'ları aktif OAuth akışına bağlıdır. TikTok connector sıradaki adapter olarak pasif tutulur.</div></div>;
+  const googleConnected=integrations.some(i=>(i.provider==='google_oauth'||i.provider==='google_ads')&&i.status==='connected');
+  const metaConnected=integrations.some(i=>i.provider==='meta_ads'&&i.status==='connected');
+  const connectedAdsCount = providers.filter(provider=>provider==='google_ads' ? googleConnected : integrations.some(i=>i.provider===provider&&i.status==='connected')).length;
+
+  useEffect(()=>{
+    if(!projectId)return;
+    let alive=true;
+    async function loadMappings(){
+      const jobs:Promise<void>[]=[];
+      if(googleConnected)jobs.push(fetch(`${api}/projects/${projectId}/integrations/google/resources`,{cache:'no-store'}).then(async r=>{if(r.ok&&alive)setGoogleResources(await r.json())}).catch(()=>{}));
+      else setGoogleResources(null);
+      if(metaConnected)jobs.push(fetch(`${api}/projects/${projectId}/integrations/meta/resources`,{cache:'no-store'}).then(async r=>{if(r.ok&&alive)setMetaResources(await r.json())}).catch(()=>{}));
+      else setMetaResources(null);
+      await Promise.all(jobs);
+    }
+    loadMappings();
+    return()=>{alive=false};
+  },[projectId,googleConnected,metaConnected,integrations.map(i=>`${i.provider}:${i.account_label}`).join('|')]);
+
+  async function selectGoogle(value:string){
+    if(!projectId||!value)return;
+    setMappingLoading(true);
+    try{
+      const res=await fetch(`${api}/projects/${projectId}/integrations/google/select`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({customerResourceName:value})});
+      const data=await res.json();
+      if(!res.ok)throw new Error(data.error||'Google Ads hesabı seçilemedi.');
+      setGoogleResources(v=>v?{...v,selectedCustomerResourceName:value}:v);
+      await onRefresh(projectId);
+    }finally{setMappingLoading(false)}
+  }
+  async function selectMeta(value:string){
+    if(!projectId||!value)return;
+    setMappingLoading(true);
+    try{
+      const res=await fetch(`${api}/projects/${projectId}/integrations/meta/select`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({accountId:value})});
+      const data=await res.json();
+      if(!res.ok)throw new Error(data.error||'Meta Ads hesabı seçilemedi.');
+      setMetaResources(v=>v?{...v,selectedAdAccountId:value}:v);
+      await onRefresh(projectId);
+    }finally{setMappingLoading(false)}
+  }
+  const googleAccounts=googleResources?.ads?.resourceNames||[];
+  const metaAccounts=metaResources?.adAccounts||[];
+  return <div className="moduleStack"><section className="moduleHero"><div><p className="eyebrow">Ads Readiness</p><h2>Reklam bütçesinden önce altyapıyı doğrula.</h2><p>Ölçümleme, dönüşüm sinyalleri ve hesap bağlantıları tek görünümde.</p></div><Score label="Ads Ready" value={audit?.scores.adsReadiness||0}/></section><section className="integrationGrid">{providers.map(provider=>{const found=provider==='google_ads'?integrations.find(i=>i.provider==='google_oauth'||i.provider==='google_ads'):integrations.find(i=>i.provider===provider);const label=provider==='google_ads'?'Google Ads':provider==='meta_ads'?'Meta Ads':'TikTok Ads';const connected=found?.status==='connected';const onConnect=provider==='google_ads'?onGoogleConnect:provider==='meta_ads'?onMetaConnect:undefined;const loadingKey=provider==='google_ads'?'google':provider==='meta_ads'?'meta':null;return <article key={provider} className={connected?'connected':''}><div className="integrationIcon">{label.slice(0,1)}</div><div><strong>{label}</strong><span>{found?.account_label||'Hesap bağlanmadı'}</span></div>{connected?<em>BAĞLI</em>:onConnect?<button className="integrationConnect" onClick={onConnect} disabled={!!connecting}>{connecting===loadingKey?'AÇILIYOR…':'BAĞLA'}</button>:<button className="integrationConnect" disabled title="TikTok uygulama onayı bekleniyor">BEKLİYOR</button>}</article>})}</section>
+    {(googleConnected||metaConnected)&&<section className="moduleCard accountMapping"><div className="reportHead compact"><div><p className="eyebrow">Project Account Mapping</p><h2>Bu proje hangi reklam hesabını kullansın?</h2></div><span>{mappingLoading?'Kaydediliyor…':'Proje bazlı'}</span></div><div className="accountMappingGrid">
+      {googleConnected&&<label><span>Google Ads hesabı</span><select value={googleResources?.selectedCustomerResourceName||''} disabled={mappingLoading||googleAccounts.length===0} onChange={e=>selectGoogle(e.target.value)}><option value="">{googleAccounts.length?'Hesap seç':'Erişilebilir hesap bulunamadı'}</option>{googleAccounts.map(name=>{const id=name.replace('customers/','');return <option key={name} value={name}>{id.length===10?`${id.slice(0,3)}-${id.slice(3,6)}-${id.slice(6)}`:id}</option>})}</select><small>{googleResources?.errors?.ads?'Google Ads kaynakları okunamadı.':'OAuth hesabından erişilebilen müşteri hesapları.'}</small></label>}
+      {metaConnected&&<label><span>Meta Ads hesabı</span><select value={metaResources?.selectedAdAccountId||''} disabled={mappingLoading||metaAccounts.length===0} onChange={e=>selectMeta(e.target.value)}><option value="">{metaAccounts.length?'Hesap seç':'Erişilebilir hesap bulunamadı'}</option>{metaAccounts.map(account=>{const value=account.id||account.account_id||'';return <option key={value} value={value}>{account.name||`Meta Ads ${account.account_id||value}`}{account.currency?` · ${account.currency}`:''}</option>})}</select><small>{metaAccounts.length} erişilebilir reklam hesabı bulundu.</small></label>}
+    </div><div className="mappingNote">Seçim yalnızca aktif Growth OS projesi için kaydedilir. Böylece ctseg, Olivon ve diğer müşterilerin kampanya verileri birbirine karışmaz.</div></section>}
+    <section className="readinessChecklist"><div><span>Audit skoru</span><b>{audit?.overallScore??'—'}</b></div><div><span>Ads readiness</span><b>{audit?.scores.adsReadiness??'—'}</b></div><div><span>Bağlı platform</span><b>{connectedAdsCount}/3</b></div></section><div className="moduleFoot">Google ve Meta OAuth bağlantıları aktif. Hesap eşlemesi proje bazında saklanır. TikTok Marketing API uygulama onayı bekleniyor.</div></div>;
 }
 
 function AnalyticsView({overview,metrics}:{overview:Overview|null;metrics:MetricRow[]}) {
