@@ -1,17 +1,14 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import { pool } from './db.js';
+import { initProjectLifecycleSchema } from './project-lifecycle-schema.js';
 import { requireRole, resolveWorkspaceActor, workspaceErrorMessage, workspaceErrorStatus } from './workspace-access.js';
 
 export const projectLifecycleRouter = Router({ mergeParams: true });
 
-async function ensureProjectLifecycleSchema() {
-  await pool.query(`
-    alter table projects add column if not exists status text not null default 'active';
-    alter table projects add column if not exists archived_at timestamptz;
-    alter table projects add column if not exists archived_by text;
-    create index if not exists idx_projects_workspace_status on projects(workspace_id,status,created_at desc);
-  `);
+const projectLifecycleSchemaReady=initProjectLifecycleSchema();
+async function ensureProjectLifecycleSchema(){
+  await projectLifecycleSchemaReady;
 }
 
 const bulkSchema = z.object({
