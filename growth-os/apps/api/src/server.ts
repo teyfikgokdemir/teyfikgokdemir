@@ -117,10 +117,11 @@ app.post('/projects/:id/integrations/google/select',async(req,res)=>{
     if(!names.includes(parsed.data.customerResourceName))return res.status(403).json({error:'Bu Google Ads hesabına erişim bulunamadı.'});
     const customerId=parsed.data.customerResourceName.replace('customers/','');
     const formatted=customerId.length===10?`${customerId.slice(0,3)}-${customerId.slice(3,6)}-${customerId.slice(6)}`:customerId;
-    const {rows}=await pool.query(`update integrations set account_label=$3, metadata=coalesce(metadata,'{}'::jsonb)||$4::jsonb,last_sync_at=now() where project_id=$1 and provider='google_oauth' and status='connected' returning id,provider,account_label,status,mode,last_sync_at`,[req.params.id,'google_oauth',`Google Ads · ${formatted}`,JSON.stringify({selectedCustomerResourceName:parsed.data.customerResourceName,selectedCustomerId:customerId})]);
+    const patch=JSON.stringify({selectedCustomerResourceName:parsed.data.customerResourceName,selectedCustomerId:customerId});
+    const {rows}=await pool.query(`update integrations set account_label=$2, metadata=coalesce(metadata,'{}'::jsonb)||$3::jsonb, last_sync_at=now() where project_id=$1 and provider='google_oauth' and status='connected' returning id,provider,account_label,status,mode,last_sync_at,metadata`,[req.params.id,`Google Ads · ${formatted}`,patch]);
     if(!rows[0])return res.status(404).json({error:'Google bağlantısı bulunamadı.'});
-    res.json(rows[0]);
-  }catch(error){res.status(400).json({error:error instanceof Error?error.message:'Google hesabı seçilemedi.'})}
+    res.json({integration:rows[0],selectedCustomerResourceName:parsed.data.customerResourceName,selectedCustomerId:customerId});
+  }catch(error){console.error('Google account mapping failed',error);res.status(400).json({error:error instanceof Error?error.message:'Google hesabı seçilemedi.'})}
 });
 
 app.post('/projects/:id/integrations/meta/connect', async (req,res)=>{
