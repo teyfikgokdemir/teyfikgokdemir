@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import SearchConsolePanel from './components/SearchConsolePanel';
+import AnalyticsPanel from './components/AnalyticsPanel';
 
 type Issue = { key:string; title:string; severity:string; status:string; detail:string; recommendation:string };
 type Comparison = {
@@ -223,7 +224,7 @@ export default function Home() {
       {section==='audit' && <AuditView domain={domain} setDomain={setDomain} submit={submit} loading={loading} audit={audit} comparison={comparison} openIssues={openIssues} criticalCount={criticalCount} mediumCount={mediumCount} verdict={verdict} audits={audits} />}
       {section==='final' && <FinalView comparison={comparison} audits={audits} />}
       {section==='ads' && <AdsView projectId={selectedProject?.id||null} audit={audit} integrations={integrations} onGoogleConnect={connectGoogle} onMetaConnect={connectMeta} onTikTokConnect={connectTikTok} connecting={connectionLoading} onRefresh={loadProjectModules} />}
-      {section==='analytics' && <AnalyticsView overview={overview} metrics={metrics} />}
+      {section==='analytics' && <AnalyticsPanel projectId={selectedProject?.id||null} />}
       {section==='seo' && <SearchConsolePanel projectId={selectedProject?.id||null} />}
       {section==='crm' && <CrmView overview={overview} leads={leads} />}
       {section==='profit' && <ProfitView overview={overview} metrics={metrics} onSave={saveTargets} />}
