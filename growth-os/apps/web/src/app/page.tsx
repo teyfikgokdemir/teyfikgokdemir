@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useMemo, useState } from 'react';
 import SearchConsolePanel from './components/SearchConsolePanel';
 import AnalyticsPanel from './components/AnalyticsPanel';
 import MerchantPanel from './components/MerchantPanel';
+import AdsSyncPanel from './components/AdsSyncPanel';
 
 type Issue = { key:string; title:string; severity:string; status:string; detail:string; recommendation:string };
 type Comparison = {
@@ -224,7 +225,7 @@ export default function Home() {
       {section==='projects' && <ProjectsView projects={projects} selected={selectedProject} onSelect={openProject} />}
       {section==='audit' && <AuditView domain={domain} setDomain={setDomain} submit={submit} loading={loading} audit={audit} comparison={comparison} openIssues={openIssues} criticalCount={criticalCount} mediumCount={mediumCount} verdict={verdict} audits={audits} />}
       {section==='final' && <FinalView comparison={comparison} audits={audits} />}
-      {section==='ads' && <AdsView projectId={selectedProject?.id||null} audit={audit} integrations={integrations} onGoogleConnect={connectGoogle} onMetaConnect={connectMeta} onTikTokConnect={connectTikTok} connecting={connectionLoading} onRefresh={loadProjectModules} />}
+      {section==='ads' && <div className="moduleStack"><AdsView projectId={selectedProject?.id||null} audit={audit} integrations={integrations} onGoogleConnect={connectGoogle} onMetaConnect={connectMeta} onTikTokConnect={connectTikTok} connecting={connectionLoading} onRefresh={loadProjectModules} /><AdsSyncPanel projectId={selectedProject?.id||null} onSynced={()=>selectedProject?loadProjectModules(selectedProject.id):undefined} /></div>}
       {section==='analytics' && <AnalyticsPanel projectId={selectedProject?.id||null} />}
       {section==='seo' && <SearchConsolePanel projectId={selectedProject?.id||null} />}
       {section==='commerce' && <MerchantPanel projectId={selectedProject?.id||null} />}
