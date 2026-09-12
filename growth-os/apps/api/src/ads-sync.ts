@@ -1,6 +1,17 @@
 import { pool } from './db.js';
+import type { PoolClient } from 'pg';
 import { decryptSecret, googleAccessForProject } from './google.js';
 import { refreshGrowthIntelligence } from './growth-intelligence.js';
+
+class AdsSyncAbortedError extends Error {
+  constructor(){super('Proje arşivlendi; reklam senkronizasyonu durduruldu.')}
+}
+
+async function assertProjectStillActive(projectId:string,client?:PoolClient){
+  // Hold the project lock until the local write transaction commits. Never across provider fetches.
+  const {rows}=await (client||pool).query(`select status from projects where id=$1${client?' for update':''}`,[projectId]);
+  if(rows[0]?.status!=='active')throw new AdsSyncAbortedError();
+}
 
 type NormalizedMetric={
   provider:'google_ads'|'meta_ads'|'tiktok_ads';
@@ -67,6 +78,7 @@ async function googleMetrics(projectId:string,days:number):Promise<NormalizedMet
   if(developerToken)headers['developer-token']=developerToken;
   const loginCustomerId=process.env.GOOGLE_ADS_LOGIN_CUSTOMER_ID?.replace(/\D/g,'');
   if(loginCustomerId)headers['login-customer-id']=loginCustomerId;
+  await assertProjectStillActive(projectId);
   const response=await fetch(`https://googleads.googleapis.com/${version}/customers/${metadata.selectedCustomerId}/googleAds:searchStream`,{method:'POST',headers,body:JSON.stringify({query})});
   const text=await response.text();
   if(!response.ok)throw new Error(`Google Ads API ${response.status}: ${text.slice(0,500)}`);
@@ -115,6 +127,7 @@ async function metaMetrics(projectId:string,days:number):Promise<NormalizedMetri
   const all:Array<Record<string,unknown>>=[];
   let next:string|null=url.toString();
   while(next&&all.length<5000){
+    await assertProjectStillActive(projectId);
     const response=await fetch(next);
     const data=await response.json() as {data?:Array<Record<string,unknown>>;paging?:{next?:string};error?:{message?:string}};
     if(!response.ok)throw new Error(data.error?.message||`Meta API ${response.status}`);
@@ -151,6 +164,7 @@ async function tiktokMetrics(projectId:string,days:number):Promise<NormalizedMet
   url.searchParams.set('start_date',start);
   url.searchParams.set('end_date',end);
   url.searchParams.set('page_size','1000');
+  await assertProjectStillActive(projectId);
   const response=await fetch(url,{headers:{'Access-Token':token}});
   const payload=await response.json() as {code?:number;message?:string;data?:{list?:Array<{dimensions?:Record<string,unknown>;metrics?:Record<string,unknown>}>}};
   if(!response.ok||payload.code!==0)throw new Error(payload.message||`TikTok API ${response.status}`);
@@ -168,16 +182,18 @@ async function tiktokMetrics(projectId:string,days:number):Promise<NormalizedMet
   })).filter(x=>x.campaignId);
 }
 
-async function persist(projectId:string,metrics:NormalizedMetric[]){
+async function persist(projectId:string,metrics:NormalizedMetric[],provider:string){
   const client=await pool.connect();
   try{
     await client.query('begin');
+    await assertProjectStillActive(projectId,client);
     for(const m of metrics){
       await client.query(`insert into campaign_metrics(project_id,provider,external_campaign_id,campaign_name,metric_date,spend,impressions,clicks,conversions,attributed_revenue,metadata)
         values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
         on conflict(project_id,provider,external_campaign_id,metric_date) do update set campaign_name=excluded.campaign_name,spend=excluded.spend,impressions=excluded.impressions,clicks=excluded.clicks,conversions=excluded.conversions,attributed_revenue=excluded.attributed_revenue,metadata=excluded.metadata`,
         [projectId,m.provider,m.campaignId,m.campaignName,m.date,m.spend,m.impressions,m.clicks,m.conversions,m.revenue,m.metadata||{}]);
     }
+    await client.query("update integrations set last_sync_at=now() where project_id=$1 and provider=$2",[projectId,provider==='google_ads'?'google_oauth':provider]);
     await client.query('commit');
   }catch(error){await client.query('rollback');throw error}finally{client.release()}
 }
@@ -276,6 +292,7 @@ async function refreshAdsIntelligence(projectId:string,metrics:NormalizedMetric[
   const client=await pool.connect();
   try{
     await client.query('begin');
+    await assertProjectStillActive(projectId,client);
     await client.query("update alerts set status='resolved',resolved_at=now() where project_id=$1 and source='ads_intelligence' and status='open'",[projectId]);
     await client.query("update recommendations set status='superseded',decided_at=now() where project_id=$1 and source='ads_intelligence' and status='proposed'",[projectId]);
     for(const alert of alerts){
@@ -310,10 +327,13 @@ function summarize(metrics:NormalizedMetric[]){
   return byProvider;
 }
 
-export async function syncAdsProject(projectId:string,days=30){
+type SyncProgress={results:Array<{provider:string;ok:boolean;rows:number;error?:string}>;metrics:number;alerts:number;recommendations:number};
+
+async function syncActiveAdsProject(projectId:string,days:number,progress:SyncProgress){
+  await assertProjectStillActive(projectId);
   const providers=await pool.query("select provider from integrations where project_id=$1 and status='connected' and provider in ('google_oauth','meta_ads','tiktok_ads')",[projectId]);
   const active=new Set(providers.rows.map(r=>r.provider as string));
-  const results:Array<{provider:string;ok:boolean;rows:number;error?:string}>=[];
+  const results=progress.results;
   const jobs:Array<[string,()=>Promise<NormalizedMetric[]>]>=[];
   const allMetrics:NormalizedMetric[]=[];
   if(active.has('google_oauth'))jobs.push(['google_ads',()=>googleMetrics(projectId,days)]);
@@ -321,19 +341,70 @@ export async function syncAdsProject(projectId:string,days=30){
   if(active.has('tiktok_ads'))jobs.push(['tiktok_ads',()=>tiktokMetrics(projectId,days)]);
   for(const [provider,job] of jobs){
     try{
+      await assertProjectStillActive(projectId);
       const metrics=await job();
+      await persist(projectId,metrics,provider);
+      progress.metrics+=metrics.length;
       allMetrics.push(...metrics);
-      await persist(projectId,metrics);
-      await pool.query("update integrations set last_sync_at=now() where project_id=$1 and provider=$2",[projectId,provider==='google_ads'?'google_oauth':provider]);
       results.push({provider,ok:true,rows:metrics.length});
-    }catch(error){results.push({provider,ok:false,rows:0,error:error instanceof Error?error.message:'Senkronizasyon başarısız.'})}
+    }catch(error){
+      if(error instanceof AdsSyncAbortedError)throw error;
+      await assertProjectStillActive(projectId);
+      results.push({provider,ok:false,rows:0,error:error instanceof Error?error.message:'Senkronizasyon başarısız.'});
+    }
   }
+  await assertProjectStillActive(projectId);
   const intelligence=allMetrics.length?await refreshAdsIntelligence(projectId,allMetrics):{evaluatedCampaigns:0,alerts:0,recommendations:0,targetsConfigured:{targetRoas:false,targetCpa:false,breakEvenRoas:false}};
+  progress.alerts+=intelligence.alerts;
+  progress.recommendations+=intelligence.recommendations;
   let crossSourceIntelligence:unknown=null;
   try{
-    crossSourceIntelligence=await refreshGrowthIntelligence(projectId);
+    await assertProjectStillActive(projectId);
+    const growth=await refreshGrowthIntelligence(projectId,client=>assertProjectStillActive(projectId,client));
+    progress.alerts+=growth.counts.alerts;
+    progress.recommendations+=growth.counts.recommendations;
+    crossSourceIntelligence=growth;
   }catch(error){
+    if(error instanceof AdsSyncAbortedError)throw error;
+    await assertProjectStillActive(projectId);
     crossSourceIntelligence={error:error instanceof Error?error.message:'Growth Intelligence yenilenemedi.'};
   }
   return {readOnly:true,externalExecution:false,days,results,summary:summarize(allMetrics),intelligence,crossSourceIntelligence};
+}
+
+export async function syncAdsProject(projectId:string,days=30){
+  const client=await pool.connect();
+  let runId:string;
+  try{
+    await client.query('begin');
+    await assertProjectStillActive(projectId,client);
+    const {rows}=await client.query("insert into ads_sync_runs(project_id,requested_days) values($1,$2) returning id",[projectId,days]);
+    runId=rows[0].id;
+    await client.query('commit');
+  }catch(error){await client.query('rollback');throw error}finally{client.release()}
+
+  const progress:SyncProgress={results:[],metrics:0,alerts:0,recommendations:0};
+  try{
+    const result=await syncActiveAdsProject(projectId,days,progress);
+    const finalizer=await pool.connect();
+    try{
+      await finalizer.query('begin');
+      await assertProjectStillActive(projectId,finalizer);
+      const updated=await finalizer.query(`update ads_sync_runs set status=$2,finished_at=now(),error_message=$3,
+        provider_results=$4,metrics_written=$5,alerts_created=$6,recommendations_created=$7
+        where id=$1 and status='running'`,
+        [runId,progress.results.some(r=>!r.ok)?'failed':'success',progress.results.filter(r=>!r.ok).map(r=>`${r.provider}: ${r.error}`).join('; ')||null,JSON.stringify(progress.results),progress.metrics,progress.alerts,progress.recommendations]);
+      if(updated.rowCount!==1)throw new Error('Reklam senkronizasyonu zaten sonlandırılmış.');
+      await finalizer.query('commit');
+    }catch(error){await finalizer.query('rollback');throw error}finally{finalizer.release()}
+    return result;
+  }catch(error){
+    // Prefer the archive abort even when a provider fails while the project is being archived.
+    try{await assertProjectStillActive(projectId)}catch(stateError){if(stateError instanceof AdsSyncAbortedError)error=stateError}
+    await pool.query(`update ads_sync_runs set status='failed',finished_at=now(),error_message=$2,
+      provider_results=$3,metrics_written=$4,alerts_created=$5,recommendations_created=$6
+      where id=$1 and status='running'`,
+      [runId,error instanceof Error?error.message:'Reklam senkronizasyonu başarısız.',JSON.stringify(progress.results),progress.metrics,progress.alerts,progress.recommendations]);
+    throw error;
+  }
 }

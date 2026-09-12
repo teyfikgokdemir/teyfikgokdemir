@@ -1,4 +1,5 @@
 import { pool } from './db.js';
+import type { PoolClient } from 'pg';
 import { discoverGoogleResources, searchConsolePerformanceForProject } from './google.js';
 import { attachRecommendationDecision } from './recommendation-scoring.js';
 import { attachRevenueImpact } from './revenue-impact.js';
@@ -33,7 +34,7 @@ export async function getGrowthIntelligence(projectId:string){
   return {alerts:alerts.rows,recommendations:recommendations.rows,counts:{alerts:alerts.rows.length,recommendations:recommendations.rows.length}};
 }
 
-export async function refreshGrowthIntelligence(projectId:string){
+export async function refreshGrowthIntelligence(projectId:string,beforeWrite?:(client:PoolClient)=>Promise<void>){
   const project=await pool.query('select id,domain from projects where id=$1',[projectId]);
   if(!project.rows[0])throw new Error('Proje bulunamadı.');
 
@@ -127,6 +128,7 @@ export async function refreshGrowthIntelligence(projectId:string){
   const client=await pool.connect();
   try{
     await client.query('begin');
+    await beforeWrite?.(client);
     await client.query("update alerts set status='resolved',resolved_at=now() where project_id=$1 and source='growth_intelligence' and status='open'",[projectId]);
     await client.query("update recommendations set status='superseded',decided_at=now() where project_id=$1 and source='growth_intelligence' and status='proposed'",[projectId]);
     for(const alert of alerts){
