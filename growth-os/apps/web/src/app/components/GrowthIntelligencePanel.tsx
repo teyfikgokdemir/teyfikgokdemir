@@ -6,6 +6,7 @@ type Metric={spend:string|number;clicks:string|number;conversions:string|number;
 type Overview={targets?:{target_roas?:number|null;target_cpa?:number|null};metrics30d?:{spend?:number;revenue?:number;roas?:number|null}};
 type GoogleResources={analyticsPerformance?:{matched?:boolean;summary?:{sessions?:number;keyEvents?:number;transactions?:number;totalRevenue?:number}};merchantCommerce?:{matched?:boolean;summary?:{totalProducts?:number;disapproved?:number;withIssues?:number;accountIssues?:number}};errors?:Record<string,string>};
 type SearchData={summary?:{clicks?:number;impressions?:number;ctr?:number;position?:number}};
+type QueueRecommendation={source?:string;status?:string};
 type Signal={severity:'high'|'medium'|'good';title:string;detail:string;action?:string;source:string};
 
 const api='/api/growth';
@@ -17,6 +18,7 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
   const [overview,setOverview]=useState<Overview|null>(null);
   const [google,setGoogle]=useState<GoogleResources|null>(null);
   const [search,setSearch]=useState<SearchData|null>(null);
+  const [queueCount,setQueueCount]=useState(0);
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState('');
   const [updatedAt,setUpdatedAt]=useState<Date|null>(null);
@@ -25,22 +27,33 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
     if(!projectId)return;
     setLoading(true);setError('');
     try{
-      const [m,o,g,s]=await Promise.all([
+      const [m,o,g,s,r]=await Promise.all([
         fetch(`${api}/projects/${projectId}/metrics`,{cache:'no-store'}),
         fetch(`${api}/projects/${projectId}/overview`,{cache:'no-store'}),
         fetch(`${api}/projects/${projectId}/integrations/google/resources`,{cache:'no-store'}),
-        fetch(`${api}/projects/${projectId}/search-console/performance?days=28`,{cache:'no-store'})
+        fetch(`${api}/projects/${projectId}/search-console/performance?days=28`,{cache:'no-store'}),
+        fetch(`${api}/projects/${projectId}/recommendations`,{cache:'no-store'})
       ]);
       if(m.ok)setMetrics(await m.json());
       if(o.ok)setOverview(await o.json());
       if(g.ok)setGoogle(await g.json());
       if(s.ok)setSearch(await s.json());
+      if(r.ok){
+        const rows=await r.json() as QueueRecommendation[];
+        setQueueCount(rows.filter(x=>x.source==='growth_intelligence'&&x.status==='proposed').length);
+      }
       setUpdatedAt(new Date());
     }catch(e){setError(e instanceof Error?e.message:'Growth Intelligence verileri okunamadı.');}
     finally{setLoading(false)}
   }
 
-  useEffect(()=>{setMetrics([]);setOverview(null);setGoogle(null);setSearch(null);void refresh()},[projectId]);
+  function openRecommendations(){
+    const buttons=Array.from(document.querySelectorAll<HTMLButtonElement>('aside.side nav button'));
+    const target=buttons.find(button=>button.querySelector('span')?.textContent?.trim()==='Recommendations');
+    target?.click();
+  }
+
+  useEffect(()=>{setMetrics([]);setOverview(null);setGoogle(null);setSearch(null);setQueueCount(0);void refresh()},[projectId]);
 
   const signals=useMemo<Signal[]>(()=>{
     const out:Signal[]=[];
@@ -80,11 +93,18 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
       :'Bağlı kaynaklarda kritik veya orta öncelikli çapraz-kanal sorun görünmüyor.';
 
   return <section className="moduleCard">
-    <div className="reportHead compact"><div><p className="eyebrow">Growth Intelligence · Executive Decision</p><h2>{statusTitle}</h2><p>{statusDetail}</p></div><button className="primaryAction" onClick={refresh} disabled={loading}>{loading?'Analiz ediliyor…':'Karar Motorunu Yenile'}</button></div>
+    <div className="reportHead compact">
+      <div><p className="eyebrow">Growth Intelligence · Executive Decision</p><h2>{statusTitle}</h2><p>{statusDetail}</p></div>
+      <div style={{display:'flex',gap:10,flexWrap:'wrap',justifyContent:'flex-end'}}>
+        <button onClick={openRecommendations}>Recommendations{queueCount>0?` · ${queueCount}`:''}</button>
+        <button className="primaryAction" onClick={refresh} disabled={loading}>{loading?'Analiz ediliyor…':'Karar Motorunu Yenile'}</button>
+      </div>
+    </div>
 
     <div className="readinessChecklist">
       <div><span>Kritik</span><b>{high}</b></div>
       <div><span>Fırsat</span><b>{medium}</b></div>
+      <div><span>Onay kuyruğu</span><b>{queueCount}</b></div>
       <div><span>Toplam karar</span><b>{signals.length}</b></div>
     </div>
 
@@ -101,6 +121,6 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
       </article>)}
     </div>
 
-    <div className="moduleFoot">{updatedAt?`Son analiz: ${updatedAt.toLocaleString('tr-TR')}`:'Kaynaklar okunuyor…'} · Ads + GA4 + Search Console + Merchant birlikte değerlendirilir.</div>
+    <div className="moduleFoot">{updatedAt?`Son analiz: ${updatedAt.toLocaleString('tr-TR')}`:'Kaynaklar okunuyor…'} · Growth Intelligence önerileri senkronizasyon sonrası Recommendations onay kuyruğunda tutulur.</div>
   </section>;
 }
