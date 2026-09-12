@@ -45,3 +45,28 @@
   .readinessChecklist>div{gap:12px}.readinessChecklist span{line-height:1.35}.finalStats span,.executiveStats span{line-height:1.3}
   .attentionStrip span,.engineStrip span,.openChips span,.auditHistoryStrip span{white-space:normal}
 }
+
+/* Coral-led premium theme: coral is primary, lilac and violet support depth. */
+:root{--accent:#ff6f61;--accent2:#d7b8ff;--accent3:#8b5cf6;--line:#3a2638;--line2:#593447;--panel:#140d16;--panel2:#1b1020;--muted:#b8a4b4;--danger:#ff7d8f}
+body{background:radial-gradient(circle at 78% -8%,rgba(255,111,97,.22),transparent 34%),radial-gradient(circle at 12% 4%,rgba(215,184,255,.10),transparent 27%),radial-gradient(circle at 54% 18%,rgba(139,92,246,.06),transparent 30%),#09070c}
+.side{border-right-color:rgba(255,111,97,.16);background:linear-gradient(180deg,rgba(18,10,17,.985),rgba(9,7,12,.985))}
+.brand>span{border-color:rgba(255,111,97,.5);color:#ffe4df;background:linear-gradient(145deg,#35202d,#17101b);box-shadow:0 0 30px rgba(255,111,97,.16)}
+.brand small,.eyebrow{color:#d0a7c2}
+.side nav button:hover{background:rgba(255,111,97,.08)!important;border-color:rgba(215,184,255,.16)!important}
+.side nav button.active{background:linear-gradient(135deg,rgba(255,111,97,.22),rgba(139,92,246,.10))!important;border-color:rgba(255,111,97,.40)!important;box-shadow:inset 3px 0 0 #ff6f61,0 10px 28px rgba(0,0,0,.16)!important}
+.moduleCard,.dashboardMainCard,.quickActions,.recentAudits,.executiveCard,.finalCard,.growthPanel{border-color:rgba(255,111,97,.16)!important;background:linear-gradient(135deg,rgba(25,14,23,.97),rgba(13,9,17,.99))!important;box-shadow:0 24px 80px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.025)}
+.dashboardHero,.moduleHero{border-color:rgba(255,111,97,.20)!important;background:radial-gradient(circle at 84% 18%,rgba(255,111,97,.19),transparent 35%),radial-gradient(circle at 68% 4%,rgba(215,184,255,.08),transparent 28%),linear-gradient(135deg,#1a101c,#0c0911)!important}
+.primaryAction,.dashboardSectionHead button,.auditBox button{border-color:rgba(255,151,137,.58)!important;background:linear-gradient(135deg,#ff7f70,#e86178 58%,#9a62de)!important;color:#fff!important;box-shadow:0 14px 32px rgba(232,97,120,.24)!important;transition:transform .18s ease,filter .18s ease,box-shadow .18s ease!important}
+.primaryAction:hover,.dashboardSectionHead button:hover,.auditBox button:hover{transform:translateY(-1px);filter:brightness(1.05);box-shadow:0 18px 36px rgba(232,97,120,.30)!important}
+.moduleCard .reportHead.compact>div:last-child>button:not(.primaryAction){appearance:none;border:1px solid rgba(255,137,124,.34);background:linear-gradient(135deg,rgba(255,111,97,.12),rgba(215,184,255,.07));color:#ffe8e3;border-radius:12px;padding:12px 16px;font:inherit;font-size:12px;font-weight:750;cursor:pointer;white-space:nowrap;box-shadow:inset 0 1px rgba(255,255,255,.04),0 10px 26px rgba(0,0,0,.16);transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease}
+.moduleCard .reportHead.compact>div:last-child>button:not(.primaryAction):hover{transform:translateY(-1px);border-color:rgba(255,154,140,.62);background:linear-gradient(135deg,rgba(255,111,97,.18),rgba(139,92,246,.10));box-shadow:0 14px 30px rgba(255,111,97,.10),inset 0 1px rgba(255,255,255,.06)}
+.readinessChecklist>div,.recommendationList article,.dashboardStats>div,.bigScore,.overviewMini,.finalStats div,.executiveStats div{border-color:rgba(215,184,255,.14)!important;background:linear-gradient(180deg,#120b13,#0c0910)!important}
+.recPriority{border-color:rgba(255,111,97,.32)!important;background:rgba(255,111,97,.10)!important;color:#ffb1a6!important}
+.ring{background:conic-gradient(#ff6f61 var(--score),#332139 0)!important;filter:drop-shadow(0 0 14px rgba(255,111,97,.16))}
+.private{border-color:rgba(255,111,97,.38)!important;color:#ffd3cc!important;background:rgba(255,111,97,.07)!important}
+.projectBar{border-color:rgba(255,111,97,.17)!important;background:linear-gradient(135deg,rgba(25,14,23,.94),rgba(12,8,16,.97))!important}
+.moduleFoot{border-color:rgba(255,111,97,.14)!important;background:rgba(255,111,97,.035)!important}
+.side::-webkit-scrollbar-thumb{background:#5a3447!important}
+.side::-webkit-scrollbar-thumb:hover{background:#855064!important}
+
+@media(max-width:900px){.moduleCard .reportHead.compact>div:last-child{width:100%}.moduleCard .reportHead.compact>div:last-child>button{width:100%}}
