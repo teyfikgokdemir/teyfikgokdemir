@@ -4,6 +4,7 @@ import express from 'express';
 import { z } from 'zod';
 import { initDb, pool } from './db.js';
 import { runAudit } from './audit.js';
+import { syncAdsProject } from './ads-sync.js';
 import { buildGoogleAuthUrl, discoverGoogleResources, encryptSecret, exchangeGoogleCode } from './google.js';
 import { buildMetaAuthUrl, discoverMetaResources, exchangeMetaCode, exchangeMetaLongLivedToken, metaCredentialMetadata } from './meta.js';
 import { buildTikTokAuthUrl, discoverTikTokAdvertisers, exchangeTikTokCode, tikTokCredentialMetadata } from './tiktok.js';
@@ -45,6 +46,7 @@ async function refreshAuditActions(projectId:string, auditId:string, result:Audi
 }
 
 app.get('/health', (_req, res) => res.json({ ok:true, service:'growth-os-api', time:new Date().toISOString() }));
+app.get('/capabilities',(_req,res)=>res.json({mode:'read_only',externalExecution:false,adPublishing:false,budgetMutation:false,creativeMutation:false,metricsSync:true}));
 app.get('/projects', async (_req,res)=>{ const {rows}=await pool.query('select * from projects order by created_at desc'); res.json(rows); });
 
 app.get('/projects/:id/overview', async (req,res)=>{
@@ -70,6 +72,14 @@ app.get('/projects/:id/metrics',async(req,res)=>{const{rows}=await pool.query('s
 app.get('/projects/:id/leads',async(req,res)=>{const{rows}=await pool.query('select id,source,campaign_id,name,email,phone,status,lead_value,won_revenue,owner,created_at,updated_at from crm_leads where project_id=$1 order by created_at desc limit 250',[req.params.id]);res.json(rows)});
 app.get('/projects/:id/integrations',async(req,res)=>{const{rows}=await pool.query('select id,provider,account_label,external_account_id,status,mode,last_sync_at,created_at from integrations where project_id=$1 order by provider',[req.params.id]);res.json(rows)});
 app.get('/projects/:id/actions',async(req,res)=>{const{rows}=await pool.query('select id,recommendation_id,provider,action_type,status,approved_by,executed_at,created_at from action_log where project_id=$1 order by created_at desc limit 100',[req.params.id]);res.json(rows)});
+app.post('/projects/:id/ads/sync',async(req,res)=>{
+  const parsed=z.object({days:z.number().int().min(1).max(90).optional()}).safeParse(req.body||{});
+  if(!parsed.success)return res.status(400).json({error:'Senkronizasyon aralığı geçersiz.'});
+  const project=await pool.query('select id from projects where id=$1',[req.params.id]);
+  if(!project.rows[0])return res.status(404).json({error:'Proje bulunamadı.'});
+  try{res.json(await syncAdsProject(req.params.id,parsed.data.days||30))}
+  catch(error){res.status(400).json({error:error instanceof Error?error.message:'Reklam verileri senkronize edilemedi.'})}
+});
 
 app.post('/projects/:id/integrations/google/connect', async (req,res)=>{
   const project=await pool.query('select id from projects where id=$1',[req.params.id]);
