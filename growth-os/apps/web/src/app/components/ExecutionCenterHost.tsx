@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import ApprovalDeskPanel from './ApprovalDeskPanel';
 import ExecutionCenterPanel from './ExecutionCenterPanel';
 
 type Project={id:string;name?:string;domain:string};
@@ -17,13 +18,30 @@ export default function ExecutionCenterHost(){
     if(window.location.pathname!=='/')return;
     let alive=true;
     let projects:Project[]=[];
+    let hiddenModule:HTMLElement|null=null;
+
+    const restoreLegacy=()=>{
+      if(hiddenModule){hiddenModule.style.display='';hiddenModule=null;}
+    };
 
     const resolve=()=>{
       if(!alive)return;
       const activeLabel=document.querySelector<HTMLElement>('aside.side nav button.active span')?.textContent?.trim()||'';
       const isRecommendations=activeLabel==='Recommendations';
       setVisible(isRecommendations);
-      if(!isRecommendations){setProjectId(null);return;}
+
+      if(!isRecommendations){
+        restoreLegacy();
+        setProjectId(null);
+        return;
+      }
+
+      const legacy=document.querySelector<HTMLElement>('section.content > .moduleStack');
+      if(legacy&&legacy!==hiddenModule){
+        restoreLegacy();
+        hiddenModule=legacy;
+        hiddenModule.style.display='none';
+      }
 
       const displayedDomain=normalizeDomain(document.querySelector<HTMLElement>('.projectBar > div:first-child small')?.textContent||'');
       const displayedName=document.querySelector<HTMLElement>('.projectBar > div:first-child strong')?.textContent?.trim().toLowerCase()||'';
@@ -45,11 +63,15 @@ export default function ExecutionCenterHost(){
 
     return()=>{
       alive=false;
+      restoreLegacy();
       observer.disconnect();
       window.clearInterval(timer);
     };
   },[]);
 
   if(!visible||!projectId)return null;
-  return <div style={{marginLeft:'242px',padding:'0 34px 34px',maxWidth:'1600px'}}><ExecutionCenterPanel projectId={projectId}/></div>;
+  return <div className="moduleStack" style={{marginLeft:'242px',padding:'0 34px 34px',maxWidth:'1600px'}}>
+    <ApprovalDeskPanel projectId={projectId}/>
+    <ExecutionCenterPanel projectId={projectId}/>
+  </div>;
 }
