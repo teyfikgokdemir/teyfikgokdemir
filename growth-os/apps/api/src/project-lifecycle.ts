@@ -13,6 +13,8 @@ async function ensureProjectLifecycleSchema(){
   await projectLifecycleSchemaReady;
 }
 
+const projectIdSchema = z.string().uuid();
+
 const bulkSchema = z.object({
   projectIds: z.array(z.string().uuid()).min(1).max(200)
 });
@@ -153,6 +155,10 @@ projectLifecycleRouter.post('/bulk/restore', async (req, res) => {
 });
 
 projectLifecycleRouter.post('/:projectId/archive', async (req, res) => {
+  if (!projectIdSchema.safeParse(req.params.projectId).success) {
+    return res.status(400).json({ error: 'Geçerli bir proje kimliği gerekli.' });
+  }
+
   const db = await pool.connect();
   try {
     await ensureProjectLifecycleSchema();
@@ -203,6 +209,10 @@ projectLifecycleRouter.post('/:projectId/archive', async (req, res) => {
 });
 
 projectLifecycleRouter.post('/:projectId/restore', async (req, res) => {
+  if (!projectIdSchema.safeParse(req.params.projectId).success) {
+    return res.status(400).json({ error: 'Geçerli bir proje kimliği gerekli.' });
+  }
+
   const db = await pool.connect();
   try {
     await ensureProjectLifecycleSchema();
@@ -252,6 +262,10 @@ projectLifecycleRouter.post('/:projectId/restore', async (req, res) => {
 });
 
 projectLifecycleRouter.delete('/:projectId', async (req, res) => {
+  if (!projectIdSchema.safeParse(req.params.projectId).success) {
+    return res.status(400).json({ error: 'Geçerli bir proje kimliği gerekli.' });
+  }
+
   const parsed = z.object({ confirmName: z.string().min(1).max(200) }).safeParse(req.body || {});
   if (!parsed.success) return res.status(400).json({ error: 'Kalıcı silme için proje adını doğrulayın.' });
 
