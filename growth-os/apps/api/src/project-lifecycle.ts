@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { pool } from './db.js';
 import { initProjectLifecycleSchema } from './project-lifecycle-schema.js';
+import { reconcileArchivedProjectSafety } from './project-archive-safety.js';
 import { writeWorkspaceActivity } from './workspace-activity-log.js';
 import { requireRole, resolveWorkspaceActor, workspaceErrorMessage, workspaceErrorStatus } from './workspace-access.js';
 
@@ -168,6 +169,7 @@ projectLifecycleRouter.post('/:projectId/archive', async (req, res) => {
     );
     const project = locked.rows[0];
     if (!project) throw new Error('PROJECT_ACCESS_DENIED');
+    await reconcileArchivedProjectSafety(db, [projectId]);
     if (project.status === 'archived') {
       await db.query('commit');
       return res.json({ archived: true, project });
@@ -175,28 +177,10 @@ projectLifecycleRouter.post('/:projectId/archive', async (req, res) => {
 
     const { rows } = await db.query(
       `update projects
-       set status='archived',archived_at=now(),archived_by=$3
+       set status='archived',archived_at=coalesce(archived_at,now()),archived_by=coalesce(archived_by,$3)
        where id=$1 and workspace_id=$2
        returning id,workspace_id,client_id,name,domain,status,archived_at,archived_by,created_at`,
       [projectId, actor.workspaceId, actor.email]
-    );
-    await db.query(
-      `update oauth_states set expires_at=least(expires_at,now()) where project_id=$1`,
-      [projectId]
-    );
-    await db.query(
-      `update project_execution_policy
-       set ads_write_enabled=false,updated_at=now()
-       where project_id=$1`,
-      [projectId]
-    );
-    await db.query(
-      `update execution_jobs
-       set status='failed',
-           error_message='Proje arşivlendi; bekleyen veya çalışan execution durduruldu.',
-           finished_at=coalesce(finished_at,now())
-       where project_id=$1 and status in ('queued','in_progress')`,
-      [projectId]
     );
     await writeWorkspaceActivity(db, {
       workspaceId: actor.workspaceId,
