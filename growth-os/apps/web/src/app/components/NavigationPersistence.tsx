@@ -1,10 +1,16 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import GrowthIntelligencePanel from './GrowthIntelligencePanel';
 
 const STORAGE_KEY='growth-os:last-section';
+type Project={id:string;domain:string};
 
 export default function NavigationPersistence(){
+  const [portalTarget,setPortalTarget]=useState<HTMLElement|null>(null);
+  const [projectId,setProjectId]=useState<string|null>(null);
+
   useEffect(()=>{
     if(window.location.pathname!=='/')return;
 
@@ -47,5 +53,42 @@ export default function NavigationPersistence(){
     };
   },[]);
 
-  return null;
+  useEffect(()=>{
+    if(window.location.pathname!=='/')return;
+    let alive=true;
+    let projects:Project[]=[];
+
+    const resolve=()=>{
+      if(!alive)return;
+      const dashboard=document.querySelector<HTMLElement>('.dashboardHome');
+      if(!dashboard){setPortalTarget(null);setProjectId(null);return;}
+
+      let mount=dashboard.querySelector<HTMLElement>('#overview-growth-intelligence');
+      if(!mount){
+        mount=document.createElement('div');
+        mount.id='overview-growth-intelligence';
+        mount.className='moduleStack';
+        dashboard.appendChild(mount);
+      }
+      setPortalTarget(current=>current===mount?current:mount);
+
+      const domain=document.querySelector<HTMLElement>('.projectBar > div:first-child small')?.textContent?.trim().replace(/^www\./,'')||'';
+      const project=projects.find(p=>p.domain.replace(/^www\./,'')===domain);
+      setProjectId(current=>current===(project?.id||null)?current:(project?.id||null));
+    };
+
+    fetch('/api/growth/projects',{cache:'no-store'})
+      .then(r=>r.ok?r.json():[])
+      .then((rows:Project[])=>{projects=rows;resolve()})
+      .catch(()=>resolve());
+
+    const observer=new MutationObserver(resolve);
+    observer.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class']});
+    resolve();
+
+    return()=>{alive=false;observer.disconnect()};
+  },[]);
+
+  if(!portalTarget||!projectId)return null;
+  return createPortal(<GrowthIntelligencePanel projectId={projectId}/>,portalTarget);
 }
