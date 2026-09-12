@@ -9,7 +9,7 @@ export async function initProjectLifecycleSchema(){
 
     create table if not exists workspace_activity_log(
       id uuid primary key default gen_random_uuid(),
-      workspace_id uuid not null references workspaces(id) on delete cascade,
+      workspace_id uuid not null references agency_workspaces(id) on delete cascade,
       actor_email text not null,
       action text not null,
       entity_type text not null,
