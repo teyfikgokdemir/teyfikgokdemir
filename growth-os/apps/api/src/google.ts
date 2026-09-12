@@ -26,8 +26,6 @@ type MerchantProductsResponse={products?:MerchantProduct[];nextPageToken?:string
 type MerchantAccountIssue={name?:string;title?:string;severity?:string;detail?:string;documentationUri?:string;impactedDestinations?:unknown[]};
 type MerchantIssuesResponse={accountIssues?:MerchantAccountIssue[];nextPageToken?:string};
 
-const MERCHANT_DEVELOPER_ACCOUNT_ID='5785856921';
-
 function required(name:string) {
   const value = process.env[name];
   if (!value) throw new Error(`${name} yapılandırılmamış.`);
@@ -119,10 +117,6 @@ async function postJson<T>(url:string, accessToken:string, body:unknown):Promise
   return data as T;
 }
 
-async function registerMerchantDeveloper(accessToken:string){
-  return postJson<{name?:string;gcpIds?:string[]}>(`https://merchantapi.googleapis.com/accounts/v1/accounts/${MERCHANT_DEVELOPER_ACCOUNT_ID}/developerRegistration:registerGcp`,accessToken,{});
-}
-
 function isoDate(date:Date){return date.toISOString().slice(0,10)}
 function normalizeDomain(value:string){return value.replace(/^https?:\/\//,'').replace(/^www\./,'').split('/')[0].toLowerCase()}
 
@@ -167,21 +161,15 @@ export async function searchConsolePerformanceForProject(projectId:string,days=2
 }
 
 async function merchantCommerceForProject(projectId:string,accessToken:string){
-  const project=await pool.query('select domain from projects where id=$1',[projectId]);
+  const [project,integration]=await Promise.all([
+    pool.query('select domain from projects where id=$1',[projectId]),
+    pool.query("select metadata from integrations where project_id=$1 and provider='google_oauth' and status='connected' order by created_at desc limit 1",[projectId])
+  ]);
   const domain=normalizeDomain(String(project.rows[0]?.domain||''));
   if(!domain)throw new Error('Proje bulunamadı.');
+  const metadata=integration.rows[0]?.metadata as {selectedMerchantAccountName?:string}|undefined;
 
-  let accountsResponse:MerchantAccountsResponse;
-  try{
-    accountsResponse=(await getJson('https://merchantapi.googleapis.com/accounts/v1/accounts?pageSize=500',accessToken)) as MerchantAccountsResponse;
-  }catch(error){
-    const message=error instanceof Error?error.message:String(error);
-    if(message.includes('GCP_NOT_REGISTERED')){
-      await registerMerchantDeveloper(accessToken);
-      throw new Error(`Growth OS Merchant API developer kaydı QCT Commerce (${MERCHANT_DEVELOPER_ACCOUNT_ID}) hesabında tamamlandı. Google aktivasyonu birkaç dakika sürebilir; ardından bu ekranı yenileyin.`);
-    }
-    throw error;
-  }
+  const accountsResponse=(await getJson('https://merchantapi.googleapis.com/accounts/v1/accounts?pageSize=500',accessToken)) as MerchantAccountsResponse;
   const accounts=accountsResponse.accounts||[];
   const enriched=await Promise.all(accounts.map(async account=>{
     if(!account.name)return {...account,homepage:null as MerchantHomepage|null};
@@ -191,14 +179,16 @@ async function merchantCommerceForProject(projectId:string,accessToken:string){
     }catch{return {...account,homepage:null as MerchantHomepage|null}}
   }));
 
-  const matched=enriched.find(a=>normalizeDomain(a.homepage?.uri||'')===domain)
+  const selected=metadata?.selectedMerchantAccountName ? enriched.find(a=>a.name===metadata.selectedMerchantAccountName) : undefined;
+  const matched=selected
+    ||enriched.find(a=>normalizeDomain(a.homepage?.uri||'')===domain)
     ||enriched.find(a=>normalizeDomain(a.homepage?.uri||'').includes(domain))
     ||enriched.find(a=>String(a.accountName||'').toLowerCase().includes(domain.split('.')[0]))
     ||(enriched.length===1?enriched[0]:undefined);
 
   const accountList=enriched.map(a=>({name:a.name||'',accountName:a.accountName||a.name||'Merchant Center',homepage:a.homepage?.uri||null,claimed:a.homepage?.claimed??null,timeZone:typeof a.timeZone==='string'?a.timeZone:a.timeZone?.id||null,languageCode:a.languageCode||null}));
   if(!matched?.name){
-    return {matched:false,domain,message:`${domain} için Merchant Center hesabı otomatik eşleşmedi.`,accounts:accountList};
+    return {matched:false,domain,message:`${domain} için Merchant Center hesabı otomatik eşleşmedi.`,accounts:accountList,selectedMerchantAccountName:metadata?.selectedMerchantAccountName||null};
   }
 
   const [productsResponse,issuesResponse]=await Promise.all([
@@ -223,6 +213,7 @@ async function merchantCommerceForProject(projectId:string,accessToken:string){
   return {
     matched:true,
     domain,
+    selectedMerchantAccountName:matched.name,
     account:{name:matched.name,accountName:matched.accountName||matched.name,homepage:matched.homepage?.uri||null,claimed:matched.homepage?.claimed??null,timeZone:typeof matched.timeZone==='string'?matched.timeZone:matched.timeZone?.id||null,languageCode:matched.languageCode||null},
     accounts:accountList,
     summary:{totalProducts:products.length,approved,pending,disapproved,withIssues,accountIssues:accountIssues.length,criticalIssues:severityCounts.critical||0,errorIssues:severityCounts.error||0,suggestionIssues:severityCounts.suggestion||0,partialProducts:Boolean(productsResponse.nextPageToken)},
@@ -247,7 +238,6 @@ export async function discoverGoogleResources(projectId:string) {
       let matched:null|{property?:string;displayName?:string;accountName?:string;stream?:{displayName?:string;measurementId?:string;defaultUri?:string};timeZone?:string;currencyCode?:string}=null;
       for(const p of properties){
         if(!p.property)continue;
-        const propertyId=p.property.replace('properties/','');
         try{
           const streams=await getJson(`https://analyticsadmin.googleapis.com/v1beta/${p.property}/dataStreams`,accessToken) as {dataStreams?:Array<{displayName?:string;webStreamData?:{measurementId?:string;defaultUri?:string}}>};
           const web=(streams.dataStreams||[]).find(s=>String(s.webStreamData?.defaultUri||'').toLowerCase().includes(domain));
