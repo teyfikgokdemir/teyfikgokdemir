@@ -2,6 +2,7 @@ import './styles.css';
 import './modules.css';
 import './modules-v2.css';
 import './report.css';
+import './mobile-overrides.css';
 import NavigationPersistence from './components/NavigationPersistence';
 import OverviewIntelligenceHost from './components/OverviewIntelligenceHost';
 import AgencyPortfolioHost from './components/AgencyPortfolioHost';
