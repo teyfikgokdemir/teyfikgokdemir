@@ -1,136 +1,196 @@
-/* Growth OS coral-dominant visual layer: ~80% coral, lilac/violet reserved for accents. */
+/* Growth OS signature palette: dark warm base + coral-first interaction system.
+   Coral carries the product identity; lilac/violet are reserved for sparse data/AI accents. */
 :root{
   --accent:#ff6f61;
-  --accent2:#ff9a8f;
+  --accent2:#ff8b7f;
   --accent3:#d7b8ff;
   --coral:#ff6f61;
+  --coral-hover:#ff8276;
   --coral-soft:#ff9a8f;
-  --coral-deep:#d94f64;
+  --coral-deep:#d95755;
+  --coral-ink:#2a1115;
   --lilac:#d7b8ff;
   --violet:#8b5cf6;
-  --line:#4a2935;
-  --line2:#6c3948;
-  --panel:#180d14;
-  --panel2:#211019;
-  --muted:#bda7af;
+  --bg:#090708;
+  --panel:#120c0e;
+  --panel2:#180f12;
+  --line:rgba(255,111,97,.18);
+  --line2:rgba(255,111,97,.30);
+  --muted:#bba7aa;
 }
 
+html{background:#090708!important}
 body{
   background:
-    radial-gradient(circle at 78% -8%,rgba(255,111,97,.34),transparent 35%),
-    radial-gradient(circle at 18% 4%,rgba(255,111,97,.16),transparent 29%),
-    radial-gradient(circle at 55% 22%,rgba(215,184,255,.045),transparent 24%),
-    #09070b!important;
+    radial-gradient(circle at 82% -10%,rgba(255,111,97,.17),transparent 31%),
+    radial-gradient(circle at 18% 2%,rgba(217,87,85,.08),transparent 27%),
+    radial-gradient(circle at 58% 16%,rgba(215,184,255,.025),transparent 22%),
+    linear-gradient(180deg,#090708 0%,#0c0809 45%,#090708 100%)!important;
 }
 
+/* Sidebar: almost-black shell with coral state language. */
 .side{
-  border-right-color:rgba(255,111,97,.24)!important;
-  background:linear-gradient(180deg,rgba(27,12,19,.99),rgba(11,7,11,.99))!important;
-  box-shadow:18px 0 60px rgba(92,28,41,.13)!important;
+  border-right-color:rgba(255,111,97,.18)!important;
+  background:linear-gradient(180deg,#110a0c 0%,#090708 100%)!important;
+  box-shadow:18px 0 60px rgba(0,0,0,.28)!important;
 }
 .brand>span{
-  border-color:rgba(255,111,97,.72)!important;
-  color:#fff0ed!important;
-  background:linear-gradient(145deg,#47212d,#1d1016)!important;
-  box-shadow:0 0 32px rgba(255,111,97,.24)!important;
+  border-color:rgba(255,111,97,.68)!important;
+  color:#fff4f1!important;
+  background:linear-gradient(145deg,#35171d,#170b0e)!important;
+  box-shadow:0 0 28px rgba(255,111,97,.20)!important;
 }
-.brand small,.eyebrow{color:#e0a5ac!important}
-
+.brand small,.eyebrow{color:#dba2a6!important}
+.side nav button{color:#bba9ad!important}
 .side nav button:hover{
-  background:rgba(255,111,97,.12)!important;
-  border-color:rgba(255,111,97,.22)!important;
+  color:#fff!important;
+  background:rgba(255,111,97,.10)!important;
+  border-color:rgba(255,111,97,.20)!important;
 }
 .side nav button.active{
-  background:linear-gradient(135deg,rgba(255,111,97,.31),rgba(217,79,100,.16) 74%,rgba(139,92,246,.06))!important;
-  border-color:rgba(255,111,97,.56)!important;
-  box-shadow:inset 3px 0 0 #ff6f61,0 10px 28px rgba(89,28,41,.20)!important;
-}
-
-.projectBar,.moduleCard,.dashboardMainCard,.quickActions,.recentAudits,.executiveCard,.finalCard,.growthPanel{
-  border-color:rgba(255,111,97,.25)!important;
-  background:
-    radial-gradient(circle at 96% 0%,rgba(255,111,97,.09),transparent 32%),
-    linear-gradient(135deg,rgba(31,14,21,.98),rgba(13,8,13,.995))!important;
-  box-shadow:0 24px 80px rgba(55,15,26,.16),inset 0 1px rgba(255,255,255,.025)!important;
-}
-
-.dashboardHero,.moduleHero{
-  border-color:rgba(255,111,97,.33)!important;
-  background:
-    radial-gradient(circle at 84% 18%,rgba(255,111,97,.30),transparent 36%),
-    radial-gradient(circle at 62% 0%,rgba(255,154,143,.11),transparent 30%),
-    radial-gradient(circle at 96% 85%,rgba(215,184,255,.05),transparent 24%),
-    linear-gradient(135deg,#24101a,#0d0910)!important;
-}
-
-.primaryAction,.dashboardSectionHead button,.auditBox button{
-  border-color:rgba(255,170,158,.76)!important;
-  background:linear-gradient(135deg,#ff806f 0%,#f66570 48%,#d94f64 82%,#9b63d7 100%)!important;
   color:#fff!important;
-  box-shadow:0 14px 34px rgba(217,79,100,.31)!important;
+  background:linear-gradient(90deg,rgba(255,111,97,.25),rgba(255,111,97,.10) 72%,transparent)!important;
+  border-color:rgba(255,111,97,.46)!important;
+  box-shadow:inset 3px 0 0 #ff6f61,0 10px 28px rgba(0,0,0,.18)!important;
+}
+
+/* Core surfaces: neutral dark, coral only on edge/light. */
+.projectBar,.moduleCard,.dashboardMainCard,.quickActions,.recentAudits,.executiveCard,.finalCard,.growthPanel,
+.auditBox,.heroMetric{
+  border-color:rgba(255,111,97,.18)!important;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(255,111,97,.055),transparent 30%),
+    linear-gradient(135deg,#140c0f 0%,#0c090a 100%)!important;
+  box-shadow:0 24px 80px rgba(0,0,0,.20),inset 0 1px rgba(255,255,255,.022)!important;
+}
+.dashboardHero,.moduleHero{
+  border-color:rgba(255,111,97,.26)!important;
+  background:
+    radial-gradient(circle at 86% 16%,rgba(255,111,97,.20),transparent 34%),
+    radial-gradient(circle at 67% 0%,rgba(255,130,118,.07),transparent 26%),
+    linear-gradient(135deg,#170c10,#0b0809)!important;
+}
+
+/* Full-coral primary actions: no purple in CTAs. */
+.primaryAction,.dashboardSectionHead button,.auditBox button{
+  border:1px solid rgba(255,171,160,.72)!important;
+  background:linear-gradient(180deg,#ff7d70 0%,#ff6f61 54%,#e95d55 100%)!important;
+  color:#fff!important;
+  text-shadow:0 1px 0 rgba(120,25,25,.20)!important;
+  box-shadow:0 12px 30px rgba(255,111,97,.25),inset 0 1px rgba(255,255,255,.18)!important;
+  transition:transform .18s ease,filter .18s ease,box-shadow .18s ease,border-color .18s ease!important;
 }
 .primaryAction:hover,.dashboardSectionHead button:hover,.auditBox button:hover{
-  box-shadow:0 18px 42px rgba(217,79,100,.38)!important;
+  background:linear-gradient(180deg,#ff9186 0%,#ff7c70 54%,#f1645c 100%)!important;
+  border-color:rgba(255,196,187,.92)!important;
+  transform:translateY(-1px)!important;
+  box-shadow:0 16px 38px rgba(255,111,97,.34),inset 0 1px rgba(255,255,255,.22)!important;
+  filter:none!important;
 }
+.primaryAction:active,.dashboardSectionHead button:active,.auditBox button:active{transform:translateY(0)!important}
+.primaryAction:disabled,.auditBox button:disabled{opacity:.52!important;box-shadow:none!important}
 
+/* Premium secondary action: dark glass with coral outline and coral hover. */
 .moduleCard .reportHead.compact>div:last-child>button:not(.primaryAction){
-  border-color:rgba(255,137,124,.50)!important;
-  background:linear-gradient(135deg,rgba(255,111,97,.20),rgba(217,79,100,.11) 78%,rgba(215,184,255,.045))!important;
-  color:#fff0ed!important;
-  box-shadow:inset 0 1px rgba(255,255,255,.045),0 10px 28px rgba(76,23,34,.18)!important;
+  appearance:none!important;
+  border:1px solid rgba(255,111,97,.38)!important;
+  background:linear-gradient(180deg,rgba(255,111,97,.095),rgba(255,111,97,.045))!important;
+  color:#ffe9e5!important;
+  border-radius:12px!important;
+  padding:12px 16px!important;
+  font:inherit!important;
+  font-size:12px!important;
+  font-weight:760!important;
+  cursor:pointer!important;
+  white-space:nowrap!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.045),0 10px 26px rgba(0,0,0,.20)!important;
+  transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease!important;
 }
 .moduleCard .reportHead.compact>div:last-child>button:not(.primaryAction):hover{
+  transform:translateY(-1px)!important;
   border-color:rgba(255,154,140,.78)!important;
-  background:linear-gradient(135deg,rgba(255,111,97,.30),rgba(217,79,100,.16) 82%,rgba(139,92,246,.055))!important;
-  box-shadow:0 14px 34px rgba(255,111,97,.16),inset 0 1px rgba(255,255,255,.06)!important;
+  background:linear-gradient(180deg,rgba(255,111,97,.20),rgba(217,87,85,.11))!important;
+  box-shadow:0 14px 30px rgba(255,111,97,.13),inset 0 1px rgba(255,255,255,.07)!important;
 }
 
-.readinessChecklist>div,.recommendationList article,.dashboardStats>div,.bigScore,.overviewMini,.finalStats div,.executiveStats div,.kpi,.score,.quickActions>button,.recentAuditList article,.listRows article{
-  border-color:rgba(255,111,97,.20)!important;
-  background:linear-gradient(180deg,#180d13,#0d0910)!important;
+/* Data tiles stay dark; coral communicates hierarchy without flooding the UI. */
+.readinessChecklist>div,.recommendationList article,.dashboardStats>div,.bigScore,.overviewMini,.finalStats div,.executiveStats div,
+.kpi,.score,.quickActions>button,.recentAuditList article,.listRows article,.issues article{
+  border-color:rgba(255,111,97,.15)!important;
+  background:linear-gradient(180deg,#130c0e,#0b0809)!important;
 }
-.readinessChecklist>div:hover,.recommendationList article:hover,.quickActions>button:hover{
-  border-color:rgba(255,111,97,.42)!important;
+.readinessChecklist>div:hover,.recommendationList article:hover,.quickActions>button:hover,.issues article:hover{
+  border-color:rgba(255,111,97,.36)!important;
+}
+.readinessChecklist span,.dashboardStats span,.bigScore span,.overviewMini span,.executiveStats span,.finalStats span{
+  color:#ba9498!important;
 }
 
 .recPriority,.private{
-  border-color:rgba(255,111,97,.46)!important;
-  background:rgba(255,111,97,.13)!important;
-  color:#ffc1b8!important;
+  border-color:rgba(255,111,97,.44)!important;
+  background:rgba(255,111,97,.12)!important;
+  color:#ffc0b8!important;
 }
 .attentionStrip span,.engineStrip span,.openChips span,.auditHistoryStrip span{
-  border-color:rgba(255,111,97,.19)!important;
-  background:rgba(255,111,97,.055)!important;
+  border-color:rgba(255,111,97,.17)!important;
+  background:rgba(255,111,97,.045)!important;
 }
 
 .ring{
-  background:conic-gradient(#ff6f61 var(--score),#3b222e 0)!important;
-  filter:drop-shadow(0 0 15px rgba(255,111,97,.23))!important;
+  background:conic-gradient(#ff6f61 var(--score),#302025 0)!important;
+  filter:drop-shadow(0 0 14px rgba(255,111,97,.20))!important;
 }
 .auditScorePill{
-  border-color:rgba(255,111,97,.42)!important;
-  background:linear-gradient(135deg,#3c1b27,#1b0f15)!important;
-  color:#ffd7d1!important;
+  border-color:rgba(255,111,97,.38)!important;
+  background:linear-gradient(135deg,#32151b,#160b0e)!important;
+  color:#ffd8d2!important;
 }
 
 .projectBar select{
-  border-color:rgba(255,111,97,.48)!important;
+  border-color:rgba(255,111,97,.36)!important;
   background-image:
-    linear-gradient(45deg,transparent 50%,#ffb2a8 50%),
-    linear-gradient(135deg,#ffb2a8 50%,transparent 50%),
-    radial-gradient(circle at 88% 50%,rgba(255,111,97,.18),transparent 30%),
-    linear-gradient(180deg,#211019,#0e0910)!important;
+    linear-gradient(45deg,transparent 50%,#ffaaa0 50%),
+    linear-gradient(135deg,#ffaaa0 50%,transparent 50%),
+    radial-gradient(circle at 88% 50%,rgba(255,111,97,.13),transparent 30%),
+    linear-gradient(180deg,#190e12,#0d090a)!important;
 }
-.projectBar select:hover,.projectBar select:focus{border-color:rgba(255,111,97,.76)!important}
-.projectBar select option:checked{background:#b94d60!important}
+.projectBar select:hover,.projectBar select:focus{
+  border-color:rgba(255,111,97,.66)!important;
+  box-shadow:0 0 0 3px rgba(255,111,97,.08),0 16px 38px rgba(0,0,0,.23)!important;
+}
+.projectBar select option{background:#130b0e!important;color:#fff!important}
+.projectBar select option:checked{background:#d95755!important}
 
 .moduleFoot{
-  border-color:rgba(255,111,97,.20)!important;
-  background:rgba(255,111,97,.055)!important;
+  border-color:rgba(255,111,97,.17)!important;
+  background:rgba(255,111,97,.04)!important;
+  color:#b7a0a4!important;
 }
 
-.side::-webkit-scrollbar-thumb{background:#6b3544!important}
-.side::-webkit-scrollbar-thumb:hover{background:#9b4a5e!important}
+/* Headlines: nearly neutral, with a very restrained coral finish. */
+.content h1{
+  background:linear-gradient(90deg,#fff 0%,#fff4f1 68%,#ffc0b8 100%)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  color:transparent!important;
+}
 
-/* Lilac/violet remain deliberately limited to secondary emphasis only. */
-.content h1{background:linear-gradient(90deg,#fff 0%,#ffe7e2 62%,#f3c2cd 86%,#d7b8ff 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}
+/* Lilac/violet are intentionally rare: use only for select intelligence/data accents. */
+.engineStrip b,.panelTitle>span{color:#d7b8ff!important}
+
+/* Agency surfaces inherit the same product identity even where pages carry local styles. */
+.agencyScreen{
+  background:
+    radial-gradient(circle at 88% 0%,rgba(255,111,97,.18),transparent 30%),
+    radial-gradient(circle at 18% 8%,rgba(215,184,255,.025),transparent 22%),
+    linear-gradient(180deg,#090708,#0d080a 55%,#090708)!important;
+}
+.agencyScreen a:hover{border-color:rgba(255,111,97,.58)!important}
+
+.side::-webkit-scrollbar-thumb{background:#63313a!important}
+.side::-webkit-scrollbar-thumb:hover{background:#9a4b58!important}
+
+@media(max-width:900px){
+  .moduleCard .reportHead.compact>div:last-child{width:100%}
+  .moduleCard .reportHead.compact>div:last-child>button{width:100%}
+}
