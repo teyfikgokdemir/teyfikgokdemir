@@ -8,8 +8,9 @@ import { requireRole, resolveWorkspaceActor, workspaceErrorMessage, workspaceErr
 
 export const projectLifecycleRouter = Router({ mergeParams: true });
 
-const projectLifecycleSchemaReady=initProjectLifecycleSchema();
+let projectLifecycleSchemaReady:Promise<void>|null=null;
 async function ensureProjectLifecycleSchema(){
+  projectLifecycleSchemaReady ??= initProjectLifecycleSchema();
   await projectLifecycleSchemaReady;
 }
 
