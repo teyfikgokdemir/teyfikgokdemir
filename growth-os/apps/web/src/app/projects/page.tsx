@@ -98,6 +98,19 @@ export default function ProjectsPage(){
     }catch(e){setError(e instanceof Error?e.message:'Toplu işlem tamamlanamadı.')}finally{setSaving(false)}
   }
 
+  async function restoreOne(project:Project){
+    if(!actor||saving)return;
+    setSaving(true);setError('');setNotice('');
+    try{
+      const res=await fetch(`${api}/workspaces/${actor.workspaceId}/project-lifecycle/${project.id}/restore`,{method:'POST'});
+      const data=await res.json() as {error?:string};
+      if(!res.ok)throw new Error(data.error||'Proje geri alınamadı.');
+      setNotice(`${project.name} aktif projelere geri alındı.`);
+      setSelected(new Set());
+      await load();
+    }catch(e){setError(e instanceof Error?e.message:'Proje geri alınamadı.')}finally{setSaving(false)}
+  }
+
   async function permanentDelete(){
     if(!actor||!deleteProject||!isOwner||saving)return;
     setSaving(true);setError('');setNotice('');
@@ -172,7 +185,7 @@ export default function ProjectsPage(){
             <div className={styles.date}>{project.status==='archived'&&project.archived_at?new Date(project.archived_at).toLocaleDateString('tr-TR'):project.created_at?new Date(project.created_at).toLocaleDateString('tr-TR'):'—'}</div>
             <div className={styles.actions}>
               {project.status!=='archived'&&<button onClick={()=>openProject(project)}>Aç</button>}
-              {project.status==='archived'&&canManage&&<button onClick={async()=>{setSelected(new Set([project.id]));await bulk('restore')}}>Geri Al</button>}
+              {project.status==='archived'&&canManage&&<button disabled={saving} onClick={()=>restoreOne(project)}>Geri Al</button>}
               {project.status==='archived'&&isOwner&&<button className={styles.danger} onClick={()=>{setDeleteProject(project);setConfirmName('')}}>Kalıcı Sil</button>}
             </div>
           </article>)}
