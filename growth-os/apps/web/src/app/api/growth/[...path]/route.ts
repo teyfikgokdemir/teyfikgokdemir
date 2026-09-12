@@ -10,10 +10,10 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
   const contentType = request.headers.get('content-type');
   if (contentType) headers.set('content-type', contentType);
 
+  // Production identity must come from Cloudflare Access only. Never forward
+  // the client-controlled x-growth-user-email header to the API.
   const accessEmail = request.headers.get('cf-access-authenticated-user-email');
-  const explicitGrowthUser = request.headers.get('x-growth-user-email');
   if (accessEmail) headers.set('cf-access-authenticated-user-email', accessEmail);
-  if (explicitGrowthUser) headers.set('x-growth-user-email', explicitGrowthUser);
 
   const init: RequestInit = {
     method: request.method,
