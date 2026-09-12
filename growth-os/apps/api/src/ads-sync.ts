@@ -1,5 +1,6 @@
 import { pool } from './db.js';
 import { decryptSecret, googleAccessForProject } from './google.js';
+import { refreshGrowthIntelligence } from './growth-intelligence.js';
 
 type NormalizedMetric={
   provider:'google_ads'|'meta_ads'|'tiktok_ads';
@@ -328,5 +329,11 @@ export async function syncAdsProject(projectId:string,days=30){
     }catch(error){results.push({provider,ok:false,rows:0,error:error instanceof Error?error.message:'Senkronizasyon başarısız.'})}
   }
   const intelligence=allMetrics.length?await refreshAdsIntelligence(projectId,allMetrics):{evaluatedCampaigns:0,alerts:0,recommendations:0,targetsConfigured:{targetRoas:false,targetCpa:false,breakEvenRoas:false}};
-  return {readOnly:true,externalExecution:false,days,results,summary:summarize(allMetrics),intelligence};
+  let crossSourceIntelligence:unknown=null;
+  try{
+    crossSourceIntelligence=await refreshGrowthIntelligence(projectId);
+  }catch(error){
+    crossSourceIntelligence={error:error instanceof Error?error.message:'Growth Intelligence yenilenemedi.'};
+  }
+  return {readOnly:true,externalExecution:false,days,results,summary:summarize(allMetrics),intelligence,crossSourceIntelligence};
 }
