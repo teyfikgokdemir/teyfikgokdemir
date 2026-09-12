@@ -82,7 +82,7 @@ async function googleMetrics(projectId:string,days:number):Promise<NormalizedMet
     conversions:asNumber(r.metrics?.conversions),
     revenue:asNumber(r.metrics?.conversionsValue),
     metadata:{status:r.campaign?.status||null}
-  })).filter(x=>x.campaignId));
+  }))).filter(x=>x.campaignId);
 }
 
 function metaActionValue(items:unknown,key:string){
@@ -165,7 +165,7 @@ async function tiktokMetrics(projectId:string,days:number):Promise<NormalizedMet
     conversions:asNumber(r.metrics?.conversion),
     revenue:0,
     metadata:{}
-  })).filter(x=>x.campaignId));
+  })).filter(x=>x.campaignId);
 }
 
 async function persist(projectId:string,metrics:NormalizedMetric[]){
