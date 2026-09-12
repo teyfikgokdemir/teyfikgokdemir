@@ -170,6 +170,41 @@ export async function initDb() {
       created_at timestamptz not null default now()
     );
 
+    create table if not exists execution_jobs (
+      id uuid primary key default gen_random_uuid(),
+      project_id uuid not null references projects(id) on delete cascade,
+      recommendation_id uuid references recommendations(id) on delete set null,
+      action_log_id uuid references action_log(id) on delete set null,
+      provider text not null,
+      action_type text not null,
+      status text not null default 'queued',
+      execution_mode text not null default 'manual_approval',
+      requested_state jsonb not null default '{}'::jsonb,
+      result_state jsonb not null default '{}'::jsonb,
+      error_message text,
+      created_at timestamptz not null default now(),
+      started_at timestamptz,
+      finished_at timestamptz
+    );
+
+    create table if not exists verification_results (
+      id uuid primary key default gen_random_uuid(),
+      project_id uuid not null references projects(id) on delete cascade,
+      execution_job_id uuid references execution_jobs(id) on delete cascade,
+      recommendation_id uuid references recommendations(id) on delete set null,
+      status text not null default 'pending',
+      verification_type text not null,
+      before_state jsonb not null default '{}'::jsonb,
+      after_state jsonb not null default '{}'::jsonb,
+      score_before numeric(10,3),
+      score_after numeric(10,3),
+      score_delta numeric(10,3),
+      verdict text,
+      evidence jsonb not null default '{}'::jsonb,
+      verified_at timestamptz,
+      created_at timestamptz not null default now()
+    );
+
     create index if not exists idx_audits_project_created on audits(project_id, created_at desc);
     create index if not exists idx_campaign_metrics_project_date on campaign_metrics(project_id, metric_date desc);
     create index if not exists idx_ads_sync_runs_project_started on ads_sync_runs(project_id, started_at desc);
@@ -177,5 +212,7 @@ export async function initDb() {
     create index if not exists idx_alerts_project_status on alerts(project_id, status, created_at desc);
     create index if not exists idx_recommendations_project_status on recommendations(project_id, status, created_at desc);
     create index if not exists idx_oauth_states_expiry on oauth_states(expires_at);
+    create index if not exists idx_execution_jobs_project_status on execution_jobs(project_id, status, created_at desc);
+    create index if not exists idx_verification_results_project_status on verification_results(project_id, status, created_at desc);
   `);
 }
