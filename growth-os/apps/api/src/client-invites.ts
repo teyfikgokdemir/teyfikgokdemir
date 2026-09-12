@@ -75,6 +75,12 @@ clientInviteRouter.get('/client/:clientId', async (req, res) => {
     const actor = await resolveWorkspaceActor(req, workspaceId);
     requireRole(actor, 'admin');
     await getClient(actor.workspaceId, clientId);
+
+    await pool.query(
+      "update client_portal_invites set status='expired' where workspace_id=$1 and client_id=$2 and status='pending' and expires_at<=now()",
+      [actor.workspaceId, clientId]
+    );
+
     const result = await pool.query(
       `select id,email,display_name,role,status,expires_at,accepted_at,created_at,invited_by
        from client_portal_invites
@@ -120,6 +126,31 @@ clientInviteRouter.post('/client/:clientId', async (req, res) => {
     );
 
     res.status(201).json({ invite: result.rows[0], token, client: { id: client.id, name: client.name, domain: client.domain } });
+  } catch (error) {
+    res.status(errorStatus(error)).json({ error: errorMessage(error) });
+  }
+});
+
+clientInviteRouter.post('/client/:clientId/:inviteId/revoke', async (req, res) => {
+  try {
+    await ensureInviteSchema();
+    const workspaceId = String((req.params as Record<string, string | undefined>).workspaceId || '');
+    const clientId = String(req.params.clientId || '');
+    const inviteId = String(req.params.inviteId || '');
+    const actor = await resolveWorkspaceActor(req, workspaceId);
+    requireRole(actor, 'admin');
+    await getClient(actor.workspaceId, clientId);
+
+    const result = await pool.query(
+      `update client_portal_invites
+       set status='revoked'
+       where id=$1 and workspace_id=$2 and client_id=$3 and status='pending'
+       returning id,email,display_name,role,status,expires_at,accepted_at,created_at,invited_by`,
+      [inviteId, actor.workspaceId, clientId]
+    );
+
+    if (!result.rows[0]) return res.status(404).json({ error: 'Bekleyen davet bulunamadı veya davet artık değiştirilemez.' });
+    res.json({ revoked: true, invite: result.rows[0] });
   } catch (error) {
     res.status(errorStatus(error)).json({ error: errorMessage(error) });
   }
