@@ -214,5 +214,40 @@ export async function initDb() {
     create index if not exists idx_oauth_states_expiry on oauth_states(expires_at);
     create index if not exists idx_execution_jobs_project_status on execution_jobs(project_id, status, created_at desc);
     create index if not exists idx_verification_results_project_status on verification_results(project_id, status, created_at desc);
+    create unique index if not exists idx_execution_jobs_recommendation_unique on execution_jobs(recommendation_id) where recommendation_id is not null;
+
+    create or replace function growth_enqueue_approved_action() returns trigger as $$
+    begin
+      if new.status='approved' and new.recommendation_id is not null then
+        insert into execution_jobs(project_id,recommendation_id,action_log_id,provider,action_type,status,execution_mode,requested_state)
+        values(new.project_id,new.recommendation_id,new.id,coalesce(new.provider,'system'),new.action_type,'queued','manual_approval',coalesce(new.requested_state,'{}'::jsonb))
+        on conflict (recommendation_id) where recommendation_id is not null do nothing;
+        update action_log set status='queued' where id=new.id and status='approved';
+      end if;
+      return new;
+    end;
+    $$ language plpgsql;
+
+    drop trigger if exists trg_growth_enqueue_approved_action on action_log;
+    create trigger trg_growth_enqueue_approved_action
+      after insert on action_log
+      for each row execute function growth_enqueue_approved_action();
+
+    create or replace function growth_sync_execution_status() returns trigger as $$
+    begin
+      if new.action_log_id is not null then
+        update action_log
+        set status=new.status,
+            executed_at=case when new.status in ('verification_pending','verified') then coalesce(executed_at,now()) else executed_at end
+        where id=new.action_log_id;
+      end if;
+      return new;
+    end;
+    $$ language plpgsql;
+
+    drop trigger if exists trg_growth_sync_execution_status on execution_jobs;
+    create trigger trg_growth_sync_execution_status
+      after insert or update of status on execution_jobs
+      for each row execute function growth_sync_execution_status();
   `);
 }
