@@ -67,7 +67,10 @@ export default function AgencyPortfolioPanel(){
   return <section className="moduleCard">
     <div className="reportHead compact">
       <div><p className="eyebrow">Agency Portfolio Intelligence</p><h2>Bugün hangi müşteriye müdahale etmeliyiz?</h2><p>Tüm projeler; risk, fırsat, karar skoru ve execution yüküne göre tek portföy görünümünde sıralanır.</p></div>
-      <button className="primaryAction" onClick={()=>void load()} disabled={loading}>{loading?'Güncelleniyor…':'Portföyü Yenile'}</button>
+      <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+        <a className="primaryAction" href="/agency/clients" style={{textDecoration:'none',display:'inline-flex',alignItems:'center'}}>Müşteri Yönetimi</a>
+        <button className="primaryAction" onClick={()=>void load()} disabled={loading}>{loading?'Güncelleniyor…':'Portföyü Yenile'}</button>
+      </div>
     </div>
 
     <div className="readinessChecklist">
