@@ -1,5 +1,6 @@
 import { pool } from './db.js';
 import { completeExecution, recordVerification } from './execution-workflow.js';
+import { verifyByProvider } from './provider-verifiers.js';
 
 type Snapshot={
   capturedAt:string;
@@ -79,12 +80,6 @@ function auditScore(snapshot:Record<string,unknown>|Snapshot){
   return Number.isFinite(value)?value:null;
 }
 
-function issueStatus(snapshot:Snapshot,issueKey:string){
-  const audit=snapshot.latestAudit as {payload?:{issues?:Array<{key?:string;status?:string}>}}|null;
-  const issue=audit?.payload?.issues?.find(item=>item.key===issueKey);
-  return issue?.status||null;
-}
-
 export async function verifyExecutionJob(jobId:string){
   const job=await loadJob(jobId);
   const verificationResult=await pool.query(`
@@ -100,40 +95,41 @@ export async function verifyExecutionJob(jobId:string){
   const scoreBefore=auditScore(before);
   const scoreAfter=auditScore(after);
   const requested=(job.proposed_action||{}) as Record<string,unknown>;
-  const issueKey=typeof requested.issueKey==='string'?requested.issueKey:null;
 
-  let status:'passed'|'failed'|'inconclusive'='inconclusive';
-  let verdict='Provider-specific doğrulama gerekli.';
-  const evidence:Record<string,unknown>={provider:job.provider,actionType:job.action_type,issueKey};
+  const decision=verifyByProvider({
+    provider:job.provider,
+    actionType:job.action_type,
+    requestedState:requested,
+    beforeState:before,
+    afterState:after as unknown as Record<string,unknown>,
+    scoreBefore,
+    scoreAfter
+  });
 
-  if(issueKey){
-    const state=issueStatus(after,issueKey);
-    evidence.auditIssueStatus=state;
-    if(state==='pass'){
-      status='passed';
-      verdict=`Audit issue ${issueKey} başarıyla geçti.`;
-    }else if(state){
-      status='failed';
-      verdict=`Audit issue ${issueKey} hâlâ ${state} durumda.`;
-    }else{
-      verdict=`Audit issue ${issueKey} son audit içinde bulunamadı.`;
-    }
-  }else if(scoreBefore!==null&&scoreAfter!==null&&scoreAfter>scoreBefore){
-    status='passed';
-    verdict=`Genel audit skoru ${scoreBefore} → ${scoreAfter} yükseldi.`;
-    evidence.scoreImproved=true;
-  }
+  const evidence={
+    provider:job.provider,
+    actionType:job.action_type,
+    verifier:decision.verifier,
+    ...decision.evidence
+  };
 
   const saved=await recordVerification({
     verificationId:verification.id,
-    status,
+    status:decision.status,
     beforeState:before,
-    afterState:after,
+    afterState:after as unknown as Record<string,unknown>,
     scoreBefore,
     scoreAfter,
-    verdict,
+    verdict:decision.verdict,
     evidence
   });
 
-  return {verified:status==='passed',status,verdict,verification:saved,afterState:after};
+  return {
+    verified:decision.status==='passed',
+    status:decision.status,
+    verifier:decision.verifier,
+    verdict:decision.verdict,
+    verification:saved,
+    afterState:after
+  };
 }
