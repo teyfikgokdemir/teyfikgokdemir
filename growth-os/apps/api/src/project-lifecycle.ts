@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { pool } from './db.js';
 import { initProjectLifecycleSchema } from './project-lifecycle-schema.js';
+import { writeWorkspaceActivity } from './workspace-activity-log.js';
 import { requireRole, resolveWorkspaceActor, workspaceErrorMessage, workspaceErrorStatus } from './workspace-access.js';
 
 export const projectLifecycleRouter = Router({ mergeParams: true });
@@ -80,6 +81,17 @@ projectLifecycleRouter.post('/bulk/archive', async (req, res) => {
        where project_id=any($1::uuid[]) and status in ('queued','in_progress')`,
       [projectIds]
     );
+    for (const project of updated.rows) {
+      await writeWorkspaceActivity(db, {
+        workspaceId: actor.workspaceId,
+        actorEmail: actor.email,
+        action: 'project.archived',
+        entityType: 'project',
+        entityId: String(project.id),
+        entityName: String(project.name),
+        metadata: { domain: project.domain, bulk: true }
+      });
+    }
     await db.query('commit');
 
     res.json({ archived: true, requested: projectIds.length, changed: updated.rowCount || 0, projects: updated.rows });
@@ -117,6 +129,17 @@ projectLifecycleRouter.post('/bulk/restore', async (req, res) => {
        returning id,name,domain,status,archived_at,archived_by`,
       [actor.workspaceId, projectIds]
     );
+    for (const project of updated.rows) {
+      await writeWorkspaceActivity(db, {
+        workspaceId: actor.workspaceId,
+        actorEmail: actor.email,
+        action: 'project.restored',
+        entityType: 'project',
+        entityId: String(project.id),
+        entityName: String(project.name),
+        metadata: { domain: project.domain, bulk: true, executionPolicyReenabled: false }
+      });
+    }
     await db.query('commit');
 
     res.json({ restored: true, requested: projectIds.length, changed: updated.rowCount || 0, projects: updated.rows });
@@ -175,6 +198,15 @@ projectLifecycleRouter.post('/:projectId/archive', async (req, res) => {
        where project_id=$1 and status in ('queued','in_progress')`,
       [projectId]
     );
+    await writeWorkspaceActivity(db, {
+      workspaceId: actor.workspaceId,
+      actorEmail: actor.email,
+      action: 'project.archived',
+      entityType: 'project',
+      entityId: projectId,
+      entityName: String(rows[0].name),
+      metadata: { domain: rows[0].domain, bulk: false }
+    });
     await db.query('commit');
 
     res.json({ archived: true, project: rows[0] });
@@ -215,6 +247,15 @@ projectLifecycleRouter.post('/:projectId/restore', async (req, res) => {
        returning id,workspace_id,client_id,name,domain,status,archived_at,archived_by,created_at`,
       [projectId, actor.workspaceId]
     );
+    await writeWorkspaceActivity(db, {
+      workspaceId: actor.workspaceId,
+      actorEmail: actor.email,
+      action: 'project.restored',
+      entityType: 'project',
+      entityId: projectId,
+      entityName: String(rows[0].name),
+      metadata: { domain: rows[0].domain, bulk: false, executionPolicyReenabled: false }
+    });
     await db.query('commit');
 
     res.json({ restored: true, project: rows[0] });
@@ -263,6 +304,21 @@ projectLifecycleRouter.delete('/:projectId', async (req, res) => {
       [projectId, actor.workspaceId]
     );
     if (!deleted.rows[0]) throw new Error('PROJECT_ACCESS_DENIED');
+    await writeWorkspaceActivity(db, {
+      workspaceId: actor.workspaceId,
+      actorEmail: actor.email,
+      action: 'project.deleted',
+      entityType: 'project',
+      entityId: projectId,
+      entityName: String(project.name),
+      metadata: {
+        domain: project.domain,
+        clientId: project.client_id,
+        archivedAt: project.archived_at,
+        archivedBy: project.archived_by,
+        createdAt: project.created_at
+      }
+    });
     await db.query('commit');
 
     res.json({ deleted: true, project: deleted.rows[0] });
