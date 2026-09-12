@@ -24,6 +24,10 @@ async function getProject(workspaceId: string, projectId: string) {
   return rows[0];
 }
 
+const bulkSchema = z.object({
+  projectIds: z.array(z.string().uuid()).min(1).max(200)
+});
+
 projectLifecycleRouter.get('/', async (req, res) => {
   try {
     await ensureProjectLifecycleSchema();
@@ -42,6 +46,84 @@ projectLifecycleRouter.get('/', async (req, res) => {
     res.json({ projects: rows, includeArchived });
   } catch (error) {
     res.status(workspaceErrorStatus(error)).json({ error: workspaceErrorMessage(error) });
+  }
+});
+
+projectLifecycleRouter.post('/bulk/archive', async (req, res) => {
+  const parsed = bulkSchema.safeParse(req.body || {});
+  if (!parsed.success) return res.status(400).json({ error: 'Arşivlenecek geçerli proje kimlikleri gerekli.' });
+
+  const db = await pool.connect();
+  try {
+    await ensureProjectLifecycleSchema();
+    const workspaceId = String((req.params as Record<string, string | undefined>).workspaceId || '');
+    const actor = await resolveWorkspaceActor(req, workspaceId);
+    requireRole(actor, 'admin');
+    const projectIds = [...new Set(parsed.data.projectIds)];
+
+    await db.query('begin');
+    const found = await db.query(
+      `select id from projects where workspace_id=$1 and id=any($2::uuid[])`,
+      [actor.workspaceId, projectIds]
+    );
+    if (found.rowCount !== projectIds.length) throw new Error('PROJECT_ACCESS_DENIED');
+
+    const updated = await db.query(
+      `update projects
+       set status='archived',archived_at=coalesce(archived_at,now()),archived_by=coalesce(archived_by,$3)
+       where workspace_id=$1 and id=any($2::uuid[]) and status<>'archived'
+       returning id,name,domain,status,archived_at,archived_by`,
+      [actor.workspaceId, projectIds, actor.email]
+    );
+    await db.query(
+      `update oauth_states set expires_at=least(expires_at,now()) where project_id=any($1::uuid[])`,
+      [projectIds]
+    );
+    await db.query('commit');
+
+    res.json({ archived: true, requested: projectIds.length, changed: updated.rowCount || 0, projects: updated.rows });
+  } catch (error) {
+    await db.query('rollback');
+    res.status(workspaceErrorStatus(error)).json({ error: workspaceErrorMessage(error) });
+  } finally {
+    db.release();
+  }
+});
+
+projectLifecycleRouter.post('/bulk/restore', async (req, res) => {
+  const parsed = bulkSchema.safeParse(req.body || {});
+  if (!parsed.success) return res.status(400).json({ error: 'Geri alınacak geçerli proje kimlikleri gerekli.' });
+
+  const db = await pool.connect();
+  try {
+    await ensureProjectLifecycleSchema();
+    const workspaceId = String((req.params as Record<string, string | undefined>).workspaceId || '');
+    const actor = await resolveWorkspaceActor(req, workspaceId);
+    requireRole(actor, 'admin');
+    const projectIds = [...new Set(parsed.data.projectIds)];
+
+    await db.query('begin');
+    const found = await db.query(
+      `select id from projects where workspace_id=$1 and id=any($2::uuid[])`,
+      [actor.workspaceId, projectIds]
+    );
+    if (found.rowCount !== projectIds.length) throw new Error('PROJECT_ACCESS_DENIED');
+
+    const updated = await db.query(
+      `update projects
+       set status='active',archived_at=null,archived_by=null
+       where workspace_id=$1 and id=any($2::uuid[]) and status='archived'
+       returning id,name,domain,status,archived_at,archived_by`,
+      [actor.workspaceId, projectIds]
+    );
+    await db.query('commit');
+
+    res.json({ restored: true, requested: projectIds.length, changed: updated.rowCount || 0, projects: updated.rows });
+  } catch (error) {
+    await db.query('rollback');
+    res.status(workspaceErrorStatus(error)).json({ error: workspaceErrorMessage(error) });
+  } finally {
+    db.release();
   }
 });
 
