@@ -1,5 +1,5 @@
 import { pool } from './db.js';
-import { discoverGoogleResources } from './google.js';
+import { discoverGoogleResources, searchConsolePerformanceForProject } from './google.js';
 
 type Severity='high'|'medium';
 type Priority='high'|'medium';
@@ -35,14 +35,15 @@ export async function refreshGrowthIntelligence(projectId:string){
   const project=await pool.query('select id,domain from projects where id=$1',[projectId]);
   if(!project.rows[0])throw new Error('Proje bulunamadı.');
 
-  const [google,ads,targets]=await Promise.all([
+  const [google,searchResult,ads,targets]=await Promise.all([
     discoverGoogleResources(projectId),
+    searchConsolePerformanceForProject(projectId,28).catch(()=>null),
     pool.query("select coalesce(sum(spend),0)::numeric spend,coalesce(sum(clicks),0)::numeric clicks,coalesce(sum(conversions),0)::numeric conversions,coalesce(sum(attributed_revenue),0)::numeric revenue from campaign_metrics where project_id=$1 and metric_date>=current_date-interval '30 days'",[projectId]),
     pool.query('select target_roas,target_cpa,break_even_roas from business_targets where project_id=$1',[projectId])
   ]);
 
   const analytics=(google.analyticsPerformance||{}) as AnalyticsPerformance;
-  const search=(google.searchConsole||{}) as SearchConsolePerformance;
+  const search=(searchResult||{}) as SearchConsolePerformance;
   const merchant=(google.merchantCommerce||{}) as MerchantCommerce;
   const ad=ads.rows[0]||{};
   const target=targets.rows[0]||{};
@@ -107,7 +108,7 @@ export async function refreshGrowthIntelligence(projectId:string){
     domain:project.rows[0].domain,
     counts:{alerts:alerts.length,recommendations:recommendations.length},
     signals:{ads:{spend,revenue,clicks,conversions,roas},ga4:ga,searchConsole:sc,merchant:ms},
-    errors:google.errors||{},
+    errors:{...(google.errors||{}),searchConsole:searchResult?undefined:'Search Console performans verisi okunamadı.'},
     alerts,
     recommendations
   };
