@@ -2,6 +2,11 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
+type Risk='LOW'|'MEDIUM'|'HIGH'|'CRITICAL';
+type Impact='LOW'|'MEDIUM'|'HIGH';
+type Effort='LOW'|'MEDIUM'|'HIGH';
+type Confidence='LOW'|'MEDIUM'|'HIGH';
+type Triage={risk:Risk;impact:Impact;effort:Effort;confidence:Confidence;score:number;label:string;modelVersion?:string};
 type Recommendation={
   id:string;
   title:string;
@@ -9,18 +14,13 @@ type Recommendation={
   priority:string;
   status:string;
   source:string;
-  proposed_action?:{recommendation?:string;type?:string;issueKey?:string};
+  proposed_action?:{recommendation?:string;type?:string;issueKey?:string;decision?:Triage};
   created_at?:string;
 };
 type Action={id:string;recommendation_id?:string|null;action_type:string;status:string;provider?:string;approved_by?:string;created_at?:string};
 type Job={id:string;recommendation_id?:string|null;status:string;provider:string;action_type:string;recommendation_title?:string|null;recommendation_priority?:string|null;created_at?:string;error_message?:string|null};
 type Center={jobs:Job[];externalExecution?:boolean};
 
-type Risk='LOW'|'MEDIUM'|'HIGH'|'CRITICAL';
-type Impact='LOW'|'MEDIUM'|'HIGH';
-type Effort='LOW'|'MEDIUM'|'HIGH';
-type Confidence='LOW'|'MEDIUM'|'HIGH';
-type Triage={risk:Risk;impact:Impact;effort:Effort;confidence:Confidence;score:number;label:string};
 const api='/api/growth';
 
 function riskFor(rec:Recommendation):Risk{
@@ -33,17 +33,19 @@ function riskFor(rec:Recommendation):Risk{
 }
 
 function triageFor(rec:Recommendation):Triage{
+  if(rec.proposed_action?.decision?.modelVersion==='decision-v1')return rec.proposed_action.decision;
+
   const risk=riskFor(rec);
   const type=(rec.proposed_action?.type||'manual_review').toLowerCase();
   const text=`${rec.title} ${rec.rationale} ${rec.proposed_action?.recommendation||''}`.toLowerCase();
   const priority=(rec.priority||'').toLowerCase();
 
   let impact:Impact='MEDIUM';
-  if(priority==='critical'||priority==='high'||text.includes('conversion')||text.includes('revenue')||text.includes('ciro')||text.includes('tracking')||text.includes('index')||text.includes('merchant'))impact='HIGH';
+  if(priority==='critical'||priority==='high'||text.includes('conversion')||text.includes('dönüşüm')||text.includes('revenue')||text.includes('ciro')||text.includes('tracking')||text.includes('ölçüm')||text.includes('index')||text.includes('merchant'))impact='HIGH';
   else if(priority==='low'||text.includes('cosmetic')||text.includes('minor'))impact='LOW';
 
   let effort:Effort='MEDIUM';
-  if(type==='site_fix'||type==='code_change'||type.includes('tracking')||type.includes('schema'))effort='LOW';
+  if(type==='site_fix'||type==='code_change'||type.includes('tracking')||type.includes('schema')||type.includes('measurement'))effort='LOW';
   if(type.includes('feed')||type.includes('merchant')||type.includes('campaign')||type.includes('budget'))effort='HIGH';
 
   let confidence:Confidence='MEDIUM';
@@ -57,7 +59,7 @@ function triageFor(rec:Recommendation):Triage{
   const raw=impactWeight[impact]*35+effortWeight[effort]*20+confidenceWeight[confidence]*25+riskWeight[risk]*5;
   const score=Math.max(1,Math.min(100,Math.round(raw/2.8)));
   const label=score>=80?'HEMEN':score>=65?'YÜKSEK':score>=45?'ORTA':'BEKLEYEBİLİR';
-  return {risk,impact,effort,confidence,score,label};
+  return {risk,impact,effort,confidence,score,label,modelVersion:'ui-fallback'};
 }
 
 export default function ApprovalDeskPanel({projectId,onApproved}:{projectId:string|null;onApproved?:()=>void}){
@@ -91,6 +93,7 @@ export default function ApprovalDeskPanel({projectId,onApproved}:{projectId:stri
   const approved=recommendations.filter(r=>r.status==='approved').length;
   const executed=recommendations.filter(r=>r.status==='executed').length;
   const urgent=proposed.filter(r=>triageFor(r).score>=80).length;
+  const backendScored=proposed.filter(r=>r.proposed_action?.decision?.modelVersion==='decision-v1').length;
   const jobByRec=useMemo(()=>new Map((center?.jobs||[]).filter(j=>j.recommendation_id).map(j=>[j.recommendation_id as string,j])),[center]);
 
   async function approve(id:string){
@@ -110,8 +113,8 @@ export default function ApprovalDeskPanel({projectId,onApproved}:{projectId:stri
 
   return <div className="moduleStack">
     <section className="moduleHero">
-      <div><p className="eyebrow">Approval Desk · Decision Gate</p><h2>{proposed.length?`${proposed.length} karar önceliklendirildi`:'Onay kuyruğu temiz'}</h2><p>Revenue impact, effort, confidence ve execution risk birlikte puanlanır; en yüksek değerli işler üstte kalır.</p></div>
-      <div className="finalStats"><div><strong>{urgent}</strong><span>Hemen</span></div><div><strong>{proposed.length}</strong><span>Bekliyor</span></div><div><strong>{approved}</strong><span>Onaylandı</span></div><div><strong>{executed}</strong><span>Doğrulandı</span></div></div>
+      <div><p className="eyebrow">Approval Desk · Decision Gate</p><h2>{proposed.length?`${proposed.length} karar önceliklendirildi`:'Onay kuyruğu temiz'}</h2><p>Impact, effort, confidence ve execution risk backend karar modeliyle puanlanır; eski kayıtlar güvenli UI fallback kullanır.</p></div>
+      <div className="finalStats"><div><strong>{urgent}</strong><span>Hemen</span></div><div><strong>{proposed.length}</strong><span>Bekliyor</span></div><div><strong>{backendScored}</strong><span>Backend Skorlu</span></div><div><strong>{approved}</strong><span>Onaylandı</span></div><div><strong>{executed}</strong><span>Doğrulandı</span></div></div>
     </section>
 
     <section className="moduleCard">
@@ -126,6 +129,7 @@ export default function ApprovalDeskPanel({projectId,onApproved}:{projectId:stri
               <strong>{rec.title}</strong>
               <p>{rec.proposed_action?.recommendation||rec.rationale}</p>
               <span>Impact: {triage.impact} · Effort: {triage.effort} · Confidence: {triage.confidence} · Risk: {triage.risk}</span>
+              <span>Scoring: {triage.modelVersion==='decision-v1'?'backend · decision-v1':'UI fallback · eski kayıt'}</span>
               <span>{rec.source} · {rec.proposed_action?.type||'manual_review'}{rec.created_at?` · ${new Date(rec.created_at).toLocaleString('tr-TR')}`:''}</span>
               <span>Execution: {job?.status||'onay sonrası oluşturulacak'} · External write: {center?.externalExecution?'açık':'kapalı'}</span>
             </div>
@@ -133,7 +137,7 @@ export default function ApprovalDeskPanel({projectId,onApproved}:{projectId:stri
           </article>
         })}
       </div>}
-      <div className="moduleFoot">Priority Score; tahmini iş etkisi, uygulama eforu, sinyal güveni ve execution riskinden türetilir. Onay dış sistemde değişiklik yapmak değildir; provider write gate ayrıca kontrol edilir.</div>
+      <div className="moduleFoot">Yeni Growth Intelligence önerileri decision-v1 modeliyle backend üzerinde puanlanır ve skor öneri kaydına yazılır. Eski öneriler geriye dönük uyumluluk için aynı formülün UI fallback sürümünü kullanır.</div>
     </section>
 
     <section className="moduleCard">
