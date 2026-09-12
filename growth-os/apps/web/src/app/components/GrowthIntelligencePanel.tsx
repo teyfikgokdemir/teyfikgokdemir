@@ -10,6 +10,7 @@ type Signal={severity:'high'|'medium'|'good';title:string;detail:string;action?:
 
 const api='/api/growth';
 const n=(v:unknown)=>Number(v||0);
+const severityRank:Record<Signal['severity'],number>={high:3,medium:2,good:1};
 
 export default function GrowthIntelligencePanel({projectId}:{projectId:string|null}){
   const [metrics,setMetrics]=useState<Metric[]>([]);
@@ -61,18 +62,45 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
     if(n(sc?.impressions)>=100&&n(sc?.ctr)<.015)out.push({severity:'medium',source:'Search Console',title:'Organik görünürlük tıklamaya dönüşmüyor',detail:`${n(sc?.impressions)} gösterim, %${(n(sc?.ctr)*100).toFixed(2)} CTR.`,action:'Yüksek gösterimli sorgu ve sayfalarda title/meta optimizasyonu yap.'});
     if(google?.merchantCommerce?.matched&&n(merchant?.disapproved)>0)out.push({severity:'high',source:'Merchant',title:'Reddedilen ürünler var',detail:`${n(merchant?.disapproved)} ürün reddedilmiş durumda.`,action:'Feed sorunlarını düzelt; Shopping envanterini geri kazan.'});
     else if(google?.merchantCommerce?.matched&&n(merchant?.withIssues)>0)out.push({severity:'medium',source:'Merchant',title:'Ürün feed kalitesi iyileştirilebilir',detail:`${n(merchant?.withIssues)} üründe veri sorunu var.`,action:'Fiyat, stok, GTIN ve görsel sorunlarını önem sırasına göre temizle.'});
+
     if(out.length===0)out.push({severity:'good',source:'Growth OS',title:'Kritik çapraz-kanal sinyal yok',detail:'Bağlı kaynaklarda mevcut eşiklere göre kritik bir çakışma görünmüyor.',action:'Verileri düzenli senkronize etmeye devam et.'});
-    return out;
+    return out.sort((a,b)=>severityRank[b.severity]-severityRank[a.severity]);
   },[metrics,overview,google,search]);
 
   if(!projectId)return <section className="moduleCard"><div className="empty">Growth Intelligence için proje seç.</div></section>;
+
   const high=signals.filter(s=>s.severity==='high').length;
   const medium=signals.filter(s=>s.severity==='medium').length;
+  const primary=signals[0];
+  const statusTitle=high>0?'Müdahale gerekli':medium>0?'Büyüme fırsatı var':'Kontrol altında';
+  const statusDetail=high>0
+    ?`${high} kritik sinyal önce çözülmeli. En yüksek öncelik: ${primary.title}.`
+    :medium>0
+      ?`${medium} optimizasyon fırsatı bulundu. En yüksek potansiyel: ${primary.title}.`
+      :'Bağlı kaynaklarda kritik veya orta öncelikli çapraz-kanal sorun görünmüyor.';
+
   return <section className="moduleCard">
-    <div className="reportHead compact"><div><p className="eyebrow">Cross-source Growth Intelligence</p><h2>Ne kaybediyoruz, neyi düzeltmeliyiz?</h2></div><button className="primaryAction" onClick={refresh} disabled={loading}>{loading?'Analiz ediliyor…':'Karar Motorunu Yenile'}</button></div>
-    <div className="readinessChecklist"><div><span>Kritik sinyal</span><b>{high}</b></div><div><span>Orta öncelik</span><b>{medium}</b></div><div><span>Toplam karar</span><b>{signals.length}</b></div></div>
+    <div className="reportHead compact"><div><p className="eyebrow">Growth Intelligence · Executive Decision</p><h2>{statusTitle}</h2><p>{statusDetail}</p></div><button className="primaryAction" onClick={refresh} disabled={loading}>{loading?'Analiz ediliyor…':'Karar Motorunu Yenile'}</button></div>
+
+    <div className="readinessChecklist">
+      <div><span>Kritik</span><b>{high}</b></div>
+      <div><span>Fırsat</span><b>{medium}</b></div>
+      <div><span>Toplam karar</span><b>{signals.length}</b></div>
+    </div>
+
     {error&&<div className="error">{error}</div>}
-    <div className="recommendationList">{signals.map((s,i)=><article key={`${s.source}-${i}`}><div className="recPriority">{s.severity==='good'?'OK':s.severity.toUpperCase()}</div><div><strong>{s.title}</strong><p>{s.detail}</p><span>{s.source}{s.action?` · ${s.action}`:''}</span></div></article>)}</div>
+
+    <div className="recommendationList">
+      {signals.map((s,i)=><article key={`${s.source}-${i}`}>
+        <div className="recPriority">{s.severity==='high'?'KRİTİK':s.severity==='medium'?'FIRSAT':'SAĞLIKLI'}</div>
+        <div>
+          <strong>{i===0&&s.severity!=='good'?'Öncelik 1 · ':''}{s.title}</strong>
+          <p>{s.detail}</p>
+          <span>{s.source}{s.action?` · Önerilen aksiyon: ${s.action}`:''}</span>
+        </div>
+      </article>)}
+    </div>
+
     <div className="moduleFoot">{updatedAt?`Son analiz: ${updatedAt.toLocaleString('tr-TR')}`:'Kaynaklar okunuyor…'} · Ads + GA4 + Search Console + Merchant birlikte değerlendirilir.</div>
   </section>;
 }
