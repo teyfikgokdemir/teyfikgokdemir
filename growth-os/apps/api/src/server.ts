@@ -8,6 +8,10 @@ import { syncAdsProject } from './ads-sync.js';
 import { buildGoogleAuthUrl, discoverGoogleResources, encryptSecret, exchangeGoogleCode, searchConsolePerformanceForProject } from './google.js';
 import { buildMetaAuthUrl, discoverMetaResources, exchangeMetaCode, exchangeMetaLongLivedToken, metaCredentialMetadata } from './meta.js';
 import { buildTikTokAuthUrl, discoverTikTokAdvertisers, exchangeTikTokCode, tikTokCredentialMetadata } from './tiktok.js';
+import { getExecutionCenter } from './execution-workflow.js';
+import { buildJobPlan, prepareExecution, runPreparedExecution } from './execution-orchestrator.js';
+import { finalizeExecutionForVerification, verifyExecutionJob } from './verification-orchestrator.js';
+import { executorCapabilities } from './executors.js';
 
 type AuditPayload = Awaited<ReturnType<typeof runAudit>>;
 
@@ -27,7 +31,7 @@ function compareAudits(previous: AuditPayload | null, current: AuditPayload) {
   const criticalOpen = current.issues.filter((i) => i.status !== 'pass' && ['critical','high'].includes(i.severity));
   const ready = criticalOpen.length === 0 && current.scores.adsReadiness >= 80 && current.overallScore >= 80;
   return { previousScore:previous.overallScore,currentScore:current.overallScore,scoreDelta,
-    fixed:fixed.map(i=>({key:i.key,title:i.title})),stillOpen:stillOpen.map(i=>({key:i.key,title:i.title,severity:i.severity})),newIssues:newIssues.map(i=>({key:i.key,title:i.title,severity:i.severity})),regressed:regressed.map(i=>({key:i.key,title:i.title})),
+    fixed:fixed.map(i=>({key:i.key,title:i.title})),stillOpen:current.issues.filter((issue) => issue.status !== 'pass' && prevByKey.get(issue.key)?.status !== 'pass').map(i=>({key:i.key,title:i.title,severity:i.severity})),newIssues:newIssues.map(i=>({key:i.key,title:i.title,severity:i.severity})),regressed:regressed.map(i=>({key:i.key,title:i.title})),
     readiness:ready?'ready':'not_ready',verdict:ready?'Final kontrolden geçti. Reklam hazırlık aşamasına geçilebilir.':`Final kontrol tamamlanmadı. ${criticalOpen.length} kritik/yüksek öncelikli madde açık.` };
 }
 
@@ -72,6 +76,23 @@ app.get('/projects/:id/metrics',async(req,res)=>{const{rows}=await pool.query('s
 app.get('/projects/:id/leads',async(req,res)=>{const{rows}=await pool.query('select id,source,campaign_id,name,email,phone,status,lead_value,won_revenue,owner,created_at,updated_at from crm_leads where project_id=$1 order by created_at desc limit 250',[req.params.id]);res.json(rows)});
 app.get('/projects/:id/integrations',async(req,res)=>{const{rows}=await pool.query('select id,provider,account_label,external_account_id,status,mode,last_sync_at,created_at from integrations where project_id=$1 order by provider',[req.params.id]);res.json(rows)});
 app.get('/projects/:id/actions',async(req,res)=>{const{rows}=await pool.query('select id,recommendation_id,provider,action_type,status,approved_by,executed_at,created_at from action_log where project_id=$1 order by created_at desc limit 100',[req.params.id]);res.json(rows)});
+
+app.get('/projects/:id/execution-center',async(req,res)=>{
+  const project=await pool.query('select id from projects where id=$1',[req.params.id]);
+  if(!project.rows[0])return res.status(404).json({error:'Proje bulunamadı.'});
+  try{res.json({...await getExecutionCenter(req.params.id),executorCapabilities:executorCapabilities(),externalExecution:false})}
+  catch(error){res.status(400).json({error:error instanceof Error?error.message:'Execution Center okunamadı.'})}
+});
+app.get('/execution-jobs/:id/plan',async(req,res)=>{try{res.json(await buildJobPlan(req.params.id))}catch(error){res.status(400).json({error:error instanceof Error?error.message:'Execution planı oluşturulamadı.'})}});
+app.post('/execution-jobs/:id/prepare',async(req,res)=>{try{res.json(await prepareExecution(req.params.id))}catch(error){res.status(400).json({error:error instanceof Error?error.message:'Execution hazırlanamadı.'})}});
+app.post('/execution-jobs/:id/run',async(req,res)=>{try{res.json(await runPreparedExecution(req.params.id))}catch(error){res.status(400).json({error:error instanceof Error?error.message:'Execution çalıştırılamadı.'})}});
+app.post('/execution-jobs/:id/finalize',async(req,res)=>{
+  const parsed=z.object({resultState:z.record(z.unknown()).optional()}).safeParse(req.body||{});
+  if(!parsed.success)return res.status(400).json({error:'Execution result state geçersiz.'});
+  try{res.json(await finalizeExecutionForVerification(req.params.id,parsed.data.resultState||{}))}catch(error){res.status(400).json({error:error instanceof Error?error.message:'Execution doğrulamaya aktarılamadı.'})}
+});
+app.post('/execution-jobs/:id/verify',async(req,res)=>{try{res.json(await verifyExecutionJob(req.params.id))}catch(error){res.status(400).json({error:error instanceof Error?error.message:'Execution doğrulanamadı.'})}});
+
 app.post('/projects/:id/ads/sync',async(req,res)=>{
   const parsed=z.object({days:z.number().int().min(1).max(90).optional()}).safeParse(req.body||{});
   if(!parsed.success)return res.status(400).json({error:'Senkronizasyon aralığı geçersiz.'});
