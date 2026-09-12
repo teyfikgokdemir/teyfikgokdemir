@@ -26,6 +26,8 @@ type MerchantProductsResponse={products?:MerchantProduct[];nextPageToken?:string
 type MerchantAccountIssue={name?:string;title?:string;severity?:string;detail?:string;documentationUri?:string;impactedDestinations?:unknown[]};
 type MerchantIssuesResponse={accountIssues?:MerchantAccountIssue[];nextPageToken?:string};
 
+const MERCHANT_DEVELOPER_ACCOUNT_ID='5785856921';
+
 function required(name:string) {
   const value = process.env[name];
   if (!value) throw new Error(`${name} yapılandırılmamış.`);
@@ -117,6 +119,10 @@ async function postJson<T>(url:string, accessToken:string, body:unknown):Promise
   return data as T;
 }
 
+async function registerMerchantDeveloper(accessToken:string){
+  return postJson<{name?:string;gcpIds?:string[]}>(`https://merchantapi.googleapis.com/accounts/v1/accounts/${MERCHANT_DEVELOPER_ACCOUNT_ID}/developerRegistration:registerGcp`,accessToken,{});
+}
+
 function isoDate(date:Date){return date.toISOString().slice(0,10)}
 function normalizeDomain(value:string){return value.replace(/^https?:\/\//,'').replace(/^www\./,'').split('/')[0].toLowerCase()}
 
@@ -165,7 +171,17 @@ async function merchantCommerceForProject(projectId:string,accessToken:string){
   const domain=normalizeDomain(String(project.rows[0]?.domain||''));
   if(!domain)throw new Error('Proje bulunamadı.');
 
-  const accountsResponse=(await getJson('https://merchantapi.googleapis.com/accounts/v1/accounts?pageSize=500',accessToken)) as MerchantAccountsResponse;
+  let accountsResponse:MerchantAccountsResponse;
+  try{
+    accountsResponse=(await getJson('https://merchantapi.googleapis.com/accounts/v1/accounts?pageSize=500',accessToken)) as MerchantAccountsResponse;
+  }catch(error){
+    const message=error instanceof Error?error.message:String(error);
+    if(message.includes('GCP_NOT_REGISTERED')){
+      await registerMerchantDeveloper(accessToken);
+      throw new Error(`Growth OS Merchant API developer kaydı QCT Commerce (${MERCHANT_DEVELOPER_ACCOUNT_ID}) hesabında tamamlandı. Google aktivasyonu birkaç dakika sürebilir; ardından bu ekranı yenileyin.`);
+    }
+    throw error;
+  }
   const accounts=accountsResponse.accounts||[];
   const enriched=await Promise.all(accounts.map(async account=>{
     if(!account.name)return {...account,homepage:null as MerchantHomepage|null};
