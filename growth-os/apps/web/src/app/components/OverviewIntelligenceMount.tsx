@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import type { Root } from 'react-dom/client';
 import GrowthIntelligencePanel from './GrowthIntelligencePanel';
 
 type Project={id:string;name?:string;domain:string};
@@ -17,7 +16,7 @@ export default function OverviewIntelligenceMount(){
 
     let alive=true;
     let projects:Project[]=[];
-    let root:Root|null=null;
+    let root:ReturnType<typeof createRoot>|null=null;
     let mount:HTMLDivElement|null=null;
     let currentProjectId:string|null=null;
 
