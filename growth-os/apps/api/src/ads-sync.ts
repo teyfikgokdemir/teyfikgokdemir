@@ -14,6 +14,23 @@ type NormalizedMetric={
   metadata?:Record<string,unknown>;
 };
 
+type CampaignAggregate={
+  provider:NormalizedMetric['provider'];
+  campaignId:string;
+  campaignName:string;
+  spend:number;
+  impressions:number;
+  clicks:number;
+  conversions:number;
+  revenue:number;
+};
+
+type BusinessTargets={
+  target_roas?:number|string|null;
+  target_cpa?:number|string|null;
+  break_even_roas?:number|string|null;
+};
+
 function asNumber(value:unknown){
   const n=Number(value??0);
   return Number.isFinite(n)?n:0;
@@ -148,7 +165,7 @@ async function tiktokMetrics(projectId:string,days:number):Promise<NormalizedMet
     conversions:asNumber(r.metrics?.conversion),
     revenue:0,
     metadata:{}
-  })).filter(x=>x.campaignId);
+  })).filter(x=>x.campaignId));
 }
 
 async function persist(projectId:string,metrics:NormalizedMetric[]){
@@ -165,21 +182,152 @@ async function persist(projectId:string,metrics:NormalizedMetric[]){
   }catch(error){await client.query('rollback');throw error}finally{client.release()}
 }
 
+function aggregateCampaigns(metrics:NormalizedMetric[]){
+  const map=new Map<string,CampaignAggregate>();
+  for(const metric of metrics){
+    const key=`${metric.provider}:${metric.campaignId}`;
+    const current=map.get(key)||{
+      provider:metric.provider,
+      campaignId:metric.campaignId,
+      campaignName:metric.campaignName,
+      spend:0,
+      impressions:0,
+      clicks:0,
+      conversions:0,
+      revenue:0
+    };
+    current.spend+=metric.spend;
+    current.impressions+=metric.impressions;
+    current.clicks+=metric.clicks;
+    current.conversions+=metric.conversions;
+    current.revenue+=metric.revenue;
+    map.set(key,current);
+  }
+  return [...map.values()];
+}
+
+function providerLabel(provider:string){
+  if(provider==='google_ads')return 'Google Ads';
+  if(provider==='meta_ads')return 'Meta Ads';
+  if(provider==='tiktok_ads')return 'TikTok Ads';
+  return provider;
+}
+
+async function refreshAdsIntelligence(projectId:string,metrics:NormalizedMetric[]){
+  const {rows}=await pool.query('select target_roas,target_cpa,break_even_roas from business_targets where project_id=$1',[projectId]);
+  const targets=(rows[0]||{}) as BusinessTargets;
+  const targetRoas=asNumber(targets.target_roas);
+  const targetCpa=asNumber(targets.target_cpa);
+  const breakEvenRoas=asNumber(targets.break_even_roas);
+  const campaigns=aggregateCampaigns(metrics);
+  const alerts:Array<{severity:'high'|'medium';title:string;message:string;payload:Record<string,unknown>}>=[];
+  const recommendations:Array<{priority:'high'|'medium';title:string;rationale:string;proposedAction:Record<string,unknown>}>=[];
+
+  for(const campaign of campaigns){
+    if(campaign.spend<=0)continue;
+    const roas=campaign.revenue>0?campaign.revenue/campaign.spend:0;
+    const cpa=campaign.conversions>0?campaign.spend/campaign.conversions:null;
+    const context={provider:campaign.provider,campaignId:campaign.campaignId,campaignName:campaign.campaignName,spend:campaign.spend,revenue:campaign.revenue,roas,cpa,conversions:campaign.conversions};
+
+    if(targetCpa>0&&campaign.conversions===0&&campaign.spend>=targetCpa){
+      alerts.push({
+        severity:'high',
+        title:`${providerLabel(campaign.provider)} · dönüşümsüz harcama`,
+        message:`${campaign.campaignName} kampanyası hedef CPA seviyesine ulaşan harcama yaptı ancak dönüşüm üretmedi.`,
+        payload:{...context,targetCpa}
+      });
+      recommendations.push({
+        priority:'high',
+        title:`${campaign.campaignName} kampanyasını incele`,
+        rationale:`Harcama ${campaign.spend.toFixed(2)} seviyesine ulaştı ve dönüşüm yok. Hedef CPA ${targetCpa.toFixed(2)}.`,
+        proposedAction:{type:'review_campaign',provider:campaign.provider,campaignId:campaign.campaignId,readOnly:true,recommendation:'Kampanyayı durdurmadan önce hedefleme, kreatif ve dönüşüm takibini kontrol et.'}
+      });
+      continue;
+    }
+
+    if(targetCpa>0&&cpa!==null&&cpa>targetCpa*1.25){
+      alerts.push({
+        severity:'high',
+        title:`${providerLabel(campaign.provider)} · CPA hedefin üzerinde`,
+        message:`${campaign.campaignName} kampanyasının CPA değeri ${cpa.toFixed(2)}; hedef ${targetCpa.toFixed(2)}.`,
+        payload:{...context,targetCpa}
+      });
+    }
+
+    if(targetRoas>0&&campaign.revenue>0&&roas<targetRoas*0.7){
+      alerts.push({
+        severity:breakEvenRoas>0&&roas<breakEvenRoas?'high':'medium',
+        title:`${providerLabel(campaign.provider)} · ROAS hedefin altında`,
+        message:`${campaign.campaignName} kampanyasının ROAS değeri ${roas.toFixed(2)}; hedef ${targetRoas.toFixed(2)}.`,
+        payload:{...context,targetRoas,breakEvenRoas:breakEvenRoas||null}
+      });
+    }
+
+    if(targetRoas>0&&campaign.revenue>0&&roas>=targetRoas*1.2){
+      recommendations.push({
+        priority:'medium',
+        title:`${campaign.campaignName} ölçekleme adayı`,
+        rationale:`ROAS ${roas.toFixed(2)} ile hedef ${targetRoas.toFixed(2)} seviyesinin üzerinde.`,
+        proposedAction:{type:'consider_scale',provider:campaign.provider,campaignId:campaign.campaignId,readOnly:true,recommendation:'Bütçe artırmadan önce son 7 gün trendini, marjı ve stok durumunu doğrula.'}
+      });
+    }
+  }
+
+  const client=await pool.connect();
+  try{
+    await client.query('begin');
+    await client.query("update alerts set status='resolved',resolved_at=now() where project_id=$1 and source='ads_intelligence' and status='open'",[projectId]);
+    await client.query("update recommendations set status='superseded',decided_at=now() where project_id=$1 and source='ads_intelligence' and status='proposed'",[projectId]);
+    for(const alert of alerts){
+      await client.query(`insert into alerts(project_id,source,severity,title,message,status,payload) values($1,'ads_intelligence',$2,$3,$4,'open',$5)`,[projectId,alert.severity,alert.title,alert.message,alert.payload]);
+    }
+    for(const rec of recommendations){
+      await client.query(`insert into recommendations(project_id,source,priority,title,rationale,proposed_action,status) values($1,'ads_intelligence',$2,$3,$4,$5,'proposed')`,[projectId,rec.priority,rec.title,rec.rationale,rec.proposedAction]);
+    }
+    await client.query('commit');
+  }catch(error){await client.query('rollback');throw error}finally{client.release()}
+
+  return {
+    evaluatedCampaigns:campaigns.length,
+    alerts:alerts.length,
+    recommendations:recommendations.length,
+    targetsConfigured:{targetRoas:targetRoas>0,targetCpa:targetCpa>0,breakEvenRoas:breakEvenRoas>0}
+  };
+}
+
+function summarize(metrics:NormalizedMetric[]){
+  const byProvider:Record<string,{spend:number;revenue:number;clicks:number;impressions:number;conversions:number;rows:number}>={};
+  for(const metric of metrics){
+    const current=byProvider[metric.provider]||{spend:0,revenue:0,clicks:0,impressions:0,conversions:0,rows:0};
+    current.spend+=metric.spend;
+    current.revenue+=metric.revenue;
+    current.clicks+=metric.clicks;
+    current.impressions+=metric.impressions;
+    current.conversions+=metric.conversions;
+    current.rows+=1;
+    byProvider[metric.provider]=current;
+  }
+  return byProvider;
+}
+
 export async function syncAdsProject(projectId:string,days=30){
   const providers=await pool.query("select provider from integrations where project_id=$1 and status='connected' and provider in ('google_oauth','meta_ads','tiktok_ads')",[projectId]);
   const active=new Set(providers.rows.map(r=>r.provider as string));
   const results:Array<{provider:string;ok:boolean;rows:number;error?:string}>=[];
   const jobs:Array<[string,()=>Promise<NormalizedMetric[]>]>=[];
+  const allMetrics:NormalizedMetric[]=[];
   if(active.has('google_oauth'))jobs.push(['google_ads',()=>googleMetrics(projectId,days)]);
   if(active.has('meta_ads'))jobs.push(['meta_ads',()=>metaMetrics(projectId,days)]);
   if(active.has('tiktok_ads'))jobs.push(['tiktok_ads',()=>tiktokMetrics(projectId,days)]);
   for(const [provider,job] of jobs){
     try{
       const metrics=await job();
+      allMetrics.push(...metrics);
       await persist(projectId,metrics);
       await pool.query("update integrations set last_sync_at=now() where project_id=$1 and provider=$2",[projectId,provider==='google_ads'?'google_oauth':provider]);
       results.push({provider,ok:true,rows:metrics.length});
     }catch(error){results.push({provider,ok:false,rows:0,error:error instanceof Error?error.message:'Senkronizasyon başarısız.'})}
   }
-  return {readOnly:true,days,results};
+  const intelligence=allMetrics.length?await refreshAdsIntelligence(projectId,allMetrics):{evaluatedCampaigns:0,alerts:0,recommendations:0,targetsConfigured:{targetRoas:false,targetCpa:false,breakEvenRoas:false}};
+  return {readOnly:true,externalExecution:false,days,results,summary:summarize(allMetrics),intelligence};
 }
