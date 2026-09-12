@@ -40,6 +40,9 @@ type CenterResponse={
   executorCapabilities?:Record<string,ExecutorCapability>;
   externalExecution?:boolean;
 };
+type ExecutionPlan={executor?:string;risk?:string;requiresApproval?:boolean;externalWrite?:boolean;verificationRequired?:boolean;blockers?:string[];steps?:string[]};
+type JobPlanResponse={plan?:ExecutionPlan;job?:{id:string;status:string;provider:string;actionType:string};recommendation?:{id:string;title:string;status:string;source:string}};
+type ActionResult={ready?:boolean;status?:string;reason?:string;blockers?:string[];plan?:ExecutionPlan;preview?:{message?:string};verified?:boolean;verdict?:string};
 
 const api='/api/growth';
 const labels:Record<string,string>={queued:'KUYRUKTA',in_progress:'UYGULANIYOR',verification_pending:'DOĞRULAMA',verified:'DOĞRULANDI',failed:'BAŞARISIZ',executed:'UYGULANDI'};
@@ -48,6 +51,9 @@ export default function ExecutionCenterPanel({projectId}:{projectId:string|null}
   const [data,setData]=useState<CenterResponse|null>(null);
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState('');
+  const [busyJob,setBusyJob]=useState<string|null>(null);
+  const [planByJob,setPlanByJob]=useState<Record<string,JobPlanResponse>>({});
+  const [resultByJob,setResultByJob]=useState<Record<string,ActionResult>>({});
 
   async function load(){
     if(!projectId)return;
@@ -61,8 +67,23 @@ export default function ExecutionCenterPanel({projectId}:{projectId:string|null}
     finally{setLoading(false)}
   }
 
+  async function requestJob(jobId:string,action:'plan'|'prepare'|'verify'){
+    setBusyJob(jobId);setError('');
+    try{
+      const url=action==='plan'?`${api}/execution-jobs/${jobId}/plan`:`${api}/execution-jobs/${jobId}/${action}`;
+      const response=await fetch(url,{method:action==='plan'?'GET':'POST',headers:{'content-type':'application/json'},cache:'no-store'});
+      const payload=await response.json();
+      if(!response.ok)throw new Error(payload?.error||'Execution işlemi tamamlanamadı.');
+      if(action==='plan')setPlanByJob(current=>({...current,[jobId]:payload as JobPlanResponse}));
+      else setResultByJob(current=>({...current,[jobId]:payload as ActionResult}));
+      await load();
+    }catch(e){setError(e instanceof Error?e.message:'Execution işlemi tamamlanamadı.');}
+    finally{setBusyJob(null)}
+  }
+
   useEffect(()=>{
     if(!projectId)return;
+    setPlanByJob({});setResultByJob({});
     void load();
     const timer=window.setInterval(()=>void load(),5000);
     return()=>window.clearInterval(timer);
@@ -104,7 +125,7 @@ export default function ExecutionCenterPanel({projectId}:{projectId:string|null}
         <div className="recPriority">{blocked?'KİLİTLİ':'AKTİF'}</div>
         <div>
           <strong>External Execution Gate</strong>
-          <p>{blocked?'Dış sistem write işlemleri kapalı. Job ve doğrulama altyapısı çalışır; provider değişikliği otomatik uygulanmaz.':'External execution açık. Yine de approval ve provider policy kontrolleri zorunlu.'}</p>
+          <p>{blocked?'Dış sistem write işlemleri kapalı. Job planlama, prepare ve doğrulama çalışır; provider değişikliği otomatik uygulanmaz.':'External execution açık. Yine de approval ve provider policy kontrolleri zorunlu.'}</p>
           <span>{Object.entries(data?.executorCapabilities||{}).map(([name,cap])=>`${name}: ${cap.writeEnabled?'write açık':'write kapalı'}`).join(' · ')||'Executor capability verisi bekleniyor.'}</span>
         </div>
       </article>
@@ -113,11 +134,11 @@ export default function ExecutionCenterPanel({projectId}:{projectId:string|null}
     {error&&<div className="error">{error}</div>}
 
     {jobs.length===0?<div className="empty"><b>Henüz execution job yok.</b> Bir Recommendation onaylandığında DB trigger otomatik job oluşturacak.</div>:<div className="recommendationList">
-      {jobs.slice(0,30).map(job=>{const check=verificationByJob.get(job.id);return <article key={job.id}>
+      {jobs.slice(0,30).map(job=>{const check=verificationByJob.get(job.id);const plan=planByJob[job.id]?.plan;const result=resultByJob[job.id];return <article key={job.id}>
         <div className="recPriority">{labels[job.status]||job.status.toUpperCase()}</div>
-        <div>
+        <div style={{flex:1}}>
           <strong>{job.recommendation_title||job.action_type}</strong>
-          <p>{check?.verdict||job.error_message||`Executor: ${job.provider} · Aksiyon: ${job.action_type}`}</p>
+          <p>{check?.verdict||result?.verdict||result?.reason||job.error_message||`Executor: ${job.provider} · Aksiyon: ${job.action_type}`}</p>
           <span>
             {job.provider} · {job.execution_mode||'manual_approval'}
             {job.recommendation_priority?` · Öncelik: ${job.recommendation_priority}`:''}
@@ -125,10 +146,20 @@ export default function ExecutionCenterPanel({projectId}:{projectId:string|null}
             {job.created_at?` · ${new Date(job.created_at).toLocaleString('tr-TR')}`:''}
           </span>
           {check&&(check.score_before!=null||check.score_after!=null)&&<span>Skor: {check.score_before??'—'} → {check.score_after??'—'}{check.score_delta!=null?` · Δ ${check.score_delta}`:''}</span>}
+          {plan&&<div style={{marginTop:10}}>
+            <span>Executor: {plan.executor||'—'} · Risk: {plan.risk||'—'} · Approval: {plan.requiresApproval?'zorunlu':'değil'} · Verification: {plan.verificationRequired?'zorunlu':'değil'}</span>
+            {Boolean(plan.blockers?.length)&&<p style={{marginTop:6}}>Blokerler: {plan.blockers?.join(' · ')}</p>}
+          </div>}
+          {result?.blockers?.length?<p style={{marginTop:6}}>Prepare blokerleri: {result.blockers.join(' · ')}</p>:null}
+        </div>
+        <div style={{display:'flex',gap:8,flexWrap:'wrap',justifyContent:'flex-end'}}>
+          {job.status==='queued'&&<button onClick={()=>void requestJob(job.id,'plan')} disabled={busyJob===job.id}>{busyJob===job.id?'…':'Planı İncele'}</button>}
+          {job.status==='queued'&&<button className="primaryAction" onClick={()=>void requestJob(job.id,'prepare')} disabled={busyJob===job.id}>{busyJob===job.id?'…':'Hazırla'}</button>}
+          {job.status==='verification_pending'&&<button className="primaryAction" onClick={()=>void requestJob(job.id,'verify')} disabled={busyJob===job.id}>{busyJob===job.id?'…':'Doğrula'}</button>}
         </div>
       </article>})}
     </div>}
 
-    <div className="moduleFoot">Recommendation → Approval → Execution Job → Verification Result zinciri artık veritabanındaki gerçek kayıtlar üzerinden izleniyor. Başarılı verification olmadan job tamamlanmış sayılmaz.</div>
+    <div className="moduleFoot">Planı İncele ve Hazırla işlemleri dış sistemde değişiklik yapmaz. External write gate kapalıyken Run aksiyonu arayüzde sunulmaz. Başarılı verification olmadan job tamamlanmış sayılmaz.</div>
   </section>;
 }
