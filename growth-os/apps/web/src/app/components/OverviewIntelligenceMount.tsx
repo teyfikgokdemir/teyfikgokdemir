@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { createRoot, Root } from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
+import type { Root } from 'react-dom/client';
 import GrowthIntelligencePanel from './GrowthIntelligencePanel';
 
 type Project={id:string;name?:string;domain:string};
@@ -17,7 +18,7 @@ export default function OverviewIntelligenceMount(){
     let alive=true;
     let projects:Project[]=[];
     let root:Root|null=null;
-    let mount:HTMLElement|null=null;
+    let mount:HTMLDivElement|null=null;
     let currentProjectId:string|null=null;
 
     const cleanupMount=()=>{
@@ -43,19 +44,20 @@ export default function OverviewIntelligenceMount(){
       if(!project)return;
 
       if(!mount||!mount.isConnected){
-        mount=document.createElement('div');
-        mount.id='overview-growth-intelligence';
-        mount.className='moduleStack';
+        const nextMount=document.createElement('div');
+        nextMount.id='overview-growth-intelligence';
+        nextMount.className='moduleStack';
         const grid=dashboard.querySelector<HTMLElement>('.dashboardGrid');
-        if(grid?.parentElement===dashboard)grid.insertAdjacentElement('afterend',mount);
-        else dashboard.appendChild(mount);
-        root=createRoot(mount);
+        if(grid?.parentElement===dashboard)grid.insertAdjacentElement('afterend',nextMount);
+        else dashboard.appendChild(nextMount);
+        mount=nextMount;
+        root=createRoot(nextMount);
         currentProjectId=null;
       }
 
-      if(currentProjectId!==project.id){
+      if(currentProjectId!==project.id&&root){
         currentProjectId=project.id;
-        root?.render(<GrowthIntelligencePanel projectId={project.id}/>);
+        root.render(<GrowthIntelligencePanel projectId={project.id}/>);
       }
     };
 
