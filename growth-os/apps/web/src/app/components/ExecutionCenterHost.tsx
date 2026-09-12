@@ -70,7 +70,7 @@ export default function ExecutionCenterHost(){
   },[]);
 
   if(!visible||!projectId)return null;
-  return <div className="moduleStack" style={{marginLeft:'242px',padding:'0 34px 34px',maxWidth:'1600px'}}>
+  return <div className="moduleStack externalModuleHost">
     <ApprovalDeskPanel projectId={projectId}/>
     <ExecutionCenterPanel projectId={projectId}/>
   </div>;
