@@ -216,6 +216,65 @@ export async function initDb() {
     create index if not exists idx_verification_results_project_status on verification_results(project_id, status, created_at desc);
     create unique index if not exists idx_execution_jobs_recommendation_unique on execution_jobs(recommendation_id) where recommendation_id is not null;
 
+    create or replace function growth_apply_audit_decision() returns trigger as $$
+    declare
+      impact text;
+      impact_weight integer;
+      priority_score integer;
+      priority_label text;
+      recommendation_text text;
+    begin
+      if new.source='audit_engine' and coalesce(new.proposed_action->'decision'->>'modelVersion','')<>'decision-v1' then
+        recommendation_text:=lower(coalesce(new.title,'')||' '||coalesce(new.rationale,'')||' '||coalesce(new.proposed_action->>'recommendation',''));
+
+        if lower(coalesce(new.priority,'')) in ('critical','high')
+          or recommendation_text like '%conversion%'
+          or recommendation_text like '%dönüşüm%'
+          or recommendation_text like '%revenue%'
+          or recommendation_text like '%ciro%'
+          or recommendation_text like '%tracking%'
+          or recommendation_text like '%ölçüm%'
+          or recommendation_text like '%index%'
+          or recommendation_text like '%merchant%' then
+          impact:='HIGH'; impact_weight:=3;
+        elsif lower(coalesce(new.priority,''))='low'
+          or recommendation_text like '%cosmetic%'
+          or recommendation_text like '%minor%' then
+          impact:='LOW'; impact_weight:=1;
+        else
+          impact:='MEDIUM'; impact_weight:=2;
+        end if;
+
+        priority_score:=greatest(1,least(100,round((impact_weight*35 + 3*20 + 3*25 + 2*5)::numeric/2.8)::integer));
+        priority_label:=case when priority_score>=80 then 'HEMEN' when priority_score>=65 then 'YÜKSEK' when priority_score>=45 then 'ORTA' else 'BEKLEYEBİLİR' end;
+
+        new.proposed_action:=coalesce(new.proposed_action,'{}'::jsonb)||jsonb_build_object(
+          'decision',jsonb_build_object(
+            'risk','MEDIUM',
+            'impact',impact,
+            'effort','LOW',
+            'confidence','HIGH',
+            'score',priority_score,
+            'label',priority_label,
+            'modelVersion','decision-v1'
+          )
+        );
+      end if;
+      return new;
+    end;
+    $$ language plpgsql;
+
+    drop trigger if exists trg_growth_apply_audit_decision on recommendations;
+    create trigger trg_growth_apply_audit_decision
+      before insert or update of proposed_action,priority,source,title,rationale on recommendations
+      for each row execute function growth_apply_audit_decision();
+
+    update recommendations
+      set proposed_action=proposed_action
+      where source='audit_engine'
+        and status='proposed'
+        and coalesce(proposed_action->'decision'->>'modelVersion','')<>'decision-v1';
+
     create or replace function growth_enqueue_approved_action() returns trigger as $$
     begin
       if new.status='approved' and new.recommendation_id is not null then
