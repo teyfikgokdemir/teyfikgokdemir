@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { initDb, pool } from './db.js';
 import { runAudit } from './audit.js';
 import { syncAdsProject } from './ads-sync.js';
-import { buildGoogleAuthUrl, discoverGoogleResources, encryptSecret, exchangeGoogleCode } from './google.js';
+import { buildGoogleAuthUrl, discoverGoogleResources, encryptSecret, exchangeGoogleCode, searchConsolePerformanceForProject } from './google.js';
 import { buildMetaAuthUrl, discoverMetaResources, exchangeMetaCode, exchangeMetaLongLivedToken, metaCredentialMetadata } from './meta.js';
 import { buildTikTokAuthUrl, discoverTikTokAdvertisers, exchangeTikTokCode, tikTokCredentialMetadata } from './tiktok.js';
 
@@ -117,6 +117,13 @@ app.get('/projects/:id/integrations/google/resources',async(req,res)=>{
     res.json({...resources,selectedCustomerResourceName:metadata?.selectedCustomerResourceName||null});
   }
   catch(error){res.status(400).json({error:error instanceof Error?error.message:'Google kaynakları okunamadı.'})}
+});
+
+app.get('/projects/:id/search-console/performance',async(req,res)=>{
+  const parsed=z.object({days:z.coerce.number().int().min(1).max(90).optional()}).safeParse(req.query);
+  if(!parsed.success)return res.status(400).json({error:'Geçerli bir tarih aralığı seçin.'});
+  try{res.json(await searchConsolePerformanceForProject(req.params.id,parsed.data.days||28))}
+  catch(error){res.status(400).json({error:error instanceof Error?error.message:'Search Console verileri okunamadı.'})}
 });
 
 app.post('/projects/:id/integrations/google/select',async(req,res)=>{
