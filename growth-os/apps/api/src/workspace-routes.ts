@@ -1,9 +1,55 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import { pool } from './db.js';
+import { runAudit } from './audit.js';
 import { assertProjectAccess, listWorkspaceProjects, requireRole, resolveWorkspaceActor, workspaceErrorMessage, workspaceErrorStatus } from './workspace-access.js';
 
 export const workspaceRouter=Router();
+
+async function persistWorkspaceAudit(workspaceId:string,domain:string,projectName?:string){
+  const result=await runAudit(domain);
+  const hostname=new URL(result.domain).hostname.replace(/^www\./,'');
+  const existing=await pool.query('select id,workspace_id from projects where domain=$1',[hostname]);
+  if(existing.rows[0]&&existing.rows[0].workspace_id!==workspaceId)throw new Error('PROJECT_ACCESS_DENIED');
+
+  const projectResult=await pool.query(`
+    insert into projects(name,domain,workspace_id)
+    values($1,$2,$3)
+    on conflict(domain) do update set name=excluded.name
+    where projects.workspace_id=excluded.workspace_id
+    returning id,name,domain,workspace_id,client_id`,[projectName||hostname,hostname,workspaceId]);
+  if(!projectResult.rows[0])throw new Error('PROJECT_ACCESS_DENIED');
+  const project=projectResult.rows[0];
+
+  const previousResult=await pool.query('select payload from audits where project_id=$1 order by created_at desc limit 1',[project.id]);
+  const previous=previousResult.rows[0]?.payload as {overallScore?:number}|undefined;
+  const inserted=await pool.query(`
+    insert into audits(project_id,domain,overall_score,seo_score,geo_score,aeo_score,aio_score,ads_readiness_score,payload)
+    values($1,$2,$3,$4,$5,$6,$7,$8,$9)
+    returning id,created_at`,[project.id,result.domain,result.overallScore,result.scores.seo,result.scores.geo,result.scores.aeo,result.scores.aio,result.scores.adsReadiness,result]);
+  const auditId=inserted.rows[0].id;
+
+  const client=await pool.connect();
+  try{
+    await client.query('begin');
+    await client.query("update alerts set status='resolved',resolved_at=now() where project_id=$1 and source='audit_engine' and status='open'",[project.id]);
+    await client.query("update recommendations set status='superseded',decided_at=now() where project_id=$1 and source='audit_engine' and status='proposed'",[project.id]);
+    for(const issue of result.issues.filter(i=>i.status!=='pass')){
+      await client.query("insert into recommendations(project_id,source,priority,title,rationale,proposed_action,status) values($1,'audit_engine',$2,$3,$4,$5,'proposed')",[project.id,issue.severity,issue.title,issue.detail,{type:'site_fix',issueKey:issue.key,recommendation:issue.recommendation,auditId}]);
+      if(['critical','high'].includes(issue.severity)){
+        await client.query("insert into alerts(project_id,source,severity,title,message,status,payload) values($1,'audit_engine',$2,$3,$4,'open',$5)",[project.id,issue.severity,issue.title,issue.recommendation,{issueKey:issue.key,auditId}]);
+      }
+    }
+    await client.query('commit');
+  }catch(error){await client.query('rollback');throw error}finally{client.release()}
+
+  const previousScore=Number(previous?.overallScore??0);
+  return {
+    project,
+    audit:{...result,id:auditId,createdAt:inserted.rows[0].created_at},
+    comparison:previous?{previousScore,currentScore:result.overallScore,scoreDelta:result.overallScore-previousScore}:null
+  };
+}
 
 workspaceRouter.get('/me',async(req,res)=>{
   try{
@@ -28,6 +74,16 @@ workspaceRouter.get('/:workspaceId',async(req,res)=>{
       listWorkspaceProjects(actor)
     ]);
     res.json({actor,workspace:workspace.rows[0]||null,branding:branding.rows[0]||null,members:members.rows,clients:clients.rows,projects});
+  }catch(error){res.status(workspaceErrorStatus(error)).json({error:workspaceErrorMessage(error)})}
+});
+
+workspaceRouter.post('/:workspaceId/audit',async(req,res)=>{
+  const parsed=z.object({domain:z.string().min(3),projectName:z.string().min(1).max(160).optional()}).safeParse(req.body||{});
+  if(!parsed.success)return res.status(400).json({error:'Geçerli bir domain girin.'});
+  try{
+    const actor=await resolveWorkspaceActor(req,req.params.workspaceId);
+    requireRole(actor,'analyst');
+    res.json(await persistWorkspaceAudit(actor.workspaceId,parsed.data.domain,parsed.data.projectName));
   }catch(error){res.status(workspaceErrorStatus(error)).json({error:workspaceErrorMessage(error)})}
 });
 
