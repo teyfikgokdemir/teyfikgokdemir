@@ -50,5 +50,5 @@ export default function OverviewIntelligenceHost(){
   },[]);
 
   if(!visible||!projectId)return null;
-  return <div style={{marginLeft:'242px',padding:'0 34px 34px',maxWidth:'1600px'}}><GrowthIntelligencePanel projectId={projectId}/></div>;
+  return <div className="externalModuleHost"><GrowthIntelligencePanel projectId={projectId}/></div>;
 }
