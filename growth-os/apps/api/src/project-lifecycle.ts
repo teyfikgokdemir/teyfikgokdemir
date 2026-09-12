@@ -14,16 +14,6 @@ async function ensureProjectLifecycleSchema() {
   `);
 }
 
-async function getProject(workspaceId: string, projectId: string) {
-  const { rows } = await pool.query(
-    `select id,workspace_id,client_id,name,domain,status,archived_at,archived_by,created_at
-     from projects where id=$1 and workspace_id=$2 limit 1`,
-    [projectId, workspaceId]
-  );
-  if (!rows[0]) throw new Error('PROJECT_ACCESS_DENIED');
-  return rows[0];
-}
-
 const bulkSchema = z.object({
   projectIds: z.array(z.string().uuid()).min(1).max(200)
 });
@@ -222,18 +212,29 @@ projectLifecycleRouter.delete('/:projectId', async (req, res) => {
     const projectId = String(req.params.projectId || '');
     const actor = await resolveWorkspaceActor(req, workspaceId);
     requireRole(actor, 'owner');
-    const project = await getProject(actor.workspaceId, projectId);
+
+    await db.query('begin');
+    const locked = await db.query(
+      `select id,workspace_id,client_id,name,domain,status,archived_at,archived_by,created_at
+       from projects where id=$1 and workspace_id=$2 for update`,
+      [projectId, actor.workspaceId]
+    );
+    const project = locked.rows[0];
+    if (!project) throw new Error('PROJECT_ACCESS_DENIED');
 
     if (project.status !== 'archived') {
+      await db.query('rollback');
       return res.status(409).json({ error: 'Bir proje kalıcı silinmeden önce arşivlenmelidir.' });
     }
     if (parsed.data.confirmName.trim() !== String(project.name).trim()) {
+      await db.query('rollback');
       return res.status(409).json({ error: 'Proje adı doğrulaması eşleşmiyor.' });
     }
 
-    await db.query('begin');
     const deleted = await db.query(
-      `delete from projects where id=$1 and workspace_id=$2 returning id,name,domain,client_id`,
+      `delete from projects
+       where id=$1 and workspace_id=$2 and status='archived'
+       returning id,name,domain,client_id`,
       [projectId, actor.workspaceId]
     );
     if (!deleted.rows[0]) throw new Error('PROJECT_ACCESS_DENIED');
