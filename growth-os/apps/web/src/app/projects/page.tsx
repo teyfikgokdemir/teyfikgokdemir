@@ -92,7 +92,9 @@ export default function ProjectsPage(){
       });
       const data=await res.json() as {changed?:number;error?:string};
       if(!res.ok)throw new Error(data.error||'Toplu işlem tamamlanamadı.');
-      setNotice(action==='archive'?`${data.changed??ids.length} proje arşivlendi.`:`${data.changed??ids.length} proje aktif listeye geri alındı.`);
+      setNotice(action==='archive'
+        ?`${data.changed??ids.length} proje arşivlendi.`
+        :`${data.changed??ids.length} proje aktif listeye geri alındı. Execution policy güvenlik nedeniyle kapalı kaldı; yeniden açılması bilinçli onay gerektirir.`);
       setSelected(new Set());
       await load();
     }catch(e){setError(e instanceof Error?e.message:'Toplu işlem tamamlanamadı.')}finally{setSaving(false)}
@@ -105,7 +107,7 @@ export default function ProjectsPage(){
       const res=await fetch(`${api}/workspaces/${actor.workspaceId}/project-lifecycle/${project.id}/restore`,{method:'POST'});
       const data=await res.json() as {error?:string};
       if(!res.ok)throw new Error(data.error||'Proje geri alınamadı.');
-      setNotice(`${project.name} aktif projelere geri alındı.`);
+      setNotice(`${project.name} aktif projelere geri alındı. Execution policy güvenlik nedeniyle kapalı kaldı; yeniden açılması bilinçli onay gerektirir.`);
       setSelected(new Set());
       await load();
     }catch(e){setError(e instanceof Error?e.message:'Proje geri alınamadı.')}finally{setSaving(false)}
@@ -192,7 +194,7 @@ export default function ProjectsPage(){
         </div>}
       </section>
 
-      <section className={styles.info}><strong>Arşiv varsayılan işlemdir.</strong><span>Arşivlenen projeler aktif portföyden çıkar; geçmiş audit, rapor ve kanıt verileri korunur. Kalıcı silme yalnızca owner rolüyle ve proje adı doğrulamasıyla yapılabilir.</span></section>
+      <section className={styles.info}><strong>Arşiv varsayılan işlemdir.</strong><span>Arşivlenen projeler aktif portföyden çıkar; geçmiş audit, rapor ve kanıt verileri korunur. Geri alınan projelerde execution policy otomatik açılmaz; reklam/yazma yetkisi bilinçli onayla yeniden etkinleştirilmelidir. Kalıcı silme yalnızca owner rolüyle ve proje adı doğrulamasıyla yapılabilir.</span></section>
     </section>
 
     {deleteProject&&<div className={styles.modalBackdrop} role="dialog" aria-modal="true">
