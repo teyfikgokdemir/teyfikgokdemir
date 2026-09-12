@@ -95,7 +95,7 @@ async function getJson(url:string, accessToken:string) {
 
 export async function discoverGoogleResources(projectId:string) {
   const accessToken = await googleAccessForProject(projectId);
-  const adsVersion = process.env.GOOGLE_ADS_API_VERSION || 'v22';
+  const adsVersion = process.env.GOOGLE_ADS_API_VERSION || 'v25';
   const results:{ads?:unknown;analytics?:unknown;searchConsole?:unknown;merchant?:unknown;errors:Record<string,string>} = {errors:{}};
 
   const jobs:[keyof Omit<typeof results,'errors'>,()=>Promise<unknown>][] = [
