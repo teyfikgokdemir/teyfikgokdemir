@@ -14,6 +14,18 @@ function isReadOnly(method:string){
   return method==='GET'||method==='HEAD';
 }
 
+function normalizeDomain(value:unknown){
+  if(typeof value!=='string')return '';
+  const trimmed=value.trim();
+  if(!trimmed)return '';
+  try{
+    const url=new URL(/^https?:\/\//i.test(trimmed)?trimmed:`https://${trimmed}`);
+    return url.hostname.replace(/^www\./i,'').toLowerCase();
+  }catch{
+    return trimmed.replace(/^https?:\/\//i,'').split('/')[0].replace(/^www\./i,'').toLowerCase();
+  }
+}
+
 export const legacyWorkspaceGuard:RequestHandler=async(req,res,next)=>{
   const path=req.path;
   if(path==='/health'||path==='/capabilities'||path.startsWith('/workspaces/')||path==='/workspaces'||path.startsWith('/oauth/'))return next();
@@ -28,6 +40,14 @@ export const legacyWorkspaceGuard:RequestHandler=async(req,res,next)=>{
     if(req.method==='POST'&&path==='/audit'){
       requireRole(actor,'analyst');
       if(actor.workspaceId!==INTERNAL_WORKSPACE_ID)return res.status(403).json({error:'Yeni audit bu workspace için workspace-scoped endpoint üzerinden başlatılmalı.'});
+      const domain=normalizeDomain((req.body as {domain?:unknown}|undefined)?.domain);
+      if(domain){
+        const {rows}=await pool.query(
+          `select id,status from projects where workspace_id=$1 and lower(domain)=lower($2) limit 1`,
+          [actor.workspaceId,domain]
+        );
+        if(rows[0]?.status==='archived')throw new Error('PROJECT_ARCHIVED');
+      }
       return next();
     }
 
