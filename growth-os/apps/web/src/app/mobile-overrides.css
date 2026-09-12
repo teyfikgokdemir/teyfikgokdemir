@@ -1,0 +1,37 @@
+.externalModuleHost{margin-left:242px;padding:0 34px 34px;max-width:1600px;width:calc(100% - 242px)}
+
+@media(max-width:900px){
+  html,body{max-width:100%;overflow-x:hidden}
+  .shell{display:block;min-width:0}
+  .side{position:sticky;top:0;z-index:50;height:auto;padding:12px 12px 10px;border-right:0;border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}
+  .brand{margin-bottom:10px}.brand>span{width:34px;height:34px;border-radius:11px}.brand strong{font-size:13px}.brand small{font-size:8px}
+  .side nav{display:flex!important;flex-direction:row!important;gap:6px;overflow-x:auto;overflow-y:hidden;padding:0 0 3px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.side nav::-webkit-scrollbar{display:none}
+  .side nav button{flex:0 0 auto;width:auto!important;min-width:max-content;padding:9px 11px!important;font-size:11px!important;border-radius:10px}.side nav button i{display:none!important}.stage{display:none}
+  .content{padding:20px 14px 28px;max-width:100%;overflow:hidden}
+  .content header{display:flex;align-items:flex-start;gap:10px}.content h1{font-size:clamp(27px,9vw,40px);line-height:1.04;margin:5px 0 18px;word-break:break-word}.private{flex:0 0 auto;margin:0;font-size:8px;padding:6px 8px}
+  .projectBar{margin-bottom:16px;padding:14px;gap:12px}.projectBar>div:first-child{display:grid!important;grid-template-columns:1fr!important;gap:4px!important}.projectBar>div:first-child span{font-size:8px}.projectBar strong{white-space:normal;overflow-wrap:anywhere}.projectBar small{white-space:normal;overflow-wrap:anywhere}.projectPicker{min-width:0!important;width:100%}.projectPicker>button{min-width:0;width:100%;padding:10px 12px}.projectPicker>button span{min-width:0}.projectPicker>button b,.projectPicker>button small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.projectPickerMenu{max-height:55vh;overflow:auto}
+  .dashboardHome,.moduleStack{gap:12px}.dashboardHero,.moduleHero,.moduleCard,.dashboardMainCard,.quickActions,.recentAudits,.executiveCard,.finalCard{border-radius:16px;padding:16px}
+  .dashboardHero,.moduleHero,.executiveCard,.finalCard{grid-template-columns:1fr!important;display:grid;gap:14px}.dashboardHero{align-items:stretch}.dashboardHero h2,.moduleHero h2{font-size:clamp(25px,8vw,34px);line-height:1.08}.dashboardHero .primaryAction,.moduleHero .primaryAction{width:100%}
+  .dashboardStats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.dashboardStats>div{min-height:100px;padding:13px}.dashboardStats strong{font-size:25px}.dashboardGrid{grid-template-columns:1fr;gap:10px}.overviewScoreRow{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.bigScore,.overviewMini{min-height:92px;padding:13px}.bigScore strong{font-size:34px}.overviewMini strong{font-size:17px}
+  .metricTiles,.kpiGrid,.scoreGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.kpi,.metricTiles .kpi{min-height:96px;padding:12px}.kpi strong{font-size:19px}.score{padding:14px}.ring{width:66px;height:66px}.ring span{font-size:17px}
+  .projectGrid,.integrationGrid,.accountMappingGrid,.targetGrid,.compareColumns,.issues{grid-template-columns:1fr!important}.integrationGrid article{grid-template-columns:38px minmax(0,1fr) auto;padding:12px;gap:10px}.integrationIcon{width:38px;height:38px}.integrationGrid span{overflow-wrap:anywhere}.accountMappingGrid select{font-size:16px}
+  .readinessChecklist{grid-template-columns:1fr!important;gap:7px}.readinessChecklist>div{padding:12px}.executiveStats,.finalStats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px}.executiveStats div,.finalStats div{padding:11px}.executiveStats strong,.finalStats strong{font-size:19px}
+  .reportHead,.reportHead.compact,.dashboardSectionHead{align-items:flex-start;gap:10px;flex-direction:column}.reportHead{margin:24px 0 12px}.reportHead h2{font-size:23px}.reportHead>span,.reportHead button,.dashboardSectionHead button{max-width:100%}.reportHead .primaryAction{width:100%}
+  .recommendationList article{grid-template-columns:1fr!important;padding:13px}.recommendationList article>button{width:100%;min-height:42px}.recommendationList strong{font-size:13px}.recommendationList p{font-size:11px}.recommendationList span{display:block;line-height:1.5;margin-top:3px;overflow-wrap:anywhere}.recPriority{justify-self:start}
+  .actionLog article{grid-template-columns:1fr!important;gap:6px}.actionLog small{text-align:left!important;overflow-wrap:anywhere}.alertList article{grid-template-columns:34px minmax(0,1fr);padding:12px}.alertSeverity{width:34px;height:34px}.alertList p{overflow-wrap:anywhere}
+  .leadList article{grid-template-columns:36px minmax(0,1fr)!important}.leadList em,.leadList article>b{grid-column:2!important;justify-self:start}.leadList span{overflow-wrap:anywhere}
+  .dataTable{margin:0 -2px;padding-bottom:4px;overflow-x:auto;-webkit-overflow-scrolling:touch}.dataHead,.dataRow{min-width:640px}
+  .auditBox{padding:14px}.auditBox input{font-size:16px}.auditHistoryStrip{gap:6px}.issueTop{align-items:flex-start}.issues article{padding:14px}.priorityRow{grid-template-columns:34px minmax(0,1fr);gap:10px;padding:12px}.priorityTitle{flex-direction:column;align-items:flex-start}
+  .externalModuleHost{margin-left:0;width:100%;padding:0 14px 28px;max-width:100%;overflow:hidden}
+  button,select,input{max-width:100%}
+}
+
+@media(max-width:430px){
+  .content{padding-left:12px;padding-right:12px}.externalModuleHost{padding-left:12px;padding-right:12px}
+  .dashboardStats,.metricTiles,.kpiGrid,.scoreGrid,.overviewScoreRow,.executiveStats,.finalStats{grid-template-columns:1fr 1fr!important}
+  .dashboardStats>div{min-width:0}.dashboardStats strong{font-size:22px}.dashboardStats span,.dashboardStats small{overflow-wrap:anywhere}
+  .content h1{font-size:29px}.dashboardHero h2,.moduleHero h2{font-size:27px}.moduleCard{padding:14px}.moduleHero,.dashboardHero{padding:15px}
+  .integrationGrid article{grid-template-columns:36px minmax(0,1fr)}.integrationGrid article>em,.integrationGrid article>button{grid-column:2;justify-self:start}.integrationConnect{margin-top:3px}
+  .readinessChecklist>div{gap:12px}.readinessChecklist span{line-height:1.35}.finalStats span,.executiveStats span{line-height:1.3}
+  .attentionStrip span,.engineStrip span,.openChips span,.auditHistoryStrip span{white-space:normal}
+}
