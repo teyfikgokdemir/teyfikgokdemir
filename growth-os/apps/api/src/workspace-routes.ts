@@ -4,11 +4,13 @@ import { pool } from './db.js';
 import { runAudit } from './audit.js';
 import { clientInviteRouter } from './client-invites.js';
 import { clientPortalRouter } from './client-portal.js';
+import { projectLifecycleRouter } from './project-lifecycle.js';
 import { assertProjectAccess, listWorkspaceProjects, requireRole, resolveWorkspaceActor, workspaceErrorMessage, workspaceErrorStatus } from './workspace-access.js';
 
 export const workspaceRouter=Router();
 workspaceRouter.use('/:workspaceId/clients',clientPortalRouter);
 workspaceRouter.use('/:workspaceId/invites',clientInviteRouter);
+workspaceRouter.use('/:workspaceId/project-lifecycle',projectLifecycleRouter);
 
 async function persistWorkspaceAudit(workspaceId:string,domain:string,projectName?:string){
   const result=await runAudit(domain);
