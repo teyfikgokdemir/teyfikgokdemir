@@ -99,8 +99,28 @@ app.get('/oauth/google/callback', async (req,res)=>{
 });
 
 app.get('/projects/:id/integrations/google/resources',async(req,res)=>{
-  try { res.json(await discoverGoogleResources(req.params.id)); }
+  try {
+    const resources=await discoverGoogleResources(req.params.id);
+    const integration=await pool.query("select metadata from integrations where project_id=$1 and provider='google_oauth' and status='connected' order by created_at desc limit 1",[req.params.id]);
+    const metadata=integration.rows[0]?.metadata as {selectedCustomerResourceName?:string}|undefined;
+    res.json({...resources,selectedCustomerResourceName:metadata?.selectedCustomerResourceName||null});
+  }
   catch(error){res.status(400).json({error:error instanceof Error?error.message:'Google kaynakları okunamadı.'})}
+});
+
+app.post('/projects/:id/integrations/google/select',async(req,res)=>{
+  const parsed=z.object({customerResourceName:z.string().regex(/^customers\/\d+$/)}).safeParse(req.body);
+  if(!parsed.success)return res.status(400).json({error:'Geçerli Google Ads hesabı seçin.'});
+  try {
+    const resources=await discoverGoogleResources(req.params.id);
+    const names=((resources.ads as {resourceNames?:string[]}|undefined)?.resourceNames)||[];
+    if(!names.includes(parsed.data.customerResourceName))return res.status(403).json({error:'Bu Google Ads hesabına erişim bulunamadı.'});
+    const customerId=parsed.data.customerResourceName.replace('customers/','');
+    const formatted=customerId.length===10?`${customerId.slice(0,3)}-${customerId.slice(3,6)}-${customerId.slice(6)}`:customerId;
+    const {rows}=await pool.query(`update integrations set account_label=$3, metadata=coalesce(metadata,'{}'::jsonb)||$4::jsonb,last_sync_at=now() where project_id=$1 and provider='google_oauth' and status='connected' returning id,provider,account_label,status,mode,last_sync_at`,[req.params.id,'google_oauth',`Google Ads · ${formatted}`,JSON.stringify({selectedCustomerResourceName:parsed.data.customerResourceName,selectedCustomerId:customerId})]);
+    if(!rows[0])return res.status(404).json({error:'Google bağlantısı bulunamadı.'});
+    res.json(rows[0]);
+  }catch(error){res.status(400).json({error:error instanceof Error?error.message:'Google hesabı seçilemedi.'})}
 });
 
 app.post('/projects/:id/integrations/meta/connect', async (req,res)=>{
@@ -137,9 +157,23 @@ app.get('/oauth/meta/callback', async (req,res)=>{
 
 app.get('/projects/:id/integrations/meta/resources',async(req,res)=>{
   const {rows}=await pool.query("select metadata from integrations where project_id=$1 and provider='meta_ads' and status='connected' order by created_at desc limit 1",[req.params.id]);
-  const metadata=rows[0]?.metadata as {profile?:unknown;adAccounts?:unknown}|undefined;
+  const metadata=rows[0]?.metadata as {profile?:unknown;adAccounts?:unknown;selectedAdAccountId?:string;selectedAdAccountName?:string}|undefined;
   if(!metadata) return res.status(404).json({error:'Meta bağlantısı bulunamadı.'});
-  res.json({profile:metadata.profile||null,adAccounts:metadata.adAccounts||[]});
+  res.json({profile:metadata.profile||null,adAccounts:metadata.adAccounts||[],selectedAdAccountId:metadata.selectedAdAccountId||null,selectedAdAccountName:metadata.selectedAdAccountName||null});
+});
+
+app.post('/projects/:id/integrations/meta/select',async(req,res)=>{
+  const parsed=z.object({accountId:z.string().min(2)}).safeParse(req.body);
+  if(!parsed.success)return res.status(400).json({error:'Geçerli Meta Ads hesabı seçin.'});
+  const integration=await pool.query("select metadata from integrations where project_id=$1 and provider='meta_ads' and status='connected' order by created_at desc limit 1",[req.params.id]);
+  const metadata=integration.rows[0]?.metadata as {adAccounts?:Array<{id?:string;account_id?:string;name?:string}>}|undefined;
+  if(!metadata)return res.status(404).json({error:'Meta bağlantısı bulunamadı.'});
+  const account=(metadata.adAccounts||[]).find(a=>a.id===parsed.data.accountId||a.account_id===parsed.data.accountId);
+  if(!account)return res.status(403).json({error:'Bu Meta Ads hesabına erişim bulunamadı.'});
+  const accountId=account.id||account.account_id||parsed.data.accountId;
+  const accountName=account.name||`Meta Ads · ${account.account_id||accountId}`;
+  const {rows}=await pool.query(`update integrations set account_label=$2,metadata=coalesce(metadata,'{}'::jsonb)||$3::jsonb,last_sync_at=now() where project_id=$1 and provider='meta_ads' and status='connected' returning id,provider,account_label,status,mode,last_sync_at`,[req.params.id,accountName,JSON.stringify({selectedAdAccountId:accountId,selectedAdAccountName:accountName})]);
+  res.json(rows[0]);
 });
 
 app.put('/projects/:id/targets',async(req,res)=>{
