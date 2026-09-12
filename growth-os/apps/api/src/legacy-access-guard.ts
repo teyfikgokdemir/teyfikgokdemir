@@ -1,6 +1,6 @@
 import type { RequestHandler } from 'express';
 import { pool } from './db.js';
-import { assertProjectAccess, listWorkspaceProjects, requireRole, resolveWorkspaceActor, workspaceErrorMessage, workspaceErrorStatus } from './workspace-access.js';
+import { assertActiveProjectAccess, assertProjectAccess, listWorkspaceProjects, requireRole, resolveWorkspaceActor, workspaceErrorMessage, workspaceErrorStatus } from './workspace-access.js';
 
 const INTERNAL_WORKSPACE_ID='00000000-0000-4000-8000-000000000001';
 
@@ -8,6 +8,10 @@ async function projectIdForResource(table:'recommendations'|'execution_jobs'|'au
   const {rows}=await pool.query(`select project_id from ${table} where id=$1 limit 1`,[id]);
   if(!rows[0]?.project_id)throw new Error('PROJECT_ACCESS_DENIED');
   return String(rows[0].project_id);
+}
+
+function isReadOnly(method:string){
+  return method==='GET'||method==='HEAD';
 }
 
 export const legacyWorkspaceGuard:RequestHandler=async(req,res,next)=>{
@@ -29,24 +33,33 @@ export const legacyWorkspaceGuard:RequestHandler=async(req,res,next)=>{
 
     const projectMatch=path.match(/^\/projects\/([^/]+)/);
     if(projectMatch){
-      await assertProjectAccess(actor,projectMatch[1]);
-      if(req.method!=='GET'&&req.method!=='HEAD')requireRole(actor,'analyst');
+      if(isReadOnly(req.method))await assertProjectAccess(actor,projectMatch[1]);
+      else{
+        requireRole(actor,'analyst');
+        await assertActiveProjectAccess(actor,projectMatch[1]);
+      }
       return next();
     }
 
     const recommendationMatch=path.match(/^\/recommendations\/([^/]+)/);
     if(recommendationMatch){
       const projectId=await projectIdForResource('recommendations',recommendationMatch[1]);
-      await assertProjectAccess(actor,projectId);
-      if(req.method!=='GET'&&req.method!=='HEAD')requireRole(actor,'analyst');
+      if(isReadOnly(req.method))await assertProjectAccess(actor,projectId);
+      else{
+        requireRole(actor,'analyst');
+        await assertActiveProjectAccess(actor,projectId);
+      }
       return next();
     }
 
     const executionMatch=path.match(/^\/execution-jobs\/([^/]+)/);
     if(executionMatch){
       const projectId=await projectIdForResource('execution_jobs',executionMatch[1]);
-      await assertProjectAccess(actor,projectId);
-      if(req.method!=='GET'&&req.method!=='HEAD')requireRole(actor,'analyst');
+      if(isReadOnly(req.method))await assertProjectAccess(actor,projectId);
+      else{
+        requireRole(actor,'analyst');
+        await assertActiveProjectAccess(actor,projectId);
+      }
       return next();
     }
 
