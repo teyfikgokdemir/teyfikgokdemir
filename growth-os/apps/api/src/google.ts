@@ -14,6 +14,13 @@ export const GOOGLE_SCOPES = [
 type SearchConsoleRow={keys?:string[];clicks?:number;impressions?:number;ctr?:number;position?:number};
 type SearchConsoleResponse={rows?:SearchConsoleRow[]};
 type SearchConsoleSites={siteEntry?:Array<{siteUrl?:string;permissionLevel?:string}>};
+type AnalyticsPropertySummary={property?:string;displayName?:string;propertyType?:string;parent?:string};
+type AnalyticsAccountSummary={name?:string;account?:string;displayName?:string;propertySummaries?:AnalyticsPropertySummary[]};
+type AnalyticsAccountSummaries={accountSummaries?:AnalyticsAccountSummary[]};
+type AnalyticsDataStream={name?:string;type?:string;displayName?:string;webStreamData?:{measurementId?:string;defaultUri?:string}};
+type AnalyticsStreams={dataStreams?:AnalyticsDataStream[]};
+type AnalyticsReportRow={dimensionValues?:Array<{value?:string}>;metricValues?:Array<{value?:string}>};
+type AnalyticsReport={rows?:AnalyticsReportRow[];metadata?:{currencyCode?:string;timeZone?:string}};
 
 function required(name:string) {
   const value = process.env[name];
@@ -107,6 +114,7 @@ async function postJson<T>(url:string, accessToken:string, body:unknown):Promise
 }
 
 function isoDate(date:Date){return date.toISOString().slice(0,10)}
+function metric(row:AnalyticsReportRow|undefined,index:number){return Number(row?.metricValues?.[index]?.value||0)}
 
 export async function searchConsolePerformanceForProject(projectId:string,days=28){
   const project=await pool.query('select domain from projects where id=$1',[projectId]);
@@ -148,14 +156,60 @@ export async function searchConsolePerformanceForProject(projectId:string,days=2
   };
 }
 
+async function analyticsPerformanceForProject(projectId:string,accessToken:string,days=28){
+  const project=await pool.query('select domain from projects where id=$1',[projectId]);
+  const domain=String(project.rows[0]?.domain||'').replace(/^www\./,'').toLowerCase();
+  if(!domain)throw new Error('Proje bulunamadı.');
+  const summaries=(await getJson('https://analyticsadmin.googleapis.com/v1beta/accountSummaries?pageSize=200',accessToken)) as AnalyticsAccountSummaries;
+  const properties=(summaries.accountSummaries||[]).flatMap(account=>(account.propertySummaries||[]).map(property=>({...property,accountName:account.displayName||account.name||account.account||'Google Analytics'}))).filter(p=>p.property);
+  if(!properties.length)throw new Error('Erişilebilir GA4 property bulunamadı.');
+
+  let selected:typeof properties[number]|undefined;
+  let selectedStream:AnalyticsDataStream|undefined;
+  for(const property of properties){
+    try{
+      const streams=(await getJson(`https://analyticsadmin.googleapis.com/v1beta/${property.property}/dataStreams?pageSize=200`,accessToken)) as AnalyticsStreams;
+      const match=(streams.dataStreams||[]).find(stream=>{
+        const uri=String(stream.webStreamData?.defaultUri||'').toLowerCase();
+        return stream.type==='WEB_DATA_STREAM' && uri.includes(domain);
+      });
+      if(match){selected=property;selectedStream=match;break;}
+    }catch{}
+  }
+  if(!selected && properties.length===1)selected=properties[0];
+  if(!selected)return {matched:false,domain,properties:properties.map(p=>({property:p.property,displayName:p.displayName,accountName:p.accountName})),message:`${domain} ile eşleşen GA4 web data stream bulunamadı.`};
+
+  const normalizedDays=Math.max(1,Math.min(days,90));
+  const dateRanges=[{startDate:`${normalizedDays-1}daysAgo`,endDate:'today'}];
+  const endpoint=`https://analyticsdata.googleapis.com/v1beta/${selected.property}:runReport`;
+  const metrics=['activeUsers','newUsers','sessions','screenPageViews','keyEvents','transactions','totalRevenue'].map(name=>({name}));
+  const summary=await postJson<AnalyticsReport>(endpoint,accessToken,{dateRanges,metrics});
+  const traffic=await postJson<AnalyticsReport>(endpoint,accessToken,{dateRanges,dimensions:[{name:'sessionDefaultChannelGroup'}],metrics:[{name:'sessions'},{name:'activeUsers'},{name:'keyEvents'},{name:'totalRevenue'}],orderBys:[{metric:{metricName:'sessions'},desc:true}],limit:'25'});
+  const landing=await postJson<AnalyticsReport>(endpoint,accessToken,{dateRanges,dimensions:[{name:'landingPagePlusQueryString'}],metrics:[{name:'sessions'},{name:'activeUsers'},{name:'keyEvents'},{name:'totalRevenue'}],orderBys:[{metric:{metricName:'sessions'},desc:true}],limit:'50'});
+  const row=summary.rows?.[0];
+  return {
+    matched:true,
+    days:normalizedDays,
+    property:selected.property,
+    propertyName:selected.displayName||selected.property,
+    accountName:selected.accountName,
+    stream:selectedStream?{name:selectedStream.name,displayName:selectedStream.displayName,measurementId:selectedStream.webStreamData?.measurementId,defaultUri:selectedStream.webStreamData?.defaultUri}:null,
+    metadata:summary.metadata||{},
+    summary:{activeUsers:metric(row,0),newUsers:metric(row,1),sessions:metric(row,2),views:metric(row,3),keyEvents:metric(row,4),transactions:metric(row,5),totalRevenue:metric(row,6)},
+    traffic:(traffic.rows||[]).map(r=>({channel:r.dimensionValues?.[0]?.value||'(not set)',sessions:metric(r,0),activeUsers:metric(r,1),keyEvents:metric(r,2),totalRevenue:metric(r,3)})),
+    landingPages:(landing.rows||[]).map(r=>({page:r.dimensionValues?.[0]?.value||'/',sessions:metric(r,0),activeUsers:metric(r,1),keyEvents:metric(r,2),totalRevenue:metric(r,3)}))
+  };
+}
+
 export async function discoverGoogleResources(projectId:string) {
   const accessToken = await googleAccessForProject(projectId);
   const adsVersion = process.env.GOOGLE_ADS_API_VERSION || 'v25';
-  const results:{ads?:unknown;analytics?:unknown;searchConsole?:unknown;merchant?:unknown;errors:Record<string,string>} = {errors:{}};
+  const results:{ads?:unknown;analytics?:unknown;analyticsPerformance?:unknown;searchConsole?:unknown;merchant?:unknown;errors:Record<string,string>} = {errors:{}};
 
   const jobs:[keyof Omit<typeof results,'errors'>,()=>Promise<unknown>][] = [
     ['ads',()=>getJson(`https://googleads.googleapis.com/${adsVersion}/customers:listAccessibleCustomers`,accessToken)],
     ['analytics',()=>getJson('https://analyticsadmin.googleapis.com/v1beta/accountSummaries?pageSize=200',accessToken)],
+    ['analyticsPerformance',()=>analyticsPerformanceForProject(projectId,accessToken,28)],
     ['searchConsole',()=>getJson('https://www.googleapis.com/webmasters/v3/sites',accessToken)],
     ['merchant',()=>getJson('https://merchantapi.googleapis.com/accounts/v1alpha/accounts?pageSize=500',accessToken)]
   ];
