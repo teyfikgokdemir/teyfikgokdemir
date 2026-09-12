@@ -93,6 +93,54 @@ async function getJson(url:string, accessToken:string) {
   return data;
 }
 
+async function postJson(url:string, accessToken:string, body:unknown) {
+  const response=await fetch(url,{method:'POST',headers:{authorization:`Bearer ${accessToken}`,'content-type':'application/json'},body:JSON.stringify(body)});
+  const text=await response.text();
+  let data:unknown={};
+  try{data=text?JSON.parse(text):{}}catch{data={raw:text}}
+  if(!response.ok)throw new Error(`Google API ${response.status}: ${typeof data==='object'?JSON.stringify(data):text}`);
+  return data;
+}
+
+function isoDate(date:Date){return date.toISOString().slice(0,10)}
+
+export async function searchConsolePerformanceForProject(projectId:string,days=28){
+  const project=await pool.query('select domain from projects where id=$1',[projectId]);
+  const domain=String(project.rows[0]?.domain||'').replace(/^www\./,'').toLowerCase();
+  if(!domain)throw new Error('Proje bulunamadı.');
+  const accessToken=await googleAccessForProject(projectId);
+  const sites=await getJson('https://www.googleapis.com/webmasters/v3/sites',accessToken) as {siteEntry?:Array<{siteUrl?:string;permissionLevel?:string}>};
+  const entries=sites.siteEntry||[];
+  const exactDomain=`sc-domain:${domain}`;
+  const site=entries.find(s=>s.siteUrl===exactDomain)||entries.find(s=>String(s.siteUrl||'').toLowerCase().includes(domain));
+  if(!site?.siteUrl)throw new Error(`Search Console içinde ${domain} için erişilebilir property bulunamadı.`);
+  const end=new Date();
+  const start=new Date();
+  start.setUTCDate(start.getUTCDate()-(Math.max(1,Math.min(days,90))-1));
+  const base={startDate:isoDate(start),endDate:isoDate(end),rowLimit:1000,dataState:'final'};
+  const endpoint=`https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(site.siteUrl)}/searchAnalytics/query`;
+  const [queries,pages]=await Promise.all([
+    postJson(endpoint,accessToken,{...base,dimensions:['query']}),
+    postJson(endpoint,accessToken,{...base,dimensions:['page']})
+  ]) as [{rows?:Array<{keys?:string[];clicks?:number;impressions?:number;ctr?:number;position?:number}>},{rows?:Array<{keys?:string[];clicks?:number;impressions?:number;ctr?:number;position?:number}>}];
+  const queryRows=queries.rows||[];
+  const pageRows=pages.rows||[];
+  const summary=queryRows.reduce((acc,row)=>{
+    acc.clicks+=Number(row.clicks||0);
+    acc.impressions+=Number(row.impressions||0);
+    acc.positionWeighted+=Number(row.position||0)*Number(row.impressions||0);
+    return acc;
+  },{clicks:0,impressions:0,positionWeighted:0});
+  return {
+    siteUrl:site.siteUrl,
+    permissionLevel:site.permissionLevel||null,
+    days:Math.max(1,Math.min(days,90)),
+    summary:{clicks:summary.clicks,impressions:summary.impressions,ctr:summary.impressions>0?summary.clicks/summary.impressions:0,position:summary.impressions>0?summary.positionWeighted/summary.impressions:null},
+    queries:queryRows.slice(0,100),
+    pages:pageRows.slice(0,100)
+  };
+}
+
 export async function discoverGoogleResources(projectId:string) {
   const accessToken = await googleAccessForProject(projectId);
   const adsVersion = process.env.GOOGLE_ADS_API_VERSION || 'v25';
