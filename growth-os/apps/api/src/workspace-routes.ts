@@ -2,11 +2,13 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { pool } from './db.js';
 import { runAudit } from './audit.js';
+import { clientInviteRouter } from './client-invites.js';
 import { clientPortalRouter } from './client-portal.js';
 import { assertProjectAccess, listWorkspaceProjects, requireRole, resolveWorkspaceActor, workspaceErrorMessage, workspaceErrorStatus } from './workspace-access.js';
 
 export const workspaceRouter=Router();
 workspaceRouter.use('/:workspaceId/clients',clientPortalRouter);
+workspaceRouter.use('/:workspaceId/invites',clientInviteRouter);
 
 async function persistWorkspaceAudit(workspaceId:string,domain:string,projectName?:string){
   const result=await runAudit(domain);
