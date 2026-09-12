@@ -1,3 +1,13 @@
+@media(min-width:901px){
+  .side{overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-gutter:stable}
+  .side nav{flex:0 0 auto}
+  .stage{margin-top:24px;padding-bottom:4px}
+  .side::-webkit-scrollbar{width:8px}
+  .side::-webkit-scrollbar-track{background:transparent}
+  .side::-webkit-scrollbar-thumb{background:#2f2441;border-radius:999px;border:2px solid transparent;background-clip:padding-box}
+  .side::-webkit-scrollbar-thumb:hover{background:#4b3867;background-clip:padding-box}
+}
+
 .externalModuleHost{margin-left:242px;padding:0 34px 34px;max-width:1600px;width:calc(100% - 242px)}
 
 @media(max-width:900px){
