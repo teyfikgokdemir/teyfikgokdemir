@@ -1,5 +1,6 @@
 import { pool } from './db.js';
 import { discoverGoogleResources, searchConsolePerformanceForProject } from './google.js';
+import { attachRecommendationDecision } from './recommendation-scoring.js';
 
 type Severity='high'|'medium';
 type Priority='high'|'medium';
@@ -89,6 +90,17 @@ export async function refreshGrowthIntelligence(projectId:string){
     recommendations.push({priority:'medium',title:'Merchant ürün sorunlarını azalt',rationale:`${n(ms.withIssues)} üründe veri sorunu bulunuyor.`,action:{type:'merchant_quality',source:'merchant',readOnly:true,recommendation:'Feed kalite sorunlarını fiyat, stok, GTIN ve görsel alanlarına göre sırala.'}});
   }
 
+  const scoredRecommendations=recommendations.map(rec=>({
+    ...rec,
+    action:attachRecommendationDecision({
+      title:rec.title,
+      rationale:rec.rationale,
+      priority:rec.priority,
+      source:'growth_intelligence',
+      proposedAction:rec.action
+    })
+  }));
+
   const client=await pool.connect();
   try{
     await client.query('begin');
@@ -97,7 +109,7 @@ export async function refreshGrowthIntelligence(projectId:string){
     for(const alert of alerts){
       await client.query("insert into alerts(project_id,source,severity,title,message,status,payload) values($1,'growth_intelligence',$2,$3,$4,'open',$5)",[projectId,alert.severity,alert.title,alert.message,alert.payload]);
     }
-    for(const rec of recommendations){
+    for(const rec of scoredRecommendations){
       await client.query("insert into recommendations(project_id,source,priority,title,rationale,proposed_action,status) values($1,'growth_intelligence',$2,$3,$4,$5,'proposed')",[projectId,rec.priority,rec.title,rec.rationale,rec.action]);
     }
     await client.query('commit');
@@ -106,10 +118,10 @@ export async function refreshGrowthIntelligence(projectId:string){
   return {
     generatedAt:new Date().toISOString(),
     domain:project.rows[0].domain,
-    counts:{alerts:alerts.length,recommendations:recommendations.length},
+    counts:{alerts:alerts.length,recommendations:scoredRecommendations.length},
     signals:{ads:{spend,revenue,clicks,conversions,roas},ga4:ga,searchConsole:sc,merchant:ms},
     errors:{...(google.errors||{}),searchConsole:searchResult?undefined:'Search Console performans verisi okunamadı.'},
     alerts,
-    recommendations
+    recommendations:scoredRecommendations
   };
 }
