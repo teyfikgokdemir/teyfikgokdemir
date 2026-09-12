@@ -30,6 +30,17 @@ export default function NavigationPersistence(){
     const nav=document.querySelector('aside.side nav');
     if(!nav)return()=>window.clearInterval(timer);
 
+    const routeProjects=(event:Event)=>{
+      const element=event.target instanceof Element?event.target:null;
+      const button=element?.closest<HTMLButtonElement>('button');
+      const label=button?.querySelector('span')?.textContent?.trim();
+      if(label!=='Projeler')return;
+      event.preventDefault();
+      event.stopPropagation();
+      window.sessionStorage.setItem(STORAGE_KEY,'Projeler');
+      window.location.assign('/projects');
+    };
+
     const saveActive=()=>{
       if(applying)return;
       const active=nav.querySelector<HTMLButtonElement>('button.active');
@@ -37,12 +48,14 @@ export default function NavigationPersistence(){
       if(label)window.sessionStorage.setItem(STORAGE_KEY,label);
     };
 
+    nav.addEventListener('click',routeProjects,true);
     saveActive();
     const observer=new MutationObserver(saveActive);
     observer.observe(nav,{subtree:true,attributes:true,attributeFilter:['class']});
 
     return()=>{
       window.clearInterval(timer);
+      nav.removeEventListener('click',routeProjects,true);
       observer.disconnect();
     };
   },[]);
