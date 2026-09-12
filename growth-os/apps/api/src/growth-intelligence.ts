@@ -1,6 +1,7 @@
 import { pool } from './db.js';
 import { discoverGoogleResources, searchConsolePerformanceForProject } from './google.js';
 import { attachRecommendationDecision } from './recommendation-scoring.js';
+import { attachRevenueImpact } from './revenue-impact.js';
 
 type Severity='high'|'medium';
 type Priority='high'|'medium';
@@ -90,16 +91,38 @@ export async function refreshGrowthIntelligence(projectId:string){
     recommendations.push({priority:'medium',title:'Merchant ürün sorunlarını azalt',rationale:`${n(ms.withIssues)} üründe veri sorunu bulunuyor.`,action:{type:'merchant_quality',source:'merchant',readOnly:true,recommendation:'Feed kalite sorunlarını fiyat, stok, GTIN ve görsel alanlarına göre sırala.'}});
   }
 
-  const scoredRecommendations=recommendations.map(rec=>({
-    ...rec,
-    action:attachRecommendationDecision({
+  const impactContext={
+    spend30d:spend,
+    revenue30d:revenue,
+    sessions28d:n(ga.sessions),
+    keyEvents28d:n(ga.keyEvents),
+    searchImpressions28d:n(sc.impressions),
+    searchCtr:n(sc.ctr),
+    merchantDisapproved:n(ms.disapproved),
+    merchantTotalProducts:n(ms.totalProducts),
+    targetRoas,
+    targetCpa
+  };
+
+  const scoredRecommendations=recommendations.map(rec=>{
+    const decisionAction=attachRecommendationDecision({
       title:rec.title,
       rationale:rec.rationale,
       priority:rec.priority,
       source:'growth_intelligence',
       proposedAction:rec.action
-    })
-  }));
+    });
+    return {
+      ...rec,
+      action:attachRevenueImpact({
+        title:rec.title,
+        rationale:rec.rationale,
+        priority:rec.priority,
+        source:'growth_intelligence',
+        proposedAction:decisionAction
+      },impactContext)
+    };
+  });
 
   const client=await pool.connect();
   try{
