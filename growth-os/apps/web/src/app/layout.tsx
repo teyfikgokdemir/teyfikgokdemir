@@ -4,6 +4,7 @@ import './modules-v2.css';
 import './report.css';
 import NavigationPersistence from './components/NavigationPersistence';
 import OverviewIntelligenceHost from './components/OverviewIntelligenceHost';
+import AgencyPortfolioHost from './components/AgencyPortfolioHost';
 import ExecutionCenterHost from './components/ExecutionCenterHost';
 
 export const metadata = {
@@ -13,5 +14,5 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="tr"><body><NavigationPersistence/>{children}<OverviewIntelligenceHost/><ExecutionCenterHost/></body></html>;
+  return <html lang="tr"><body><NavigationPersistence/>{children}<AgencyPortfolioHost/><OverviewIntelligenceHost/><ExecutionCenterHost/></body></html>;
 }
