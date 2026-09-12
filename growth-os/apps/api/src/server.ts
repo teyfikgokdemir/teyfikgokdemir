@@ -113,8 +113,8 @@ app.get('/projects/:id/integrations/google/resources',async(req,res)=>{
   try {
     const resources=await discoverGoogleResources(req.params.id);
     const integration=await pool.query("select metadata from integrations where project_id=$1 and provider='google_oauth' and status='connected' order by created_at desc limit 1",[req.params.id]);
-    const metadata=integration.rows[0]?.metadata as {selectedCustomerResourceName?:string}|undefined;
-    res.json({...resources,selectedCustomerResourceName:metadata?.selectedCustomerResourceName||null});
+    const metadata=integration.rows[0]?.metadata as {selectedCustomerResourceName?:string;selectedMerchantAccountName?:string}|undefined;
+    res.json({...resources,selectedCustomerResourceName:metadata?.selectedCustomerResourceName||null,selectedMerchantAccountName:metadata?.selectedMerchantAccountName||null});
   }
   catch(error){res.status(400).json({error:error instanceof Error?error.message:'Google kaynakları okunamadı.'})}
 });
@@ -140,6 +140,21 @@ app.post('/projects/:id/integrations/google/select',async(req,res)=>{
     if(!rows[0])return res.status(404).json({error:'Google bağlantısı bulunamadı.'});
     res.json({integration:rows[0],selectedCustomerResourceName:parsed.data.customerResourceName,selectedCustomerId:customerId});
   }catch(error){console.error('Google account mapping failed',error);res.status(400).json({error:error instanceof Error?error.message:'Google hesabı seçilemedi.'})}
+});
+
+app.post('/projects/:id/integrations/google/merchant/select',async(req,res)=>{
+  const parsed=z.object({accountName:z.string().regex(/^accounts\/\d+$/)}).safeParse(req.body);
+  if(!parsed.success)return res.status(400).json({error:'Geçerli Merchant Center hesabı seçin.'});
+  try{
+    const resources=await discoverGoogleResources(req.params.id);
+    const accounts=((resources.merchant as {accounts?:Array<{name?:string;accountName?:string}>}|undefined)?.accounts)||[];
+    const account=accounts.find(a=>a.name===parsed.data.accountName);
+    if(!account)return res.status(403).json({error:'Bu Merchant Center hesabına erişim bulunamadı.'});
+    const patch=JSON.stringify({selectedMerchantAccountName:parsed.data.accountName,selectedMerchantAccountLabel:account.accountName||parsed.data.accountName});
+    const {rows}=await pool.query(`update integrations set metadata=coalesce(metadata,'{}'::jsonb)||$2::jsonb,last_sync_at=now() where project_id=$1 and provider='google_oauth' and status='connected' returning id,provider,account_label,status,mode,last_sync_at,metadata`,[req.params.id,patch]);
+    if(!rows[0])return res.status(404).json({error:'Google bağlantısı bulunamadı.'});
+    res.json({integration:rows[0],selectedMerchantAccountName:parsed.data.accountName,selectedMerchantAccountLabel:account.accountName||parsed.data.accountName});
+  }catch(error){console.error('Merchant account mapping failed',error);res.status(400).json({error:error instanceof Error?error.message:'Merchant Center hesabı seçilemedi.'})}
 });
 
 app.post('/projects/:id/integrations/meta/connect', async (req,res)=>{
