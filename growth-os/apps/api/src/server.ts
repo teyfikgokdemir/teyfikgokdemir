@@ -12,12 +12,14 @@ import { getExecutionCenter } from './execution-workflow.js';
 import { buildJobPlan, prepareExecution, runPreparedExecution } from './execution-orchestrator.js';
 import { finalizeExecutionForVerification, verifyExecutionJob } from './verification-orchestrator.js';
 import { executorCapabilities } from './executors.js';
+import { workspaceRouter } from './workspace-routes.js';
 
 type AuditPayload = Awaited<ReturnType<typeof runAudit>>;
 
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '1mb' }));
+app.use('/workspaces',workspaceRouter);
 
 function compareAudits(previous: AuditPayload | null, current: AuditPayload) {
   if (!previous) return null;
