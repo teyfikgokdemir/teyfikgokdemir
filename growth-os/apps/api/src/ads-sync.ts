@@ -55,16 +55,15 @@ async function googleMetrics(projectId:string,days:number):Promise<NormalizedMet
   const metadata=row.metadata as {selectedCustomerId?:string};
   if(!metadata.selectedCustomerId)throw new Error('Önce Google Ads müşteri hesabını seçin.');
   const developerToken=process.env.GOOGLE_ADS_DEVELOPER_TOKEN?.trim();
-  if(!developerToken)throw new Error('GOOGLE_ADS_DEVELOPER_TOKEN yapılandırılmamış.');
   const accessToken=await googleAccessForProject(projectId);
   const version=process.env.GOOGLE_ADS_API_VERSION?.trim()||'v25';
   const {start,end}=lastNDays(days);
   const query=`SELECT campaign.id, campaign.name, campaign.status, segments.date, metrics.cost_micros, metrics.impressions, metrics.clicks, metrics.conversions, metrics.conversions_value FROM campaign WHERE segments.date BETWEEN '${start}' AND '${end}' AND campaign.status != 'REMOVED'`;
   const headers:Record<string,string>={
     authorization:`Bearer ${accessToken}`,
-    'developer-token':developerToken,
     'content-type':'application/json'
   };
+  if(developerToken)headers['developer-token']=developerToken;
   const loginCustomerId=process.env.GOOGLE_ADS_LOGIN_CUSTOMER_ID?.replace(/\D/g,'');
   if(loginCustomerId)headers['login-customer-id']=loginCustomerId;
   const response=await fetch(`https://googleads.googleapis.com/${version}/customers/${metadata.selectedCustomerId}/googleAds:searchStream`,{method:'POST',headers,body:JSON.stringify({query})});
