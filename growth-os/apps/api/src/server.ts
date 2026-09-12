@@ -6,6 +6,7 @@ import { initDb, pool } from './db.js';
 import { runAudit } from './audit.js';
 import { buildGoogleAuthUrl, discoverGoogleResources, encryptSecret, exchangeGoogleCode } from './google.js';
 import { buildMetaAuthUrl, discoverMetaResources, exchangeMetaCode, exchangeMetaLongLivedToken, metaCredentialMetadata } from './meta.js';
+import { buildTikTokAuthUrl, discoverTikTokAdvertisers, exchangeTikTokCode, tikTokCredentialMetadata } from './tiktok.js';
 
 type AuditPayload = Awaited<ReturnType<typeof runAudit>>;
 
@@ -174,6 +175,56 @@ app.post('/projects/:id/integrations/meta/select',async(req,res)=>{
   const accountId=account.id||account.account_id||parsed.data.accountId;
   const accountName=account.name||`Meta Ads · ${account.account_id||accountId}`;
   const {rows}=await pool.query(`update integrations set account_label=$2,metadata=coalesce(metadata,'{}'::jsonb)||$3::jsonb,last_sync_at=now() where project_id=$1 and provider='meta_ads' and status='connected' returning id,provider,account_label,status,mode,last_sync_at`,[req.params.id,accountName,JSON.stringify({selectedAdAccountId:accountId,selectedAdAccountName:accountName})]);
+  res.json(rows[0]);
+});
+
+app.post('/projects/:id/integrations/tiktok/connect',async(req,res)=>{
+  const project=await pool.query('select id from projects where id=$1',[req.params.id]);
+  if(!project.rows[0])return res.status(404).json({error:'Proje bulunamadı'});
+  await pool.query("delete from oauth_states where expires_at < now()");
+  const state=crypto.randomBytes(32).toString('base64url');
+  await pool.query("insert into oauth_states(state,project_id,provider,return_path,expires_at) values($1,$2,'tiktok',$3,now()+interval '10 minutes')",[state,req.params.id,'/?integration=tiktok']);
+  try{res.json({authUrl:buildTikTokAuthUrl(state)})}
+  catch(error){res.status(503).json({error:error instanceof Error?error.message:'TikTok OAuth yapılandırılmamış.'})}
+});
+
+app.get('/oauth/tiktok/callback',async(req,res)=>{
+  const authCode=typeof req.query.auth_code==='string'?req.query.auth_code:'';
+  const state=typeof req.query.state==='string'?req.query.state:'';
+  const appBase=process.env.APP_BASE_URL||'http://localhost:3000';
+  if(!authCode||!state)return res.redirect(`${appBase}/?integration=tiktok_error&reason=missing_code`);
+  const stateResult=await pool.query("delete from oauth_states where state=$1 and provider='tiktok' and expires_at>now() returning project_id,return_path",[state]);
+  if(!stateResult.rows[0])return res.redirect(`${appBase}/?integration=tiktok_error&reason=invalid_state`);
+  try{
+    const token=await exchangeTikTokCode(authCode);
+    const advertisers=await discoverTikTokAdvertisers(token.access_token!);
+    const first=advertisers[0];
+    const label=advertisers.length===1?(first?.advertiser_name||first?.name||`TikTok Ads · ${first?.advertiser_id||''}`):advertisers.length>1?`${advertisers.length} TikTok Ads hesabı`:'TikTok Ads';
+    await pool.query(`insert into integrations(project_id,provider,account_label,external_account_id,status,mode,metadata,last_sync_at)
+      values($1,'tiktok_ads',$2,'oauth_primary','connected','read_only',$3,now())
+      on conflict(project_id,provider,external_account_id) do update set account_label=excluded.account_label,status='connected',mode='read_only',metadata=excluded.metadata,last_sync_at=now()`,
+      [stateResult.rows[0].project_id,label,tikTokCredentialMetadata(token.access_token!,token,advertisers)]);
+    res.redirect(`${appBase}/?integration=tiktok_success&project=${stateResult.rows[0].project_id}`);
+  }catch(error){console.error('TikTok OAuth failed',error);res.redirect(`${appBase}/?integration=tiktok_error&reason=exchange_failed&project=${stateResult.rows[0].project_id}`)}
+});
+
+app.get('/projects/:id/integrations/tiktok/resources',async(req,res)=>{
+  const {rows}=await pool.query("select metadata from integrations where project_id=$1 and provider='tiktok_ads' and status='connected' order by created_at desc limit 1",[req.params.id]);
+  const metadata=rows[0]?.metadata as {advertisers?:unknown;selectedAdvertiserId?:string;selectedAdvertiserName?:string}|undefined;
+  if(!metadata)return res.status(404).json({error:'TikTok bağlantısı bulunamadı.'});
+  res.json({advertisers:metadata.advertisers||[],selectedAdvertiserId:metadata.selectedAdvertiserId||null,selectedAdvertiserName:metadata.selectedAdvertiserName||null});
+});
+
+app.post('/projects/:id/integrations/tiktok/select',async(req,res)=>{
+  const parsed=z.object({advertiserId:z.string().min(2)}).safeParse(req.body);
+  if(!parsed.success)return res.status(400).json({error:'Geçerli TikTok Ads hesabı seçin.'});
+  const integration=await pool.query("select metadata from integrations where project_id=$1 and provider='tiktok_ads' and status='connected' order by created_at desc limit 1",[req.params.id]);
+  const metadata=integration.rows[0]?.metadata as {advertisers?:Array<{advertiser_id?:string;advertiser_name?:string;name?:string}>}|undefined;
+  if(!metadata)return res.status(404).json({error:'TikTok bağlantısı bulunamadı.'});
+  const account=(metadata.advertisers||[]).find(a=>String(a.advertiser_id||'')===parsed.data.advertiserId);
+  if(!account)return res.status(403).json({error:'Bu TikTok Ads hesabına erişim bulunamadı.'});
+  const accountName=account.advertiser_name||account.name||`TikTok Ads · ${parsed.data.advertiserId}`;
+  const {rows}=await pool.query(`update integrations set account_label=$2,metadata=coalesce(metadata,'{}'::jsonb)||$3::jsonb,last_sync_at=now() where project_id=$1 and provider='tiktok_ads' and status='connected' returning id,provider,account_label,status,mode,last_sync_at`,[req.params.id,accountName,JSON.stringify({selectedAdvertiserId:parsed.data.advertiserId,selectedAdvertiserName:accountName})]);
   res.json(rows[0]);
 });
 
