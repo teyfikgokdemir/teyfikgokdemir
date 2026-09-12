@@ -13,6 +13,15 @@ const roleWeight:Record<WorkspaceRole,number>={viewer:1,analyst:2,admin:3,owner:
 
 function normalizeEmail(value:string){return value.trim().toLowerCase()}
 
+async function hasProjectStatusColumn(){
+  const {rows}=await pool.query(`
+    select exists(
+      select 1 from information_schema.columns
+      where table_schema=current_schema() and table_name='projects' and column_name='status'
+    ) as available`);
+  return Boolean(rows[0]?.available);
+}
+
 export function actorEmailFromRequest(req:Request){
   const header=req.header('x-growth-user-email')||req.header('cf-access-authenticated-user-email')||'';
   return normalizeEmail(header||process.env.DEFAULT_WORKSPACE_USER_EMAIL||'teyfikgokdemir@outlook.com');
@@ -40,18 +49,34 @@ export function requireRole(actor:WorkspaceActor,minRole:WorkspaceRole){
 }
 
 export async function assertProjectAccess(actor:WorkspaceActor,projectId:string){
-  const {rows}=await pool.query('select id,workspace_id,client_id,name,domain from projects where id=$1 and workspace_id=$2',[projectId,actor.workspaceId]);
+  const lifecycleReady=await hasProjectStatusColumn();
+  const fields=lifecycleReady
+    ? 'id,workspace_id,client_id,name,domain,status,archived_at,archived_by'
+    : "id,workspace_id,client_id,name,domain,'active'::text as status,null::timestamptz as archived_at,null::text as archived_by";
+  const {rows}=await pool.query(`select ${fields} from projects where id=$1 and workspace_id=$2`,[projectId,actor.workspaceId]);
   if(!rows[0])throw new Error('PROJECT_ACCESS_DENIED');
   return rows[0];
 }
 
+export async function assertActiveProjectAccess(actor:WorkspaceActor,projectId:string){
+  const project=await assertProjectAccess(actor,projectId);
+  if(project.status==='archived')throw new Error('PROJECT_ARCHIVED');
+  return project;
+}
+
 export async function listWorkspaceProjects(actor:WorkspaceActor){
+  const lifecycleReady=await hasProjectStatusColumn();
+  const lifecycleFields=lifecycleReady
+    ? 'p.status,p.archived_at,p.archived_by,'
+    : "'active'::text as status,null::timestamptz as archived_at,null::text as archived_by,";
+  const activeFilter=lifecycleReady?"and p.status='active'":'';
   const {rows}=await pool.query(`
     select p.id,p.name,p.domain,p.created_at,p.client_id,
+      ${lifecycleFields}
       c.name client_name,c.status client_status
     from projects p
     left join agency_clients c on c.id=p.client_id and c.workspace_id=p.workspace_id
-    where p.workspace_id=$1
+    where p.workspace_id=$1 ${activeFilter}
     order by p.created_at desc`,[actor.workspaceId]);
   return rows;
 }
@@ -60,6 +85,7 @@ export function workspaceErrorStatus(error:unknown){
   const message=error instanceof Error?error.message:'';
   if(message==='WORKSPACE_ACCESS_DENIED'||message==='PROJECT_ACCESS_DENIED')return 403;
   if(message==='WORKSPACE_ROLE_DENIED')return 403;
+  if(message==='PROJECT_ARCHIVED')return 409;
   return 400;
 }
 
@@ -68,5 +94,6 @@ export function workspaceErrorMessage(error:unknown){
   if(message==='WORKSPACE_ACCESS_DENIED')return 'Bu workspace için aktif üyelik bulunamadı.';
   if(message==='PROJECT_ACCESS_DENIED')return 'Bu projeye erişim yetkiniz yok.';
   if(message==='WORKSPACE_ROLE_DENIED')return 'Bu işlem için rolünüz yeterli değil.';
+  if(message==='PROJECT_ARCHIVED')return 'Bu proje arşivde. Yeni operasyon başlatmadan önce projeyi geri alın.';
   return message||'Workspace işlemi tamamlanamadı.';
 }
