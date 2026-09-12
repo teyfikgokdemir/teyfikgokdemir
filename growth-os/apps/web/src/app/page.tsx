@@ -210,7 +210,7 @@ export default function Home() {
         <div><span>Aktif Proje</span><strong>{selectedProject?.name || 'Henüz proje yok'}</strong><small>{selectedProject?.domain || 'Yeni audit ile proje oluştur'}</small></div>
         {projects.length>0 && <div className="projectPicker">
           <button className={projectMenuOpen?'open':''} onClick={()=>setProjectMenuOpen(v=>!v)}><span><b>{selectedProject?.name}</b><small>{selectedProject?.domain}</small></span><i>⌄</i></button>
-          {projectMenuOpen && <div className="projectPickerMenu">{projects.map(p=><button key={p.id} className={p.id===selectedProject?.id?'selected':''} onClick={()=>openProject(p)}><span><strong>{p.name}</strong><small>{p.domain}</small></span>{p.id===selectedProject?.id&&<em>AKTİF</em>}</button>)}</div>}
+          {projectMenuOpen && <div className="projectPickerMenu">{projects.map(p=><button key={p.id} className={p.id===selectedProject?.id?'selected':''} onClick={()=>openProject(p,section)}><span><strong>{p.name}</strong><small>{p.domain}</small></span>{p.id===selectedProject?.id&&<em>AKTİF</em>}</button>)}</div>}
         </div>}
       </div>
 
