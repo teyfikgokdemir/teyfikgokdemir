@@ -128,54 +128,86 @@ projectLifecycleRouter.post('/bulk/restore', async (req, res) => {
 });
 
 projectLifecycleRouter.post('/:projectId/archive', async (req, res) => {
+  const db = await pool.connect();
   try {
     await ensureProjectLifecycleSchema();
     const workspaceId = String((req.params as Record<string, string | undefined>).workspaceId || '');
     const projectId = String(req.params.projectId || '');
     const actor = await resolveWorkspaceActor(req, workspaceId);
     requireRole(actor, 'admin');
-    const project = await getProject(actor.workspaceId, projectId);
-    if (project.status === 'archived') return res.json({ archived: true, project });
 
-    const { rows } = await pool.query(
+    await db.query('begin');
+    const locked = await db.query(
+      `select id,workspace_id,client_id,name,domain,status,archived_at,archived_by,created_at
+       from projects where id=$1 and workspace_id=$2 for update`,
+      [projectId, actor.workspaceId]
+    );
+    const project = locked.rows[0];
+    if (!project) throw new Error('PROJECT_ACCESS_DENIED');
+    if (project.status === 'archived') {
+      await db.query('commit');
+      return res.json({ archived: true, project });
+    }
+
+    const { rows } = await db.query(
       `update projects
        set status='archived',archived_at=now(),archived_by=$3
        where id=$1 and workspace_id=$2
        returning id,workspace_id,client_id,name,domain,status,archived_at,archived_by,created_at`,
       [projectId, actor.workspaceId, actor.email]
     );
-
-    await pool.query(
+    await db.query(
       `update oauth_states set expires_at=least(expires_at,now()) where project_id=$1`,
       [projectId]
     );
+    await db.query('commit');
 
     res.json({ archived: true, project: rows[0] });
   } catch (error) {
+    await db.query('rollback');
     res.status(workspaceErrorStatus(error)).json({ error: workspaceErrorMessage(error) });
+  } finally {
+    db.release();
   }
 });
 
 projectLifecycleRouter.post('/:projectId/restore', async (req, res) => {
+  const db = await pool.connect();
   try {
     await ensureProjectLifecycleSchema();
     const workspaceId = String((req.params as Record<string, string | undefined>).workspaceId || '');
     const projectId = String(req.params.projectId || '');
     const actor = await resolveWorkspaceActor(req, workspaceId);
     requireRole(actor, 'admin');
-    const project = await getProject(actor.workspaceId, projectId);
-    if (project.status === 'active') return res.json({ restored: true, project });
 
-    const { rows } = await pool.query(
+    await db.query('begin');
+    const locked = await db.query(
+      `select id,workspace_id,client_id,name,domain,status,archived_at,archived_by,created_at
+       from projects where id=$1 and workspace_id=$2 for update`,
+      [projectId, actor.workspaceId]
+    );
+    const project = locked.rows[0];
+    if (!project) throw new Error('PROJECT_ACCESS_DENIED');
+    if (project.status === 'active') {
+      await db.query('commit');
+      return res.json({ restored: true, project });
+    }
+
+    const { rows } = await db.query(
       `update projects
        set status='active',archived_at=null,archived_by=null
        where id=$1 and workspace_id=$2
        returning id,workspace_id,client_id,name,domain,status,archived_at,archived_by,created_at`,
       [projectId, actor.workspaceId]
     );
+    await db.query('commit');
+
     res.json({ restored: true, project: rows[0] });
   } catch (error) {
+    await db.query('rollback');
     res.status(workspaceErrorStatus(error)).json({ error: workspaceErrorMessage(error) });
+  } finally {
+    db.release();
   }
 });
 
