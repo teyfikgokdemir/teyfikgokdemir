@@ -1,0 +1,136 @@
+/* Growth OS coral-dominant visual layer: ~80% coral, lilac/violet reserved for accents. */
+:root{
+  --accent:#ff6f61;
+  --accent2:#ff9a8f;
+  --accent3:#d7b8ff;
+  --coral:#ff6f61;
+  --coral-soft:#ff9a8f;
+  --coral-deep:#d94f64;
+  --lilac:#d7b8ff;
+  --violet:#8b5cf6;
+  --line:#4a2935;
+  --line2:#6c3948;
+  --panel:#180d14;
+  --panel2:#211019;
+  --muted:#bda7af;
+}
+
+body{
+  background:
+    radial-gradient(circle at 78% -8%,rgba(255,111,97,.34),transparent 35%),
+    radial-gradient(circle at 18% 4%,rgba(255,111,97,.16),transparent 29%),
+    radial-gradient(circle at 55% 22%,rgba(215,184,255,.045),transparent 24%),
+    #09070b!important;
+}
+
+.side{
+  border-right-color:rgba(255,111,97,.24)!important;
+  background:linear-gradient(180deg,rgba(27,12,19,.99),rgba(11,7,11,.99))!important;
+  box-shadow:18px 0 60px rgba(92,28,41,.13)!important;
+}
+.brand>span{
+  border-color:rgba(255,111,97,.72)!important;
+  color:#fff0ed!important;
+  background:linear-gradient(145deg,#47212d,#1d1016)!important;
+  box-shadow:0 0 32px rgba(255,111,97,.24)!important;
+}
+.brand small,.eyebrow{color:#e0a5ac!important}
+
+.side nav button:hover{
+  background:rgba(255,111,97,.12)!important;
+  border-color:rgba(255,111,97,.22)!important;
+}
+.side nav button.active{
+  background:linear-gradient(135deg,rgba(255,111,97,.31),rgba(217,79,100,.16) 74%,rgba(139,92,246,.06))!important;
+  border-color:rgba(255,111,97,.56)!important;
+  box-shadow:inset 3px 0 0 #ff6f61,0 10px 28px rgba(89,28,41,.20)!important;
+}
+
+.projectBar,.moduleCard,.dashboardMainCard,.quickActions,.recentAudits,.executiveCard,.finalCard,.growthPanel{
+  border-color:rgba(255,111,97,.25)!important;
+  background:
+    radial-gradient(circle at 96% 0%,rgba(255,111,97,.09),transparent 32%),
+    linear-gradient(135deg,rgba(31,14,21,.98),rgba(13,8,13,.995))!important;
+  box-shadow:0 24px 80px rgba(55,15,26,.16),inset 0 1px rgba(255,255,255,.025)!important;
+}
+
+.dashboardHero,.moduleHero{
+  border-color:rgba(255,111,97,.33)!important;
+  background:
+    radial-gradient(circle at 84% 18%,rgba(255,111,97,.30),transparent 36%),
+    radial-gradient(circle at 62% 0%,rgba(255,154,143,.11),transparent 30%),
+    radial-gradient(circle at 96% 85%,rgba(215,184,255,.05),transparent 24%),
+    linear-gradient(135deg,#24101a,#0d0910)!important;
+}
+
+.primaryAction,.dashboardSectionHead button,.auditBox button{
+  border-color:rgba(255,170,158,.76)!important;
+  background:linear-gradient(135deg,#ff806f 0%,#f66570 48%,#d94f64 82%,#9b63d7 100%)!important;
+  color:#fff!important;
+  box-shadow:0 14px 34px rgba(217,79,100,.31)!important;
+}
+.primaryAction:hover,.dashboardSectionHead button:hover,.auditBox button:hover{
+  box-shadow:0 18px 42px rgba(217,79,100,.38)!important;
+}
+
+.moduleCard .reportHead.compact>div:last-child>button:not(.primaryAction){
+  border-color:rgba(255,137,124,.50)!important;
+  background:linear-gradient(135deg,rgba(255,111,97,.20),rgba(217,79,100,.11) 78%,rgba(215,184,255,.045))!important;
+  color:#fff0ed!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.045),0 10px 28px rgba(76,23,34,.18)!important;
+}
+.moduleCard .reportHead.compact>div:last-child>button:not(.primaryAction):hover{
+  border-color:rgba(255,154,140,.78)!important;
+  background:linear-gradient(135deg,rgba(255,111,97,.30),rgba(217,79,100,.16) 82%,rgba(139,92,246,.055))!important;
+  box-shadow:0 14px 34px rgba(255,111,97,.16),inset 0 1px rgba(255,255,255,.06)!important;
+}
+
+.readinessChecklist>div,.recommendationList article,.dashboardStats>div,.bigScore,.overviewMini,.finalStats div,.executiveStats div,.kpi,.score,.quickActions>button,.recentAuditList article,.listRows article{
+  border-color:rgba(255,111,97,.20)!important;
+  background:linear-gradient(180deg,#180d13,#0d0910)!important;
+}
+.readinessChecklist>div:hover,.recommendationList article:hover,.quickActions>button:hover{
+  border-color:rgba(255,111,97,.42)!important;
+}
+
+.recPriority,.private{
+  border-color:rgba(255,111,97,.46)!important;
+  background:rgba(255,111,97,.13)!important;
+  color:#ffc1b8!important;
+}
+.attentionStrip span,.engineStrip span,.openChips span,.auditHistoryStrip span{
+  border-color:rgba(255,111,97,.19)!important;
+  background:rgba(255,111,97,.055)!important;
+}
+
+.ring{
+  background:conic-gradient(#ff6f61 var(--score),#3b222e 0)!important;
+  filter:drop-shadow(0 0 15px rgba(255,111,97,.23))!important;
+}
+.auditScorePill{
+  border-color:rgba(255,111,97,.42)!important;
+  background:linear-gradient(135deg,#3c1b27,#1b0f15)!important;
+  color:#ffd7d1!important;
+}
+
+.projectBar select{
+  border-color:rgba(255,111,97,.48)!important;
+  background-image:
+    linear-gradient(45deg,transparent 50%,#ffb2a8 50%),
+    linear-gradient(135deg,#ffb2a8 50%,transparent 50%),
+    radial-gradient(circle at 88% 50%,rgba(255,111,97,.18),transparent 30%),
+    linear-gradient(180deg,#211019,#0e0910)!important;
+}
+.projectBar select:hover,.projectBar select:focus{border-color:rgba(255,111,97,.76)!important}
+.projectBar select option:checked{background:#b94d60!important}
+
+.moduleFoot{
+  border-color:rgba(255,111,97,.20)!important;
+  background:rgba(255,111,97,.055)!important;
+}
+
+.side::-webkit-scrollbar-thumb{background:#6b3544!important}
+.side::-webkit-scrollbar-thumb:hover{background:#9b4a5e!important}
+
+/* Lilac/violet remain deliberately limited to secondary emphasis only. */
+.content h1{background:linear-gradient(90deg,#fff 0%,#ffe7e2 62%,#f3c2cd 86%,#d7b8ff 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}
