@@ -11,17 +11,20 @@ export type WorkspaceActor={
 
 const roleWeight:Record<WorkspaceRole,number>={viewer:1,analyst:2,admin:3,owner:4};
 const uuidPattern=/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
+let projectStatusColumnAvailable:boolean|null=null;
 
 function normalizeEmail(value:string){return value.trim().toLowerCase()}
 function isUuid(value:string){return uuidPattern.test(value)}
 
 async function hasProjectStatusColumn(){
+  if(projectStatusColumnAvailable!==null)return projectStatusColumnAvailable;
   const {rows}=await pool.query(`
     select exists(
       select 1 from information_schema.columns
       where table_schema=current_schema() and table_name='projects' and column_name='status'
     ) as available`);
-  return Boolean(rows[0]?.available);
+  projectStatusColumnAvailable=Boolean(rows[0]?.available);
+  return projectStatusColumnAvailable;
 }
 
 export function actorEmailFromRequest(req:Request){
