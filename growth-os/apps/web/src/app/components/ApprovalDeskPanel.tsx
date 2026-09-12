@@ -7,6 +7,7 @@ type Impact='LOW'|'MEDIUM'|'HIGH';
 type Effort='LOW'|'MEDIUM'|'HIGH';
 type Confidence='LOW'|'MEDIUM'|'HIGH';
 type Triage={risk:Risk;impact:Impact;effort:Effort;confidence:Confidence;score:number;label:string;modelVersion?:string};
+type BusinessImpact={monthlyLow:number;monthlyHigh:number;currency:'TRY';confidence:Confidence;basis:string;modelVersion?:string};
 type Recommendation={
   id:string;
   title:string;
@@ -14,7 +15,7 @@ type Recommendation={
   priority:string;
   status:string;
   source:string;
-  proposed_action?:{recommendation?:string;type?:string;issueKey?:string;decision?:Triage};
+  proposed_action?:{recommendation?:string;type?:string;issueKey?:string;decision?:Triage;businessImpact?:BusinessImpact};
   created_at?:string;
 };
 type Action={id:string;recommendation_id?:string|null;action_type:string;status:string;provider?:string;approved_by?:string;created_at?:string};
@@ -22,6 +23,7 @@ type Job={id:string;recommendation_id?:string|null;status:string;provider:string
 type Center={jobs:Job[];externalExecution?:boolean};
 
 const api='/api/growth';
+const money=(value:number)=>new Intl.NumberFormat('tr-TR',{style:'currency',currency:'TRY',maximumFractionDigits:0}).format(value||0);
 
 function riskFor(rec:Recommendation):Risk{
   const type=(rec.proposed_action?.type||'').toLowerCase();
@@ -89,11 +91,17 @@ export default function ApprovalDeskPanel({projectId,onApproved}:{projectId:stri
 
   useEffect(()=>{if(projectId)void load()},[projectId]);
 
-  const proposed=useMemo(()=>recommendations.filter(r=>r.status==='proposed').sort((a,b)=>triageFor(b).score-triageFor(a).score),[recommendations]);
+  const proposed=useMemo(()=>recommendations.filter(r=>r.status==='proposed').sort((a,b)=>{
+    const scoreDelta=triageFor(b).score-triageFor(a).score;
+    if(scoreDelta!==0)return scoreDelta;
+    return (b.proposed_action?.businessImpact?.monthlyHigh||0)-(a.proposed_action?.businessImpact?.monthlyHigh||0);
+  }),[recommendations]);
   const approved=recommendations.filter(r=>r.status==='approved').length;
   const executed=recommendations.filter(r=>r.status==='executed').length;
   const urgent=proposed.filter(r=>triageFor(r).score>=80).length;
   const backendScored=proposed.filter(r=>r.proposed_action?.decision?.modelVersion==='decision-v1').length;
+  const impactScored=proposed.filter(r=>r.proposed_action?.businessImpact?.modelVersion==='impact-v1').length;
+  const potentialHigh=proposed.reduce((sum,r)=>sum+(r.proposed_action?.businessImpact?.monthlyHigh||0),0);
   const jobByRec=useMemo(()=>new Map((center?.jobs||[]).filter(j=>j.recommendation_id).map(j=>[j.recommendation_id as string,j])),[center]);
 
   async function approve(id:string){
@@ -113,8 +121,8 @@ export default function ApprovalDeskPanel({projectId,onApproved}:{projectId:stri
 
   return <div className="moduleStack">
     <section className="moduleHero">
-      <div><p className="eyebrow">Approval Desk · Decision Gate</p><h2>{proposed.length?`${proposed.length} karar önceliklendirildi`:'Onay kuyruğu temiz'}</h2><p>Impact, effort, confidence ve execution risk backend karar modeliyle puanlanır; eski kayıtlar güvenli UI fallback kullanır.</p></div>
-      <div className="finalStats"><div><strong>{urgent}</strong><span>Hemen</span></div><div><strong>{proposed.length}</strong><span>Bekliyor</span></div><div><strong>{backendScored}</strong><span>Backend Skorlu</span></div><div><strong>{approved}</strong><span>Onaylandı</span></div><div><strong>{executed}</strong><span>Doğrulandı</span></div></div>
+      <div><p className="eyebrow">Approval Desk · Decision Gate</p><h2>{proposed.length?`${proposed.length} karar ticari etkiye göre sıralandı`:'Onay kuyruğu temiz'}</h2><p>Decision Score artık gerçek reklam, gelir, GA4, Search Console ve Merchant sinyallerinden türetilen aylık fırsat bandıyla birlikte okunur.</p></div>
+      <div className="finalStats"><div><strong>{urgent}</strong><span>Hemen</span></div><div><strong>{proposed.length}</strong><span>Bekliyor</span></div><div><strong>{backendScored}</strong><span>Decision-v1</span></div><div><strong>{impactScored}</strong><span>Impact-v1</span></div><div><strong>{potentialHigh>0?money(potentialHigh):'—'}</strong><span>Üst Fırsat Bandı</span></div></div>
     </section>
 
     <section className="moduleCard">
@@ -122,13 +130,15 @@ export default function ApprovalDeskPanel({projectId,onApproved}:{projectId:stri
       {error&&<div className="error">{error}</div>}
       {proposed.length===0?<div className="empty"><b>Onay bekleyen öneri yok.</b> Yeni audit ve Growth Intelligence sinyalleri burada karar kartına dönüşür.</div>:<div className="recommendationList">
         {proposed.map(rec=>{
-          const triage=triageFor(rec);const job=jobByRec.get(rec.id);
+          const triage=triageFor(rec);const job=jobByRec.get(rec.id);const impact=rec.proposed_action?.businessImpact;
           return <article key={rec.id}>
             <div className="recPriority">{triage.label} · {triage.score}</div>
             <div>
               <strong>{rec.title}</strong>
               <p>{rec.proposed_action?.recommendation||rec.rationale}</p>
               <span>Impact: {triage.impact} · Effort: {triage.effort} · Confidence: {triage.confidence} · Risk: {triage.risk}</span>
+              {impact&&<span>Tahmini aylık fırsat: {money(impact.monthlyLow)} – {money(impact.monthlyHigh)} · Güven: {impact.confidence} · {impact.modelVersion||'impact'}</span>}
+              {impact?.basis&&<span>Dayanak: {impact.basis}</span>}
               <span>Scoring: {triage.modelVersion==='decision-v1'?'backend · decision-v1':'UI fallback · eski kayıt'}</span>
               <span>{rec.source} · {rec.proposed_action?.type||'manual_review'}{rec.created_at?` · ${new Date(rec.created_at).toLocaleString('tr-TR')}`:''}</span>
               <span>Execution: {job?.status||'onay sonrası oluşturulacak'} · External write: {center?.externalExecution?'açık':'kapalı'}</span>
@@ -137,7 +147,7 @@ export default function ApprovalDeskPanel({projectId,onApproved}:{projectId:stri
           </article>
         })}
       </div>}
-      <div className="moduleFoot">Yeni Growth Intelligence önerileri decision-v1 modeliyle backend üzerinde puanlanır ve skor öneri kaydına yazılır. Eski öneriler geriye dönük uyumluluk için aynı formülün UI fallback sürümünü kullanır.</div>
+      <div className="moduleFoot">Impact-v1 bir tahmin modelidir; fırsatı tek sayı yerine aralık ve güven seviyesiyle gösterir. Bu değer gerçekleşmiş gelir değildir. Decision-v1 öncelik, impact-v1 ise ticari bağlam sağlar.</div>
     </section>
 
     <section className="moduleCard">
