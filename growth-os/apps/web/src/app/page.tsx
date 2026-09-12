@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useEffect, useMemo, useState } from 'react';
+import SearchConsolePanel from './components/SearchConsolePanel';
 
 type Issue = { key:string; title:string; severity:string; status:string; detail:string; recommendation:string };
 type Comparison = {
@@ -22,7 +23,7 @@ type MetricRow = {provider:string;external_campaign_id:string;campaign_name:stri
 type LeadRow = {id:string;source?:string;campaign_id?:string;name?:string;email?:string;phone?:string;status:string;lead_value:string|number;won_revenue:string|number;owner?:string;created_at?:string};
 type IntegrationRow = {id:string;provider:string;account_label?:string;external_account_id?:string;status:string;mode:string;last_sync_at?:string;created_at?:string};
 type ActionRow = {id:string;recommendation_id?:string;provider?:string;action_type:string;status:string;approved_by?:string;executed_at?:string;created_at?:string};
-type Section = 'overview'|'projects'|'audit'|'final'|'ads'|'analytics'|'crm'|'profit'|'alerts'|'recommendations';
+type Section = 'overview'|'projects'|'audit'|'final'|'ads'|'analytics'|'seo'|'crm'|'profit'|'alerts'|'recommendations';
 
 const api = '/api/growth';
 const money = (value:number) => new Intl.NumberFormat('tr-TR',{style:'currency',currency:'TRY',maximumFractionDigits:0}).format(value || 0);
@@ -30,7 +31,7 @@ const number = (value:string|number) => Number(value || 0);
 const severityWeight:Record<string,number> = {critical:5,high:4,medium:3,low:2,info:1};
 const navItems:{key:Section;label:string;icon:string}[] = [
   {key:'overview',label:'Genel Bakış',icon:'◫'},{key:'projects',label:'Projeler',icon:'◇'},{key:'audit',label:'Audit',icon:'◎'},{key:'final',label:'Final Check',icon:'✓'},
-  {key:'ads',label:'Ads',icon:'↗'},{key:'analytics',label:'Analytics',icon:'⌁'},{key:'crm',label:'CRM',icon:'○'},{key:'profit',label:'Profit',icon:'₺'},
+  {key:'ads',label:'Ads',icon:'↗'},{key:'analytics',label:'Analytics',icon:'⌁'},{key:'seo',label:'SEO / Search',icon:'⌕'},{key:'crm',label:'CRM',icon:'○'},{key:'profit',label:'Profit',icon:'₺'},
   {key:'alerts',label:'Alerts',icon:'!'},{key:'recommendations',label:'Recommendations',icon:'✦'}
 ];
 
@@ -223,6 +224,7 @@ export default function Home() {
       {section==='final' && <FinalView comparison={comparison} audits={audits} />}
       {section==='ads' && <AdsView projectId={selectedProject?.id||null} audit={audit} integrations={integrations} onGoogleConnect={connectGoogle} onMetaConnect={connectMeta} onTikTokConnect={connectTikTok} connecting={connectionLoading} onRefresh={loadProjectModules} />}
       {section==='analytics' && <AnalyticsView overview={overview} metrics={metrics} />}
+      {section==='seo' && <SearchConsolePanel projectId={selectedProject?.id||null} />}
       {section==='crm' && <CrmView overview={overview} leads={leads} />}
       {section==='profit' && <ProfitView overview={overview} metrics={metrics} onSave={saveTargets} />}
       {section==='alerts' && <AlertsView alerts={alerts} />}
