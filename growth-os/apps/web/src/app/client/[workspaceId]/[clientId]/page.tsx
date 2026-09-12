@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import type { CSSProperties } from 'react';
 import { useParams } from 'next/navigation';
 import styles from './portal.module.css';
 
@@ -62,7 +63,7 @@ export default function ClientPortalPage(){
   const metrics=data.summary?.metrics30d||{};
   const brand=data.branding?.brand_name||'Growth OS';
   const canDecide=data.user?.role==='client_admin';
-  const cssVars={'--portal-primary':data.branding?.primary_color||'#8b5cf6','--portal-accent':data.branding?.accent_color||'#c4b5fd'} as React.CSSProperties;
+  const cssVars={'--portal-primary':data.branding?.primary_color||'#8b5cf6','--portal-accent':data.branding?.accent_color||'#c4b5fd'} as CSSProperties;
 
   return <main className={styles.screen} style={cssVars}>
     <div className={styles.wrap}>
@@ -116,7 +117,7 @@ export default function ClientPortalPage(){
         </aside>
       </section>
 
-      <footer>{data.branding?.report_footer||`${brand} · Growth OS tarafından desteklenir`}</footer>
+      <footer className={styles.footer}>{data.branding?.report_footer||`${brand} · Growth OS tarafından desteklenir`}</footer>
     </div>
   </main>;
 }
