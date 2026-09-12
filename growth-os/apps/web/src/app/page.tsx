@@ -203,7 +203,7 @@ export default function Home() {
   return <main className="shell">
     <aside className="side">
       <div className="brand"><span>G</span><div><strong>Growth OS</strong><small>Private Control Center</small></div></div>
-      <nav>{navItems.map(item=><button key={item.key} className={section===item.key?'active':''} onClick={()=>setSection(item.key)}><i>{item.icon}</i><span>{item.label}</span></button>)}</nav>
+      <nav>{navItems.map(item=><button key={item.key} className={section===item.key?'active':''} onClick={()=>setSection(item.key)}><i>{item.icon}</i><span>{item.label}</span></button>)}<a href="/activity" style={{display:'flex',gap:12,textDecoration:'none',color:'#ffab99',background:'#281b17',borderColor:'#59352e'}}><i aria-hidden="true">↳</i><span>Aktivite Geçmişi</span></a></nav>
       <div className="stage"><span className="liveDot"/> Core online · v0.8</div>
     </aside>
 

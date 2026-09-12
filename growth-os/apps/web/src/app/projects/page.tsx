@@ -139,6 +139,7 @@ export default function ProjectsPage(){
       <nav>
         <a href="/" onClick={()=>window.sessionStorage.setItem('growth-os:last-section','Genel Bakış')}>Genel Bakış</a>
         <a className={styles.active} href="/projects">Projeler</a>
+        <a href="/activity">Aktivite Geçmişi</a>
         <a href="/agency">Ajans Merkezi</a>
       </nav>
       <div className={styles.sideFoot}>Core online · Project Lifecycle</div>
