@@ -70,7 +70,7 @@ async function getClient(workspaceId: string, clientId: string) {
 clientInviteRouter.get('/client/:clientId', async (req, res) => {
   try {
     await ensureInviteSchema();
-    const workspaceId = String(req.params.workspaceId || '');
+    const workspaceId = String((req.params as Record<string, string | undefined>).workspaceId || '');
     const clientId = String(req.params.clientId || '');
     const actor = await resolveWorkspaceActor(req, workspaceId);
     requireRole(actor, 'admin');
@@ -91,7 +91,7 @@ clientInviteRouter.get('/client/:clientId', async (req, res) => {
 clientInviteRouter.post('/client/:clientId', async (req, res) => {
   try {
     await ensureInviteSchema();
-    const workspaceId = String(req.params.workspaceId || '');
+    const workspaceId = String((req.params as Record<string, string | undefined>).workspaceId || '');
     const clientId = String(req.params.clientId || '');
     const actor = await resolveWorkspaceActor(req, workspaceId);
     requireRole(actor, 'admin');
