@@ -11,20 +11,20 @@ export type WorkspaceActor={
 
 const roleWeight:Record<WorkspaceRole,number>={viewer:1,analyst:2,admin:3,owner:4};
 const uuidPattern=/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
-let projectStatusColumnAvailable:boolean|null=null;
+let projectLifecycleSchemaAvailable:boolean|null=null;
 
 function normalizeEmail(value:string){return value.trim().toLowerCase()}
 function isUuid(value:string){return uuidPattern.test(value)}
 
 async function hasProjectStatusColumn(){
-  if(projectStatusColumnAvailable!==null)return projectStatusColumnAvailable;
+  if(projectLifecycleSchemaAvailable!==null)return projectLifecycleSchemaAvailable;
   const {rows}=await pool.query(`
     select exists(
       select 1 from information_schema.columns
       where table_schema=current_schema() and table_name='projects' and column_name='status'
     ) as available`);
-  projectStatusColumnAvailable=Boolean(rows[0]?.available);
-  return projectStatusColumnAvailable;
+  projectLifecycleSchemaAvailable=Boolean(rows[0]?.available);
+  return projectLifecycleSchemaAvailable;
 }
 
 export function actorEmailFromRequest(req:Request){
@@ -39,6 +39,9 @@ export function actorEmailFromRequest(req:Request){
 
 export async function resolveWorkspaceActor(req:Request,workspaceId?:string):Promise<WorkspaceActor>{
   const email=actorEmailFromRequest(req);
+  if(!email)throw new Error('WORKSPACE_ACCESS_DENIED');
+  if(workspaceId&&!isUuid(workspaceId))throw new Error('WORKSPACE_ID_INVALID');
+
   const values:unknown[]=[email];
   let where="lower(wm.email)=lower($1) and wm.status='active' and aw.status='active'";
   if(workspaceId){values.push(workspaceId);where+=' and aw.id=$2'}
@@ -94,7 +97,7 @@ export async function listWorkspaceProjects(actor:WorkspaceActor){
 
 export function workspaceErrorStatus(error:unknown){
   const message=error instanceof Error?error.message:'';
-  if(message==='PROJECT_ID_INVALID')return 400;
+  if(message==='PROJECT_ID_INVALID'||message==='WORKSPACE_ID_INVALID')return 400;
   if(message==='WORKSPACE_ACCESS_DENIED'||message==='PROJECT_ACCESS_DENIED')return 403;
   if(message==='WORKSPACE_ROLE_DENIED')return 403;
   if(message==='PROJECT_ARCHIVED')return 409;
@@ -104,6 +107,7 @@ export function workspaceErrorStatus(error:unknown){
 export function workspaceErrorMessage(error:unknown){
   const message=error instanceof Error?error.message:'';
   if(message==='PROJECT_ID_INVALID')return 'Geçerli bir proje kimliği gerekli.';
+  if(message==='WORKSPACE_ID_INVALID')return 'Geçerli bir workspace kimliği gerekli.';
   if(message==='WORKSPACE_ACCESS_DENIED')return 'Bu workspace için aktif üyelik bulunamadı.';
   if(message==='PROJECT_ACCESS_DENIED')return 'Bu projeye erişim yetkiniz yok.';
   if(message==='WORKSPACE_ROLE_DENIED')return 'Bu işlem için rolünüz yeterli değil.';
