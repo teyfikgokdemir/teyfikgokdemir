@@ -23,8 +23,13 @@ async function hasProjectStatusColumn(){
 }
 
 export function actorEmailFromRequest(req:Request){
-  const header=req.header('x-growth-user-email')||req.header('cf-access-authenticated-user-email')||'';
-  return normalizeEmail(header||process.env.DEFAULT_WORKSPACE_USER_EMAIL||'teyfikgokdemir@outlook.com');
+  const accessEmail=req.header('cf-access-authenticated-user-email')||'';
+  if(accessEmail)return normalizeEmail(accessEmail);
+
+  if(process.env.NODE_ENV==='production')return '';
+
+  const developmentEmail=req.header('x-growth-user-email')||process.env.DEFAULT_WORKSPACE_USER_EMAIL||'teyfikgokdemir@outlook.com';
+  return normalizeEmail(developmentEmail);
 }
 
 export async function resolveWorkspaceActor(req:Request,workspaceId?:string):Promise<WorkspaceActor>{
