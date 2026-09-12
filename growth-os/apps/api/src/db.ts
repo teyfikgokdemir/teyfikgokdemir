@@ -17,6 +17,102 @@ export async function initDb() {
       created_at timestamptz not null default now()
     );
 
+    create table if not exists agency_workspaces (
+      id uuid primary key default gen_random_uuid(),
+      name text not null,
+      slug text not null unique,
+      status text not null default 'active',
+      plan text not null default 'internal',
+      settings jsonb not null default '{}'::jsonb,
+      created_at timestamptz not null default now(),
+      updated_at timestamptz not null default now()
+    );
+
+    create table if not exists workspace_members (
+      id uuid primary key default gen_random_uuid(),
+      workspace_id uuid not null references agency_workspaces(id) on delete cascade,
+      email text not null,
+      display_name text,
+      role text not null default 'analyst',
+      status text not null default 'active',
+      permissions jsonb not null default '{}'::jsonb,
+      created_at timestamptz not null default now(),
+      updated_at timestamptz not null default now(),
+      unique(workspace_id,email)
+    );
+
+    create table if not exists agency_clients (
+      id uuid primary key default gen_random_uuid(),
+      workspace_id uuid not null references agency_workspaces(id) on delete cascade,
+      name text not null,
+      domain text,
+      status text not null default 'active',
+      metadata jsonb not null default '{}'::jsonb,
+      created_at timestamptz not null default now(),
+      updated_at timestamptz not null default now(),
+      unique(workspace_id,domain)
+    );
+
+    create table if not exists workspace_branding (
+      workspace_id uuid primary key references agency_workspaces(id) on delete cascade,
+      brand_name text,
+      logo_url text,
+      primary_color text,
+      accent_color text,
+      custom_domain text,
+      report_footer text,
+      settings jsonb not null default '{}'::jsonb,
+      updated_at timestamptz not null default now()
+    );
+
+    insert into agency_workspaces(id,name,slug,status,plan)
+      values('00000000-0000-4000-8000-000000000001','Growth OS','growth-os','active','internal')
+      on conflict(id) do nothing;
+
+    insert into workspace_members(workspace_id,email,display_name,role,status,permissions)
+      values('00000000-0000-4000-8000-000000000001','teyfikgokdemir@outlook.com','Teyfik Gökdemir','owner','active','{"all":true}'::jsonb)
+      on conflict(workspace_id,email) do nothing;
+
+    alter table projects add column if not exists workspace_id uuid references agency_workspaces(id) on delete restrict;
+    alter table projects add column if not exists client_id uuid references agency_clients(id) on delete set null;
+    alter table projects alter column workspace_id set default '00000000-0000-4000-8000-000000000001';
+    update projects set workspace_id='00000000-0000-4000-8000-000000000001' where workspace_id is null;
+    alter table projects alter column workspace_id set not null;
+
+    insert into agency_clients(workspace_id,name,domain,status,metadata)
+      select p.workspace_id,p.name,p.domain,'active',jsonb_build_object('migratedFromProjectId',p.id)
+      from projects p
+      where p.client_id is null
+      on conflict(workspace_id,domain) do nothing;
+
+    update projects p
+      set client_id=c.id
+      from agency_clients c
+      where p.client_id is null and c.workspace_id=p.workspace_id and c.domain=p.domain;
+
+    create or replace function growth_sync_project_client() returns trigger as $$
+    declare
+      resolved_client_id uuid;
+    begin
+      if new.workspace_id is null then
+        new.workspace_id:='00000000-0000-4000-8000-000000000001';
+      end if;
+      if new.client_id is null then
+        insert into agency_clients(workspace_id,name,domain,status,metadata)
+        values(new.workspace_id,new.name,new.domain,'active',jsonb_build_object('autoCreated',true))
+        on conflict(workspace_id,domain) do update set name=excluded.name,updated_at=now()
+        returning id into resolved_client_id;
+        new.client_id:=resolved_client_id;
+      end if;
+      return new;
+    end;
+    $$ language plpgsql;
+
+    drop trigger if exists trg_growth_sync_project_client on projects;
+    create trigger trg_growth_sync_project_client
+      before insert or update of name,domain,workspace_id,client_id on projects
+      for each row execute function growth_sync_project_client();
+
     create table if not exists audits (
       id uuid primary key default gen_random_uuid(),
       project_id uuid not null references projects(id) on delete cascade,
@@ -205,6 +301,10 @@ export async function initDb() {
       created_at timestamptz not null default now()
     );
 
+    create index if not exists idx_workspace_members_workspace on workspace_members(workspace_id,status);
+    create index if not exists idx_agency_clients_workspace on agency_clients(workspace_id,status);
+    create index if not exists idx_projects_workspace on projects(workspace_id,created_at desc);
+    create index if not exists idx_projects_client on projects(client_id);
     create index if not exists idx_audits_project_created on audits(project_id, created_at desc);
     create index if not exists idx_campaign_metrics_project_date on campaign_metrics(project_id, metric_date desc);
     create index if not exists idx_ads_sync_runs_project_started on ads_sync_runs(project_id, started_at desc);
