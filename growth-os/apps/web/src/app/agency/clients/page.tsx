@@ -20,6 +20,8 @@ export default function AgencyClientsPage(){
   const [role,setRole]=useState<'client_admin'|'client_viewer'>('client_viewer');
   const [loading,setLoading]=useState(true);
   const [saving,setSaving]=useState(false);
+  const [inviting,setInviting]=useState(false);
+  const [inviteUrl,setInviteUrl]=useState('');
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
 
@@ -53,7 +55,7 @@ export default function AgencyClientsPage(){
   }
 
   useEffect(()=>{void loadBase()},[]);
-  useEffect(()=>{if(selected&&workspaceId)void loadUsers(selected)},[selected,workspaceId]);
+  useEffect(()=>{setInviteUrl('');if(selected&&workspaceId)void loadUsers(selected)},[selected,workspaceId]);
 
   async function submit(event:FormEvent){
     event.preventDefault();
@@ -65,9 +67,24 @@ export default function AgencyClientsPage(){
       });
       const payload=await response.json();
       if(!response.ok)throw new Error(payload?.error||'Portal kullanıcısı eklenemedi.');
-      setEmail('');setDisplayName('');setNotice('Portal kullanıcısı hazırlandı. Bağlantıyı müşteriye iletebilirsin.');
+      setEmail('');setDisplayName('');setNotice('Portal kullanıcısı doğrudan aktifleştirildi.');
       await loadUsers(selectedClient.id);
     }catch(err){setError(err instanceof Error?err.message:'Portal kullanıcısı eklenemedi.')}finally{setSaving(false)}
+  }
+
+  async function createInvite(){
+    if(!selectedClient||!email)return;
+    setInviting(true);setError('');setNotice('');setInviteUrl('');
+    try{
+      const response=await fetch(`${api}/workspaces/${workspaceId}/invites/client/${selectedClient.id}`,{
+        method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email,displayName:displayName||undefined,role,expiresInDays:7})
+      });
+      const payload=await response.json();
+      if(!response.ok)throw new Error(payload?.error||'Davet oluşturulamadı.');
+      const url=`${window.location.origin}/client/invite/${workspaceId}/${payload.token}`;
+      setInviteUrl(url);
+      try{await navigator.clipboard.writeText(url);setNotice('Güvenli davet bağlantısı oluşturuldu ve panoya kopyalandı.')}catch{setNotice('Güvenli davet bağlantısı oluşturuldu.')}
+    }catch(err){setError(err instanceof Error?err.message:'Davet oluşturulamadı.')}finally{setInviting(false)}
   }
 
   async function copyPortal(){
@@ -79,7 +96,7 @@ export default function AgencyClientsPage(){
   return <main className={styles.screen}>
     <div className={styles.shell}>
       <header className={styles.header}>
-        <div><p className={styles.eyebrow}>AGENCY WORKSPACE</p><h1>Müşteri Yönetimi</h1><p>Müşteri portal erişimleri, roller ve paylaşılabilir bağlantılar tek merkezde.</p></div>
+        <div><p className={styles.eyebrow}>AGENCY WORKSPACE</p><h1>Müşteri Yönetimi</h1><p>Müşteri portal erişimleri, güvenli davetler, roller ve paylaşılabilir bağlantılar tek merkezde.</p></div>
         <a className={styles.back} href="/">Growth OS’a dön</a>
       </header>
 
@@ -110,8 +127,11 @@ export default function AgencyClientsPage(){
                 <div><label>E-posta</label><input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="musteri@firma.com" required/></div>
                 <div><label>Ad Soyad</label><input value={displayName} onChange={e=>setDisplayName(e.target.value)} placeholder="İsteğe bağlı"/></div>
                 <div><label>Rol</label><select value={role} onChange={e=>setRole(e.target.value as 'client_admin'|'client_viewer')}><option value="client_viewer">client_viewer · sadece görüntüleme</option><option value="client_admin">client_admin · karar verebilir</option></select></div>
-                <button className={styles.primary} disabled={saving}>{saving?'Hazırlanıyor…':'Portal Kullanıcısı Oluştur'}</button>
+                <button className={styles.primary} disabled={saving||inviting}>{saving?'Hazırlanıyor…':'Doğrudan Kullanıcı Oluştur'}</button>
+                <button type="button" className={styles.copy} disabled={saving||inviting||!email} onClick={()=>void createInvite()}>{inviting?'Davet hazırlanıyor…':'7 Günlük Güvenli Davet Oluştur'}</button>
               </form>
+
+              {inviteUrl?<div className={styles.portalBox}><span>Tek kullanımlık davet</span><code>{inviteUrl}</code><small>Davet yalnızca tanımlanan e-posta hesabıyla ve 7 gün içinde kabul edilebilir. Yeni davet oluşturulursa önceki bekleyen davet iptal edilir.</small></div>:null}
 
               <div className={styles.users}>
                 <div className={styles.usersHead}><h3>Portal Kullanıcıları</h3><span>{users.length}</span></div>
