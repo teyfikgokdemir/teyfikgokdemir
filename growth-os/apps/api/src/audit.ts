@@ -141,6 +141,14 @@ const scoreFromIssues = (issues: AuditIssue[], keys: string[]) => {
   return Math.max(0, Math.min(100, score));
 };
 
+const formatEvidenceUrls = (evidence: AuditEvidence[], limit = 5) => {
+  const urls = [...new Set(evidence.map((item) => item.url))];
+  if (!urls.length) return '';
+  const shown = urls.slice(0, limit);
+  const suffix = urls.length > limit ? ` (+${urls.length - limit} daha)` : '';
+  return ` Etkilenen URL: ${shown.join(', ')}${suffix}`;
+};
+
 export async function runAudit(inputDomain: string) {
   const domain = normalizeDomain(inputDomain);
   const controller = new AbortController();
@@ -270,10 +278,10 @@ export async function runAudit(inputDomain: string) {
   add(tracking.metaPixel, { key: 'meta', title: 'Meta Pixel', severity: 'medium', detail: tracking.metaPixel ? 'Bulundu' : 'Bulunamadı', recommendation: 'Meta reklamı kullanılacaksa Pixel + CAPI ölçümünü kur.' });
   add(forms > 0 || /sepete ekle|satın al|iletişim|teklif/i.test(text), { key: 'conversion', title: 'Dönüşüm yolu', severity: 'high', detail: `${forms} form`, recommendation: 'Birincil dönüşüm aksiyonunu görünür ve ölçülebilir hale getir.' });
   add(sampledPages.length >= 2, { key: 'crawl-coverage', title: 'Çoklu sayfa tarama kapsamı', severity: 'medium', detail: `${sampledPages.length} sayfa örneklendi`, recommendation: 'İç link yapısını ve taranabilir sayfa kapsamını güçlendir.' });
-  add(pagesWithoutTitle === 0 && duplicateTitles === 0, { key: 'site-titles', title: 'Site geneli title kalitesi', severity: 'high', detail: `${pagesWithoutTitle} eksik, ${duplicateTitles} tekrar eden title`, recommendation: 'Örneklenen tüm sayfalarda benzersiz title kullan.', evidence: titleEvidence });
-  add(pagesWithoutDescription === 0 && duplicateDescriptions === 0, { key: 'site-descriptions', title: 'Site geneli description kalitesi', severity: 'medium', detail: `${pagesWithoutDescription} eksik, ${duplicateDescriptions} tekrar eden description`, recommendation: 'Önemli sayfalarda özgün meta description kullan.', evidence: descriptionEvidence });
-  add(pagesWithoutCanonical === 0, { key: 'site-canonicals', title: 'Site geneli canonical', severity: 'high', detail: `${pagesWithoutCanonical} sayfada canonical eksik`, recommendation: 'Taranan tüm indexlenebilir sayfalarda doğru canonical tanımla.', evidence: canonicalEvidence });
-  add(pagesBadH1 === 0, { key: 'site-h1', title: 'Site geneli H1 yapısı', severity: 'medium', detail: `${pagesBadH1} sayfada H1 sayısı hatalı`, recommendation: 'Her önemli sayfada tek ve anlamlı H1 kullan.', evidence: h1Evidence });
+  add(pagesWithoutTitle === 0 && duplicateTitles === 0, { key: 'site-titles', title: 'Site geneli title kalitesi', severity: 'high', detail: `${pagesWithoutTitle} eksik, ${duplicateTitles} tekrar eden title.${formatEvidenceUrls(titleEvidence)}`, recommendation: 'Örneklenen tüm sayfalarda benzersiz title kullan.', evidence: titleEvidence });
+  add(pagesWithoutDescription === 0 && duplicateDescriptions === 0, { key: 'site-descriptions', title: 'Site geneli description kalitesi', severity: 'medium', detail: `${pagesWithoutDescription} eksik, ${duplicateDescriptions} tekrar eden description.${formatEvidenceUrls(descriptionEvidence)}`, recommendation: 'Önemli sayfalarda özgün meta description kullan.', evidence: descriptionEvidence });
+  add(pagesWithoutCanonical === 0, { key: 'site-canonicals', title: 'Site geneli canonical', severity: 'high', detail: `${pagesWithoutCanonical} sayfada canonical eksik.${formatEvidenceUrls(canonicalEvidence)}`, recommendation: 'Taranan tüm indexlenebilir sayfalarda doğru canonical tanımla.', evidence: canonicalEvidence });
+  add(pagesBadH1 === 0, { key: 'site-h1', title: 'Site geneli H1 yapısı', severity: 'medium', detail: `${pagesBadH1} sayfada H1 sayısı hatalı.${formatEvidenceUrls(h1Evidence)}`, recommendation: 'Her önemli sayfada tek ve anlamlı H1 kullan.', evidence: h1Evidence });
 
   const seoKeys = ['http','title','description','canonical','h1','lang','robots','sitemap','schema','content','crawl-coverage','site-titles','site-descriptions','site-canonicals','site-h1'];
   const geoKeys = ['schema','entity','content','canonical','lang','site-canonicals'];
