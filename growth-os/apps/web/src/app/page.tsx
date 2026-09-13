@@ -63,7 +63,7 @@ export default function Home() {
   const projectLoadGeneration = useRef(0);
   const initialUrlProjectHandled = useRef(false);
 
-  const openIssues = useMemo(() => audit ? audit.issues.filter(i=>i.status!=='pass').sort((a,b)=>(severityWeight[b.severity]||0)-(severityWeight[a.severity]||0)) : [], [audit]);
+  const openIssues = useMemo(() => audit ? audit.issues.filter(i=>i.status==='fail').sort((a,b)=>(severityWeight[b.severity]||0)-(severityWeight[a.severity]||0)) : [], [audit]);
   const criticalCount = openIssues.filter(i=>['critical','high'].includes(i.severity)).length;
   const mediumCount = openIssues.filter(i=>i.severity==='medium').length;
   const verdict = audit ? (criticalCount===0 && audit.scores.adsReadiness>=80 ? 'Reklama hazırlık aşamasına geçilebilir' : criticalCount>0 ? 'Önce kritik teknik ve ölçüm açıklarını kapat' : 'İyileştirme tamamlanmadan ölçekleme yapma') : '';
