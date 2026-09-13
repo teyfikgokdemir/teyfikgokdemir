@@ -93,9 +93,21 @@ function pageSignals(url: string, status: number, html: string): PageSample {
   };
 }
 
+function normalizeSampleUrl(rawUrl: string) {
+  const url = new URL(rawUrl);
+  url.hash = '';
+  if (url.pathname !== '/') url.pathname = url.pathname.replace(/\/+$/, '');
+  return url.toString();
+}
+
+function isIgnoredSamplePath(pathname: string) {
+  return /^\/cdn-cgi(?:\/|$)/i.test(pathname);
+}
+
 async function crawlSamples(baseUrl: string, homeHtml: string, limit = 20) {
   const origin = new URL(baseUrl).origin;
-  const candidates = new Set<string>([baseUrl]);
+  const normalizedBaseUrl = normalizeSampleUrl(baseUrl);
+  const candidates = new Set<string>([normalizedBaseUrl]);
   const $ = cheerio.load(homeHtml);
   $('a[href]').each((_i, el) => {
     const href = $(el).attr('href');
@@ -105,26 +117,36 @@ async function crawlSamples(baseUrl: string, homeHtml: string, limit = 20) {
       u.hash = '';
       if (u.origin !== origin) return;
       if (!['http:', 'https:'].includes(u.protocol)) return;
+      if (isIgnoredSamplePath(u.pathname)) return;
       if (u.searchParams.has('add-to-cart') || u.searchParams.has('wc-ajax')) return;
       if (/\.(jpg|jpeg|png|webp|gif|svg|pdf|zip|xml|txt|css|js)(\?|$)/i.test(u.pathname)) return;
-      candidates.add(u.toString().replace(/\/$/, '') || origin);
+      candidates.add(normalizeSampleUrl(u.toString()));
     } catch {}
   });
 
   const urls = [...candidates].slice(0, limit);
   const results: PageSample[] = [];
+  const seenFinalUrls = new Set<string>();
   for (const url of urls) {
     try {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 10000);
       const res = await safeFetch(url, { signal: controller.signal, headers: { 'user-agent': 'GrowthOS-AuditBot/0.2 (+private audit)' } });
       clearTimeout(timeout);
+      const finalUrl = normalizeSampleUrl(res.url || url);
+      const finalParsed = new URL(finalUrl);
+      if (finalParsed.origin !== origin || isIgnoredSamplePath(finalParsed.pathname)) continue;
+      if (seenFinalUrls.has(finalUrl)) continue;
+      seenFinalUrls.add(finalUrl);
       const type = res.headers.get('content-type') || '';
       if (!type.includes('text/html')) continue;
-      const html = url === baseUrl ? homeHtml : await res.text();
-      results.push(pageSignals(res.url, res.status, html));
+      const html = finalUrl === normalizedBaseUrl ? homeHtml : await res.text();
+      results.push(pageSignals(finalUrl, res.status, html));
     } catch {
-      results.push({ url, status: 0, title: '', description: '', canonical: '', h1Count: 0, schemaCount: 0, robotsMeta: '', wordCount: 0 });
+      const failedUrl = normalizeSampleUrl(url);
+      if (seenFinalUrls.has(failedUrl)) continue;
+      seenFinalUrls.add(failedUrl);
+      results.push({ url: failedUrl, status: 0, title: '', description: '', canonical: '', h1Count: 0, schemaCount: 0, robotsMeta: '', wordCount: 0 });
     }
   }
   return results;
