@@ -373,38 +373,54 @@ async function syncActiveAdsProject(projectId:string,days:number,progress:SyncPr
 }
 
 export async function syncAdsProject(projectId:string,days=30){
-  const client=await pool.connect();
-  let runId:string;
+  const lockClient=await pool.connect();
+  let lockHeld=false;
   try{
-    await client.query('begin');
-    await assertProjectStillActive(projectId,client);
-    const {rows}=await client.query("insert into ads_sync_runs(project_id,requested_days) values($1,$2) returning id",[projectId,days]);
-    runId=rows[0].id;
-    await client.query('commit');
-  }catch(error){await client.query('rollback');throw error}finally{client.release()}
+    const lock=await lockClient.query<{acquired:boolean}>(
+      'select pg_try_advisory_lock(hashtextextended($1::text,0::bigint)) as acquired',
+      [projectId]
+    );
+    if(!lock.rows[0]?.acquired)throw new Error('Bu proje için reklam senkronizasyonu zaten çalışıyor.');
+    lockHeld=true;
 
-  const progress:SyncProgress={results:[],metrics:0,alerts:0,recommendations:0};
-  try{
-    const result=await syncActiveAdsProject(projectId,days,progress);
-    const finalizer=await pool.connect();
+    const client=await pool.connect();
+    let runId:string;
     try{
-      await finalizer.query('begin');
-      await assertProjectStillActive(projectId,finalizer);
-      const updated=await finalizer.query(`update ads_sync_runs set status=$2,finished_at=now(),error_message=$3,
-        provider_results=$4,metrics_written=$5,alerts_created=$6,recommendations_created=$7
+      await client.query('begin');
+      await assertProjectStillActive(projectId,client);
+      const {rows}=await client.query("insert into ads_sync_runs(project_id,requested_days) values($1,$2) returning id",[projectId,days]);
+      runId=rows[0].id;
+      await client.query('commit');
+    }catch(error){await client.query('rollback');throw error}finally{client.release()}
+
+    const progress:SyncProgress={results:[],metrics:0,alerts:0,recommendations:0};
+    try{
+      const result=await syncActiveAdsProject(projectId,days,progress);
+      const finalizer=await pool.connect();
+      try{
+        await finalizer.query('begin');
+        await assertProjectStillActive(projectId,finalizer);
+        const updated=await finalizer.query(`update ads_sync_runs set status=$2,finished_at=now(),error_message=$3,
+          provider_results=$4,metrics_written=$5,alerts_created=$6,recommendations_created=$7
+          where id=$1 and status='running'`,
+          [runId,progress.results.some(r=>!r.ok)?'failed':'success',progress.results.filter(r=>!r.ok).map(r=>`${r.provider}: ${r.error}`).join('; ')||null,JSON.stringify(progress.results),progress.metrics,progress.alerts,progress.recommendations]);
+        if(updated.rowCount!==1)throw new Error('Reklam senkronizasyonu zaten sonlandırılmış.');
+        await finalizer.query('commit');
+      }catch(error){await finalizer.query('rollback');throw error}finally{finalizer.release()}
+      return result;
+    }catch(error){
+      // Prefer the archive abort even when a provider fails while the project is being archived.
+      try{await assertProjectStillActive(projectId)}catch(stateError){if(stateError instanceof AdsSyncAbortedError)error=stateError}
+      await pool.query(`update ads_sync_runs set status='failed',finished_at=now(),error_message=$2,
+        provider_results=$3,metrics_written=$4,alerts_created=$5,recommendations_created=$6
         where id=$1 and status='running'`,
-        [runId,progress.results.some(r=>!r.ok)?'failed':'success',progress.results.filter(r=>!r.ok).map(r=>`${r.provider}: ${r.error}`).join('; ')||null,JSON.stringify(progress.results),progress.metrics,progress.alerts,progress.recommendations]);
-      if(updated.rowCount!==1)throw new Error('Reklam senkronizasyonu zaten sonlandırılmış.');
-      await finalizer.query('commit');
-    }catch(error){await finalizer.query('rollback');throw error}finally{finalizer.release()}
-    return result;
-  }catch(error){
-    // Prefer the archive abort even when a provider fails while the project is being archived.
-    try{await assertProjectStillActive(projectId)}catch(stateError){if(stateError instanceof AdsSyncAbortedError)error=stateError}
-    await pool.query(`update ads_sync_runs set status='failed',finished_at=now(),error_message=$2,
-      provider_results=$3,metrics_written=$4,alerts_created=$5,recommendations_created=$6
-      where id=$1 and status='running'`,
-      [runId,error instanceof Error?error.message:'Reklam senkronizasyonu başarısız.',JSON.stringify(progress.results),progress.metrics,progress.alerts,progress.recommendations]);
-    throw error;
+        [runId,error instanceof Error?error.message:'Reklam senkronizasyonu başarısız.',JSON.stringify(progress.results),progress.metrics,progress.alerts,progress.recommendations]);
+      throw error;
+    }
+  }finally{
+    if(lockHeld){
+      try{await lockClient.query('select pg_advisory_unlock(hashtextextended($1::text,0::bigint))',[projectId])}catch(error){console.error('Ads sync advisory lock release failed',error)}
+    }
+    lockClient.release();
   }
 }
