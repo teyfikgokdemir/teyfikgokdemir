@@ -76,7 +76,7 @@ export default function ExecutionCenterPanel({projectId}:{projectId:string|null}
   }
 
   async function requestJob(jobId:string,action:'plan'|'prepare'|'verify'){
-    if(!projectId)return;
+    if(!projectId||busyJob)return;
     const id=projectId;
     const generation=projectGeneration.current;
     setBusyJob(jobId);setError('');
@@ -170,9 +170,9 @@ export default function ExecutionCenterPanel({projectId}:{projectId:string|null}
           {result?.blockers?.length?<p style={{marginTop:6}}>Prepare blokerleri: {result.blockers.join(' · ')}</p>:null}
         </div>
         <div style={{display:'flex',gap:8,flexWrap:'wrap',justifyContent:'flex-end'}}>
-          {job.status==='queued'&&<button onClick={()=>void requestJob(job.id,'plan')} disabled={busyJob===job.id}>{busyJob===job.id?'…':'Planı İncele'}</button>}
-          {job.status==='queued'&&<button className="primaryAction" onClick={()=>void requestJob(job.id,'prepare')} disabled={busyJob===job.id}>{busyJob===job.id?'…':'Hazırla'}</button>}
-          {job.status==='verification_pending'&&<button className="primaryAction" onClick={()=>void requestJob(job.id,'verify')} disabled={busyJob===job.id}>{busyJob===job.id?'…':'Doğrula'}</button>}
+          {job.status==='queued'&&<button onClick={()=>void requestJob(job.id,'plan')} disabled={busyJob!==null}>{busyJob===job.id?'…':'Planı İncele'}</button>}
+          {job.status==='queued'&&<button className="primaryAction" onClick={()=>void requestJob(job.id,'prepare')} disabled={busyJob!==null}>{busyJob===job.id?'…':'Hazırla'}</button>}
+          {job.status==='verification_pending'&&<button className="primaryAction" onClick={()=>void requestJob(job.id,'verify')} disabled={busyJob!==null}>{busyJob===job.id?'…':'Doğrula'}</button>}
         </div>
       </article>})}
     </div>}
