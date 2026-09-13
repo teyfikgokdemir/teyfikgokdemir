@@ -33,8 +33,11 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
 
   useEffect(()=>{setResult(null);setError('');void load();},[projectId]);
 
+  const connectedAds=integrations.filter(i=>i.status==='connected'&&['google_oauth','google_ads','meta_ads','tiktok_ads'].includes(i.provider));
+  const canSync=connectedAds.length>0;
+
   async function sync(){
-    if(!projectId||syncing)return;
+    if(!projectId||syncing||!canSync)return;
     setSyncing(true);setError('');
     try{
       const res=await fetch(`${api}/projects/${projectId}/ads/sync`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({days})});
@@ -57,10 +60,11 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
     <section className="moduleCard">
       <div className="reportHead compact"><div><p className="eyebrow">Read-only Ads Sync</p><h2>Gerçek kampanya verilerini senkronize et</h2></div><span>{lastSync?`Son: ${new Date(lastSync).toLocaleString('tr-TR')}`:'Henüz sync yok'}</span></div>
       <div style={{display:'flex',gap:12,alignItems:'end',flexWrap:'wrap'}}>
-        <label style={{display:'grid',gap:7,minWidth:150}}><span>Veri aralığı</span><select value={days} onChange={e=>setDays(Number(e.target.value))} disabled={syncing}><option value={7}>Son 7 gün</option><option value={14}>Son 14 gün</option><option value={30}>Son 30 gün</option><option value={60}>Son 60 gün</option><option value={90}>Son 90 gün</option></select></label>
-        <button className="primaryAction" onClick={sync} disabled={syncing}>{syncing?'Senkronize ediliyor…':'Verileri Senkronize Et'}</button>
+        <label style={{display:'grid',gap:7,minWidth:150}}><span>Veri aralığı</span><select value={days} onChange={e=>setDays(Number(e.target.value))} disabled={syncing||!canSync}><option value={7}>Son 7 gün</option><option value={14}>Son 14 gün</option><option value={30}>Son 30 gün</option><option value={60}>Son 60 gün</option><option value={90}>Son 90 gün</option></select></label>
+        <button className="primaryAction" onClick={sync} disabled={syncing||!canSync}>{syncing?'Senkronize ediliyor…':'Verileri Senkronize Et'}</button>
         <span style={{opacity:.7,fontSize:13}}>Salt okunur · reklam yayınlama kapalı</span>
       </div>
+      {!canSync&&<div className="empty" style={{marginTop:14}}><b>Önce bir reklam hesabı bağla.</b> Google Ads, Meta Ads veya TikTok Ads bağlantısı tamamlanınca salt okunur senkronizasyon açılır.</div>}
       {error&&<div className="error" style={{marginTop:14}}>{error}</div>}
       {result&&<div style={{display:'grid',gap:10,marginTop:18}}>{result.results.map(r=><div key={r.provider} style={{display:'flex',justifyContent:'space-between',gap:18,padding:'12px 14px',border:'1px solid rgba(255,255,255,.09)',borderRadius:12}}><span><b>{providerName(r.provider)}</b>{r.error&&<small style={{display:'block',opacity:.7,marginTop:4}}>{r.error}</small>}</span><strong>{r.ok?`${r.rows} kayıt`:'HATA'}</strong></div>)}</div>}
     </section>
@@ -75,7 +79,7 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
 
     <section className="moduleCard">
       <div className="reportHead compact"><div><p className="eyebrow">Campaign Performance</p><h2>Son kampanya metrikleri</h2></div><span>{metrics.length} kayıt</span></div>
-      {metrics.length===0?<div className="empty">Henüz kampanya metriği yok. Yukarıdan senkronizasyon başlat.</div>:<div className="dataTable"><div className="dataHead"><span>Kampanya</span><span>Kaynak</span><span>Harcama</span><span>Ciro</span><span>ROAS</span></div>{metrics.slice(0,30).map((m,i)=><div className="dataRow" key={`${m.external_campaign_id}-${m.metric_date}-${i}`}><span><b>{m.campaign_name}</b><small>{m.metric_date}</small></span><span>{providerName(m.provider)}</span><span>{money(n(m.spend))}</span><span>{money(n(m.attributed_revenue))}</span><span>{n(m.spend)>0?(n(m.attributed_revenue)/n(m.spend)).toFixed(2):'—'}</span></div>)}</div>}
+      {metrics.length===0?<div className="empty">{canSync?'Henüz kampanya metriği yok. Yukarıdan senkronizasyon başlat.':'Reklam hesabı bağlantısı tamamlandığında kampanya metrikleri burada görünecek.'}</div>:<div className="dataTable"><div className="dataHead"><span>Kampanya</span><span>Kaynak</span><span>Harcama</span><span>Ciro</span><span>ROAS</span></div>{metrics.slice(0,30).map((m,i)=><div className="dataRow" key={`${m.external_campaign_id}-${m.metric_date}-${i}`}><span><b>{m.campaign_name}</b><small>{m.metric_date}</small></span><span>{providerName(m.provider)}</span><span>{money(n(m.spend))}</span><span>{money(n(m.attributed_revenue))}</span><span>{n(m.spend)>0?(n(m.attributed_revenue)/n(m.spend)).toFixed(2):'—'}</span></div>)}</div>}
     </section>
   </div>;
 }
