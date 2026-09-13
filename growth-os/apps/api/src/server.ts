@@ -18,7 +18,21 @@ import { legacyWorkspaceGuard } from './legacy-access-guard.js';
 type AuditPayload = Awaited<ReturnType<typeof runAudit>>;
 
 const app = express();
-app.use(cors());
+const normalizeOrigin=(value:string)=>value.trim().replace(/\/$/,'');
+const productionOrigins=new Set([
+  'https://growth.teyfikgokdemir.com',
+  ...(process.env.APP_BASE_URL?[process.env.APP_BASE_URL]:[]),
+  ...(process.env.CORS_ALLOWED_ORIGINS||'').split(',')
+].map(normalizeOrigin).filter(Boolean));
+app.use(cors({
+  origin(origin,callback){
+    if(!origin||process.env.NODE_ENV!=='production'||productionOrigins.has(normalizeOrigin(origin)))return callback(null,true);
+    return callback(new Error('CORS_ORIGIN_DENIED'));
+  },
+  credentials:false,
+  methods:['GET','HEAD','POST','PUT','PATCH','DELETE','OPTIONS'],
+  allowedHeaders:['content-type','cf-access-authenticated-user-email','cf-access-jwt-assertion']
+}));
 app.use(express.json({ limit: '1mb' }));
 app.use(legacyWorkspaceGuard);
 app.use('/workspaces',workspaceRouter);
