@@ -56,8 +56,10 @@ export default function AgencyPortfolioPanel(){
     const topDecision=Math.max(0,...proposed.map(r=>n(r.proposed_action?.decision?.score)));
     const critical=proposed.filter(r=>String(r.priority||'').toLowerCase()==='critical'||String(r.priority||'').toLowerCase()==='high').length;
     const executionWaiting=n(row.execution.counts?.queued)+n(row.execution.counts?.in_progress)+n(row.execution.counts?.verification_pending);
-    const audit=n(row.overview.latestAudit?.overall_score);
-    const attentionScore=Math.min(100,Math.round(topDecision*0.5+critical*12+Math.min(25,opportunityHigh/10000)+Math.max(0,80-audit)*0.25));
+    const auditValue=row.overview.latestAudit?.overall_score;
+    const audit=typeof auditValue==='number'&&Number.isFinite(auditValue)?auditValue:null;
+    const auditPenalty=audit==null?0:Math.max(0,80-audit)*0.25;
+    const attentionScore=Math.min(100,Math.round(topDecision*0.5+critical*12+Math.min(25,opportunityHigh/10000)+auditPenalty));
     return {...row,proposed,opportunityLow,opportunityHigh,topDecision,critical,executionWaiting,audit,attentionScore};
   }).sort((a,b)=>b.attentionScore-a.attentionScore),[rows]);
 
@@ -94,13 +96,13 @@ export default function AgencyPortfolioPanel(){
         <div className="recPriority">#{index+1} · {row.attentionScore}</div>
         <div>
           <strong>{row.project.name}</strong>
-          <p>{row.project.domain} · Audit {row.audit||'—'} · ROAS {row.overview.metrics30d?.roas==null?'—':Number(row.overview.metrics30d.roas).toFixed(2)}</p>
+          <p>{row.project.domain} · Audit {row.audit==null?'—':row.audit} · ROAS {row.overview.metrics30d?.roas==null?'—':Number(row.overview.metrics30d.roas).toFixed(2)}</p>
           <span>Bekleyen karar: {row.proposed.length} · Kritik/Yüksek: {row.critical} · Execution: {row.executionWaiting} · En yüksek karar skoru: {row.topDecision||'—'}</span>
           <span>Tahmini aylık fırsat: {money(row.opportunityLow)} – {money(row.opportunityHigh)}</span>
         </div>
       </article>)}
     </div>}
 
-    <div className="moduleFoot">Attention Score müşteri önceliğini; karar skoru, açık yüksek öncelikli işler, audit açığı ve tahmini ticari fırsatı birlikte kullanarak sıralar. Bu görünüm ajans operasyon planlaması içindir.</div>
+    <div className="moduleFoot">Attention Score müşteri önceliğini; karar skoru, açık yüksek öncelikli işler, audit açığı ve tahmini ticari fırsatı birlikte kullanarak sıralar. Audit henüz yoksa sıralamaya yapay bir skor cezası eklenmez. Bu görünüm ajans operasyon planlaması içindir.</div>
   </section>;
 }
