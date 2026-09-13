@@ -129,16 +129,20 @@ async function crawlSamples(baseUrl: string, homeHtml: string, limit = 20) {
   return results;
 }
 
-const scoreFromIssues = (issues: AuditIssue[], keys: string[]) => {
+const scoreFromIssues = (issues: AuditIssue[], keys: string[], sampledPageCount = 0) => {
   const selected = issues.filter((issue) => keys.includes(issue.key));
   if (!selected.length) return 100;
   let score = 100;
   for (const issue of selected) {
     if (issue.status === 'pass') continue;
     const penalty = issue.severity === 'critical' ? 30 : issue.severity === 'high' ? 18 : issue.severity === 'medium' ? 10 : 4;
-    score -= penalty;
+    const affectedPages = issue.evidence ? new Set(issue.evidence.map((item) => item.url)).size : 0;
+    const coverageWeight = issue.key.startsWith('site-') && sampledPageCount > 0 && affectedPages > 0
+      ? Math.max(0.15, Math.min(1, affectedPages / sampledPageCount))
+      : 1;
+    score -= penalty * coverageWeight;
   }
-  return Math.max(0, Math.min(100, score));
+  return Math.round(Math.max(0, Math.min(100, score)));
 };
 
 const formatEvidenceUrls = (evidence: AuditEvidence[], limit = 5) => {
@@ -289,11 +293,11 @@ export async function runAudit(inputDomain: string) {
   const aioKeys = ['entity','schema','content','aeo','og','site-titles'];
   const adsKeys = ['analytics','meta','conversion','viewport','http'];
 
-  const seoScore = scoreFromIssues(issues, seoKeys);
-  const geoScore = scoreFromIssues(issues, geoKeys);
-  const aeoScore = scoreFromIssues(issues, aeoKeys);
-  const aioScore = scoreFromIssues(issues, aioKeys);
-  const adsReadinessScore = scoreFromIssues(issues, adsKeys);
+  const seoScore = scoreFromIssues(issues, seoKeys, sampledPages.length);
+  const geoScore = scoreFromIssues(issues, geoKeys, sampledPages.length);
+  const aeoScore = scoreFromIssues(issues, aeoKeys, sampledPages.length);
+  const aioScore = scoreFromIssues(issues, aioKeys, sampledPages.length);
+  const adsReadinessScore = scoreFromIssues(issues, adsKeys, sampledPages.length);
   const overallScore = Math.round((seoScore + geoScore + aeoScore + aioScore + adsReadinessScore) / 5);
 
   return {
