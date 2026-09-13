@@ -75,7 +75,7 @@ export default function Home() {
       const data = await res.json().catch(()=>null);
       if (!res.ok) throw new Error(data?.error || 'Proje listesi yüklenemedi.');
       setProjects(data);
-      if (!selectedProject && data[0]) setSelectedProject(data[0]);
+      if (data[0]) setSelectedProject(current=>current ?? data[0]);
     } catch (e) {
       setProjectsError(e instanceof Error ? e.message : 'Proje listesi yüklenemedi.');
     } finally {
@@ -155,13 +155,15 @@ export default function Home() {
   },[projects]);
 
   async function submit(e: FormEvent) {
-    e.preventDefault(); setLoading(true); setError('');
+    e.preventDefault();
+    projectLoadGeneration.current+=1;
+    setLoading(true); setError(''); setAudit(null); setComparison(null); setAudits([]);
     try {
       const res = await fetch(`${api}/audit`, { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({domain}), cache:'no-store' });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Analiz başarısız');
       setAudit(data.audit); setComparison(data.comparison || null); setSelectedProject(data.project); setSection('audit');
-      await loadProjects(); await loadProjectModules(data.project.id);
+      await loadProjectModules(data.project.id); await loadProjects();
     } catch (e) { setError(e instanceof Error ? e.message : 'Analiz başarısız'); }
     finally { setLoading(false); }
   }
@@ -325,7 +327,7 @@ function ProjectsView({projects,selected,onSelect,loading,loadError}:{projects:P
 }
 
 function AuditView({domain,setDomain,submit,loading,audit,comparison,openIssues,criticalCount,mediumCount,verdict,audits}:{domain:string;setDomain:(v:string)=>void;submit:(e:FormEvent)=>void;loading:boolean;audit:Audit|null;comparison:Comparison;openIssues:Issue[];criticalCount:number;mediumCount:number;verdict:string;audits:AuditRow[]}) {
-  return <><form className="auditBox" onSubmit={submit}><div><label>Domain</label><input value={domain} onChange={(e)=>setDomain(e.target.value)} placeholder="domain.com" /></div><button disabled={loading||!domain}>{loading?'Analiz ediliyor…':'Analiz Başlat'}</button></form>{audits.length>0&&<div className="auditHistoryStrip"><span>Son tarama: <b>{new Date(audits[0].created_at).toLocaleString('tr-TR')}</b></span><span>Skor <b>{audits[0].overall_score}</b></span><span>{audits.length} toplam audit</span></div>}{!audit&&<div className="empty"><b>Audit Engine hazır.</b> Domain girerek SEO/GEO/AEO/AIO, Ads Readiness ve teknik görünürlüğü birlikte tara.</div>}{audit&&<><section className="executiveCard"><div className="executiveLead"><p className="eyebrow">Executive Audit Summary</p><h2>{verdict}</h2><p>{audit.domain} için {openIssues.length} açık aksiyon tespit edildi.</p></div><div className="executiveStats"><div><strong>{criticalCount}</strong><span>Kritik/Yüksek</span></div><div><strong>{mediumCount}</strong><span>Orta</span></div><div><strong>{openIssues.length}</strong><span>Toplam Aksiyon</span></div></div></section><div className="scoreGrid"><Score label="Genel" value={audit.overallScore}/><Score label="SEO" value={audit.scores.seo}/><Score label="GEO" value={audit.scores.geo}/><Score label="AEO" value={audit.scores.aeo}/><Score label="AIO" value={audit.scores.aio}/><Score label="Ads Ready" value={audit.scores.adsReadiness}/></div><div className="reportHead"><div><p className="eyebrow">{audit.domain}</p><h2>Detaylı Bulgular</h2></div><span>{openIssues.length} açık aksiyon</span></div><div className="issues">{[...audit.issues].sort((a,b)=>{if(a.status==='pass'&&b.status!=='pass')return 1;if(a.status!=='pass'&&b.status==='pass')return -1;return (severityWeight[b.severity]||0)-(severityWeight[a.severity]||0)}).map(i=><article key={i.key} className={i.status}><div className="issueTop"><strong>{i.title}</strong><span>{i.status==='pass'?'PASS':i.severity.toUpperCase()}</span></div><p>{i.detail}</p>{i.status!=='pass'&&<small>{i.recommendation}</small>}</article>)}</div>{comparison&&<div className="moduleFoot">Final Check verisi hazır. Final Check bölümünden değişimi görebilirsin.</div>}</>}</>;
+  return <><form className="auditBox" onSubmit={submit}><div><label>Domain</label><input value={domain} onChange={(e)=>setDomain(e.target.value)} placeholder="domain.com" /></div><button disabled={loading||!domain}>{loading?'Analiz ediliyor…':'Analiz Başlat'}</button></form>{audits.length>0&&<div className="auditHistoryStrip"><span>Son tarama: <b>{new Date(audits[0].created_at).toLocaleString('tr-TR')}</b></span><span>Skor <b>{audits[0].overall_score}</b></span><span>{audits.length} toplam audit</span></div>}{!audit&&<div className="empty"><b>{loading?'Audit çalışıyor.':'Audit Engine hazır.'}</b> {loading?'Yeni sonuç tamamlanana kadar önceki proje sonucu gösterilmeyecek.':'Domain girerek SEO/GEO/AEO/AIO, Ads Readiness ve teknik görünürlüğü birlikte tara.'}</div>}{audit&&<><section className="executiveCard"><div className="executiveLead"><p className="eyebrow">Executive Audit Summary</p><h2>{verdict}</h2><p>{audit.domain} için {openIssues.length} açık aksiyon tespit edildi.</p></div><div className="executiveStats"><div><strong>{criticalCount}</strong><span>Kritik/Yüksek</span></div><div><strong>{mediumCount}</strong><span>Orta</span></div><div><strong>{openIssues.length}</strong><span>Toplam Aksiyon</span></div></div></section><div className="scoreGrid"><Score label="Genel" value={audit.overallScore}/><Score label="SEO" value={audit.scores.seo}/><Score label="GEO" value={audit.scores.geo}/><Score label="AEO" value={audit.scores.aeo}/><Score label="AIO" value={audit.scores.aio}/><Score label="Ads Ready" value={audit.scores.adsReadiness}/></div><div className="reportHead"><div><p className="eyebrow">{audit.domain}</p><h2>Detaylı Bulgular</h2></div><span>{openIssues.length} açık aksiyon</span></div><div className="issues">{[...audit.issues].sort((a,b)=>{if(a.status==='pass'&&b.status!=='pass')return 1;if(a.status!=='pass'&&b.status==='pass')return -1;return (severityWeight[b.severity]||0)-(severityWeight[a.severity]||0)}).map(i=><article key={i.key} className={i.status}><div className="issueTop"><strong>{i.title}</strong><span>{i.status==='pass'?'PASS':i.severity.toUpperCase()}</span></div><p>{i.detail}</p>{i.status!=='pass'&&<small>{i.recommendation}</small>}</article>)}</div>{comparison&&<div className="moduleFoot">Final Check verisi hazır. Final Check bölümünden değişimi görebilirsin.</div>}</>}</>;
 }
 
 function FinalView({comparison,audits}:{comparison:Comparison;audits:AuditRow[]}) {
