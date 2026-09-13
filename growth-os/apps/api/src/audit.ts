@@ -145,12 +145,15 @@ const scoreFromIssues = (issues: AuditIssue[], keys: string[], sampledPageCount 
   return Math.round(Math.max(0, Math.min(100, score)));
 };
 
-const formatEvidenceUrls = (evidence: AuditEvidence[], limit = 5) => {
-  const urls = [...new Set(evidence.map((item) => item.url))];
-  if (!urls.length) return '';
-  const shown = urls.slice(0, limit);
-  const suffix = urls.length > limit ? ` (+${urls.length - limit} daha)` : '';
-  return ` Etkilenen URL: ${shown.join(', ')}${suffix}`;
+const formatEvidenceDetails = (evidence: AuditEvidence[], limit = 3) => {
+  if (!evidence.length) return '';
+  const shown = evidence.slice(0, limit).map((item) => {
+    const current = item.current?.trim() || 'Eksik';
+    const related = item.relatedUrls?.length ? ` · İlişkili: ${item.relatedUrls.join(', ')}` : '';
+    return `URL: ${item.url} · Mevcut: ${current} · Sorun: ${item.problem}${related} · Önerilen: ${item.expected || 'Düzelt'} · Doğrulama: Tekrar tara`;
+  });
+  const suffix = evidence.length > limit ? ` · +${evidence.length - limit} ek bulgu` : '';
+  return ` ${shown.join(' | ')}${suffix}`;
 };
 
 export async function runAudit(inputDomain: string) {
@@ -260,15 +263,19 @@ export async function runAudit(inputDomain: string) {
     current: `${p.h1Count} H1`,
     expected: '1 anlamlı H1',
   }));
+  const homeTitleEvidence: AuditEvidence[] = [{ url: response.url, problem: !title ? 'missing' : title.length < 20 ? 'too_short' : 'too_long', current: title, expected: '20–65 karakter, benzersiz SEO title' }];
+  const homeDescriptionEvidence: AuditEvidence[] = [{ url: response.url, problem: !description ? 'missing' : description.length < 70 ? 'too_short' : 'too_long', current: description, expected: '70–170 karakter, özgün meta description' }];
+  const homeCanonicalEvidence: AuditEvidence[] = [{ url: response.url, problem: canonical ? 'valid' : 'missing', current: canonical, expected: 'Doğru canonical URL' }];
+  const homeH1Evidence: AuditEvidence[] = [{ url: response.url, problem: h1Count === 1 ? 'valid' : 'invalid_h1_count', current: `${h1Count} H1`, expected: '1 anlamlı H1' }];
 
   const issues: AuditIssue[] = [];
   const add = (condition: boolean, issue: Omit<AuditIssue, 'status'>) => issues.push({ ...issue, status: condition ? 'pass' : 'fail' });
 
   add(response.ok, { key: 'http', title: 'HTTP erişilebilirliği', severity: 'critical', detail: `HTTP ${response.status}`, recommendation: 'Ana sayfanın 200 yanıtı verdiğini doğrula.' });
-  add(title.length >= 20 && title.length <= 65, { key: 'title', title: 'SEO title', severity: 'high', detail: title || 'Title bulunamadı', recommendation: 'Her sayfaya benzersiz ve arama niyetine uygun title ekle.' });
-  add(description.length >= 70 && description.length <= 170, { key: 'description', title: 'Meta description', severity: 'high', detail: description || 'Description bulunamadı', recommendation: 'Sayfaya ikna edici ve özgün meta description ekle.' });
-  add(Boolean(canonical), { key: 'canonical', title: 'Canonical', severity: 'high', detail: canonical || 'Canonical bulunamadı', recommendation: 'Canonical URL tanımla.' });
-  add(h1Count === 1, { key: 'h1', title: 'H1 yapısı', severity: 'medium', detail: `${h1Count} adet H1`, recommendation: 'Sayfa başına tek, açıklayıcı H1 kullan.' });
+  add(title.length >= 20 && title.length <= 65, { key: 'title', title: 'SEO title', severity: 'high', detail: `${title || 'Title bulunamadı'}.${formatEvidenceDetails(homeTitleEvidence)}`, recommendation: 'Her sayfaya benzersiz ve arama niyetine uygun title ekle.', evidence: homeTitleEvidence });
+  add(description.length >= 70 && description.length <= 170, { key: 'description', title: 'Meta description', severity: 'high', detail: `${description || 'Description bulunamadı'}.${formatEvidenceDetails(homeDescriptionEvidence)}`, recommendation: 'Sayfaya ikna edici ve özgün meta description ekle.', evidence: homeDescriptionEvidence });
+  add(Boolean(canonical), { key: 'canonical', title: 'Canonical', severity: 'high', detail: `${canonical || 'Canonical bulunamadı'}.${formatEvidenceDetails(homeCanonicalEvidence)}`, recommendation: 'Canonical URL tanımla.', evidence: homeCanonicalEvidence });
+  add(h1Count === 1, { key: 'h1', title: 'H1 yapısı', severity: 'medium', detail: `${h1Count} adet H1.${formatEvidenceDetails(homeH1Evidence)}`, recommendation: 'Sayfa başına tek, açıklayıcı H1 kullan.', evidence: homeH1Evidence });
   add(Boolean(lang), { key: 'lang', title: 'Dil bildirimi', severity: 'medium', detail: lang || 'html lang yok', recommendation: 'html lang değerini tanımla.' });
   add(Boolean(viewport), { key: 'viewport', title: 'Mobil viewport', severity: 'high', detail: viewport || 'Viewport yok', recommendation: 'Mobil uyumlu viewport meta etiketi ekle.' });
   add(robotsOk, { key: 'robots', title: 'robots.txt', severity: 'high', detail: robotsOk ? robotsUrl : 'robots.txt erişilemiyor', recommendation: 'robots.txt dosyasını yayınla ve önemli alanları engellemediğini doğrula.' });
@@ -286,10 +293,10 @@ export async function runAudit(inputDomain: string) {
   }
   add(forms > 0 || /sepete ekle|satın al|iletişim|teklif/i.test(text), { key: 'conversion', title: 'Dönüşüm yolu', severity: 'high', detail: `${forms} form`, recommendation: 'Birincil dönüşüm aksiyonunu görünür ve ölçülebilir hale getir.' });
   add(sampledPages.length >= 2, { key: 'crawl-coverage', title: 'Çoklu sayfa tarama kapsamı', severity: 'medium', detail: `${sampledPages.length} sayfa örneklendi`, recommendation: 'İç link yapısını ve taranabilir sayfa kapsamını güçlendir.' });
-  add(pagesWithoutTitle === 0 && duplicateTitles === 0, { key: 'site-titles', title: 'Site geneli title kalitesi', severity: 'high', detail: `${pagesWithoutTitle} eksik, ${duplicateTitles} tekrar eden title.${formatEvidenceUrls(titleEvidence)}`, recommendation: 'Örneklenen tüm sayfalarda benzersiz title kullan.', evidence: titleEvidence });
-  add(pagesWithoutDescription === 0 && duplicateDescriptions === 0, { key: 'site-descriptions', title: 'Site geneli description kalitesi', severity: 'medium', detail: `${pagesWithoutDescription} eksik, ${duplicateDescriptions} tekrar eden description.${formatEvidenceUrls(descriptionEvidence)}`, recommendation: 'Önemli sayfalarda özgün meta description kullan.', evidence: descriptionEvidence });
-  add(pagesWithoutCanonical === 0, { key: 'site-canonicals', title: 'Site geneli canonical', severity: 'high', detail: `${pagesWithoutCanonical} sayfada canonical eksik.${formatEvidenceUrls(canonicalEvidence)}`, recommendation: 'Taranan tüm indexlenebilir sayfalarda doğru canonical tanımla.', evidence: canonicalEvidence });
-  add(pagesBadH1 === 0, { key: 'site-h1', title: 'Site geneli H1 yapısı', severity: 'medium', detail: `${pagesBadH1} sayfada H1 sayısı hatalı.${formatEvidenceUrls(h1Evidence)}`, recommendation: 'Her önemli sayfada tek ve anlamlı H1 kullan.', evidence: h1Evidence });
+  add(pagesWithoutTitle === 0 && duplicateTitles === 0, { key: 'site-titles', title: 'Site geneli title kalitesi', severity: 'high', detail: `${pagesWithoutTitle} eksik, ${duplicateTitles} tekrar eden title.${formatEvidenceDetails(titleEvidence)}`, recommendation: 'Örneklenen tüm sayfalarda benzersiz title kullan.', evidence: titleEvidence });
+  add(pagesWithoutDescription === 0 && duplicateDescriptions === 0, { key: 'site-descriptions', title: 'Site geneli description kalitesi', severity: 'medium', detail: `${pagesWithoutDescription} eksik, ${duplicateDescriptions} tekrar eden description.${formatEvidenceDetails(descriptionEvidence)}`, recommendation: 'Önemli sayfalarda özgün meta description kullan.', evidence: descriptionEvidence });
+  add(pagesWithoutCanonical === 0, { key: 'site-canonicals', title: 'Site geneli canonical', severity: 'high', detail: `${pagesWithoutCanonical} sayfada canonical eksik.${formatEvidenceDetails(canonicalEvidence)}`, recommendation: 'Taranan tüm indexlenebilir sayfalarda doğru canonical tanımla.', evidence: canonicalEvidence });
+  add(pagesBadH1 === 0, { key: 'site-h1', title: 'Site geneli H1 yapısı', severity: 'medium', detail: `${pagesBadH1} sayfada H1 sayısı hatalı.${formatEvidenceDetails(h1Evidence)}`, recommendation: 'Her önemli sayfada tek ve anlamlı H1 kullan.', evidence: h1Evidence });
 
   const seoKeys = ['http','title','description','canonical','h1','lang','robots','sitemap','schema','content','crawl-coverage','site-titles','site-descriptions','site-canonicals','site-h1'];
   const geoKeys = ['schema','entity','content','canonical','lang','site-canonicals'];
