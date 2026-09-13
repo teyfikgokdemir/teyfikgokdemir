@@ -147,6 +147,17 @@
   color: #f0b199;
 }
 
+.hero-actions .button:not(.primary) {
+  display: none;
+}
+
+.hero-summary {
+  max-width: 44rem;
+  margin-top: 1.1rem;
+  padding-left: 1rem;
+  border-left: 1px solid rgba(224, 146, 114, .55);
+}
+
 @media (max-width: 900px) {
   #ventures .venture-card,
   #ventures .venture-card.has-image,
@@ -189,6 +200,12 @@
   #ventures .venture-card.has-image .venture-arrow {
     grid-column: 2;
     grid-row: 2;
+  }
+
+  .hero-summary {
+    max-width: none;
+    margin-top: .9rem;
+    padding-left: .8rem;
   }
 }
 
