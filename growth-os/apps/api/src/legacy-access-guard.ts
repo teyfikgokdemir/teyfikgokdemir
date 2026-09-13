@@ -68,6 +68,10 @@ export const legacyWorkspaceGuard:RequestHandler=async(req,res,next)=>{
       else{
         requireRole(actor,'analyst');
         await assertActiveProjectAccess(actor,projectId);
+        if(req.method==='POST'&&/^\/recommendations\/[^/]+\/approve$/.test(path)){
+          const body=req.body&&typeof req.body==='object'?req.body:{};
+          req.body={...body,approvedBy:actor.email};
+        }
       }
       return next();
     }
