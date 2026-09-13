@@ -54,8 +54,18 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
   useEffect(()=>{setResult(null);setError('');void load();},[projectId]);
 
   const connectedAds=integrations.filter(i=>i.status==='connected'&&['google_oauth','google_ads','meta_ads','tiktok_ads'].includes(i.provider));
+  const connectedState={
+    google:integrations.some(i=>i.status==='connected'&&['google_oauth','google_ads'].includes(i.provider)),
+    meta:integrations.some(i=>i.status==='connected'&&i.provider==='meta_ads'),
+    tiktok:integrations.some(i=>i.status==='connected'&&i.provider==='tiktok_ads')
+  };
   const mappedCount=[mappedAds.google,mappedAds.meta,mappedAds.tiktok].filter(Boolean).length;
   const canSync=mappedAds.loaded&&mappedCount>0;
+  const readiness=[
+    {key:'google',label:'Google Ads',connected:connectedState.google,mapped:mappedAds.google},
+    {key:'meta',label:'Meta Ads',connected:connectedState.meta,mapped:mappedAds.meta},
+    {key:'tiktok',label:'TikTok Ads',connected:connectedState.tiktok,mapped:mappedAds.tiktok}
+  ] as const;
 
   async function sync(){
     if(!projectId||syncing||!canSync)return;
@@ -80,6 +90,9 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
   return <div className="moduleStack">
     <section className="moduleCard">
       <div className="reportHead compact"><div><p className="eyebrow">Read-only Ads Sync</p><h2>Gerçek kampanya verilerini senkronize et</h2></div><span>{lastSync?`Son: ${new Date(lastSync).toLocaleString('tr-TR')}`:'Henüz sync yok'}</span></div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))',gap:10,marginBottom:16}}>
+        {readiness.map(item=><div key={item.key} style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:12,padding:'12px 14px',border:'1px solid rgba(255,255,255,.09)',borderRadius:12}}><span><b>{item.label}</b><small style={{display:'block',opacity:.7,marginTop:4}}>{item.mapped?'Proje hesabı eşlendi':item.connected?'OAuth bağlı, hesap seçilmedi':'Bağlantı yok'}</small></span><strong style={{fontSize:12}}>{item.mapped?'HAZIR':item.connected?'EŞLE':'BAĞLA'}</strong></div>)}
+      </div>
       <div style={{display:'flex',gap:12,alignItems:'end',flexWrap:'wrap'}}>
         <label style={{display:'grid',gap:7,minWidth:150}}><span>Veri aralığı</span><select value={days} onChange={e=>setDays(Number(e.target.value))} disabled={syncing||!canSync}><option value={7}>Son 7 gün</option><option value={14}>Son 14 gün</option><option value={30}>Son 30 gün</option><option value={60}>Son 60 gün</option><option value={90}>Son 90 gün</option></select></label>
         <button className="primaryAction" onClick={sync} disabled={syncing||!canSync}>{syncing?'Senkronize ediliyor…':'Verileri Senkronize Et'}</button>
