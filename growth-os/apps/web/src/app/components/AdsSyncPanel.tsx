@@ -38,6 +38,8 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
       const nextMetrics=await metricsRes.json() as Metric[];
       if(sequence!==loadSequence.current)return;
       setMetrics(nextMetrics);
+    } else if(sequence===loadSequence.current) {
+      setMetrics([]);
     }
     if(integrationsRes.ok){
       const nextIntegrations=await integrationsRes.json() as Integration[];
