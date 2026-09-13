@@ -101,6 +101,7 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
   },[metrics,overview,google,search]);
 
   if(!projectId)return <section className="moduleCard"><div className="empty">Growth Intelligence için proje seç.</div></section>;
+  if(loading&&!updatedAt&&!error)return <section className="moduleCard"><div className="moduleLoading"><span/> Growth Intelligence kaynakları analiz ediliyor…</div></section>;
 
   const high=signals.filter(s=>s.severity==='high').length;
   const medium=signals.filter(s=>s.severity==='medium').length;
