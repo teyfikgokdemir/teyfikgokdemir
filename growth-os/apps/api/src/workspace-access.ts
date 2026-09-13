@@ -39,7 +39,8 @@ export function actorEmailFromRequest(req:Request){
 }
 
 async function resolvedActorEmail(req:Request){
-  if(process.env.NODE_ENV==='production'&&cloudflareAccessConfigured()){
+  if(process.env.NODE_ENV==='production'){
+    if(!cloudflareAccessConfigured())throw new Error('CF_ACCESS_CONFIG_MISSING');
     return verifiedCloudflareAccessEmail(req);
   }
   return actorEmailFromRequest(req);
