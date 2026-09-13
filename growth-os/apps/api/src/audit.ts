@@ -105,6 +105,7 @@ async function crawlSamples(baseUrl: string, homeHtml: string, limit = 20) {
       u.hash = '';
       if (u.origin !== origin) return;
       if (!['http:', 'https:'].includes(u.protocol)) return;
+      if (u.searchParams.has('add-to-cart') || u.searchParams.has('wc-ajax')) return;
       if (/\.(jpg|jpeg|png|webp|gif|svg|pdf|zip|xml|txt|css|js)(\?|$)/i.test(u.pathname)) return;
       candidates.add(u.toString().replace(/\/$/, '') || origin);
     } catch {}
