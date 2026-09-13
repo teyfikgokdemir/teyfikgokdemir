@@ -2,15 +2,13 @@ interface Env {
   CANSU_ANALYTICS_DB: D1Database;
 }
 
-const SITES = new Set(['teyfikgokdemir', 'ctseg', 'mythborn', 'qct-studio', 'qct-commerce-tr', 'iran-ahli', 'olivon-agency']);
+const SITES = new Set(['teyfikgokdemir', 'ctseg', 'mythborn', 'qct-studio', 'qct-commerce-tr', 'olivon-agency']);
 const ORIGINS = new Set([
   'https://teyfikgokdemir.com',
   'https://ctseg.com.tr',
   'https://mythborn.co',
   'https://qctstudio.com',
   'https://qctcommerce.com',
-  'https://iran-ahli.pages.dev',
-  'https://atelierpersia.com',
   'https://olivonagency.com',
   'https://olivon.agency',
   'https://olivon.com.tr',
