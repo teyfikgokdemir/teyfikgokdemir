@@ -61,6 +61,7 @@ export default function Home() {
   const [actions, setActions] = useState<ActionRow[]>([]);
   const [error, setError] = useState('');
   const projectLoadGeneration = useRef(0);
+  const initialUrlProjectHandled = useRef(false);
 
   const openIssues = useMemo(() => audit ? audit.issues.filter(i=>i.status!=='pass').sort((a,b)=>(severityWeight[b.severity]||0)-(severityWeight[a.severity]||0)) : [], [audit]);
   const criticalCount = openIssues.filter(i=>['critical','high'].includes(i.severity)).length;
@@ -110,27 +111,31 @@ export default function Home() {
         finalRes.ok?finalRes.json():null
       ]);
       if(generation!==projectLoadGeneration.current)return;
-      if (overviewData) setOverview(overviewData);
-      if (auditsData) setAudits(auditsData);
-      if (alertsData) setAlerts(alertsData);
-      if (recsData) setRecommendations(recsData);
-      if (metricsData) setMetrics(metricsData);
-      if (leadsData) setLeads(leadsData);
-      if (integrationsData) setIntegrations(integrationsData);
-      if (actionsData) setActions(actionsData);
-      if (finalData) {
-        setComparison(finalData.comparison || null);
-        if (finalData.current) setAudit(finalData.current);
-      } else { setComparison(null); }
+      setOverview(overviewData || null);
+      setAudits(auditsData || []);
+      setAlerts(alertsData || []);
+      setRecommendations(recsData || []);
+      setMetrics(metricsData || []);
+      setLeads(leadsData || []);
+      setIntegrations(integrationsData || []);
+      setActions(actionsData || []);
+      setComparison(finalData?.comparison || null);
+      setAudit(finalData?.current || null);
     } finally {
       if(generation===projectLoadGeneration.current)setModuleLoading(false);
     }
   }
 
   useEffect(()=>{ loadProjects(); },[]);
-  useEffect(()=>{ if(selectedProject) loadProjectModules(selectedProject.id); },[selectedProject?.id]);
   useEffect(()=>{
-    if (!projects.length || typeof window === 'undefined') return;
+    if(!selectedProject)return;
+    projectLoadGeneration.current+=1;
+    setAudit(null); setComparison(null); setOverview(null); setAudits([]); setAlerts([]); setRecommendations([]); setMetrics([]); setLeads([]); setIntegrations([]); setActions([]);
+    void loadProjectModules(selectedProject.id);
+  },[selectedProject?.id]);
+  useEffect(()=>{
+    if (!projects.length || typeof window === 'undefined' || initialUrlProjectHandled.current) return;
+    initialUrlProjectHandled.current=true;
     const params = new URLSearchParams(window.location.search);
     const integration = params.get('integration');
     const projectId = params.get('project');
@@ -151,8 +156,15 @@ export default function Home() {
       setSection('ads');
       setError('TikTok bağlantısı tamamlanamadı. TikTok uygulama izinlerini ve Railway değişkenlerini kontrol et.');
     }
-    if (integration) window.history.replaceState({},'',window.location.pathname);
   },[projects]);
+
+  function syncProjectUrl(projectId:string) {
+    if (typeof window === 'undefined') return;
+    const url = new URL(window.location.href);
+    url.searchParams.set('project',projectId);
+    url.searchParams.delete('integration');
+    window.history.replaceState({},'',`${url.pathname}${url.search}`);
+  }
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -162,14 +174,15 @@ export default function Home() {
       const res = await fetch(`${api}/audit`, { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({domain}), cache:'no-store' });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Analiz başarısız');
-      setAudit(data.audit); setComparison(data.comparison || null); setSelectedProject(data.project); setSection('audit');
+      syncProjectUrl(data.project.id);
+      setSelectedProject(data.project); setSection('audit');
       await loadProjectModules(data.project.id); await loadProjects();
     } catch (e) { setError(e instanceof Error ? e.message : 'Analiz başarısız'); }
     finally { setLoading(false); }
   }
 
   function openProject(project:Project, target:Section='overview') {
-    setSelectedProject(project); setProjectMenuOpen(false); setSection(target);
+    syncProjectUrl(project.id); setSelectedProject(project); setProjectMenuOpen(false); setSection(target);
   }
 
   async function connectGoogle() {
