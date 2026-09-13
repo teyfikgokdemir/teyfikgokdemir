@@ -25,6 +25,46 @@ function normalizePassingAuditEvidence(value: unknown) {
   }
 }
 
+type ComparisonIssue = { key?: string; title?: string; severity?: string; status?: string };
+type ComparisonAudit = {
+  overallScore?: number;
+  scores?: { adsReadiness?: number };
+  issues?: ComparisonIssue[];
+};
+
+function normalizeFinalCheckComparison(value: unknown) {
+  if (!value || typeof value !== 'object') return;
+  const payload = value as { current?: ComparisonAudit; previous?: ComparisonAudit | null; comparison?: unknown };
+  const current = payload.current;
+  const previous = payload.previous;
+  if (!current || !previous || !Array.isArray(current.issues) || !Array.isArray(previous.issues)) return;
+
+  const previousByKey = new Map(previous.issues.map((issue) => [issue.key, issue]));
+  const currentByKey = new Map(current.issues.map((issue) => [issue.key, issue]));
+  const fixed = current.issues.filter((issue) => issue.status === 'pass' && previousByKey.get(issue.key)?.status === 'fail');
+  const stillOpen = current.issues.filter((issue) => issue.status === 'fail' && previousByKey.get(issue.key)?.status === 'fail');
+  const newIssues = current.issues.filter((issue) => issue.status === 'fail' && previousByKey.get(issue.key)?.status !== 'fail');
+  const regressed = previous.issues.filter((issue) => issue.status !== 'fail' && currentByKey.get(issue.key)?.status === 'fail');
+  const previousScore = Number(previous.overallScore || 0);
+  const currentScore = Number(current.overallScore || 0);
+  const criticalOpen = current.issues.filter((issue) => issue.status === 'fail' && ['critical', 'high'].includes(issue.severity || ''));
+  const ready = criticalOpen.length === 0 && Number(current.scores?.adsReadiness || 0) >= 80 && currentScore >= 80;
+
+  payload.comparison = {
+    previousScore,
+    currentScore,
+    scoreDelta: currentScore - previousScore,
+    fixed: fixed.map((issue) => ({ key: issue.key, title: issue.title })),
+    stillOpen: stillOpen.map((issue) => ({ key: issue.key, title: issue.title, severity: issue.severity })),
+    newIssues: newIssues.map((issue) => ({ key: issue.key, title: issue.title, severity: issue.severity })),
+    regressed: regressed.map((issue) => ({ key: issue.key, title: issue.title })),
+    readiness: ready ? 'ready' : 'not_ready',
+    verdict: ready
+      ? 'Final kontrolden geçti. Reklam hazırlık aşamasına geçilebilir.'
+      : `Final kontrol tamamlanmadı. ${criticalOpen.length} kritik/yüksek öncelikli madde açık.`,
+  };
+}
+
 function normalizeAuditPayload(payload: unknown) {
   if (!payload || typeof payload !== 'object') return payload;
   const record = payload as Record<string, unknown>;
@@ -70,6 +110,7 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
       try {
         const parsed = JSON.parse(body);
         normalizeAuditPayload(parsed);
+        if (routePath.endsWith('/final-check')) normalizeFinalCheckComparison(parsed);
         body = JSON.stringify(parsed);
       } catch {
         // Preserve upstream payload if it is not the expected audit JSON.
