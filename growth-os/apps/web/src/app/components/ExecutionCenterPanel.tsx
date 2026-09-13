@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 type Job={
   id:string;
@@ -54,38 +54,55 @@ export default function ExecutionCenterPanel({projectId}:{projectId:string|null}
   const [busyJob,setBusyJob]=useState<string|null>(null);
   const [planByJob,setPlanByJob]=useState<Record<string,JobPlanResponse>>({});
   const [resultByJob,setResultByJob]=useState<Record<string,ActionResult>>({});
+  const projectGeneration=useRef(0);
+  const loadSequence=useRef(0);
 
-  async function load(){
-    if(!projectId)return;
+  async function load(id:string,generation=projectGeneration.current){
+    const sequence=++loadSequence.current;
+    if(generation!==projectGeneration.current)return;
     setLoading(true);setError('');
     try{
-      const response=await fetch(`${api}/projects/${projectId}/execution-center`,{cache:'no-store'});
+      const response=await fetch(`${api}/projects/${id}/execution-center`,{cache:'no-store'});
       const payload=await response.json();
+      if(generation!==projectGeneration.current||sequence!==loadSequence.current)return;
       if(!response.ok)throw new Error(payload?.error||'Execution Center kayıtları okunamadı.');
       setData(payload);
-    }catch(e){setError(e instanceof Error?e.message:'Execution Center yüklenemedi.');}
-    finally{setLoading(false)}
+    }catch(e){
+      if(generation!==projectGeneration.current||sequence!==loadSequence.current)return;
+      setError(e instanceof Error?e.message:'Execution Center yüklenemedi.');
+    }finally{
+      if(generation===projectGeneration.current&&sequence===loadSequence.current)setLoading(false);
+    }
   }
 
   async function requestJob(jobId:string,action:'plan'|'prepare'|'verify'){
+    if(!projectId)return;
+    const id=projectId;
+    const generation=projectGeneration.current;
     setBusyJob(jobId);setError('');
     try{
       const url=action==='plan'?`${api}/execution-jobs/${jobId}/plan`:`${api}/execution-jobs/${jobId}/${action}`;
       const response=await fetch(url,{method:action==='plan'?'GET':'POST',headers:{'content-type':'application/json'},cache:'no-store'});
       const payload=await response.json();
+      if(generation!==projectGeneration.current)return;
       if(!response.ok)throw new Error(payload?.error||'Execution işlemi tamamlanamadı.');
       if(action==='plan')setPlanByJob(current=>({...current,[jobId]:payload as JobPlanResponse}));
       else setResultByJob(current=>({...current,[jobId]:payload as ActionResult}));
-      await load();
-    }catch(e){setError(e instanceof Error?e.message:'Execution işlemi tamamlanamadı.');}
-    finally{setBusyJob(null)}
+      await load(id,generation);
+    }catch(e){
+      if(generation===projectGeneration.current)setError(e instanceof Error?e.message:'Execution işlemi tamamlanamadı.');
+    }finally{
+      if(generation===projectGeneration.current)setBusyJob(null);
+    }
   }
 
   useEffect(()=>{
-    if(!projectId)return;
-    setPlanByJob({});setResultByJob({});
-    void load();
-    const timer=window.setInterval(()=>void load(),5000);
+    const generation=++projectGeneration.current;
+    ++loadSequence.current;
+    setData(null);setPlanByJob({});setResultByJob({});setBusyJob(null);setError('');
+    if(!projectId){setLoading(false);return;}
+    void load(projectId,generation);
+    const timer=window.setInterval(()=>void load(projectId,generation),5000);
     return()=>window.clearInterval(timer);
   },[projectId]);
 
@@ -109,7 +126,7 @@ export default function ExecutionCenterPanel({projectId}:{projectId:string|null}
         <h2>{waiting>0?`${waiting} gerçek job işlem hattında`:'Execution hattı hazır'}</h2>
         <p>Bu ekran doğrudan execution_jobs ve verification_results kayıtlarını okur.</p>
       </div>
-      <button className="primaryAction" onClick={()=>void load()} disabled={loading}>{loading?'Yenileniyor…':'Akışı Yenile'}</button>
+      <button className="primaryAction" onClick={()=>void load(projectId)} disabled={loading}>{loading?'Yenileniyor…':'Akışı Yenile'}</button>
     </div>
 
     <div className="readinessChecklist">
