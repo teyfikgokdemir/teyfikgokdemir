@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { pool } from './db.js';
 import { runAudit } from './audit.js';
 import { analyticsPerformanceForProject, selectAnalyticsPropertyForProject } from './google-analytics.js';
+import { searchConsolePerformanceForWorkspaceProject, selectSearchConsoleSiteForProject } from './google-search-console.js';
 import { clientInviteRouter } from './client-invites.js';
 import { clientPortalRouter } from './client-portal.js';
 import { projectLifecycleRouter } from './project-lifecycle.js';
@@ -86,6 +87,27 @@ workspaceRouter.post('/me/projects/:projectId/analytics/select',async(req,res)=>
     requireRole(actor,'analyst');
     await assertProjectAccess(actor,req.params.projectId);
     res.json(await selectAnalyticsPropertyForProject(req.params.projectId,parsed.data.property));
+  }catch(error){res.status(workspaceErrorStatus(error)).json({error:workspaceErrorMessage(error)})}
+});
+
+workspaceRouter.get('/me/projects/:projectId/search-console/performance',async(req,res)=>{
+  const parsed=z.object({days:z.coerce.number().int().min(1).max(90).optional()}).safeParse(req.query);
+  if(!parsed.success)return res.status(400).json({error:'Geçerli bir tarih aralığı seçin.'});
+  try{
+    const actor=await resolveWorkspaceActor(req);
+    await assertProjectAccess(actor,req.params.projectId);
+    res.json(await searchConsolePerformanceForWorkspaceProject(req.params.projectId,parsed.data.days||28));
+  }catch(error){res.status(workspaceErrorStatus(error)).json({error:workspaceErrorMessage(error)})}
+});
+
+workspaceRouter.post('/me/projects/:projectId/search-console/select',async(req,res)=>{
+  const parsed=z.object({siteUrl:z.string().min(3).max(500)}).safeParse(req.body||{});
+  if(!parsed.success)return res.status(400).json({error:'Geçerli Search Console property seçin.'});
+  try{
+    const actor=await resolveWorkspaceActor(req);
+    requireRole(actor,'analyst');
+    await assertProjectAccess(actor,req.params.projectId);
+    res.json(await selectSearchConsoleSiteForProject(req.params.projectId,parsed.data.siteUrl));
   }catch(error){res.status(workspaceErrorStatus(error)).json({error:workspaceErrorMessage(error)})}
 });
 
