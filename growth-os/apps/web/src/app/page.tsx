@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import SearchConsolePanel from './components/SearchConsolePanel';
 import AnalyticsPanel from './components/AnalyticsPanel';
 import MerchantPanel from './components/MerchantPanel';
@@ -58,6 +58,7 @@ export default function Home() {
   const [integrations, setIntegrations] = useState<IntegrationRow[]>([]);
   const [actions, setActions] = useState<ActionRow[]>([]);
   const [error, setError] = useState('');
+  const projectLoadGeneration = useRef(0);
 
   const openIssues = useMemo(() => audit ? audit.issues.filter(i=>i.status!=='pass').sort((a,b)=>(severityWeight[b.severity]||0)-(severityWeight[a.severity]||0)) : [], [audit]);
   const criticalCount = openIssues.filter(i=>['critical','high'].includes(i.severity)).length;
@@ -73,6 +74,7 @@ export default function Home() {
   }
 
   async function loadProjectModules(projectId:string) {
+    const generation=++projectLoadGeneration.current;
     setModuleLoading(true);
     try {
       const [overviewRes,auditsRes,alertsRes,recsRes,finalRes,metricsRes,leadsRes,integrationsRes,actionsRes] = await Promise.all([
@@ -86,20 +88,33 @@ export default function Home() {
         fetch(`${api}/projects/${projectId}/integrations`,{cache:'no-store'}),
         fetch(`${api}/projects/${projectId}/actions`,{cache:'no-store'})
       ]);
-      if (overviewRes.ok) setOverview(await overviewRes.json());
-      if (auditsRes.ok) setAudits(await auditsRes.json());
-      if (alertsRes.ok) setAlerts(await alertsRes.json());
-      if (recsRes.ok) setRecommendations(await recsRes.json());
-      if (metricsRes.ok) setMetrics(await metricsRes.json());
-      if (leadsRes.ok) setLeads(await leadsRes.json());
-      if (integrationsRes.ok) setIntegrations(await integrationsRes.json());
-      if (actionsRes.ok) setActions(await actionsRes.json());
-      if (finalRes.ok) {
-        const data = await finalRes.json();
-        setComparison(data.comparison || null);
-        if (data.current) setAudit(data.current);
+      const [overviewData,auditsData,alertsData,recsData,metricsData,leadsData,integrationsData,actionsData,finalData]=await Promise.all([
+        overviewRes.ok?overviewRes.json():null,
+        auditsRes.ok?auditsRes.json():null,
+        alertsRes.ok?alertsRes.json():null,
+        recsRes.ok?recsRes.json():null,
+        metricsRes.ok?metricsRes.json():null,
+        leadsRes.ok?leadsRes.json():null,
+        integrationsRes.ok?integrationsRes.json():null,
+        actionsRes.ok?actionsRes.json():null,
+        finalRes.ok?finalRes.json():null
+      ]);
+      if(generation!==projectLoadGeneration.current)return;
+      if (overviewData) setOverview(overviewData);
+      if (auditsData) setAudits(auditsData);
+      if (alertsData) setAlerts(alertsData);
+      if (recsData) setRecommendations(recsData);
+      if (metricsData) setMetrics(metricsData);
+      if (leadsData) setLeads(leadsData);
+      if (integrationsData) setIntegrations(integrationsData);
+      if (actionsData) setActions(actionsData);
+      if (finalData) {
+        setComparison(finalData.comparison || null);
+        if (finalData.current) setAudit(finalData.current);
       } else { setComparison(null); }
-    } finally { setModuleLoading(false); }
+    } finally {
+      if(generation===projectLoadGeneration.current)setModuleLoading(false);
+    }
   }
 
   useEffect(()=>{ loadProjects(); },[]);
