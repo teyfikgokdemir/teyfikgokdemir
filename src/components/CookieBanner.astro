@@ -111,18 +111,23 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
       document.head.appendChild(script);
     };
 
-    window.addEventListener('load', () => {
+    const scheduleAnalytics = () => {
       if (window.requestIdleCallback) {
         window.requestIdleCallback(loadAnalytics, { timeout: 2200 });
       } else {
         window.setTimeout(loadAnalytics, 1600);
       }
-    });
+    };
 
     const stored = localStorage.getItem(key);
-    if (stored === 'accepted' || stored === 'rejected') {
+    if (stored === 'accepted') {
+      banner.hidden = true;
+      window.addEventListener('load', scheduleAnalytics, { once: true });
+    } else if (stored === 'rejected') {
+      window['ga-disable-' + measurementId] = true;
       banner.hidden = true;
     } else {
+      window['ga-disable-' + measurementId] = true;
       banner.hidden = false;
     }
 
@@ -134,6 +139,7 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
 
     banner.querySelector('[data-cookie-reject]')?.addEventListener('click', () => {
       localStorage.setItem(key, 'rejected');
+      window['ga-disable-' + measurementId] = true;
       banner.hidden = true;
     });
   })();
