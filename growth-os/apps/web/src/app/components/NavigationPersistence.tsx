@@ -3,18 +3,31 @@
 import { useEffect } from 'react';
 
 const STORAGE_KEY='growth-os:last-section';
+const SECTION_ORDER=['overview','projects','audit','final','ads','analytics','seo','commerce','crm','profit','alerts','recommendations'] as const;
+type SectionKey=typeof SECTION_ORDER[number];
+const isSectionKey=(value:string|null):value is SectionKey=>Boolean(value&&SECTION_ORDER.includes(value as SectionKey));
 
 export default function NavigationPersistence(){
   useEffect(()=>{
     if(window.location.pathname!=='/')return;
 
     let applying=true;
-    const saved=window.sessionStorage.getItem(STORAGE_KEY);
+    const savedRaw=window.sessionStorage.getItem(STORAGE_KEY);
+    const saved=isSectionKey(savedRaw)?savedRaw:null;
+
+    const tagButtons=()=>{
+      const buttons=Array.from(document.querySelectorAll<HTMLButtonElement>('aside.side nav button'));
+      buttons.forEach((button,index)=>{
+        const section=SECTION_ORDER[index];
+        if(section)button.dataset.growthSection=section;
+      });
+      return buttons;
+    };
 
     const restore=()=>{
       if(!saved){applying=false;return true;}
-      const buttons=Array.from(document.querySelectorAll<HTMLButtonElement>('aside.side nav button'));
-      const target=buttons.find(button=>button.querySelector('span')?.textContent?.trim()===saved);
+      const buttons=tagButtons();
+      const target=buttons.find(button=>button.dataset.growthSection===saved);
       if(!target)return false;
       if(!target.classList.contains('active'))target.click();
       applying=false;
@@ -29,23 +42,24 @@ export default function NavigationPersistence(){
 
     const nav=document.querySelector('aside.side nav');
     if(!nav)return()=>window.clearInterval(timer);
+    tagButtons();
 
     const routeProjects=(event:Event)=>{
       const element=event.target instanceof Element?event.target:null;
       const button=element?.closest<HTMLButtonElement>('button');
-      const label=button?.querySelector('span')?.textContent?.trim();
-      if(label!=='Projeler')return;
+      if(button?.dataset.growthSection!=='projects')return;
       event.preventDefault();
       event.stopPropagation();
-      window.sessionStorage.setItem(STORAGE_KEY,'Projeler');
+      window.sessionStorage.setItem(STORAGE_KEY,'projects');
       window.location.assign('/projects');
     };
 
     const saveActive=()=>{
       if(applying)return;
+      tagButtons();
       const active=nav.querySelector<HTMLButtonElement>('button.active');
-      const label=active?.querySelector('span')?.textContent?.trim();
-      if(label)window.sessionStorage.setItem(STORAGE_KEY,label);
+      const section=active?.dataset.growthSection??null;
+      if(isSectionKey(section))window.sessionStorage.setItem(STORAGE_KEY,section);
     };
 
     nav.addEventListener('click',routeProjects,true);
