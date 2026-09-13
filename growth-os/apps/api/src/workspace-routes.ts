@@ -40,7 +40,7 @@ async function persistWorkspaceAudit(workspaceId:string,domain:string,projectNam
     await client.query('begin');
     await client.query("update alerts set status='resolved',resolved_at=now() where project_id=$1 and source='audit_engine' and status='open'",[project.id]);
     await client.query("update recommendations set status='superseded',decided_at=now() where project_id=$1 and source='audit_engine' and status='proposed'",[project.id]);
-    for(const issue of result.issues.filter(i=>i.status!=='pass')){
+    for(const issue of result.issues.filter(i=>i.status==='fail')){
       await client.query("insert into recommendations(project_id,source,priority,title,rationale,proposed_action,status) values($1,'audit_engine',$2,$3,$4,$5,'proposed')",[project.id,issue.severity,issue.title,issue.detail,{type:'site_fix',issueKey:issue.key,recommendation:issue.recommendation,auditId}]);
       if(['critical','high'].includes(issue.severity)){
         await client.query("insert into alerts(project_id,source,severity,title,message,status,payload) values($1,'audit_engine',$2,$3,$4,'open',$5)",[project.id,issue.severity,issue.title,issue.recommendation,{issueKey:issue.key,auditId}]);
