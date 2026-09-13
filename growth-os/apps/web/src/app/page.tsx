@@ -227,6 +227,11 @@ export default function Home() {
 
   const projectBarTitle = projectsLoading ? 'Projeler yükleniyor…' : projectsError ? 'Projeler yüklenemedi' : selectedProject?.name || 'Henüz proje yok';
   const projectBarDetail = projectsLoading ? 'Workspace verisi bekleniyor' : projectsError ? 'Erişim veya bağlantı ayarlarını kontrol et' : selectedProject?.domain || 'Yeni audit ile proje oluştur';
+  const googleConnected=integrations.some(i=>(i.provider==='google_oauth'||i.provider==='google_ads')&&i.status==='connected');
+  const metaConnected=integrations.some(i=>i.provider==='meta_ads'&&i.status==='connected');
+  const tiktokConnected=integrations.some(i=>i.provider==='tiktok_ads'&&i.status==='connected');
+  const setupIncomplete=Boolean(selectedProject)&&(!googleConnected||!metaConnected||!tiktokConnected);
+  const showSetup=setupIncomplete&&(['overview','projects','audit'] as Section[]).includes(section);
 
   return <main className="shell">
     <aside className="side">
@@ -249,6 +254,7 @@ export default function Home() {
       {projectsError && <div className="error">{projectsError}<button onClick={()=>loadProjects()}>Tekrar dene</button></div>}
       {error && <div className="error">{error}<button onClick={()=>setError('')}>×</button></div>}
       {moduleLoading && <div className="moduleLoading"><span/> Veriler güncelleniyor…</div>}
+      {showSetup&&selectedProject&&<ProjectSetup project={selectedProject} googleConnected={googleConnected} metaConnected={metaConnected} tiktokConnected={tiktokConnected} connecting={connectionLoading} onGoogle={connectGoogle} onMeta={connectMeta} onTikTok={connectTikTok} onOpenAds={()=>setSection('ads')} />}
 
       {section==='overview' && <OverviewView overview={overview} projects={projects} audits={audits} alerts={alerts} recommendations={recommendations} onNavigate={setSection} />}
       {section==='projects' && <ProjectsView projects={projects} selected={selectedProject} onSelect={openProject} loading={projectsLoading} loadError={projectsError} />}
@@ -264,6 +270,16 @@ export default function Home() {
       {section==='recommendations' && <RecommendationsView recommendations={recommendations} actions={actions} onApprove={approveRecommendation} />}
     </section>
   </main>;
+}
+
+function ProjectSetup({project,googleConnected,metaConnected,tiktokConnected,connecting,onGoogle,onMeta,onTikTok,onOpenAds}:{project:Project;googleConnected:boolean;metaConnected:boolean;tiktokConnected:boolean;connecting:'google'|'meta'|'tiktok'|null;onGoogle:()=>Promise<void>;onMeta:()=>Promise<void>;onTikTok:()=>Promise<void>;onOpenAds:()=>void}) {
+  const connectedCount=[googleConnected,metaConnected,tiktokConnected].filter(Boolean).length;
+  const steps=[
+    {key:'google',label:'Google Ads',connected:googleConnected,action:onGoogle},
+    {key:'meta',label:'Meta Ads',connected:metaConnected,action:onMeta},
+    {key:'tiktok',label:'TikTok Ads',connected:tiktokConnected,action:onTikTok},
+  ] as const;
+  return <section className="moduleCard"><div className="reportHead compact"><div><p className="eyebrow">Proje Kurulumu · {project.domain}</p><h2>Ölçüm ve reklam hesaplarını bağla.</h2></div><span>{connectedCount}/3 bağlı</span></div><div className="integrationGrid"><article className="connected"><div className="integrationIcon">✓</div><div><strong>Audit</strong><span>Proje oluşturuldu ve ilk tarama hazır.</span></div><em>TAMAM</em></article>{steps.map(step=><article key={step.key} className={step.connected?'connected':''}><div className="integrationIcon">{step.label.slice(0,1)}</div><div><strong>{step.label}</strong><span>{step.connected?'Hesap bağlantısı hazır.':'Bu proje için hesabı bağla.'}</span></div>{step.connected?<em>BAĞLI</em>:<button className="integrationConnect" disabled={!!connecting} onClick={step.action}>{connecting===step.key?'AÇILIYOR…':'BAĞLA'}</button>}</article>)}</div><div className="moduleFoot">Bağlantılar aktif projeye kaydedilir; müşteri hesapları birbirine karışmaz. <button onClick={onOpenAds}>Ads detaylarını aç →</button></div></section>;
 }
 
 function OverviewView({overview,projects,audits,alerts,recommendations,onNavigate}:{overview:Overview|null;projects:Project[];audits:AuditRow[];alerts:AlertRow[];recommendations:RecommendationRow[];onNavigate:(section:Section)=>void}) {
