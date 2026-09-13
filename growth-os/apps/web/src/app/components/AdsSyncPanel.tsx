@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 type Project={id:string;name:string;domain:string};
 type Metric={provider:string;external_campaign_id:string;campaign_name:string;metric_date:string;spend:string|number;impressions:string|number;clicks:string|number;conversions:string|number;attributed_revenue:string|number};
@@ -22,16 +22,21 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
   const [integrations,setIntegrations]=useState<Integration[]>([]);
   const [mappedAds,setMappedAds]=useState<MappedAds>({google:false,meta:false,tiktok:false,loaded:false});
   const [error,setError]=useState('');
+  const loadSequence=useRef(0);
 
   async function load(){
+    const sequence=++loadSequence.current;
     if(!projectId){setMetrics([]);setIntegrations([]);setMappedAds({google:false,meta:false,tiktok:false,loaded:false});return;}
+    const targetProjectId=projectId;
     const [metricsRes,integrationsRes]=await Promise.all([
-      fetch(`${api}/projects/${projectId}/metrics`,{cache:'no-store'}),
-      fetch(`${api}/projects/${projectId}/integrations`,{cache:'no-store'})
+      fetch(`${api}/projects/${targetProjectId}/metrics`,{cache:'no-store'}),
+      fetch(`${api}/projects/${targetProjectId}/integrations`,{cache:'no-store'})
     ]);
+    if(sequence!==loadSequence.current)return;
     if(metricsRes.ok)setMetrics(await metricsRes.json());
     if(integrationsRes.ok){
       const nextIntegrations=await integrationsRes.json() as Integration[];
+      if(sequence!==loadSequence.current)return;
       setIntegrations(nextIntegrations);
       const connected={
         google:nextIntegrations.some(i=>i.status==='connected'&&['google_oauth','google_ads'].includes(i.provider)),
@@ -40,12 +45,13 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
       };
       const next:MappedAds={google:false,meta:false,tiktok:false,loaded:true};
       const jobs:Promise<void>[]=[];
-      if(connected.google)jobs.push(fetch(`${api}/projects/${projectId}/integrations/google/resources`,{cache:'no-store'}).then(async r=>{if(r.ok){const data=await r.json();next.google=Boolean(data.selectedCustomerResourceName)}}).catch(()=>{}));
-      if(connected.meta)jobs.push(fetch(`${api}/projects/${projectId}/integrations/meta/resources`,{cache:'no-store'}).then(async r=>{if(r.ok){const data=await r.json();next.meta=Boolean(data.selectedAdAccountId)}}).catch(()=>{}));
-      if(connected.tiktok)jobs.push(fetch(`${api}/projects/${projectId}/integrations/tiktok/resources`,{cache:'no-store'}).then(async r=>{if(r.ok){const data=await r.json();next.tiktok=Boolean(data.selectedAdvertiserId)}}).catch(()=>{}));
+      if(connected.google)jobs.push(fetch(`${api}/projects/${targetProjectId}/integrations/google/resources`,{cache:'no-store'}).then(async r=>{if(r.ok){const data=await r.json();next.google=Boolean(data.selectedCustomerResourceName)}}).catch(()=>{}));
+      if(connected.meta)jobs.push(fetch(`${api}/projects/${targetProjectId}/integrations/meta/resources`,{cache:'no-store'}).then(async r=>{if(r.ok){const data=await r.json();next.meta=Boolean(data.selectedAdAccountId)}}).catch(()=>{}));
+      if(connected.tiktok)jobs.push(fetch(`${api}/projects/${targetProjectId}/integrations/tiktok/resources`,{cache:'no-store'}).then(async r=>{if(r.ok){const data=await r.json();next.tiktok=Boolean(data.selectedAdvertiserId)}}).catch(()=>{}));
       await Promise.all(jobs);
+      if(sequence!==loadSequence.current)return;
       setMappedAds(next);
-    } else {
+    } else if(sequence===loadSequence.current) {
       setIntegrations([]);
       setMappedAds({google:false,meta:false,tiktok:false,loaded:true});
     }
