@@ -48,6 +48,8 @@ export const legacyWorkspaceGuard:RequestHandler=async(req,res,next)=>{
         );
         if(rows[0]?.status==='archived')throw new Error('PROJECT_ARCHIVED');
       }
+      // Keep the legacy frontend contract while routing writes through the tenant-scoped audit path.
+      req.url=`/workspaces/${encodeURIComponent(actor.workspaceId)}/audit`;
       return next();
     }
 
