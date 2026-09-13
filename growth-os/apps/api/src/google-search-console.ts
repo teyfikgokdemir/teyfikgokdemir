@@ -67,29 +67,25 @@ export async function searchConsolePerformanceForWorkspaceProject(projectId:stri
   const end=new Date();
   const start=new Date();
   start.setUTCDate(start.getUTCDate()-(normalizedDays-1));
-  const base={startDate:isoDate(start),endDate:isoDate(end),rowLimit:1000,dataState:'final'};
+  const base={startDate:isoDate(start),endDate:isoDate(end),dataState:'final'};
   const endpoint=`https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(site.siteUrl)}/searchAnalytics/query`;
-  const queries=await postJson<SearchConsoleResponse>(endpoint,accessToken,{...base,dimensions:['query']});
-  const pages=await postJson<SearchConsoleResponse>(endpoint,accessToken,{...base,dimensions:['page']});
+  const [totals,queries,pages]=await Promise.all([
+    postJson<SearchConsoleResponse>(endpoint,accessToken,{...base,rowLimit:1}),
+    postJson<SearchConsoleResponse>(endpoint,accessToken,{...base,rowLimit:1000,dimensions:['query']}),
+    postJson<SearchConsoleResponse>(endpoint,accessToken,{...base,rowLimit:1000,dimensions:['page']})
+  ]);
+  const totalRow=totals.rows?.[0];
   const queryRows=queries.rows||[];
   const pageRows=pages.rows||[];
-  let clicks=0;
-  let impressions=0;
-  let positionWeighted=0;
-  for(const row of queryRows){
-    const rowClicks=Number(row.clicks||0);
-    const rowImpressions=Number(row.impressions||0);
-    clicks+=rowClicks;
-    impressions+=rowImpressions;
-    positionWeighted+=Number(row.position||0)*rowImpressions;
-  }
+  const clicks=Number(totalRow?.clicks||0);
+  const impressions=Number(totalRow?.impressions||0);
   return {
     matched:true,
     siteUrl:site.siteUrl,
     permissionLevel:site.permissionLevel||null,
     selectedSearchConsoleSiteUrl:metadata?.selectedSearchConsoleSiteUrl||null,
     days:normalizedDays,
-    summary:{clicks,impressions,ctr:impressions>0?clicks/impressions:0,position:impressions>0?positionWeighted/impressions:null},
+    summary:{clicks,impressions,ctr:Number(totalRow?.ctr||0),position:totalRow?.position==null?null:Number(totalRow.position)},
     queries:queryRows.slice(0,100),
     pages:pageRows.slice(0,100),
     sites
