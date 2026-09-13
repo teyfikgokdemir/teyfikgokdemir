@@ -9,7 +9,6 @@
   grid-template-rows: none !important;
   grid-auto-rows: auto;
   gap: .75rem;
-  counter-reset: venture;
   min-height: 0;
   height: auto;
   border-top: 0;
@@ -34,21 +33,9 @@
   background: #343a33;
   box-shadow: none;
   color: #f3eee6;
-  counter-increment: venture;
   grid-column: 1 !important;
   grid-row: auto !important;
   transition: color 180ms ease, background-color 180ms ease;
-}
-
-#ventures .venture-card::before {
-  content: counter(venture, decimal-leading-zero);
-  position: absolute;
-  inset: .8rem auto auto 1rem;
-  z-index: 1;
-  color: #e09272;
-  font-size: .68rem;
-  font-weight: 850;
-  letter-spacing: .12em;
 }
 
 #ventures .venture-card::after {
@@ -91,7 +78,7 @@
   display: grid;
   gap: .4rem;
   margin: 0;
-  padding-top: 1rem;
+  padding-top: 0;
 }
 
 #ventures .tag {
@@ -158,6 +145,10 @@
   border-left: 1px solid rgba(224, 146, 114, .55);
 }
 
+.positioning-strip b {
+  display: none;
+}
+
 @media (max-width: 900px) {
   #ventures .venture-card,
   #ventures .venture-card.has-image,
@@ -182,7 +173,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: .35rem .75rem;
-    padding-top: .8rem;
+    padding-top: 0;
   }
 
   #ventures .venture-card h3,
