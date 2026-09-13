@@ -3,6 +3,7 @@ const ventures = [
   { name: 'CTSEG', href: 'https://ctseg.com.tr', tone: 'ctseg', logo: '/images/ctseg-logo-transparent.png' },
   { name: 'QCT Studio', href: 'https://qctstudio.com', tone: 'studio' },
   { name: 'QCT Commerce', href: 'https://qctcommerce.com', tone: 'commerce' },
+  { name: 'Mythborn', href: 'https://mythborn.co/', tone: 'mythborn' },
 ] as const;
 
 ---
@@ -99,6 +100,10 @@ const ventures = [
   .venture-marquee__item--ctseg { color: #d78263; }
   .venture-marquee__item--studio,
   .venture-marquee__item--commerce { color: #bdb3a8; }
+
+  .venture-marquee__item--mythborn {
+    display: none;
+  }
 
   @keyframes ventureMarqueeFlow {
     to { transform: translate3d(-50%, 0, 0); }
