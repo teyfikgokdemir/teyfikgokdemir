@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 type Metric={spend:string|number;clicks:string|number;conversions:string|number;attributed_revenue:string|number};
 type Overview={targets?:{target_roas?:number|null;target_cpa?:number|null};metrics30d?:{spend?:number;revenue?:number;roas?:number|null}};
@@ -22,29 +22,44 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState('');
   const [updatedAt,setUpdatedAt]=useState<Date|null>(null);
+  const loadGeneration=useRef(0);
 
-  async function refresh(){
-    if(!projectId)return;
+  async function refresh(id:string,generation=loadGeneration.current){
+    if(generation!==loadGeneration.current)return;
     setLoading(true);setError('');
     try{
       const [m,o,g,s,r]=await Promise.all([
-        fetch(`${api}/projects/${projectId}/metrics`,{cache:'no-store'}),
-        fetch(`${api}/projects/${projectId}/overview`,{cache:'no-store'}),
-        fetch(`${api}/projects/${projectId}/integrations/google/resources`,{cache:'no-store'}),
-        fetch(`${api}/projects/${projectId}/search-console/performance?days=28`,{cache:'no-store'}),
-        fetch(`${api}/projects/${projectId}/recommendations`,{cache:'no-store'})
+        fetch(`${api}/projects/${id}/metrics`,{cache:'no-store'}),
+        fetch(`${api}/projects/${id}/overview`,{cache:'no-store'}),
+        fetch(`${api}/projects/${id}/integrations/google/resources`,{cache:'no-store'}),
+        fetch(`${api}/projects/${id}/search-console/performance?days=28`,{cache:'no-store'}),
+        fetch(`${api}/projects/${id}/recommendations`,{cache:'no-store'})
       ]);
-      if(m.ok)setMetrics(await m.json());
-      if(o.ok)setOverview(await o.json());
-      if(g.ok)setGoogle(await g.json());
-      if(s.ok)setSearch(await s.json());
-      if(r.ok){
-        const rows=await r.json() as QueueRecommendation[];
-        setQueueCount(rows.filter(x=>x.source==='growth_intelligence'&&x.status==='proposed').length);
-      }
+      const [nextMetrics,nextOverview,nextGoogle,nextSearch,nextRecommendations]=await Promise.all([
+        m.ok?m.json() as Promise<Metric[]>:Promise.resolve(null),
+        o.ok?o.json() as Promise<Overview>:Promise.resolve(null),
+        g.ok?g.json() as Promise<GoogleResources>:Promise.resolve(null),
+        s.ok?s.json() as Promise<SearchData>:Promise.resolve(null),
+        r.ok?r.json() as Promise<QueueRecommendation[]>:Promise.resolve(null)
+      ]);
+      if(generation!==loadGeneration.current)return;
+      if(nextMetrics)setMetrics(nextMetrics);
+      if(nextOverview)setOverview(nextOverview);
+      if(nextGoogle)setGoogle(nextGoogle);
+      if(nextSearch)setSearch(nextSearch);
+      if(nextRecommendations)setQueueCount(nextRecommendations.filter(x=>x.source==='growth_intelligence'&&x.status==='proposed').length);
       setUpdatedAt(new Date());
-    }catch(e){setError(e instanceof Error?e.message:'Growth Intelligence verileri okunamadı.');}
-    finally{setLoading(false)}
+    }catch(e){
+      if(generation===loadGeneration.current)setError(e instanceof Error?e.message:'Growth Intelligence verileri okunamadı.');
+    }finally{
+      if(generation===loadGeneration.current)setLoading(false);
+    }
+  }
+
+  function refreshCurrent(){
+    if(!projectId||loading)return;
+    const generation=++loadGeneration.current;
+    void refresh(projectId,generation);
   }
 
   function openRecommendations(){
@@ -53,7 +68,12 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
     target?.click();
   }
 
-  useEffect(()=>{setMetrics([]);setOverview(null);setGoogle(null);setSearch(null);setQueueCount(0);void refresh()},[projectId]);
+  useEffect(()=>{
+    const generation=++loadGeneration.current;
+    setMetrics([]);setOverview(null);setGoogle(null);setSearch(null);setQueueCount(0);setUpdatedAt(null);setError('');
+    if(!projectId){setLoading(false);return;}
+    void refresh(projectId,generation);
+  },[projectId]);
 
   const signals=useMemo<Signal[]>(()=>{
     const out:Signal[]=[];
@@ -97,7 +117,7 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
       <div><p className="eyebrow">Growth Intelligence · Executive Decision</p><h2>{statusTitle}</h2><p>{statusDetail}</p></div>
       <div style={{display:'flex',gap:10,flexWrap:'wrap',justifyContent:'flex-end'}}>
         <button onClick={openRecommendations}>Recommendations{queueCount>0?` · ${queueCount}`:''}</button>
-        <button className="primaryAction" onClick={refresh} disabled={loading}>{loading?'Analiz ediliyor…':'Karar Motorunu Yenile'}</button>
+        <button className="primaryAction" onClick={refreshCurrent} disabled={loading}>{loading?'Analiz ediliyor…':'Karar Motorunu Yenile'}</button>
       </div>
     </div>
 
