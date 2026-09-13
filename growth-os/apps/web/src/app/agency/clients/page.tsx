@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './clients.module.css';
 
 type WorkspaceMe={actor:{email:string;workspaceId:string;role:string};workspace?:{id:string;name:string;plan?:string}|null};
@@ -28,6 +28,7 @@ export default function AgencyClientsPage(){
   const [inviteUrl,setInviteUrl]=useState('');
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
+  const accessGeneration=useRef(0);
 
   const workspaceId=me?.actor.workspaceId||'';
   const selectedClient=useMemo(()=>clients.find(c=>c.id===selected)||null,[clients,selected]);
@@ -49,7 +50,8 @@ export default function AgencyClientsPage(){
     }catch(err){setError(err instanceof Error?err.message:'Müşteri yönetimi yüklenemedi.')}finally{setLoading(false)}
   }
 
-  async function loadAccess(clientId:string){
+  async function loadAccess(clientId:string,generation=accessGeneration.current){
+    if(generation!==accessGeneration.current)return;
     if(!workspaceId||!clientId){setUsers([]);setInvites([]);return}
     try{
       const [usersRes,invitesRes]=await Promise.all([
@@ -58,45 +60,59 @@ export default function AgencyClientsPage(){
       ]);
       const usersPayload=await usersRes.json();
       const invitesPayload=await invitesRes.json();
+      if(generation!==accessGeneration.current)return;
       if(!usersRes.ok)throw new Error(usersPayload?.error||'Portal kullanıcıları okunamadı.');
       if(!invitesRes.ok)throw new Error(invitesPayload?.error||'Davetler okunamadı.');
       setUsers(usersPayload);
       setInvites(invitesPayload);
-    }catch(err){setUsers([]);setInvites([]);setError(err instanceof Error?err.message:'Müşteri erişimleri okunamadı.')}
+    }catch(err){
+      if(generation!==accessGeneration.current)return;
+      setUsers([]);setInvites([]);setError(err instanceof Error?err.message:'Müşteri erişimleri okunamadı.');
+    }
   }
 
   useEffect(()=>{void loadBase()},[]);
-  useEffect(()=>{setInviteUrl('');if(selected&&workspaceId)void loadAccess(selected)},[selected,workspaceId]);
+  useEffect(()=>{
+    const generation=++accessGeneration.current;
+    setInviteUrl('');setUsers([]);setInvites([]);
+    if(selected&&workspaceId)void loadAccess(selected,generation);
+  },[selected,workspaceId]);
 
   async function submit(event:FormEvent){
     event.preventDefault();
-    if(!selectedClient||!email)return;
+    if(!selectedClient||!email||saving)return;
+    const targetClientId=selectedClient.id;
+    const generation=accessGeneration.current;
     setSaving(true);setError('');setNotice('');
     try{
-      const response=await fetch(`${api}/workspaces/${workspaceId}/clients/${selectedClient.id}/portal-users`,{
+      const response=await fetch(`${api}/workspaces/${workspaceId}/clients/${targetClientId}/portal-users`,{
         method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email,displayName:displayName||undefined,role})
       });
       const payload=await response.json();
+      if(generation!==accessGeneration.current)return;
       if(!response.ok)throw new Error(payload?.error||'Portal kullanıcısı eklenemedi.');
       setEmail('');setDisplayName('');setNotice('Portal kullanıcısı doğrudan aktifleştirildi.');
-      await loadAccess(selectedClient.id);
-    }catch(err){setError(err instanceof Error?err.message:'Portal kullanıcısı eklenemedi.')}finally{setSaving(false)}
+      await loadAccess(targetClientId,generation);
+    }catch(err){if(generation===accessGeneration.current)setError(err instanceof Error?err.message:'Portal kullanıcısı eklenemedi.')}finally{if(generation===accessGeneration.current)setSaving(false)}
   }
 
   async function createInviteFor(targetEmail:string,targetName:string,targetRole:'client_admin'|'client_viewer'){
-    if(!selectedClient||!targetEmail)return;
+    if(!selectedClient||!targetEmail||inviting)return;
+    const targetClientId=selectedClient.id;
+    const generation=accessGeneration.current;
     setInviting(true);setError('');setNotice('');setInviteUrl('');
     try{
-      const response=await fetch(`${api}/workspaces/${workspaceId}/invites/client/${selectedClient.id}`,{
+      const response=await fetch(`${api}/workspaces/${workspaceId}/invites/client/${targetClientId}`,{
         method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:targetEmail,displayName:targetName||undefined,role:targetRole,expiresInDays:7})
       });
       const payload=await response.json();
+      if(generation!==accessGeneration.current)return;
       if(!response.ok)throw new Error(payload?.error||'Davet oluşturulamadı.');
       const url=`${window.location.origin}/client/invite/${workspaceId}/${payload.token}`;
       setInviteUrl(url);
-      try{await navigator.clipboard.writeText(url);setNotice('Güvenli davet bağlantısı oluşturuldu ve panoya kopyalandı.')}catch{setNotice('Güvenli davet bağlantısı oluşturuldu.')}
-      await loadAccess(selectedClient.id);
-    }catch(err){setError(err instanceof Error?err.message:'Davet oluşturulamadı.')}finally{setInviting(false)}
+      try{await navigator.clipboard.writeText(url);if(generation===accessGeneration.current)setNotice('Güvenli davet bağlantısı oluşturuldu ve panoya kopyalandı.')}catch{if(generation===accessGeneration.current)setNotice('Güvenli davet bağlantısı oluşturuldu.')}
+      await loadAccess(targetClientId,generation);
+    }catch(err){if(generation===accessGeneration.current)setError(err instanceof Error?err.message:'Davet oluşturulamadı.')}finally{if(generation===accessGeneration.current)setInviting(false)}
   }
 
   async function createInvite(){
@@ -104,15 +120,18 @@ export default function AgencyClientsPage(){
   }
 
   async function revokeInvite(inviteId:string){
-    if(!selectedClient)return;
+    if(!selectedClient||revokingId)return;
+    const targetClientId=selectedClient.id;
+    const generation=accessGeneration.current;
     setRevokingId(inviteId);setError('');setNotice('');
     try{
-      const response=await fetch(`${api}/workspaces/${workspaceId}/invites/client/${selectedClient.id}/${inviteId}/revoke`,{method:'POST'});
+      const response=await fetch(`${api}/workspaces/${workspaceId}/invites/client/${targetClientId}/${inviteId}/revoke`,{method:'POST'});
       const payload=await response.json();
+      if(generation!==accessGeneration.current)return;
       if(!response.ok)throw new Error(payload?.error||'Davet iptal edilemedi.');
       setNotice('Bekleyen davet iptal edildi.');
-      await loadAccess(selectedClient.id);
-    }catch(err){setError(err instanceof Error?err.message:'Davet iptal edilemedi.')}finally{setRevokingId('')}
+      await loadAccess(targetClientId,generation);
+    }catch(err){if(generation===accessGeneration.current)setError(err instanceof Error?err.message:'Davet iptal edilemedi.')}finally{if(generation===accessGeneration.current)setRevokingId('')}
   }
 
   async function reissueInvite(invite:ClientInvite){
@@ -157,18 +176,18 @@ export default function AgencyClientsPage(){
               <div className={styles.portalBox}><span>Portal adresi</span><code>{portalPath}</code><small>Müşteri yalnızca kendisine atanmış projeleri, kararları ve doğrulanmış sonuçları görür.</small></div>
 
               <form className={styles.form} onSubmit={submit}>
-                <div><label>E-posta</label><input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="musteri@firma.com" required/></div>
-                <div><label>Ad Soyad</label><input value={displayName} onChange={e=>setDisplayName(e.target.value)} placeholder="İsteğe bağlı"/></div>
-                <div><label>Rol</label><select value={role} onChange={e=>setRole(e.target.value as 'client_admin'|'client_viewer')}><option value="client_viewer">client_viewer · sadece görüntüleme</option><option value="client_admin">client_admin · karar verebilir</option></select></div>
-                <button className={styles.primary} disabled={saving||inviting}>{saving?'Hazırlanıyor…':'Doğrudan Kullanıcı Oluştur'}</button>
-                <button type="button" className={styles.copy} disabled={saving||inviting||!email} onClick={()=>void createInvite()}>{inviting?'Davet hazırlanıyor…':'7 Günlük Güvenli Davet Oluştur'}</button>
+                <div><label>E-posta</label><input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="musteri@firma.com" required disabled={saving||inviting||Boolean(revokingId)}/></div>
+                <div><label>Ad Soyad</label><input value={displayName} onChange={e=>setDisplayName(e.target.value)} placeholder="İsteğe bağlı" disabled={saving||inviting||Boolean(revokingId)}/></div>
+                <div><label>Rol</label><select value={role} onChange={e=>setRole(e.target.value as 'client_admin'|'client_viewer')} disabled={saving||inviting||Boolean(revokingId)}><option value="client_viewer">client_viewer · sadece görüntüleme</option><option value="client_admin">client_admin · karar verebilir</option></select></div>
+                <button className={styles.primary} disabled={saving||inviting||Boolean(revokingId)}>{saving?'Hazırlanıyor…':'Doğrudan Kullanıcı Oluştur'}</button>
+                <button type="button" className={styles.copy} disabled={saving||inviting||Boolean(revokingId)||!email} onClick={()=>void createInvite()}>{inviting?'Davet hazırlanıyor…':'7 Günlük Güvenli Davet Oluştur'}</button>
               </form>
 
               {inviteUrl?<div className={styles.portalBox}><span>Tek kullanımlık davet</span><code>{inviteUrl}</code><small>Davet yalnızca tanımlanan e-posta hesabıyla ve 7 gün içinde kabul edilebilir. Yeni davet oluşturulursa önceki bekleyen davet iptal edilir.</small></div>:null}
 
               <div className={styles.users}>
                 <div className={styles.usersHead}><h3>Davet Geçmişi</h3><span>{invites.length}</span></div>
-                {invites.length===0?<div className={styles.empty}>Bu müşteri için henüz davet oluşturulmadı.</div>:invites.map(invite=><article key={invite.id}><div><strong>{invite.display_name||invite.email}</strong><span>{invite.email} · {invite.role}</span><span>{inviteStatus[invite.status]||invite.status} · {new Date(invite.expires_at).toLocaleString('tr-TR')}</span></div><div><b>{inviteStatus[invite.status]||invite.status}</b><small>{invite.status==='accepted'&&invite.accepted_at?`Kabul: ${new Date(invite.accepted_at).toLocaleDateString('tr-TR')}`:`Oluşturma: ${new Date(invite.created_at).toLocaleDateString('tr-TR')}`}</small><div style={{display:'flex',gap:6,justifyContent:'flex-end',marginTop:7,flexWrap:'wrap'}}>{invite.status==='pending'?<button type="button" className={styles.copy} disabled={revokingId===invite.id||inviting} onClick={()=>void revokeInvite(invite.id)}>{revokingId===invite.id?'İptal ediliyor…':'İptal Et'}</button>:null}{invite.status!=='accepted'?<button type="button" className={styles.copy} disabled={inviting||Boolean(revokingId)} onClick={()=>void reissueInvite(invite)}>Yeniden Davet</button>:null}</div></div></article>)}
+                {invites.length===0?<div className={styles.empty}>Bu müşteri için henüz davet oluşturulmadı.</div>:invites.map(invite=><article key={invite.id}><div><strong>{invite.display_name||invite.email}</strong><span>{invite.email} · {invite.role}</span><span>{inviteStatus[invite.status]||invite.status} · {new Date(invite.expires_at).toLocaleString('tr-TR')}</span></div><div><b>{inviteStatus[invite.status]||invite.status}</b><small>{invite.status==='accepted'&&invite.accepted_at?`Kabul: ${new Date(invite.accepted_at).toLocaleDateString('tr-TR')}`:`Oluşturma: ${new Date(invite.created_at).toLocaleDateString('tr-TR')}`}</small><div style={{display:'flex',gap:6,justifyContent:'flex-end',marginTop:7,flexWrap:'wrap'}}>{invite.status==='pending'?<button type="button" className={styles.copy} disabled={Boolean(revokingId)||inviting||saving} onClick={()=>void revokeInvite(invite.id)}>{revokingId===invite.id?'İptal ediliyor…':'İptal Et'}</button>:null}{invite.status!=='accepted'?<button type="button" className={styles.copy} disabled={inviting||Boolean(revokingId)||saving} onClick={()=>void reissueInvite(invite)}>Yeniden Davet</button>:null}</div></div></article>)}
               </div>
 
               <div className={styles.users}>
