@@ -43,6 +43,8 @@ export default function Home() {
   const [domain, setDomain] = useState('');
   const [loading, setLoading] = useState(false);
   const [moduleLoading, setModuleLoading] = useState(false);
+  const [projectsLoading, setProjectsLoading] = useState(true);
+  const [projectsError, setProjectsError] = useState('');
   const [connectionLoading, setConnectionLoading] = useState<'google'|'meta'|'tiktok'|null>(null);
   const [audit, setAudit] = useState<Audit | null>(null);
   const [comparison, setComparison] = useState<Comparison>(null);
@@ -66,11 +68,19 @@ export default function Home() {
   const verdict = audit ? (criticalCount===0 && audit.scores.adsReadiness>=80 ? 'Reklama hazırlık aşamasına geçilebilir' : criticalCount>0 ? 'Önce kritik teknik ve ölçüm açıklarını kapat' : 'İyileştirme tamamlanmadan ölçekleme yapma') : '';
 
   async function loadProjects() {
-    const res = await fetch(`${api}/projects`, { cache:'no-store' });
-    if (!res.ok) return;
-    const data = await res.json();
-    setProjects(data);
-    if (!selectedProject && data[0]) setSelectedProject(data[0]);
+    setProjectsLoading(true);
+    setProjectsError('');
+    try {
+      const res = await fetch(`${api}/projects`, { cache:'no-store' });
+      const data = await res.json().catch(()=>null);
+      if (!res.ok) throw new Error(data?.error || 'Proje listesi yüklenemedi.');
+      setProjects(data);
+      if (!selectedProject && data[0]) setSelectedProject(data[0]);
+    } catch (e) {
+      setProjectsError(e instanceof Error ? e.message : 'Proje listesi yüklenemedi.');
+    } finally {
+      setProjectsLoading(false);
+    }
   }
 
   async function loadProjectModules(projectId:string) {
@@ -215,6 +225,9 @@ export default function Home() {
     await loadProjectModules(selectedProject.id); return true;
   }
 
+  const projectBarTitle = projectsLoading ? 'Projeler yükleniyor…' : projectsError ? 'Projeler yüklenemedi' : selectedProject?.name || 'Henüz proje yok';
+  const projectBarDetail = projectsLoading ? 'Workspace verisi bekleniyor' : projectsError ? 'Erişim veya bağlantı ayarlarını kontrol et' : selectedProject?.domain || 'Yeni audit ile proje oluştur';
+
   return <main className="shell">
     <aside className="side">
       <div className="brand"><span>G</span><div><strong>Growth OS</strong><small>Private Control Center</small></div></div>
@@ -226,18 +239,19 @@ export default function Home() {
       <header><div><p className="eyebrow">Growth intelligence + execution</p><h1>{section==='overview'?'Büyümenin kontrol merkezi.':navItems.find(i=>i.key===section)?.label}</h1></div><span className="private">PRIVATE</span></header>
 
       <div className="projectBar">
-        <div><span>Aktif Proje</span><strong>{selectedProject?.name || 'Henüz proje yok'}</strong><small>{selectedProject?.domain || 'Yeni audit ile proje oluştur'}</small></div>
+        <div><span>Aktif Proje</span><strong>{projectBarTitle}</strong><small>{projectBarDetail}</small></div>
         {projects.length>0 && <div className="projectPicker">
           <button className={projectMenuOpen?'open':''} onClick={()=>setProjectMenuOpen(v=>!v)}><span><b>{selectedProject?.name}</b><small>{selectedProject?.domain}</small></span><i>⌄</i></button>
           {projectMenuOpen && <div className="projectPickerMenu">{projects.map(p=><button key={p.id} className={p.id===selectedProject?.id?'selected':''} onClick={()=>openProject(p,section)}><span><strong>{p.name}</strong><small>{p.domain}</small></span>{p.id===selectedProject?.id&&<em>AKTİF</em>}</button>)}</div>}
         </div>}
       </div>
 
+      {projectsError && <div className="error">{projectsError}<button onClick={()=>loadProjects()}>Tekrar dene</button></div>}
       {error && <div className="error">{error}<button onClick={()=>setError('')}>×</button></div>}
       {moduleLoading && <div className="moduleLoading"><span/> Veriler güncelleniyor…</div>}
 
       {section==='overview' && <OverviewView overview={overview} projects={projects} audits={audits} alerts={alerts} recommendations={recommendations} onNavigate={setSection} />}
-      {section==='projects' && <ProjectsView projects={projects} selected={selectedProject} onSelect={openProject} />}
+      {section==='projects' && <ProjectsView projects={projects} selected={selectedProject} onSelect={openProject} loading={projectsLoading} loadError={projectsError} />}
       {section==='audit' && <AuditView domain={domain} setDomain={setDomain} submit={submit} loading={loading} audit={audit} comparison={comparison} openIssues={openIssues} criticalCount={criticalCount} mediumCount={mediumCount} verdict={verdict} audits={audits} />}
       {section==='final' && <FinalView comparison={comparison} audits={audits} />}
       {section==='ads' && <div className="moduleStack"><AdsView projectId={selectedProject?.id||null} audit={audit} integrations={integrations} onGoogleConnect={connectGoogle} onMetaConnect={connectMeta} onTikTokConnect={connectTikTok} connecting={connectionLoading} onRefresh={loadProjectModules} /><AdsSyncPanel projectId={selectedProject?.id||null} onSynced={()=>selectedProject?loadProjectModules(selectedProject.id):undefined} /></div>}
@@ -275,8 +289,8 @@ function OverviewView({overview,projects,audits,alerts,recommendations,onNavigat
   </div>;
 }
 
-function ProjectsView({projects,selected,onSelect}:{projects:Project[];selected:Project|null;onSelect:(p:Project)=>void}) {
-  return <section className="moduleCard"><div className="reportHead compact"><div><p className="eyebrow">Portföy</p><h2>Projeler</h2></div><span>{projects.length} proje</span></div>{projects.length===0?<div className="empty">Henüz proje yok. Audit başlatınca otomatik oluşur.</div>:<div className="projectGrid">{projects.map(p=><button key={p.id} className={selected?.id===p.id?'selected':''} onClick={()=>onSelect(p)}><div className="projectAvatar">{p.domain.slice(0,1).toUpperCase()}</div><strong>{p.name}</strong><span>{p.domain}</span><small>{selected?.id===p.id?'Aktif proje':'Projeyi aç →'}</small></button>)}</div>}</section>;
+function ProjectsView({projects,selected,onSelect,loading,loadError}:{projects:Project[];selected:Project|null;onSelect:(p:Project)=>void;loading:boolean;loadError:string}) {
+  return <section className="moduleCard"><div className="reportHead compact"><div><p className="eyebrow">Portföy</p><h2>Projeler</h2></div><span>{projects.length} proje</span></div>{loading?<div className="empty">Projeler yükleniyor…</div>:loadError?<div className="empty"><b>Proje listesi yüklenemedi.</b> {loadError}</div>:projects.length===0?<div className="empty">Henüz proje yok. Audit başlatınca otomatik oluşur.</div>:<div className="projectGrid">{projects.map(p=><button key={p.id} className={selected?.id===p.id?'selected':''} onClick={()=>onSelect(p)}><div className="projectAvatar">{p.domain.slice(0,1).toUpperCase()}</div><strong>{p.name}</strong><span>{p.domain}</span><small>{selected?.id===p.id?'Aktif proje':'Projeyi aç →'}</small></button>)}</div>}</section>;
 }
 
 function AuditView({domain,setDomain,submit,loading,audit,comparison,openIssues,criticalCount,mediumCount,verdict,audits}:{domain:string;setDomain:(v:string)=>void;submit:(e:FormEvent)=>void;loading:boolean;audit:Audit|null;comparison:Comparison;openIssues:Issue[];criticalCount:number;mediumCount:number;verdict:string;audits:AuditRow[]}) {
