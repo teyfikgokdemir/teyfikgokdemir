@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 type Project={id:string;name:string;domain:string};
 type Overview={latestAudit?:{overall_score?:number}|null;openAlerts?:number;pendingRecommendations?:number;metrics30d?:{spend?:number;revenue?:number;grossProfit?:number;roas?:number|null}};
@@ -16,8 +16,10 @@ export default function AgencyPortfolioPanel(){
   const [rows,setRows]=useState<PortfolioRow[]>([]);
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState('');
+  const loadSequence=useRef(0);
 
   async function load(){
+    const sequence=++loadSequence.current;
     setLoading(true);setError('');
     try{
       const projectsResponse=await fetch(`${api}/projects`,{cache:'no-store'});
@@ -36,12 +38,16 @@ export default function AgencyPortfolioPanel(){
           execution:executionRes.ok?await executionRes.json():{}
         } as PortfolioRow;
       }));
+      if(sequence!==loadSequence.current)return;
       setRows(result);
-    }catch(err){setError(err instanceof Error?err.message:'Ajans portföyü yüklenemedi.');}
-    finally{setLoading(false)}
+    }catch(err){
+      if(sequence===loadSequence.current)setError(err instanceof Error?err.message:'Ajans portföyü yüklenemedi.');
+    }finally{
+      if(sequence===loadSequence.current)setLoading(false);
+    }
   }
 
-  useEffect(()=>{void load();const timer=window.setInterval(()=>void load(),30000);return()=>window.clearInterval(timer)},[]);
+  useEffect(()=>{void load();const timer=window.setInterval(()=>void load(),30000);return()=>{loadSequence.current++;window.clearInterval(timer)}},[]);
 
   const ranked=useMemo(()=>rows.map(row=>{
     const proposed=row.recommendations.filter(r=>r.status==='proposed');
