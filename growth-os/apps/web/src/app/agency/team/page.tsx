@@ -37,7 +37,7 @@ export default function AgencyTeamPage(){
 
   async function submit(event:FormEvent){
     event.preventDefault();
-    if(!me?.actor.workspaceId||!email)return;
+    if(!me?.actor.workspaceId||!email||saving)return;
     setSaving(true);setError('');setNotice('');
     try{
       const response=await fetch(`${api}/workspaces/${me.actor.workspaceId}/members`,{
@@ -86,9 +86,9 @@ export default function AgencyTeamPage(){
               <div><b>viewer</b><span>Verileri ve sonuçları görüntüler; değişiklik yapamaz.</span></div>
             </div>
             <form className="form" onSubmit={submit}>
-              <label><span>E-posta</span><input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="ekip@ajans.com" required disabled={!canManage}/></label>
-              <label><span>Ad Soyad</span><input value={displayName} onChange={e=>setDisplayName(e.target.value)} placeholder="İsteğe bağlı" disabled={!canManage}/></label>
-              <label><span>Rol</span><select value={role} onChange={e=>setRole(e.target.value as 'admin'|'analyst'|'viewer')} disabled={!canManage}><option value="viewer">viewer</option><option value="analyst">analyst</option><option value="admin">admin</option></select></label>
+              <label><span>E-posta</span><input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="ekip@ajans.com" required disabled={!canManage||saving}/></label>
+              <label><span>Ad Soyad</span><input value={displayName} onChange={e=>setDisplayName(e.target.value)} placeholder="İsteğe bağlı" disabled={!canManage||saving}/></label>
+              <label><span>Rol</span><select value={role} onChange={e=>setRole(e.target.value as 'admin'|'analyst'|'viewer')} disabled={!canManage||saving}><option value="viewer">viewer</option><option value="analyst">analyst</option><option value="admin">admin</option></select></label>
               <button disabled={!canManage||saving}>{saving?'Kaydediliyor…':'Ekip Üyesini Kaydet'}</button>
             </form>
             {!canManage?<div className="hint">Ekip üyeliği ve rol değişiklikleri yalnızca workspace owner tarafından yapılabilir.</div>:null}
