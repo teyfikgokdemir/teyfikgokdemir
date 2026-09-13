@@ -128,6 +128,18 @@ const panelLabels = ({
   vi: { services: 'Hệ sinh thái', approach: 'Chuyên môn', start: 'Bắt đầu trao đổi', email: 'Gửi email' },
 }[locale] || { services: 'Ecosystem', approach: 'Expertise', start: 'Start a conversation', email: 'Send an email' });
 
+const mobileLabels = ({
+  tr: { language: 'Dil', global: 'Global', operations: 'Operasyon', strategy: 'Strateji', navigation: 'Hızlı erişim', menu: 'Menü', insights: 'Analiz ve yazılar', background: 'Geçmiş ve deneyim', direct: 'Doğrudan iletişim' },
+  en: { language: 'Language', global: 'Global', operations: 'Operations', strategy: 'Strategy', navigation: 'Navigation', menu: 'Menu', insights: 'Analysis & Articles', background: 'Background', direct: 'Direct Contact' },
+  ru: { language: 'Язык', global: 'Мир', operations: 'Операции', strategy: 'Стратегия', navigation: 'Навигация', menu: 'Меню', insights: 'Аналитика и статьи', background: 'Опыт', direct: 'Прямая связь' },
+  mk: { language: 'Јазик', global: 'Глобално', operations: 'Операции', strategy: 'Стратегија', navigation: 'Навигација', menu: 'Мени', insights: 'Анализи и статии', background: 'Искуство', direct: 'Директен контакт' },
+  sr: { language: 'Jezik', global: 'Globalno', operations: 'Operacije', strategy: 'Strategija', navigation: 'Navigacija', menu: 'Meni', insights: 'Analize i članci', background: 'Iskustvo', direct: 'Direktan kontakt' },
+  sq: { language: 'Gjuha', global: 'Global', operations: 'Operacione', strategy: 'Strategji', navigation: 'Navigim', menu: 'Menu', insights: 'Analiza dhe artikuj', background: 'Përvoja', direct: 'Kontakt direkt' },
+  fa: { language: 'زبان', global: 'جهانی', operations: 'عملیات', strategy: 'راهبرد', navigation: 'ناوبری', menu: 'منو', insights: 'تحلیل و مقالات', background: 'سابقه', direct: 'ارتباط مستقیم' },
+  zh: { language: '语言', global: '全球', operations: '运营', strategy: '策略', navigation: '导航', menu: '菜单', insights: '分析与文章', background: '经历', direct: '直接联系' },
+  vi: { language: 'Ngôn ngữ', global: 'Toàn cầu', operations: 'Vận hành', strategy: 'Chiến lược', navigation: 'Điều hướng', menu: 'Menu', insights: 'Phân tích & bài viết', background: 'Kinh nghiệm', direct: 'Liên hệ trực tiếp' },
+}[locale] || { language: 'Language', global: 'Global', operations: 'Operations', strategy: 'Strategy', navigation: 'Navigation', menu: 'Menu', insights: 'Analysis & Articles', background: 'Background', direct: 'Direct Contact' });
+
 const ctsegUrl = locale === 'tr'
   ? 'https://ctseg.com.tr/'
   : locale === 'fa'
@@ -138,7 +150,7 @@ const ventureSubItems = [
   { name: 'CTSEG', desc: locale === 'tr' ? 'Ana ticari yapı · Uluslararası ticaret ve tedarik' : locale === 'zh' ? '核心商业实体 · 国际贸易与战略采购' : 'Main operating company · International Trade & Sourcing', url: ctsegUrl, external: true },
   { name: 'REFLEX · CTSEG', desc: locale === 'tr' ? 'Ürün portföyü · Tek kullanımlık ve muayene eldivenleri' : locale === 'zh' ? 'CTSEG 产品组合 · 一次性及医用防护手套' : 'CTSEG product portfolio · Disposable & examination gloves', url: reflexUrl, external: false },
   { name: 'QCT Studio', desc: locale === 'tr' ? 'Balkanlar Dijital ve Yazılım' : locale === 'zh' ? '欧洲数字化与技术开发' : 'Balkan Digital & Software', url: 'https://qctstudio.com', external: true },
-  { name: 'QCT Commerce', desc: locale === 'tr' ? 'E-Ticaret ve Büyüme Sistemleri' : locale === 'zh' ? '数字化贸易与分销系统' : 'E-Commerce & Digital Growth', url: 'https://qctcommerce.com', external: true },
+  { name: 'QCT Commerce', desc: locale === 'tr' ? 'E-Ticaret ve Büyüme Sistemleri' : locale === 'zh' ? '数字化贸易与增长' : 'E-Commerce & Digital Growth', url: 'https://qctcommerce.com', external: true },
 ];
 
 const expertiseSubItems = [
@@ -242,8 +254,8 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
       <div class="mobile-panel-body">
         <div class="myth-card">
           <div class="myth-card-head">
-            <span class="myth-card-title">DİL</span>
-            <span class="myth-card-badge">GLOBAL</span>
+            <span class="myth-card-title">{mobileLabels.language}</span>
+            <span class="myth-card-badge">{mobileLabels.global}</span>
           </div>
           <div class="myth-lang-grid">
             {allLocales.map((item) => (
@@ -264,7 +276,7 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
         <div class="myth-card">
           <div class="myth-card-head">
             <span class="myth-card-title">{panelLabels.services.toUpperCase()}</span>
-            <span class="myth-card-badge">OPERASYON</span>
+            <span class="myth-card-badge">{mobileLabels.operations}</span>
           </div>
           <div class="myth-card-grid">
             {ventureSubItems.map((item) => (
@@ -279,7 +291,7 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
         <div class="myth-card">
           <div class="myth-card-head">
             <span class="myth-card-title">{panelLabels.approach.toUpperCase()}</span>
-            <span class="myth-card-badge">STRATEJİ</span>
+            <span class="myth-card-badge">{mobileLabels.strategy}</span>
           </div>
           <div class="myth-card-grid">
             {expertiseSubItems.map((item) => (
@@ -293,8 +305,8 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
 
         <div class="myth-card">
           <div class="myth-card-head">
-            <span class="myth-card-title">{locale === 'tr' ? 'HIZLI ERİŞİM' : 'NAVIGATION'}</span>
-            <span class="myth-card-badge">MENÜ</span>
+            <span class="myth-card-title">{mobileLabels.navigation}</span>
+            <span class="myth-card-badge">{mobileLabels.menu}</span>
           </div>
           <div class="myth-card-grid">
             <a href={aiVisibilityUrl} class="myth-card-item myth-card-item--highlight">
@@ -303,15 +315,15 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
             </a>
             <a href={blogUrl} class="myth-card-item">
               <strong class="item-title">{blogLabel}</strong>
-              <span class="item-desc">Analysis & Articles</span>
+              <span class="item-desc">{mobileLabels.insights}</span>
             </a>
             <a href={sectionUrl('journey')} class="myth-card-item">
               <strong class="item-title">{aboutLabel}</strong>
-              <span class="item-desc">Background</span>
+              <span class="item-desc">{mobileLabels.background}</span>
             </a>
             <a href={sectionUrl('contact')} class="myth-card-item">
               <strong class="item-title">{navLabels.contact}</strong>
-              <span class="item-desc">Direct Connect</span>
+              <span class="item-desc">{mobileLabels.direct}</span>
             </a>
           </div>
         </div>
