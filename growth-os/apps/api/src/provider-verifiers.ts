@@ -47,7 +47,9 @@ export function verifyByProvider(context:VerificationContext):VerificationDecisi
   if(issueKey){
     const state=auditIssueStatus(context.afterState,issueKey);
     if(state==='pass')return {status:'passed',verdict:`Audit issue ${issueKey} başarıyla geçti.`,verifier:'audit_issue',evidence:{issueKey,auditIssueStatus:state}};
-    if(state)return {status:'failed',verdict:`Audit issue ${issueKey} hâlâ ${state} durumda.`,verifier:'audit_issue',evidence:{issueKey,auditIssueStatus:state}};
+    if(state==='fail')return {status:'failed',verdict:`Audit issue ${issueKey} hâlâ fail durumda.`,verifier:'audit_issue',evidence:{issueKey,auditIssueStatus:state}};
+    if(state==='warning')return {status:'inconclusive',verdict:`Audit issue ${issueKey} warning durumda; bu durum başarısız doğrulama sayılmıyor.`,verifier:'audit_issue',evidence:{issueKey,auditIssueStatus:state}};
+    if(state)return {status:'inconclusive',verdict:`Audit issue ${issueKey} beklenmeyen ${state} durumunda.`,verifier:'audit_issue',evidence:{issueKey,auditIssueStatus:state}};
     return {status:'inconclusive',verdict:`Audit issue ${issueKey} son audit içinde bulunamadı.`,verifier:'audit_issue',evidence:{issueKey,auditIssueStatus:null}};
   }
 
