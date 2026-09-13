@@ -22,6 +22,7 @@ export default function MerchantPanel({projectId}:{projectId:string|null}){
   const[loading,setLoading]=useState(false);
   const[saving,setSaving]=useState(false);
   const[error,setError]=useState('');
+  const[selectedAccount,setSelectedAccount]=useState('');
 
   async function load(id:string){
     setLoading(true);setError('');
@@ -30,21 +31,23 @@ export default function MerchantPanel({projectId}:{projectId:string|null}){
       const body=await r.json() as Resources & {error?:string};
       if(!r.ok)throw new Error(body.error||'Merchant Center verisi okunamadı.');
       if(body.errors?.merchantCommerce)throw new Error(body.errors.merchantCommerce);
-      setData(body.merchantCommerce?{...body.merchantCommerce,selectedMerchantAccountName:body.selectedMerchantAccountName||body.merchantCommerce.selectedMerchantAccountName||null}:null);
-    }catch(e){setData(null);setError(e instanceof Error?e.message:'Merchant Center verisi okunamadı.');}
+      const commerce=body.merchantCommerce?{...body.merchantCommerce,selectedMerchantAccountName:body.selectedMerchantAccountName||body.merchantCommerce.selectedMerchantAccountName||null}:null;
+      setData(commerce);
+      setSelectedAccount(commerce?.selectedMerchantAccountName||commerce?.account?.name||'');
+    }catch(e){setData(null);setSelectedAccount('');setError(e instanceof Error?e.message:'Merchant Center verisi okunamadı.');}
     finally{setLoading(false)}
   }
 
   useEffect(()=>{
-    if(!projectId){setData(null);return;}
+    if(!projectId){setData(null);setSelectedAccount('');return;}
     void load(projectId);
   },[projectId]);
 
-  async function selectAccount(accountName:string){
-    if(!projectId||!accountName)return;
+  async function selectAccount(){
+    if(!projectId||!selectedAccount||saving)return;
     setSaving(true);setError('');
     try{
-      const r=await fetch(`${api}/projects/${projectId}/integrations/google/merchant/select`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({accountName})});
+      const r=await fetch(`${api}/projects/${projectId}/integrations/google/merchant/select`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({accountName:selectedAccount})});
       const body=await r.json() as {error?:string};
       if(!r.ok)throw new Error(body.error||'Merchant Center hesabı seçilemedi.');
       await load(projectId);
@@ -54,16 +57,16 @@ export default function MerchantPanel({projectId}:{projectId:string|null}){
 
   if(!projectId)return <div className="empty">Önce bir proje seç.</div>;
   const s=data?.summary;
-  const accounts=data?.accounts||[];
-  const selected=data?.selectedMerchantAccountName||data?.account?.name||'';
+  const accounts=(data?.accounts||[]).filter(a=>a.name);
+  const currentAccount=data?.selectedMerchantAccountName||data?.account?.name||'';
+  const canOverride=Boolean(data?.matched&&accounts.length>1);
   return <div className="moduleStack">
     <section className="moduleCard">
       <div className="reportHead compact"><div><p className="eyebrow">Commerce / Merchant</p><h2>Google Merchant Center</h2></div><span>{data?.matched?'CANLI VERİ':'HESAP EŞLEME'}</span></div>
       {loading&&<div className="moduleLoading"><span/> Merchant Center verileri okunuyor…</div>}
       {error&&<div className="error">{error}</div>}
-      {accounts.length>0&&<div className="accountMappingGrid" style={{marginTop:16}}><label><span>Bu proje hangi Merchant hesabını kullansın?</span><select value={selected} disabled={saving||loading} onChange={e=>void selectAccount(e.target.value)}><option value="">Hesap seç</option>{accounts.map(a=><option key={a.name} value={a.name}>{a.accountName||a.name}{a.homepage?` · ${a.homepage}`:''}</option>)}</select><small>{saving?'Kaydediliyor…':`${accounts.length} erişilebilir Merchant hesabı bulundu.`}</small></label></div>}
-      {data?.matched&&<div className="moduleFoot">{data.account?.accountName||data.account?.name} · {data.account?.homepage||'homepage bilinmiyor'} · {data.account?.claimed===true?'domain doğrulandı':'domain durumu bilinmiyor'}</div>}
-      {data&&!data.matched&&<div className="empty"><b>Merchant hesabı otomatik eşleşmedi.</b> {data.message}<br/><small>Yukarıdaki listeden bu projeye ait Merchant hesabını seçebilirsin.</small></div>}
+      {data?.matched&&<><div className="moduleFoot">{data.account?.accountName||data.account?.name} · {data.account?.homepage||'homepage bilinmiyor'} · {data.account?.claimed===true?'domain doğrulandı':'domain durumu bilinmiyor'}</div>{canOverride&&<div className="accountMappingGrid" style={{marginTop:16}}><label><span>Yanlış Merchant hesabı eşleştiyse değiştir</span><select value={selectedAccount} disabled={saving||loading} onChange={e=>setSelectedAccount(e.target.value)}><option value="">Hesap seç</option>{accounts.map(a=><option key={a.name} value={a.name}>{a.accountName||a.name}{a.homepage?` · ${a.homepage}`:''}</option>)}</select><small>{saving?'Kaydediliyor…':`${accounts.length} erişilebilir Merchant hesabı bulundu.`}</small></label><button className="primaryAction" onClick={selectAccount} disabled={!selectedAccount||saving||selectedAccount===currentAccount}>{saving?'Kaydediliyor…':'Hesabı Değiştir'}</button></div>}</>}
+      {data&&!data.matched&&<div className="empty"><b>Merchant hesabı otomatik eşleşmedi.</b> {data.message}{accounts.length>0&&<div className="accountMappingGrid" style={{marginTop:16}}><label><span>Bu proje hangi Merchant hesabını kullansın?</span><select value={selectedAccount} disabled={saving||loading} onChange={e=>setSelectedAccount(e.target.value)}><option value="">Hesap seç</option>{accounts.map(a=><option key={a.name} value={a.name}>{a.accountName||a.name}{a.homepage?` · ${a.homepage}`:''}</option>)}</select><small>{saving?'Kaydediliyor…':`${accounts.length} erişilebilir Merchant hesabı bulundu.`}</small></label><button className="primaryAction" onClick={selectAccount} disabled={!selectedAccount||saving}>{saving?'Kaydediliyor…':'Hesabı Eşle'}</button></div>}</div>}
     </section>
 
     {data?.matched&&s&&<>
