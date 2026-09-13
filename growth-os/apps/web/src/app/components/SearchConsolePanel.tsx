@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect,useState } from 'react';
+import { useEffect,useRef,useState } from 'react';
 
 type Row={keys?:string[];clicks?:number;impressions?:number;ctr?:number;position?:number};
 type Site={siteUrl?:string;permissionLevel?:string};
@@ -15,32 +15,46 @@ export default function SearchConsolePanel({projectId}:{projectId:string|null}){
   const[saving,setSaving]=useState(false);
   const[error,setError]=useState('');
   const[selectedSite,setSelectedSite]=useState('');
+  const loadGeneration=useRef(0);
 
-  async function load(targetProjectId=projectId,targetDays=days){
-    if(!targetProjectId){setData(null);return;}
-    setLoading(true);setError('');
+  async function load(targetProjectId=projectId,targetDays=days,generation=loadGeneration.current){
+    if(!targetProjectId){if(generation===loadGeneration.current){setData(null);setSelectedSite('');setLoading(false)}return;}
+    if(generation===loadGeneration.current){setLoading(true);setError('');}
     try{
       const response=await fetch(`${api}/workspaces/me/projects/${targetProjectId}/search-console/performance?days=${targetDays}`,{cache:'no-store'});
       const body=await response.json() as Performance&{error?:string};
       if(!response.ok)throw new Error(body.error||'Search Console verisi okunamadı.');
+      if(generation!==loadGeneration.current)return;
       setData(body);
       setSelectedSite(body.selectedSearchConsoleSiteUrl||body.siteUrl||'');
-    }catch(e){setData(null);setError(e instanceof Error?e.message:'Search Console verisi okunamadı.');}
-    finally{setLoading(false);}
+    }catch(e){
+      if(generation!==loadGeneration.current)return;
+      setData(null);setSelectedSite('');setError(e instanceof Error?e.message:'Search Console verisi okunamadı.');
+    }finally{
+      if(generation===loadGeneration.current)setLoading(false);
+    }
   }
 
-  useEffect(()=>{void load(projectId,days)},[projectId,days]);
+  useEffect(()=>{
+    const generation=++loadGeneration.current;
+    setData(null);setSelectedSite('');setError('');setSaving(false);
+    void load(projectId,days,generation);
+  },[projectId,days]);
 
   async function selectSite(){
     if(!projectId||!selectedSite||saving)return;
+    const targetProjectId=projectId;
+    const targetDays=days;
+    const generation=loadGeneration.current;
     setSaving(true);setError('');
     try{
-      const response=await fetch(`${api}/workspaces/me/projects/${projectId}/search-console/select`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({siteUrl:selectedSite})});
+      const response=await fetch(`${api}/workspaces/me/projects/${targetProjectId}/search-console/select`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({siteUrl:selectedSite})});
       const body=await response.json() as {error?:string};
       if(!response.ok)throw new Error(body.error||'Search Console property kaydedilemedi.');
-      await load(projectId,days);
-    }catch(e){setError(e instanceof Error?e.message:'Search Console property kaydedilemedi.');}
-    finally{setSaving(false);}
+      if(generation!==loadGeneration.current)return;
+      await load(targetProjectId,targetDays,generation);
+    }catch(e){if(generation===loadGeneration.current)setError(e instanceof Error?e.message:'Search Console property kaydedilemedi.');}
+    finally{if(generation===loadGeneration.current)setSaving(false);}
   }
 
   const fmt=(n:number)=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(n||0);
