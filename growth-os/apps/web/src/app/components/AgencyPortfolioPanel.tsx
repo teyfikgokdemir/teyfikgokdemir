@@ -6,19 +6,20 @@ type Project={id:string;name:string;domain:string};
 type Overview={latestAudit?:{overall_score?:number}|null;openAlerts?:number;pendingRecommendations?:number;metrics30d?:{spend?:number;revenue?:number;grossProfit?:number;roas?:number|null}};
 type Recommendation={status:string;priority?:string;proposed_action?:{decision?:{score?:number;label?:string};businessImpact?:{monthlyLow?:number;monthlyHigh?:number;currency?:string;confidence?:string}}};
 type ExecutionCenter={counts?:{queued?:number;in_progress?:number;verification_pending?:number;verified?:number;failed?:number}};
-type PortfolioRow={project:Project;overview:Overview;recommendations:Recommendation[];execution:ExecutionCenter};
+type PortfolioRow={project:Project;overview:Overview;recommendations:Recommendation[];execution:ExecutionCenter;dataComplete:boolean};
+type FetchResult<T>={data:T;ok:boolean};
 
 const api='/api/growth';
 const money=(value:number)=>new Intl.NumberFormat('tr-TR',{style:'currency',currency:'TRY',maximumFractionDigits:0}).format(value||0);
 const n=(value:unknown)=>{const parsed=Number(value??0);return Number.isFinite(parsed)?parsed:0};
 
-async function fetchJson<T>(url:string,fallback:T):Promise<T>{
+async function fetchJson<T>(url:string,fallback:T):Promise<FetchResult<T>>{
   try{
     const response=await fetch(url,{cache:'no-store'});
-    if(!response.ok)return fallback;
-    return await response.json() as T;
+    if(!response.ok)return {data:fallback,ok:false};
+    return {data:await response.json() as T,ok:true};
   }catch{
-    return fallback;
+    return {data:fallback,ok:false};
   }
 }
 
@@ -36,12 +37,18 @@ export default function AgencyPortfolioPanel(){
       if(!projectsResponse.ok)throw new Error('Ajans portföyü okunamadı.');
       const projects=(await projectsResponse.json()) as Project[];
       const result=await Promise.all(projects.slice(0,50).map(async project=>{
-        const [overview,recommendations,execution]=await Promise.all([
+        const [overviewResult,recommendationsResult,executionResult]=await Promise.all([
           fetchJson<Overview>(`${api}/projects/${project.id}/overview`,{}),
           fetchJson<Recommendation[]>(`${api}/projects/${project.id}/recommendations`,[]),
           fetchJson<ExecutionCenter>(`${api}/projects/${project.id}/execution-center`,{})
         ]);
-        return {project,overview,recommendations,execution} as PortfolioRow;
+        return {
+          project,
+          overview:overviewResult.data,
+          recommendations:recommendationsResult.data,
+          execution:executionResult.data,
+          dataComplete:overviewResult.ok&&recommendationsResult.ok&&executionResult.ok
+        } as PortfolioRow;
       }));
       if(sequence!==loadSequence.current)return;
       setRows(result);
@@ -72,6 +79,7 @@ export default function AgencyPortfolioPanel(){
 
   const totals=useMemo(()=>({
     projects:ranked.length,
+    incomplete:ranked.filter(r=>!r.dataComplete).length,
     hasImpact:ranked.some(r=>r.hasImpact),
     opportunityLow:ranked.reduce((s,r)=>s+r.opportunityLow,0),
     opportunityHigh:ranked.reduce((s,r)=>s+r.opportunityHigh,0),
@@ -91,6 +99,7 @@ export default function AgencyPortfolioPanel(){
 
     <div className="readinessChecklist">
       <div><span>Proje</span><b>{totals.projects}</b></div>
+      <div><span>Eksik Veri</span><b>{totals.incomplete}</b></div>
       <div><span>Bekleyen Karar</span><b>{totals.pending}</b></div>
       <div><span>Kritik/Yüksek</span><b>{totals.critical}</b></div>
       <div><span>Execution Hattı</span><b>{totals.executionWaiting}</b></div>
@@ -105,12 +114,13 @@ export default function AgencyPortfolioPanel(){
         <div>
           <strong>{row.project.name}</strong>
           <p>{row.project.domain} · Audit {row.audit==null?'—':row.audit} · ROAS {row.overview.metrics30d?.roas==null?'—':Number(row.overview.metrics30d.roas).toFixed(2)}</p>
+          {!row.dataComplete&&<span>Veri durumu: eksik kaynak · Attention Score geçici değerlendirmedir.</span>}
           <span>Bekleyen karar: {row.proposed.length} · Kritik/Yüksek: {row.critical} · Execution: {row.executionWaiting} · En yüksek karar skoru: {row.topDecision||'—'}</span>
           <span>Tahmini aylık fırsat: {row.hasImpact?`${money(row.opportunityLow)} – ${money(row.opportunityHigh)}`:'— · impact tahmini yok'}</span>
         </div>
       </article>)}
     </div>}
 
-    <div className="moduleFoot">Attention Score müşteri önceliğini; karar skoru, açık yüksek öncelikli işler, audit açığı ve mevcutsa tahmini ticari fırsatı birlikte kullanarak sıralar. Audit veya impact tahmini henüz yoksa arayüz bunu yapay bir sıfır değer gibi göstermez. Tek bir proje kaynağı geçici olarak okunamazsa diğer müşteri verileri gösterilmeye devam eder. Bu görünüm ajans operasyon planlaması içindir.</div>
+    <div className="moduleFoot">Attention Score müşteri önceliğini; karar skoru, açık yüksek öncelikli işler, audit açığı ve mevcutsa tahmini ticari fırsatı birlikte kullanarak sıralar. Audit veya impact tahmini henüz yoksa arayüz bunu yapay bir sıfır değer gibi göstermez. Tek bir proje kaynağı geçici olarak okunamazsa diğer müşteri verileri gösterilmeye devam eder ve eksik kaynaklı skor geçici olarak işaretlenir. Bu görünüm ajans operasyon planlaması içindir.</div>
   </section>;
 }
