@@ -7,6 +7,7 @@ type Metric={provider:string;external_campaign_id:string;campaign_name:string;me
 type Integration={provider:string;account_label?:string;status:string;last_sync_at?:string};
 type SyncResult={provider:string;ok:boolean;rows:number;error?:string};
 type SyncPayload={readOnly:boolean;externalExecution:boolean;days:number;results:SyncResult[];summary?:Record<string,{spend:number;revenue:number;clicks:number;impressions:number;conversions:number;rows:number}>;intelligence?:{evaluatedCampaigns:number;alerts:number;recommendations:number}};
+type MappedAds={google:boolean;meta:boolean;tiktok:boolean;loaded:boolean};
 
 const api='/api/growth';
 const n=(v:string|number|undefined)=>Number(v||0);
@@ -19,22 +20,42 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
   const [result,setResult]=useState<SyncPayload|null>(null);
   const [metrics,setMetrics]=useState<Metric[]>([]);
   const [integrations,setIntegrations]=useState<Integration[]>([]);
+  const [mappedAds,setMappedAds]=useState<MappedAds>({google:false,meta:false,tiktok:false,loaded:false});
   const [error,setError]=useState('');
 
   async function load(){
-    if(!projectId){setMetrics([]);setIntegrations([]);return;}
+    if(!projectId){setMetrics([]);setIntegrations([]);setMappedAds({google:false,meta:false,tiktok:false,loaded:false});return;}
     const [metricsRes,integrationsRes]=await Promise.all([
       fetch(`${api}/projects/${projectId}/metrics`,{cache:'no-store'}),
       fetch(`${api}/projects/${projectId}/integrations`,{cache:'no-store'})
     ]);
     if(metricsRes.ok)setMetrics(await metricsRes.json());
-    if(integrationsRes.ok)setIntegrations(await integrationsRes.json());
+    if(integrationsRes.ok){
+      const nextIntegrations=await integrationsRes.json() as Integration[];
+      setIntegrations(nextIntegrations);
+      const connected={
+        google:nextIntegrations.some(i=>i.status==='connected'&&['google_oauth','google_ads'].includes(i.provider)),
+        meta:nextIntegrations.some(i=>i.status==='connected'&&i.provider==='meta_ads'),
+        tiktok:nextIntegrations.some(i=>i.status==='connected'&&i.provider==='tiktok_ads')
+      };
+      const next:MappedAds={google:false,meta:false,tiktok:false,loaded:true};
+      const jobs:Promise<void>[]=[];
+      if(connected.google)jobs.push(fetch(`${api}/projects/${projectId}/integrations/google/resources`,{cache:'no-store'}).then(async r=>{if(r.ok){const data=await r.json();next.google=Boolean(data.selectedCustomerResourceName)}}).catch(()=>{}));
+      if(connected.meta)jobs.push(fetch(`${api}/projects/${projectId}/integrations/meta/resources`,{cache:'no-store'}).then(async r=>{if(r.ok){const data=await r.json();next.meta=Boolean(data.selectedAdAccountId)}}).catch(()=>{}));
+      if(connected.tiktok)jobs.push(fetch(`${api}/projects/${projectId}/integrations/tiktok/resources`,{cache:'no-store'}).then(async r=>{if(r.ok){const data=await r.json();next.tiktok=Boolean(data.selectedAdvertiserId)}}).catch(()=>{}));
+      await Promise.all(jobs);
+      setMappedAds(next);
+    } else {
+      setIntegrations([]);
+      setMappedAds({google:false,meta:false,tiktok:false,loaded:true});
+    }
   }
 
   useEffect(()=>{setResult(null);setError('');void load();},[projectId]);
 
   const connectedAds=integrations.filter(i=>i.status==='connected'&&['google_oauth','google_ads','meta_ads','tiktok_ads'].includes(i.provider));
-  const canSync=connectedAds.length>0;
+  const mappedCount=[mappedAds.google,mappedAds.meta,mappedAds.tiktok].filter(Boolean).length;
+  const canSync=mappedAds.loaded&&mappedCount>0;
 
   async function sync(){
     if(!projectId||syncing||!canSync)return;
@@ -64,7 +85,8 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
         <button className="primaryAction" onClick={sync} disabled={syncing||!canSync}>{syncing?'Senkronize ediliyor…':'Verileri Senkronize Et'}</button>
         <span style={{opacity:.7,fontSize:13}}>Salt okunur · reklam yayınlama kapalı</span>
       </div>
-      {!canSync&&<div className="empty" style={{marginTop:14}}><b>Önce bir reklam hesabı bağla.</b> Google Ads, Meta Ads veya TikTok Ads bağlantısı tamamlanınca salt okunur senkronizasyon açılır.</div>}
+      {mappedAds.loaded&&!canSync&&<div className="empty" style={{marginTop:14}}><b>{connectedAds.length?'Reklam hesabını projeye eşle.':'Önce bir reklam hesabı bağla.'}</b> {connectedAds.length?'OAuth bağlantısı hazır; Ads ekranından kullanılacak Google, Meta veya TikTok reklam hesabını seç.':'Google Ads, Meta Ads veya TikTok Ads bağlantısı ve hesap eşlemesi tamamlanınca salt okunur senkronizasyon açılır.'}</div>}
+      {!mappedAds.loaded&&<div className="moduleLoading" style={{marginTop:14}}><span/> Reklam hesabı eşlemeleri kontrol ediliyor…</div>}
       {error&&<div className="error" style={{marginTop:14}}>{error}</div>}
       {result&&<div style={{display:'grid',gap:10,marginTop:18}}>{result.results.map(r=><div key={r.provider} style={{display:'flex',justifyContent:'space-between',gap:18,padding:'12px 14px',border:'1px solid rgba(255,255,255,.09)',borderRadius:12}}><span><b>{providerName(r.provider)}</b>{r.error&&<small style={{display:'block',opacity:.7,marginTop:4}}>{r.error}</small>}</span><strong>{r.ok?`${r.rows} kayıt`:'HATA'}</strong></div>)}</div>}
     </section>
@@ -79,7 +101,7 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
 
     <section className="moduleCard">
       <div className="reportHead compact"><div><p className="eyebrow">Campaign Performance</p><h2>Son kampanya metrikleri</h2></div><span>{metrics.length} kayıt</span></div>
-      {metrics.length===0?<div className="empty">{canSync?'Henüz kampanya metriği yok. Yukarıdan senkronizasyon başlat.':'Reklam hesabı bağlantısı tamamlandığında kampanya metrikleri burada görünecek.'}</div>:<div className="dataTable"><div className="dataHead"><span>Kampanya</span><span>Kaynak</span><span>Harcama</span><span>Ciro</span><span>ROAS</span></div>{metrics.slice(0,30).map((m,i)=><div className="dataRow" key={`${m.external_campaign_id}-${m.metric_date}-${i}`}><span><b>{m.campaign_name}</b><small>{m.metric_date}</small></span><span>{providerName(m.provider)}</span><span>{money(n(m.spend))}</span><span>{money(n(m.attributed_revenue))}</span><span>{n(m.spend)>0?(n(m.attributed_revenue)/n(m.spend)).toFixed(2):'—'}</span></div>)}</div>}
+      {metrics.length===0?<div className="empty">{canSync?'Henüz kampanya metriği yok. Yukarıdan senkronizasyon başlat.':connectedAds.length?'Reklam hesabı projeye eşlendiğinde kampanya metrikleri burada görünecek.':'Reklam hesabı bağlantısı tamamlandığında kampanya metrikleri burada görünecek.'}</div>:<div className="dataTable"><div className="dataHead"><span>Kampanya</span><span>Kaynak</span><span>Harcama</span><span>Ciro</span><span>ROAS</span></div>{metrics.slice(0,30).map((m,i)=><div className="dataRow" key={`${m.external_campaign_id}-${m.metric_date}-${i}`}><span><b>{m.campaign_name}</b><small>{m.metric_date}</small></span><span>{providerName(m.provider)}</span><span>{money(n(m.spend))}</span><span>{money(n(m.attributed_revenue))}</span><span>{n(m.spend)>0?(n(m.attributed_revenue)/n(m.spend)).toFixed(2):'—'}</span></div>)}</div>}
     </section>
   </div>;
 }
