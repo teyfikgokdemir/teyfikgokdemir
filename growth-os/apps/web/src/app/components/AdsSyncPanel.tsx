@@ -59,8 +59,13 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
     meta:integrations.some(i=>i.status==='connected'&&i.provider==='meta_ads'),
     tiktok:integrations.some(i=>i.status==='connected'&&i.provider==='tiktok_ads')
   };
-  const mappedCount=[mappedAds.google,mappedAds.meta,mappedAds.tiktok].filter(Boolean).length;
-  const canSync=mappedAds.loaded&&mappedCount>0;
+  const connectedCount=[connectedState.google,connectedState.meta,connectedState.tiktok].filter(Boolean).length;
+  const mappedConnectedCount=[
+    connectedState.google&&mappedAds.google,
+    connectedState.meta&&mappedAds.meta,
+    connectedState.tiktok&&mappedAds.tiktok
+  ].filter(Boolean).length;
+  const canSync=mappedAds.loaded&&connectedCount>0&&mappedConnectedCount===connectedCount;
   const readiness=[
     {key:'google',label:'Google Ads',connected:connectedState.google,mapped:mappedAds.google},
     {key:'meta',label:'Meta Ads',connected:connectedState.meta,mapped:mappedAds.meta},
@@ -98,7 +103,7 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
         <button className="primaryAction" onClick={sync} disabled={syncing||!canSync}>{syncing?'Senkronize ediliyor…':'Verileri Senkronize Et'}</button>
         <span style={{opacity:.7,fontSize:13}}>Salt okunur · reklam yayınlama kapalı</span>
       </div>
-      {mappedAds.loaded&&!canSync&&<div className="empty" style={{marginTop:14}}><b>{connectedAds.length?'Reklam hesabını projeye eşle.':'Önce bir reklam hesabı bağla.'}</b> {connectedAds.length?'OAuth bağlantısı hazır; Ads ekranından kullanılacak Google, Meta veya TikTok reklam hesabını seç.':'Google Ads, Meta Ads veya TikTok Ads bağlantısı ve hesap eşlemesi tamamlanınca salt okunur senkronizasyon açılır.'}</div>}
+      {mappedAds.loaded&&!canSync&&<div className="empty" style={{marginTop:14}}><b>{connectedCount?'Bağlı reklam hesaplarının eşlemesini tamamla.':'Önce bir reklam hesabı bağla.'}</b> {connectedCount?`${mappedConnectedCount}/${connectedCount} bağlı platform projeye eşlendi. Toplu sync, bağlı platformların tamamı hesap seçimini tamamlayınca açılır.`:'Google Ads, Meta Ads veya TikTok Ads bağlantısı ve hesap eşlemesi tamamlanınca salt okunur senkronizasyon açılır.'}</div>}
       {!mappedAds.loaded&&<div className="moduleLoading" style={{marginTop:14}}><span/> Reklam hesabı eşlemeleri kontrol ediliyor…</div>}
       {error&&<div className="error" style={{marginTop:14}}>{error}</div>}
       {result&&<div style={{display:'grid',gap:10,marginTop:18}}>{result.results.map(r=><div key={r.provider} style={{display:'flex',justifyContent:'space-between',gap:18,padding:'12px 14px',border:'1px solid rgba(255,255,255,.09)',borderRadius:12}}><span><b>{providerName(r.provider)}</b>{r.error&&<small style={{display:'block',opacity:.7,marginTop:4}}>{r.error}</small>}</span><strong>{r.ok?`${r.rows} kayıt`:'HATA'}</strong></div>)}</div>}
@@ -114,7 +119,7 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
 
     <section className="moduleCard">
       <div className="reportHead compact"><div><p className="eyebrow">Campaign Performance</p><h2>Son kampanya metrikleri</h2></div><span>{metrics.length} kayıt</span></div>
-      {metrics.length===0?<div className="empty">{canSync?'Henüz kampanya metriği yok. Yukarıdan senkronizasyon başlat.':connectedAds.length?'Reklam hesabı projeye eşlendiğinde kampanya metrikleri burada görünecek.':'Reklam hesabı bağlantısı tamamlandığında kampanya metrikleri burada görünecek.'}</div>:<div className="dataTable"><div className="dataHead"><span>Kampanya</span><span>Kaynak</span><span>Harcama</span><span>Ciro</span><span>ROAS</span></div>{metrics.slice(0,30).map((m,i)=><div className="dataRow" key={`${m.external_campaign_id}-${m.metric_date}-${i}`}><span><b>{m.campaign_name}</b><small>{m.metric_date}</small></span><span>{providerName(m.provider)}</span><span>{money(n(m.spend))}</span><span>{money(n(m.attributed_revenue))}</span><span>{n(m.spend)>0?(n(m.attributed_revenue)/n(m.spend)).toFixed(2):'—'}</span></div>)}</div>}
+      {metrics.length===0?<div className="empty">{canSync?'Henüz kampanya metriği yok. Yukarıdan senkronizasyon başlat.':connectedAds.length?'Bağlı reklam platformlarının hesap eşlemesi tamamlandığında kampanya metrikleri burada görünecek.':'Reklam hesabı bağlantısı tamamlandığında kampanya metrikleri burada görünecek.'}</div>:<div className="dataTable"><div className="dataHead"><span>Kampanya</span><span>Kaynak</span><span>Harcama</span><span>Ciro</span><span>ROAS</span></div>{metrics.slice(0,30).map((m,i)=><div className="dataRow" key={`${m.external_campaign_id}-${m.metric_date}-${i}`}><span><b>{m.campaign_name}</b><small>{m.metric_date}</small></span><span>{providerName(m.provider)}</span><span>{money(n(m.spend))}</span><span>{money(n(m.attributed_revenue))}</span><span>{n(m.spend)>0?(n(m.attributed_revenue)/n(m.spend)).toFixed(2):'—'}</span></div>)}</div>}
     </section>
   </div>;
 }
