@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 type Project={id:string;name:string;domain:string};
 type Overview={latestAudit?:{overall_score?:number}|null;metrics30d?:{spend?:number;revenue?:number;grossProfit?:number;roas?:number|null};pendingRecommendations?:number;openAlerts?:number};
 type Execution={counts?:{verified?:number;failed?:number;queued?:number;in_progress?:number;verification_pending?:number}};
-type Row={project:Project;overview:Overview;execution:Execution};
+type Row={project:Project;overview:Overview;execution:Execution;overviewLoaded:boolean;executionLoaded:boolean};
 
 const api='/api/growth';
 const n=(value:unknown)=>{const parsed=Number(value??0);return Number.isFinite(parsed)?parsed:0};
@@ -28,7 +28,13 @@ export default function AgencyReportsPage(){
             fetch(`${api}/projects/${project.id}/overview`,{cache:'no-store'}),
             fetch(`${api}/projects/${project.id}/execution-center`,{cache:'no-store'})
           ]);
-          return {project,overview:overviewRes.ok?await overviewRes.json():{},execution:executionRes.ok?await executionRes.json():{}} as Row;
+          return {
+            project,
+            overview:overviewRes.ok?await overviewRes.json():{},
+            execution:executionRes.ok?await executionRes.json():{},
+            overviewLoaded:overviewRes.ok,
+            executionLoaded:executionRes.ok
+          } as Row;
         }));
         if(active)setRows(data);
       }catch(err){if(active)setError(err instanceof Error?err.message:'Rapor merkezi yüklenemedi.')}finally{if(active)setLoading(false)}
@@ -42,8 +48,10 @@ export default function AgencyReportsPage(){
     spend:rows.reduce((sum,row)=>sum+n(row.overview.metrics30d?.spend),0),
     verified:rows.reduce((sum,row)=>sum+n(row.execution.counts?.verified),0),
     waiting:rows.reduce((sum,row)=>sum+n(row.execution.counts?.queued)+n(row.execution.counts?.in_progress)+n(row.execution.counts?.verification_pending),0),
-    alerts:rows.reduce((sum,row)=>sum+n(row.overview.openAlerts),0)
+    alerts:rows.reduce((sum,row)=>sum+n(row.overview.openAlerts),0),
+    incomplete:rows.filter(row=>!row.overviewLoaded||!row.executionLoaded).length
   }),[rows]);
+  const partialLabel=totals.incomplete>0?`kısmi toplam · ${totals.incomplete} proje eksik`:'toplam';
 
   return <main className="reportsScreen">
     <div className="reportsShell">
@@ -58,19 +66,20 @@ export default function AgencyReportsPage(){
       {!loading&&!error?<>
         <section className="summary">
           <article><span>Projeler</span><strong>{totals.projects}</strong><small>workspace kapsamında</small></article>
-          <article><span>30 Gün Gelir</span><strong>{money(totals.revenue)}</strong><small>toplam gözlenen gelir</small></article>
-          <article><span>30 Gün Harcama</span><strong>{money(totals.spend)}</strong><small>toplam reklam harcaması</small></article>
-          <article><span>Doğrulanmış</span><strong>{totals.verified}</strong><small>kanıtlanmış execution</small></article>
-          <article><span>Execution Hattı</span><strong>{totals.waiting}</strong><small>işlem / doğrulama bekleyen</small></article>
-          <article><span>Açık Alarm</span><strong>{totals.alerts}</strong><small>aktif risk sinyali</small></article>
+          <article><span>30 Gün Gelir</span><strong>{money(totals.revenue)}</strong><small>{partialLabel}</small></article>
+          <article><span>30 Gün Harcama</span><strong>{money(totals.spend)}</strong><small>{partialLabel}</small></article>
+          <article><span>Doğrulanmış</span><strong>{totals.verified}</strong><small>{totals.incomplete>0?partialLabel:'kanıtlanmış execution'}</small></article>
+          <article><span>Execution Hattı</span><strong>{totals.waiting}</strong><small>{totals.incomplete>0?partialLabel:'işlem / doğrulama bekleyen'}</small></article>
+          <article><span>Açık Alarm</span><strong>{totals.alerts}</strong><small>{totals.incomplete>0?partialLabel:'aktif risk sinyali'}</small></article>
         </section>
 
         <section className="panel">
-          <div className="panelHead"><div><small>CLIENT REPORTING</small><h2>Portföy görünümü</h2></div><span>{rows.length} proje</span></div>
+          <div className="panelHead"><div><small>CLIENT REPORTING</small><h2>Portföy görünümü</h2></div><span>{rows.length} proje{totals.incomplete>0?` · ${totals.incomplete} eksik kaynak`:''}</span></div>
           <div className="tableWrap"><table><thead><tr><th>Müşteri / Proje</th><th>Audit</th><th>Gelir</th><th>Harcama</th><th>ROAS</th><th>Bekleyen</th><th>Verified</th></tr></thead><tbody>
-            {rows.map(row=><tr key={row.project.id}><td><b>{row.project.name}</b><small>{row.project.domain}</small></td><td>{row.overview.latestAudit?.overall_score??'—'}</td><td>{money(n(row.overview.metrics30d?.revenue))}</td><td>{money(n(row.overview.metrics30d?.spend))}</td><td>{row.overview.metrics30d?.roas==null?'—':Number(row.overview.metrics30d.roas).toFixed(2)}</td><td>{n(row.execution.counts?.queued)+n(row.execution.counts?.in_progress)+n(row.execution.counts?.verification_pending)}</td><td>{n(row.execution.counts?.verified)}</td></tr>)}
+            {rows.map(row=><tr key={row.project.id}><td><b>{row.project.name}</b><small>{row.project.domain}{!row.overviewLoaded||!row.executionLoaded?' · veri eksik':''}</small></td><td>{row.overviewLoaded?(row.overview.latestAudit?.overall_score??'—'):'—'}</td><td>{row.overviewLoaded?money(n(row.overview.metrics30d?.revenue)):'—'}</td><td>{row.overviewLoaded?money(n(row.overview.metrics30d?.spend)):'—'}</td><td>{row.overviewLoaded?(row.overview.metrics30d?.roas==null?'—':Number(row.overview.metrics30d.roas).toFixed(2)):'—'}</td><td>{row.executionLoaded?n(row.execution.counts?.queued)+n(row.execution.counts?.in_progress)+n(row.execution.counts?.verification_pending):'—'}</td><td>{row.executionLoaded?n(row.execution.counts?.verified):'—'}</td></tr>)}
           </tbody></table></div>
           {rows.length===0?<div className="empty">Workspace içinde raporlanacak proje bulunmuyor.</div>:null}
+          {totals.incomplete>0?<div className="state">{totals.incomplete} projede overview veya execution kaynağı okunamadı. Bu satırlardaki eksik alanlar sıfır yerine “—” gösterilir; üst toplamlar yalnız okunabilen kaynakların kısmi toplamıdır.</div>:null}
         </section>
 
         <section className="proofGrid">
