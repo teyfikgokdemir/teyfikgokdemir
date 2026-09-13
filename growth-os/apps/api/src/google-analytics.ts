@@ -42,7 +42,7 @@ export async function selectAnalyticsPropertyForProject(projectId:string,propert
   if(!selected)throw new Error('Bu GA4 property için erişim bulunamadı.');
   const {rows}=await pool.query(`
     update integrations
-    set metadata=coalesce(metadata,'{}'::jsonb)||$2::jsonb,last_sync_at=now()
+    set metadata=coalesce(metadata,'{}'::jsonb)||$2::jsonb
     where project_id=$1 and provider='google_oauth' and status='connected'
     returning id,provider,account_label,status,mode,last_sync_at,metadata`,[projectId,JSON.stringify({selectedAnalyticsProperty:property,selectedAnalyticsPropertyName:selected.displayName||property})]);
   if(!rows[0])throw new Error('Google bağlantısı bulunamadı.');
