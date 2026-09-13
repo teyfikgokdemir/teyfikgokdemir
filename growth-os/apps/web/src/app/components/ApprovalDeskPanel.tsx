@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 type Risk='LOW'|'MEDIUM'|'HIGH'|'CRITICAL';
 type Impact='LOW'|'MEDIUM'|'HIGH';
@@ -71,25 +71,39 @@ export default function ApprovalDeskPanel({projectId,onApproved}:{projectId:stri
   const [loading,setLoading]=useState(false);
   const [approving,setApproving]=useState<string|null>(null);
   const [error,setError]=useState('');
+  const loadGeneration=useRef(0);
 
-  async function load(){
-    if(!projectId)return;
+  async function load(id:string|null=projectId,generation=loadGeneration.current){
+    if(!id||generation!==loadGeneration.current)return;
     setLoading(true);setError('');
     try{
       const [r,a,e]=await Promise.all([
-        fetch(`${api}/projects/${projectId}/recommendations`,{cache:'no-store'}),
-        fetch(`${api}/projects/${projectId}/actions`,{cache:'no-store'}),
-        fetch(`${api}/projects/${projectId}/execution-center`,{cache:'no-store'})
+        fetch(`${api}/projects/${id}/recommendations`,{cache:'no-store'}),
+        fetch(`${api}/projects/${id}/actions`,{cache:'no-store'}),
+        fetch(`${api}/projects/${id}/execution-center`,{cache:'no-store'})
       ]);
+      if(generation!==loadGeneration.current)return;
       if(!r.ok)throw new Error('Recommendation kuyruğu okunamadı.');
-      setRecommendations(await r.json());
-      if(a.ok)setActions(await a.json());
-      if(e.ok)setCenter(await e.json());
-    }catch(err){setError(err instanceof Error?err.message:'Approval Desk yüklenemedi.');}
-    finally{setLoading(false)}
+      const nextRecommendations=await r.json() as Recommendation[];
+      const nextActions=a.ok?await a.json() as Action[]:[];
+      const nextCenter=e.ok?await e.json() as Center:null;
+      if(generation!==loadGeneration.current)return;
+      setRecommendations(nextRecommendations);
+      setActions(nextActions);
+      setCenter(nextCenter);
+    }catch(err){
+      if(generation===loadGeneration.current)setError(err instanceof Error?err.message:'Approval Desk yüklenemedi.');
+    }finally{
+      if(generation===loadGeneration.current)setLoading(false);
+    }
   }
 
-  useEffect(()=>{if(projectId)void load()},[projectId]);
+  useEffect(()=>{
+    const generation=++loadGeneration.current;
+    setRecommendations([]);setActions([]);setCenter(null);setApproving(null);setError('');
+    if(!projectId){setLoading(false);return;}
+    void load(projectId,generation);
+  },[projectId]);
 
   const proposed=useMemo(()=>recommendations.filter(r=>r.status==='proposed').sort((a,b)=>{
     const scoreDelta=triageFor(b).score-triageFor(a).score;
@@ -105,16 +119,22 @@ export default function ApprovalDeskPanel({projectId,onApproved}:{projectId:stri
   const jobByRec=useMemo(()=>new Map((center?.jobs||[]).filter(j=>j.recommendation_id).map(j=>[j.recommendation_id as string,j])),[center]);
 
   async function approve(id:string){
-    if(approving)return;
+    if(!projectId||approving)return;
+    const targetProjectId=projectId;
+    const generation=loadGeneration.current;
     setApproving(id);setError('');
     try{
       const res=await fetch(`${api}/recommendations/${id}/approve`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({approvedBy:'teyfikgokdemir@outlook.com'})});
       const payload=await res.json();
+      if(generation!==loadGeneration.current)return;
       if(!res.ok)throw new Error(payload?.error||'Öneri onaylanamadı.');
-      await load();
-      onApproved?.();
-    }catch(err){setError(err instanceof Error?err.message:'Öneri onaylanamadı.');}
-    finally{setApproving(null)}
+      await load(targetProjectId,generation);
+      if(generation===loadGeneration.current)onApproved?.();
+    }catch(err){
+      if(generation===loadGeneration.current)setError(err instanceof Error?err.message:'Öneri onaylanamadı.');
+    }finally{
+      if(generation===loadGeneration.current)setApproving(null);
+    }
   }
 
   if(!projectId)return <div className="empty">Approval Desk için aktif proje seç.</div>;
