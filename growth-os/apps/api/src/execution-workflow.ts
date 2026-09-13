@@ -79,7 +79,7 @@ export async function completeExecution(jobId:string,resultState:Record<string,u
     const job=await client.query(`
       update execution_jobs
       set status='verification_pending',result_state=$2,finished_at=now(),error_message=null
-      where id=$1 and status in ('queued','in_progress')
+      where id=$1 and status='in_progress'
       returning *
     `,[jobId,resultState]);
     if(!job.rows[0]){
