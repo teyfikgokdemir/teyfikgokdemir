@@ -14,6 +14,8 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
   // the client-controlled x-growth-user-email header to the API.
   const accessEmail = request.headers.get('cf-access-authenticated-user-email');
   if (accessEmail) headers.set('cf-access-authenticated-user-email', accessEmail);
+  const accessJwt = request.headers.get('cf-access-jwt-assertion');
+  if (accessJwt) headers.set('cf-access-jwt-assertion', accessJwt);
 
   const init: RequestInit = {
     method: request.method,

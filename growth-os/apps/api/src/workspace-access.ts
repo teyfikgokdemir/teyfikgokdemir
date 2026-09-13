@@ -1,5 +1,6 @@
 import type { Request } from 'express';
 import { pool } from './db.js';
+import { cloudflareAccessConfigured, verifiedCloudflareAccessEmail } from './cloudflare-access.js';
 
 export type WorkspaceRole='owner'|'admin'|'analyst'|'viewer';
 export type WorkspaceActor={
@@ -37,8 +38,15 @@ export function actorEmailFromRequest(req:Request){
   return normalizeEmail(developmentEmail);
 }
 
+async function resolvedActorEmail(req:Request){
+  if(process.env.NODE_ENV==='production'&&cloudflareAccessConfigured()){
+    return verifiedCloudflareAccessEmail(req);
+  }
+  return actorEmailFromRequest(req);
+}
+
 export async function resolveWorkspaceActor(req:Request,workspaceId?:string):Promise<WorkspaceActor>{
-  const email=actorEmailFromRequest(req);
+  const email=await resolvedActorEmail(req);
   if(!email)throw new Error('WORKSPACE_ACCESS_DENIED');
   if(workspaceId&&!isUuid(workspaceId))throw new Error('WORKSPACE_ID_INVALID');
 
@@ -98,6 +106,8 @@ export async function listWorkspaceProjects(actor:WorkspaceActor){
 export function workspaceErrorStatus(error:unknown){
   const message=error instanceof Error?error.message:'';
   if(message==='PROJECT_ID_INVALID'||message==='WORKSPACE_ID_INVALID')return 400;
+  if(message==='CF_ACCESS_CONFIG_MISSING'||message==='CF_ACCESS_JWKS_UNAVAILABLE')return 503;
+  if(message==='CF_ACCESS_JWT_MISSING'||message==='CF_ACCESS_JWT_INVALID'||message==='CF_ACCESS_IDENTITY_MISMATCH')return 403;
   if(message==='WORKSPACE_ACCESS_DENIED'||message==='PROJECT_ACCESS_DENIED')return 403;
   if(message==='WORKSPACE_ROLE_DENIED')return 403;
   if(message==='PROJECT_ARCHIVED')return 409;
@@ -108,6 +118,10 @@ export function workspaceErrorMessage(error:unknown){
   const message=error instanceof Error?error.message:'';
   if(message==='PROJECT_ID_INVALID')return 'Geçerli bir proje kimliği gerekli.';
   if(message==='WORKSPACE_ID_INVALID')return 'Geçerli bir workspace kimliği gerekli.';
+  if(message==='CF_ACCESS_CONFIG_MISSING')return 'Cloudflare Access doğrulama ayarları eksik.';
+  if(message==='CF_ACCESS_JWKS_UNAVAILABLE')return 'Cloudflare Access doğrulama anahtarlarına ulaşılamadı.';
+  if(message==='CF_ACCESS_JWT_MISSING')return 'Cloudflare Access doğrulama jetonu bulunamadı.';
+  if(message==='CF_ACCESS_JWT_INVALID'||message==='CF_ACCESS_IDENTITY_MISMATCH')return 'Cloudflare Access kimliği doğrulanamadı.';
   if(message==='WORKSPACE_ACCESS_DENIED')return 'Bu workspace için aktif üyelik bulunamadı.';
   if(message==='PROJECT_ACCESS_DENIED')return 'Bu projeye erişim yetkiniz yok.';
   if(message==='WORKSPACE_ROLE_DENIED')return 'Bu işlem için rolünüz yeterli değil.';
