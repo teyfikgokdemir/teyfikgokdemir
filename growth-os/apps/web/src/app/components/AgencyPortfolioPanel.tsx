@@ -12,6 +12,16 @@ const api='/api/growth';
 const money=(value:number)=>new Intl.NumberFormat('tr-TR',{style:'currency',currency:'TRY',maximumFractionDigits:0}).format(value||0);
 const n=(value:unknown)=>{const parsed=Number(value??0);return Number.isFinite(parsed)?parsed:0};
 
+async function fetchJson<T>(url:string,fallback:T):Promise<T>{
+  try{
+    const response=await fetch(url,{cache:'no-store'});
+    if(!response.ok)return fallback;
+    return await response.json() as T;
+  }catch{
+    return fallback;
+  }
+}
+
 export default function AgencyPortfolioPanel(){
   const [rows,setRows]=useState<PortfolioRow[]>([]);
   const [loading,setLoading]=useState(false);
@@ -26,17 +36,12 @@ export default function AgencyPortfolioPanel(){
       if(!projectsResponse.ok)throw new Error('Ajans portföyü okunamadı.');
       const projects=(await projectsResponse.json()) as Project[];
       const result=await Promise.all(projects.slice(0,50).map(async project=>{
-        const [overviewRes,recommendationsRes,executionRes]=await Promise.all([
-          fetch(`${api}/projects/${project.id}/overview`,{cache:'no-store'}),
-          fetch(`${api}/projects/${project.id}/recommendations`,{cache:'no-store'}),
-          fetch(`${api}/projects/${project.id}/execution-center`,{cache:'no-store'})
+        const [overview,recommendations,execution]=await Promise.all([
+          fetchJson<Overview>(`${api}/projects/${project.id}/overview`,{}),
+          fetchJson<Recommendation[]>(`${api}/projects/${project.id}/recommendations`,[]),
+          fetchJson<ExecutionCenter>(`${api}/projects/${project.id}/execution-center`,{})
         ]);
-        return {
-          project,
-          overview:overviewRes.ok?await overviewRes.json():{},
-          recommendations:recommendationsRes.ok?await recommendationsRes.json():[],
-          execution:executionRes.ok?await executionRes.json():{}
-        } as PortfolioRow;
+        return {project,overview,recommendations,execution} as PortfolioRow;
       }));
       if(sequence!==loadSequence.current)return;
       setRows(result);
@@ -106,6 +111,6 @@ export default function AgencyPortfolioPanel(){
       </article>)}
     </div>}
 
-    <div className="moduleFoot">Attention Score müşteri önceliğini; karar skoru, açık yüksek öncelikli işler, audit açığı ve mevcutsa tahmini ticari fırsatı birlikte kullanarak sıralar. Audit veya impact tahmini henüz yoksa arayüz bunu yapay bir sıfır değer gibi göstermez. Bu görünüm ajans operasyon planlaması içindir.</div>
+    <div className="moduleFoot">Attention Score müşteri önceliğini; karar skoru, açık yüksek öncelikli işler, audit açığı ve mevcutsa tahmini ticari fırsatı birlikte kullanarak sıralar. Audit veya impact tahmini henüz yoksa arayüz bunu yapay bir sıfır değer gibi göstermez. Tek bir proje kaynağı geçici olarak okunamazsa diğer müşteri verileri gösterilmeye devam eder. Bu görünüm ajans operasyon planlaması içindir.</div>
   </section>;
 }
