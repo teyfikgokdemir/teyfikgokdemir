@@ -14,11 +14,11 @@ workspaceRouter.use('/:workspaceId/activity',workspaceActivityRouter);
 workspaceRouter.use('/:workspaceId/clients',clientPortalRouter);
 workspaceRouter.use('/:workspaceId/invites',clientInviteRouter);
 workspaceRouter.use('/:workspaceId/project-lifecycle',projectLifecycleRouter);
+await ensureWorkspaceScopedProjectDomains();
 
 async function persistWorkspaceAudit(workspaceId:string,domain:string,projectName?:string){
   const result=await runAudit(domain);
   const hostname=new URL(result.domain).hostname.replace(/^www\./,'');
-  await ensureWorkspaceScopedProjectDomains();
   const existing=await pool.query('select id,status from projects where workspace_id=$1 and lower(domain)=lower($2) limit 1',[workspaceId,hostname]);
   if(existing.rows[0]?.status==='archived')throw new Error('PROJECT_ARCHIVED');
 
