@@ -39,8 +39,8 @@ export default function AnalyticsPanel({projectId}:{projectId:string|null}){
 
   useEffect(()=>{
     const generation=++loadGeneration.current;
-    setSaving(false);setError('');
-    if(!projectId){setData(null);setLoading(false);return;}
+    setData(null);setSaving(false);setError('');
+    if(!projectId){setLoading(false);return;}
     void load(projectId,generation);
   },[projectId]);
 
