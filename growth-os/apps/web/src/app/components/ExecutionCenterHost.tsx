@@ -18,6 +18,7 @@ export default function ExecutionCenterHost(){
     if(window.location.pathname!=='/')return;
     let alive=true;
     let projects:Project[]=[];
+    let loadingProjects=false;
     let hiddenModule:HTMLElement|null=null;
 
     const restoreLegacy=()=>{
@@ -52,14 +53,29 @@ export default function ExecutionCenterHost(){
       setProjectId(project?.id||null);
     };
 
-    fetch('/api/growth/projects',{cache:'no-store'})
-      .then(r=>r.ok?r.json():[])
-      .then((rows:Project[])=>{projects=rows;resolve()})
-      .catch(()=>resolve());
+    const loadProjects=async()=>{
+      if(!alive||loadingProjects)return;
+      loadingProjects=true;
+      try{
+        const response=await fetch('/api/growth/projects',{cache:'no-store'});
+        if(response.ok){
+          const rows=await response.json() as Project[];
+          if(alive)projects=rows;
+        }
+      }catch{
+        // Keep the last known project list and retry on the next refresh cycle.
+      }finally{
+        loadingProjects=false;
+        resolve();
+      }
+    };
+
+    void loadProjects();
 
     const observer=new MutationObserver(resolve);
     observer.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','data-growth-section']});
     const timer=window.setInterval(resolve,1000);
+    const projectsTimer=window.setInterval(()=>void loadProjects(),15000);
     resolve();
 
     return()=>{
@@ -67,6 +83,7 @@ export default function ExecutionCenterHost(){
       restoreLegacy();
       observer.disconnect();
       window.clearInterval(timer);
+      window.clearInterval(projectsTimer);
     };
   },[]);
 
