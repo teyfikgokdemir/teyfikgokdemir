@@ -230,8 +230,7 @@ export default function Home() {
   const googleConnected=integrations.some(i=>(i.provider==='google_oauth'||i.provider==='google_ads')&&i.status==='connected');
   const metaConnected=integrations.some(i=>i.provider==='meta_ads'&&i.status==='connected');
   const tiktokConnected=integrations.some(i=>i.provider==='tiktok_ads'&&i.status==='connected');
-  const setupIncomplete=Boolean(selectedProject)&&(!googleConnected||!metaConnected||!tiktokConnected);
-  const showSetup=setupIncomplete&&(['overview','projects','audit'] as Section[]).includes(section);
+  const showSetup=Boolean(selectedProject)&&(['overview','projects','audit'] as Section[]).includes(section);
 
   return <main className="shell">
     <aside className="side">
@@ -273,13 +272,29 @@ export default function Home() {
 }
 
 function ProjectSetup({project,googleConnected,metaConnected,tiktokConnected,connecting,onGoogle,onMeta,onTikTok,onOpenAds}:{project:Project;googleConnected:boolean;metaConnected:boolean;tiktokConnected:boolean;connecting:'google'|'meta'|'tiktok'|null;onGoogle:()=>Promise<void>;onMeta:()=>Promise<void>;onTikTok:()=>Promise<void>;onOpenAds:()=>void}) {
-  const connectedCount=[googleConnected,metaConnected,tiktokConnected].filter(Boolean).length;
+  const [mapped,setMapped]=useState({google:false,meta:false,tiktok:false,loaded:false});
+  useEffect(()=>{
+    let alive=true;
+    async function loadMapping(){
+      const next={google:false,meta:false,tiktok:false,loaded:true};
+      const jobs:Promise<void>[]=[];
+      if(googleConnected)jobs.push(fetch(`${api}/projects/${project.id}/integrations/google/resources`,{cache:'no-store'}).then(async r=>{if(r.ok){const data=await r.json();next.google=Boolean(data.selectedCustomerResourceName)}}).catch(()=>{}));
+      if(metaConnected)jobs.push(fetch(`${api}/projects/${project.id}/integrations/meta/resources`,{cache:'no-store'}).then(async r=>{if(r.ok){const data=await r.json();next.meta=Boolean(data.selectedAdAccountId)}}).catch(()=>{}));
+      if(tiktokConnected)jobs.push(fetch(`${api}/projects/${project.id}/integrations/tiktok/resources`,{cache:'no-store'}).then(async r=>{if(r.ok){const data=await r.json();next.tiktok=Boolean(data.selectedAdvertiserId)}}).catch(()=>{}));
+      await Promise.all(jobs);
+      if(alive)setMapped(next);
+    }
+    loadMapping();
+    return()=>{alive=false};
+  },[project.id,googleConnected,metaConnected,tiktokConnected]);
+  const readyCount=[mapped.google,mapped.meta,mapped.tiktok].filter(Boolean).length;
+  if(mapped.loaded&&readyCount===3)return null;
   const steps=[
-    {key:'google',label:'Google Ads',connected:googleConnected,action:onGoogle},
-    {key:'meta',label:'Meta Ads',connected:metaConnected,action:onMeta},
-    {key:'tiktok',label:'TikTok Ads',connected:tiktokConnected,action:onTikTok},
+    {key:'google',label:'Google Ads',connected:googleConnected,mapped:mapped.google,action:onGoogle},
+    {key:'meta',label:'Meta Ads',connected:metaConnected,mapped:mapped.meta,action:onMeta},
+    {key:'tiktok',label:'TikTok Ads',connected:tiktokConnected,mapped:mapped.tiktok,action:onTikTok},
   ] as const;
-  return <section className="moduleCard"><div className="reportHead compact"><div><p className="eyebrow">Proje Kurulumu · {project.domain}</p><h2>Ölçüm ve reklam hesaplarını bağla.</h2></div><span>{connectedCount}/3 bağlı</span></div><div className="integrationGrid"><article className="connected"><div className="integrationIcon">✓</div><div><strong>Audit</strong><span>Proje oluşturuldu ve ilk tarama hazır.</span></div><em>TAMAM</em></article>{steps.map(step=><article key={step.key} className={step.connected?'connected':''}><div className="integrationIcon">{step.label.slice(0,1)}</div><div><strong>{step.label}</strong><span>{step.connected?'Hesap bağlantısı hazır.':'Bu proje için hesabı bağla.'}</span></div>{step.connected?<em>BAĞLI</em>:<button className="integrationConnect" disabled={!!connecting} onClick={step.action}>{connecting===step.key?'AÇILIYOR…':'BAĞLA'}</button>}</article>)}</div><div className="moduleFoot">Bağlantılar aktif projeye kaydedilir; müşteri hesapları birbirine karışmaz. <button onClick={onOpenAds}>Ads detaylarını aç →</button></div></section>;
+  return <section className="moduleCard"><div className="reportHead compact"><div><p className="eyebrow">Proje Kurulumu · {project.domain}</p><h2>Reklam hesaplarını bağla ve projeye eşle.</h2></div><span>{mapped.loaded?`${readyCount}/3 hazır`:'Kontrol ediliyor…'}</span></div><div className="integrationGrid"><article className="connected"><div className="integrationIcon">✓</div><div><strong>Audit</strong><span>Proje oluşturuldu ve ilk tarama hazır.</span></div><em>TAMAM</em></article>{steps.map(step=><article key={step.key} className={step.mapped?'connected':''}><div className="integrationIcon">{step.label.slice(0,1)}</div><div><strong>{step.label}</strong><span>{step.mapped?'Reklam hesabı projeye eşlendi.':step.connected?'OAuth bağlı; kullanılacak reklam hesabını seç.':'Bu proje için hesabı bağla.'}</span></div>{step.mapped?<em>EŞLENDİ</em>:step.connected?<button className="integrationConnect" onClick={onOpenAds}>HESAP SEÇ</button>:<button className="integrationConnect" disabled={!!connecting} onClick={step.action}>{connecting===step.key?'AÇILIYOR…':'BAĞLA'}</button>}</article>)}</div><div className="moduleFoot">Kurulum, yalnız OAuth bağlantısı değil proje-hesap eşlemesi tamamlandığında biter. <button onClick={onOpenAds}>Ads detaylarını aç →</button></div></section>;
 }
 
 function OverviewView({overview,projects,audits,alerts,recommendations,onNavigate}:{overview:Overview|null;projects:Project[];audits:AuditRow[];alerts:AlertRow[];recommendations:RecommendationRow[];onNavigate:(section:Section)=>void}) {
