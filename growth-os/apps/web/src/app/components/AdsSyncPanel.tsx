@@ -23,6 +23,7 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
   const [mappedAds,setMappedAds]=useState<MappedAds>({google:false,meta:false,tiktok:false,loaded:false});
   const [error,setError]=useState('');
   const loadSequence=useRef(0);
+  const syncGeneration=useRef(0);
 
   async function load(){
     const sequence=++loadSequence.current;
@@ -57,7 +58,11 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
     }
   }
 
-  useEffect(()=>{setResult(null);setError('');void load();},[projectId]);
+  useEffect(()=>{
+    ++syncGeneration.current;
+    setSyncing(false);setResult(null);setError('');
+    void load();
+  },[projectId]);
 
   const connectedAds=integrations.filter(i=>i.status==='connected'&&['google_oauth','google_ads','meta_ads','tiktok_ads'].includes(i.provider));
   const connectedState={
@@ -80,16 +85,23 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
 
   async function sync(){
     if(!projectId||syncing||!canSync)return;
+    const targetProjectId=projectId;
+    const generation=syncGeneration.current;
     setSyncing(true);setError('');
     try{
-      const res=await fetch(`${api}/projects/${projectId}/ads/sync`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({days})});
+      const res=await fetch(`${api}/projects/${targetProjectId}/ads/sync`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({days})});
       const data=await res.json();
+      if(generation!==syncGeneration.current)return;
       if(!res.ok)throw new Error(data.error||'Senkronizasyon başarısız.');
       setResult(data);
       await load();
+      if(generation!==syncGeneration.current)return;
       await onSynced?.();
-    }catch(e){setError(e instanceof Error?e.message:'Senkronizasyon başarısız.');}
-    finally{setSyncing(false);}
+    }catch(e){
+      if(generation===syncGeneration.current)setError(e instanceof Error?e.message:'Senkronizasyon başarısız.');
+    }finally{
+      if(generation===syncGeneration.current)setSyncing(false);
+    }
   }
 
   const totals=useMemo(()=>metrics.reduce((a,m)=>({spend:a.spend+n(m.spend),revenue:a.revenue+n(m.attributed_revenue),clicks:a.clicks+n(m.clicks),conversions:a.conversions+n(m.conversions),impressions:a.impressions+n(m.impressions)}),{spend:0,revenue:0,clicks:0,conversions:0,impressions:0}),[metrics]);
