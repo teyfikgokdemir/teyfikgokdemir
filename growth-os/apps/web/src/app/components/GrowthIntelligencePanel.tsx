@@ -63,8 +63,8 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
   }
 
   function openRecommendations(){
-    const buttons=Array.from(document.querySelectorAll<HTMLButtonElement>('aside.side nav button'));
-    const target=buttons.find(button=>button.querySelector('span')?.textContent?.trim()==='Recommendations');
+    const target=document.querySelector<HTMLButtonElement>('aside.side nav button[data-growth-section="recommendations"]')
+      ||Array.from(document.querySelectorAll<HTMLButtonElement>('aside.side nav button')).find(button=>button.querySelector('span')?.textContent?.trim()==='Recommendations');
     target?.click();
   }
 
