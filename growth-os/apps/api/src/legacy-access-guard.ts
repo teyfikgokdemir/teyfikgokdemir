@@ -28,6 +28,15 @@ function normalizeDomain(value:unknown){
 
 export const legacyWorkspaceGuard:RequestHandler=async(req,res,next)=>{
   const path=req.path;
+  if(path==='/health/ready'){
+    try{
+      await pool.query('select 1');
+      return res.json({ok:true,ready:true,database:'reachable',service:'growth-os-api',time:new Date().toISOString()});
+    }catch(error){
+      console.error('Readiness check failed',error);
+      return res.status(503).json({ok:false,ready:false,database:'unreachable',service:'growth-os-api',time:new Date().toISOString()});
+    }
+  }
   if(path==='/health'||path==='/capabilities'||path.startsWith('/workspaces/')||path==='/workspaces'||path.startsWith('/oauth/'))return next();
 
   try{
