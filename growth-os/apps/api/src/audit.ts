@@ -2,6 +2,14 @@ import * as cheerio from 'cheerio';
 import { lookup } from 'node:dns/promises';
 import net from 'node:net';
 
+export type AuditEvidence = {
+  url: string;
+  problem: string;
+  current?: string;
+  relatedUrls?: string[];
+  expected?: string;
+};
+
 export type AuditIssue = {
   key: string;
   title: string;
@@ -9,6 +17,7 @@ export type AuditIssue = {
   status: 'pass' | 'fail' | 'warning';
   detail: string;
   recommendation: string;
+  evidence?: AuditEvidence[];
 };
 
 type PageSample = {
@@ -187,13 +196,58 @@ export async function runAudit(inputDomain: string) {
     if (p.title) titleCounts.set(p.title, (titleCounts.get(p.title) || 0) + 1);
     if (p.description) descriptionCounts.set(p.description, (descriptionCounts.get(p.description) || 0) + 1);
   });
-  const pagesWithoutTitle = sampledPages.filter((p) => !p.title).length;
-  const pagesWithoutDescription = sampledPages.filter((p) => !p.description).length;
-  const pagesWithoutCanonical = sampledPages.filter((p) => !p.canonical).length;
-  const pagesBadH1 = sampledPages.filter((p) => p.h1Count !== 1).length;
-  const duplicateTitles = [...titleCounts.values()].filter((n) => n > 1).reduce((a,b) => a+b, 0);
-  const duplicateDescriptions = [...descriptionCounts.values()].filter((n) => n > 1).reduce((a,b) => a+b, 0);
+
+  const missingTitlePages = sampledPages.filter((p) => !p.title);
+  const missingDescriptionPages = sampledPages.filter((p) => !p.description);
+  const missingCanonicalPages = sampledPages.filter((p) => !p.canonical);
+  const badH1Pages = sampledPages.filter((p) => p.h1Count !== 1);
+  const duplicateTitleGroups = [...titleCounts.entries()]
+    .filter(([, count]) => count > 1)
+    .map(([value]) => ({ value, pages: sampledPages.filter((p) => p.title === value) }));
+  const duplicateDescriptionGroups = [...descriptionCounts.entries()]
+    .filter(([, count]) => count > 1)
+    .map(([value]) => ({ value, pages: sampledPages.filter((p) => p.description === value) }));
+
+  const pagesWithoutTitle = missingTitlePages.length;
+  const pagesWithoutDescription = missingDescriptionPages.length;
+  const pagesWithoutCanonical = missingCanonicalPages.length;
+  const pagesBadH1 = badH1Pages.length;
+  const duplicateTitles = duplicateTitleGroups.reduce((sum, group) => sum + group.pages.length, 0);
+  const duplicateDescriptions = duplicateDescriptionGroups.reduce((sum, group) => sum + group.pages.length, 0);
   const noindexPages = sampledPages.filter((p) => /noindex/i.test(p.robotsMeta)).length;
+
+  const titleEvidence: AuditEvidence[] = [
+    ...missingTitlePages.map((p) => ({ url: p.url, problem: 'missing', current: '', expected: 'Benzersiz SEO title' })),
+    ...duplicateTitleGroups.flatMap((group) => group.pages.map((p) => ({
+      url: p.url,
+      problem: 'duplicate',
+      current: group.value,
+      relatedUrls: group.pages.filter((other) => other.url !== p.url).map((other) => other.url),
+      expected: 'Site içinde benzersiz SEO title',
+    }))),
+  ];
+  const descriptionEvidence: AuditEvidence[] = [
+    ...missingDescriptionPages.map((p) => ({ url: p.url, problem: 'missing', current: '', expected: 'Özgün meta description' })),
+    ...duplicateDescriptionGroups.flatMap((group) => group.pages.map((p) => ({
+      url: p.url,
+      problem: 'duplicate',
+      current: group.value,
+      relatedUrls: group.pages.filter((other) => other.url !== p.url).map((other) => other.url),
+      expected: 'Site içinde özgün meta description',
+    }))),
+  ];
+  const canonicalEvidence: AuditEvidence[] = missingCanonicalPages.map((p) => ({
+    url: p.url,
+    problem: 'missing',
+    current: '',
+    expected: 'Doğru canonical URL',
+  }));
+  const h1Evidence: AuditEvidence[] = badH1Pages.map((p) => ({
+    url: p.url,
+    problem: 'invalid_h1_count',
+    current: `${p.h1Count} H1`,
+    expected: '1 anlamlı H1',
+  }));
 
   const issues: AuditIssue[] = [];
   const add = (condition: boolean, issue: Omit<AuditIssue, 'status'>) => issues.push({ ...issue, status: condition ? 'pass' : 'fail' });
@@ -216,10 +270,10 @@ export async function runAudit(inputDomain: string) {
   add(tracking.metaPixel, { key: 'meta', title: 'Meta Pixel', severity: 'medium', detail: tracking.metaPixel ? 'Bulundu' : 'Bulunamadı', recommendation: 'Meta reklamı kullanılacaksa Pixel + CAPI ölçümünü kur.' });
   add(forms > 0 || /sepete ekle|satın al|iletişim|teklif/i.test(text), { key: 'conversion', title: 'Dönüşüm yolu', severity: 'high', detail: `${forms} form`, recommendation: 'Birincil dönüşüm aksiyonunu görünür ve ölçülebilir hale getir.' });
   add(sampledPages.length >= 2, { key: 'crawl-coverage', title: 'Çoklu sayfa tarama kapsamı', severity: 'medium', detail: `${sampledPages.length} sayfa örneklendi`, recommendation: 'İç link yapısını ve taranabilir sayfa kapsamını güçlendir.' });
-  add(pagesWithoutTitle === 0 && duplicateTitles === 0, { key: 'site-titles', title: 'Site geneli title kalitesi', severity: 'high', detail: `${pagesWithoutTitle} eksik, ${duplicateTitles} tekrar eden title`, recommendation: 'Örneklenen tüm sayfalarda benzersiz title kullan.' });
-  add(pagesWithoutDescription === 0 && duplicateDescriptions === 0, { key: 'site-descriptions', title: 'Site geneli description kalitesi', severity: 'medium', detail: `${pagesWithoutDescription} eksik, ${duplicateDescriptions} tekrar eden description`, recommendation: 'Önemli sayfalarda özgün meta description kullan.' });
-  add(pagesWithoutCanonical === 0, { key: 'site-canonicals', title: 'Site geneli canonical', severity: 'high', detail: `${pagesWithoutCanonical} sayfada canonical eksik`, recommendation: 'Taranan tüm indexlenebilir sayfalarda doğru canonical tanımla.' });
-  add(pagesBadH1 === 0, { key: 'site-h1', title: 'Site geneli H1 yapısı', severity: 'medium', detail: `${pagesBadH1} sayfada H1 sayısı hatalı`, recommendation: 'Her önemli sayfada tek ve anlamlı H1 kullan.' });
+  add(pagesWithoutTitle === 0 && duplicateTitles === 0, { key: 'site-titles', title: 'Site geneli title kalitesi', severity: 'high', detail: `${pagesWithoutTitle} eksik, ${duplicateTitles} tekrar eden title`, recommendation: 'Örneklenen tüm sayfalarda benzersiz title kullan.', evidence: titleEvidence });
+  add(pagesWithoutDescription === 0 && duplicateDescriptions === 0, { key: 'site-descriptions', title: 'Site geneli description kalitesi', severity: 'medium', detail: `${pagesWithoutDescription} eksik, ${duplicateDescriptions} tekrar eden description`, recommendation: 'Önemli sayfalarda özgün meta description kullan.', evidence: descriptionEvidence });
+  add(pagesWithoutCanonical === 0, { key: 'site-canonicals', title: 'Site geneli canonical', severity: 'high', detail: `${pagesWithoutCanonical} sayfada canonical eksik`, recommendation: 'Taranan tüm indexlenebilir sayfalarda doğru canonical tanımla.', evidence: canonicalEvidence });
+  add(pagesBadH1 === 0, { key: 'site-h1', title: 'Site geneli H1 yapısı', severity: 'medium', detail: `${pagesBadH1} sayfada H1 sayısı hatalı`, recommendation: 'Her önemli sayfada tek ve anlamlı H1 kullan.', evidence: h1Evidence });
 
   const seoKeys = ['http','title','description','canonical','h1','lang','robots','sitemap','schema','content','crawl-coverage','site-titles','site-descriptions','site-canonicals','site-h1'];
   const geoKeys = ['schema','entity','content','canonical','lang','site-canonicals'];
