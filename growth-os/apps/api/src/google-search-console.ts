@@ -26,6 +26,11 @@ async function postJson<T>(url:string,accessToken:string,body:unknown):Promise<T
 
 function isoDate(date:Date){return date.toISOString().slice(0,10)}
 function normalizeDomain(value:string){return value.replace(/^https?:\/\//,'').replace(/^www\./,'').split('/')[0].toLowerCase()}
+function searchConsoleSiteDomain(siteUrl:string){
+  const value=siteUrl.trim().toLowerCase();
+  if(value.startsWith('sc-domain:'))return normalizeDomain(value.slice('sc-domain:'.length));
+  try{return normalizeDomain(new URL(value).hostname)}catch{return ''}
+}
 
 async function listSites(accessToken:string){
   const sites=await getJson('https://www.googleapis.com/webmasters/v3/sites',accessToken) as SearchConsoleSites;
@@ -58,7 +63,7 @@ export async function searchConsolePerformanceForWorkspaceProject(projectId:stri
   const sites=await listSites(accessToken);
   const selected=metadata?.selectedSearchConsoleSiteUrl?sites.find(site=>site.siteUrl===metadata.selectedSearchConsoleSiteUrl):undefined;
   const exactDomain=`sc-domain:${domain}`;
-  const site=selected||sites.find(item=>item.siteUrl===exactDomain)||sites.find(item=>String(item.siteUrl||'').toLowerCase().includes(domain));
+  const site=selected||sites.find(item=>item.siteUrl===exactDomain)||sites.find(item=>item.siteUrl&&searchConsoleSiteDomain(item.siteUrl)===domain);
   if(!site?.siteUrl){
     return {matched:false,days:Math.max(1,Math.min(days,90)),sites,selectedSearchConsoleSiteUrl:metadata?.selectedSearchConsoleSiteUrl||null,message:`Search Console içinde ${domain} için property otomatik eşleşmedi.`};
   }
