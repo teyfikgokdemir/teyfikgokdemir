@@ -26,8 +26,9 @@ export default function ExecutionCenterHost(){
 
     const resolve=()=>{
       if(!alive)return;
-      const activeLabel=document.querySelector<HTMLElement>('aside.side nav button.active span')?.textContent?.trim()||'';
-      const isRecommendations=activeLabel==='Recommendations';
+      const activeButton=document.querySelector<HTMLButtonElement>('aside.side nav button.active');
+      const activeLabel=activeButton?.querySelector('span')?.textContent?.trim()||'';
+      const isRecommendations=activeButton?.dataset.growthSection==='recommendations'||activeLabel==='Recommendations';
       setVisible(isRecommendations);
 
       if(!isRecommendations){
@@ -57,7 +58,7 @@ export default function ExecutionCenterHost(){
       .catch(()=>resolve());
 
     const observer=new MutationObserver(resolve);
-    observer.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class']});
+    observer.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','data-growth-section']});
     const timer=window.setInterval(resolve,1000);
     resolve();
 
