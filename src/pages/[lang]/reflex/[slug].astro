@@ -59,6 +59,7 @@ const langBrandTitles: Record<string, string> = {
   sq: 'Portofoli B2B Reflex Plastik',
   fa: 'پرتفوی B2B رفلکس پلاستیک',
   zh: 'Reflex Plastik B2B 产品矩阵',
+  vi: 'Danh mục B2B Reflex Plastik',
 };
 
 const brandTitle = langBrandTitles[locale] || langBrandTitles.tr;
@@ -129,10 +130,13 @@ const pageSchema = [productSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema]
 const reflexLanguageUrls: Record<string, string> = {
   tr: `/reflex/${product.slug}/`,
   en: `/en/reflex/${product.slug}/`,
+  ru: `/ru/reflex/${product.slug}/`,
   mk: `/mk/reflex/${product.slug}/`,
   sr: `/sr/reflex/${product.slug}/`,
   sq: `/sq/reflex/${product.slug}/`,
   fa: `/fa/reflex/${product.slug}/`,
+  zh: `/zh/reflex/${product.slug}/`,
+  vi: `/vi/reflex/${product.slug}/`,
 };
 ---
 
