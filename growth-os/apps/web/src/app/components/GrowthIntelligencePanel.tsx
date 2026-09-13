@@ -102,6 +102,8 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
 
   if(!projectId)return <section className="moduleCard"><div className="empty">Growth Intelligence için proje seç.</div></section>;
   if(loading&&!updatedAt&&!error)return <section className="moduleCard"><div className="moduleLoading"><span/> Growth Intelligence kaynakları analiz ediliyor…</div></section>;
+  const hasDecisionData=metrics.length>0||overview!==null||google!==null||search!==null;
+  if(updatedAt&&!hasDecisionData&&!error)return <section className="moduleCard"><div className="empty"><b>Karar üretmek için yeterli kaynak verisi yok.</b><div style={{marginTop:8,opacity:.75}}>Ads, GA4, Search Console veya proje özetinden en az bir veri kaynağı okunmadan Growth OS sağlıklı/risksiz verdict üretmez.</div><button className="primaryAction" style={{marginTop:14}} onClick={refreshCurrent} disabled={loading}>{loading?'Analiz ediliyor…':'Kaynakları Yeniden Kontrol Et'}</button></div></section>;
 
   const high=signals.filter(s=>s.severity==='high').length;
   const medium=signals.filter(s=>s.severity==='medium').length;
