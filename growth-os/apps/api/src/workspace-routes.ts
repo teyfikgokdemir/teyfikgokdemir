@@ -6,6 +6,7 @@ import { clientInviteRouter } from './client-invites.js';
 import { clientPortalRouter } from './client-portal.js';
 import { projectLifecycleRouter } from './project-lifecycle.js';
 import { workspaceActivityRouter } from './workspace-activity.js';
+import { ensureWorkspaceScopedProjectDomains } from './project-domain-schema.js';
 import { assertProjectAccess, listWorkspaceProjects, requireRole, resolveWorkspaceActor, workspaceErrorMessage, workspaceErrorStatus } from './workspace-access.js';
 
 export const workspaceRouter=Router();
@@ -17,16 +18,15 @@ workspaceRouter.use('/:workspaceId/project-lifecycle',projectLifecycleRouter);
 async function persistWorkspaceAudit(workspaceId:string,domain:string,projectName?:string){
   const result=await runAudit(domain);
   const hostname=new URL(result.domain).hostname.replace(/^www\./,'');
-  const existing=await pool.query('select id,workspace_id from projects where domain=$1',[hostname]);
-  if(existing.rows[0]&&existing.rows[0].workspace_id!==workspaceId)throw new Error('PROJECT_ACCESS_DENIED');
+  await ensureWorkspaceScopedProjectDomains();
+  const existing=await pool.query('select id,status from projects where workspace_id=$1 and lower(domain)=lower($2) limit 1',[workspaceId,hostname]);
+  if(existing.rows[0]?.status==='archived')throw new Error('PROJECT_ARCHIVED');
 
   const projectResult=await pool.query(`
     insert into projects(name,domain,workspace_id)
     values($1,$2,$3)
-    on conflict(domain) do update set name=excluded.name
-    where projects.workspace_id=excluded.workspace_id
+    on conflict(workspace_id,domain) do update set name=excluded.name
     returning id,name,domain,workspace_id,client_id`,[projectName||hostname,hostname,workspaceId]);
-  if(!projectResult.rows[0])throw new Error('PROJECT_ACCESS_DENIED');
   const project=projectResult.rows[0];
 
   const previousResult=await pool.query('select payload from audits where project_id=$1 order by created_at desc limit 1',[project.id]);
