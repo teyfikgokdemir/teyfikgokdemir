@@ -10,6 +10,8 @@ const pages = [
   ['sr', 'sr/index.html'],
   ['sq', 'sq/index.html'],
   ['fa', 'fa/index.html'],
+  ['zh-CN', 'zh/index.html'],
+  ['vi-VN', 'vi/index.html'],
 ];
 
 const failures = [];
@@ -23,7 +25,7 @@ for (const [locale, relative] of pages) {
     'FAQPage',
     'WebPage',
     'rel="canonical"',
-    `lang="${locale === 'tr' ? 'tr' : locale}"`,
+    `lang="${locale}"`,
   ];
   for (const marker of required) {
     if (!html.includes(marker)) failures.push(`${locale}: missing ${marker}`);
