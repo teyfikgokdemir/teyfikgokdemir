@@ -38,7 +38,7 @@ export default function OverviewIntelligenceHost(){
       .catch(()=>resolve());
 
     const observer=new MutationObserver(resolve);
-    observer.observe(document.body,{subtree:true,childList:true,characterData:true});
+    observer.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class']});
     const timer=window.setInterval(resolve,1000);
     resolve();
 
