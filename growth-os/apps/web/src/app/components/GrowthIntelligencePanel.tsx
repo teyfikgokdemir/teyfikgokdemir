@@ -43,11 +43,11 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
         r.ok?r.json() as Promise<QueueRecommendation[]>:Promise.resolve(null)
       ]);
       if(generation!==loadGeneration.current)return;
-      if(nextMetrics)setMetrics(nextMetrics);
-      if(nextOverview)setOverview(nextOverview);
-      if(nextGoogle)setGoogle(nextGoogle);
-      if(nextSearch)setSearch(nextSearch);
-      if(nextRecommendations)setQueueCount(nextRecommendations.filter(x=>x.source==='growth_intelligence'&&x.status==='proposed').length);
+      setMetrics(nextMetrics??[]);
+      setOverview(nextOverview);
+      setGoogle(nextGoogle);
+      setSearch(nextSearch);
+      setQueueCount(nextRecommendations?nextRecommendations.filter(x=>x.source==='growth_intelligence'&&x.status==='proposed').length:0);
       setUpdatedAt(new Date());
     }catch(e){
       if(generation===loadGeneration.current)setError(e instanceof Error?e.message:'Growth Intelligence verileri okunamadı.');
