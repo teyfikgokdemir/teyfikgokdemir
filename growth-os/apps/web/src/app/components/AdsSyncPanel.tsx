@@ -34,7 +34,11 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
       fetch(`${api}/projects/${targetProjectId}/integrations`,{cache:'no-store'})
     ]);
     if(sequence!==loadSequence.current)return;
-    if(metricsRes.ok)setMetrics(await metricsRes.json());
+    if(metricsRes.ok){
+      const nextMetrics=await metricsRes.json() as Metric[];
+      if(sequence!==loadSequence.current)return;
+      setMetrics(nextMetrics);
+    }
     if(integrationsRes.ok){
       const nextIntegrations=await integrationsRes.json() as Integration[];
       if(sequence!==loadSequence.current)return;
