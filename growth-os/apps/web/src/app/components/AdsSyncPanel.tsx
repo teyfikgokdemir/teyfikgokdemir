@@ -64,7 +64,7 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
 
   useEffect(()=>{
     ++syncGeneration.current;
-    setSyncing(false);setResult(null);setError('');
+    setSyncing(false);setResult(null);setMetrics([]);setIntegrations([]);setMappedAds({google:false,meta:false,tiktok:false,loaded:false});setError('');
     void load();
   },[projectId]);
 
