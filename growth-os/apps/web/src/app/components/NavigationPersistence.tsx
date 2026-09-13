@@ -13,7 +13,7 @@ export default function NavigationPersistence(){
 
     let applying=true;
     const savedRaw=window.sessionStorage.getItem(STORAGE_KEY);
-    const saved=isSectionKey(savedRaw)?savedRaw:null;
+    const saved=savedRaw==='Genel Bakış'?'overview':isSectionKey(savedRaw)?savedRaw:null;
 
     const tagButtons=()=>{
       const buttons=Array.from(document.querySelectorAll<HTMLButtonElement>('aside.side nav button'));
