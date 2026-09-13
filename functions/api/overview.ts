@@ -150,10 +150,11 @@ async function cloudflareTraffic(site: Site, env: Env) {
       ...metrics,
       requestShare: totalCountryRequests ? (metrics.requests / totalCountryRequests) * 100 : 0,
       bytesShare: totalCountryBytes ? (metrics.bytes / totalCountryBytes) * 100 : 0,
-    })).sort((a, b) => b.requests - a.requests).slice(0, 15);
+    })).sort((a, b) => b.requests - a.requests).slice(0, 10);
     const uniqueVisitors7d = (zone?.sevenDays || []).reduce((sum, group) => sum + (group.uniq?.uniques || 0), 0);
     const uniqueVisitors30d = (zone?.thirtyDays || []).reduce((sum, group) => sum + (group.uniq?.uniques || 0), 0);
     let sources: Array<{ host: string; requests: number; visits: number; bytes: number }> = [];
+    let locations: Array<{ country: string; region: string; city: string; views: number }> = [];
     if (env.CANSU_ANALYTICS_DB) {
       const previousDay = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
       const sourceRows = await env.CANSU_ANALYTICS_DB.prepare(
@@ -165,6 +166,19 @@ async function cloudflareTraffic(site: Site, env: Env) {
         visits: Number(item.views || 0),
         bytes: 0,
       }));
+      try {
+        const geoRows = await env.CANSU_ANALYTICS_DB.prepare(
+          'SELECT country, region, city, SUM(views) AS views FROM geo_events WHERE site = ? AND day >= ? GROUP BY country, region, city ORDER BY views DESC LIMIT 10',
+        ).bind(site.key, previousDay).all<{ country: string; region: string; city: string; views: number }>();
+        locations = (geoRows.results ?? []).map((item) => ({
+          country: item.country || 'Bilinmiyor',
+          region: item.region || 'Bilinmiyor',
+          city: item.city || 'Bilinmiyor',
+          views: Number(item.views || 0),
+        }));
+      } catch {
+        locations = [];
+      }
     }
     if (sources.length === 0) {
       const totalReqs = daily?.sum?.requests || groups.reduce((sum, group) => sum + (group.sum?.requests || 0), 0);
@@ -197,6 +211,7 @@ async function cloudflareTraffic(site: Site, env: Env) {
         return { level: score, requestPerVisitor: Number(requestPerVisitor.toFixed(1)), topCountryShare: Number(topCountryShare.toFixed(1)), note: 'Heuristik sinyaldir; kesin bot tespiti değildir.' };
       })(),
       countries,
+      locations,
       sources,
       hourly: groups.map((group) => ({ at: group.dimensions?.datetime, requests: group.sum?.requests || 0, uniqueVisitors: group.uniq?.uniques || 0 })),
     };
