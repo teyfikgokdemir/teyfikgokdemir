@@ -72,7 +72,7 @@ export async function analyticsPerformanceForProject(projectId:string){
       if(!property.property)continue;
       try{
         const streams=await streamsForProperty(property.property,accessToken);
-        const web=streams.find(stream=>normalizeDomain(stream.webStreamData?.defaultUri||'')===domain)||streams.find(stream=>normalizeDomain(stream.webStreamData?.defaultUri||'').includes(domain));
+        const web=streams.find(stream=>normalizeDomain(stream.webStreamData?.defaultUri||'')===domain);
         if(!web)continue;
         const detail=await getJson(`https://analyticsadmin.googleapis.com/v1beta/${property.property}`,accessToken) as {timeZone?:string;currencyCode?:string};
         matched={property:property.property,displayName:property.displayName,accountName:property.accountName,stream:{displayName:web.displayName,measurementId:web.webStreamData?.measurementId,defaultUri:web.webStreamData?.defaultUri},timeZone:detail.timeZone,currencyCode:detail.currencyCode};
