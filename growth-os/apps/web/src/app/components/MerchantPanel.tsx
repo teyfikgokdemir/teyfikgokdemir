@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect,useState } from 'react';
+import { useEffect,useRef,useState } from 'react';
 
 type ProductIssue={code?:string;severity?:string;attribute?:string;description?:string;detail?:string;documentation?:string};
 type ProductRow={offerId:string;title:string;availability?:string|null;link?:string|null;status:string;issueCount:number;issues?:ProductIssue[]};
@@ -23,36 +23,50 @@ export default function MerchantPanel({projectId}:{projectId:string|null}){
   const[saving,setSaving]=useState(false);
   const[error,setError]=useState('');
   const[selectedAccount,setSelectedAccount]=useState('');
+  const loadGeneration=useRef(0);
 
-  async function load(id:string){
+  async function load(id:string,generation=loadGeneration.current){
+    if(generation!==loadGeneration.current)return;
     setLoading(true);setError('');
     try{
       const r=await fetch(`${api}/projects/${id}/integrations/google/resources`,{cache:'no-store'});
       const body=await r.json() as Resources & {error?:string};
+      if(generation!==loadGeneration.current)return;
       if(!r.ok)throw new Error(body.error||'Merchant Center verisi okunamadı.');
       if(body.errors?.merchantCommerce)throw new Error(body.errors.merchantCommerce);
       const commerce=body.merchantCommerce?{...body.merchantCommerce,selectedMerchantAccountName:body.selectedMerchantAccountName||body.merchantCommerce.selectedMerchantAccountName||null}:null;
       setData(commerce);
       setSelectedAccount(commerce?.selectedMerchantAccountName||commerce?.account?.name||'');
-    }catch(e){setData(null);setSelectedAccount('');setError(e instanceof Error?e.message:'Merchant Center verisi okunamadı.');}
-    finally{setLoading(false)}
+    }catch(e){
+      if(generation!==loadGeneration.current)return;
+      setData(null);setSelectedAccount('');setError(e instanceof Error?e.message:'Merchant Center verisi okunamadı.');
+    }finally{
+      if(generation===loadGeneration.current)setLoading(false);
+    }
   }
 
   useEffect(()=>{
-    if(!projectId){setData(null);setSelectedAccount('');return;}
-    void load(projectId);
+    const generation=++loadGeneration.current;
+    setSaving(false);setError('');
+    if(!projectId){setData(null);setSelectedAccount('');setLoading(false);return;}
+    void load(projectId,generation);
   },[projectId]);
 
   async function selectAccount(){
     if(!projectId||!selectedAccount||saving)return;
+    const generation=loadGeneration.current;
     setSaving(true);setError('');
     try{
       const r=await fetch(`${api}/projects/${projectId}/integrations/google/merchant/select`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({accountName:selectedAccount})});
       const body=await r.json() as {error?:string};
+      if(generation!==loadGeneration.current)return;
       if(!r.ok)throw new Error(body.error||'Merchant Center hesabı seçilemedi.');
-      await load(projectId);
-    }catch(e){setError(e instanceof Error?e.message:'Merchant Center hesabı seçilemedi.');}
-    finally{setSaving(false)}
+      await load(projectId,generation);
+    }catch(e){
+      if(generation===loadGeneration.current)setError(e instanceof Error?e.message:'Merchant Center hesabı seçilemedi.');
+    }finally{
+      if(generation===loadGeneration.current)setSaving(false);
+    }
   }
 
   if(!projectId)return <div className="empty">Önce bir proje seç.</div>;
