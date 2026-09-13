@@ -124,7 +124,7 @@ export default function ApprovalDeskPanel({projectId,onApproved}:{projectId:stri
     const generation=loadGeneration.current;
     setApproving(id);setError('');
     try{
-      const res=await fetch(`${api}/recommendations/${id}/approve`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({approvedBy:'teyfikgokdemir@outlook.com'})});
+      const res=await fetch(`${api}/recommendations/${id}/approve`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({})});
       const payload=await res.json();
       if(generation!==loadGeneration.current)return;
       if(!res.ok)throw new Error(payload?.error||'Öneri onaylanamadı.');
