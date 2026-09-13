@@ -47,8 +47,8 @@ export default function MerchantPanel({projectId}:{projectId:string|null}){
 
   useEffect(()=>{
     const generation=++loadGeneration.current;
-    setSaving(false);setError('');
-    if(!projectId){setData(null);setSelectedAccount('');setLoading(false);return;}
+    setData(null);setSelectedAccount('');setSaving(false);setError('');
+    if(!projectId){setLoading(false);return;}
     void load(projectId,generation);
   },[projectId]);
 
