@@ -43,6 +43,37 @@ const sourceName = (body: Record<string, unknown>) => {
   return referrer;
 };
 
+type RequestWithCf = Request & {
+  cf?: {
+    country?: string;
+    region?: string;
+    city?: string;
+  };
+};
+
+const recordGeo = async (env: Env, request: Request, site: string, day: string) => {
+  const cf = (request as RequestWithCf).cf;
+  const country = clean(cf?.country, 80) || 'Bilinmiyor';
+  const region = clean(cf?.region, 120) || 'Bilinmiyor';
+  const city = clean(cf?.city, 120) || 'Bilinmiyor';
+
+  await env.CANSU_ANALYTICS_DB.prepare(
+    `CREATE TABLE IF NOT EXISTS geo_events (
+      site TEXT NOT NULL,
+      day TEXT NOT NULL,
+      country TEXT NOT NULL,
+      region TEXT NOT NULL,
+      city TEXT NOT NULL,
+      views INTEGER NOT NULL DEFAULT 0,
+      PRIMARY KEY (site, day, country, region, city)
+    )`,
+  ).run();
+
+  await env.CANSU_ANALYTICS_DB.prepare(
+    'INSERT INTO geo_events (site, day, country, region, city, views) VALUES (?, ?, ?, ?, ?, 1) ON CONFLICT(site, day, country, region, city) DO UPDATE SET views = views + 1',
+  ).bind(site, day, country, region, city).run();
+};
+
 export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   const origin = request.headers.get('origin');
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors(origin) });
@@ -59,6 +90,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
       await env.CANSU_ANALYTICS_DB.prepare(
         'INSERT INTO source_events (site, day, source, landing_path, views) VALUES (?, ?, ?, ?, 1) ON CONFLICT(site, day, source, landing_path) DO UPDATE SET views = views + 1',
       ).bind(site, day, source, path).run();
+      await recordGeo(env, request, site, day);
       return response({ ok: true }, 202, origin);
     } catch {
       return response({ ok: false, error: 'Invalid analytics event' }, 400, origin);
@@ -89,6 +121,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
       await env.CANSU_ANALYTICS_DB.prepare(
         'INSERT INTO source_events (site, day, source, landing_path, views) VALUES (?, ?, ?, ?, 1) ON CONFLICT(site, day, source, landing_path) DO UPDATE SET views = views + 1',
       ).bind(eventSite, day, source, path).run();
+      await recordGeo(env, request, eventSite, day);
       return response({ ok: true }, 202, origin);
     }
     const site = clean(url.searchParams.get('site'), 40);
