@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { pool } from './db.js';
 import { runAudit } from './audit.js';
+import { analyticsPerformanceForProject, selectAnalyticsPropertyForProject } from './google-analytics.js';
 import { clientInviteRouter } from './client-invites.js';
 import { clientPortalRouter } from './client-portal.js';
 import { projectLifecycleRouter } from './project-lifecycle.js';
@@ -66,6 +67,25 @@ workspaceRouter.get('/me',async(req,res)=>{
       listWorkspaceProjects(actor)
     ]);
     res.json({actor,workspace:workspace.rows[0]||null,branding:branding.rows[0]||null,projects});
+  }catch(error){res.status(workspaceErrorStatus(error)).json({error:workspaceErrorMessage(error)})}
+});
+
+workspaceRouter.get('/me/projects/:projectId/analytics/performance',async(req,res)=>{
+  try{
+    const actor=await resolveWorkspaceActor(req);
+    await assertProjectAccess(actor,req.params.projectId);
+    res.json(await analyticsPerformanceForProject(req.params.projectId));
+  }catch(error){res.status(workspaceErrorStatus(error)).json({error:workspaceErrorMessage(error)})}
+});
+
+workspaceRouter.post('/me/projects/:projectId/analytics/select',async(req,res)=>{
+  const parsed=z.object({property:z.string().regex(/^properties\/\d+$/)}).safeParse(req.body||{});
+  if(!parsed.success)return res.status(400).json({error:'Geçerli GA4 property seçin.'});
+  try{
+    const actor=await resolveWorkspaceActor(req);
+    requireRole(actor,'analyst');
+    await assertProjectAccess(actor,req.params.projectId);
+    res.json(await selectAnalyticsPropertyForProject(req.params.projectId,parsed.data.property));
   }catch(error){res.status(workspaceErrorStatus(error)).json({error:workspaceErrorMessage(error)})}
 });
 
