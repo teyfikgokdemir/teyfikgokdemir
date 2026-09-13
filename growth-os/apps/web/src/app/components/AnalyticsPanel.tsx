@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect,useState } from 'react';
+import { useEffect,useRef,useState } from 'react';
 
 type Performance={
   matched?:boolean;days?:number;property?:string;propertyName?:string;accountName?:string;message?:string;selectedAnalyticsProperty?:string|null;
@@ -18,30 +18,48 @@ export default function AnalyticsPanel({projectId}:{projectId:string|null}){
   const[loading,setLoading]=useState(false);
   const[saving,setSaving]=useState(false);
   const[error,setError]=useState('');
+  const loadGeneration=useRef(0);
 
-  async function load(id:string){
+  async function load(id:string,generation=loadGeneration.current){
+    if(generation!==loadGeneration.current)return;
     setLoading(true);setError('');
     try{
       const response=await fetch(`${api}/workspaces/me/projects/${id}/analytics/performance`,{cache:'no-store'});
       const body=await response.json() as Performance & {error?:string};
       if(!response.ok)throw new Error(body.error||'Google Analytics verisi okunamadı.');
+      if(generation!==loadGeneration.current)return;
       setData(body);
-    }catch(e){setData(null);setError(e instanceof Error?e.message:'Google Analytics verisi okunamadı.');}
-    finally{setLoading(false)}
+    }catch(e){
+      if(generation!==loadGeneration.current)return;
+      setData(null);setError(e instanceof Error?e.message:'Google Analytics verisi okunamadı.');
+    }finally{
+      if(generation===loadGeneration.current)setLoading(false);
+    }
   }
 
-  useEffect(()=>{if(!projectId){setData(null);return;}void load(projectId);},[projectId]);
+  useEffect(()=>{
+    const generation=++loadGeneration.current;
+    setSaving(false);setError('');
+    if(!projectId){setData(null);setLoading(false);return;}
+    void load(projectId,generation);
+  },[projectId]);
 
   async function selectProperty(property:string){
     if(!projectId||!property||saving)return;
+    const id=projectId;
+    const generation=loadGeneration.current;
     setSaving(true);setError('');
     try{
-      const response=await fetch(`${api}/workspaces/me/projects/${projectId}/analytics/select`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({property})});
+      const response=await fetch(`${api}/workspaces/me/projects/${id}/analytics/select`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({property})});
       const body=await response.json() as {error?:string};
       if(!response.ok)throw new Error(body.error||'GA4 property seçilemedi.');
-      await load(projectId);
-    }catch(e){setError(e instanceof Error?e.message:'GA4 property seçilemedi.');}
-    finally{setSaving(false)}
+      if(generation!==loadGeneration.current)return;
+      await load(id,generation);
+    }catch(e){
+      if(generation===loadGeneration.current)setError(e instanceof Error?e.message:'GA4 property seçilemedi.');
+    }finally{
+      if(generation===loadGeneration.current)setSaving(false);
+    }
   }
 
   const fmt=(n:number)=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(n||0);
