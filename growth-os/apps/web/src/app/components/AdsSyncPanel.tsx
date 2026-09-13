@@ -106,7 +106,7 @@ export default function AdsSyncPanel({projectId,onSynced}:{projectId:string|null
 
   const totals=useMemo(()=>metrics.reduce((a,m)=>({spend:a.spend+n(m.spend),revenue:a.revenue+n(m.attributed_revenue),clicks:a.clicks+n(m.clicks),conversions:a.conversions+n(m.conversions),impressions:a.impressions+n(m.impressions)}),{spend:0,revenue:0,clicks:0,conversions:0,impressions:0}),[metrics]);
   const roas=totals.spend>0?totals.revenue/totals.spend:null;
-  const lastSync=integrations.map(i=>i.last_sync_at).filter(Boolean).sort().at(-1);
+  const lastSync=connectedAds.map(i=>i.last_sync_at).filter(Boolean).sort().at(-1);
 
   if(!projectId)return <section className="moduleCard"><div className="empty">Önce bir proje seç.</div></section>;
 
