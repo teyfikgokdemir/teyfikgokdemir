@@ -83,7 +83,7 @@ const portalHandler:RequestHandler=async(req,res)=>{
     const user=await resolveClientUser(workspaceId,clientId,email);
     const [branding,projects]=await Promise.all([
       pool.query('select brand_name,logo_url,primary_color,accent_color,custom_domain,report_footer,settings from workspace_branding where workspace_id=$1',[workspaceId]),
-      pool.query('select id,name,domain,created_at from projects where workspace_id=$1 and client_id=$2 order by created_at desc',[workspaceId,clientId])
+      pool.query("select id,name,domain,created_at from projects where workspace_id=$1 and client_id=$2 and status='active' order by created_at desc",[workspaceId,clientId])
     ]);
     const projectIds:string[]=projects.rows.map((row:{id:string})=>String(row.id));
     if(!projectIds.length){
@@ -121,7 +121,7 @@ const decisionHandler:RequestHandler=async(req,res)=>{
     const email=actorEmailFromRequest(req);
     await assertClient(workspaceId,clientId);
     await resolveClientUser(workspaceId,clientId,email);
-    const rec=await pool.query(`select r.id,r.project_id,r.status from recommendations r join projects p on p.id=r.project_id where r.id=$1 and p.workspace_id=$2 and p.client_id=$3 and r.status in ('proposed','approved')`,[recommendationId,workspaceId,clientId]);
+    const rec=await pool.query(`select r.id,r.project_id,r.status from recommendations r join projects p on p.id=r.project_id where r.id=$1 and p.workspace_id=$2 and p.client_id=$3 and p.status='active' and r.status in ('proposed','approved')`,[recommendationId,workspaceId,clientId]);
     if(!rec.rows[0]){res.status(404).json({error:'Karar verilebilir öneri bulunamadı.'});return}
     const {rows}=await pool.query(`insert into client_decisions(workspace_id,client_id,project_id,recommendation_id,decided_by,decision,note) values($1,$2,$3,$4,$5,$6,$7) on conflict(client_id,recommendation_id) do update set decided_by=excluded.decided_by,decision=excluded.decision,note=excluded.note,created_at=now() returning *`,[workspaceId,clientId,rec.rows[0].project_id,recommendationId,email,decision,note||null]);
     res.json({decision:rows[0],executionTriggered:false,note:'Müşteri kararı kaydedildi. Bu işlem harici sistemlerde değişiklik başlatmaz.'});
