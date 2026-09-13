@@ -11,15 +11,60 @@ interface Props {
 const { copy, locale = 'en' } = Astro.props;
 
 const footerText = {
-  tr: { connect: 'Bağlantılar', ventures: 'Yapılar', contact: 'İletişim', position: 'CTSEG kurucusu · Uluslararası ticaret ve stratejik tedarik sistemleri.' },
-  ru: { connect: 'Ссылки', ventures: 'Проекты', contact: 'Контакты', position: 'Основатель CTSEG · Международная торговля и системы стратегических закупок.' },
-  en: { connect: 'Connect', ventures: 'Organizations', contact: 'Contact', position: 'Founder of CTSEG · International trade and strategic sourcing systems.' },
-  mk: { connect: 'Поврзување', ventures: 'Организации', contact: 'Контакт', position: 'Основач на CTSEG · Меѓународна трговија и стратешко снабдување.' },
-  sr: { connect: 'Povezivanje', ventures: 'Organizacije', contact: 'Kontakt', position: 'Osnivač CTSEG-a · Međunarodna trgovina i strateška nabavka.' },
-  sq: { connect: 'Lidhje', ventures: 'Organizata', contact: 'Kontakt', position: 'Themelues i CTSEG · Tregti ndërkombëtare dhe furnizim strategjik.' },
-  fa: { connect: 'ارتباطات', ventures: 'سازمان‌ها', contact: 'تماس', position: 'بنیان‌گذار CTSEG · هماهنگ‌کننده تجاری تولیدکنندگان ایرانی با بازارهای بین‌المللی.' },
-  zh: { connect: '社交连接', ventures: '商业实体', contact: '联系我们', position: 'CTSEG 创始人 · 国际贸易与战略采购落地系统。' },
-  vi: { connect: 'Liên kết', ventures: 'Dự án & Doanh nghiệp', contact: 'Liên hệ', position: 'Nhà sáng lập CTSEG · Hệ thống thương mại quốc tế và thu mua chiến lược.' },
+  tr: {
+    connect: 'Bağlantılar', ventures: 'Yapılar', contact: 'İletişim',
+    position: 'CTSEG kurucusu · Uluslararası ticaret ve stratejik tedarik sistemleri.',
+    socialNav: 'Sosyal bağlantılar', ventureNav: 'Yapı bağlantıları', contactNav: 'İletişim bağlantıları',
+    whatsappMessage: 'Merhaba Teyfik, teyfikgokdemir.com üzerinden iletişime geçiyorum.'
+  },
+  ru: {
+    connect: 'Ссылки', ventures: 'Проекты', contact: 'Контакты',
+    position: 'Основатель CTSEG · Международная торговля и системы стратегических закупок.',
+    socialNav: 'Социальные сети', ventureNav: 'Ссылки на проекты', contactNav: 'Контактные ссылки',
+    whatsappMessage: 'Здравствуйте, Тейфик. Я связываюсь с вами через teyfikgokdemir.com.'
+  },
+  en: {
+    connect: 'Connect', ventures: 'Organizations', contact: 'Contact',
+    position: 'Founder of CTSEG · International trade and strategic sourcing systems.',
+    socialNav: 'Social links', ventureNav: 'Organization links', contactNav: 'Contact links',
+    whatsappMessage: 'Hello Teyfik, I am contacting you through teyfikgokdemir.com.'
+  },
+  mk: {
+    connect: 'Поврзување', ventures: 'Организации', contact: 'Контакт',
+    position: 'Основач на CTSEG · Меѓународна трговија и стратешко снабдување.',
+    socialNav: 'Социјални врски', ventureNav: 'Врски до организации', contactNav: 'Контакт врски',
+    whatsappMessage: 'Здраво Тејфик, ве контактирам преку teyfikgokdemir.com.'
+  },
+  sr: {
+    connect: 'Povezivanje', ventures: 'Organizacije', contact: 'Kontakt',
+    position: 'Osnivač CTSEG-a · Međunarodna trgovina i strateška nabavka.',
+    socialNav: 'Društvene mreže', ventureNav: 'Linkovi organizacija', contactNav: 'Kontakt linkovi',
+    whatsappMessage: 'Zdravo Teyfik, kontaktiram vas preko teyfikgokdemir.com.'
+  },
+  sq: {
+    connect: 'Lidhje', ventures: 'Organizata', contact: 'Kontakt',
+    position: 'Themelues i CTSEG · Tregti ndërkombëtare dhe furnizim strategjik.',
+    socialNav: 'Lidhje sociale', ventureNav: 'Lidhje të organizatave', contactNav: 'Lidhje kontakti',
+    whatsappMessage: 'Përshëndetje Teyfik, po ju kontaktoj përmes teyfikgokdemir.com.'
+  },
+  fa: {
+    connect: 'ارتباطات', ventures: 'سازمان‌ها', contact: 'تماس',
+    position: 'بنیان‌گذار CTSEG · هماهنگ‌کننده تجاری تولیدکنندگان ایرانی با بازارهای بین‌المللی.',
+    socialNav: 'پیوندهای شبکه‌های اجتماعی', ventureNav: 'پیوندهای سازمان‌ها', contactNav: 'راه‌های تماس',
+    whatsappMessage: 'سلام تیفیک، از طریق teyfikgokdemir.com با شما تماس می‌گیرم.'
+  },
+  zh: {
+    connect: '社交连接', ventures: '商业实体', contact: '联系我们',
+    position: 'CTSEG 创始人 · 国际贸易与战略采购落地系统。',
+    socialNav: '社交媒体链接', ventureNav: '商业实体链接', contactNav: '联系方式',
+    whatsappMessage: '你好 Teyfik，我通过 teyfikgokdemir.com 与你联系。'
+  },
+  vi: {
+    connect: 'Liên kết', ventures: 'Dự án & Doanh nghiệp', contact: 'Liên hệ',
+    position: 'Nhà sáng lập CTSEG · Hệ thống thương mại quốc tế và thu mua chiến lược.',
+    socialNav: 'Liên kết mạng xã hội', ventureNav: 'Liên kết doanh nghiệp', contactNav: 'Liên kết liên hệ',
+    whatsappMessage: 'Xin chào Teyfik, tôi liên hệ với bạn qua teyfikgokdemir.com.'
+  },
 } as const;
 
 const footer = footerText[locale] ?? footerText.en;
@@ -50,9 +95,7 @@ const ventureLinks = [
 
 const whatsappUrl =
   `https://wa.me/${site.whatsapp}?text=` +
-  encodeURIComponent(
-    'Hello Teyfik, I am contacting you through teyfikgokdemir.com.'
-  );
+  encodeURIComponent(footer.whatsappMessage);
 ---
 <footer class="site-footer premium-footer">
   <div class="premium-footer__inner">
@@ -125,7 +168,7 @@ const whatsappUrl =
       <div class="premium-footer__group">
         <span class="premium-footer__label">{footer.connect}</span>
 
-        <nav aria-label="Social links">
+        <nav aria-label={footer.socialNav}>
           {socialLinks.map(([label, href]) => (
             <a
               href={href}
@@ -143,7 +186,7 @@ const whatsappUrl =
       <div class="premium-footer__group">
         <span class="premium-footer__label">{footer.ventures}</span>
 
-        <nav aria-label="Venture links">
+        <nav aria-label={footer.ventureNav}>
           {ventureLinks.map(([label, href]) => (
             <a
               href={href}
@@ -161,7 +204,7 @@ const whatsappUrl =
       <div class="premium-footer__group premium-footer__group--contact">
         <span class="premium-footer__label">{footer.contact}</span>
 
-        <nav aria-label="Contact links">
+        <nav aria-label={footer.contactNav}>
           <a href={'mailto:' + site.email}>
             <span>{site.email}</span>
           </a>
