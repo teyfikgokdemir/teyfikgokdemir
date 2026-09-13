@@ -134,7 +134,7 @@ const scoreFromIssues = (issues: AuditIssue[], keys: string[], sampledPageCount 
   if (!selected.length) return 100;
   let score = 100;
   for (const issue of selected) {
-    if (issue.status === 'pass') continue;
+    if (issue.status === 'pass' || issue.status === 'warning') continue;
     const penalty = issue.severity === 'critical' ? 30 : issue.severity === 'high' ? 18 : issue.severity === 'medium' ? 10 : 4;
     const affectedPages = issue.evidence ? new Set(issue.evidence.map((item) => item.url)).size : 0;
     const coverageWeight = issue.key.startsWith('site-') && sampledPageCount > 0 && affectedPages > 0
@@ -279,7 +279,11 @@ export async function runAudit(inputDomain: string) {
   add(faqSignals, { key: 'aeo', title: 'AEO soru-cevap sinyali', severity: 'medium', detail: faqSignals ? 'Soru-cevap sinyali bulundu' : 'Belirgin FAQ/soru-cevap sinyali yok', recommendation: 'Gerçek kullanıcı sorularına kısa ve açık cevaplar ekle.' });
   add(authorSignals, { key: 'entity', title: 'Varlık ve güven sinyalleri', severity: 'medium', detail: authorSignals ? 'Kurumsal/uzman sinyali bulundu' : 'Zayıf varlık sinyali', recommendation: 'Şirket, ekip, uzmanlık, referans ve doğrulanabilir işletme bilgilerini güçlendir.' });
   add(tracking.ga4 || tracking.gtm, { key: 'analytics', title: 'Analytics altyapısı', severity: 'high', detail: `GA4:${tracking.ga4} GTM:${tracking.gtm}`, recommendation: 'GA4/GTM ölçüm altyapısını kur ve temel eventleri doğrula.' });
-  add(tracking.metaPixel, { key: 'meta', title: 'Meta Pixel', severity: 'medium', detail: tracking.metaPixel ? 'Bulundu' : 'Bulunamadı', recommendation: 'Meta reklamı kullanılacaksa Pixel + CAPI ölçümünü kur.' });
+  if (tracking.metaPixel) {
+    add(true, { key: 'meta', title: 'Meta Pixel', severity: 'medium', detail: 'Bulundu', recommendation: 'Meta reklamı kullanılacaksa Pixel + CAPI ölçümünü kur.' });
+  } else {
+    issues.push({ key: 'meta', title: 'Meta Pixel', severity: 'info', status: 'warning', detail: 'Bulunamadı · Meta Ads kullanılmıyorsa opsiyonel', recommendation: 'Meta reklamı kullanılacaksa Pixel + CAPI ölçümünü kur.' });
+  }
   add(forms > 0 || /sepete ekle|satın al|iletişim|teklif/i.test(text), { key: 'conversion', title: 'Dönüşüm yolu', severity: 'high', detail: `${forms} form`, recommendation: 'Birincil dönüşüm aksiyonunu görünür ve ölçülebilir hale getir.' });
   add(sampledPages.length >= 2, { key: 'crawl-coverage', title: 'Çoklu sayfa tarama kapsamı', severity: 'medium', detail: `${sampledPages.length} sayfa örneklendi`, recommendation: 'İç link yapısını ve taranabilir sayfa kapsamını güçlendir.' });
   add(pagesWithoutTitle === 0 && duplicateTitles === 0, { key: 'site-titles', title: 'Site geneli title kalitesi', severity: 'high', detail: `${pagesWithoutTitle} eksik, ${duplicateTitles} tekrar eden title.${formatEvidenceUrls(titleEvidence)}`, recommendation: 'Örneklenen tüm sayfalarda benzersiz title kullan.', evidence: titleEvidence });
