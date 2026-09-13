@@ -13,6 +13,27 @@ function normalizedHost(value: unknown) {
   }
 }
 
+function normalizePassingAuditEvidence(value: unknown) {
+  if (!value || typeof value !== 'object') return;
+  const audit = value as { issues?: Array<{ status?: string; evidence?: Array<{ problem?: string }> }> };
+  if (!Array.isArray(audit.issues)) return;
+  for (const issue of audit.issues) {
+    if (issue.status !== 'pass' || !Array.isArray(issue.evidence)) continue;
+    for (const evidence of issue.evidence) {
+      if (evidence.problem === 'too_short' || evidence.problem === 'too_long') evidence.problem = 'valid';
+    }
+  }
+}
+
+function normalizeAuditPayload(payload: unknown) {
+  if (!payload || typeof payload !== 'object') return payload;
+  const record = payload as Record<string, unknown>;
+  normalizePassingAuditEvidence(record.audit);
+  normalizePassingAuditEvidence(record.current);
+  normalizePassingAuditEvidence(record.previous);
+  return payload;
+}
+
 async function proxy(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
   const { path } = await context.params;
   const routePath = path.join('/');
@@ -44,6 +65,16 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
   try {
     const upstream = await fetch(target, init);
     let body = await upstream.text();
+
+    if (upstream.ok && (routePath === 'audit' || routePath.endsWith('/final-check'))) {
+      try {
+        const parsed = JSON.parse(body);
+        normalizeAuditPayload(parsed);
+        body = JSON.stringify(parsed);
+      } catch {
+        // Preserve upstream payload if it is not the expected audit JSON.
+      }
+    }
 
     if (routePath === 'audit' && request.method === 'POST' && upstream.ok) {
       try {
