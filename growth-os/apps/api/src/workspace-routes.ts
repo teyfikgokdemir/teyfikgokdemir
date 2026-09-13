@@ -6,7 +6,6 @@ import { clientInviteRouter } from './client-invites.js';
 import { clientPortalRouter } from './client-portal.js';
 import { projectLifecycleRouter } from './project-lifecycle.js';
 import { workspaceActivityRouter } from './workspace-activity.js';
-import { ensureWorkspaceScopedProjectDomains } from './project-domain-schema.js';
 import { assertProjectAccess, listWorkspaceProjects, requireRole, resolveWorkspaceActor, workspaceErrorMessage, workspaceErrorStatus } from './workspace-access.js';
 
 export const workspaceRouter=Router();
@@ -14,7 +13,6 @@ workspaceRouter.use('/:workspaceId/activity',workspaceActivityRouter);
 workspaceRouter.use('/:workspaceId/clients',clientPortalRouter);
 workspaceRouter.use('/:workspaceId/invites',clientInviteRouter);
 workspaceRouter.use('/:workspaceId/project-lifecycle',projectLifecycleRouter);
-await ensureWorkspaceScopedProjectDomains();
 
 async function persistWorkspaceAudit(workspaceId:string,domain:string,projectName?:string){
   const result=await runAudit(domain);

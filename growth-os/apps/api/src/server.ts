@@ -3,6 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import { z } from 'zod';
 import { initDb, pool } from './db.js';
+import { runMigrations } from './migrations.js';
 import { runAudit } from './audit.js';
 import { syncAdsProject } from './ads-sync.js';
 import { buildGoogleAuthUrl, discoverGoogleResources, encryptSecret, exchangeGoogleCode, searchConsolePerformanceForProject } from './google.js';
@@ -312,4 +313,4 @@ app.get('/audits/:id',async(req,res)=>{const{rows}=await pool.query('select payl
 
 app.use((error:unknown,_req:express.Request,res:express.Response,_next:express.NextFunction)=>{console.error(error);res.status(500).json({error:'Beklenmeyen sunucu hatası.'})});
 const port=Number(process.env.PORT||4000);
-initDb().then(()=>app.listen(port,'0.0.0.0',()=>console.log(`Growth OS API :${port}`))).catch(error=>{console.error(error);process.exit(1)});
+initDb().then(()=>runMigrations()).then(()=>app.listen(port,'0.0.0.0',()=>console.log(`Growth OS API :${port}`))).catch(error=>{console.error(error);process.exit(1)});
