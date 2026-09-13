@@ -53,7 +53,6 @@ const reflexUrls: Record<Locale | 'fa', string> = {
 };
 
 const reflexUrl = reflexUrls[locale];
-const isReflexPage = Astro.url.pathname.includes('/reflex/');
 const aiVisibilityUrl = aiVisibilityUrls[locale];
 const blogUrl = blogUrls[locale];
 
@@ -118,15 +117,16 @@ const a11y = locale === 'fa'
   : copy.a11y;
 
 const panelLabels = ({
-  tr: { services: 'Hizmetler', approach: 'Uzmanlık', start: 'Birlikte çalışalım', email: 'E-posta gönder' },
-  en: { services: 'Services', approach: 'Expertise', start: 'Start a conversation', email: 'Send an email' },
-  ru: { services: 'Проекты', approach: 'Подход', start: 'Обсудить задачу', email: 'Написать по email' },
-  mk: { services: 'Потфати', approach: 'Пристап', start: 'Да разговараме', email: 'Испрати email' },
-  sr: { services: 'Poduhvati', approach: 'Pristup', start: 'Započnimo razgovor', email: 'Pošalji email' },
-  sq: { services: 'Sipërmarrjet', approach: 'Qasja', start: 'Nisni një bisedë', email: 'Dërgo email' },
-  fa: { services: 'ساختارها', approach: 'رویکرد', start: 'شروع گفتگو', email: 'ارسال ایمیل' },
-  zh: { services: '核心业务', approach: '运作体系', start: '开启商务对接', email: '发送商务邮件' },
-}[locale] || { services: 'Services', approach: 'Expertise', start: 'Start a conversation', email: 'Send an email' });
+  tr: { services: 'Ekosistem', approach: 'Uzmanlık', start: 'Birlikte çalışalım', email: 'E-posta gönder' },
+  en: { services: 'Ecosystem', approach: 'Expertise', start: 'Start a conversation', email: 'Send an email' },
+  ru: { services: 'Экосистема', approach: 'Подход', start: 'Обсудить задачу', email: 'Написать по email' },
+  mk: { services: 'Екосистем', approach: 'Пристап', start: 'Да разговараме', email: 'Испрати email' },
+  sr: { services: 'Ekosistem', approach: 'Pristup', start: 'Započnimo razgovor', email: 'Pošalji email' },
+  sq: { services: 'Ekosistemi', approach: 'Qasja', start: 'Nisni një bisedë', email: 'Dërgo email' },
+  fa: { services: 'اکوسیستم', approach: 'رویکرد', start: 'شروع گفتگو', email: 'ارسال ایمیل' },
+  zh: { services: '生态体系', approach: '运作体系', start: '开启商务对接', email: '发送商务邮件' },
+  vi: { services: 'Hệ sinh thái', approach: 'Chuyên môn', start: 'Bắt đầu trao đổi', email: 'Gửi email' },
+}[locale] || { services: 'Ecosystem', approach: 'Expertise', start: 'Start a conversation', email: 'Send an email' });
 
 const ctsegUrl = locale === 'tr'
   ? 'https://ctseg.com.tr/'
@@ -135,10 +135,10 @@ const ctsegUrl = locale === 'tr'
     : 'https://ctseg.com.tr/en/';
 
 const ventureSubItems = [
-  { name: 'CTSEG', desc: locale === 'tr' ? 'Uluslararası Ticaret ve Tedarik' : locale === 'zh' ? '国际贸易与战略采购' : 'International Trade & Sourcing', url: ctsegUrl, external: true },
+  { name: 'CTSEG', desc: locale === 'tr' ? 'Ana ticari yapı · Uluslararası ticaret ve tedarik' : locale === 'zh' ? '核心商业实体 · 国际贸易与战略采购' : 'Main operating company · International Trade & Sourcing', url: ctsegUrl, external: true },
+  { name: 'REFLEX · CTSEG', desc: locale === 'tr' ? 'Ürün portföyü · Tek kullanımlık ve muayene eldivenleri' : locale === 'zh' ? 'CTSEG 产品组合 · 一次性及医用防护手套' : 'CTSEG product portfolio · Disposable & examination gloves', url: reflexUrl, external: false },
   { name: 'QCT Studio', desc: locale === 'tr' ? 'Balkanlar Dijital ve Yazılım' : locale === 'zh' ? '欧洲数字化与技术开发' : 'Balkan Digital & Software', url: 'https://qctstudio.com', external: true },
   { name: 'QCT Commerce', desc: locale === 'tr' ? 'E-Ticaret ve Büyüme Sistemleri' : locale === 'zh' ? '数字化贸易与分销系统' : 'E-Commerce & Digital Growth', url: 'https://qctcommerce.com', external: true },
-  { name: 'Reflex Medical', desc: locale === 'tr' ? 'Medikal Tedarik ve İhracat' : locale === 'zh' ? '防护手套供应链与出口' : 'Medical Sourcing & Export', url: reflexUrl, external: false },
 ];
 
 const expertiseSubItems = [
@@ -153,7 +153,6 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
 
 <header class="site-header">
   <div class="header-container">
-    <!-- Brand Logo -->
     <a class="brand" href={currentHomePath} aria-label="Teyfik Gökdemir">
       <picture class="brand__mark">
         <source media="(max-width: 760px)" srcset="/brand/teyfik-gokdemir-monogram.webp" type="image/webp" />
@@ -169,7 +168,6 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
       </picture>
     </a>
 
-    <!-- Hamburger Toggle (Mobile Only) -->
     <button
       class="menu-toggle"
       type="button"
@@ -181,7 +179,6 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
       <span></span><span></span><span></span>
     </button>
 
-    <!-- Desktop Navigation Bar (Desktop Only - UNTOUCHED) -->
     <nav class="desktop-nav" aria-label="Desktop Navigation">
       <div class="desktop-nav-item" data-dropdown>
         <button class="desktop-nav-btn dropdown-trigger" type="button" aria-expanded="false">
@@ -212,12 +209,10 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
         </div>
       </div>
 
-      <a href={reflexUrl} class="desktop-nav-link" aria-current={isReflexPage ? 'page' : undefined}>Reflex</a>
       <a href={blogUrl} class="desktop-nav-link">{blogLabel}</a>
       <a href={sectionUrl('journey')} class="desktop-nav-link">{aboutLabel}</a>
       <a href={sectionUrl('contact')} class="desktop-nav-link">{navLabels.contact}</a>
 
-      <!-- Desktop Language Dropdown -->
       <div class="desktop-nav-item lang-item" data-dropdown>
         <button class="desktop-nav-btn lang-btn dropdown-trigger" type="button" aria-expanded="false">
           <span>{locale.toUpperCase()}</span>
@@ -234,7 +229,6 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
       </div>
     </nav>
 
-    <!-- Mobile Navigation Panel (Full Screen Modal - z-index 99999) -->
     <div class="mobile-panel" id="mobile-navigation" aria-hidden="true">
       <div class="mobile-panel-head">
         <div class="mobile-panel-brand">
@@ -246,7 +240,6 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
       </div>
 
       <div class="mobile-panel-body">
-        <!-- Mythborn Card 1: DİL SEÇİMİ / LANGUAGE -->
         <div class="myth-card">
           <div class="myth-card-head">
             <span class="myth-card-title">DİL</span>
@@ -268,7 +261,6 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
           </div>
         </div>
 
-        <!-- Mythborn Card 2: GİRİŞİMLER VE YAPILANMA -->
         <div class="myth-card">
           <div class="myth-card-head">
             <span class="myth-card-title">{panelLabels.services.toUpperCase()}</span>
@@ -284,7 +276,6 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
           </div>
         </div>
 
-        <!-- Mythborn Card 3: UZMANLIK ALANLARI -->
         <div class="myth-card">
           <div class="myth-card-head">
             <span class="myth-card-title">{panelLabels.approach.toUpperCase()}</span>
@@ -300,16 +291,15 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
           </div>
         </div>
 
-        <!-- Mythborn Card 4: HIZLI ERİŞİM -->
         <div class="myth-card">
           <div class="myth-card-head">
             <span class="myth-card-title">{locale === 'tr' ? 'HIZLI ERİŞİM' : 'NAVIGATION'}</span>
             <span class="myth-card-badge">MENÜ</span>
           </div>
           <div class="myth-card-grid">
-            <a href={reflexUrl} class="myth-card-item myth-card-item--highlight" aria-current={isReflexPage ? 'page' : undefined}>
-              <strong class="item-title">Reflex</strong>
-              <span class="item-desc">Medical Sourcing</span>
+            <a href={aiVisibilityUrl} class="myth-card-item myth-card-item--highlight">
+              <strong class="item-title">{aiVisibilityLabel}</strong>
+              <span class="item-desc">GEO · AEO · AIO</span>
             </a>
             <a href={blogUrl} class="myth-card-item">
               <strong class="item-title">{blogLabel}</strong>
@@ -370,7 +360,6 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
 
   closeButton?.addEventListener('click', closeMobileMenu);
 
-  // Desktop Dropdowns
   document.querySelectorAll('.desktop-nav [data-dropdown]').forEach((dropdown) => {
     const trigger = dropdown.querySelector('.dropdown-trigger');
     if (!trigger) return;
@@ -425,7 +414,6 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
     overscroll-behavior: none !important;
   }
 
-  /* Sticky Desktop Header */
   .site-header {
     height: 80px;
     background: #191512;
@@ -465,7 +453,6 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
     display: none;
   }
 
-  /* Desktop Navigation Styling (UNTOUCHED & CLEAN) */
   .desktop-nav {
     display: flex;
     align-items: center;
@@ -578,7 +565,6 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
     color: #d78263;
   }
 
-  /* Mobile Panel Styling (Standalone Full Screen Modal z-index 99999) */
   .mobile-panel {
     display: none;
   }
@@ -639,7 +625,6 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
       transform: translateY(0) !important;
     }
 
-    /* ABSOLUTE FORCE COLOR OVERRIDES */
     .mobile-panel,
     .mobile-panel *,
     .mobile-panel a,
@@ -691,7 +676,6 @@ const allLocales: Locale[] = ['tr', 'en', 'ru', 'sq', 'mk', 'sr', 'fa', 'zh', 'v
       width: 100% !important;
     }
 
-    /* Solid Ultra-Bright Cards */
     .mobile-panel .myth-card {
       background: #26201b !important;
       border: 1.5px solid #4a3e35 !important;
