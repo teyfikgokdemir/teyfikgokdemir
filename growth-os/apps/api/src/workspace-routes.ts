@@ -156,18 +156,19 @@ workspaceRouter.put('/:workspaceId/branding',async(req,res)=>{
     const actor=await resolveWorkspaceActor(req,req.params.workspaceId);
     requireRole(actor,'admin');
     const d=parsed.data;
+    const has=(key:keyof typeof d)=>Object.prototype.hasOwnProperty.call(d,key);
     const {rows}=await pool.query(`
       insert into workspace_branding(workspace_id,brand_name,logo_url,primary_color,accent_color,custom_domain,report_footer)
       values($1,$2,$3,$4,$5,$6,$7)
       on conflict(workspace_id) do update set
-        brand_name=coalesce(excluded.brand_name,workspace_branding.brand_name),
-        logo_url=coalesce(excluded.logo_url,workspace_branding.logo_url),
-        primary_color=coalesce(excluded.primary_color,workspace_branding.primary_color),
-        accent_color=coalesce(excluded.accent_color,workspace_branding.accent_color),
-        custom_domain=coalesce(excluded.custom_domain,workspace_branding.custom_domain),
-        report_footer=coalesce(excluded.report_footer,workspace_branding.report_footer),
+        brand_name=case when $8 then excluded.brand_name else workspace_branding.brand_name end,
+        logo_url=case when $9 then excluded.logo_url else workspace_branding.logo_url end,
+        primary_color=case when $10 then excluded.primary_color else workspace_branding.primary_color end,
+        accent_color=case when $11 then excluded.accent_color else workspace_branding.accent_color end,
+        custom_domain=case when $12 then excluded.custom_domain else workspace_branding.custom_domain end,
+        report_footer=case when $13 then excluded.report_footer else workspace_branding.report_footer end,
         updated_at=now()
-      returning *`,[actor.workspaceId,d.brandName??null,d.logoUrl??null,d.primaryColor??null,d.accentColor??null,d.customDomain??null,d.reportFooter??null]);
+      returning *`,[actor.workspaceId,d.brandName??null,d.logoUrl??null,d.primaryColor??null,d.accentColor??null,d.customDomain??null,d.reportFooter??null,has('brandName'),has('logoUrl'),has('primaryColor'),has('accentColor'),has('customDomain'),has('reportFooter')]);
     res.json({branding:rows[0],actor:{email:actor.email,role:actor.role}});
   }catch(error){res.status(workspaceErrorStatus(error)).json({error:workspaceErrorMessage(error)})}
 });
