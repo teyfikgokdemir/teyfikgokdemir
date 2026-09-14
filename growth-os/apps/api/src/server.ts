@@ -246,7 +246,7 @@ app.post('/projects/:id/integrations/meta/select',async(req,res)=>{
   const parsed=z.object({accountId:z.string().min(2)}).safeParse(req.body);
   if(!parsed.success)return res.status(400).json({error:'Geçerli Meta Ads hesabı seçin.'});
   const integration=await pool.query("select metadata from integrations where project_id=$1 and provider='meta_ads' and status='connected' order by created_at desc limit 1",[req.params.id]);
-  const metadata=integration.rows[0]?.metadata as {adAccounts?:Array<{id?:string;account_id?:string;name?:string}>}|undefined;
+  const metadata=integration.rows[0]?.metadata as {adAccounts?:Array<{id?:string;account_id?:string;name?:string}>;selectedAdAccountId?:string}|undefined;
   if(!metadata)return res.status(404).json({error:'Meta bağlantısı bulunamadı.'});
   const account=(metadata.adAccounts||[]).find(a=>a.id===parsed.data.accountId||a.account_id===parsed.data.accountId);
   if(!account)return res.status(403).json({error:'Bu Meta Ads hesabına erişim bulunamadı.'});
@@ -301,7 +301,7 @@ app.post('/projects/:id/integrations/tiktok/select',async(req,res)=>{
   const parsed=z.object({advertiserId:z.string().min(2)}).safeParse(req.body);
   if(!parsed.success)return res.status(400).json({error:'Geçerli TikTok Ads hesabı seçin.'});
   const integration=await pool.query("select metadata from integrations where project_id=$1 and provider='tiktok_ads' and status='connected' order by created_at desc limit 1",[req.params.id]);
-  const metadata=integration.rows[0]?.metadata as {advertisers?:Array<{advertiser_id?:string;advertiser_name?:string;name?:string}>}|undefined;
+  const metadata=integration.rows[0]?.metadata as {advertisers?:Array<{advertiser_id?:string;advertiser_name?:string;name?:string}>;selectedAdvertiserId?:string}|undefined;
   if(!metadata)return res.status(404).json({error:'TikTok bağlantısı bulunamadı.'});
   const account=(metadata.advertisers||[]).find(a=>String(a.advertiser_id||'')===parsed.data.advertiserId);
   if(!account)return res.status(403).json({error:'Bu TikTok Ads hesabına erişim bulunamadı.'});
