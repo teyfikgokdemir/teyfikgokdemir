@@ -31,6 +31,7 @@ export default function AgencyClientsPage(){
   const accessGeneration=useRef(0);
 
   const workspaceId=me?.actor.workspaceId||'';
+  const canManage=Boolean(me&&['owner','admin'].includes(me.actor.role));
   const selectedClient=useMemo(()=>clients.find(c=>c.id===selected)||null,[clients,selected]);
   const portalPath=selectedClient?`/client/${workspaceId}/${selectedClient.id}`:'';
   const pendingInvites=invites.filter(item=>item.status==='pending').length;
@@ -52,7 +53,7 @@ export default function AgencyClientsPage(){
 
   async function loadAccess(clientId:string,generation=accessGeneration.current){
     if(generation!==accessGeneration.current)return;
-    if(!workspaceId||!clientId){setUsers([]);setInvites([]);return}
+    if(!workspaceId||!clientId||!canManage){setUsers([]);setInvites([]);return}
     try{
       const [usersRes,invitesRes]=await Promise.all([
         fetch(`${api}/workspaces/${workspaceId}/clients/${clientId}/portal-users`,{cache:'no-store'}),
@@ -75,12 +76,12 @@ export default function AgencyClientsPage(){
   useEffect(()=>{
     const generation=++accessGeneration.current;
     setInviteUrl('');setUsers([]);setInvites([]);
-    if(selected&&workspaceId)void loadAccess(selected,generation);
-  },[selected,workspaceId]);
+    if(selected&&workspaceId&&canManage)void loadAccess(selected,generation);
+  },[selected,workspaceId,canManage]);
 
   async function submit(event:FormEvent){
     event.preventDefault();
-    if(!selectedClient||!email||saving)return;
+    if(!canManage||!selectedClient||!email||saving)return;
     const targetClientId=selectedClient.id;
     const generation=accessGeneration.current;
     setSaving(true);setError('');setNotice('');
@@ -97,7 +98,7 @@ export default function AgencyClientsPage(){
   }
 
   async function createInviteFor(targetEmail:string,targetName:string,targetRole:'client_admin'|'client_viewer'){
-    if(!selectedClient||!targetEmail||inviting)return;
+    if(!canManage||!selectedClient||!targetEmail||inviting)return;
     const targetClientId=selectedClient.id;
     const generation=accessGeneration.current;
     setInviting(true);setError('');setNotice('');setInviteUrl('');
@@ -120,7 +121,7 @@ export default function AgencyClientsPage(){
   }
 
   async function revokeInvite(inviteId:string){
-    if(!selectedClient||revokingId)return;
+    if(!canManage||!selectedClient||revokingId)return;
     const targetClientId=selectedClient.id;
     const generation=accessGeneration.current;
     setRevokingId(inviteId);setError('');setNotice('');
@@ -135,6 +136,7 @@ export default function AgencyClientsPage(){
   }
 
   async function reissueInvite(invite:ClientInvite){
+    if(!canManage)return;
     setEmail(invite.email);setDisplayName(invite.display_name||'');setRole(invite.role==='client_admin'?'client_admin':'client_viewer');
     await createInviteFor(invite.email,invite.display_name||'',invite.role==='client_admin'?'client_admin':'client_viewer');
   }
@@ -160,7 +162,7 @@ export default function AgencyClientsPage(){
         <section className={styles.summary}>
           <article><span>Workspace</span><strong>{me.workspace?.name||'Growth OS'}</strong><small>{me.actor.role}</small></article>
           <article><span>Müşteri</span><strong>{clients.length}</strong><small>aktif kayıt</small></article>
-          <article><span>Portal Kullanıcısı</span><strong>{users.length}</strong><small>{pendingInvites} bekleyen davet</small></article>
+          <article><span>Portal Kullanıcısı</span><strong>{canManage?users.length:'—'}</strong><small>{canManage?`${pendingInvites} bekleyen davet`:'admin/owner gerekli'}</small></article>
         </section>
 
         <section className={styles.grid}>
@@ -175,25 +177,27 @@ export default function AgencyClientsPage(){
             {selectedClient?<>
               <div className={styles.portalBox}><span>Portal adresi</span><code>{portalPath}</code><small>Müşteri yalnızca kendisine atanmış projeleri, kararları ve doğrulanmış sonuçları görür.</small></div>
 
-              <form className={styles.form} onSubmit={submit}>
-                <div><label>E-posta</label><input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="musteri@firma.com" required disabled={saving||inviting||Boolean(revokingId)}/></div>
-                <div><label>Ad Soyad</label><input value={displayName} onChange={e=>setDisplayName(e.target.value)} placeholder="İsteğe bağlı" disabled={saving||inviting||Boolean(revokingId)}/></div>
-                <div><label>Rol</label><select value={role} onChange={e=>setRole(e.target.value as 'client_admin'|'client_viewer')} disabled={saving||inviting||Boolean(revokingId)}><option value="client_viewer">client_viewer · sadece görüntüleme</option><option value="client_admin">client_admin · karar verebilir</option></select></div>
-                <button className={styles.primary} disabled={saving||inviting||Boolean(revokingId)}>{saving?'Hazırlanıyor…':'Doğrudan Kullanıcı Oluştur'}</button>
-                <button type="button" className={styles.copy} disabled={saving||inviting||Boolean(revokingId)||!email} onClick={()=>void createInvite()}>{inviting?'Davet hazırlanıyor…':'7 Günlük Güvenli Davet Oluştur'}</button>
-              </form>
+              {canManage?<>
+                <form className={styles.form} onSubmit={submit}>
+                  <div><label>E-posta</label><input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="musteri@firma.com" required disabled={saving||inviting||Boolean(revokingId)}/></div>
+                  <div><label>Ad Soyad</label><input value={displayName} onChange={e=>setDisplayName(e.target.value)} placeholder="İsteğe bağlı" disabled={saving||inviting||Boolean(revokingId)}/></div>
+                  <div><label>Rol</label><select value={role} onChange={e=>setRole(e.target.value as 'client_admin'|'client_viewer')} disabled={saving||inviting||Boolean(revokingId)}><option value="client_viewer">client_viewer · sadece görüntüleme</option><option value="client_admin">client_admin · karar verebilir</option></select></div>
+                  <button className={styles.primary} disabled={saving||inviting||Boolean(revokingId)}>{saving?'Hazırlanıyor…':'Doğrudan Kullanıcı Oluştur'}</button>
+                  <button type="button" className={styles.copy} disabled={saving||inviting||Boolean(revokingId)||!email} onClick={()=>void createInvite()}>{inviting?'Davet hazırlanıyor…':'7 Günlük Güvenli Davet Oluştur'}</button>
+                </form>
 
-              {inviteUrl?<div className={styles.portalBox}><span>Tek kullanımlık davet</span><code>{inviteUrl}</code><small>Davet yalnızca tanımlanan e-posta hesabıyla ve 7 gün içinde kabul edilebilir. Yeni davet oluşturulursa önceki bekleyen davet iptal edilir.</small></div>:null}
+                {inviteUrl?<div className={styles.portalBox}><span>Tek kullanımlık davet</span><code>{inviteUrl}</code><small>Davet yalnızca tanımlanan e-posta hesabıyla ve 7 gün içinde kabul edilebilir. Yeni davet oluşturulursa önceki bekleyen davet iptal edilir.</small></div>:null}
 
-              <div className={styles.users}>
-                <div className={styles.usersHead}><h3>Davet Geçmişi</h3><span>{invites.length}</span></div>
-                {invites.length===0?<div className={styles.empty}>Bu müşteri için henüz davet oluşturulmadı.</div>:invites.map(invite=><article key={invite.id}><div><strong>{invite.display_name||invite.email}</strong><span>{invite.email} · {invite.role}</span><span>{inviteStatus[invite.status]||invite.status} · {new Date(invite.expires_at).toLocaleString('tr-TR')}</span></div><div><b>{inviteStatus[invite.status]||invite.status}</b><small>{invite.status==='accepted'&&invite.accepted_at?`Kabul: ${new Date(invite.accepted_at).toLocaleDateString('tr-TR')}`:`Oluşturma: ${new Date(invite.created_at).toLocaleDateString('tr-TR')}`}</small><div style={{display:'flex',gap:6,justifyContent:'flex-end',marginTop:7,flexWrap:'wrap'}}>{invite.status==='pending'?<button type="button" className={styles.copy} disabled={Boolean(revokingId)||inviting||saving} onClick={()=>void revokeInvite(invite.id)}>{revokingId===invite.id?'İptal ediliyor…':'İptal Et'}</button>:null}{invite.status!=='accepted'?<button type="button" className={styles.copy} disabled={inviting||Boolean(revokingId)||saving} onClick={()=>void reissueInvite(invite)}>Yeniden Davet</button>:null}</div></div></article>)}
-              </div>
+                <div className={styles.users}>
+                  <div className={styles.usersHead}><h3>Davet Geçmişi</h3><span>{invites.length}</span></div>
+                  {invites.length===0?<div className={styles.empty}>Bu müşteri için henüz davet oluşturulmadı.</div>:invites.map(invite=><article key={invite.id}><div><strong>{invite.display_name||invite.email}</strong><span>{invite.email} · {invite.role}</span><span>{inviteStatus[invite.status]||invite.status} · {new Date(invite.expires_at).toLocaleString('tr-TR')}</span></div><div><b>{inviteStatus[invite.status]||invite.status}</b><small>{invite.status==='accepted'&&invite.accepted_at?`Kabul: ${new Date(invite.accepted_at).toLocaleDateString('tr-TR')}`:`Oluşturma: ${new Date(invite.created_at).toLocaleDateString('tr-TR')}`}</small><div style={{display:'flex',gap:6,justifyContent:'flex-end',marginTop:7,flexWrap:'wrap'}}>{invite.status==='pending'?<button type="button" className={styles.copy} disabled={Boolean(revokingId)||inviting||saving} onClick={()=>void revokeInvite(invite.id)}>{revokingId===invite.id?'İptal ediliyor…':'İptal Et'}</button>:null}{invite.status!=='accepted'?<button type="button" className={styles.copy} disabled={inviting||Boolean(revokingId)||saving} onClick={()=>void reissueInvite(invite)}>Yeniden Davet</button>:null}</div></div></article>)}
+                </div>
 
-              <div className={styles.users}>
-                <div className={styles.usersHead}><h3>Portal Kullanıcıları</h3><span>{users.length}</span></div>
-                {users.length===0?<div className={styles.empty}>Bu müşteri için portal kullanıcısı yok.</div>:users.map(user=><article key={user.id}><div><strong>{user.display_name||user.email}</strong><span>{user.email}</span></div><div><b>{user.role}</b><small>{user.status}</small></div></article>)}
-              </div>
+                <div className={styles.users}>
+                  <div className={styles.usersHead}><h3>Portal Kullanıcıları</h3><span>{users.length}</span></div>
+                  {users.length===0?<div className={styles.empty}>Bu müşteri için portal kullanıcısı yok.</div>:users.map(user=><article key={user.id}><div><strong>{user.display_name||user.email}</strong><span>{user.email}</span></div><div><b>{user.role}</b><small>{user.status}</small></div></article>)}
+                </div>
+              </>:<div className={styles.empty}>Portal kullanıcıları ve davetleri yönetmek için admin veya owner rolü gerekir. Müşteri ve portal adresini görüntülemeye devam edebilirsin.</div>}
             </>:<div className={styles.empty}>Portal yönetmek için müşteri seç.</div>}
           </section>
         </section>
