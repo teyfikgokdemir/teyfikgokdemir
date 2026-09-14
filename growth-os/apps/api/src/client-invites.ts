@@ -95,6 +95,7 @@ clientInviteRouter.get('/client/:clientId', async (req, res) => {
 });
 
 clientInviteRouter.post('/client/:clientId', async (req, res) => {
+  let db: Awaited<ReturnType<typeof pool.connect>> | undefined;
   try {
     await ensureInviteSchema();
     const workspaceId = String((req.params as Record<string, string | undefined>).workspaceId || '');
@@ -113,21 +114,28 @@ clientInviteRouter.post('/client/:clientId', async (req, res) => {
     const token = crypto.randomBytes(32).toString('base64url');
     const tokenHash = hashToken(token);
 
-    await pool.query(
+    db = await pool.connect();
+    await db.query('begin');
+    await db.query("select pg_advisory_xact_lock(hashtext($1))", [`client-portal-invite:${actor.workspaceId}:${client.id}:${email}`]);
+    await db.query(
       "update client_portal_invites set status='revoked' where workspace_id=$1 and client_id=$2 and lower(email)=lower($3) and status='pending'",
       [actor.workspaceId, client.id, email]
     );
 
-    const result = await pool.query(
+    const result = await db.query(
       `insert into client_portal_invites(workspace_id,client_id,email,display_name,role,token_hash,status,invited_by,expires_at)
        values($1,$2,$3,$4,$5,$6,'pending',$7,now()+make_interval(days=>$8))
        returning id,email,display_name,role,status,expires_at,created_at`,
       [actor.workspaceId, client.id, email, displayName, role, tokenHash, actor.email, expiresInDays]
     );
+    await db.query('commit');
 
     res.status(201).json({ invite: result.rows[0], token, client: { id: client.id, name: client.name, domain: client.domain } });
   } catch (error) {
+    if (db) await db.query('rollback');
     res.status(errorStatus(error)).json({ error: errorMessage(error) });
+  } finally {
+    db?.release();
   }
 });
 
