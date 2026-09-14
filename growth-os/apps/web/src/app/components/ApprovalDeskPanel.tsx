@@ -24,6 +24,7 @@ type Center={jobs:Job[];externalExecution?:boolean};
 
 const api='/api/growth';
 const money=(value:number)=>new Intl.NumberFormat('tr-TR',{style:'currency',currency:'TRY',maximumFractionDigits:0}).format(value||0);
+const hasMeaningfulImpact=(impact?:BusinessImpact)=>Boolean(impact&&(Number(impact.monthlyLow)>0||Number(impact.monthlyHigh)>0));
 
 function riskFor(rec:Recommendation):Risk{
   const type=(rec.proposed_action?.type||'').toLowerCase();
@@ -114,8 +115,8 @@ export default function ApprovalDeskPanel({projectId,onApproved}:{projectId:stri
   const executed=recommendations.filter(r=>r.status==='executed').length;
   const urgent=proposed.filter(r=>triageFor(r).score>=80).length;
   const backendScored=proposed.filter(r=>r.proposed_action?.decision?.modelVersion==='decision-v1').length;
-  const impactScored=proposed.filter(r=>r.proposed_action?.businessImpact?.modelVersion==='impact-v1').length;
-  const potentialHigh=proposed.reduce((sum,r)=>sum+(r.proposed_action?.businessImpact?.monthlyHigh||0),0);
+  const impactScored=proposed.filter(r=>r.proposed_action?.businessImpact?.modelVersion==='impact-v1'&&hasMeaningfulImpact(r.proposed_action.businessImpact)).length;
+  const potentialHigh=proposed.reduce((sum,r)=>sum+(hasMeaningfulImpact(r.proposed_action?.businessImpact)?(r.proposed_action?.businessImpact?.monthlyHigh||0):0),0);
   const jobByRec=useMemo(()=>new Map((center?.jobs||[]).filter(j=>j.recommendation_id).map(j=>[j.recommendation_id as string,j])),[center]);
 
   async function approve(id:string){
@@ -150,7 +151,7 @@ export default function ApprovalDeskPanel({projectId,onApproved}:{projectId:stri
       {error&&<div className="error">{error}</div>}
       {proposed.length===0?<div className="empty"><b>Onay bekleyen öneri yok.</b> Yeni audit ve Growth Intelligence sinyalleri burada karar kartına dönüşür.</div>:<div className="recommendationList">
         {proposed.map(rec=>{
-          const triage=triageFor(rec);const job=jobByRec.get(rec.id);const impact=rec.proposed_action?.businessImpact;
+          const triage=triageFor(rec);const job=jobByRec.get(rec.id);const rawImpact=rec.proposed_action?.businessImpact;const impact=hasMeaningfulImpact(rawImpact)?rawImpact:undefined;
           return <article key={rec.id}>
             <div className="recPriority">{triage.label} · {triage.score}</div>
             <div>
