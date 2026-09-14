@@ -111,7 +111,11 @@ clientInviteRouter.post('/client/:clientId', async (req, res) => {
 
     const email = String(req.body?.email || '').trim().toLowerCase();
     const displayName = req.body?.displayName ? String(req.body.displayName).trim().slice(0, 120) : null;
-    const role = req.body?.role === 'client_admin' ? 'client_admin' : 'client_viewer';
+    const requestedRole = req.body?.role;
+    if (requestedRole !== undefined && requestedRole !== 'client_admin' && requestedRole !== 'client_viewer') {
+      return res.status(400).json({ error: 'Geçerli portal rolü gerekli.' });
+    }
+    const role = requestedRole === 'client_admin' ? 'client_admin' : 'client_viewer';
     const requestedDays = Number(req.body?.expiresInDays || 7);
     const expiresInDays = Number.isInteger(requestedDays) ? Math.max(1, Math.min(30, requestedDays)) : 7;
     if (!isValidEmail(email)) return res.status(400).json({ error: 'Geçerli e-posta adresi gerekli.' });
