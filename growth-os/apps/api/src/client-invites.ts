@@ -107,7 +107,6 @@ clientInviteRouter.post('/client/:clientId', async (req, res) => {
     const clientId = String(req.params.clientId || '');
     const actor = await resolveWorkspaceActor(req, workspaceId);
     requireRole(actor, 'admin');
-    const client = await getClient(actor.workspaceId, clientId);
 
     const email = String(req.body?.email || '').trim().toLowerCase();
     const displayName = req.body?.displayName ? String(req.body.displayName).trim().slice(0, 120) : null;
@@ -125,6 +124,12 @@ clientInviteRouter.post('/client/:clientId', async (req, res) => {
 
     db = await pool.connect();
     await db.query('begin');
+    const activeClient = await db.query(
+      "select c.id,c.name,c.domain from agency_clients c join agency_workspaces w on w.id=c.workspace_id where c.id=$1 and c.workspace_id=$2 and c.status='active' and w.status='active' for update of c,w",
+      [clientId, actor.workspaceId]
+    );
+    const client = activeClient.rows[0];
+    if (!client) throw new Error('CLIENT_ACCESS_DENIED');
     await db.query("select pg_advisory_xact_lock(hashtext($1))", [`client-portal-invite:${actor.workspaceId}:${client.id}:${email}`]);
     await db.query(
       "update client_portal_invites set status='revoked' where workspace_id=$1 and client_id=$2 and lower(email)=lower($3) and status='pending'",
