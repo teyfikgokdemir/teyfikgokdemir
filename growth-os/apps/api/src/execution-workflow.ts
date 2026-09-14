@@ -64,10 +64,11 @@ export async function getExecutionCenter(projectId:string){
 
 export async function startExecution(jobId:string){
   const {rows}=await pool.query(`
-    update execution_jobs
+    update execution_jobs ej
     set status='in_progress',started_at=coalesce(started_at,now()),error_message=null
-    where id=$1 and status='queued'
-    returning *
+    where ej.id=$1 and ej.status='queued'
+      and exists(select 1 from projects p where p.id=ej.project_id and p.status='active')
+    returning ej.*
   `,[jobId]);
   return rows[0]||null;
 }
