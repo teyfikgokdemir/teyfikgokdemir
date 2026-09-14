@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
 import { Router } from 'express';
+import type { PoolClient } from 'pg';
 import { pool } from './db.js';
 import { requireRole, resolveWorkspaceActor, verifiedActorEmailFromRequest, workspaceErrorMessage, workspaceErrorStatus } from './workspace-access.js';
 
@@ -95,7 +96,7 @@ clientInviteRouter.get('/client/:clientId', async (req, res) => {
 });
 
 clientInviteRouter.post('/client/:clientId', async (req, res) => {
-  let db: Awaited<ReturnType<typeof pool.connect>> | undefined;
+  let db: PoolClient | undefined;
   try {
     await ensureInviteSchema();
     const workspaceId = String((req.params as Record<string, string | undefined>).workspaceId || '');
