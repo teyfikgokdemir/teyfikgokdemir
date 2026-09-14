@@ -18,14 +18,19 @@ function normalizeEmail(value:string){return value.trim().toLowerCase()}
 function isUuid(value:string){return uuidPattern.test(value)}
 
 async function hasProjectStatusColumn(){
-  if(projectLifecycleSchemaAvailable!==null)return projectLifecycleSchemaAvailable;
+  if(projectLifecycleSchemaAvailable===true)return true;
   const {rows}=await pool.query(`
     select exists(
       select 1 from information_schema.columns
       where table_schema=current_schema() and table_name='projects' and column_name='status'
     ) as available`);
-  projectLifecycleSchemaAvailable=Boolean(rows[0]?.available);
-  return projectLifecycleSchemaAvailable;
+  const available=Boolean(rows[0]?.available);
+  if(available)projectLifecycleSchemaAvailable=true;
+  return available;
+}
+
+async function requireProjectLifecycleSchema(){
+  if(!(await hasProjectStatusColumn()))throw new Error('PROJECT_LIFECYCLE_SCHEMA_MISSING');
 }
 
 export function actorEmailFromRequest(req:Request){
@@ -78,11 +83,8 @@ export function requireRole(actor:WorkspaceActor,minRole:WorkspaceRole){
 
 export async function assertProjectAccess(actor:WorkspaceActor,projectId:string){
   if(!isUuid(projectId))throw new Error('PROJECT_ID_INVALID');
-  const lifecycleReady=await hasProjectStatusColumn();
-  const fields=lifecycleReady
-    ? 'id,workspace_id,client_id,name,domain,status,archived_at,archived_by'
-    : "id,workspace_id,client_id,name,domain,'active'::text as status,null::timestamptz as archived_at,null::text as archived_by";
-  const {rows}=await pool.query(`select ${fields} from projects where id=$1 and workspace_id=$2`,[projectId,actor.workspaceId]);
+  await requireProjectLifecycleSchema();
+  const {rows}=await pool.query(`select id,workspace_id,client_id,name,domain,status,archived_at,archived_by from projects where id=$1 and workspace_id=$2`,[projectId,actor.workspaceId]);
   if(!rows[0])throw new Error('PROJECT_ACCESS_DENIED');
   return rows[0];
 }
@@ -94,18 +96,14 @@ export async function assertActiveProjectAccess(actor:WorkspaceActor,projectId:s
 }
 
 export async function listWorkspaceProjects(actor:WorkspaceActor){
-  const lifecycleReady=await hasProjectStatusColumn();
-  const lifecycleFields=lifecycleReady
-    ? 'p.status,p.archived_at,p.archived_by,'
-    : "'active'::text as status,null::timestamptz as archived_at,null::text as archived_by,";
-  const activeFilter=lifecycleReady?"and p.status='active'":'';
+  await requireProjectLifecycleSchema();
   const {rows}=await pool.query(`
     select p.id,p.name,p.domain,p.created_at,p.client_id,
-      ${lifecycleFields}
+      p.status,p.archived_at,p.archived_by,
       c.name client_name,c.status client_status
     from projects p
     left join agency_clients c on c.id=p.client_id and c.workspace_id=p.workspace_id
-    where p.workspace_id=$1 ${activeFilter}
+    where p.workspace_id=$1 and p.status='active'
     order by p.created_at desc`,[actor.workspaceId]);
   return rows;
 }
@@ -113,7 +111,7 @@ export async function listWorkspaceProjects(actor:WorkspaceActor){
 export function workspaceErrorStatus(error:unknown){
   const message=error instanceof Error?error.message:'';
   if(message==='PROJECT_ID_INVALID'||message==='WORKSPACE_ID_INVALID')return 400;
-  if(message==='CF_ACCESS_CONFIG_MISSING'||message==='CF_ACCESS_JWKS_UNAVAILABLE')return 503;
+  if(message==='CF_ACCESS_CONFIG_MISSING'||message==='CF_ACCESS_JWKS_UNAVAILABLE'||message==='PROJECT_LIFECYCLE_SCHEMA_MISSING')return 503;
   if(message==='CF_ACCESS_JWT_MISSING'||message==='CF_ACCESS_JWT_INVALID'||message==='CF_ACCESS_IDENTITY_MISMATCH')return 403;
   if(message==='WORKSPACE_ACCESS_DENIED'||message==='PROJECT_ACCESS_DENIED')return 403;
   if(message==='WORKSPACE_ROLE_DENIED')return 403;
@@ -133,5 +131,6 @@ export function workspaceErrorMessage(error:unknown){
   if(message==='PROJECT_ACCESS_DENIED')return 'Bu projeye erişim yetkiniz yok.';
   if(message==='WORKSPACE_ROLE_DENIED')return 'Bu işlem için rolünüz yeterli değil.';
   if(message==='PROJECT_ARCHIVED')return 'Bu proje arşivde. Yeni operasyon başlatmadan önce projeyi geri alın.';
+  if(message==='PROJECT_LIFECYCLE_SCHEMA_MISSING')return 'Proje lifecycle şeması hazır değil. Migration tamamlanmadan proje erişimi açılamaz.';
   return message||'Workspace işlemi tamamlanamadı.';
 }
