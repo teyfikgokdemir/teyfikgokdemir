@@ -129,15 +129,15 @@ export default function ProjectsPage(){
   }
 
   function openProject(project:Project){
-    window.sessionStorage.setItem('growth-os:last-section','Genel Bakış');
+    window.sessionStorage.setItem('growth-os:last-section','overview');
     window.location.assign(`/?project=${encodeURIComponent(project.id)}`);
   }
 
   return <main className={styles.page}>
     <aside className={styles.side}>
-      <a className={styles.brand} href="/" onClick={()=>window.sessionStorage.setItem('growth-os:last-section','Genel Bakış')}><span>G</span><div><strong>Growth OS</strong><small>Private Control Center</small></div></a>
+      <a className={styles.brand} href="/" onClick={()=>window.sessionStorage.setItem('growth-os:last-section','overview')}><span>G</span><div><strong>Growth OS</strong><small>Private Control Center</small></div></a>
       <nav>
-        <a href="/" onClick={()=>window.sessionStorage.setItem('growth-os:last-section','Genel Bakış')}>Genel Bakış</a>
+        <a href="/" onClick={()=>window.sessionStorage.setItem('growth-os:last-section','overview')}>Genel Bakış</a>
         <a className={styles.active} href="/projects">Projeler</a>
         <a href="/activity">Aktivite Geçmişi</a>
         <a href="/agency">Ajans Merkezi</a>
@@ -148,7 +148,7 @@ export default function ProjectsPage(){
     <section className={styles.content}>
       <header className={styles.header}>
         <div><p>PROJECT OPERATIONS</p><h1>Projeler</h1><span>Aktif portföyü temiz tut; biten işleri arşivle, gerektiğinde geri al.</span></div>
-        <a href="/" onClick={()=>window.sessionStorage.setItem('growth-os:last-section','Genel Bakış')}>Kontrol Merkezine Dön</a>
+        <a href="/" onClick={()=>window.sessionStorage.setItem('growth-os:last-section','overview')}>Kontrol Merkezine Dön</a>
       </header>
 
       <section className={styles.stats}>
