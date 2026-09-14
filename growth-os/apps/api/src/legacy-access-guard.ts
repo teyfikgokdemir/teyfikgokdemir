@@ -30,15 +30,24 @@ function normalizeDomain(value:unknown){
 export const legacyWorkspaceGuard:RequestHandler=async(req,res,next)=>{
   const path=req.path;
   if(path==='/health/ready'){
+    const time=new Date().toISOString();
     try{
       await pool.query('select 1');
-      const migration=await pool.query('select 1 from schema_migrations where version=$1 limit 1',[REQUIRED_SCHEMA_MIGRATION]);
-      if(!migration.rows[0])throw new Error('REQUIRED_SCHEMA_MIGRATION_MISSING');
-      return res.json({ok:true,ready:true,database:'reachable',schema:'ready',service:'growth-os-api',time:new Date().toISOString()});
     }catch(error){
-      console.error('Readiness check failed',error);
-      return res.status(503).json({ok:false,ready:false,database:'unreachable',schema:'not_ready',service:'growth-os-api',time:new Date().toISOString()});
+      console.error('Readiness database check failed',error);
+      return res.status(503).json({ok:false,ready:false,database:'unreachable',schema:'unknown',service:'growth-os-api',time});
     }
+    try{
+      const migration=await pool.query('select 1 from schema_migrations where version=$1 limit 1',[REQUIRED_SCHEMA_MIGRATION]);
+      if(!migration.rows[0]){
+        console.error('Readiness schema check failed: required migration missing');
+        return res.status(503).json({ok:false,ready:false,database:'reachable',schema:'not_ready',service:'growth-os-api',time});
+      }
+    }catch(error){
+      console.error('Readiness schema check failed',error);
+      return res.status(503).json({ok:false,ready:false,database:'reachable',schema:'not_ready',service:'growth-os-api',time});
+    }
+    return res.json({ok:true,ready:true,database:'reachable',schema:'ready',service:'growth-os-api',time});
   }
   if(path==='/health'||path==='/capabilities'||path.startsWith('/workspaces/')||path==='/workspaces'||path.startsWith('/oauth/'))return next();
 
