@@ -220,11 +220,12 @@ clientInviteRouter.get('/:token', async (req, res) => {
 });
 
 clientInviteRouter.post('/:token/accept', async (req, res) => {
-  const db = await pool.connect();
+  let db: PoolClient | undefined;
   try {
     await ensureInviteSchema();
     const token = String(req.params.token || '');
     const email = await verifiedActorEmailFromRequest(req);
+    db = await pool.connect();
     await db.query('begin');
     const result = await db.query(
       `select i.*
@@ -251,9 +252,9 @@ clientInviteRouter.post('/:token/accept', async (req, res) => {
     await db.query('commit');
     res.json({ accepted: true, workspaceId: invite.workspace_id, clientId: invite.client_id, role: invite.role });
   } catch (error) {
-    await db.query('rollback');
+    if (db) await db.query('rollback');
     res.status(errorStatus(error)).json({ error: errorMessage(error) });
   } finally {
-    db.release();
+    db?.release();
   }
 });
