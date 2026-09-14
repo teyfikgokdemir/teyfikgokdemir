@@ -126,10 +126,11 @@ export async function recordVerification(input:{
     await client.query('begin');
     const delta=input.scoreBefore!=null&&input.scoreAfter!=null?input.scoreAfter-input.scoreBefore:null;
     const verification=await client.query(`
-      update verification_results
+      update verification_results vr
       set status=$2,before_state=$3,after_state=$4,score_before=$5,score_after=$6,score_delta=$7,verdict=$8,evidence=$9,verified_at=now()
-      where id=$1 and status='pending'
-      returning *
+      where vr.id=$1 and vr.status='pending'
+        and exists(select 1 from projects p where p.id=vr.project_id and p.status='active')
+      returning vr.*
     `,[input.verificationId,input.status,input.beforeState||{},input.afterState||{},input.scoreBefore??null,input.scoreAfter??null,delta,input.verdict,input.evidence||{}]);
     if(!verification.rows[0]){
       await client.query('rollback');
