@@ -63,7 +63,7 @@ export default function ActivityPage(){
     <aside className={styles.side}>
       <a href="/" className={styles.brand}><span>G</span><div><strong>Growth OS</strong><small>Private Control Center</small></div></a>
       <nav aria-label="Ana gezinme">
-        <a href="/" onClick={()=>window.sessionStorage.setItem('growth-os:last-section','Genel Bakış')}>Genel Bakış</a>
+        <a href="/" onClick={()=>window.sessionStorage.setItem('growth-os:last-section','overview')}>Genel Bakış</a>
         <a href="/projects">Projeler</a>
         <a href="/activity" aria-current="page">Aktivite Geçmişi</a>
         <a href="/agency">Ajans Merkezi</a>
