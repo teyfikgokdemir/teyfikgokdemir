@@ -3,7 +3,7 @@ import { pool } from './db.js';
 import { assertActiveProjectAccess, assertProjectAccess, listWorkspaceProjects, requireRole, resolveWorkspaceActor, workspaceErrorMessage, workspaceErrorStatus } from './workspace-access.js';
 
 const INTERNAL_WORKSPACE_ID='00000000-0000-4000-8000-000000000001';
-const REQUIRED_SCHEMA_MIGRATION='002_client_portal_schema';
+const REQUIRED_SCHEMA_MIGRATION='003_project_lifecycle_schema';
 
 async function projectIdForResource(table:'recommendations'|'execution_jobs'|'audits',id:string){
   const {rows}=await pool.query(`select project_id from ${table} where id=$1 limit 1`,[id]);
