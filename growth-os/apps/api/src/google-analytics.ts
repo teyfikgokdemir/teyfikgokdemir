@@ -60,6 +60,9 @@ export async function analyticsPerformanceForProject(projectId:string){
   const metadata=integrationResult.rows[0]?.metadata as {selectedAnalyticsProperty?:string}|undefined;
   const properties=await listProperties(accessToken);
   const selectedProperty=metadata?.selectedAnalyticsProperty?properties.find(item=>item.property===metadata.selectedAnalyticsProperty):undefined;
+  if(metadata?.selectedAnalyticsProperty&&!selectedProperty?.property){
+    return {matched:false,properties,selectedAnalyticsProperty:metadata.selectedAnalyticsProperty,message:'Seçili GA4 property için artık erişim bulunamadı. Yeni property açıkça seçilmeli.'};
+  }
 
   let matched:null|{property?:string;displayName?:string;accountName?:string;stream?:{displayName?:string;measurementId?:string;defaultUri?:string};timeZone?:string;currencyCode?:string}=null;
   if(selectedProperty?.property){

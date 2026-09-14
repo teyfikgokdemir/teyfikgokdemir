@@ -62,6 +62,9 @@ export async function searchConsolePerformanceForWorkspaceProject(projectId:stri
   const metadata=integrationResult.rows[0]?.metadata as {selectedSearchConsoleSiteUrl?:string}|undefined;
   const sites=await listSites(accessToken);
   const selected=metadata?.selectedSearchConsoleSiteUrl?sites.find(site=>site.siteUrl===metadata.selectedSearchConsoleSiteUrl):undefined;
+  if(metadata?.selectedSearchConsoleSiteUrl&&!selected?.siteUrl){
+    return {matched:false,days:Math.max(1,Math.min(days,90)),sites,selectedSearchConsoleSiteUrl:metadata.selectedSearchConsoleSiteUrl,message:'Seçili Search Console property için artık erişim bulunamadı. Yeni property açıkça seçilmeli.'};
+  }
   const exactDomain=`sc-domain:${domain}`;
   const site=selected||sites.find(item=>item.siteUrl===exactDomain)||sites.find(item=>item.siteUrl&&searchConsoleSiteDomain(item.siteUrl)===domain);
   if(!site?.siteUrl){

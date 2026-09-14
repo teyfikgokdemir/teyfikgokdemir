@@ -119,6 +119,11 @@ async function postJson<T>(url:string, accessToken:string, body:unknown):Promise
 
 function isoDate(date:Date){return date.toISOString().slice(0,10)}
 function normalizeDomain(value:string){return value.replace(/^https?:\/\//,'').replace(/^www\./,'').split('/')[0].toLowerCase()}
+function searchConsoleSiteDomain(siteUrl:string){
+  const value=siteUrl.trim().toLowerCase();
+  if(value.startsWith('sc-domain:'))return normalizeDomain(value.slice('sc-domain:'.length));
+  try{return normalizeDomain(new URL(value).hostname)}catch{return ''}
+}
 
 export async function searchConsolePerformanceForProject(projectId:string,days=28){
   const project=await pool.query('select domain from projects where id=$1',[projectId]);
@@ -128,7 +133,7 @@ export async function searchConsolePerformanceForProject(projectId:string,days=2
   const sites=(await getJson('https://www.googleapis.com/webmasters/v3/sites',accessToken)) as SearchConsoleSites;
   const entries=sites.siteEntry||[];
   const exactDomain=`sc-domain:${domain}`;
-  const site=entries.find(s=>s.siteUrl===exactDomain)||entries.find(s=>String(s.siteUrl||'').toLowerCase().includes(domain));
+  const site=entries.find(s=>s.siteUrl===exactDomain)||entries.find(s=>s.siteUrl&&searchConsoleSiteDomain(s.siteUrl)===domain);
   if(!site?.siteUrl)throw new Error(`Search Console içinde ${domain} için erişilebilir property bulunamadı.`);
   const normalizedDays=Math.max(1,Math.min(days,90));
   const end=new Date();
@@ -180,13 +185,12 @@ async function merchantCommerceForProject(projectId:string,accessToken:string){
   }));
 
   const selected=metadata?.selectedMerchantAccountName ? enriched.find(a=>a.name===metadata.selectedMerchantAccountName) : undefined;
-  const matched=selected
-    ||enriched.find(a=>normalizeDomain(a.homepage?.uri||'')===domain)
-    ||enriched.find(a=>normalizeDomain(a.homepage?.uri||'').includes(domain))
-    ||enriched.find(a=>String(a.accountName||'').toLowerCase().includes(domain.split('.')[0]))
-    ||(enriched.length===1?enriched[0]:undefined);
-
   const accountList=enriched.map(a=>({name:a.name||'',accountName:a.accountName||a.name||'Merchant Center',homepage:a.homepage?.uri||null,claimed:a.homepage?.claimed??null,timeZone:typeof a.timeZone==='string'?a.timeZone:a.timeZone?.id||null,languageCode:a.languageCode||null}));
+  if(metadata?.selectedMerchantAccountName&&!selected?.name){
+    return {matched:false,domain,message:'Seçili Merchant Center hesabına artık erişim bulunamadı. Yeni hesap açıkça seçilmeli.',accounts:accountList,selectedMerchantAccountName:metadata.selectedMerchantAccountName};
+  }
+  const matched=selected||enriched.find(a=>normalizeDomain(a.homepage?.uri||'')===domain);
+
   if(!matched?.name){
     return {matched:false,domain,message:`${domain} için Merchant Center hesabı otomatik eşleşmedi.`,accounts:accountList,selectedMerchantAccountName:metadata?.selectedMerchantAccountName||null};
   }
@@ -240,7 +244,7 @@ export async function discoverGoogleResources(projectId:string) {
         if(!p.property)continue;
         try{
           const streams=await getJson(`https://analyticsadmin.googleapis.com/v1beta/${p.property}/dataStreams`,accessToken) as {dataStreams?:Array<{displayName?:string;webStreamData?:{measurementId?:string;defaultUri?:string}}>};
-          const web=(streams.dataStreams||[]).find(s=>String(s.webStreamData?.defaultUri||'').toLowerCase().includes(domain));
+          const web=(streams.dataStreams||[]).find(s=>normalizeDomain(s.webStreamData?.defaultUri||'')===domain);
           if(web){
             const detail=await getJson(`https://analyticsadmin.googleapis.com/v1beta/${p.property}`,accessToken) as {timeZone?:string;currencyCode?:string};
             matched={property:p.property,displayName:p.displayName,accountName:p.accountName,stream:{displayName:web.displayName,measurementId:web.webStreamData?.measurementId,defaultUri:web.webStreamData?.defaultUri},timeZone:detail.timeZone,currencyCode:detail.currencyCode};break;
