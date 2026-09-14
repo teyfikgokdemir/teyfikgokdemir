@@ -126,10 +126,22 @@ const decisionHandler:RequestHandler=async(req,res)=>{
     await assertClient(workspaceId,clientId);
     const user=await resolveClientUser(workspaceId,clientId,email);
     if(user.role!=='client_admin')throw new Error('CLIENT_PORTAL_DECISION_DENIED');
-    const rec=await pool.query(`select r.id,r.project_id,r.status from recommendations r join projects p on p.id=r.project_id where r.id=$1 and p.workspace_id=$2 and p.client_id=$3 and p.status='active' and r.status in ('proposed','approved')`,[recommendationId,workspaceId,clientId]);
-    if(!rec.rows[0]){res.status(404).json({error:'Karar verilebilir öneri bulunamadı.'});return}
-    const {rows}=await pool.query(`insert into client_decisions(workspace_id,client_id,project_id,recommendation_id,decided_by,decision,note) values($1,$2,$3,$4,$5,$6,$7) on conflict(client_id,recommendation_id) do update set decided_by=excluded.decided_by,decision=excluded.decision,note=excluded.note,created_at=now() returning *`,[workspaceId,clientId,rec.rows[0].project_id,recommendationId,email,decision,note||null]);
-    res.json({decision:rows[0],executionTriggered:false,note:'Müşteri kararı kaydedildi. Bu işlem harici sistemlerde değişiklik başlatmaz.'});
+
+    const client=await pool.connect();
+    try{
+      await client.query('begin');
+      const rec=await client.query(`select r.id,r.project_id,r.status from recommendations r join projects p on p.id=r.project_id where r.id=$1 and p.workspace_id=$2 and p.client_id=$3 and r.status in ('proposed','approved') for update of p`,[recommendationId,workspaceId,clientId]);
+      if(!rec.rows[0]){
+        await client.query('rollback');
+        res.status(404).json({error:'Karar verilebilir öneri bulunamadı.'});
+        return;
+      }
+      const project=await client.query('select status from projects where id=$1 for update',[rec.rows[0].project_id]);
+      if(project.rows[0]?.status!=='active')throw new Error('PROJECT_ARCHIVED');
+      const {rows}=await client.query(`insert into client_decisions(workspace_id,client_id,project_id,recommendation_id,decided_by,decision,note) values($1,$2,$3,$4,$5,$6,$7) on conflict(client_id,recommendation_id) do update set decided_by=excluded.decided_by,decision=excluded.decision,note=excluded.note,created_at=now() returning *`,[workspaceId,clientId,rec.rows[0].project_id,recommendationId,email,decision,note||null]);
+      await client.query('commit');
+      res.json({decision:rows[0],executionTriggered:false,note:'Müşteri kararı kaydedildi. Bu işlem harici sistemlerde değişiklik başlatmaz.'});
+    }catch(error){await client.query('rollback');throw error}finally{client.release()}
   }catch(error){res.status(errorStatus(error)).json({error:errorMessage(error)})}
 };
 
