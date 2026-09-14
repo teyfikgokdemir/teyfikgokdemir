@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-type Project={id:string;name:string;domain:string};
+type Project={id:string;name:string;domain:string;status?:string};
 type Overview={latestAudit?:{overall_score?:number}|null;openAlerts?:number;pendingRecommendations?:number;metrics30d?:{spend?:number;revenue?:number;grossProfit?:number;roas?:number|null}};
 type Recommendation={status:string;priority?:string;proposed_action?:{decision?:{score?:number;label?:string};businessImpact?:{monthlyLow?:number;monthlyHigh?:number;currency?:string;confidence?:string}}};
 type ExecutionCenter={counts?:{queued?:number;in_progress?:number;verification_pending?:number;verified?:number;failed?:number}};
@@ -36,7 +36,8 @@ export default function AgencyPortfolioPanel(){
       const projectsResponse=await fetch(`${api}/projects`,{cache:'no-store'});
       if(!projectsResponse.ok)throw new Error('Ajans portföyü okunamadı.');
       const projects=(await projectsResponse.json()) as Project[];
-      const result=await Promise.all(projects.slice(0,50).map(async project=>{
+      const activeProjects=projects.filter(project=>project.status!=='archived');
+      const result=await Promise.all(activeProjects.slice(0,50).map(async project=>{
         const [overviewResult,recommendationsResult,executionResult]=await Promise.all([
           fetchJson<Overview>(`${api}/projects/${project.id}/overview`,{}),
           fetchJson<Recommendation[]>(`${api}/projects/${project.id}/recommendations`,[]),
