@@ -16,6 +16,66 @@ const migrations:Migration[]=[
       `);
       await client.query('alter table projects drop constraint if exists projects_domain_key');
     }
+  },
+  {
+    version:'002_client_portal_schema',
+    async up(client){
+      await client.query(`
+        create table if not exists client_portal_users (
+          id uuid primary key default gen_random_uuid(),
+          workspace_id uuid not null references agency_workspaces(id) on delete cascade,
+          client_id uuid not null references agency_clients(id) on delete cascade,
+          email text not null,
+          display_name text,
+          role text not null default 'client_viewer',
+          status text not null default 'active',
+          permissions jsonb not null default '{}'::jsonb,
+          created_at timestamptz not null default now(),
+          updated_at timestamptz not null default now(),
+          unique(workspace_id,client_id,email)
+        );
+
+        create table if not exists client_decisions (
+          id uuid primary key default gen_random_uuid(),
+          workspace_id uuid not null references agency_workspaces(id) on delete cascade,
+          client_id uuid not null references agency_clients(id) on delete cascade,
+          project_id uuid not null references projects(id) on delete cascade,
+          recommendation_id uuid not null references recommendations(id) on delete cascade,
+          decided_by text not null,
+          decision text not null,
+          note text,
+          created_at timestamptz not null default now(),
+          unique(client_id,recommendation_id)
+        );
+
+        create table if not exists client_portal_invites (
+          id uuid primary key default gen_random_uuid(),
+          workspace_id uuid not null references agency_workspaces(id) on delete cascade,
+          client_id uuid not null references agency_clients(id) on delete cascade,
+          email text not null,
+          display_name text,
+          role text not null default 'client_viewer',
+          token_hash text not null unique,
+          status text not null default 'pending',
+          invited_by text not null,
+          expires_at timestamptz not null,
+          accepted_at timestamptz,
+          created_at timestamptz not null default now()
+        );
+
+        create index if not exists idx_client_portal_users_access
+        on client_portal_users(workspace_id,client_id,status);
+
+        create index if not exists idx_client_decisions_client
+        on client_decisions(client_id,created_at desc);
+
+        create index if not exists idx_client_portal_invites_client
+        on client_portal_invites(workspace_id,client_id,status,created_at desc);
+
+        create index if not exists idx_client_portal_invites_expiry
+        on client_portal_invites(status,expires_at);
+      `);
+    }
   }
 ];
 
