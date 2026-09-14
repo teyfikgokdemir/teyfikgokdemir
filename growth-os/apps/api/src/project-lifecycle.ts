@@ -10,7 +10,12 @@ export const projectLifecycleRouter = Router({ mergeParams: true });
 
 let projectLifecycleSchemaReady:Promise<void>|null=null;
 async function ensureProjectLifecycleSchema(){
-  projectLifecycleSchemaReady ??= initProjectLifecycleSchema();
+  if(!projectLifecycleSchemaReady){
+    projectLifecycleSchemaReady=initProjectLifecycleSchema().catch(error=>{
+      projectLifecycleSchemaReady=null;
+      throw error;
+    });
+  }
   await projectLifecycleSchemaReady;
 }
 
