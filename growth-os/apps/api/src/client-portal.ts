@@ -41,7 +41,10 @@ async function ensureClientPortalSchema(): Promise<void> {
         create index if not exists idx_client_decisions_client on client_decisions(client_id,created_at desc);
       `);
       schemaReady = true;
-    })();
+    })().catch((error) => {
+      schemaInitializing = undefined;
+      throw error;
+    });
   }
   await schemaInitializing;
 }
