@@ -62,7 +62,7 @@ async function resolveClientUser(workspaceId:string,clientId:string,email:string
 function errorStatus(error:unknown){
   const message=error instanceof Error?error.message:'';
   if(message==='CLIENT_ACCESS_DENIED')return 404;
-  if(message==='CLIENT_PORTAL_ACCESS_DENIED')return 403;
+  if(message==='CLIENT_PORTAL_ACCESS_DENIED'||message==='CLIENT_PORTAL_DECISION_DENIED')return 403;
   return workspaceErrorStatus(error);
 }
 
@@ -70,6 +70,7 @@ function errorMessage(error:unknown){
   const message=error instanceof Error?error.message:'';
   if(message==='CLIENT_ACCESS_DENIED')return 'Müşteri bulunamadı.';
   if(message==='CLIENT_PORTAL_ACCESS_DENIED')return 'Bu müşteri portalına erişim yetkiniz yok.';
+  if(message==='CLIENT_PORTAL_DECISION_DENIED')return 'Bu işlem client_admin yetkisi gerektiriyor.';
   return workspaceErrorMessage(error);
 }
 
@@ -120,7 +121,8 @@ const decisionHandler:RequestHandler=async(req,res)=>{
     const recommendationId=String(req.params['recommendationId']||'');
     const email=actorEmailFromRequest(req);
     await assertClient(workspaceId,clientId);
-    await resolveClientUser(workspaceId,clientId,email);
+    const user=await resolveClientUser(workspaceId,clientId,email);
+    if(user.role!=='client_admin')throw new Error('CLIENT_PORTAL_DECISION_DENIED');
     const rec=await pool.query(`select r.id,r.project_id,r.status from recommendations r join projects p on p.id=r.project_id where r.id=$1 and p.workspace_id=$2 and p.client_id=$3 and p.status='active' and r.status in ('proposed','approved')`,[recommendationId,workspaceId,clientId]);
     if(!rec.rows[0]){res.status(404).json({error:'Karar verilebilir öneri bulunamadı.'});return}
     const {rows}=await pool.query(`insert into client_decisions(workspace_id,client_id,project_id,recommendation_id,decided_by,decision,note) values($1,$2,$3,$4,$5,$6,$7) on conflict(client_id,recommendation_id) do update set decided_by=excluded.decided_by,decision=excluded.decision,note=excluded.note,created_at=now() returning *`,[workspaceId,clientId,rec.rows[0].project_id,recommendationId,email,decision,note||null]);
