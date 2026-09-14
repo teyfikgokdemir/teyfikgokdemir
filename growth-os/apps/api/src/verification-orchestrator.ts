@@ -53,6 +53,32 @@ async function getBeforeState(job:{action_log_id:string|null}):Promise<Record<st
   return (rows[0]?.before_state||{}) as Record<string,unknown>;
 }
 
+async function pendingVerificationForJob(job:{id:string;project_id:string;recommendation_id:string|null;status:string}){
+  const pending=await pool.query(`
+    select * from verification_results
+    where execution_job_id=$1 and status='pending'
+    order by created_at desc limit 1
+  `,[job.id]);
+  if(pending.rows[0])return pending.rows[0];
+  if(job.status!=='verification_pending')return null;
+
+  const previous=await pool.query(`
+    select * from verification_results
+    where execution_job_id=$1 and status='inconclusive'
+    order by created_at desc limit 1
+  `,[job.id]);
+  const prior=previous.rows[0];
+  if(!prior)return null;
+
+  const retry=await pool.query(`
+    insert into verification_results(project_id,execution_job_id,recommendation_id,status,verification_type,before_state,after_state,evidence)
+    values($1,$2,$3,'pending',$4,$5,$6,$7)
+    returning *
+  `,[job.project_id,job.id,job.recommendation_id,prior.verification_type||'post_execution',prior.before_state||{},prior.after_state||{},
+    {...(prior.evidence||{}),retryOfVerificationId:prior.id,retryCreatedAt:new Date().toISOString()}]);
+  return retry.rows[0]||null;
+}
+
 export async function finalizeExecutionForVerification(jobId:string,resultState:Record<string,unknown>={}){
   const job=await loadJob(jobId);
   const beforeState=await getBeforeState(job);
@@ -82,12 +108,7 @@ function auditScore(snapshot:Record<string,unknown>|Snapshot){
 
 export async function verifyExecutionJob(jobId:string){
   const job=await loadJob(jobId);
-  const verificationResult=await pool.query(`
-    select * from verification_results
-    where execution_job_id=$1 and status='pending'
-    order by created_at desc limit 1
-  `,[jobId]);
-  const verification=verificationResult.rows[0];
+  const verification=await pendingVerificationForJob(job);
   if(!verification)return {verified:false,reason:'Pending verification bulunamadı.'};
 
   const before=(verification.before_state||{}) as Record<string,unknown>;
