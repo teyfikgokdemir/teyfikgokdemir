@@ -79,10 +79,11 @@ export async function completeExecution(jobId:string,resultState:Record<string,u
   try{
     await client.query('begin');
     const job=await client.query(`
-      update execution_jobs
+      update execution_jobs ej
       set status='verification_pending',result_state=$2,finished_at=now(),error_message=null
-      where id=$1 and status='in_progress'
-      returning *
+      where ej.id=$1 and ej.status='in_progress'
+        and exists(select 1 from projects p where p.id=ej.project_id and p.status='active')
+      returning ej.*
     `,[jobId,resultState]);
     if(!job.rows[0]){
       await client.query('rollback');
