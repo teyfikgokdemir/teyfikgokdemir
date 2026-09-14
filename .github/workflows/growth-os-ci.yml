@@ -13,6 +13,20 @@ on:
 jobs:
   api:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
     defaults:
       run:
         working-directory: growth-os/apps/api
@@ -25,6 +39,8 @@ jobs:
           cache-dependency-path: growth-os/apps/api/package.json
       - run: npm install
       - run: npm run build
+      - run: node tests/ads-sync-archive.mjs postgres://postgres:postgres@127.0.0.1:5432/postgres
+      - run: node tests/workspace-activity.mjs postgres://postgres:postgres@127.0.0.1:5432/postgres
 
   web:
     runs-on: ubuntu-latest
