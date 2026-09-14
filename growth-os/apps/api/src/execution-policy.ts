@@ -13,7 +13,7 @@ export type ExecutionPolicy={
 };
 
 function envWriteEnabled(){
-  return String(process.env.ADS_WRITE_ENABLED||'false').toLowerCase()==='true';
+  return String(process.env.EXTERNAL_EXECUTION_ENABLED||'false').toLowerCase()==='true'&&String(process.env.ADS_WRITE_ENABLED||'false').toLowerCase()==='true';
 }
 
 export async function getExecutionPolicy(projectId:string):Promise<ExecutionPolicy>{
@@ -37,7 +37,7 @@ export async function getExecutionPolicy(projectId:string):Promise<ExecutionPoli
 
 export async function assertExecutionAllowed(projectId:string,provider:AdsProvider,approved:boolean){
   const policy=await getExecutionPolicy(projectId);
-  if(!policy.globalWriteEnabled)throw new Error('ADS_WRITE_ENABLED kapalı. Dış reklam işlemleri devre dışı.');
+  if(!policy.globalWriteEnabled)throw new Error('Ads write gate kapalı. EXTERNAL_EXECUTION_ENABLED ve ADS_WRITE_ENABLED birlikte açık olmalı.');
   if(!policy.projectWriteEnabled)throw new Error('Bu proje için reklam yazma izni kapalı.');
   if(!policy.allowedProviders.includes(provider))throw new Error(`${provider} bu proje için execution listesinde değil.`);
   if(policy.requireManualApproval&&!approved)throw new Error('Bu işlem manuel onay gerektiriyor.');
