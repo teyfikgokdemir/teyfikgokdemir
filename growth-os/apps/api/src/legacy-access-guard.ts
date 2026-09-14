@@ -28,8 +28,9 @@ function normalizeDomain(value:unknown){
 }
 
 export const legacyWorkspaceGuard:RequestHandler=async(req,res,next)=>{
-  const path=req.path;
-  if(path==='/health/ready'){
+  const path=req.path.replace(/\/+$/,'')||'/';
+  const routePath=path.toLowerCase();
+  if(routePath==='/health/ready'){
     const time=new Date().toISOString();
     try{
       await pool.query('select 1');
@@ -49,16 +50,16 @@ export const legacyWorkspaceGuard:RequestHandler=async(req,res,next)=>{
     }
     return res.json({ok:true,ready:true,database:'reachable',schema:'ready',service:'growth-os-api',time});
   }
-  if(path==='/health'||path==='/capabilities'||path.startsWith('/workspaces/')||path==='/workspaces'||path.startsWith('/oauth/'))return next();
+  if(routePath==='/health'||routePath==='/capabilities'||routePath.startsWith('/workspaces/')||routePath==='/workspaces'||routePath.startsWith('/oauth/'))return next();
 
   try{
     const actor=await resolveWorkspaceActor(req);
 
-    if(req.method==='GET'&&path==='/projects'){
+    if(req.method==='GET'&&routePath==='/projects'){
       return res.json(await listWorkspaceProjects(actor));
     }
 
-    if(req.method==='POST'&&path==='/audit'){
+    if(req.method==='POST'&&routePath==='/audit'){
       requireRole(actor,'analyst');
       if(actor.workspaceId!==INTERNAL_WORKSPACE_ID)return res.status(403).json({error:'Yeni audit bu workspace için workspace-scoped endpoint üzerinden başlatılmalı.'});
       const domain=normalizeDomain((req.body as {domain?:unknown}|undefined)?.domain);
@@ -74,7 +75,7 @@ export const legacyWorkspaceGuard:RequestHandler=async(req,res,next)=>{
       return next();
     }
 
-    const projectMatch=path.match(/^\/projects\/([^/]+)/);
+    const projectMatch=path.match(/^\/projects\/([^/]+)/i);
     if(projectMatch){
       if(isReadOnly(req.method))await assertProjectAccess(actor,projectMatch[1]);
       else{
@@ -84,14 +85,14 @@ export const legacyWorkspaceGuard:RequestHandler=async(req,res,next)=>{
       return next();
     }
 
-    const recommendationMatch=path.match(/^\/recommendations\/([^/]+)/);
+    const recommendationMatch=path.match(/^\/recommendations\/([^/]+)/i);
     if(recommendationMatch){
       const projectId=await projectIdForResource('recommendations',recommendationMatch[1]);
       if(isReadOnly(req.method))await assertProjectAccess(actor,projectId);
       else{
         requireRole(actor,'analyst');
         await assertActiveProjectAccess(actor,projectId);
-        if(req.method==='POST'&&/^\/recommendations\/[^/]+\/approve$/.test(path)){
+        if(req.method==='POST'&&/^\/recommendations\/[^/]+\/approve$/i.test(path)){
           const body=req.body&&typeof req.body==='object'?req.body:{};
           req.body={...body,approvedBy:actor.email};
         }
@@ -99,7 +100,7 @@ export const legacyWorkspaceGuard:RequestHandler=async(req,res,next)=>{
       return next();
     }
 
-    const executionMatch=path.match(/^\/execution-jobs\/([^/]+)/);
+    const executionMatch=path.match(/^\/execution-jobs\/([^/]+)/i);
     if(executionMatch){
       const projectId=await projectIdForResource('execution_jobs',executionMatch[1]);
       if(isReadOnly(req.method))await assertProjectAccess(actor,projectId);
@@ -110,7 +111,7 @@ export const legacyWorkspaceGuard:RequestHandler=async(req,res,next)=>{
       return next();
     }
 
-    const auditMatch=path.match(/^\/audits\/([^/]+)/);
+    const auditMatch=path.match(/^\/audits\/([^/]+)/i);
     if(auditMatch){
       const projectId=await projectIdForResource('audits',auditMatch[1]);
       await assertProjectAccess(actor,projectId);
