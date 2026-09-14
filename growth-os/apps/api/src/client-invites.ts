@@ -154,7 +154,7 @@ clientInviteRouter.post('/client/:clientId', async (req, res) => {
 });
 
 clientInviteRouter.post('/client/:clientId/:inviteId/revoke', async (req, res) => {
-  const db = await pool.connect();
+  let db: PoolClient | undefined;
   try {
     await ensureInviteSchema();
     const workspaceId = String((req.params as Record<string, string | undefined>).workspaceId || '');
@@ -162,6 +162,7 @@ clientInviteRouter.post('/client/:clientId/:inviteId/revoke', async (req, res) =
     const inviteId = String(req.params.inviteId || '');
     const actor = await resolveWorkspaceActor(req, workspaceId);
     requireRole(actor, 'admin');
+    db = await pool.connect();
     await db.query('begin');
     const activeClient = await db.query(
       "select c.id from agency_clients c join agency_workspaces w on w.id=c.workspace_id where c.id=$1 and c.workspace_id=$2 and c.status='active' and w.status='active' for update of c,w",
@@ -184,10 +185,10 @@ clientInviteRouter.post('/client/:clientId/:inviteId/revoke', async (req, res) =
     await db.query('commit');
     res.json({ revoked: true, invite: result.rows[0] });
   } catch (error) {
-    await db.query('rollback');
+    if (db) await db.query('rollback');
     res.status(errorStatus(error)).json({ error: errorMessage(error) });
   } finally {
-    db.release();
+    db?.release();
   }
 });
 
