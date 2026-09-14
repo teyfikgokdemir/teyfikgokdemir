@@ -179,6 +179,8 @@ workspaceRouter.post('/:workspaceId/members',async(req,res)=>{
     const actor=await resolveWorkspaceActor(req,req.params.workspaceId);
     requireRole(actor,'owner');
     const d=parsed.data;
+    const existing=await pool.query("select role from workspace_members where workspace_id=$1 and lower(email)=lower($2) and status='active' limit 1",[actor.workspaceId,d.email]);
+    if(existing.rows[0]?.role==='owner')return res.status(400).json({error:'Workspace owner rolü bu üye endpointi üzerinden değiştirilemez.'});
     const {rows}=await pool.query(`
       insert into workspace_members(workspace_id,email,display_name,role,status)
       values($1,lower($2),$3,$4,'active')
