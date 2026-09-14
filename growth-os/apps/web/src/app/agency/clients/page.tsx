@@ -46,8 +46,9 @@ export default function AgencyClientsPage(){
       const detailRes=await fetch(`${api}/workspaces/${mePayload.actor.workspaceId}`,{cache:'no-store'});
       const detail=(await detailRes.json()) as WorkspaceDetail&{error?:string};
       if(!detailRes.ok)throw new Error(detail.error||'Müşteri listesi okunamadı.');
-      setClients(detail.clients||[]);
-      setSelected(current=>current&&detail.clients.some(c=>c.id===current)?current:(detail.clients[0]?.id||''));
+      const activeClients=(detail.clients||[]).filter(client=>client.status!=='inactive');
+      setClients(activeClients);
+      setSelected(current=>current&&activeClients.some(c=>c.id===current)?current:(activeClients[0]?.id||''));
     }catch(err){setError(err instanceof Error?err.message:'Müşteri yönetimi yüklenemedi.')}finally{setLoading(false)}
   }
 
