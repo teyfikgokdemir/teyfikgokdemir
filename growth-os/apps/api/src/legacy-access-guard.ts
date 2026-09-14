@@ -3,6 +3,7 @@ import { pool } from './db.js';
 import { assertActiveProjectAccess, assertProjectAccess, listWorkspaceProjects, requireRole, resolveWorkspaceActor, workspaceErrorMessage, workspaceErrorStatus } from './workspace-access.js';
 
 const INTERNAL_WORKSPACE_ID='00000000-0000-4000-8000-000000000001';
+const REQUIRED_SCHEMA_MIGRATION='001_workspace_scoped_project_domains';
 
 async function projectIdForResource(table:'recommendations'|'execution_jobs'|'audits',id:string){
   const {rows}=await pool.query(`select project_id from ${table} where id=$1 limit 1`,[id]);
@@ -31,10 +32,12 @@ export const legacyWorkspaceGuard:RequestHandler=async(req,res,next)=>{
   if(path==='/health/ready'){
     try{
       await pool.query('select 1');
-      return res.json({ok:true,ready:true,database:'reachable',service:'growth-os-api',time:new Date().toISOString()});
+      const migration=await pool.query('select 1 from schema_migrations where version=$1 limit 1',[REQUIRED_SCHEMA_MIGRATION]);
+      if(!migration.rows[0])throw new Error('REQUIRED_SCHEMA_MIGRATION_MISSING');
+      return res.json({ok:true,ready:true,database:'reachable',schema:'ready',service:'growth-os-api',time:new Date().toISOString()});
     }catch(error){
       console.error('Readiness check failed',error);
-      return res.status(503).json({ok:false,ready:false,database:'unreachable',service:'growth-os-api',time:new Date().toISOString()});
+      return res.status(503).json({ok:false,ready:false,database:'unreachable',schema:'not_ready',service:'growth-os-api',time:new Date().toISOString()});
     }
   }
   if(path==='/health'||path==='/capabilities'||path.startsWith('/workspaces/')||path==='/workspaces'||path.startsWith('/oauth/'))return next();
