@@ -19,27 +19,26 @@ workspaceRouter.use('/:workspaceId/project-lifecycle',projectLifecycleRouter);
 async function persistWorkspaceAudit(workspaceId:string,domain:string,projectName?:string){
   const result=await runAudit(domain);
   const hostname=new URL(result.domain).hostname.replace(/^www\./,'');
-  const existing=await pool.query('select id,status from projects where workspace_id=$1 and lower(domain)=lower($2) limit 1',[workspaceId,hostname]);
-  if(existing.rows[0]?.status==='archived')throw new Error('PROJECT_ARCHIVED');
-
-  const projectResult=await pool.query(`
-    insert into projects(name,domain,workspace_id)
-    values($1,$2,$3)
-    on conflict(workspace_id,domain) do update set name=excluded.name
-    returning id,name,domain,workspace_id,client_id`,[projectName||hostname,hostname,workspaceId]);
-  const project=projectResult.rows[0];
-
-  const previousResult=await pool.query('select payload from audits where project_id=$1 order by created_at desc limit 1',[project.id]);
-  const previous=previousResult.rows[0]?.payload as {overallScore?:number}|undefined;
-  const inserted=await pool.query(`
-    insert into audits(project_id,domain,overall_score,seo_score,geo_score,aeo_score,aio_score,ads_readiness_score,payload)
-    values($1,$2,$3,$4,$5,$6,$7,$8,$9)
-    returning id,created_at`,[project.id,result.domain,result.overallScore,result.scores.seo,result.scores.geo,result.scores.aeo,result.scores.aio,result.scores.adsReadiness,result]);
-  const auditId=inserted.rows[0].id;
-
   const client=await pool.connect();
   try{
     await client.query('begin');
+    const projectResult=await client.query(`
+      insert into projects(name,domain,workspace_id)
+      values($1,$2,$3)
+      on conflict(workspace_id,domain) do update set name=excluded.name
+      returning id,name,domain,workspace_id,client_id,status`,[projectName||hostname,hostname,workspaceId]);
+    const project=projectResult.rows[0];
+    const lockedProject=await client.query('select status from projects where id=$1 for update',[project.id]);
+    if(lockedProject.rows[0]?.status==='archived')throw new Error('PROJECT_ARCHIVED');
+
+    const previousResult=await client.query('select payload from audits where project_id=$1 order by created_at desc limit 1',[project.id]);
+    const previous=previousResult.rows[0]?.payload as {overallScore?:number}|undefined;
+    const inserted=await client.query(`
+      insert into audits(project_id,domain,overall_score,seo_score,geo_score,aeo_score,aio_score,ads_readiness_score,payload)
+      values($1,$2,$3,$4,$5,$6,$7,$8,$9)
+      returning id,created_at`,[project.id,result.domain,result.overallScore,result.scores.seo,result.scores.geo,result.scores.aeo,result.scores.aio,result.scores.adsReadiness,result]);
+    const auditId=inserted.rows[0].id;
+
     await client.query("update alerts set status='resolved',resolved_at=now() where project_id=$1 and source='audit_engine' and status='open'",[project.id]);
     await client.query("update recommendations set status='superseded',decided_at=now() where project_id=$1 and source='audit_engine' and status='proposed'",[project.id]);
     for(const issue of result.issues.filter(i=>i.status==='fail')){
@@ -49,14 +48,14 @@ async function persistWorkspaceAudit(workspaceId:string,domain:string,projectNam
       }
     }
     await client.query('commit');
-  }catch(error){await client.query('rollback');throw error}finally{client.release()}
 
-  const previousScore=Number(previous?.overallScore??0);
-  return {
-    project,
-    audit:{...result,id:auditId,createdAt:inserted.rows[0].created_at},
-    comparison:previous?{previousScore,currentScore:result.overallScore,scoreDelta:result.overallScore-previousScore}:null
-  };
+    const previousScore=Number(previous?.overallScore??0);
+    return {
+      project,
+      audit:{...result,id:auditId,createdAt:inserted.rows[0].created_at},
+      comparison:previous?{previousScore,currentScore:result.overallScore,scoreDelta:result.overallScore-previousScore}:null
+    };
+  }catch(error){await client.query('rollback');throw error}finally{client.release()}
 }
 
 workspaceRouter.get('/me',async(req,res)=>{
