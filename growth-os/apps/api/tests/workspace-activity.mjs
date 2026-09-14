@@ -19,7 +19,13 @@ async function load(name,bindings,exports){
     .replace(/^import .*;\r?\n/gm,'').replace(/export (async function|function|const) /g,'$1 ');
   return vm.runInNewContext(source+`\n({${exports}})`,{Error,Buffer,...bindings});
 }
-const access=await load('workspace-access',{pool,process:{env:{NODE_ENV:'production'}}},'resolveWorkspaceActor,workspaceErrorMessage,workspaceErrorStatus');
+const cloudflareAccessConfigured=()=>true;
+async function verifiedCloudflareAccessEmail(req){
+  const email=req.header('cf-access-authenticated-user-email')||'';
+  if(!email)throw new Error('CF_ACCESS_JWT_MISSING');
+  return email.trim().toLowerCase();
+}
+const access=await load('workspace-access',{pool,process:{env:{NODE_ENV:'production'}},cloudflareAccessConfigured,verifiedCloudflareAccessEmail},'resolveWorkspaceActor,workspaceErrorMessage,workspaceErrorStatus');
 const {workspaceActivityRouter}=await load('workspace-activity',{Router:express.Router,z,pool,...access},'workspaceActivityRouter');
 const {workspaceRouter}=await load('workspace-routes',{
   Router:express.Router,z,pool,...access,workspaceActivityRouter,
