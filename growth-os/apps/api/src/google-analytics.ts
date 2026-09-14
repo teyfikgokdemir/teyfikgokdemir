@@ -40,12 +40,25 @@ export async function selectAnalyticsPropertyForProject(projectId:string,propert
   const properties=await listProperties(accessToken);
   const selected=properties.find(item=>item.property===property);
   if(!selected)throw new Error('Bu GA4 property için erişim bulunamadı.');
-  const {rows}=await pool.query(`
-    update integrations
-    set metadata=coalesce(metadata,'{}'::jsonb)||$2::jsonb
-    where project_id=$1 and provider='google_oauth' and status='connected'
-    returning id,provider,account_label,status,mode,last_sync_at,metadata`,[projectId,JSON.stringify({selectedAnalyticsProperty:property,selectedAnalyticsPropertyName:selected.displayName||property})]);
-  if(!rows[0])throw new Error('Google bağlantısı bulunamadı.');
+
+  const client=await pool.connect();
+  try{
+    await client.query('begin');
+    const projectResult=await client.query('select status from projects where id=$1 for update',[projectId]);
+    if(projectResult.rows[0]?.status!=='active')throw new Error('Proje aktif değil veya bulunamadı.');
+    const {rows}=await client.query(`
+      update integrations
+      set metadata=coalesce(metadata,'{}'::jsonb)||$2::jsonb
+      where project_id=$1 and provider='google_oauth' and status='connected'
+      returning id,provider,account_label,status,mode,last_sync_at,metadata`,[projectId,JSON.stringify({selectedAnalyticsProperty:property,selectedAnalyticsPropertyName:selected.displayName||property})]);
+    if(!rows[0])throw new Error('Google bağlantısı bulunamadı.');
+    await client.query('commit');
+  }catch(error){
+    await client.query('rollback');
+    throw error;
+  }finally{
+    client.release();
+  }
   return {selectedAnalyticsProperty:property,propertyName:selected.displayName||property,accountName:selected.accountName||null};
 }
 
