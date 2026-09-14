@@ -190,7 +190,13 @@ clientInviteRouter.post('/:token/accept', async (req, res) => {
     const email = await verifiedActorEmailFromRequest(req);
     await db.query('begin');
     const result = await db.query(
-      "select * from client_portal_invites where token_hash=$1 and status='pending' and expires_at>now() for update",
+      `select i.*
+       from client_portal_invites i
+       join agency_clients c on c.id=i.client_id and c.workspace_id=i.workspace_id
+       join agency_workspaces w on w.id=i.workspace_id
+       where i.token_hash=$1 and i.status='pending' and i.expires_at>now()
+         and c.status='active' and w.status='active'
+       for update of i,c,w`,
       [hashToken(token)]
     );
     const invite = result.rows[0];
