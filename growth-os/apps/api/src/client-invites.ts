@@ -44,6 +44,10 @@ function hashToken(token: string) {
   return crypto.createHash('sha256').update(token).digest('hex');
 }
 
+function isValidEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
 function errorStatus(error: unknown) {
   const message = error instanceof Error ? error.message : '';
   if (message === 'CLIENT_ACCESS_DENIED') return 404;
@@ -110,7 +114,7 @@ clientInviteRouter.post('/client/:clientId', async (req, res) => {
     const role = req.body?.role === 'client_admin' ? 'client_admin' : 'client_viewer';
     const requestedDays = Number(req.body?.expiresInDays || 7);
     const expiresInDays = Number.isInteger(requestedDays) ? Math.max(1, Math.min(30, requestedDays)) : 7;
-    if (!email || !email.includes('@')) return res.status(400).json({ error: 'Geçerli e-posta adresi gerekli.' });
+    if (!isValidEmail(email)) return res.status(400).json({ error: 'Geçerli e-posta adresi gerekli.' });
 
     const token = crypto.randomBytes(32).toString('base64url');
     const tokenHash = hashToken(token);
