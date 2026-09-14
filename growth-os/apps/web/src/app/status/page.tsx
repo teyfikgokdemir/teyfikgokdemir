@@ -23,7 +23,10 @@ export default function StatusPage(){
       if(!readyRes.ok)throw new Error(readyBody.error||'API readiness kontrolü başarısız.');
       if(!capRes.ok)throw new Error(capBody.error||'Capability bilgisi alınamadı.');
       setReady(readyBody);setCapabilities(capBody);
-    }catch(e){setError(e instanceof Error?e.message:'Sistem durumu okunamadı.')}finally{setLoading(false)}
+    }catch(e){
+      setReady(null);setCapabilities(null);
+      setError(e instanceof Error?e.message:'Sistem durumu okunamadı.');
+    }finally{setLoading(false)}
   }
 
   useEffect(()=>{void load();const timer=window.setInterval(()=>void load(),30000);return()=>window.clearInterval(timer)},[]);
