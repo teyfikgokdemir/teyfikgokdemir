@@ -33,7 +33,7 @@ type ImpactContext={
 function n(value:unknown){const parsed=Number(value??0);return Number.isFinite(parsed)?parsed:0}
 function roundMoney(value:number){return Math.max(0,Math.round(value/10)*10)}
 
-export function estimateRevenueImpact(input:RecommendationLike,context:ImpactContext):RevenueImpactEstimate{
+export function estimateRevenueImpact(input:RecommendationLike,context:ImpactContext):RevenueImpactEstimate|null{
   const action=input.proposedAction||{};
   const type=typeof action.type==='string'?action.type.toLowerCase():'manual_review';
   const text=`${input.title} ${input.rationale}`.toLowerCase();
@@ -94,6 +94,8 @@ export function estimateRevenueImpact(input:RecommendationLike,context:ImpactCon
     }
   }
 
+  if(low===0&&high===0)return null;
+
   return {
     monthlyLow:roundMoney(low),
     monthlyHigh:roundMoney(Math.max(low,high)),
@@ -105,5 +107,7 @@ export function estimateRevenueImpact(input:RecommendationLike,context:ImpactCon
 }
 
 export function attachRevenueImpact(input:RecommendationLike,context:ImpactContext){
-  return {...(input.proposedAction||{}),businessImpact:estimateRevenueImpact(input,context)};
+  const proposedAction={...(input.proposedAction||{})};
+  const businessImpact=estimateRevenueImpact(input,context);
+  return businessImpact?{...proposedAction,businessImpact}:proposedAction;
 }
