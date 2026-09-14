@@ -27,6 +27,10 @@ function externalWritesEnabled(){
   return String(process.env.EXTERNAL_EXECUTION_ENABLED||'false').toLowerCase()==='true';
 }
 
+function adsWritesEnabled(){
+  return externalWritesEnabled()&&String(process.env.ADS_WRITE_ENABLED||'false').toLowerCase()==='true';
+}
+
 const githubExecutor:GrowthExecutor={
   kind:'github',
   canHandle:context=>context.provider==='github'||context.actionType==='site_fix'||context.actionType==='code_change',
@@ -45,20 +49,20 @@ const adsExecutor:GrowthExecutor={
   kind:'ads',
   canHandle:context=>['google_ads','meta_ads','tiktok_ads','ads','growth_intelligence'].includes(context.provider)||context.actionType.includes('campaign')||context.actionType.includes('budget'),
   async execute(context){
-    if(!externalWritesEnabled()){
+    if(!adsWritesEnabled()){
       return {
         status:'blocked',
         executor:'ads',
         externalExecution:false,
-        message:'Ads external execution gate kapalı. Job güvenli şekilde kuyrukta tutulur.',
-        resultState:{blockedBy:'EXTERNAL_EXECUTION_ENABLED',requiredValue:true}
+        message:'Ads write gate kapalı. Job güvenli şekilde kuyrukta tutulur.',
+        resultState:{blockedBy:'ADS_WRITE_GATES',required:{EXTERNAL_EXECUTION_ENABLED:true,ADS_WRITE_ENABLED:true}}
       };
     }
     return {
       status:'ready',
       executor:'ads',
       externalExecution:false,
-      message:'Ads executor gate açık ancak provider bazlı write adapter henüz devreye alınmadı.',
+      message:'Ads write gate açık ancak provider bazlı write adapter henüz devreye alınmadı.',
       resultState:{mode:'provider_adapter_required'}
     };
   }
@@ -106,7 +110,7 @@ export async function previewExecution(context:ExecutorContext){
 export function executorCapabilities(){
   return {
     github:{available:true,writeEnabled:false,requiresApproval:true},
-    ads:{available:true,writeEnabled:externalWritesEnabled(),requiresApproval:true},
+    ads:{available:true,writeEnabled:adsWritesEnabled(),requiresApproval:true},
     commerce:{available:true,writeEnabled:false,requiresApproval:true},
     manual:{available:true,writeEnabled:false,requiresApproval:true}
   };
