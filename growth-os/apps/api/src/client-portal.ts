@@ -166,7 +166,9 @@ const createPortalUser:RequestHandler=async(req,res)=>{
   const body=(req.body&&typeof req.body==='object'?req.body:{}) as Record<string,unknown>;
   const email=typeof body['email']==='string'?body['email'].trim().toLowerCase():'';
   const displayName=typeof body['displayName']==='string'?body['displayName'].trim().slice(0,120):null;
-  const role=body['role']==='client_admin'?'client_admin':'client_viewer';
+  const requestedRole=body['role'];
+  if(requestedRole!==undefined&&requestedRole!=='client_admin'&&requestedRole!=='client_viewer'){res.status(400).json({error:'Geçerli portal rolü gerekli.'});return}
+  const role=requestedRole==='client_admin'?'client_admin':'client_viewer';
   if(!isValidEmail(email)){res.status(400).json({error:'Portal kullanıcısı e-postası geçersiz.'});return}
   try{
     await ensureClientPortalSchema();
