@@ -174,6 +174,12 @@ app.post('/projects/:id/integrations/google/select',async(req,res)=>{
     const names=((resources.ads as {resourceNames?:string[]}|undefined)?.resourceNames)||[];
     if(!names.includes(parsed.data.customerResourceName))return res.status(403).json({error:'Bu Google Ads hesabına erişim bulunamadı.'});
     const customerId=parsed.data.customerResourceName.replace('customers/','');
+    const integration=await pool.query("select metadata from integrations where project_id=$1 and provider='google_oauth' and status='connected' order by created_at desc limit 1",[req.params.id]);
+    const metadata=integration.rows[0]?.metadata as {selectedCustomerResourceName?:string}|undefined;
+    if(metadata?.selectedCustomerResourceName&&metadata.selectedCustomerResourceName!==parsed.data.customerResourceName){
+      const metrics=await pool.query("select 1 from campaign_metrics where project_id=$1 and provider='google_ads' limit 1",[req.params.id]);
+      if(metrics.rows[0])return res.status(409).json({error:'Bu projede Google Ads metrikleri var. Hesap değişimi metrik karışmasını önlemek için engellendi.'});
+    }
     const formatted=customerId.length===10?`${customerId.slice(0,3)}-${customerId.slice(3,6)}-${customerId.slice(6)}`:customerId;
     const patch=JSON.stringify({selectedCustomerResourceName:parsed.data.customerResourceName,selectedCustomerId:customerId});
     const {rows}=await pool.query(`update integrations set account_label=$2, metadata=coalesce(metadata,'{}'::jsonb)||$3::jsonb, last_sync_at=now() where project_id=$1 and provider='google_oauth' and status='connected' returning id,provider,account_label,status,mode,last_sync_at,metadata`,[req.params.id,`Google Ads · ${formatted}`,patch]);
@@ -245,6 +251,10 @@ app.post('/projects/:id/integrations/meta/select',async(req,res)=>{
   const account=(metadata.adAccounts||[]).find(a=>a.id===parsed.data.accountId||a.account_id===parsed.data.accountId);
   if(!account)return res.status(403).json({error:'Bu Meta Ads hesabına erişim bulunamadı.'});
   const accountId=account.id||account.account_id||parsed.data.accountId;
+  if(metadata.selectedAdAccountId&&metadata.selectedAdAccountId!==accountId){
+    const metrics=await pool.query("select 1 from campaign_metrics where project_id=$1 and provider='meta_ads' limit 1",[req.params.id]);
+    if(metrics.rows[0])return res.status(409).json({error:'Bu projede Meta Ads metrikleri var. Hesap değişimi metrik karışmasını önlemek için engellendi.'});
+  }
   const accountName=account.name||`Meta Ads · ${account.account_id||accountId}`;
   const {rows}=await pool.query(`update integrations set account_label=$2,metadata=coalesce(metadata,'{}'::jsonb)||$3::jsonb,last_sync_at=now() where project_id=$1 and provider='meta_ads' and status='connected' returning id,provider,account_label,status,mode,last_sync_at`,[req.params.id,accountName,JSON.stringify({selectedAdAccountId:accountId,selectedAdAccountName:accountName})]);
   res.json(rows[0]);
@@ -295,6 +305,10 @@ app.post('/projects/:id/integrations/tiktok/select',async(req,res)=>{
   if(!metadata)return res.status(404).json({error:'TikTok bağlantısı bulunamadı.'});
   const account=(metadata.advertisers||[]).find(a=>String(a.advertiser_id||'')===parsed.data.advertiserId);
   if(!account)return res.status(403).json({error:'Bu TikTok Ads hesabına erişim bulunamadı.'});
+  if(metadata.selectedAdvertiserId&&metadata.selectedAdvertiserId!==parsed.data.advertiserId){
+    const metrics=await pool.query("select 1 from campaign_metrics where project_id=$1 and provider='tiktok_ads' limit 1",[req.params.id]);
+    if(metrics.rows[0])return res.status(409).json({error:'Bu projede TikTok Ads metrikleri var. Hesap değişimi metrik karışmasını önlemek için engellendi.'});
+  }
   const accountName=account.advertiser_name||account.name||`TikTok Ads · ${parsed.data.advertiserId}`;
   const {rows}=await pool.query(`update integrations set account_label=$2,metadata=coalesce(metadata,'{}'::jsonb)||$3::jsonb,last_sync_at=now() where project_id=$1 and provider='tiktok_ads' and status='connected' returning id,provider,account_label,status,mode,last_sync_at`,[req.params.id,accountName,JSON.stringify({selectedAdvertiserId:parsed.data.advertiserId,selectedAdvertiserName:accountName})]);
   res.json(rows[0]);
