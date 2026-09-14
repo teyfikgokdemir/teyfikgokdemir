@@ -46,6 +46,12 @@ async function resolvedActorEmail(req:Request){
   return actorEmailFromRequest(req);
 }
 
+export async function verifiedActorEmailFromRequest(req:Request){
+  const email=await resolvedActorEmail(req);
+  if(!email)throw new Error('WORKSPACE_ACCESS_DENIED');
+  return normalizeEmail(email);
+}
+
 export async function resolveWorkspaceActor(req:Request,workspaceId?:string):Promise<WorkspaceActor>{
   const email=await resolvedActorEmail(req);
   if(!email)throw new Error('WORKSPACE_ACCESS_DENIED');

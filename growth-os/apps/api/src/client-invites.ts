@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import { Router } from 'express';
 import { pool } from './db.js';
-import { actorEmailFromRequest, requireRole, resolveWorkspaceActor, workspaceErrorMessage, workspaceErrorStatus } from './workspace-access.js';
+import { requireRole, resolveWorkspaceActor, verifiedActorEmailFromRequest, workspaceErrorMessage, workspaceErrorStatus } from './workspace-access.js';
 
 export const clientInviteRouter = Router({ mergeParams: true });
 
@@ -160,7 +160,7 @@ clientInviteRouter.get('/:token', async (req, res) => {
   try {
     await ensureInviteSchema();
     const token = String(req.params.token || '');
-    const email = actorEmailFromRequest(req);
+    const email = await verifiedActorEmailFromRequest(req);
     const result = await pool.query(
       `select i.id,i.workspace_id,i.client_id,i.email,i.display_name,i.role,i.status,i.expires_at,
         c.name client_name,c.domain client_domain,coalesce(b.brand_name,w.name) brand_name,
@@ -187,7 +187,7 @@ clientInviteRouter.post('/:token/accept', async (req, res) => {
   try {
     await ensureInviteSchema();
     const token = String(req.params.token || '');
-    const email = actorEmailFromRequest(req);
+    const email = await verifiedActorEmailFromRequest(req);
     await db.query('begin');
     const result = await db.query(
       "select * from client_portal_invites where token_hash=$1 and status='pending' and expires_at>now() for update",

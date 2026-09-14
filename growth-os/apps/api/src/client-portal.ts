@@ -1,6 +1,6 @@
 import { Router, type RequestHandler } from 'express';
 import { pool } from './db.js';
-import { actorEmailFromRequest, requireRole, resolveWorkspaceActor, workspaceErrorMessage, workspaceErrorStatus } from './workspace-access.js';
+import { requireRole, resolveWorkspaceActor, verifiedActorEmailFromRequest, workspaceErrorMessage, workspaceErrorStatus } from './workspace-access.js';
 
 export const clientPortalRouter = Router({ mergeParams: true });
 
@@ -82,7 +82,7 @@ const portalHandler:RequestHandler=async(req,res)=>{
     await ensureClientPortalSchema();
     const workspaceId=String(req.params['workspaceId']||'');
     const clientId=String(req.params['clientId']||'');
-    const email=actorEmailFromRequest(req);
+    const email=await verifiedActorEmailFromRequest(req);
     const client=await assertClient(workspaceId,clientId);
     const user=await resolveClientUser(workspaceId,clientId,email);
     const [branding,projects]=await Promise.all([
@@ -122,7 +122,7 @@ const decisionHandler:RequestHandler=async(req,res)=>{
     const workspaceId=String(req.params['workspaceId']||'');
     const clientId=String(req.params['clientId']||'');
     const recommendationId=String(req.params['recommendationId']||'');
-    const email=actorEmailFromRequest(req);
+    const email=await verifiedActorEmailFromRequest(req);
     await assertClient(workspaceId,clientId);
     const user=await resolveClientUser(workspaceId,clientId,email);
     if(user.role!=='client_admin')throw new Error('CLIENT_PORTAL_DECISION_DENIED');
