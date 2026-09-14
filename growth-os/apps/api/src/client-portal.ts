@@ -62,6 +62,10 @@ async function resolveClientUser(workspaceId:string,clientId:string,email:string
   return rows[0];
 }
 
+function isValidEmail(value:string){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
 function errorStatus(error:unknown){
   const message=error instanceof Error?error.message:'';
   if(message==='CLIENT_ACCESS_DENIED')return 404;
@@ -163,7 +167,7 @@ const createPortalUser:RequestHandler=async(req,res)=>{
   const email=typeof body['email']==='string'?body['email'].trim().toLowerCase():'';
   const displayName=typeof body['displayName']==='string'?body['displayName'].trim().slice(0,120):null;
   const role=body['role']==='client_admin'?'client_admin':'client_viewer';
-  if(!email.includes('@')){res.status(400).json({error:'Portal kullanıcısı e-postası geçersiz.'});return}
+  if(!isValidEmail(email)){res.status(400).json({error:'Portal kullanıcısı e-postası geçersiz.'});return}
   try{
     await ensureClientPortalSchema();
     const workspaceId=String(req.params['workspaceId']||'');
