@@ -17,8 +17,10 @@ function envWriteEnabled(){
 }
 
 export async function getExecutionPolicy(projectId:string):Promise<ExecutionPolicy>{
-  const {rows}=await pool.query(`select ads_write_enabled,require_manual_approval,max_daily_budget_change_pct,allowed_providers
-    from project_execution_policy where project_id=$1`,[projectId]);
+  const {rows}=await pool.query(`select pep.ads_write_enabled,pep.require_manual_approval,pep.max_daily_budget_change_pct,pep.allowed_providers
+    from project_execution_policy pep
+    join projects p on p.id=pep.project_id and p.status='active'
+    where pep.project_id=$1`,[projectId]);
   const row=rows[0] as {ads_write_enabled?:boolean;require_manual_approval?:boolean;max_daily_budget_change_pct?:string|number|null;allowed_providers?:string[]}|undefined;
   const allowed=(row?.allowed_providers||[]).filter((p):p is AdsProvider=>['google_ads','meta_ads','tiktok_ads'].includes(p));
   const globalWriteEnabled=envWriteEnabled();
