@@ -63,7 +63,7 @@ export default function AgencyPortfolioPanel(){
 
   const ranked=useMemo(()=>rows.map(row=>{
     const proposed=row.recommendations.filter(r=>r.status==='proposed');
-    const impactRecommendations=proposed.filter(r=>r.proposed_action?.businessImpact!=null);
+    const impactRecommendations=proposed.filter(r=>n(r.proposed_action?.businessImpact?.monthlyLow)>0||n(r.proposed_action?.businessImpact?.monthlyHigh)>0);
     const hasImpact=impactRecommendations.length>0;
     const opportunityLow=impactRecommendations.reduce((sum,r)=>sum+n(r.proposed_action?.businessImpact?.monthlyLow),0);
     const opportunityHigh=impactRecommendations.reduce((sum,r)=>sum+n(r.proposed_action?.businessImpact?.monthlyHigh),0);
