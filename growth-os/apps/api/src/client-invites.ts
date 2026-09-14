@@ -179,6 +179,7 @@ clientInviteRouter.get('/:token', async (req, res) => {
        join agency_workspaces w on w.id=i.workspace_id
        left join workspace_branding b on b.workspace_id=i.workspace_id
        where i.token_hash=$1 and i.status='pending' and i.expires_at>now()
+         and c.status='active' and w.status='active'
        limit 1`,
       [hashToken(token)]
     );
