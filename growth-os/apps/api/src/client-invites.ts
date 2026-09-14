@@ -154,6 +154,7 @@ clientInviteRouter.post('/client/:clientId', async (req, res) => {
 });
 
 clientInviteRouter.post('/client/:clientId/:inviteId/revoke', async (req, res) => {
+  const db = await pool.connect();
   try {
     await ensureInviteSchema();
     const workspaceId = String((req.params as Record<string, string | undefined>).workspaceId || '');
@@ -161,9 +162,14 @@ clientInviteRouter.post('/client/:clientId/:inviteId/revoke', async (req, res) =
     const inviteId = String(req.params.inviteId || '');
     const actor = await resolveWorkspaceActor(req, workspaceId);
     requireRole(actor, 'admin');
-    await getClient(actor.workspaceId, clientId);
+    await db.query('begin');
+    const activeClient = await db.query(
+      "select c.id from agency_clients c join agency_workspaces w on w.id=c.workspace_id where c.id=$1 and c.workspace_id=$2 and c.status='active' and w.status='active' for update of c,w",
+      [clientId, actor.workspaceId]
+    );
+    if (!activeClient.rows[0]) throw new Error('CLIENT_ACCESS_DENIED');
 
-    const result = await pool.query(
+    const result = await db.query(
       `update client_portal_invites
        set status='revoked'
        where id=$1 and workspace_id=$2 and client_id=$3 and status='pending'
@@ -171,10 +177,17 @@ clientInviteRouter.post('/client/:clientId/:inviteId/revoke', async (req, res) =
       [inviteId, actor.workspaceId, clientId]
     );
 
-    if (!result.rows[0]) return res.status(404).json({ error: 'Bekleyen davet bulunamadı veya davet artık değiştirilemez.' });
+    if (!result.rows[0]) {
+      await db.query('rollback');
+      return res.status(404).json({ error: 'Bekleyen davet bulunamadı veya davet artık değiştirilemez.' });
+    }
+    await db.query('commit');
     res.json({ revoked: true, invite: result.rows[0] });
   } catch (error) {
+    await db.query('rollback');
     res.status(errorStatus(error)).json({ error: errorMessage(error) });
+  } finally {
+    db.release();
   }
 });
 
