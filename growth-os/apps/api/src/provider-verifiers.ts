@@ -33,10 +33,15 @@ function auditIssueStatus(snapshot:Record<string,unknown>,issueKey:string){
   return typeof issue?.status==='string'?issue.status:null;
 }
 
+function integrationProvider(provider:string){
+  return provider==='google_ads'?'google_oauth':provider;
+}
+
 function integrationState(snapshot:Record<string,unknown>,provider:string){
   const integrations=snapshot.integrations;
   if(!Array.isArray(integrations))return null;
-  return integrations.find(item=>item&&typeof item==='object'&&String((item as Record<string,unknown>).provider||'')===provider) as Record<string,unknown>|undefined||null;
+  const storedProvider=integrationProvider(provider);
+  return integrations.find(item=>item&&typeof item==='object'&&String((item as Record<string,unknown>).provider||'')===storedProvider) as Record<string,unknown>|undefined||null;
 }
 
 export function verifyByProvider(context:VerificationContext):VerificationDecision{
