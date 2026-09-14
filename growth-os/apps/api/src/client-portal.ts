@@ -176,9 +176,15 @@ const createPortalUser:RequestHandler=async(req,res)=>{
     const clientId=String(req.params['clientId']||'');
     const actor=await resolveWorkspaceActor(req,workspaceId);
     requireRole(actor,'admin');
-    await assertClient(actor.workspaceId,clientId);
-    const {rows}=await pool.query(`insert into client_portal_users(workspace_id,client_id,email,display_name,role,status) values($1,$2,$3,$4,$5,'active') on conflict(workspace_id,client_id,email) do update set display_name=excluded.display_name,role=excluded.role,status='active',updated_at=now() returning id,email,display_name,role,status,permissions,created_at,updated_at`,[actor.workspaceId,clientId,email,displayName,role]);
-    res.status(201).json({user:rows[0]});
+    const client=await pool.connect();
+    try{
+      await client.query('begin');
+      const activeClient=await client.query("select c.id from agency_clients c join agency_workspaces w on w.id=c.workspace_id where c.id=$1 and c.workspace_id=$2 and c.status='active' and w.status='active' for update of c,w",[clientId,actor.workspaceId]);
+      if(!activeClient.rows[0])throw new Error('CLIENT_ACCESS_DENIED');
+      const {rows}=await client.query(`insert into client_portal_users(workspace_id,client_id,email,display_name,role,status) values($1,$2,$3,$4,$5,'active') on conflict(workspace_id,client_id,email) do update set display_name=excluded.display_name,role=excluded.role,status='active',updated_at=now() returning id,email,display_name,role,status,permissions,created_at,updated_at`,[actor.workspaceId,clientId,email,displayName,role]);
+      await client.query('commit');
+      res.status(201).json({user:rows[0]});
+    }catch(error){await client.query('rollback');throw error}finally{client.release()}
   }catch(error){res.status(errorStatus(error)).json({error:errorMessage(error)})}
 };
 
