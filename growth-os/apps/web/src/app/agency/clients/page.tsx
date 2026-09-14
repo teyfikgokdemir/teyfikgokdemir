@@ -76,6 +76,7 @@ export default function AgencyClientsPage(){
   useEffect(()=>{void loadBase()},[]);
   useEffect(()=>{
     const generation=++accessGeneration.current;
+    setSaving(false);setInviting(false);setRevokingId('');
     setInviteUrl('');setUsers([]);setInvites([]);
     if(selected&&workspaceId&&canManage)void loadAccess(selected,generation);
   },[selected,workspaceId,canManage]);
