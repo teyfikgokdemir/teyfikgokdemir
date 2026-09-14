@@ -16,7 +16,8 @@ type QueueInput={
 export async function queueExecution(input:QueueInput){
   const {rows}=await pool.query(`
     insert into execution_jobs(project_id,recommendation_id,action_log_id,provider,action_type,status,execution_mode,requested_state)
-    values($1,$2,$3,$4,$5,'queued',$6,$7)
+    select $1,$2,$3,$4,$5,'queued',$6,$7
+    where exists(select 1 from projects p where p.id=$1 and p.status='active')
     returning *
   `,[
     input.projectId,
