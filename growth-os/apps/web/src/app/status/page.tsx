@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type Ready={ok?:boolean;ready?:boolean;database?:string;service?:string;time?:string;error?:string};
 type Capabilities={mode?:string;externalExecution?:boolean;adPublishing?:boolean;budgetMutation?:boolean;creativeMutation?:boolean;metricsSync?:boolean;error?:string};
@@ -10,8 +10,10 @@ export default function StatusPage(){
   const [capabilities,setCapabilities]=useState<Capabilities|null>(null);
   const [loading,setLoading]=useState(true);
   const [error,setError]=useState('');
+  const loadSequence=useRef(0);
 
   async function load(){
+    const sequence=++loadSequence.current;
     setLoading(true);setError('');
     try{
       const [readyRes,capRes]=await Promise.all([
@@ -20,16 +22,20 @@ export default function StatusPage(){
       ]);
       const readyBody=await readyRes.json() as Ready;
       const capBody=await capRes.json() as Capabilities;
+      if(sequence!==loadSequence.current)return;
       if(!readyRes.ok)throw new Error(readyBody.error||'API readiness kontrolü başarısız.');
       if(!capRes.ok)throw new Error(capBody.error||'Capability bilgisi alınamadı.');
       setReady(readyBody);setCapabilities(capBody);
     }catch(e){
+      if(sequence!==loadSequence.current)return;
       setReady(null);setCapabilities(null);
       setError(e instanceof Error?e.message:'Sistem durumu okunamadı.');
-    }finally{setLoading(false)}
+    }finally{
+      if(sequence===loadSequence.current)setLoading(false);
+    }
   }
 
-  useEffect(()=>{void load();const timer=window.setInterval(()=>void load(),30000);return()=>window.clearInterval(timer)},[]);
+  useEffect(()=>{void load();const timer=window.setInterval(()=>void load(),30000);return()=>{loadSequence.current++;window.clearInterval(timer)}},[]);
 
   const apiOk=Boolean(ready?.ok&&ready?.ready);
   const dbOk=ready?.database==='reachable';
