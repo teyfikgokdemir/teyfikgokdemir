@@ -158,9 +158,9 @@ const listPortalUsers:RequestHandler=async(req,res)=>{
     const clientId=String(req.params['clientId']||'');
     const actor=await resolveWorkspaceActor(req,workspaceId);
     requireRole(actor,'admin');
-    await assertClient(actor.workspaceId,clientId);
-    const {rows}=await pool.query('select id,email,display_name,role,status,permissions,created_at,updated_at from client_portal_users where workspace_id=$1 and client_id=$2 order by created_at',[actor.workspaceId,clientId]);
-    res.json(rows);
+    const {rows}=await pool.query(`select c.id client_access_id,u.id,u.email,u.display_name,u.role,u.status,u.permissions,u.created_at,u.updated_at from agency_clients c join agency_workspaces w on w.id=c.workspace_id left join client_portal_users u on u.workspace_id=c.workspace_id and u.client_id=c.id where c.id=$1 and c.workspace_id=$2 and c.status='active' and w.status='active' order by u.created_at`,[clientId,actor.workspaceId]);
+    if(!rows[0])throw new Error('CLIENT_ACCESS_DENIED');
+    res.json(rows.filter((row:{id?:string|null})=>Boolean(row.id)).map(({client_access_id: _clientAccessId,...row}:{client_access_id:string;[key:string]:unknown})=>row));
   }catch(error){res.status(errorStatus(error)).json({error:errorMessage(error)})}
 };
 
