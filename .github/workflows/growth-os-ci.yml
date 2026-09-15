@@ -53,6 +53,7 @@ jobs:
           assert.match(source, /partialProducts:Boolean\(productsResponse\.nextPageToken\)/, 'Product truncation must be surfaced.');
           assert.match(source, /partialIssues:Boolean\(issuesResponse\.nextPageToken\)/, 'Issue truncation must be surfaced.');
           NODE
+      - run: node tests/ads-pagination.mjs
       - run: node tests/ads-sync-archive.mjs postgres://postgres:postgres@127.0.0.1:5432/postgres
       - run: node tests/workspace-activity.mjs postgres://postgres:postgres@127.0.0.1:5432/postgres
 

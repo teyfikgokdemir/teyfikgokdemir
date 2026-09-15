@@ -126,13 +126,14 @@ async function metaMetrics(projectId:string,days:number):Promise<NormalizedMetri
   url.searchParams.set('limit','500');
   const all:Array<Record<string,unknown>>=[];
   let next:string|null=url.toString();
-  while(next&&all.length<5000){
+  while(next){
     await assertProjectStillActive(projectId);
     const response=await fetch(next);
     const data=await response.json() as {data?:Array<Record<string,unknown>>;paging?:{next?:string};error?:{message?:string}};
     if(!response.ok)throw new Error(data.error?.message||`Meta API ${response.status}`);
     all.push(...(data.data||[]));
     next=data.paging?.next||null;
+    if(next&&all.length>=5000)throw new Error('Meta Ads raporu 5000 kayıt limitini aştı; eksik veri kaydedilmedi.');
   }
   return all.map(r=>({
     provider:'meta_ads' as const,
@@ -164,11 +165,22 @@ async function tiktokMetrics(projectId:string,days:number):Promise<NormalizedMet
   url.searchParams.set('start_date',start);
   url.searchParams.set('end_date',end);
   url.searchParams.set('page_size','1000');
-  await assertProjectStillActive(projectId);
-  const response=await fetch(url,{headers:{'Access-Token':token}});
-  const payload=await response.json() as {code?:number;message?:string;data?:{list?:Array<{dimensions?:Record<string,unknown>;metrics?:Record<string,unknown>}>}};
-  if(!response.ok||payload.code!==0)throw new Error(payload.message||`TikTok API ${response.status}`);
-  return (payload.data?.list||[]).map(r=>({
+  const all:Array<{dimensions?:Record<string,unknown>;metrics?:Record<string,unknown>}>=[];
+  const maxPages=100;
+  let page=1;
+  while(true){
+    url.searchParams.set('page',String(page));
+    await assertProjectStillActive(projectId);
+    const response=await fetch(url,{headers:{'Access-Token':token}});
+    const payload=await response.json() as {code?:number;message?:string;data?:{list?:Array<{dimensions?:Record<string,unknown>;metrics?:Record<string,unknown>}>;page_info?:{page?:number;page_size?:number;total_number?:number;total_page?:number}}};
+    if(!response.ok||payload.code!==0)throw new Error(payload.message||`TikTok API ${response.status}`);
+    all.push(...(payload.data?.list||[]));
+    const totalPages=Math.max(1,asNumber(payload.data?.page_info?.total_page)||1);
+    if(totalPages>maxPages)throw new Error(`TikTok Ads raporu ${maxPages} sayfa limitini aştı; eksik veri kaydedilmedi.`);
+    if(page>=totalPages)break;
+    page+=1;
+  }
+  return all.map(r=>({
     provider:'tiktok_ads' as const,
     campaignId:String(r.dimensions?.campaign_id||''),
     campaignName:String(r.metrics?.campaign_name||`TikTok ${r.dimensions?.campaign_id||''}`),
