@@ -77,6 +77,54 @@ async function safeFetch(rawUrl: string, init: RequestInit = {}, redirects = 0):
   return response;
 }
 
+const AUDIT_BODY_MAX_BYTES = 4 * 1024 * 1024;
+const AUDIT_PROBE_TIMEOUT_MS = 5000;
+
+async function readBoundedText(response: Response, maxBytes = AUDIT_BODY_MAX_BYTES) {
+  const contentLength = Number(response.headers.get('content-length') || 0);
+  if (Number.isFinite(contentLength) && contentLength > maxBytes) {
+    await response.body?.cancel();
+    throw new Error('Yanıt gövdesi güvenli boyut sınırını aştı.');
+  }
+  if (!response.body) return '';
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let total = 0;
+  let text = '';
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!value) continue;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel();
+        throw new Error('Yanıt gövdesi güvenli boyut sınırını aştı.');
+      }
+      text += decoder.decode(value, { stream: true });
+    }
+    return text + decoder.decode();
+  } finally {
+    reader.releaseLock();
+  }
+}
+
+async function probeUrl(rawUrl: string, timeoutMs = AUDIT_PROBE_TIMEOUT_MS) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await safeFetch(rawUrl, {
+      signal: controller.signal,
+      headers: { 'user-agent': 'GrowthOS-AuditBot/0.2 (+private audit)' },
+    });
+    const ok = response.ok;
+    await response.body?.cancel();
+    return ok;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 function pageSignals(url: string, status: number, html: string): PageSample {
   const $ = cheerio.load(html);
   const text = $('body').text().replace(/\s+/g, ' ').trim();
@@ -128,11 +176,12 @@ async function crawlSamples(baseUrl: string, homeHtml: string, limit = 20) {
   const results: PageSample[] = [];
   const seenFinalUrls = new Set<string>();
   for (const url of urls) {
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    let res: Response | undefined;
     try {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 10000);
-      const res = await safeFetch(url, { signal: controller.signal, headers: { 'user-agent': 'GrowthOS-AuditBot/0.2 (+private audit)' } });
-      clearTimeout(timeout);
+      timeout = setTimeout(() => controller.abort(), 10000);
+      res = await safeFetch(url, { signal: controller.signal, headers: { 'user-agent': 'GrowthOS-AuditBot/0.2 (+private audit)' } });
       const finalUrl = normalizeSampleUrl(res.url || url);
       const finalParsed = new URL(finalUrl);
       if (finalParsed.origin !== origin || isIgnoredSamplePath(finalParsed.pathname)) continue;
@@ -140,13 +189,16 @@ async function crawlSamples(baseUrl: string, homeHtml: string, limit = 20) {
       seenFinalUrls.add(finalUrl);
       const type = res.headers.get('content-type') || '';
       if (!type.includes('text/html')) continue;
-      const html = finalUrl === normalizedBaseUrl ? homeHtml : await res.text();
+      const html = finalUrl === normalizedBaseUrl ? homeHtml : await readBoundedText(res);
       results.push(pageSignals(finalUrl, res.status, html));
     } catch {
       const failedUrl = normalizeSampleUrl(url);
       if (seenFinalUrls.has(failedUrl)) continue;
       seenFinalUrls.add(failedUrl);
       results.push({ url: failedUrl, status: 0, title: '', description: '', canonical: '', h1Count: 0, schemaCount: 0, robotsMeta: '', wordCount: 0 });
+    } finally {
+      if (timeout) clearTimeout(timeout);
+      if (res?.body && !res.body.locked) await res.body.cancel().catch(() => undefined);
     }
   }
   return results;
@@ -184,16 +236,17 @@ export async function runAudit(inputDomain: string) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15000);
   let response: Response;
+  let html: string;
   try {
     response = await safeFetch(domain, {
       signal: controller.signal,
       headers: { 'user-agent': 'GrowthOS-AuditBot/0.2 (+private audit)' },
     });
+    html = await readBoundedText(response);
   } finally {
     clearTimeout(timeout);
   }
 
-  const html = await response.text();
   const $ = cheerio.load(html);
   const title = $('title').first().text().trim();
   const description = $('meta[name="description"]').attr('content')?.trim() || '';
@@ -220,13 +273,11 @@ export async function runAudit(inputDomain: string) {
 
   const robotsUrl = new URL('/robots.txt', response.url).toString();
   const sitemapUrl = new URL('/sitemap.xml', response.url).toString();
-  const [robotsRes, sitemapRes, sampledPages] = await Promise.all([
-    safeFetch(robotsUrl).catch(() => null),
-    safeFetch(sitemapUrl).catch(() => null),
+  const [robotsOk, sitemapOk, sampledPages] = await Promise.all([
+    probeUrl(robotsUrl).catch(() => false),
+    probeUrl(sitemapUrl).catch(() => false),
     crawlSamples(response.url, html, 20),
   ]);
-  const robotsOk = Boolean(robotsRes?.ok);
-  const sitemapOk = Boolean(sitemapRes?.ok);
 
   const titleCounts = new Map<string, number>();
   const descriptionCounts = new Map<string, number>();
