@@ -117,6 +117,36 @@ async function postJson<T>(url:string, accessToken:string, body:unknown):Promise
   return data as T;
 }
 
+async function merchantProductsPages(url:string,accessToken:string,maxPages=20):Promise<MerchantProductsResponse>{
+  const products:MerchantProduct[]=[];
+  let nextPageToken='';
+  let page=0;
+  do{
+    const endpoint=new URL(url);
+    if(nextPageToken)endpoint.searchParams.set('pageToken',nextPageToken);
+    const response=await getJson(endpoint.toString(),accessToken) as MerchantProductsResponse;
+    products.push(...(response.products||[]));
+    nextPageToken=response.nextPageToken||'';
+    page++;
+  }while(nextPageToken&&page<maxPages);
+  return {products,nextPageToken:nextPageToken||undefined};
+}
+
+async function merchantIssuePages(url:string,accessToken:string,maxPages=20):Promise<MerchantIssuesResponse>{
+  const accountIssues:MerchantAccountIssue[]=[];
+  let nextPageToken='';
+  let page=0;
+  do{
+    const endpoint=new URL(url);
+    if(nextPageToken)endpoint.searchParams.set('pageToken',nextPageToken);
+    const response=await getJson(endpoint.toString(),accessToken) as MerchantIssuesResponse;
+    accountIssues.push(...(response.accountIssues||[]));
+    nextPageToken=response.nextPageToken||'';
+    page++;
+  }while(nextPageToken&&page<maxPages);
+  return {accountIssues,nextPageToken:nextPageToken||undefined};
+}
+
 function isoDate(date:Date){return date.toISOString().slice(0,10)}
 function normalizeDomain(value:string){return value.replace(/^https?:\/\//,'').replace(/^www\./,'').split('/')[0].toLowerCase()}
 function searchConsoleSiteDomain(siteUrl:string){
@@ -196,8 +226,8 @@ async function merchantCommerceForProject(projectId:string,accessToken:string){
   }
 
   const [productsResponse,issuesResponse]=await Promise.all([
-    getJson(`https://merchantapi.googleapis.com/products/v1/${matched.name}/products?pageSize=250`,accessToken) as Promise<MerchantProductsResponse>,
-    getJson(`https://merchantapi.googleapis.com/accounts/v1/${matched.name}/issues?pageSize=100&languageCode=tr-TR&timeZone=Europe%2FIstanbul`,accessToken) as Promise<MerchantIssuesResponse>
+    merchantProductsPages(`https://merchantapi.googleapis.com/products/v1/${matched.name}/products?pageSize=250`,accessToken),
+    merchantIssuePages(`https://merchantapi.googleapis.com/accounts/v1/${matched.name}/issues?pageSize=100&languageCode=tr-TR&timeZone=Europe%2FIstanbul`,accessToken)
   ]);
   const products=productsResponse.products||[];
   const accountIssues=issuesResponse.accountIssues||[];
@@ -220,7 +250,7 @@ async function merchantCommerceForProject(projectId:string,accessToken:string){
     selectedMerchantAccountName:matched.name,
     account:{name:matched.name,accountName:matched.accountName||matched.name,homepage:matched.homepage?.uri||null,claimed:matched.homepage?.claimed??null,timeZone:typeof matched.timeZone==='string'?matched.timeZone:matched.timeZone?.id||null,languageCode:matched.languageCode||null},
     accounts:accountList,
-    summary:{totalProducts:products.length,approved,pending,disapproved,withIssues,accountIssues:accountIssues.length,criticalIssues:severityCounts.critical||0,errorIssues:severityCounts.error||0,suggestionIssues:severityCounts.suggestion||0,partialProducts:Boolean(productsResponse.nextPageToken)},
+    summary:{totalProducts:products.length,approved,pending,disapproved,withIssues,accountIssues:accountIssues.length,criticalIssues:severityCounts.critical||0,errorIssues:severityCounts.error||0,suggestionIssues:severityCounts.suggestion||0,partialProducts:Boolean(productsResponse.nextPageToken),partialIssues:Boolean(issuesResponse.nextPageToken)},
     accountIssues:accountIssues.slice(0,50),
     products:productRows.slice(0,100)
   };
