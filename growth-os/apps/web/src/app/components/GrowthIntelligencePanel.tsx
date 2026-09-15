@@ -35,6 +35,9 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
         fetch(`${api}/projects/${id}/search-console/performance?days=28`,{cache:'no-store'}),
         fetch(`${api}/projects/${id}/recommendations`,{cache:'no-store'})
       ]);
+      const failedSources=[
+        ['Metrics',m],['Overview',o],['Google',g],['Search Console',s],['Recommendations',r]
+      ].filter(([,response])=>!(response as Response).ok).map(([name,response])=>`${name} (${(response as Response).status})`);
       const [nextMetrics,nextOverview,nextGoogle,nextSearch,nextRecommendations]=await Promise.all([
         m.ok?m.json() as Promise<Metric[]>:Promise.resolve(null),
         o.ok?o.json() as Promise<Overview>:Promise.resolve(null),
@@ -48,6 +51,7 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
       setGoogle(nextGoogle);
       setSearch(nextSearch);
       setQueueCount(nextRecommendations?nextRecommendations.filter(x=>x.source==='growth_intelligence'&&x.status==='proposed').length:0);
+      setError(failedSources.length?`Bazı Growth Intelligence kaynakları okunamadı: ${failedSources.join(', ')}.`:'');
       setUpdatedAt(new Date());
     }catch(e){
       if(generation===loadGeneration.current)setError(e instanceof Error?e.message:'Growth Intelligence verileri okunamadı.');
@@ -88,6 +92,7 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
     const merchant=google?.merchantCommerce?.summary;
     const sc=search?.summary;
 
+    if(error)out.push({severity:'high',source:'Growth OS',title:'Kaynak verisi eksik',detail:error,action:'Başarısız kaynağı yeniden kontrol et; eksik veri varken sağlıklı verdict üretme.'});
     if(google?.analyticsPerformance?.matched&&n(ga?.sessions)>0&&n(ga?.keyEvents)===0)out.push({severity:'high',source:'GA4',title:'Dönüşüm sinyali yok',detail:`${n(ga?.sessions)} oturum var ancak key event görünmüyor.`,action:'Form, WhatsApp, telefon ve teklif aksiyonlarını key event olarak doğrula.'});
     if(spend>0&&targetRoas>0&&roas!==null&&roas<targetRoas*.7)out.push({severity:'high',source:'Ads',title:'ROAS hedefin belirgin altında',detail:`30 günlük ROAS ${roas.toFixed(2)}, hedef ${targetRoas.toFixed(2)}.`,action:'Kampanya, landing page ve marjı birlikte incele.'});
     if(spend>0&&targetCpa>0&&conversions>0&&spend/conversions>targetCpa*1.25)out.push({severity:'high',source:'Ads',title:'CPA hedefin üzerinde',detail:`CPA ${(spend/conversions).toFixed(2)}, hedef ${targetCpa.toFixed(2)}.`,action:'Düşük kaliteli kampanya ve trafik kaynaklarını daralt.'});
@@ -98,7 +103,7 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
 
     if(out.length===0)out.push({severity:'good',source:'Growth OS',title:'Kritik çapraz-kanal sinyal yok',detail:'Bağlı kaynaklarda mevcut eşiklere göre kritik bir çakışma görünmüyor.',action:'Verileri düzenli senkronize etmeye devam et.'});
     return out.sort((a,b)=>severityRank[b.severity]-severityRank[a.severity]);
-  },[metrics,overview,google,search]);
+  },[metrics,overview,google,search,error]);
 
   if(!projectId)return <section className="moduleCard"><div className="empty">Growth Intelligence için proje seç.</div></section>;
   if(loading&&!updatedAt&&!error)return <section className="moduleCard"><div className="moduleLoading"><span/> Growth Intelligence kaynakları analiz ediliyor…</div></section>;
