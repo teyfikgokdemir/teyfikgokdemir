@@ -15,7 +15,7 @@ type SearchConsoleRow={keys?:string[];clicks?:number;impressions?:number;ctr?:nu
 type SearchConsoleResponse={rows?:SearchConsoleRow[]};
 type SearchConsoleSites={siteEntry?:Array<{siteUrl?:string;permissionLevel?:string}>};
 type MerchantAccount={name?:string;accountName?:string;timeZone?:{id?:string}|string;languageCode?:string};
-type MerchantAccountsResponse={accounts?:MerchantAccount[]};
+type MerchantAccountsResponse={accounts?:MerchantAccount[];nextPageToken?:string};
 type MerchantHomepage={uri?:string;claimed?:boolean};
 type MerchantProductStatus={
   destinationStatuses?:Array<{reportingContext?:string;approvedCountries?:string[];pendingCountries?:string[];disapprovedCountries?:string[]}>;
@@ -117,6 +117,21 @@ async function postJson<T>(url:string, accessToken:string, body:unknown):Promise
   return data as T;
 }
 
+async function merchantAccountPages(url:string,accessToken:string,maxPages=20):Promise<MerchantAccountsResponse>{
+  const accounts:MerchantAccount[]=[];
+  let nextPageToken='';
+  let page=0;
+  do{
+    const endpoint=new URL(url);
+    if(nextPageToken)endpoint.searchParams.set('pageToken',nextPageToken);
+    const response=await getJson(endpoint.toString(),accessToken) as MerchantAccountsResponse;
+    accounts.push(...(response.accounts||[]));
+    nextPageToken=response.nextPageToken||'';
+    page++;
+  }while(nextPageToken&&page<maxPages);
+  return {accounts,nextPageToken:nextPageToken||undefined};
+}
+
 async function merchantProductsPages(url:string,accessToken:string,maxPages=20):Promise<MerchantProductsResponse>{
   const products:MerchantProduct[]=[];
   let nextPageToken='';
@@ -204,7 +219,7 @@ async function merchantCommerceForProject(projectId:string,accessToken:string){
   if(!domain)throw new Error('Proje bulunamadı.');
   const metadata=integration.rows[0]?.metadata as {selectedMerchantAccountName?:string}|undefined;
 
-  const accountsResponse=(await getJson('https://merchantapi.googleapis.com/accounts/v1/accounts?pageSize=500',accessToken)) as MerchantAccountsResponse;
+  const accountsResponse=await merchantAccountPages('https://merchantapi.googleapis.com/accounts/v1/accounts?pageSize=500',accessToken);
   const accounts=accountsResponse.accounts||[];
   const enriched=await Promise.all(accounts.map(async account=>{
     if(!account.name)return {...account,homepage:null as MerchantHomepage|null};
@@ -217,12 +232,12 @@ async function merchantCommerceForProject(projectId:string,accessToken:string){
   const selected=metadata?.selectedMerchantAccountName ? enriched.find(a=>a.name===metadata.selectedMerchantAccountName) : undefined;
   const accountList=enriched.map(a=>({name:a.name||'',accountName:a.accountName||a.name||'Merchant Center',homepage:a.homepage?.uri||null,claimed:a.homepage?.claimed??null,timeZone:typeof a.timeZone==='string'?a.timeZone:a.timeZone?.id||null,languageCode:a.languageCode||null}));
   if(metadata?.selectedMerchantAccountName&&!selected?.name){
-    return {matched:false,domain,message:'Seçili Merchant Center hesabına artık erişim bulunamadı. Yeni hesap açıkça seçilmeli.',accounts:accountList,selectedMerchantAccountName:metadata.selectedMerchantAccountName};
+    return {matched:false,domain,message:'Seçili Merchant Center hesabına artık erişim bulunamadı. Yeni hesap açıkça seçilmeli.',accounts:accountList,selectedMerchantAccountName:metadata.selectedMerchantAccountName,partialAccounts:Boolean(accountsResponse.nextPageToken)};
   }
   const matched=selected||enriched.find(a=>normalizeDomain(a.homepage?.uri||'')===domain);
 
   if(!matched?.name){
-    return {matched:false,domain,message:`${domain} için Merchant Center hesabı otomatik eşleşmedi.`,accounts:accountList,selectedMerchantAccountName:metadata?.selectedMerchantAccountName||null};
+    return {matched:false,domain,message:`${domain} için Merchant Center hesabı otomatik eşleşmedi.`,accounts:accountList,selectedMerchantAccountName:metadata?.selectedMerchantAccountName||null,partialAccounts:Boolean(accountsResponse.nextPageToken)};
   }
 
   const [productsResponse,issuesResponse]=await Promise.all([
@@ -250,7 +265,7 @@ async function merchantCommerceForProject(projectId:string,accessToken:string){
     selectedMerchantAccountName:matched.name,
     account:{name:matched.name,accountName:matched.accountName||matched.name,homepage:matched.homepage?.uri||null,claimed:matched.homepage?.claimed??null,timeZone:typeof matched.timeZone==='string'?matched.timeZone:matched.timeZone?.id||null,languageCode:matched.languageCode||null},
     accounts:accountList,
-    summary:{totalProducts:products.length,approved,pending,disapproved,withIssues,accountIssues:accountIssues.length,criticalIssues:severityCounts.critical||0,errorIssues:severityCounts.error||0,suggestionIssues:severityCounts.suggestion||0,partialProducts:Boolean(productsResponse.nextPageToken),partialIssues:Boolean(issuesResponse.nextPageToken)},
+    summary:{totalProducts:products.length,approved,pending,disapproved,withIssues,accountIssues:accountIssues.length,criticalIssues:severityCounts.critical||0,errorIssues:severityCounts.error||0,suggestionIssues:severityCounts.suggestion||0,partialAccounts:Boolean(accountsResponse.nextPageToken),partialProducts:Boolean(productsResponse.nextPageToken),partialIssues:Boolean(issuesResponse.nextPageToken)},
     accountIssues:accountIssues.slice(0,50),
     products:productRows.slice(0,100)
   };
@@ -292,7 +307,7 @@ export async function discoverGoogleResources(projectId:string) {
       return {matched:true,days:28,property:matched.property,propertyName:matched.displayName,accountName:matched.accountName,stream:matched.stream,metadata:{timeZone:matched.timeZone,currencyCode:matched.currencyCode},summary:{activeUsers:n(sv[0]?.value),newUsers:n(sv[1]?.value),sessions:n(sv[2]?.value),views:n(sv[3]?.value),keyEvents:n(sv[4]?.value),transactions:n(sv[5]?.value),totalRevenue:n(sv[6]?.value)},traffic:(traffic.rows||[]).map(r=>({channel:r.dimensionValues?.[0]?.value||'Unknown',sessions:n(r.metricValues?.[0]?.value),activeUsers:n(r.metricValues?.[1]?.value),keyEvents:n(r.metricValues?.[2]?.value),totalRevenue:n(r.metricValues?.[3]?.value)})),landingPages:(landing.rows||[]).map(r=>({page:r.dimensionValues?.[0]?.value||'/',sessions:n(r.metricValues?.[0]?.value),activeUsers:n(r.metricValues?.[1]?.value),keyEvents:n(r.metricValues?.[2]?.value),totalRevenue:n(r.metricValues?.[3]?.value)})),properties};
     }],
     ['searchConsole',()=>getJson('https://www.googleapis.com/webmasters/v3/sites',accessToken)],
-    ['merchant',()=>getJson('https://merchantapi.googleapis.com/accounts/v1/accounts?pageSize=500',accessToken)],
+    ['merchant',()=>merchantAccountPages('https://merchantapi.googleapis.com/accounts/v1/accounts?pageSize=500',accessToken)],
     ['merchantCommerce',()=>merchantCommerceForProject(projectId,accessToken)]
   ];
 
