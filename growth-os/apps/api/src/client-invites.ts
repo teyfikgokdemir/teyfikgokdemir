@@ -65,7 +65,7 @@ function errorMessage(error: unknown) {
 
 async function getClient(workspaceId: string, clientId: string) {
   const result = await pool.query(
-    "select id,name,domain from agency_clients where id=$1 and workspace_id=$2 and status='active'",
+    "select c.id,c.name,c.domain from agency_clients c join agency_workspaces w on w.id=c.workspace_id where c.id=$1 and c.workspace_id=$2 and c.status='active' and w.status='active'",
     [clientId, workspaceId]
   );
   if (!result.rows[0]) throw new Error('CLIENT_ACCESS_DENIED');
