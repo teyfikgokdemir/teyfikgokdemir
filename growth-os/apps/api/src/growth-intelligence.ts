@@ -45,6 +45,10 @@ export async function refreshGrowthIntelligence(projectId:string,beforeWrite?:(c
     pool.query('select target_roas,target_cpa,break_even_roas from business_targets where project_id=$1',[projectId])
   ]);
 
+  const sourceErrors:Record<string,string>={...(google.errors||{})};
+  if(!searchResult)sourceErrors.searchConsole='Search Console performans verisi okunamadı.';
+  const hasSourceErrors=Object.keys(sourceErrors).length>0;
+
   const analytics=(google.analyticsPerformance||{}) as AnalyticsPerformance;
   const search=(searchResult||{}) as SearchConsolePerformance;
   const merchant=(google.merchantCommerce||{}) as MerchantCommerce;
@@ -129,13 +133,15 @@ export async function refreshGrowthIntelligence(projectId:string,beforeWrite?:(c
   try{
     await client.query('begin');
     await beforeWrite?.(client);
-    await client.query("update alerts set status='resolved',resolved_at=now() where project_id=$1 and source='growth_intelligence' and status='open'",[projectId]);
-    await client.query("update recommendations set status='superseded',decided_at=now() where project_id=$1 and source='growth_intelligence' and status='proposed'",[projectId]);
-    for(const alert of alerts){
-      await client.query("insert into alerts(project_id,source,severity,title,message,status,payload) values($1,'growth_intelligence',$2,$3,$4,'open',$5)",[projectId,alert.severity,alert.title,alert.message,alert.payload]);
-    }
-    for(const rec of scoredRecommendations){
-      await client.query("insert into recommendations(project_id,source,priority,title,rationale,proposed_action,status) values($1,'growth_intelligence',$2,$3,$4,$5,'proposed')",[projectId,rec.priority,rec.title,rec.rationale,rec.action]);
+    if(!hasSourceErrors){
+      await client.query("update alerts set status='resolved',resolved_at=now() where project_id=$1 and source='growth_intelligence' and status='open'",[projectId]);
+      await client.query("update recommendations set status='superseded',decided_at=now() where project_id=$1 and source='growth_intelligence' and status='proposed'",[projectId]);
+      for(const alert of alerts){
+        await client.query("insert into alerts(project_id,source,severity,title,message,status,payload) values($1,'growth_intelligence',$2,$3,$4,'open',$5)",[projectId,alert.severity,alert.title,alert.message,alert.payload]);
+      }
+      for(const rec of scoredRecommendations){
+        await client.query("insert into recommendations(project_id,source,priority,title,rationale,proposed_action,status) values($1,'growth_intelligence',$2,$3,$4,$5,'proposed')",[projectId,rec.priority,rec.title,rec.rationale,rec.action]);
+      }
     }
     await client.query('commit');
   }catch(error){await client.query('rollback');throw error}finally{client.release()}
@@ -145,7 +151,7 @@ export async function refreshGrowthIntelligence(projectId:string,beforeWrite?:(c
     domain:project.rows[0].domain,
     counts:{alerts:alerts.length,recommendations:scoredRecommendations.length},
     signals:{ads:{spend,revenue,clicks,conversions,roas},ga4:ga,searchConsole:sc,merchant:ms},
-    errors:{...(google.errors||{}),searchConsole:searchResult?undefined:'Search Console performans verisi okunamadı.'},
+    errors:sourceErrors,
     alerts,
     recommendations:scoredRecommendations
   };
