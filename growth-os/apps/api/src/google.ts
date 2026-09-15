@@ -99,8 +99,8 @@ export async function googleAccessForProject(projectId:string) {
   return refreshGoogleAccessToken(decryptSecret(metadata.refreshTokenEncrypted));
 }
 
-async function getJson(url:string, accessToken:string):Promise<unknown> {
-  const response = await fetch(url, {headers:{authorization:`Bearer ${accessToken}`}});
+async function getJson(url:string, accessToken:string, extraHeaders:Record<string,string>={}):Promise<unknown> {
+  const response = await fetch(url, {headers:{authorization:`Bearer ${accessToken}`,...extraHeaders}});
   const text = await response.text();
   let data:unknown = {};
   try { data = text ? JSON.parse(text) : {}; } catch { data = {raw:text}; }
@@ -232,7 +232,7 @@ export async function discoverGoogleResources(projectId:string) {
   const results:{ads?:unknown;analytics?:unknown;analyticsPerformance?:unknown;searchConsole?:unknown;merchant?:unknown;merchantCommerce?:unknown;errors:Record<string,string>} = {errors:{}};
 
   const jobs:[keyof Omit<typeof results,'errors'>,()=>Promise<unknown>][] = [
-    ['ads',()=>getJson(`https://googleads.googleapis.com/${adsVersion}/customers:listAccessibleCustomers`,accessToken)],
+    ['ads',()=>getJson(`https://googleads.googleapis.com/${adsVersion}/customers:listAccessibleCustomers`,accessToken,{'developer-token':required('GOOGLE_ADS_DEVELOPER_TOKEN')})],
     ['analytics',()=>getJson('https://analyticsadmin.googleapis.com/v1beta/accountSummaries?pageSize=200',accessToken)],
     ['analyticsPerformance',async()=>{
       const project=await pool.query('select domain from projects where id=$1',[projectId]);
