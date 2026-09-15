@@ -73,29 +73,41 @@ async function getClient(workspaceId: string, clientId: string) {
 }
 
 clientInviteRouter.get('/client/:clientId', async (req, res) => {
+  let db: PoolClient | undefined;
   try {
     await ensureInviteSchema();
     const workspaceId = String((req.params as Record<string, string | undefined>).workspaceId || '');
     const clientId = String(req.params.clientId || '');
     const actor = await resolveWorkspaceActor(req, workspaceId);
     requireRole(actor, 'admin');
-    await getClient(actor.workspaceId, clientId);
 
-    await pool.query(
+    db = await pool.connect();
+    await db.query('begin');
+    const activeClient = await db.query(
+      "select c.id from agency_clients c join agency_workspaces w on w.id=c.workspace_id where c.id=$1 and c.workspace_id=$2 and c.status='active' and w.status='active' for update of c,w",
+      [clientId, actor.workspaceId]
+    );
+    if (!activeClient.rows[0]) throw new Error('CLIENT_ACCESS_DENIED');
+
+    await db.query(
       "update client_portal_invites set status='expired' where workspace_id=$1 and client_id=$2 and status='pending' and expires_at<=now()",
       [actor.workspaceId, clientId]
     );
 
-    const result = await pool.query(
+    const result = await db.query(
       `select id,email,display_name,role,status,expires_at,accepted_at,created_at,invited_by
        from client_portal_invites
        where workspace_id=$1 and client_id=$2
        order by created_at desc limit 100`,
       [actor.workspaceId, clientId]
     );
+    await db.query('commit');
     res.json(result.rows);
   } catch (error) {
+    if (db) await db.query('rollback');
     res.status(errorStatus(error)).json({ error: errorMessage(error) });
+  } finally {
+    db?.release();
   }
 });
 
