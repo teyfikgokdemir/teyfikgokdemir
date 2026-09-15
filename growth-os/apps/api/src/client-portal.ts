@@ -134,6 +134,8 @@ const decisionHandler:RequestHandler=async(req,res)=>{
     const client=await pool.connect();
     try{
       await client.query('begin');
+      const activeClient=await client.query("select c.id from agency_clients c join agency_workspaces w on w.id=c.workspace_id where c.id=$1 and c.workspace_id=$2 and c.status='active' and w.status='active' for update of c,w",[clientId,workspaceId]);
+      if(!activeClient.rows[0])throw new Error('CLIENT_ACCESS_DENIED');
       const rec=await client.query(`select r.id,r.project_id,r.status from recommendations r join projects p on p.id=r.project_id where r.id=$1 and p.workspace_id=$2 and p.client_id=$3 and r.status in ('proposed','approved') for update of p`,[recommendationId,workspaceId,clientId]);
       if(!rec.rows[0]){
         await client.query('rollback');
