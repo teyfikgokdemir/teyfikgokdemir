@@ -14,7 +14,7 @@ const schema = 'ads_sync_test_' + Date.now();
 await db.query(`create schema ${schema}`);
 const pool = new Pool({ connectionString: url.href, options: `-c search_path=${schema}` });
 let boundary = 0, archiveAt = 0, fetches = 0, duringFetch = false, pagination = false;
-let failInsert = false, concurrentArchive = false, archivePromise, externallyFailed = false;
+let failInsert = false, concurrentArchive = false, archivePromise, externallyFailed = false, failGrowth = false;
 const archive = () => pool.query("update projects set status='archived' where id=$1", [projectId]);
 const guardedPool = {
   query: (...args) => pool.query(...args),
@@ -59,7 +59,12 @@ const growth = await load('growth-intelligence', {
   attachRevenueImpact: x => x.proposedAction,
 });
 const sync = await load('ads-sync', {
-  pool: guardedPool, refreshGrowthIntelligence: growth, process, URL,
+  pool: guardedPool,
+  refreshGrowthIntelligence: async (...args) => {
+    if (failGrowth) throw Error('Injected intelligence failure');
+    return growth(...args);
+  },
+  process, URL,
   decryptSecret: () => 'test-token', googleAccessForProject: async () => 'test-token',
   fetch: async input => {
     fetches++;
@@ -78,12 +83,12 @@ try {
     create table recommendations(project_id uuid,source text,priority text,title text,rationale text,proposed_action jsonb,status text,decided_at timestamptz);
     create table ads_sync_runs(id uuid default gen_random_uuid(),project_id uuid references projects(id) on delete cascade,status text default 'running',requested_days integer,provider_results jsonb default '[]',metrics_written integer default 0,alerts_created integer default 0,recommendations_created integer default 0,finished_at timestamptz,error_message text);
   `);
-  for (const scenario of ['active', 'initial-archive', 'fetch-archive', 'pagination-archive', 'metric-boundary', 'ads-boundary', 'growth-boundary', 'final-boundary', 'metric-rollback', 'concurrent-archive', 'external-terminal']) {
+  for (const scenario of ['active', 'zero-provider', 'intelligence-failure', 'initial-archive', 'fetch-archive', 'pagination-archive', 'metric-boundary', 'ads-boundary', 'growth-boundary', 'final-boundary', 'metric-rollback', 'concurrent-archive', 'external-terminal']) {
     boundary = archiveAt = fetches = 0;
-    duringFetch = pagination = failInsert = concurrentArchive = externallyFailed = false;
+    duringFetch = pagination = failInsert = concurrentArchive = externallyFailed = failGrowth = false;
     await pool.query('truncate projects,integrations,campaign_metrics,business_targets,alerts,recommendations,ads_sync_runs cascade');
     await pool.query("insert into projects values($1,'active','example.test')", [projectId]);
-    await pool.query("insert into integrations(project_id,provider,status,metadata) values($1,'meta_ads','connected',$2)", [projectId, { accessTokenEncrypted: 'test', selectedAdAccountId: '123' }]);
+    if (scenario !== 'zero-provider') await pool.query("insert into integrations(project_id,provider,status,metadata) values($1,'meta_ads','connected',$2)", [projectId, { accessTokenEncrypted: 'test', selectedAdAccountId: '123' }]);
     await pool.query('insert into business_targets values($1,2,10,1)', [projectId]);
     if (scenario === 'initial-archive') await archive();
     duringFetch = ['fetch-archive', 'pagination-archive'].includes(scenario);
@@ -92,6 +97,7 @@ try {
     failInsert = scenario === 'metric-rollback';
     concurrentArchive = scenario === 'concurrent-archive';
     externallyFailed = scenario === 'external-terminal';
+    failGrowth = scenario === 'intelligence-failure';
     let result, error;
     try { result = await sync(projectId); } catch (e) { error = e; }
     const runs = (await pool.query('select * from ads_sync_runs')).rows;
@@ -112,6 +118,13 @@ try {
         assert.equal(error, undefined); assert.equal(runs[0].status, 'success');
         assert.equal(result.readOnly, true); assert.equal(result.externalExecution, false);
         assert.equal(metrics, 1); assert.equal(alerts, 3); assert.equal(recommendations, 3);
+      } else if (scenario === 'zero-provider') {
+        assert.equal(error, undefined); assert.equal(runs[0].status, 'skipped');
+        assert.equal(runs[0].error_message, null); assert.equal(metrics, 0); assert.equal(fetches, 0);
+      } else if (scenario === 'intelligence-failure') {
+        assert.equal(error, undefined); assert.equal(runs[0].status, 'failed');
+        assert.match(runs[0].error_message, /growth_intelligence: Injected intelligence failure/);
+        assert.equal(metrics, 1);
       } else if (scenario === 'metric-rollback') {
         assert.equal(error, undefined); assert.equal(runs[0].status, 'failed');
         assert.match(runs[0].error_message, /Injected metric failure/); assert.equal(metrics, 0);

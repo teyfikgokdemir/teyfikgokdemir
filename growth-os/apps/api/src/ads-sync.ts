@@ -327,7 +327,7 @@ function summarize(metrics:NormalizedMetric[]){
   return byProvider;
 }
 
-type SyncProgress={results:Array<{provider:string;ok:boolean;rows:number;error?:string}>;metrics:number;alerts:number;recommendations:number};
+type SyncProgress={results:Array<{provider:string;ok:boolean;rows:number;error?:string}>;metrics:number;alerts:number;recommendations:number;intelligenceError?:string};
 
 async function syncActiveAdsProject(projectId:string,days:number,progress:SyncProgress){
   await assertProjectStillActive(projectId);
@@ -367,7 +367,8 @@ async function syncActiveAdsProject(projectId:string,days:number,progress:SyncPr
   }catch(error){
     if(error instanceof AdsSyncAbortedError)throw error;
     await assertProjectStillActive(projectId);
-    crossSourceIntelligence={error:error instanceof Error?error.message:'Growth Intelligence yenilenemedi.'};
+    progress.intelligenceError=error instanceof Error?error.message:'Growth Intelligence yenilenemedi.';
+    crossSourceIntelligence={error:progress.intelligenceError};
   }
   return {readOnly:true,externalExecution:false,days,results,summary:summarize(allMetrics),intelligence,crossSourceIntelligence};
 }
@@ -400,10 +401,13 @@ export async function syncAdsProject(projectId:string,days=30){
       try{
         await finalizer.query('begin');
         await assertProjectStillActive(projectId,finalizer);
+        const providerErrors=progress.results.filter(r=>!r.ok).map(r=>`${r.provider}: ${r.error}`);
+        const errorMessage=[...providerErrors,...(progress.intelligenceError?[`growth_intelligence: ${progress.intelligenceError}`]:[])].join('; ')||null;
+        const status=progress.results.length===0?'skipped':errorMessage?'failed':'success';
         const updated=await finalizer.query(`update ads_sync_runs set status=$2,finished_at=now(),error_message=$3,
           provider_results=$4,metrics_written=$5,alerts_created=$6,recommendations_created=$7
           where id=$1 and status='running'`,
-          [runId,progress.results.some(r=>!r.ok)?'failed':'success',progress.results.filter(r=>!r.ok).map(r=>`${r.provider}: ${r.error}`).join('; ')||null,JSON.stringify(progress.results),progress.metrics,progress.alerts,progress.recommendations]);
+          [runId,status,errorMessage,JSON.stringify(progress.results),progress.metrics,progress.alerts,progress.recommendations]);
         if(updated.rowCount!==1)throw new Error('Reklam senkronizasyonu zaten sonlandırılmış.');
         await finalizer.query('commit');
       }catch(error){await finalizer.query('rollback');throw error}finally{finalizer.release()}
