@@ -52,8 +52,9 @@ async function load(name, bindings) {
 }
 const growth = await load('growth-intelligence', {
   pool: guardedPool,
-  discoverGoogleResources: async () => ({ analyticsPerformance: { matched: true, summary: { sessions: 10, keyEvents: 0 } } }),
-  searchConsolePerformanceForProject: async () => ({}),
+  discoverGoogleResources: async () => ({}),
+  analyticsPerformanceForProject: async () => ({ matched: true, summary: { sessions: 10, keyEvents: 0 } }),
+  searchConsolePerformanceForWorkspaceProject: async () => ({}),
   attachRecommendationDecision: x => x.proposedAction,
   attachRevenueImpact: x => x.proposedAction,
 });

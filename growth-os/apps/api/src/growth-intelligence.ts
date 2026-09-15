@@ -1,6 +1,8 @@
 import { pool } from './db.js';
 import type { PoolClient } from 'pg';
-import { discoverGoogleResources, searchConsolePerformanceForProject } from './google.js';
+import { discoverGoogleResources } from './google.js';
+import { analyticsPerformanceForProject } from './google-analytics.js';
+import { searchConsolePerformanceForWorkspaceProject } from './google-search-console.js';
 import { attachRecommendationDecision } from './recommendation-scoring.js';
 import { attachRevenueImpact } from './revenue-impact.js';
 
@@ -38,18 +40,21 @@ export async function refreshGrowthIntelligence(projectId:string,beforeWrite?:(c
   const project=await pool.query('select id,domain from projects where id=$1',[projectId]);
   if(!project.rows[0])throw new Error('Proje bulunamadı.');
 
-  const [google,searchResult,ads,targets]=await Promise.all([
+  const [google,analyticsResult,searchResult,ads,targets]=await Promise.all([
     discoverGoogleResources(projectId),
-    searchConsolePerformanceForProject(projectId,28).catch(()=>null),
+    analyticsPerformanceForProject(projectId).catch(()=>null),
+    searchConsolePerformanceForWorkspaceProject(projectId,28).catch(()=>null),
     pool.query("select coalesce(sum(spend),0)::numeric spend,coalesce(sum(clicks),0)::numeric clicks,coalesce(sum(conversions),0)::numeric conversions,coalesce(sum(attributed_revenue),0)::numeric revenue from campaign_metrics where project_id=$1 and metric_date>=current_date-interval '30 days'",[projectId]),
     pool.query('select target_roas,target_cpa,break_even_roas from business_targets where project_id=$1',[projectId])
   ]);
 
   const sourceErrors:Record<string,string>={...(google.errors||{})};
+  delete sourceErrors.analyticsPerformance;
+  if(!analyticsResult)sourceErrors.analyticsPerformance='GA4 performans verisi okunamadı.';
   if(!searchResult)sourceErrors.searchConsole='Search Console performans verisi okunamadı.';
   const hasSourceErrors=Object.keys(sourceErrors).length>0;
 
-  const analytics=(google.analyticsPerformance||{}) as AnalyticsPerformance;
+  const analytics=(analyticsResult||{}) as AnalyticsPerformance;
   const search=(searchResult||{}) as SearchConsolePerformance;
   const merchant=(google.merchantCommerce||{}) as MerchantCommerce;
   const ad=ads.rows[0]||{};
