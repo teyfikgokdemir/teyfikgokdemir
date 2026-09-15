@@ -39,6 +39,20 @@ jobs:
           cache-dependency-path: growth-os/apps/api/package.json
       - run: npm install
       - run: npm run build
+      - name: Guard Google Merchant pagination
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          import assert from 'node:assert/strict';
+          const source = readFileSync('src/google.ts', 'utf8');
+          for (const helper of ['merchantAccountPages','merchantProductsPages','merchantIssuePages']) {
+            assert.match(source, new RegExp(`async function ${helper}\\([\\s\\S]*pageToken[\\s\\S]*page<maxPages`), `${helper} must keep bounded pageToken pagination.`);
+          }
+          assert.match(source, /\['merchant',\(\)=>merchantAccountPages\(/, 'Merchant discovery must use paginated accounts.');
+          assert.match(source, /partialAccounts:Boolean\(accountsResponse\.nextPageToken\)/, 'Account truncation must be surfaced.');
+          assert.match(source, /partialProducts:Boolean\(productsResponse\.nextPageToken\)/, 'Product truncation must be surfaced.');
+          assert.match(source, /partialIssues:Boolean\(issuesResponse\.nextPageToken\)/, 'Issue truncation must be surfaced.');
+          NODE
       - run: node tests/ads-sync-archive.mjs postgres://postgres:postgres@127.0.0.1:5432/postgres
       - run: node tests/workspace-activity.mjs postgres://postgres:postgres@127.0.0.1:5432/postgres
 
