@@ -57,7 +57,7 @@ async function assertClient(workspaceId:string,clientId:string){
 
 async function resolveClientUser(workspaceId:string,clientId:string,email:string){
   await ensureClientPortalSchema();
-  const {rows}=await pool.query(`select id,email,display_name,role,permissions,status from client_portal_users where workspace_id=$1 and client_id=$2 and lower(email)=lower($3) and status='active' limit 1`,[workspaceId,clientId,email]);
+  const {rows}=await pool.query(`select u.id,u.email,u.display_name,u.role,u.permissions,u.status from client_portal_users u join agency_clients c on c.id=u.client_id and c.workspace_id=u.workspace_id join agency_workspaces w on w.id=u.workspace_id where u.workspace_id=$1 and u.client_id=$2 and lower(u.email)=lower($3) and u.status='active' and c.status='active' and w.status='active' limit 1`,[workspaceId,clientId,email]);
   if(!rows[0])throw new Error('CLIENT_PORTAL_ACCESS_DENIED');
   return rows[0];
 }
