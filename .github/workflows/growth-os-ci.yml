@@ -94,6 +94,7 @@ jobs:
           cache: npm
           cache-dependency-path: growth-os/apps/web/package.json
       - run: npm install
+      - run: npm audit --omit=dev --audit-level=high
       - run: npm run build
       - name: Guard web Docker build context
         run: |
