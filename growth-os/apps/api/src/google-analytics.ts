@@ -7,6 +7,7 @@ type AnalyticsSummary={accountSummaries?:Array<{account?:string;displayName?:str
 
 const ANALYTICS_HTTP_TIMEOUT_MS=20_000;
 const ANALYTICS_HTTP_MAX_BYTES=4*1024*1024;
+const ANALYTICS_ACCOUNT_SUMMARY_MAX_PAGES=100;
 
 async function readLimitedText(response:Response,maxBytes=ANALYTICS_HTTP_MAX_BYTES){
   const contentLength=Number(response.headers.get('content-length')||'0');
@@ -74,19 +75,19 @@ async function listProperties(accessToken:string){
   const properties:AnalyticsProperty[]=[];
   const seenPageTokens=new Set<string>();
   let pageToken='';
-  while(true){
+  for(let page=0;page<ANALYTICS_ACCOUNT_SUMMARY_MAX_PAGES;page++){
     const url=new URL('https://analyticsadmin.googleapis.com/v1beta/accountSummaries');
     url.searchParams.set('pageSize','200');
     if(pageToken)url.searchParams.set('pageToken',pageToken);
     const summaries=await getJson(url.toString(),accessToken) as AnalyticsSummary;
     properties.push(...(summaries.accountSummaries||[]).flatMap(account=>(account.propertySummaries||[]).map(property=>({...property,accountName:account.displayName||'',account:account.account||''}))));
     const nextPageToken=(summaries.nextPageToken||'').trim();
-    if(!nextPageToken)break;
+    if(!nextPageToken)return properties;
     if(seenPageTokens.has(nextPageToken))throw new Error('Google Analytics account summary pagination döngüsü algılandı.');
     seenPageTokens.add(nextPageToken);
     pageToken=nextPageToken;
   }
-  return properties;
+  throw new Error('Google Analytics account summary pagination güvenlik sayfa limitini aştı.');
 }
 
 async function streamsForProperty(property:string,accessToken:string){
