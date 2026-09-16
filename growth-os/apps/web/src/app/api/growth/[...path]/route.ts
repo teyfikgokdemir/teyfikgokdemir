@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const API_BASE = process.env.API_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'https://growth-api-production-4917.up.railway.app';
 const LAST_AUDIT_PROJECT_COOKIE = 'growth-last-audit-project';
+const PROXY_TIMEOUT_MS = 30_000;
+const PROXY_RESPONSE_MAX_BYTES = 8 * 1024 * 1024;
 
 function normalizedHost(value: unknown) {
   if (typeof value !== 'string' || !value.trim()) return '';
@@ -74,6 +76,35 @@ function normalizeAuditPayload(payload: unknown) {
   return payload;
 }
 
+async function readLimitedResponseText(response: Response, maxBytes = PROXY_RESPONSE_MAX_BYTES) {
+  const contentLength = Number(response.headers.get('content-length') || '0');
+  if (Number.isFinite(contentLength) && contentLength > maxBytes) {
+    await response.body?.cancel();
+    throw new Error('Growth API yanıtı boyut limitini aştı.');
+  }
+  if (!response.body) return '';
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let total = 0;
+  let text = '';
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!value) continue;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel();
+        throw new Error('Growth API yanıtı boyut limitini aştı.');
+      }
+      text += decoder.decode(value, { stream: true });
+    }
+    return text + decoder.decode();
+  } finally {
+    reader.releaseLock();
+  }
+}
+
 async function proxy(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
   const { path } = await context.params;
   const routePath = path.join('/');
@@ -102,9 +133,11 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
     init.body = requestBody;
   }
 
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(new Error('Growth API isteği zaman aşımına uğradı.')), PROXY_TIMEOUT_MS);
   try {
-    const upstream = await fetch(target, init);
-    let body = await upstream.text();
+    const upstream = await fetch(target, { ...init, signal: controller.signal });
+    let body = await readLimitedResponseText(upstream);
 
     if (upstream.ok && (routePath === 'audit' || routePath.endsWith('/final-check'))) {
       try {
@@ -180,6 +213,8 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Growth API bağlantısı başarısız';
     return NextResponse.json({ error: message }, { status: 502 });
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
