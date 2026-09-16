@@ -26,6 +26,7 @@ for (const [locale, relative] of pages) {
     'core-grid',
     'asset-stack',
     'collab-card',
+    'site-footer',
     'rel="canonical"',
     `lang="${locale}"`,
     ...ecosystem,
