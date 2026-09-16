@@ -43,6 +43,9 @@ type BusinessTargets={
   break_even_roas?:number|string|null;
 };
 
+const ADS_PROVIDER_TIMEOUT_MS=30_000;
+const ADS_PROVIDER_MAX_BYTES=8*1024*1024;
+
 function asNumber(value:unknown){
   const n=Number(value??0);
   return Number.isFinite(n)?n:0;
@@ -54,6 +57,54 @@ function lastNDays(days:number){
   const start=new Date();
   start.setUTCDate(start.getUTCDate()-(days-1));
   return {start:isoDate(start),end:isoDate(end)};
+}
+
+async function readProviderText(response:Response,maxBytes=ADS_PROVIDER_MAX_BYTES){
+  const contentLength=Number(response.headers.get('content-length')||0);
+  if(Number.isFinite(contentLength)&&contentLength>maxBytes){
+    await response.body?.cancel();
+    throw new Error('Reklam sağlayıcısı yanıtı güvenli boyut sınırını aştı.');
+  }
+  if(!response.body)return '';
+  const reader=response.body.getReader();
+  const decoder=new TextDecoder();
+  let total=0;
+  let text='';
+  try{
+    while(true){
+      const {done,value}=await reader.read();
+      if(done)break;
+      if(!value)continue;
+      total+=value.byteLength;
+      if(total>maxBytes){
+        await reader.cancel();
+        throw new Error('Reklam sağlayıcısı yanıtı güvenli boyut sınırını aştı.');
+      }
+      text+=decoder.decode(value,{stream:true});
+    }
+    return text+decoder.decode();
+  }finally{
+    reader.releaseLock();
+  }
+}
+
+async function providerFetchText(input:string|URL,init:RequestInit={}){
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(new Error('Reklam sağlayıcısı isteği zaman aşımına uğradı.')),ADS_PROVIDER_TIMEOUT_MS);
+  try{
+    const response=await fetch(input,{...init,signal:controller.signal});
+    const text=await readProviderText(response);
+    return {response,text};
+  }finally{
+    clearTimeout(timeout);
+  }
+}
+
+async function providerFetchJson<T>(input:string|URL,init:RequestInit={}){
+  const {response,text}=await providerFetchText(input,init);
+  let data:unknown={};
+  try{data=text?JSON.parse(text):{}}catch{throw new Error(`Reklam sağlayıcısı geçersiz JSON döndürdü: ${text.slice(0,300)}`)}
+  return {response,data:data as T};
 }
 
 async function integration(projectId:string,provider:string){
@@ -79,8 +130,7 @@ async function googleMetrics(projectId:string,days:number):Promise<NormalizedMet
   const loginCustomerId=process.env.GOOGLE_ADS_LOGIN_CUSTOMER_ID?.replace(/\D/g,'');
   if(loginCustomerId)headers['login-customer-id']=loginCustomerId;
   await assertProjectStillActive(projectId);
-  const response=await fetch(`https://googleads.googleapis.com/${version}/customers/${metadata.selectedCustomerId}/googleAds:searchStream`,{method:'POST',headers,body:JSON.stringify({query})});
-  const text=await response.text();
+  const {response,text}=await providerFetchText(`https://googleads.googleapis.com/${version}/customers/${metadata.selectedCustomerId}/googleAds:searchStream`,{method:'POST',headers,body:JSON.stringify({query})});
   if(!response.ok)throw new Error(`Google Ads API ${response.status}: ${text.slice(0,500)}`);
   const batches=JSON.parse(text) as Array<{results?:Array<{campaign?:{id?:string;name?:string;status?:string};segments?:{date?:string};metrics?:Record<string,unknown>}>}>;
   return batches.flatMap(batch=>(batch.results||[]).map(r=>({
@@ -128,8 +178,7 @@ async function metaMetrics(projectId:string,days:number):Promise<NormalizedMetri
   let next:string|null=url.toString();
   while(next){
     await assertProjectStillActive(projectId);
-    const response=await fetch(next);
-    const data=await response.json() as {data?:Array<Record<string,unknown>>;paging?:{next?:string};error?:{message?:string}};
+    const {response,data}=await providerFetchJson<{data?:Array<Record<string,unknown>>;paging?:{next?:string};error?:{message?:string}}>(next);
     if(!response.ok)throw new Error(data.error?.message||`Meta API ${response.status}`);
     all.push(...(data.data||[]));
     next=data.paging?.next||null;
@@ -171,8 +220,7 @@ async function tiktokMetrics(projectId:string,days:number):Promise<NormalizedMet
   while(true){
     url.searchParams.set('page',String(page));
     await assertProjectStillActive(projectId);
-    const response=await fetch(url,{headers:{'Access-Token':token}});
-    const payload=await response.json() as {code?:number;message?:string;data?:{list?:Array<{dimensions?:Record<string,unknown>;metrics?:Record<string,unknown>}>;page_info?:{page?:number;page_size?:number;total_number?:number;total_page?:number}}};
+    const {response,data:payload}=await providerFetchJson<{code?:number;message?:string;data?:{list?:Array<{dimensions?:Record<string,unknown>;metrics?:Record<string,unknown>}>;page_info?:{page?:number;page_size?:number;total_number?:number;total_page?:number}}}>(url,{headers:{'Access-Token':token}});
     if(!response.ok||payload.code!==0)throw new Error(payload.message||`TikTok API ${response.status}`);
     all.push(...(payload.data?.list||[]));
     const totalPages=Math.max(1,asNumber(payload.data?.page_info?.total_page)||1);
