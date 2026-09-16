@@ -33,10 +33,20 @@ import PersonalHomePalette from './PersonalHomePalette.astro';
     background: transparent !important;
     border-radius: 22px !important;
     overflow: hidden;
+    box-shadow: none !important;
+    filter: none !important;
+  }
+
+  .personal-home .portrait-shell::before,
+  .personal-home .portrait-shell::after {
+    display: none !important;
+    content: none !important;
   }
 
   .personal-home .portrait-shell img {
     border-radius: 20px !important;
+    box-shadow: none !important;
+    filter: none !important;
   }
 
   .personal-home .section {
@@ -129,11 +139,48 @@ import PersonalHomePalette from './PersonalHomePalette.astro';
 
   .personal-home .method-grid li {
     min-height: 165px !important;
-    padding: 24px !important;
+    padding: 30px 26px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(216, 137, 58, .22) !important;
+    border-radius: 22px !important;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.018), rgba(255,255,255,0)),
+      linear-gradient(135deg, rgba(216,137,58,.055), rgba(20,19,16,.96) 46%, rgba(20,19,16,1)) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.025) !important;
+    transition: border-color .25s ease, transform .25s ease, background .25s ease !important;
+  }
+
+  .personal-home .method-grid li::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(233,182,110,.34), transparent);
+    pointer-events: none;
+  }
+
+  .personal-home .method-grid li:hover {
+    transform: translateY(-3px);
+    border-color: rgba(233, 182, 110, .48) !important;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,0)),
+      linear-gradient(135deg, rgba(216,137,58,.08), rgba(20,19,16,.98) 48%, rgba(20,19,16,1)) !important;
   }
 
   .personal-home .method-grid strong {
-    font-size: clamp(.98rem, 1vw, 1.08rem) !important;
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
+    font-size: clamp(1rem, 1.05vw, 1.12rem) !important;
+    line-height: 1.35 !important;
+    letter-spacing: -.015em;
+    text-align: center !important;
   }
 
   .personal-home .about {
@@ -228,6 +275,10 @@ import PersonalHomePalette from './PersonalHomePalette.astro';
       grid-template-columns: 1fr !important;
     }
 
+    .personal-home .method-grid li {
+      min-height: 138px !important;
+    }
+
     .personal-home .about img {
       max-width: 560px;
       justify-self: start;
@@ -250,6 +301,11 @@ import PersonalHomePalette from './PersonalHomePalette.astro';
 
     .personal-home .asset-card > span {
       font-size: .82rem !important;
+    }
+
+    .personal-home .method-grid li {
+      min-height: 118px !important;
+      padding: 22px 18px !important;
     }
   }
 </style>
