@@ -51,9 +51,17 @@ for (const line of redirectLines) {
   if (!source || !target || !['301', '308'].includes(status)) errors.push(`Geçersiz redirect kuralı: ${line}`);
   else redirects.set(decodeURI(source), decodeURI(target));
 }
+const redirectTargetFor = (route) => {
+  const exact = redirects.get(route);
+  if (exact) return exact;
+  for (const [source, target] of redirects) {
+    if (source.endsWith('*') && route.startsWith(source.slice(0, -1))) return target;
+  }
+  return undefined;
+};
 for (const [source, target] of redirects) {
   if (source === target) errors.push(`Redirect döngüsü: ${source}`);
-  if (redirects.has(target)) errors.push(`Redirect zinciri: ${source} -> ${target}`);
+  if (!source.includes('*') && redirects.has(target)) errors.push(`Redirect zinciri: ${source} -> ${target}`);
 }
 
 const pageByRoute = new Map();
@@ -65,7 +73,7 @@ for (const file of htmlFiles) {
   const route = routeFor(file);
   const html = fs.readFileSync(file, 'utf8');
   const robots = attr(selectedTag(html, 'meta', 'name', 'robots'), 'content') ?? '';
-  const indexable = !/noindex/i.test(robots) && !redirects.has(route);
+  const indexable = !/noindex/i.test(robots) && !redirectTargetFor(route);
   const canonical = attr(tags(html, 'link').find((tag) => attr(tag, 'rel')?.toLowerCase() === 'canonical'), 'href');
   const title = titleText(html);
   const description = attr(selectedTag(html, 'meta', 'name', 'description'), 'content');
@@ -120,18 +128,9 @@ for (const page of pageByRoute.values()) {
 
 const homeRoutes = ['/', '/en/', '/ru/', '/mk/', '/sr/', '/sq/', '/fa/', '/zh/', '/vi/'];
 const ecosystemMarkers = [
-  'QCT Studio',
-  'QCT Commerce',
-  'CTSEG',
-  'Growth OS',
-  'Mythborn',
-  'Olivon',
-  'https://qctstudio.com',
-  'https://qctcommerce.com',
-  'https://ctseg.com.tr',
-  'https://growth.teyfikgokdemir.com',
-  'https://mythborn.co',
-  'https://olivon.com.tr',
+  'QCT Studio','QCT Commerce','CTSEG','Growth OS','Mythborn','Olivon',
+  'https://qctstudio.com','https://qctcommerce.com','https://ctseg.com.tr',
+  'https://growth.teyfikgokdemir.com','https://mythborn.co','https://olivon.com.tr',
 ];
 for (const route of homeRoutes) {
   const page = pageByRoute.get(route);
@@ -175,7 +174,7 @@ for (const page of pageByRoute.values()) {
     if (url.origin !== origin) continue;
     const route = decodeURI(url.pathname);
     if (staticAssetPrefixes.some((prefix) => route.startsWith(prefix))) continue;
-    if (!pageByRoute.has(route) && !redirects.has(route) && route !== '/') errors.push(`${page.route}: kırık dahili bağlantı (${href}).`);
+    if (!pageByRoute.has(route) && !redirectTargetFor(route) && route !== '/') errors.push(`${page.route}: kırık dahili bağlantı (${href}).`);
   }
   for (const tag of page.html.matchAll(/<a\b[^>]*target=["']_blank["'][^>]*>/gi)) {
     const rel = attr(tag[0], 'rel') ?? '';
