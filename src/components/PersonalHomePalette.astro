@@ -1,0 +1,103 @@
+<style is:global>
+  :root {
+    --personal-bg: #0b0b0a;
+    --personal-surface: #141310;
+    --personal-surface-soft: #1b1712;
+    --personal-text: #f7efe5;
+    --personal-muted: #b7aa9b;
+    --personal-accent: #d8893a;
+    --personal-accent-soft: #e9b66e;
+    --personal-warm: #c99b82;
+    --personal-line: #332a22;
+  }
+
+  body:has(.personal-home) {
+    background: var(--personal-bg) !important;
+    color: var(--personal-text) !important;
+  }
+
+  .personal-home {
+    color: var(--personal-text) !important;
+  }
+
+  .personal-home .eyebrow,
+  .personal-home .card-tag {
+    color: var(--personal-accent) !important;
+  }
+
+  .personal-home .lead,
+  .personal-home .section-heading p,
+  .personal-home .core-card p,
+  .personal-home .asset-card p,
+  .personal-home .collab-card p,
+  .personal-home .about-copy > p:last-child,
+  .personal-home .contact > p,
+  .personal-home .portrait-caption {
+    color: var(--personal-muted) !important;
+  }
+
+  .personal-home .core-card,
+  .personal-home .asset-card,
+  .personal-home .collab-card,
+  .personal-home .method-grid li,
+  .personal-home .portrait-shell {
+    background: var(--personal-surface) !important;
+    border-color: var(--personal-line) !important;
+  }
+
+  .personal-home .core-card:hover,
+  .personal-home .asset-card:hover,
+  .personal-home .collab-card:hover {
+    border-color: var(--personal-accent) !important;
+  }
+
+  .personal-home .button.primary {
+    background: var(--personal-accent) !important;
+    color: #160f09 !important;
+  }
+
+  .personal-home .button.primary:hover {
+    background: var(--personal-accent-soft) !important;
+  }
+
+  .personal-home .button.ghost,
+  .personal-home .contact-links a {
+    border-color: var(--personal-line) !important;
+    color: var(--personal-text) !important;
+  }
+
+  .personal-home .button.ghost:hover,
+  .personal-home .contact-links a:hover {
+    border-color: var(--personal-accent) !important;
+    color: var(--personal-accent-soft) !important;
+  }
+
+  .personal-home .signal-row span {
+    border-color: var(--personal-line) !important;
+    color: var(--personal-muted) !important;
+  }
+
+  .personal-home .section,
+  .personal-footer {
+    border-color: var(--personal-line) !important;
+  }
+
+  .personal-home .card-link,
+  .personal-home .asset-card > span,
+  .personal-footer a {
+    color: var(--personal-accent-soft) !important;
+  }
+
+  .personal-footer {
+    color: var(--personal-muted) !important;
+  }
+
+  /* Numbered card markers are intentionally removed from the personal site. */
+  .personal-home .method-grid > li > span {
+    display: none !important;
+  }
+
+  .personal-home .method-grid li {
+    justify-content: flex-end !important;
+  }
+</style>
