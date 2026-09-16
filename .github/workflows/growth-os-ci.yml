@@ -71,3 +71,17 @@ jobs:
           cache-dependency-path: growth-os/apps/web/package.json
       - run: npm install
       - run: npm run build
+      - name: Guard Growth API proxy bounds
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          import assert from 'node:assert/strict';
+          const source = readFileSync('src/app/api/growth/[...path]/route.ts', 'utf8');
+          assert.match(source, /const PROXY_TIMEOUT_MS = 30_000;/, 'Proxy timeout must remain bounded.');
+          assert.match(source, /const PROXY_REQUEST_MAX_BYTES = 1024 \* 1024;/, 'Proxy request bodies must remain bounded.');
+          assert.match(source, /const PROXY_RESPONSE_MAX_BYTES = 8 \* 1024 \* 1024;/, 'Proxy responses must remain bounded.');
+          assert.match(source, /readLimitedRequestText\(request\)/, 'Proxy must use the bounded request reader.');
+          assert.match(source, /readLimitedResponseText\(upstream\)/, 'Proxy must use the bounded response reader.');
+          assert.match(source, /status: 413/, 'Oversized proxy requests must fail closed.');
+          assert.match(source, /signal: controller\.signal/, 'Proxy upstream fetches must keep the abort signal.');
+          NODE
