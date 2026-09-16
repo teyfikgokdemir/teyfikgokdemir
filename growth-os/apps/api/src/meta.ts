@@ -1,6 +1,8 @@
 import { encryptSecret } from './google.js';
 
 export const META_SCOPES = ['ads_read','business_management'];
+const META_HTTP_TIMEOUT_MS = 20_000;
+const META_HTTP_MAX_BYTES = 4 * 1024 * 1024;
 
 function required(name:string) {
   const value = process.env[name];
@@ -11,6 +13,49 @@ function required(name:string) {
 function graphBase() {
   const version = process.env.META_GRAPH_API_VERSION?.trim() || 'v26.0';
   return `https://graph.facebook.com/${version}`;
+}
+
+async function readLimitedText(response:Response,maxBytes=META_HTTP_MAX_BYTES) {
+  const contentLength = Number(response.headers.get('content-length') || '0');
+  if (Number.isFinite(contentLength) && contentLength > maxBytes) throw new Error('Meta API yanıtı boyut limitini aştı.');
+  if (!response.body) return '';
+  const reader = response.body.getReader();
+  const chunks:Uint8Array[] = [];
+  let total = 0;
+  try {
+    while (true) {
+      const {done,value} = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel();
+        throw new Error('Meta API yanıtı boyut limitini aştı.');
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk,offset);
+    offset += chunk.byteLength;
+  }
+  return new TextDecoder().decode(bytes);
+}
+
+async function fetchJson<T>(input:string|URL):Promise<{response:Response;data:T}> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(new Error('Meta API isteği zaman aşımına uğradı.')), META_HTTP_TIMEOUT_MS);
+  try {
+    const response = await fetch(input,{signal:controller.signal});
+    const text = await readLimitedText(response);
+    const data = (text ? JSON.parse(text) : {}) as T;
+    return {response,data};
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 export function buildMetaAuthUrl(state:string) {
@@ -30,8 +75,7 @@ export async function exchangeMetaCode(code:string) {
   url.searchParams.set('client_secret', required('META_APP_SECRET'));
   url.searchParams.set('redirect_uri', required('META_REDIRECT_URI'));
   url.searchParams.set('code', code);
-  const response = await fetch(url);
-  const data = await response.json() as {access_token?:string;token_type?:string;expires_in?:number;error?:{message?:string}};
+  const {response,data} = await fetchJson<{access_token?:string;token_type?:string;expires_in?:number;error?:{message?:string}}>(url);
   if (!response.ok || !data.access_token) throw new Error(data.error?.message || 'Meta access token alınamadı.');
   return data;
 }
@@ -42,8 +86,7 @@ export async function exchangeMetaLongLivedToken(shortToken:string) {
   url.searchParams.set('client_id', required('META_APP_ID'));
   url.searchParams.set('client_secret', required('META_APP_SECRET'));
   url.searchParams.set('fb_exchange_token', shortToken);
-  const response = await fetch(url);
-  const data = await response.json() as {access_token?:string;token_type?:string;expires_in?:number;error?:{message?:string}};
+  const {response,data} = await fetchJson<{access_token?:string;token_type?:string;expires_in?:number;error?:{message?:string}}>(url);
   if (!response.ok || !data.access_token) throw new Error(data.error?.message || 'Meta uzun süreli token alınamadı.');
   return data;
 }
@@ -51,8 +94,7 @@ export async function exchangeMetaLongLivedToken(shortToken:string) {
 async function getJson(path:string, accessToken:string) {
   const url = new URL(`${graphBase()}${path}`);
   url.searchParams.set('access_token', accessToken);
-  const response = await fetch(url);
-  const data = await response.json() as Record<string,unknown> & {error?:{message?:string}};
+  const {response,data} = await fetchJson<Record<string,unknown> & {error?:{message?:string}}>(url);
   if (!response.ok) throw new Error(data.error?.message || `Meta API ${response.status}`);
   return data;
 }
