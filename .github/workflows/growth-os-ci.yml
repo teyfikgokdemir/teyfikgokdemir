@@ -43,6 +43,16 @@ jobs:
           cache-dependency-path: growth-os/apps/api/package.json
       - run: npm install
       - run: npm run build
+      - name: Guard API Docker build context
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lines = readFileSync('.dockerignore', 'utf8').split(/\r?\n/).map((line) => line.trim());
+          for (const required of ['node_modules', '.env', '.env.*', '!.env.example', 'dist']) {
+            assert.ok(lines.includes(required), `API .dockerignore must keep ${required} excluded.`);
+          }
+          NODE
       - name: Guard Google Merchant pagination
         run: |
           node --input-type=module <<'NODE'
@@ -85,6 +95,16 @@ jobs:
           cache-dependency-path: growth-os/apps/web/package.json
       - run: npm install
       - run: npm run build
+      - name: Guard web Docker build context
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lines = readFileSync('.dockerignore', 'utf8').split(/\r?\n/).map((line) => line.trim());
+          for (const required of ['node_modules', '.next', '.env', '.env.*', '!.env.example']) {
+            assert.ok(lines.includes(required), `Web .dockerignore must keep ${required} excluded.`);
+          }
+          NODE
       - name: Guard Growth API proxy bounds
         run: |
           node --input-type=module <<'NODE'
