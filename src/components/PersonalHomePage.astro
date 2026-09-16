@@ -9,148 +9,155 @@ interface Props { locale: Locale | 'fa'; }
 const { locale } = Astro.props;
 const copy = content[locale as Locale] ?? content.en;
 
-const t = {
-  tr: {
-    eyebrow: 'TEKNOLOJİ · TİCARET · KÜRESEL OPERASYONLAR',
-    title: 'Dijital sistemler kuruyor, ticari operasyonlar geliştiriyorum.',
-    lead: 'Yazılım, e-ticaret, büyüme altyapıları ve uluslararası ticaret arasında çalışan yapılar geliştiriyorum. Fikirleri ölçülebilir, işletilebilir sistemlere dönüştürmeye odaklanıyorum.',
-    primary: 'Yapıları incele', secondary: 'İletişime geç',
-    coreLabel: 'ANA YAPILAR', coreTitle: 'Birbirini tamamlayan üç operasyon alanı.',
-    coreLead: 'QCT Studio teknoloji ve dijital ürün geliştirmeyi, QCT Commerce e-ticaret ve dijital büyümeyi, CTSEG ise uluslararası ticaret ve stratejik tedariki yürütür.',
-    ownedLabel: 'SAHİP OLDUĞUM DİJİTAL VARLIKLAR', ownedTitle: 'Ürün, veri ve organik erişim üreten sistemler.',
-    growthDesc: 'SEO, GEO, AEO, AIO, reklam ve büyüme operasyonlarını analiz eden, karar desteği üreten özel growth intelligence platformu.',
-    mythDesc: 'Tarot, astroloji ve sembolik farkındalık alanında organik arama görünürlüğü güçlü, çok dilli bağımsız yayın ve ürün platformu.',
-    collabLabel: 'ORTAK PROJELER', collabTitle: 'Kişisel markadan ayrı duran iş birlikleri.',
-    olivonDesc: 'E-ticaret, dijital büyüme ve marka sistemleri üzerine konumlanan ortak ajans projesi. Ortaklık yapısından bağımsız olarak burada bir iş birliği olarak temsil edilir.',
-    methodLabel: 'ÇALIŞMA MODELİ', methodTitle: 'Araştır. Kur. İşlet. Ölç. Geliştir.',
-    methodLead: 'Teknoloji ya da ticaret fark etmeksizin, karar kalitesini artıran ve tekrar edilebilir operasyon kuran sistemlere odaklanıyorum.',
-    steps: ['Araştırma ve fırsat analizi','Sistem ve operasyon tasarımı','Uygulama ve entegrasyon','Ölçüm ve optimizasyon'],
-    aboutLabel: 'HAKKIMDA', aboutTitle: 'Tek bir sektör yerine çalışan sistemlerin peşindeyim.',
-    aboutBody: 'Kariyerimde dijital ticaret, yazılım, ajans operasyonları ve uluslararası tedarik farklı dönemlerde öne çıktı. Bugün bu alanları ayrı işler olarak değil; araştırma, teknoloji, dağıtım ve operasyon disiplinlerinin birleştiği tek bir çalışma yaklaşımı içinde yönetiyorum.',
-    contactLabel: 'İLETİŞİM', contactTitle: 'Doğru yapı üzerinden konuşalım.',
-    contactBody: 'Yazılım ve dijital sistemler için QCT Studio, e-ticaret ve büyüme için QCT Commerce, uluslararası ticaret için CTSEG veya doğrudan benimle iletişime geçebilirsiniz.',
-    view: 'İncele', privateLabel: 'Özel ürün', mediaLabel: 'Dijital medya varlığı', collaborationLabel: 'Ortak proje',
-  },
-  en: {
-    eyebrow: 'TECHNOLOGY · COMMERCE · GLOBAL OPERATIONS',
-    title: 'I build digital systems and develop commercial operations.',
-    lead: 'I work across software, e-commerce, growth infrastructure and international trade, turning ideas into measurable and operable systems.',
-    primary: 'Explore the ecosystem', secondary: 'Get in touch',
-    coreLabel: 'CORE BUSINESSES', coreTitle: 'Three complementary operating areas.',
-    coreLead: 'QCT Studio leads technology and digital product work, QCT Commerce focuses on e-commerce and digital growth, and CTSEG operates international trade and strategic sourcing.',
-    ownedLabel: 'OWNED DIGITAL ASSETS', ownedTitle: 'Systems that create product, data and organic reach.',
-    growthDesc: 'A private growth intelligence platform for SEO, GEO, AEO, AIO, advertising and growth operations analysis and decision support.',
-    mythDesc: 'An independent multilingual publishing and product platform with strong organic search visibility across Tarot, astrology and symbolic reflection.',
-    collabLabel: 'COLLABORATIONS', collabTitle: 'Joint projects kept separate from the personal brand.',
-    olivonDesc: 'A collaborative agency project focused on e-commerce, digital growth and brand systems, represented here as a partnership rather than a core owned business.',
-    methodLabel: 'OPERATING MODEL', methodTitle: 'Research. Build. Operate. Measure. Improve.',
-    methodLead: 'Whether the context is technology or trade, I focus on systems that improve decision quality and create repeatable operations.',
-    steps: ['Research and opportunity analysis','System and operating design','Implementation and integration','Measurement and optimisation'],
-    aboutLabel: 'ABOUT', aboutTitle: 'I am interested in working systems, not a single industry.',
-    aboutBody: 'Digital commerce, software, agency operations and international sourcing have each been prominent at different stages of my work. Today I manage them through one operating approach that combines research, technology, distribution and execution.',
-    contactLabel: 'CONTACT', contactTitle: 'Start with the right operating structure.',
-    contactBody: 'For software and digital systems contact QCT Studio, for e-commerce and growth QCT Commerce, for international trade CTSEG, or reach me directly.',
-    view: 'Explore', privateLabel: 'Private product', mediaLabel: 'Digital media asset', collaborationLabel: 'Joint project',
-  }
-} as const;
+type HomeCopy = {
+  eyebrow:string; title:string; lead:string; primary:string; secondary:string;
+  coreLabel:string; coreTitle:string; coreLead:string;
+  studioDesc:string; commerceDesc:string; ctsegDesc:string;
+  ownedLabel:string; ownedTitle:string; growthDesc:string; mythDesc:string;
+  collabLabel:string; collabTitle:string; olivonDesc:string;
+  methodLabel:string; methodTitle:string; methodLead:string; steps:string[];
+  aboutLabel:string; aboutTitle:string; aboutBody:string;
+  contactLabel:string; contactTitle:string; contactBody:string;
+  view:string; privateLabel:string; mediaLabel:string; collaborationLabel:string;
+};
 
-const ui = (t as any)[locale] ?? t.en;
+const t: Record<string,HomeCopy> = {
+  tr:{
+    eyebrow:'TEKNOLOJİ · TİCARET · KÜRESEL OPERASYONLAR', title:'Dijital sistemler kuruyor, ticari operasyonlar geliştiriyorum.',
+    lead:'Yazılım, e-ticaret, büyüme altyapıları ve uluslararası ticaret arasında çalışan yapılar geliştiriyorum. Fikirleri ölçülebilir, işletilebilir sistemlere dönüştürmeye odaklanıyorum.', primary:'Yapıları incele', secondary:'İletişime geç',
+    coreLabel:'ANA YAPILAR', coreTitle:'Birbirini tamamlayan üç operasyon alanı.', coreLead:'QCT Studio teknoloji ve dijital ürün geliştirmeyi, QCT Commerce e-ticaret ve dijital büyümeyi, CTSEG ise uluslararası ticaret ve stratejik tedariki yürütür.',
+    studioDesc:'Yazılım, web sistemleri, otomasyon, AI destekli dijital ürünler ve teknik uygulamalar.', commerceDesc:'E-ticaret altyapıları, platform operasyonları, dönüşüm, büyüme ve dijital ticaret sistemleri.', ctsegDesc:'Uluslararası tedarik, B2B iş geliştirme, pazar araştırması, tedarikçi doğrulama ve sınır ötesi operasyonlar.',
+    ownedLabel:'SAHİP OLDUĞUM DİJİTAL VARLIKLAR', ownedTitle:'Ürün, veri ve organik erişim üreten sistemler.', growthDesc:'SEO, GEO, AEO, AIO, reklam ve büyüme operasyonlarını analiz eden, karar desteği üreten özel growth intelligence platformu.', mythDesc:'Tarot, astroloji ve sembolik farkındalık alanında organik arama görünürlüğü güçlü, çok dilli bağımsız yayın ve ürün platformu.',
+    collabLabel:'ORTAK PROJELER', collabTitle:'Kişisel markadan ayrı duran iş birlikleri.', olivonDesc:'E-ticaret, dijital büyüme ve marka sistemleri üzerine konumlanan ortak ajans projesi. Burada ana sahip olunan yapılardan ayrı bir iş birliği olarak temsil edilir.',
+    methodLabel:'ÇALIŞMA MODELİ', methodTitle:'Araştır. Kur. İşlet. Ölç. Geliştir.', methodLead:'Teknoloji ya da ticaret fark etmeksizin, karar kalitesini artıran ve tekrar edilebilir operasyon kuran sistemlere odaklanıyorum.', steps:['Araştırma ve fırsat analizi','Sistem ve operasyon tasarımı','Uygulama ve entegrasyon','Ölçüm ve optimizasyon'],
+    aboutLabel:'HAKKIMDA', aboutTitle:'Tek bir sektör yerine çalışan sistemlerin peşindeyim.', aboutBody:'Dijital ticaret, yazılım, ajans operasyonları ve uluslararası tedarik kariyerimin farklı dönemlerinde öne çıktı. Bugün bu alanları ayrı işler olarak değil; araştırma, teknoloji, dağıtım ve operasyon disiplinlerinin birleştiği tek bir çalışma yaklaşımı içinde yönetiyorum.',
+    contactLabel:'İLETİŞİM', contactTitle:'Doğru yapı üzerinden konuşalım.', contactBody:'Yazılım ve dijital sistemler için QCT Studio, e-ticaret ve büyüme için QCT Commerce, uluslararası ticaret için CTSEG veya doğrudan benimle iletişime geçebilirsiniz.', view:'İncele', privateLabel:'Özel ürün', mediaLabel:'Dijital medya varlığı', collaborationLabel:'Ortak proje'
+  },
+  en:{
+    eyebrow:'TECHNOLOGY · COMMERCE · GLOBAL OPERATIONS', title:'I build digital systems and develop commercial operations.', lead:'I work across software, e-commerce, growth infrastructure and international trade, turning ideas into measurable and operable systems.', primary:'Explore the ecosystem', secondary:'Get in touch',
+    coreLabel:'CORE BUSINESSES', coreTitle:'Three complementary operating areas.', coreLead:'QCT Studio leads technology and digital product work, QCT Commerce focuses on e-commerce and digital growth, and CTSEG operates international trade and strategic sourcing.',
+    studioDesc:'Software, web systems, automation, AI-enabled digital products and technical implementation.', commerceDesc:'E-commerce infrastructure, platform operations, conversion, growth and digital commerce systems.', ctsegDesc:'International sourcing, B2B business development, market research, supplier verification and cross-border operations.',
+    ownedLabel:'OWNED DIGITAL ASSETS', ownedTitle:'Systems that create product, data and organic reach.', growthDesc:'A private growth intelligence platform for SEO, GEO, AEO, AIO, advertising and growth operations analysis and decision support.', mythDesc:'An independent multilingual publishing and product platform with strong organic search visibility across Tarot, astrology and symbolic reflection.',
+    collabLabel:'COLLABORATIONS', collabTitle:'Joint projects kept separate from the personal brand.', olivonDesc:'A collaborative agency project focused on e-commerce, digital growth and brand systems, represented separately from the core owned businesses.',
+    methodLabel:'OPERATING MODEL', methodTitle:'Research. Build. Operate. Measure. Improve.', methodLead:'Whether the context is technology or trade, I focus on systems that improve decision quality and create repeatable operations.', steps:['Research and opportunity analysis','System and operating design','Implementation and integration','Measurement and optimisation'],
+    aboutLabel:'ABOUT', aboutTitle:'I am interested in working systems, not a single industry.', aboutBody:'Digital commerce, software, agency operations and international sourcing have each been prominent at different stages of my work. Today I manage them through one operating approach that combines research, technology, distribution and execution.',
+    contactLabel:'CONTACT', contactTitle:'Start with the right operating structure.', contactBody:'For software and digital systems contact QCT Studio, for e-commerce and growth QCT Commerce, for international trade CTSEG, or reach me directly.', view:'Explore', privateLabel:'Private product', mediaLabel:'Digital media asset', collaborationLabel:'Joint project'
+  },
+  ru:{
+    eyebrow:'ТЕХНОЛОГИИ · КОММЕРЦИЯ · ГЛОБАЛЬНЫЕ ОПЕРАЦИИ', title:'Я создаю цифровые системы и развиваю коммерческие операции.', lead:'Работаю на стыке программного обеспечения, электронной коммерции, инфраструктуры роста и международной торговли, превращая идеи в измеримые и управляемые системы.', primary:'Изучить экосистему', secondary:'Связаться',
+    coreLabel:'ОСНОВНЫЕ СТРУКТУРЫ', coreTitle:'Три взаимодополняющих направления.', coreLead:'QCT Studio отвечает за технологии и цифровые продукты, QCT Commerce — за электронную коммерцию и рост, CTSEG — за международную торговлю и стратегический сорсинг.',
+    studioDesc:'Программное обеспечение, веб-системы, автоматизация, AI-продукты и техническая реализация.', commerceDesc:'Инфраструктура e-commerce, операции платформ, конверсия, рост и цифровая торговля.', ctsegDesc:'Международный сорсинг, B2B-развитие, исследование рынков, проверка поставщиков и трансграничные операции.',
+    ownedLabel:'СОБСТВЕННЫЕ ЦИФРОВЫЕ АКТИВЫ', ownedTitle:'Системы, создающие продукт, данные и органический охват.', growthDesc:'Закрытая платформа growth intelligence для анализа SEO, GEO, AEO, AIO, рекламы и операций роста.', mythDesc:'Независимая многоязычная контентная и продуктовая платформа с сильной органической видимостью в поиске.',
+    collabLabel:'СОВМЕСТНЫЕ ПРОЕКТЫ', collabTitle:'Партнерские проекты отдельно от личного бренда.', olivonDesc:'Совместный агентский проект в области e-commerce, цифрового роста и бренд-систем, представленный отдельно от собственных основных структур.',
+    methodLabel:'МОДЕЛЬ РАБОТЫ', methodTitle:'Исследовать. Создать. Запустить. Измерить. Улучшить.', methodLead:'В технологиях и торговле я сосредоточен на системах, повышающих качество решений и формирующих повторяемые операции.', steps:['Исследование и анализ возможностей','Проектирование системы и операций','Внедрение и интеграция','Измерение и оптимизация'],
+    aboutLabel:'ОБО МНЕ', aboutTitle:'Меня интересуют работающие системы, а не одна отрасль.', aboutBody:'Цифровая коммерция, программное обеспечение, агентские операции и международный сорсинг занимали важное место на разных этапах моей работы. Сегодня я объединяю их в одном подходе: исследование, технологии, дистрибуция и исполнение.',
+    contactLabel:'КОНТАКТ', contactTitle:'Начнем с подходящей структуры.', contactBody:'QCT Studio — для программного обеспечения и цифровых систем, QCT Commerce — для e-commerce и роста, CTSEG — для международной торговли; также можно связаться со мной напрямую.', view:'Открыть', privateLabel:'Закрытый продукт', mediaLabel:'Цифровой медиа-актив', collaborationLabel:'Совместный проект'
+  },
+  mk:{
+    eyebrow:'ТЕХНОЛОГИЈА · ТРГОВИЈА · ГЛОБАЛНИ ОПЕРАЦИИ', title:'Градам дигитални системи и развивам комерцијални операции.', lead:'Работам меѓу софтвер, е-трговија, инфраструктура за раст и меѓународна трговија, претворајќи идеи во мерливи и управливи системи.', primary:'Истражи го екосистемот', secondary:'Контакт',
+    coreLabel:'ГЛАВНИ СТРУКТУРИ', coreTitle:'Три комплементарни оперативни области.', coreLead:'QCT Studio се фокусира на технологија и дигитални производи, QCT Commerce на е-трговија и раст, а CTSEG на меѓународна трговија и стратешко снабдување.',
+    studioDesc:'Софтвер, веб-системи, автоматизација, AI дигитални производи и техничка имплементација.', commerceDesc:'Е-трговска инфраструктура, платформски операции, конверзија, раст и дигитална трговија.', ctsegDesc:'Меѓународно снабдување, B2B развој, истражување пазари, проверка на добавувачи и прекугранични операции.',
+    ownedLabel:'СОПСТВЕНИ ДИГИТАЛНИ СРЕДСТВА', ownedTitle:'Системи што создаваат производ, податоци и органски досег.', growthDesc:'Приватна growth intelligence платформа за SEO, GEO, AEO, AIO, рекламирање и анализа на раст.', mythDesc:'Независна повеќејазична издавачка и продуктна платформа со силна органска видливост во пребарување.',
+    collabLabel:'ЗАЕДНИЧКИ ПРОЕКТИ', collabTitle:'Соработки одвоени од личниот бренд.', olivonDesc:'Заеднички агенциски проект за е-трговија, дигитален раст и бренд системи, одвоен од основните сопствени структури.',
+    methodLabel:'МОДЕЛ НА РАБОТА', methodTitle:'Истражи. Изгради. Управувај. Измери. Подобри.', methodLead:'Без разлика дали станува збор за технологија или трговија, се фокусирам на системи што го подобруваат квалитетот на одлуките и создаваат повторливи операции.', steps:['Истражување и анализа на можности','Дизајн на систем и операции','Имплементација и интеграција','Мерење и оптимизација'],
+    aboutLabel:'ЗА МЕНЕ', aboutTitle:'Ме интересираат функционални системи, не една индустрија.', aboutBody:'Дигиталната трговија, софтверот, агенциските операции и меѓународното снабдување беа важни во различни фази од мојата работа. Денес ги обединувам преку истражување, технологија, дистрибуција и извршување.',
+    contactLabel:'КОНТАКТ', contactTitle:'Да започнеме преку вистинската структура.', contactBody:'QCT Studio за софтвер и дигитални системи, QCT Commerce за е-трговија и раст, CTSEG за меѓународна трговија или директно со мене.', view:'Погледни', privateLabel:'Приватен производ', mediaLabel:'Дигитален медиумски актив', collaborationLabel:'Заеднички проект'
+  },
+  sr:{
+    eyebrow:'TEHNOLOGIJA · TRGOVINA · GLOBALNE OPERACIJE', title:'Gradim digitalne sisteme i razvijam komercijalne operacije.', lead:'Radim na spoju softvera, e-trgovine, infrastrukture rasta i međunarodne trgovine, pretvarajući ideje u merljive i operativne sisteme.', primary:'Istraži ekosistem', secondary:'Kontakt',
+    coreLabel:'GLAVNE STRUKTURE', coreTitle:'Tri komplementarna operativna područja.', coreLead:'QCT Studio vodi tehnologiju i digitalne proizvode, QCT Commerce e-trgovinu i rast, a CTSEG međunarodnu trgovinu i strateški sourcing.',
+    studioDesc:'Softver, web sistemi, automatizacija, AI digitalni proizvodi i tehnička implementacija.', commerceDesc:'E-commerce infrastruktura, platformske operacije, konverzija, rast i digitalna trgovina.', ctsegDesc:'Međunarodni sourcing, B2B razvoj, istraživanje tržišta, verifikacija dobavljača i prekogranične operacije.',
+    ownedLabel:'DIGITALNA IMOVINA U VLASNIŠTVU', ownedTitle:'Sistemi koji stvaraju proizvod, podatke i organski doseg.', growthDesc:'Privatna growth intelligence platforma za SEO, GEO, AEO, AIO, oglašavanje i analizu operacija rasta.', mythDesc:'Nezavisna višejezična izdavačka i produktna platforma sa snažnom organskom vidljivošću u pretrazi.',
+    collabLabel:'ZAJEDNIČKI PROJEKTI', collabTitle:'Saradnje odvojene od ličnog brenda.', olivonDesc:'Zajednički agencijski projekat fokusiran na e-trgovinu, digitalni rast i brend sisteme, odvojen od osnovnih struktura u vlasništvu.',
+    methodLabel:'MODEL RADA', methodTitle:'Istraži. Izgradi. Operiši. Izmeri. Unapredi.', methodLead:'Bilo da je reč o tehnologiji ili trgovini, fokusiram se na sisteme koji poboljšavaju kvalitet odluka i stvaraju ponovljive operacije.', steps:['Istraživanje i analiza prilika','Dizajn sistema i operacija','Implementacija i integracija','Merenje i optimizacija'],
+    aboutLabel:'O MENI', aboutTitle:'Zanimaju me sistemi koji rade, ne jedna industrija.', aboutBody:'Digitalna trgovina, softver, agencijske operacije i međunarodni sourcing bili su važni u različitim fazama mog rada. Danas ih povezujem kroz istraživanje, tehnologiju, distribuciju i izvršenje.',
+    contactLabel:'KONTAKT', contactTitle:'Počnimo kroz odgovarajuću strukturu.', contactBody:'QCT Studio za softver i digitalne sisteme, QCT Commerce za e-trgovinu i rast, CTSEG za međunarodnu trgovinu ili kontaktirajte mene direktno.', view:'Pogledaj', privateLabel:'Privatni proizvod', mediaLabel:'Digitalni medijski aktiv', collaborationLabel:'Zajednički projekat'
+  },
+  sq:{
+    eyebrow:'TEKNOLOGJI · TREGTI · OPERACIONE GLOBALE', title:'Ndërtoj sisteme digjitale dhe zhvilloj operacione tregtare.', lead:'Punoj mes software-it, e-commerce, infrastrukturës së rritjes dhe tregtisë ndërkombëtare, duke i kthyer idetë në sisteme të matshme dhe të operueshme.', primary:'Eksploro ekosistemin', secondary:'Kontakto',
+    coreLabel:'STRUKTURAT KRYESORE', coreTitle:'Tre fusha operative që plotësojnë njëra-tjetrën.', coreLead:'QCT Studio udhëheq teknologjinë dhe produktet digjitale, QCT Commerce e-commerce dhe rritjen, ndërsa CTSEG tregtinë ndërkombëtare dhe sourcing-un strategjik.',
+    studioDesc:'Software, sisteme web, automatizim, produkte digjitale me AI dhe implementim teknik.', commerceDesc:'Infrastrukturë e-commerce, operacione platformash, konvertim, rritje dhe tregti digjitale.', ctsegDesc:'Sourcing ndërkombëtar, zhvillim B2B, kërkim tregu, verifikim furnitorësh dhe operacione ndërkufitare.',
+    ownedLabel:'ASETET DIGJITALE NË PRONËSI', ownedTitle:'Sisteme që krijojnë produkt, të dhëna dhe shtrirje organike.', growthDesc:'Platformë private growth intelligence për analizën e SEO, GEO, AEO, AIO, reklamimit dhe operacioneve të rritjes.', mythDesc:'Platformë e pavarur shumëgjuhëshe publikimi dhe produktesh me dukshmëri të fortë organike në kërkim.',
+    collabLabel:'PROJEKTE TË PËRBASHKËTA', collabTitle:'Bashkëpunime të ndara nga marka personale.', olivonDesc:'Projekt i përbashkët agjencie për e-commerce, rritje digjitale dhe sisteme marke, i paraqitur veç strukturave kryesore në pronësi.',
+    methodLabel:'MODELI I PUNËS', methodTitle:'Kërko. Ndërto. Opero. Mat. Përmirëso.', methodLead:'Në teknologji apo tregti, fokusohem te sistemet që rrisin cilësinë e vendimmarrjes dhe krijojnë operacione të përsëritshme.', steps:['Kërkim dhe analizë mundësish','Projektim sistemi dhe operacionesh','Implementim dhe integrim','Matje dhe optimizim'],
+    aboutLabel:'RRETH MEJE', aboutTitle:'Më interesojnë sistemet që funksionojnë, jo një industri e vetme.', aboutBody:'Tregtia digjitale, software-i, operacionet e agjencisë dhe sourcing-u ndërkombëtar kanë qenë të rëndësishme në faza të ndryshme të punës sime. Sot i bashkoj përmes kërkimit, teknologjisë, shpërndarjes dhe ekzekutimit.',
+    contactLabel:'KONTAKT', contactTitle:'Le të fillojmë përmes strukturës së duhur.', contactBody:'QCT Studio për software dhe sisteme digjitale, QCT Commerce për e-commerce dhe rritje, CTSEG për tregti ndërkombëtare ose kontaktoni drejtpërdrejt me mua.', view:'Shiko', privateLabel:'Produkt privat', mediaLabel:'Aset mediatik digjital', collaborationLabel:'Projekt i përbashkët'
+  },
+  fa:{
+    eyebrow:'فناوری · تجارت · عملیات جهانی', title:'سیستم‌های دیجیتال می‌سازم و عملیات تجاری را توسعه می‌دهم.', lead:'در تقاطع نرم‌افزار، تجارت الکترونیک، زیرساخت رشد و تجارت بین‌المللی کار می‌کنم و ایده‌ها را به سیستم‌های قابل‌اندازه‌گیری و قابل‌اجرا تبدیل می‌کنم.', primary:'مشاهده اکوسیستم', secondary:'تماس',
+    coreLabel:'ساختارهای اصلی', coreTitle:'سه حوزه عملیاتی مکمل یکدیگر.', coreLead:'QCT Studio بر فناوری و محصولات دیجیتال، QCT Commerce بر تجارت الکترونیک و رشد، و CTSEG بر تجارت بین‌المللی و تأمین راهبردی تمرکز دارد.',
+    studioDesc:'نرم‌افزار، سیستم‌های وب، اتوماسیون، محصولات دیجیتال مبتنی بر هوش مصنوعی و پیاده‌سازی فنی.', commerceDesc:'زیرساخت تجارت الکترونیک، عملیات پلتفرم، تبدیل، رشد و سیستم‌های تجارت دیجیتال.', ctsegDesc:'تأمین بین‌المللی، توسعه B2B، تحقیق بازار، اعتبارسنجی تأمین‌کننده و عملیات فرامرزی.',
+    ownedLabel:'دارایی‌های دیجیتال تحت مالکیت', ownedTitle:'سیستم‌هایی که محصول، داده و دسترسی ارگانیک ایجاد می‌کنند.', growthDesc:'پلتفرم خصوصی هوشمندی رشد برای تحلیل SEO، GEO، AEO، AIO، تبلیغات و عملیات رشد و پشتیبانی از تصمیم‌گیری.', mythDesc:'پلتفرم مستقل و چندزبانه انتشار و محصول با دیده‌شدن ارگانیک قوی در جستجو، در حوزه تاروت، طالع‌بینی و بازتاب نمادین.',
+    collabLabel:'پروژه‌های مشترک', collabTitle:'همکاری‌هایی جدا از برند شخصی.', olivonDesc:'پروژه مشترک آژانسی با تمرکز بر تجارت الکترونیک، رشد دیجیتال و سیستم‌های برند که جدا از ساختارهای اصلی تحت مالکیت معرفی می‌شود.',
+    methodLabel:'مدل عملیاتی', methodTitle:'تحقیق. ساخت. اجرا. اندازه‌گیری. بهبود.', methodLead:'چه در فناوری و چه در تجارت، بر سیستم‌هایی تمرکز می‌کنم که کیفیت تصمیم‌گیری را افزایش می‌دهند و عملیات تکرارپذیر ایجاد می‌کنند.', steps:['تحقیق و تحلیل فرصت','طراحی سیستم و عملیات','پیاده‌سازی و یکپارچه‌سازی','اندازه‌گیری و بهینه‌سازی'],
+    aboutLabel:'درباره من', aboutTitle:'به سیستم‌های کارآمد علاقه‌مندم، نه فقط یک صنعت.', aboutBody:'تجارت دیجیتال، نرم‌افزار، عملیات آژانسی و تأمین بین‌المللی در دوره‌های مختلف کاری من برجسته بوده‌اند. امروز آن‌ها را با یک رویکرد واحد مبتنی بر تحقیق، فناوری، توزیع و اجرا مدیریت می‌کنم.',
+    contactLabel:'تماس', contactTitle:'از ساختار مناسب شروع کنیم.', contactBody:'برای نرم‌افزار و سیستم‌های دیجیتال QCT Studio، برای تجارت الکترونیک و رشد QCT Commerce، برای تجارت بین‌المللی CTSEG یا مستقیماً با من تماس بگیرید.', view:'مشاهده', privateLabel:'محصول خصوصی', mediaLabel:'دارایی رسانه‌ای دیجیتال', collaborationLabel:'پروژه مشترک'
+  },
+  zh:{
+    eyebrow:'技术 · 商业 · 全球运营', title:'我构建数字系统，并推动商业运营落地。', lead:'我的工作横跨软件、电商、增长基础设施与国际贸易，将想法转化为可衡量、可运营的系统。', primary:'查看业务生态', secondary:'联系我',
+    coreLabel:'核心业务', coreTitle:'三个互相补充的运营方向。', coreLead:'QCT Studio 负责技术与数字产品，QCT Commerce 聚焦电商与数字增长，CTSEG 负责国际贸易与战略采购。',
+    studioDesc:'软件、网站系统、自动化、AI 驱动的数字产品与技术实施。', commerceDesc:'电商基础设施、平台运营、转化、增长与数字商业系统。', ctsegDesc:'国际采购、B2B 业务开发、市场研究、供应商验证与跨境运营。',
+    ownedLabel:'自有数字资产', ownedTitle:'持续产生产品、数据与自然流量的系统。', growthDesc:'用于 SEO、GEO、AEO、AIO、广告与增长运营分析及决策支持的私有 growth intelligence 平台。', mythDesc:'拥有较强自然搜索可见度的独立多语言内容与产品平台，覆盖塔罗、占星与象征性探索。',
+    collabLabel:'合作项目', collabTitle:'与个人核心资产保持独立的合作关系。', olivonDesc:'聚焦电商、数字增长与品牌系统的联合代理项目，作为合作项目单独呈现，而非核心自有业务。',
+    methodLabel:'运营方法', methodTitle:'研究。构建。运营。衡量。优化。', methodLead:'无论技术还是贸易，我都关注能够提升决策质量并形成可重复运营的系统。', steps:['研究与机会分析','系统与运营设计','实施与集成','衡量与优化'],
+    aboutLabel:'关于我', aboutTitle:'我关注能真正运转的系统，而不是单一行业。', aboutBody:'数字商业、软件、代理运营与国际采购在我不同阶段的工作中都占据重要位置。如今，我用研究、技术、分发与执行相结合的方式统一管理这些领域。',
+    contactLabel:'联系', contactTitle:'从正确的业务结构开始沟通。', contactBody:'软件与数字系统可联系 QCT Studio，电商与增长可联系 QCT Commerce，国际贸易可联系 CTSEG，也可以直接联系我。', view:'查看', privateLabel:'私有产品', mediaLabel:'数字媒体资产', collaborationLabel:'联合项目'
+  },
+  vi:{
+    eyebrow:'CÔNG NGHỆ · THƯƠNG MẠI · VẬN HÀNH TOÀN CẦU', title:'Tôi xây dựng hệ thống số và phát triển các hoạt động thương mại.', lead:'Tôi làm việc tại giao điểm của phần mềm, thương mại điện tử, hạ tầng tăng trưởng và thương mại quốc tế, biến ý tưởng thành hệ thống có thể đo lường và vận hành.', primary:'Khám phá hệ sinh thái', secondary:'Liên hệ',
+    coreLabel:'CẤU TRÚC CỐT LÕI', coreTitle:'Ba lĩnh vực vận hành bổ trợ cho nhau.', coreLead:'QCT Studio phụ trách công nghệ và sản phẩm số, QCT Commerce tập trung vào e-commerce và tăng trưởng, còn CTSEG vận hành thương mại quốc tế và thu mua chiến lược.',
+    studioDesc:'Phần mềm, hệ thống web, tự động hóa, sản phẩm số ứng dụng AI và triển khai kỹ thuật.', commerceDesc:'Hạ tầng e-commerce, vận hành nền tảng, chuyển đổi, tăng trưởng và hệ thống thương mại số.', ctsegDesc:'Sourcing quốc tế, phát triển B2B, nghiên cứu thị trường, xác minh nhà cung cấp và vận hành xuyên biên giới.',
+    ownedLabel:'TÀI SẢN SỐ SỞ HỮU', ownedTitle:'Các hệ thống tạo ra sản phẩm, dữ liệu và lưu lượng organic.', growthDesc:'Nền tảng growth intelligence riêng để phân tích SEO, GEO, AEO, AIO, quảng cáo và vận hành tăng trưởng, hỗ trợ ra quyết định.', mythDesc:'Nền tảng xuất bản và sản phẩm đa ngôn ngữ độc lập với khả năng hiển thị tìm kiếm organic mạnh trong Tarot, chiêm tinh và khám phá biểu tượng.',
+    collabLabel:'DỰ ÁN HỢP TÁC', collabTitle:'Các dự án chung được tách biệt khỏi thương hiệu cá nhân.', olivonDesc:'Dự án agency hợp tác tập trung vào e-commerce, tăng trưởng số và hệ thống thương hiệu, được trình bày riêng khỏi các cấu trúc sở hữu cốt lõi.',
+    methodLabel:'MÔ HÌNH VẬN HÀNH', methodTitle:'Nghiên cứu. Xây dựng. Vận hành. Đo lường. Cải tiến.', methodLead:'Dù là công nghệ hay thương mại, tôi tập trung vào các hệ thống nâng cao chất lượng quyết định và tạo ra quy trình vận hành có thể lặp lại.', steps:['Nghiên cứu và phân tích cơ hội','Thiết kế hệ thống và vận hành','Triển khai và tích hợp','Đo lường và tối ưu'],
+    aboutLabel:'VỀ TÔI', aboutTitle:'Tôi quan tâm đến những hệ thống vận hành tốt, không chỉ một ngành.', aboutBody:'Thương mại số, phần mềm, vận hành agency và sourcing quốc tế đều nổi bật ở các giai đoạn khác nhau trong công việc của tôi. Hiện nay tôi kết nối chúng bằng một phương pháp chung gồm nghiên cứu, công nghệ, phân phối và thực thi.',
+    contactLabel:'LIÊN HỆ', contactTitle:'Bắt đầu qua đúng cấu trúc vận hành.', contactBody:'QCT Studio cho phần mềm và hệ thống số, QCT Commerce cho e-commerce và tăng trưởng, CTSEG cho thương mại quốc tế, hoặc liên hệ trực tiếp với tôi.', view:'Khám phá', privateLabel:'Sản phẩm riêng', mediaLabel:'Tài sản truyền thông số', collaborationLabel:'Dự án chung'
+  }
+};
+
+const ui = t[locale] ?? t.en;
 const homePath = locale === 'tr' ? '/' : `/${locale}/`;
 const contactHref = `mailto:${site.email}`;
-
 const core = [
-  { name: 'QCT Studio', tag: 'Technology & Digital Products', desc: locale === 'tr' ? 'Yazılım, web sistemleri, otomasyon, AI destekli dijital ürünler ve teknik uygulamalar.' : 'Software, web systems, automation, AI-enabled digital products and technical implementation.', url: site.links.qctStudio },
-  { name: 'QCT Commerce', tag: 'E-commerce & Growth', desc: locale === 'tr' ? 'E-ticaret altyapıları, platform operasyonları, dönüşüm, büyüme ve dijital ticaret sistemleri.' : 'E-commerce infrastructure, platform operations, conversion, growth and digital commerce systems.', url: site.links.qctCommerce },
-  { name: 'CTSEG', tag: 'Global Trade & Strategic Sourcing', desc: locale === 'tr' ? 'Uluslararası tedarik, B2B iş geliştirme, pazar araştırması, tedarikçi doğrulama ve sınır ötesi operasyonlar.' : 'International sourcing, B2B business development, market research, supplier verification and cross-border operations.', url: site.links.ctseg },
+  { name:'QCT Studio', tag:'Technology & Digital Products', desc:ui.studioDesc, url:site.links.qctStudio },
+  { name:'QCT Commerce', tag:'E-commerce & Growth', desc:ui.commerceDesc, url:site.links.qctCommerce },
+  { name:'CTSEG', tag:'Global Trade & Strategic Sourcing', desc:ui.ctsegDesc, url:site.links.ctseg },
 ];
 ---
-
 <Header locale={locale} copy={copy} homePath={homePath} />
 <main class="personal-home">
   <section class="hero" id="top">
     <div class="hero-copy">
-      <p class="eyebrow">{ui.eyebrow}</p>
-      <h1>{ui.title}</h1>
-      <p class="lead">{ui.lead}</p>
-      <div class="actions">
-        <a class="button primary" href="#ventures">{ui.primary}</a>
-        <a class="button ghost" href={contactHref}>{ui.secondary}</a>
-      </div>
-      <div class="signal-row" aria-label="Focus areas">
-        <span>QCT Studio</span><span>QCT Commerce</span><span>CTSEG</span><span>Growth OS</span><span>Mythborn</span>
-      </div>
+      <p class="eyebrow">{ui.eyebrow}</p><h1>{ui.title}</h1><p class="lead">{ui.lead}</p>
+      <div class="actions"><a class="button primary" href="#ventures">{ui.primary}</a><a class="button ghost" href={contactHref}>{ui.secondary}</a></div>
+      <div class="signal-row" aria-label="Focus areas"><span>QCT Studio</span><span>QCT Commerce</span><span>CTSEG</span><span>Growth OS</span><span>Mythborn</span></div>
     </div>
-    <div class="hero-media">
-      <div class="portrait-shell">
-        <img src={site.images.hero.path} srcset={site.images.hero.srcset} sizes="(max-width: 900px) 82vw, 420px" width={site.images.hero.width} height={site.images.hero.height} alt="Teyfik Gökdemir" loading="eager" fetchpriority="high" />
-      </div>
-      <p class="portrait-caption">Teyfik Gökdemir · Founder / Operator</p>
-    </div>
+    <div class="hero-media"><div class="portrait-shell"><img src={site.images.hero.path} srcset={site.images.hero.srcset} sizes="(max-width:900px) 82vw, 420px" width={site.images.hero.width} height={site.images.hero.height} alt="Teyfik Gökdemir" loading="eager" fetchpriority="high" /></div><p class="portrait-caption">Teyfik Gökdemir · Founder / Operator</p></div>
   </section>
 
   <section class="section" id="ventures">
-    <p class="eyebrow">{ui.coreLabel}</p>
-    <div class="section-heading"><h2>{ui.coreTitle}</h2><p>{ui.coreLead}</p></div>
-    <div class="grid core-grid">
-      {core.map((item) => (
-        <a class="card core-card" href={item.url} target="_blank" rel="noreferrer">
-          <div><span class="card-tag">{item.tag}</span><h3>{item.name}</h3><p>{item.desc}</p></div>
-          <span class="card-link">{ui.view} ↗</span>
-        </a>
-      ))}
-    </div>
+    <p class="eyebrow">{ui.coreLabel}</p><div class="section-heading"><h2>{ui.coreTitle}</h2><p>{ui.coreLead}</p></div>
+    <div class="grid core-grid">{core.map((item) => <a class="card core-card" href={item.url} target="_blank" rel="noopener noreferrer"><div><span class="card-tag">{item.tag}</span><h3>{item.name}</h3><p>{item.desc}</p></div><span class="card-link">{ui.view} ↗</span></a>)}</div>
   </section>
 
   <section class="section split-section" id="expertise">
     <div class="section-intro"><p class="eyebrow">{ui.ownedLabel}</p><h2>{ui.ownedTitle}</h2></div>
     <div class="asset-stack">
-      <a class="asset-card" href="https://growth.teyfikgokdemir.com" target="_blank" rel="noreferrer">
-        <div><span class="card-tag">{ui.privateLabel}</span><h3>Growth OS</h3><p>{ui.growthDesc}</p></div><span>growth.teyfikgokdemir.com ↗</span>
-      </a>
-      <a class="asset-card" href={site.links.mythborn} target="_blank" rel="noreferrer">
-        <div><span class="card-tag">{ui.mediaLabel}</span><h3>Mythborn</h3><p>{ui.mythDesc}</p></div><span>mythborn.co ↗</span>
-      </a>
+      <a class="asset-card" href="https://growth.teyfikgokdemir.com" target="_blank" rel="noopener noreferrer"><div><span class="card-tag">{ui.privateLabel}</span><h3>Growth OS</h3><p>{ui.growthDesc}</p></div><span>growth.teyfikgokdemir.com ↗</span></a>
+      <a class="asset-card" href={site.links.mythborn} target="_blank" rel="noopener noreferrer"><div><span class="card-tag">{ui.mediaLabel}</span><h3>Mythborn</h3><p>{ui.mythDesc}</p></div><span>mythborn.co ↗</span></a>
     </div>
   </section>
 
-  <section class="section collaboration">
-    <p class="eyebrow">{ui.collabLabel}</p>
-    <div class="collab-card">
-      <div><span class="card-tag">{ui.collaborationLabel}</span><h2>Olivon</h2><p>{ui.olivonDesc}</p></div>
-      <a class="button ghost" href="https://olivon.com.tr" target="_blank" rel="noreferrer">olivon.com.tr ↗</a>
-    </div>
-  </section>
+  <section class="section collaboration"><p class="eyebrow">{ui.collabLabel}</p><div class="collab-card"><div><span class="card-tag">{ui.collaborationLabel}</span><h2>Olivon</h2><p>{ui.olivonDesc}</p></div><a class="button ghost" href="https://olivon.com.tr" target="_blank" rel="noopener noreferrer">olivon.com.tr ↗</a></div></section>
 
-  <section class="section method" id="journey">
-    <p class="eyebrow">{ui.methodLabel}</p>
-    <div class="section-heading"><h2>{ui.methodTitle}</h2><p>{ui.methodLead}</p></div>
-    <ol class="method-grid">
-      {ui.steps.map((step: string, index: number) => <li><span>0{index + 1}</span><strong>{step}</strong></li>)}
-    </ol>
-  </section>
+  <section class="section method" id="journey"><p class="eyebrow">{ui.methodLabel}</p><div class="section-heading"><h2>{ui.methodTitle}</h2><p>{ui.methodLead}</p></div><ol class="method-grid">{ui.steps.map((step,index) => <li><span>0{index+1}</span><strong>{step}</strong></li>)}</ol></section>
 
-  <section class="section about">
-    <div class="about-copy"><p class="eyebrow">{ui.aboutLabel}</p><h2>{ui.aboutTitle}</h2><p>{ui.aboutBody}</p></div>
-    <img src={site.images.profile.path} srcset={site.images.profile.srcset} sizes="(max-width: 900px) 88vw, 420px" width={site.images.profile.width} height={site.images.profile.height} alt="Teyfik Gökdemir" loading="lazy" />
-  </section>
+  <section class="section about"><div class="about-copy"><p class="eyebrow">{ui.aboutLabel}</p><h2>{ui.aboutTitle}</h2><p>{ui.aboutBody}</p></div><img src={site.images.profile.path} srcset={site.images.profile.srcset} sizes="(max-width:900px) 88vw, 420px" width={site.images.profile.width} height={site.images.profile.height} alt="Teyfik Gökdemir" loading="lazy" /></section>
 
-  <section class="section contact" id="contact">
-    <p class="eyebrow">{ui.contactLabel}</p><h2>{ui.contactTitle}</h2><p>{ui.contactBody}</p>
-    <div class="contact-links">
-      <a href={site.links.qctStudio} target="_blank" rel="noreferrer">QCT Studio ↗</a>
-      <a href={site.links.qctCommerce} target="_blank" rel="noreferrer">QCT Commerce ↗</a>
-      <a href={site.links.ctseg} target="_blank" rel="noreferrer">CTSEG ↗</a>
-      <a href={contactHref}>{site.email}</a>
-    </div>
-  </section>
+  <section class="section contact" id="contact"><p class="eyebrow">{ui.contactLabel}</p><h2>{ui.contactTitle}</h2><p>{ui.contactBody}</p><div class="contact-links"><a href={site.links.qctStudio} target="_blank" rel="noopener noreferrer">QCT Studio ↗</a><a href={site.links.qctCommerce} target="_blank" rel="noopener noreferrer">QCT Commerce ↗</a><a href={site.links.ctseg} target="_blank" rel="noopener noreferrer">CTSEG ↗</a><a href={contactHref}>{site.email}</a></div></section>
 </main>
-
-<footer class="personal-footer">
-  <span>© 2026 Teyfik Gökdemir</span>
-  <div><a href={site.links.linkedin} target="_blank" rel="noreferrer">LinkedIn</a><a href={site.links.github} target="_blank" rel="noreferrer">GitHub</a><a href={site.links.instagram} target="_blank" rel="noreferrer">Instagram</a></div>
-</footer>
+<footer class="personal-footer"><span>© 2026 Teyfik Gökdemir</span><div><a href={site.links.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a><a href={site.links.github} target="_blank" rel="noopener noreferrer">GitHub</a><a href={site.links.instagram} target="_blank" rel="noopener noreferrer">Instagram</a></div></footer>
 <FloatingActions locale={locale} />
-
 <style>
-  :global(body){background:#0b0b0a;color:#f1eee7}.personal-home{max-width:1280px;margin:0 auto;padding:0 28px}.hero{min-height:86vh;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:72px;align-items:center;padding:110px 0 70px}.eyebrow{margin:0 0 18px;color:#c9a879;font-size:.74rem;letter-spacing:.18em;font-weight:700}.hero h1,.section h2{font-family:Georgia,'Times New Roman',serif;font-weight:500;letter-spacing:-.04em}.hero h1{font-size:clamp(3.2rem,6.4vw,6.7rem);line-height:.94;max-width:900px;margin:0}.lead{font-size:clamp(1.05rem,1.5vw,1.3rem);line-height:1.7;color:#bdb9b0;max-width:760px;margin:30px 0 0}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border-radius:999px;text-decoration:none;font-weight:700}.button.primary{background:#e9e3d8;color:#0b0b0a}.button.ghost{border:1px solid #3a3834;color:#eee8de}.signal-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:40px}.signal-row span,.card-tag{font-size:.73rem;letter-spacing:.08em;text-transform:uppercase}.signal-row span{border:1px solid #292824;border-radius:999px;padding:9px 12px;color:#a9a59d}.portrait-shell{border:1px solid #292824;border-radius:26px;padding:12px;background:#121210}.portrait-shell img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;border-radius:18px;filter:saturate(.82) contrast(1.02)}.portrait-caption{color:#77736b;font-size:.8rem;margin:12px 4px 0}.section{padding:110px 0;border-top:1px solid #24231f}.section-heading{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:60px;align-items:end;margin-bottom:42px}.section h2{font-size:clamp(2.5rem,4.5vw,4.7rem);line-height:1;margin:0}.section-heading p,.asset-card p,.core-card p,.collab-card p,.about-copy>p:last-child,.contact>p{color:#aaa69d;line-height:1.7}.grid{display:grid;gap:16px}.core-grid{grid-template-columns:repeat(3,1fr)}.card,.asset-card,.collab-card{border:1px solid #2a2925;background:#11110f;border-radius:22px}.core-card{min-height:330px;padding:26px;display:flex;flex-direction:column;justify-content:space-between;text-decoration:none;color:inherit;transition:transform .25s ease,border-color .25s ease}.core-card:hover{transform:translateY(-4px);border-color:#6c5a42}.card-tag{color:#a48761}.core-card h3,.asset-card h3{font-size:1.8rem;margin:18px 0 12px}.card-link,.asset-card>span{color:#d2cabd;font-size:.9rem}.split-section{display:grid;grid-template-columns:.8fr 1.2fr;gap:70px}.section-intro h2{max-width:520px}.asset-stack{display:grid;gap:16px}.asset-card{padding:28px;text-decoration:none;color:inherit;display:grid;grid-template-columns:1fr auto;gap:30px;align-items:end}.asset-card p{max-width:720px}.collab-card{padding:34px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end}.collab-card h2{font-size:3rem;margin:14px 0}.collab-card p{max-width:760px}.method-grid{list-style:none;padding:0;margin:42px 0 0;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.method-grid li{min-height:180px;border:1px solid #2a2925;border-radius:18px;padding:22px;display:flex;flex-direction:column;justify-content:space-between}.method-grid span{color:#716b61;font-family:monospace}.method-grid strong{font-size:1rem;line-height:1.45}.about{display:grid;grid-template-columns:1fr .75fr;gap:80px;align-items:center}.about-copy h2{max-width:760px}.about img{width:100%;max-height:660px;object-fit:cover;border-radius:24px;border:1px solid #2a2925}.contact{text-align:center}.contact h2{max-width:780px;margin:0 auto}.contact>p{max-width:760px;margin:24px auto}.contact-links{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:30px}.contact-links a{border:1px solid #34322d;border-radius:999px;padding:12px 16px;color:#eee8de;text-decoration:none}.personal-footer{max-width:1280px;margin:0 auto;padding:30px 28px 50px;border-top:1px solid #24231f;display:flex;justify-content:space-between;gap:20px;color:#77736b;font-size:.84rem}.personal-footer div{display:flex;gap:16px}.personal-footer a{color:#aaa69d;text-decoration:none}@media(max-width:900px){.personal-home{padding:0 18px}.hero{grid-template-columns:1fr;gap:42px;padding:96px 0 56px;min-height:auto}.hero h1{font-size:clamp(2.8rem,12vw,4.5rem)}.hero-media{max-width:520px}.section{padding:78px 0}.section-heading,.split-section,.about{grid-template-columns:1fr;gap:32px}.core-grid,.method-grid{grid-template-columns:1fr}.asset-card,.collab-card{grid-template-columns:1fr}.method-grid li{min-height:130px}.personal-footer{padding-left:18px;padding-right:18px;flex-direction:column}.section h2{font-size:clamp(2.3rem,9vw,3.7rem)}}
+:global(body){background:#0b0b0a;color:#f1eee7}.personal-home{max-width:1280px;margin:0 auto;padding:0 28px}.hero{min-height:86vh;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:72px;align-items:center;padding:110px 0 70px}.eyebrow{margin:0 0 18px;color:#c9a879;font-size:.74rem;letter-spacing:.18em;font-weight:700;text-transform:uppercase}.hero h1,.section h2{font-family:Georgia,'Times New Roman',serif;font-weight:500;letter-spacing:-.04em}.hero h1{font-size:clamp(3.2rem,6.4vw,6.7rem);line-height:.94;max-width:900px;margin:0}.lead{font-size:clamp(1.05rem,1.5vw,1.3rem);line-height:1.7;color:#bdb9b0;max-width:760px;margin:30px 0 0}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border-radius:999px;text-decoration:none;font-weight:700}.button.primary{background:#e9e3d8;color:#0b0b0a}.button.ghost{border:1px solid #3a3834;color:#eee8de}.signal-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:40px}.signal-row span,.card-tag{font-size:.73rem;letter-spacing:.08em;text-transform:uppercase}.signal-row span{border:1px solid #292824;border-radius:999px;padding:9px 12px;color:#a9a59d}.portrait-shell{border:1px solid #292824;border-radius:26px;padding:12px;background:#121210}.portrait-shell img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;border-radius:18px;filter:saturate(.82) contrast(1.02)}.portrait-caption{color:#77736b;font-size:.8rem;margin:12px 4px 0}.section{padding:110px 0;border-top:1px solid #24231f}.section-heading{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:60px;align-items:end;margin-bottom:42px}.section h2{font-size:clamp(2.5rem,4.5vw,4.7rem);line-height:1;margin:0}.section-heading p,.asset-card p,.core-card p,.collab-card p,.about-copy>p:last-child,.contact>p{color:#aaa69d;line-height:1.7}.grid{display:grid;gap:16px}.core-grid{grid-template-columns:repeat(3,1fr)}.card,.asset-card,.collab-card{border:1px solid #2a2925;background:#11110f;border-radius:22px}.core-card{min-height:330px;padding:26px;display:flex;flex-direction:column;justify-content:space-between;text-decoration:none;color:inherit;transition:transform .25s ease,border-color .25s ease}.core-card:hover{transform:translateY(-4px);border-color:#6c5a42}.card-tag{color:#a48761}.core-card h3,.asset-card h3{font-size:1.8rem;margin:18px 0 12px}.card-link,.asset-card>span{color:#d2cabd;font-size:.9rem}.split-section{display:grid;grid-template-columns:.8fr 1.2fr;gap:70px}.section-intro h2{max-width:520px}.asset-stack{display:grid;gap:16px}.asset-card{padding:28px;text-decoration:none;color:inherit;display:grid;grid-template-columns:1fr auto;gap:30px;align-items:end}.asset-card p{max-width:720px}.collab-card{padding:34px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end}.collab-card h2{font-size:3rem;margin:14px 0}.collab-card p{max-width:760px}.method-grid{list-style:none;padding:0;margin:42px 0 0;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.method-grid li{min-height:180px;border:1px solid #2a2925;border-radius:18px;padding:22px;display:flex;flex-direction:column;justify-content:space-between}.method-grid span{color:#716b61;font-family:monospace}.method-grid strong{font-size:1rem;line-height:1.45}.about{display:grid;grid-template-columns:1fr .75fr;gap:80px;align-items:center}.about-copy h2{max-width:760px}.about img{width:100%;max-height:660px;object-fit:cover;border-radius:24px;border:1px solid #2a2925}.contact{text-align:center}.contact h2{max-width:780px;margin:0 auto}.contact>p{max-width:760px;margin:24px auto}.contact-links{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:30px}.contact-links a{border:1px solid #34322d;border-radius:999px;padding:12px 16px;color:#eee8de;text-decoration:none}.personal-footer{max-width:1280px;margin:0 auto;padding:30px 28px 50px;border-top:1px solid #24231f;display:flex;justify-content:space-between;gap:20px;color:#77736b;font-size:.84rem}.personal-footer div{display:flex;gap:16px}.personal-footer a{color:#aaa69d;text-decoration:none}:global(html[dir=rtl]) .hero-copy,:global(html[dir=rtl]) .section-intro,:global(html[dir=rtl]) .about-copy{text-align:right}@media(max-width:900px){.personal-home{padding:0 18px}.hero{grid-template-columns:1fr;gap:42px;padding:80px 0 56px;min-height:auto}.hero h1{font-size:clamp(2.65rem,11vw,4.5rem)}.hero-media{max-width:520px}.section{padding:78px 0}.section-heading,.split-section,.about{grid-template-columns:1fr;gap:32px}.core-grid,.method-grid{grid-template-columns:1fr}.asset-card,.collab-card{grid-template-columns:1fr}.method-grid li{min-height:130px}.personal-footer{padding-left:18px;padding-right:18px;flex-direction:column}.section h2{font-size:clamp(2.3rem,9vw,3.7rem)}}
 </style>
