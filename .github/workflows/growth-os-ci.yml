@@ -74,8 +74,10 @@ jobs:
           import assert from 'node:assert/strict';
           const source = readFileSync('src/google-analytics.ts', 'utf8');
           assert.match(source, /type AnalyticsSummary=\{[\s\S]*nextPageToken\?:string/, 'Analytics account summary response must retain nextPageToken.');
-          assert.match(source, /async function listProperties\([\s\S]*pageSize','200'[\s\S]*pageToken[\s\S]*seenPageTokens/, 'Analytics property discovery must keep paginated account summaries with loop protection.');
+          assert.match(source, /const ANALYTICS_ACCOUNT_SUMMARY_MAX_PAGES=100;/, 'Analytics pagination must keep a hard page bound.');
+          assert.match(source, /async function listProperties\([\s\S]*for\(let page=0;page<ANALYTICS_ACCOUNT_SUMMARY_MAX_PAGES;page\+\+\)[\s\S]*pageSize','200'[\s\S]*pageToken[\s\S]*seenPageTokens/, 'Analytics property discovery must keep bounded paginated account summaries with loop protection.');
           assert.match(source, /summaries\.nextPageToken/, 'Analytics pagination must advance using the API nextPageToken.');
+          assert.match(source, /pagination güvenlik sayfa limitini aştı/, 'Analytics pagination must fail closed when the hard page bound is exhausted.');
           NODE
       - name: Guard Meta ad account pagination
         run: |
