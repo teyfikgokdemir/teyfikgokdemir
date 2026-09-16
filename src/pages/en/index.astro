@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PersonalHomePage from '../../components/PersonalHomePage.astro';
+import PersonalHomePolish from '../../components/PersonalHomePolish.astro';
 import { content } from '../../i18n/content';
 
 const locale = 'en';
@@ -10,4 +11,5 @@ const description = 'The personal operating hub of Teyfik Gökdemir across techn
 ---
 <BaseLayout locale={locale} copy={copy} title={title} description={description}>
   <PersonalHomePage locale={locale} />
+  <PersonalHomePolish />
 </BaseLayout>

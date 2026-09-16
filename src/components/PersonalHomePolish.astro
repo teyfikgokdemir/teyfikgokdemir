@@ -1,0 +1,256 @@
+<style is:global>
+  /* Layout and typography polish only. Palette intentionally inherited from PersonalHomePage. */
+  .personal-home {
+    max-width: 1320px !important;
+    padding-inline: clamp(22px, 3vw, 42px) !important;
+  }
+
+  .personal-home .hero {
+    gap: clamp(48px, 6vw, 88px) !important;
+    padding-top: clamp(96px, 9vw, 132px) !important;
+  }
+
+  .personal-home .hero h1 {
+    max-width: 820px !important;
+    text-wrap: balance;
+  }
+
+  .personal-home .lead,
+  .personal-home .section-heading p,
+  .personal-home .core-card p,
+  .personal-home .asset-card p,
+  .personal-home .collab-card p,
+  .personal-home .about-copy > p:last-child,
+  .personal-home .contact > p {
+    font-size: clamp(.98rem, .9vw, 1.08rem) !important;
+  }
+
+  .personal-home .portrait-shell {
+    padding: 0 !important;
+    background: transparent !important;
+    border-radius: 22px !important;
+    overflow: hidden;
+  }
+
+  .personal-home .portrait-shell img {
+    border-radius: 20px !important;
+  }
+
+  .personal-home .section {
+    padding-block: clamp(88px, 8vw, 122px) !important;
+  }
+
+  .personal-home .section h2 {
+    text-wrap: balance;
+  }
+
+  .personal-home .core-card {
+    min-height: 300px !important;
+    padding: 30px !important;
+  }
+
+  .personal-home .core-card h3,
+  .personal-home .asset-card h3 {
+    font-size: clamp(1.65rem, 2vw, 2rem) !important;
+  }
+
+  /* Owned assets: full-width editorial block, then two substantial cards. */
+  .personal-home .split-section {
+    display: block !important;
+  }
+
+  .personal-home .split-section .section-intro {
+    max-width: 920px;
+    margin-bottom: 42px;
+  }
+
+  .personal-home .split-section .section-intro h2 {
+    max-width: 900px !important;
+  }
+
+  .personal-home .asset-stack {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+    width: 100%;
+  }
+
+  .personal-home .asset-card {
+    min-width: 0;
+    min-height: 270px;
+    padding: 30px !important;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start !important;
+    gap: 34px !important;
+  }
+
+  .personal-home .asset-card > div,
+  .personal-home .asset-card p {
+    min-width: 0;
+    max-width: 620px !important;
+  }
+
+  .personal-home .asset-card > span {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    line-height: 1.45;
+  }
+
+  /* Collaboration should read as a deliberate case, not an empty banner. */
+  .personal-home .collab-card {
+    min-height: 250px;
+    padding: clamp(34px, 4vw, 52px) !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: end !important;
+  }
+
+  .personal-home .collab-card > div {
+    max-width: 820px;
+  }
+
+  .personal-home .collab-card h2 {
+    font-size: clamp(2.8rem, 4vw, 4.5rem) !important;
+  }
+
+  /* Keep the operating model compact and legible on desktop. */
+  .personal-home .method .section-heading {
+    grid-template-columns: minmax(0, 1.25fr) minmax(300px, .75fr) !important;
+    align-items: center !important;
+  }
+
+  .personal-home .method .section-heading h2 {
+    max-width: 760px;
+    font-size: clamp(3rem, 5vw, 5.2rem) !important;
+    line-height: .95 !important;
+  }
+
+  .personal-home .method-grid li {
+    min-height: 165px !important;
+    padding: 24px !important;
+  }
+
+  .personal-home .method-grid strong {
+    font-size: clamp(.98rem, 1vw, 1.08rem) !important;
+  }
+
+  /* About: bring copy and portrait into one visual baseline. */
+  .personal-home .about {
+    grid-template-columns: minmax(0, 1.1fr) minmax(320px, .7fr) !important;
+    gap: clamp(52px, 7vw, 96px) !important;
+    align-items: center !important;
+  }
+
+  .personal-home .about-copy {
+    align-self: center;
+  }
+
+  .personal-home .about-copy h2 {
+    max-width: 780px !important;
+  }
+
+  .personal-home .about img {
+    max-width: 460px;
+    justify-self: end;
+  }
+
+  .personal-home .contact {
+    padding-block: clamp(96px, 9vw, 132px) !important;
+  }
+
+  .personal-home .contact h2 {
+    max-width: 720px !important;
+  }
+
+  @media (max-width: 1050px) {
+    .personal-home .asset-stack {
+      grid-template-columns: 1fr !important;
+    }
+
+    .personal-home .asset-card {
+      min-height: 220px;
+    }
+
+    .personal-home .method-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .personal-home {
+      padding-inline: 18px !important;
+    }
+
+    .personal-home .hero {
+      padding-top: 82px !important;
+      gap: 36px !important;
+    }
+
+    .personal-home .hero h1 {
+      font-size: clamp(2.7rem, 10.8vw, 4.35rem) !important;
+      line-height: .96 !important;
+    }
+
+    .personal-home .section {
+      padding-block: 76px !important;
+    }
+
+    .personal-home .core-card,
+    .personal-home .asset-card {
+      min-height: auto !important;
+      padding: 24px !important;
+    }
+
+    .personal-home .asset-card {
+      gap: 28px !important;
+    }
+
+    .personal-home .collab-card {
+      min-height: auto;
+      grid-template-columns: 1fr !important;
+      align-items: start !important;
+      gap: 28px !important;
+      padding: 28px !important;
+    }
+
+    .personal-home .method .section-heading,
+    .personal-home .about {
+      grid-template-columns: 1fr !important;
+    }
+
+    .personal-home .method .section-heading h2 {
+      font-size: clamp(2.65rem, 11vw, 4.15rem) !important;
+      max-width: 620px;
+    }
+
+    .personal-home .method-grid {
+      grid-template-columns: 1fr !important;
+    }
+
+    .personal-home .about img {
+      max-width: 560px;
+      justify-self: start;
+    }
+
+    .personal-home .contact {
+      padding-block: 84px !important;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .personal-home .signal-row {
+      gap: 7px !important;
+    }
+
+    .personal-home .signal-row span {
+      padding: 8px 10px !important;
+      font-size: .67rem !important;
+    }
+
+    .personal-home .asset-card > span {
+      font-size: .82rem !important;
+    }
+  }
+</style>
