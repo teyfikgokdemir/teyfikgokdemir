@@ -5,10 +5,14 @@ on:
     branches: [growth-os]
     paths:
       - 'growth-os/**'
+      - '.github/dependabot.yml'
       - '.github/workflows/growth-os-ci.yml'
   pull_request:
     paths:
       - 'growth-os/**'
+      - '.github/dependabot.yml'
+      - '.github/workflows/growth-os-ci.yml'
+  workflow_dispatch:
 
 jobs:
   api:
