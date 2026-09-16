@@ -1,14 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import FounderPage from '../../components/FounderPage.astro';
+import PersonalHomePage from '../../components/PersonalHomePage.astro';
 import { content } from '../../i18n/content';
-import { faqSchema } from '../../data/homeFaq';
 import type { Locale } from '../../i18n/locales';
-
 const locale = 'zh' as Locale;
-const copy = content[locale] || content.tr;
-const pageSchema = faqSchema(locale);
+const copy = content[locale] || content.en;
 ---
-<BaseLayout locale={locale} copy={copy} pageSchema={pageSchema}>
-  <FounderPage locale={locale} />
+<BaseLayout locale={locale} copy={copy}>
+  <PersonalHomePage locale={locale} />
 </BaseLayout>

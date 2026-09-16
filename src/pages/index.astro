@@ -1,15 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import FounderPage from '../components/FounderPage.astro';
+import PersonalHomePage from '../components/PersonalHomePage.astro';
 import { content } from '../i18n/content';
-import { faqSchema } from '../data/homeFaq';
 
 const locale = 'tr';
 const copy = content.tr;
-const title = 'Teyfik Gökdemir | Kurucu, Uluslararası Ticaret ve Stratejik Tedarik';
-const description = 'Teyfik Gökdemir’in kişisel kurucu ve uzmanlık merkezi. Uluslararası ticaret, stratejik tedarik, RFQ ve operasyonel ticaret talepleri CTSEG üzerinden yürütülür.';
-const pageSchema = faqSchema(locale);
+const title = 'Teyfik Gökdemir | Teknoloji, Dijital Ticaret ve Küresel Operasyonlar';
+const description = 'Teyfik Gökdemir’in teknoloji, e-ticaret, büyüme sistemleri ve uluslararası ticaret alanındaki şirket, ürün ve operasyonlarını bir araya getiren kişisel merkezi.';
 ---
-<BaseLayout locale={locale} copy={copy} title={title} description={description} pathname="/" pageSchema={pageSchema}>
-  <FounderPage locale={locale} />
+<BaseLayout locale={locale} copy={copy} title={title} description={description} pathname="/">
+  <PersonalHomePage locale={locale} />
 </BaseLayout>
