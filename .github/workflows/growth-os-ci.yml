@@ -67,6 +67,16 @@ jobs:
           assert.match(source, /partialProducts:Boolean\(productsResponse\.nextPageToken\)/, 'Product truncation must be surfaced.');
           assert.match(source, /partialIssues:Boolean\(issuesResponse\.nextPageToken\)/, 'Issue truncation must be surfaced.');
           NODE
+      - name: Guard Google Analytics pagination
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          import assert from 'node:assert/strict';
+          const source = readFileSync('src/google-analytics.ts', 'utf8');
+          assert.match(source, /type AnalyticsSummary=\{[\s\S]*nextPageToken\?:string/, 'Analytics account summary response must retain nextPageToken.');
+          assert.match(source, /async function listProperties\([\s\S]*pageSize','200'[\s\S]*pageToken[\s\S]*seenPageTokens/, 'Analytics property discovery must keep paginated account summaries with loop protection.');
+          assert.match(source, /summaries\.nextPageToken/, 'Analytics pagination must advance using the API nextPageToken.');
+          NODE
       - name: Guard Meta ad account pagination
         run: |
           node --input-type=module <<'NODE'
