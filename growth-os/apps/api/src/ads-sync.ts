@@ -100,7 +100,7 @@ async function providerFetchText(input:string|URL,init:RequestInit={}){
   }
 }
 
-async function providerFetchJson<T>(input:string|URL,init:RequestInit={}){
+async function providerFetchJson<T>(input:string|URL,init:RequestInit={}):Promise<{response:Response;data:T}>{
   const {response,text}=await providerFetchText(input,init);
   let data:unknown={};
   try{data=text?JSON.parse(text):{}}catch{throw new Error(`Reklam sağlayıcısı geçersiz JSON döndürdü: ${text.slice(0,300)}`)}
