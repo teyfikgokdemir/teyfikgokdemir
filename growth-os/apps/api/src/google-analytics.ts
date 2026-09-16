@@ -3,7 +3,7 @@ import { googleAccessForProject } from './google.js';
 
 type AnalyticsProperty={property?:string;displayName?:string;accountName?:string;account?:string};
 type AnalyticsStream={displayName?:string;webStreamData?:{measurementId?:string;defaultUri?:string}};
-type AnalyticsSummary={accountSummaries?:Array<{account?:string;displayName?:string;propertySummaries?:Array<{property?:string;displayName?:string}>}>};
+type AnalyticsSummary={accountSummaries?:Array<{account?:string;displayName?:string;propertySummaries?:Array<{property?:string;displayName?:string}>}>;nextPageToken?:string};
 
 const ANALYTICS_HTTP_TIMEOUT_MS=20_000;
 const ANALYTICS_HTTP_MAX_BYTES=4*1024*1024;
@@ -71,8 +71,22 @@ async function postJson<T>(url:string,accessToken:string,body:unknown):Promise<T
 function normalizeDomain(value:string){return value.replace(/^https?:\/\//,'').replace(/^www\./,'').split('/')[0].toLowerCase()}
 
 async function listProperties(accessToken:string){
-  const summaries=await getJson('https://analyticsadmin.googleapis.com/v1beta/accountSummaries?pageSize=200',accessToken) as AnalyticsSummary;
-  return (summaries.accountSummaries||[]).flatMap(account=>(account.propertySummaries||[]).map(property=>({...property,accountName:account.displayName||'',account:account.account||''})));
+  const properties:AnalyticsProperty[]=[];
+  const seenPageTokens=new Set<string>();
+  let pageToken='';
+  while(true){
+    const url=new URL('https://analyticsadmin.googleapis.com/v1beta/accountSummaries');
+    url.searchParams.set('pageSize','200');
+    if(pageToken)url.searchParams.set('pageToken',pageToken);
+    const summaries=await getJson(url.toString(),accessToken) as AnalyticsSummary;
+    properties.push(...(summaries.accountSummaries||[]).flatMap(account=>(account.propertySummaries||[]).map(property=>({...property,accountName:account.displayName||'',account:account.account||''}))));
+    const nextPageToken=(summaries.nextPageToken||'').trim();
+    if(!nextPageToken)break;
+    if(seenPageTokens.has(nextPageToken))throw new Error('Google Analytics account summary pagination döngüsü algılandı.');
+    seenPageTokens.add(nextPageToken);
+    pageToken=nextPageToken;
+  }
+  return properties;
 }
 
 async function streamsForProperty(property:string,accessToken:string){
