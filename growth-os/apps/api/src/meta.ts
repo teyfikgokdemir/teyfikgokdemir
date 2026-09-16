@@ -3,6 +3,11 @@ import { encryptSecret } from './google.js';
 export const META_SCOPES = ['ads_read','business_management'];
 const META_HTTP_TIMEOUT_MS = 20_000;
 const META_HTTP_MAX_BYTES = 4 * 1024 * 1024;
+const META_PAGE_LIMIT = 200;
+const META_MAX_PAGES = 100;
+
+type MetaPaging={cursors?:{after?:string}};
+type MetaCollection<T=Record<string,unknown>>={data?:T[];paging?:MetaPaging;[key:string]:unknown};
 
 function required(name:string) {
   const value = process.env[name];
@@ -99,10 +104,34 @@ async function getJson(path:string, accessToken:string) {
   return data;
 }
 
+async function getPagedCollection(path:string, accessToken:string) {
+  const items:Record<string,unknown>[]=[];
+  const seenAfter=new Set<string>();
+  let after='';
+  let firstPage:MetaCollection<Record<string,unknown>>|null=null;
+
+  for(let page=0;page<META_MAX_PAGES;page++){
+    const separator=path.includes('?')?'&':'?';
+    const pagedPath=after?`${path}${separator}after=${encodeURIComponent(after)}`:path;
+    const payload=await getJson(pagedPath,accessToken) as MetaCollection<Record<string,unknown>>;
+    if(!firstPage)firstPage=payload;
+    if(Array.isArray(payload.data))items.push(...payload.data);
+
+    const nextAfter=payload.paging?.cursors?.after?.trim()||'';
+    if(!nextAfter)break;
+    if(seenAfter.has(nextAfter))throw new Error('Meta pagination aynı cursor değerini tekrar döndürdü.');
+    seenAfter.add(nextAfter);
+    after=nextAfter;
+  }
+
+  if(after&&items.length>0&&seenAfter.size>=META_MAX_PAGES)throw new Error('Meta pagination güvenlik sayfa limitini aştı.');
+  return {...(firstPage||{}),data:items};
+}
+
 export async function discoverMetaResources(accessToken:string) {
   const [profile, adAccounts] = await Promise.all([
     getJson('/me?fields=id,name', accessToken),
-    getJson('/me/adaccounts?fields=id,account_id,name,account_status,currency,timezone_name,business_name&limit=200', accessToken)
+    getPagedCollection(`/me/adaccounts?fields=id,account_id,name,account_status,currency,timezone_name,business_name&limit=${META_PAGE_LIMIT}`, accessToken)
   ]);
   return {profile, adAccounts};
 }
