@@ -1,14 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import FounderPage from '../../components/FounderPage.astro';
+import PersonalHomePage from '../../components/PersonalHomePage.astro';
 import { content } from '../../i18n/content';
-import { faqSchema } from '../../data/homeFaq';
 import type { Locale } from '../../i18n/locales';
-
 const locale = 'mk' as Locale;
-const copy = content[locale] || content.tr;
-const pageSchema = faqSchema(locale);
+const copy = content[locale] || content.en;
+const title = 'Teyfik Gökdemir | Технологија, дигитална трговија и глобални операции';
+const description = 'Личен центар на Teyfik Gökdemir за технологија, е-трговија, системи за раст, дигитални средства и меѓународни операции.';
 ---
-<BaseLayout locale={locale} copy={copy} pageSchema={pageSchema}>
-  <FounderPage locale={locale} />
+<BaseLayout locale={locale} copy={copy} title={title} description={description}>
+  <PersonalHomePage locale={locale} />
 </BaseLayout>

@@ -1,14 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import FounderPage from '../../components/FounderPage.astro';
+import PersonalHomePage from '../../components/PersonalHomePage.astro';
 import { content } from '../../i18n/content';
-import { faqSchema } from '../../data/homeFaq';
 import type { Locale } from '../../i18n/locales';
-
 const locale = 'vi' as Locale;
-const copy = content[locale] || content.tr;
-const pageSchema = faqSchema(locale);
+const copy = content[locale] || content.en;
+const title = 'Teyfik Gökdemir | Công nghệ, thương mại số và vận hành toàn cầu';
+const description = 'Trung tâm cá nhân của Teyfik Gökdemir về công nghệ, e-commerce, hệ thống tăng trưởng, tài sản số và vận hành thương mại quốc tế.';
 ---
-<BaseLayout locale={locale} copy={copy} pageSchema={pageSchema}>
-  <FounderPage locale={locale} />
+<BaseLayout locale={locale} copy={copy} title={title} description={description}>
+  <PersonalHomePage locale={locale} />
 </BaseLayout>
