@@ -234,6 +234,27 @@ function searchConsoleSiteDomain(siteUrl:string){
   try{return normalizeDomain(new URL(value).hostname)}catch{return ''}
 }
 
+const SEARCH_CONSOLE_PAGE_SIZE=1000;
+const SEARCH_CONSOLE_MAX_PAGES=20;
+
+async function searchConsoleRows(endpoint:string,accessToken:string,base:Record<string,unknown>,dimension:'query'|'page'){
+  const rows:SearchConsoleRow[]=[];
+  const seenKeys=new Set<string>();
+  for(let page=0;page<SEARCH_CONSOLE_MAX_PAGES;page++){
+    const response=await postJson<SearchConsoleResponse>(endpoint,accessToken,{...base,dimensions:[dimension],rowLimit:SEARCH_CONSOLE_PAGE_SIZE,startRow:page*SEARCH_CONSOLE_PAGE_SIZE});
+    const batch=response.rows||[];
+    if(!Array.isArray(batch)||batch.length>SEARCH_CONSOLE_PAGE_SIZE)throw new Error('Search Console geçersiz pagination yanıtı.');
+    for(const row of batch){
+      const key=JSON.stringify(row.keys);
+      if(seenKeys.has(key))throw new Error('Search Console pagination tekrar eden satır döndürdü.');
+      seenKeys.add(key);
+      rows.push(row);
+    }
+    if(batch.length<SEARCH_CONSOLE_PAGE_SIZE)return {rows,partial:false};
+  }
+  return {rows,partial:true};
+}
+
 export async function searchConsolePerformanceForProject(projectId:string,days=28){
   const project=await pool.query('select domain from projects where id=$1',[projectId]);
   const domain=String(project.rows[0]?.domain||'').replace(/^www\./,'').toLowerCase();
@@ -248,27 +269,27 @@ export async function searchConsolePerformanceForProject(projectId:string,days=2
   const end=new Date();
   const start=new Date();
   start.setUTCDate(start.getUTCDate()-(normalizedDays-1));
-  const base={startDate:isoDate(start),endDate:isoDate(end),rowLimit:1000,dataState:'final'};
+  const base={startDate:isoDate(start),endDate:isoDate(end),dataState:'final'};
   const endpoint=`https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(site.siteUrl)}/searchAnalytics/query`;
-  const queries=await postJson<SearchConsoleResponse>(endpoint,accessToken,{...base,dimensions:['query']});
-  const pages=await postJson<SearchConsoleResponse>(endpoint,accessToken,{...base,dimensions:['page']});
-  const queryRows:SearchConsoleRow[]=queries.rows||[];
-  const pageRows:SearchConsoleRow[]=pages.rows||[];
-  let clicks=0;
-  let impressions=0;
-  let positionWeighted=0;
-  for(const row of queryRows){
-    const rowClicks=Number(row.clicks||0);
-    const rowImpressions=Number(row.impressions||0);
-    clicks+=rowClicks;
-    impressions+=rowImpressions;
-    positionWeighted+=Number(row.position||0)*rowImpressions;
-  }
+  const [queries,pages,totals]=await Promise.all([
+    searchConsoleRows(endpoint,accessToken,base,'query'),
+    searchConsoleRows(endpoint,accessToken,base,'page'),
+    postJson<SearchConsoleResponse>(endpoint,accessToken,{...base,dimensions:[],rowLimit:1})
+  ]);
+  const queryRows=queries.rows;
+  const pageRows=pages.rows;
+  const total=totals.rows?.[0];
+  const clicks=Number(total?.clicks||0);
+  const impressions=Number(total?.impressions||0);
   return {
     siteUrl:site.siteUrl,
     permissionLevel:site.permissionLevel||null,
     days:normalizedDays,
-    summary:{clicks,impressions,ctr:impressions>0?clicks/impressions:0,position:impressions>0?positionWeighted/impressions:null},
+    summary:{clicks,impressions,ctr:impressions>0?clicks/impressions:0,position:impressions>0?Number(total?.position||0):null},
+    partial:queries.partial||pages.partial,
+    partialQueries:queries.partial,
+    partialPages:pages.partial,
+    detailCoverage:'top_rows',
     queries:queryRows.slice(0,100),
     pages:pageRows.slice(0,100)
   };

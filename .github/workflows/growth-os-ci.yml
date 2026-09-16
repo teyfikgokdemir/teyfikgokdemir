@@ -114,6 +114,8 @@ jobs:
           assert.match(source, /loadJwks\(teamDomain,true\)/, 'Unknown Cloudflare key IDs must trigger one forced JWKS refresh.');
           assert.match(source, /lastForcedJwksRefreshAt/, 'JWKS forced refresh cooldown state must be preserved.');
           NODE
+      - name: Guard Search Console pagination
+        run: node tests/search-console-pagination.mjs
       - run: node tests/audit-comparison.mjs
       - run: node tests/ads-pagination.mjs
       - run: node tests/ads-sync-archive.mjs postgres://postgres:postgres@127.0.0.1:5432/postgres
