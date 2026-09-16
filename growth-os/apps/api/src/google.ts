@@ -168,6 +168,7 @@ async function postJson<T>(url:string, accessToken:string, body:unknown):Promise
 
 async function merchantAccountPages(url:string,accessToken:string,maxPages=20):Promise<MerchantAccountsResponse>{
   const accounts:MerchantAccount[]=[];
+  const seenPageTokens=new Set<string>();
   let nextPageToken='';
   let page=0;
   do{
@@ -176,6 +177,10 @@ async function merchantAccountPages(url:string,accessToken:string,maxPages=20):P
     const response=await getJson(endpoint.toString(),accessToken) as MerchantAccountsResponse;
     accounts.push(...(response.accounts||[]));
     nextPageToken=response.nextPageToken||'';
+    if(nextPageToken){
+      if(seenPageTokens.has(nextPageToken))throw new Error('Google Merchant pagination aynı pageToken değerini tekrar döndürdü.');
+      seenPageTokens.add(nextPageToken);
+    }
     page++;
   }while(nextPageToken&&page<maxPages);
   return {accounts,nextPageToken:nextPageToken||undefined};
@@ -183,6 +188,7 @@ async function merchantAccountPages(url:string,accessToken:string,maxPages=20):P
 
 async function merchantProductsPages(url:string,accessToken:string,maxPages=20):Promise<MerchantProductsResponse>{
   const products:MerchantProduct[]=[];
+  const seenPageTokens=new Set<string>();
   let nextPageToken='';
   let page=0;
   do{
@@ -191,6 +197,10 @@ async function merchantProductsPages(url:string,accessToken:string,maxPages=20):
     const response=await getJson(endpoint.toString(),accessToken) as MerchantProductsResponse;
     products.push(...(response.products||[]));
     nextPageToken=response.nextPageToken||'';
+    if(nextPageToken){
+      if(seenPageTokens.has(nextPageToken))throw new Error('Google Merchant pagination aynı pageToken değerini tekrar döndürdü.');
+      seenPageTokens.add(nextPageToken);
+    }
     page++;
   }while(nextPageToken&&page<maxPages);
   return {products,nextPageToken:nextPageToken||undefined};
@@ -198,6 +208,7 @@ async function merchantProductsPages(url:string,accessToken:string,maxPages=20):
 
 async function merchantIssuePages(url:string,accessToken:string,maxPages=20):Promise<MerchantIssuesResponse>{
   const accountIssues:MerchantAccountIssue[]=[];
+  const seenPageTokens=new Set<string>();
   let nextPageToken='';
   let page=0;
   do{
@@ -206,6 +217,10 @@ async function merchantIssuePages(url:string,accessToken:string,maxPages=20):Pro
     const response=await getJson(endpoint.toString(),accessToken) as MerchantIssuesResponse;
     accountIssues.push(...(response.accountIssues||[]));
     nextPageToken=response.nextPageToken||'';
+    if(nextPageToken){
+      if(seenPageTokens.has(nextPageToken))throw new Error('Google Merchant pagination aynı pageToken değerini tekrar döndürdü.');
+      seenPageTokens.add(nextPageToken);
+    }
     page++;
   }while(nextPageToken&&page<maxPages);
   return {accountIssues,nextPageToken:nextPageToken||undefined};

@@ -71,6 +71,10 @@ jobs:
           import assert from 'node:assert/strict';
           const source = readFileSync('src/google.ts', 'utf8');
           for (const helper of ['merchantAccountPages','merchantProductsPages','merchantIssuePages']) {
+            const body = source.slice(source.indexOf(`async function ${helper}(`)).split('\n}')[0];
+            assert.match(body, /new Set<string>\(\)/, 'Merchant helper must track seen tokens.');
+            assert.match(body, /seenPageTokens\.has\(nextPageToken\)\)throw new Error/, 'Merchant helper must reject repeated tokens.');
+            assert.match(body, /seenPageTokens\.add\(nextPageToken\)/, 'Merchant helper must remember tokens.');
             assert.match(source, new RegExp(`async function ${helper}\\([\\s\\S]*pageToken[\\s\\S]*page<maxPages`), `${helper} must keep bounded pageToken pagination.`);
           }
           assert.match(source, /\['merchant',\(\)=>merchantAccountPages\(/, 'Merchant discovery must use paginated accounts.');

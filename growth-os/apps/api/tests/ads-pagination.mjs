@@ -80,3 +80,35 @@ fetchImpl=async input=>{
 await assert.rejects(()=>api.tiktokMetrics('project',30),/100 sayfa limitini aştı/);
 assert.equal(fetches,1);
 console.log('PASS tiktok truncation guard');
+
+// Exercise the compiled Merchant helpers with mocked responses, like the ads helpers above.
+const googleSource=await readFile(new URL('../dist/google.js',import.meta.url),'utf8');
+const merchantSource=googleSource.slice(googleSource.indexOf('async function merchantAccountPages('),googleSource.indexOf('function isoDate('));
+for(const [helper,key] of [['merchantAccountPages','accounts'],['merchantProductsPages','products'],['merchantIssuePages','accountIssues']]){
+  let tokens=[], calls=[];
+  const run=vm.runInNewContext(merchantSource+`\n${helper}`,{URL,Error,getJson:async url=>{
+    calls.push(new URL(url).searchParams.get('pageToken'));
+    return {[key]:[calls.length],nextPageToken:tokens[calls.length-1]};
+  }});
+  for(const sequence of [['a','a'],['a','b','a']]){
+    tokens=sequence; calls=[];
+    await assert.rejects(()=>run('https://merchantapi.googleapis.com/test','token'),/Google Merchant pagination aynı pageToken değerini tekrar döndürdü\./);
+    assert.equal(calls.length,sequence.length,'Must reject before fetching a repeated page');
+    assert.equal(new Set(calls).size,calls.length);
+  }
+  tokens=['a',undefined]; calls=[];
+  let result=await run('https://merchantapi.googleapis.com/test','token');
+  assert.equal(result[key].join(','),'1,2');
+  assert.equal(result.nextPageToken,undefined);
+  assert.deepEqual(calls,[null,'a']);
+  tokens=['a','b','c']; calls=[];
+  result=await run('https://merchantapi.googleapis.com/test','token',2);
+  assert.equal(calls.length,2);
+  assert.equal(result[key].join(','),'1,2');
+  assert.equal(result.nextPageToken,'b','Capped results must retain the partial-result token');
+  tokens=[undefined]; calls=[];
+  result=await run('https://merchantapi.googleapis.com/test','token');
+  assert.equal(calls.length,1);
+  assert.equal(result.nextPageToken,undefined);
+  console.log(`PASS ${helper}: repeated token, cycle, completion and maxPages`);
+}
