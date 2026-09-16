@@ -41,16 +41,15 @@ app.use('/workspaces',workspaceRouter);
 function compareAudits(previous: AuditPayload | null, current: AuditPayload) {
   if (!previous) return null;
   const prevByKey = new Map(previous.issues.map((issue) => [issue.key, issue]));
-  const currentByKey = new Map(current.issues.map((issue) => [issue.key, issue]));
-  const fixed = current.issues.filter((issue) => issue.status === 'pass' && prevByKey.get(issue.key)?.status !== 'pass');
-  const stillOpen = current.issues.filter((issue) => issue.status !== 'pass' && prevByKey.get(issue.key)?.status !== 'pass');
-  const newIssues = current.issues.filter((issue) => issue.status !== 'pass' && prevByKey.get(issue.key)?.status === 'pass');
-  const regressed = previous.issues.filter((issue) => issue.status === 'pass' && currentByKey.get(issue.key)?.status !== 'pass');
+  const fixed = current.issues.filter((issue) => issue.status === 'pass' && prevByKey.has(issue.key) && prevByKey.get(issue.key)?.status !== 'pass');
+  const stillOpen = current.issues.filter((issue) => issue.status !== 'pass' && prevByKey.has(issue.key) && prevByKey.get(issue.key)?.status !== 'pass');
+  const newIssues = current.issues.filter((issue) => issue.status !== 'pass' && !prevByKey.has(issue.key));
+  const regressed = current.issues.filter((issue) => issue.status !== 'pass' && prevByKey.get(issue.key)?.status === 'pass');
   const scoreDelta = current.overallScore - previous.overallScore;
   const criticalOpen = current.issues.filter((i) => i.status !== 'pass' && ['critical','high'].includes(i.severity));
   const ready = criticalOpen.length === 0 && current.scores.adsReadiness >= 80 && current.overallScore >= 80;
   return { previousScore:previous.overallScore,currentScore:current.overallScore,scoreDelta,
-    fixed:fixed.map(i=>({key:i.key,title:i.title})),stillOpen:current.issues.filter((issue) => issue.status !== 'pass' && prevByKey.get(issue.key)?.status !== 'pass').map(i=>({key:i.key,title:i.title,severity:i.severity})),newIssues:newIssues.map(i=>({key:i.key,title:i.title,severity:i.severity})),regressed:regressed.map(i=>({key:i.key,title:i.title})),
+    fixed:fixed.map(i=>({key:i.key,title:i.title})),stillOpen:stillOpen.map(i=>({key:i.key,title:i.title,severity:i.severity})),newIssues:newIssues.map(i=>({key:i.key,title:i.title,severity:i.severity})),regressed:regressed.map(i=>({key:i.key,title:i.title})),
     readiness:ready?'ready':'not_ready',verdict:ready?'Final kontrolden geçti. Reklam hazırlık aşamasına geçilebilir.':`Final kontrol tamamlanmadı. ${criticalOpen.length} kritik/yüksek öncelikli madde açık.` };
 }
 
