@@ -1,5 +1,8 @@
+---
+import PersonalHomePalette from './PersonalHomePalette.astro';
+---
+<PersonalHomePalette />
 <style is:global>
-  /* Layout and typography polish only. Palette intentionally inherited from PersonalHomePage. */
   .personal-home {
     max-width: 1320px !important;
     padding-inline: clamp(22px, 3vw, 42px) !important;
@@ -54,7 +57,6 @@
     font-size: clamp(1.65rem, 2vw, 2rem) !important;
   }
 
-  /* Owned assets: full-width editorial block, then two substantial cards. */
   .personal-home .split-section {
     display: block !important;
   }
@@ -99,7 +101,6 @@
     line-height: 1.45;
   }
 
-  /* Collaboration should read as a deliberate case, not an empty banner. */
   .personal-home .collab-card {
     min-height: 250px;
     padding: clamp(34px, 4vw, 52px) !important;
@@ -115,7 +116,6 @@
     font-size: clamp(2.8rem, 4vw, 4.5rem) !important;
   }
 
-  /* Keep the operating model compact and legible on desktop. */
   .personal-home .method .section-heading {
     grid-template-columns: minmax(0, 1.25fr) minmax(300px, .75fr) !important;
     align-items: center !important;
@@ -136,7 +136,6 @@
     font-size: clamp(.98rem, 1vw, 1.08rem) !important;
   }
 
-  /* About: bring copy and portrait into one visual baseline. */
   .personal-home .about {
     grid-template-columns: minmax(0, 1.1fr) minmax(320px, .7fr) !important;
     gap: clamp(52px, 7vw, 96px) !important;
