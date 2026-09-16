@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PersonalHomePage from '../../components/PersonalHomePage.astro';
+import PersonalHomePolish from '../../components/PersonalHomePolish.astro';
 import { content } from '../../i18n/content';
 const locale = 'fa';
 const copy = content.fa;
@@ -9,4 +10,5 @@ const description = 'مرکز شخصی Teyfik Gökdemir برای فناوری، 
 ---
 <BaseLayout locale={locale} copy={copy} title={title} description={description}>
   <PersonalHomePage locale={locale} />
+  <PersonalHomePolish />
 </BaseLayout>
