@@ -50,7 +50,9 @@
   .card-tag,
   .footer-label,
   .dropdown-group,
-  .mobile-label {
+  .mobile-label,
+  .article-meta-line,
+  .text-link {
     color: #d8893a !important;
   }
 
@@ -103,7 +105,13 @@
   .legal-page,
   .instagram-hub,
   main {
-    background-color: #0b0b0a;
+    background-color: #0b0b0a !important;
+  }
+
+  .blog-hero,
+  .content-hero {
+    background: #100f0d !important;
+    border-color: #332a22 !important;
   }
 
   .featured-article,
@@ -111,18 +119,69 @@
   .article-faq-item,
   .article-table-wrapper,
   .legal-card,
-  .content-card {
+  .content-card,
+  .answer-block,
+  .venture-card,
+  .focus-list span {
     background: #141310 !important;
     border-color: #332a22 !important;
+    box-shadow: none !important;
+  }
+
+  .featured-article::before,
+  .featured-article::after,
+  .venture-card::before,
+  .venture-card::after {
+    opacity: 0 !important;
+  }
+
+  .featured-article,
+  .featured-article h2,
+  .venture-card,
+  .venture-card h3 {
+    color: #f7efe5 !important;
+  }
+
+  .featured-article p,
+  .venture-card p,
+  .article-content p,
+  .article-content li,
+  .related-insights span,
+  .content-body p,
+  .content-body li,
+  .legal-card p {
+    color: #b7aa9b !important;
   }
 
   .article-table th {
     background: #1b1712 !important;
+    color: #f7efe5 !important;
+  }
+
+  .article-table td {
+    color: #b7aa9b !important;
   }
 
   .article-list > a:hover,
   .article-list > a:focus-visible {
     background: #100f0d !important;
+  }
+
+  .tag {
+    border-color: rgba(216, 137, 58, .3) !important;
+    background: rgba(216, 137, 58, .07) !important;
+    color: #e9b66e !important;
+  }
+
+  .button.primary {
+    background: #d8893a !important;
+    border-color: #d8893a !important;
+    color: #160f09 !important;
+  }
+
+  .button.primary:hover {
+    background: #e9b66e !important;
+    border-color: #e9b66e !important;
   }
 
   /* Site-wide card language: no decorative sequence numbers. */
@@ -143,13 +202,15 @@
     .featured-article,
     .article-list > a,
     .content-card,
-    .legal-card {
+    .legal-card,
+    .venture-card {
       transition: border-color .2s ease, transform .24s ease, background-color .2s ease;
     }
 
     .featured-article:hover,
     .content-card:hover,
-    .legal-card:hover {
+    .legal-card:hover,
+    .venture-card:hover {
       border-color: #574536 !important;
     }
   }
