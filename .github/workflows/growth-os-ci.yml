@@ -63,9 +63,9 @@ jobs:
           import { readFileSync } from 'node:fs';
           import assert from 'node:assert/strict';
           const source = readFileSync('src/cloudflare-access.ts', 'utf8');
-          assert.match(source, /const JWKS_FORCE_REFRESH_COOLDOWN_MS=30_000;/, 'JWKS forced refresh must remain rate limited.');
+          assert.match(source, /const CF_ACCESS_JWKS_REFRESH_COOLDOWN_MS=30_000;/, 'JWKS forced refresh must remain rate limited.');
           assert.match(source, /loadJwks\(teamDomain,true\)/, 'Unknown Cloudflare key IDs must trigger one forced JWKS refresh.');
-          assert.match(source, /lastJwksForcedRefreshAt/, 'JWKS forced refresh cooldown state must be preserved.');
+          assert.match(source, /lastForcedJwksRefreshAt/, 'JWKS forced refresh cooldown state must be preserved.');
           NODE
       - run: node tests/ads-pagination.mjs
       - run: node tests/ads-sync-archive.mjs postgres://postgres:postgres@127.0.0.1:5432/postgres
