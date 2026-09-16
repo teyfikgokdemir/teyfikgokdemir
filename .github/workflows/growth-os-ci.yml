@@ -57,6 +57,16 @@ jobs:
           assert.match(source, /partialProducts:Boolean\(productsResponse\.nextPageToken\)/, 'Product truncation must be surfaced.');
           assert.match(source, /partialIssues:Boolean\(issuesResponse\.nextPageToken\)/, 'Issue truncation must be surfaced.');
           NODE
+      - name: Guard Cloudflare JWKS rotation handling
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          import assert from 'node:assert/strict';
+          const source = readFileSync('src/cloudflare-access.ts', 'utf8');
+          assert.match(source, /const JWKS_FORCE_REFRESH_COOLDOWN_MS=30_000;/, 'JWKS forced refresh must remain rate limited.');
+          assert.match(source, /loadJwks\(teamDomain,true\)/, 'Unknown Cloudflare key IDs must trigger one forced JWKS refresh.');
+          assert.match(source, /lastJwksForcedRefreshAt/, 'JWKS forced refresh cooldown state must be preserved.');
+          NODE
       - run: node tests/ads-pagination.mjs
       - run: node tests/ads-sync-archive.mjs postgres://postgres:postgres@127.0.0.1:5432/postgres
       - run: node tests/workspace-activity.mjs postgres://postgres:postgres@127.0.0.1:5432/postgres
