@@ -48,7 +48,14 @@ const guardedPool = {
 async function load(name, bindings) {
   const source = (await readFile(new URL(`../dist/${name}.js`, import.meta.url), 'utf8'))
     .replace(/^import .*;\r?\n/gm, '').replace(/export async function /g, 'async function ');
-  return vm.runInNewContext(source + `\n(${name === 'ads-sync' ? 'syncAdsProject' : 'refreshGrowthIntelligence'})`, { ...bindings, Error });
+  return vm.runInNewContext(source + `\n(${name === 'ads-sync' ? 'syncAdsProject' : 'refreshGrowthIntelligence'})`, {
+    ...bindings,
+    Error,
+    AbortController,
+    TextDecoder,
+    setTimeout,
+    clearTimeout,
+  });
 }
 const growth = await load('growth-intelligence', {
   pool: guardedPool,
@@ -58,6 +65,7 @@ const growth = await load('growth-intelligence', {
   attachRecommendationDecision: x => x.proposedAction,
   attachRevenueImpact: x => x.proposedAction,
 });
+const jsonResponse = payload => new Response(JSON.stringify(payload), { status: 200, headers: { 'content-type': 'application/json' } });
 const sync = await load('ads-sync', {
   pool: guardedPool,
   refreshGrowthIntelligence: async (...args) => {
@@ -70,7 +78,7 @@ const sync = await load('ads-sync', {
     fetches++;
     assert.match(String(input), /^https:\/\/graph.facebook.com\//);
     if (duringFetch) await archive();
-    return { ok: true, json: async () => ({ data: [{ campaign_id: 'c', campaign_name: 'Campaign', date_start: new Date().toISOString().slice(0, 10), spend: '20', impressions: '100', clicks: '10' }], paging: pagination ? { next: 'https://graph.facebook.com/next' } : undefined }) };
+    return jsonResponse({ data: [{ campaign_id: 'c', campaign_name: 'Campaign', date_start: new Date().toISOString().slice(0, 10), spend: '20', impressions: '100', clicks: '10' }], paging: pagination ? { next: 'https://graph.facebook.com/next' } : undefined });
   },
 });
 try {
