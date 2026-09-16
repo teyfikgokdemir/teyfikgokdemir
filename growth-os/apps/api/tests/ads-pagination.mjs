@@ -26,6 +26,8 @@ const api=vm.runInNewContext(source+'\n({metaMetrics,tiktokMetrics})',{
   Error,
   AbortController,
   TextDecoder,
+  setTimeout,
+  clearTimeout,
   decryptSecret:()=> 'token',
   googleAccessForProject:async()=> 'token',
   refreshGrowthIntelligence:async()=>({counts:{alerts:0,recommendations:0}}),
