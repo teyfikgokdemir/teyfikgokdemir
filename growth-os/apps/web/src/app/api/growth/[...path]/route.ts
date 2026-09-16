@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 const API_BASE = process.env.API_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'https://growth-api-production-4917.up.railway.app';
 const LAST_AUDIT_PROJECT_COOKIE = 'growth-last-audit-project';
 const PROXY_TIMEOUT_MS = 30_000;
+const PROXY_REQUEST_MAX_BYTES = 1024 * 1024;
 const PROXY_RESPONSE_MAX_BYTES = 8 * 1024 * 1024;
 
 function normalizedHost(value: unknown) {
@@ -76,6 +77,32 @@ function normalizeAuditPayload(payload: unknown) {
   return payload;
 }
 
+async function readLimitedRequestText(request: NextRequest, maxBytes = PROXY_REQUEST_MAX_BYTES) {
+  const contentLength = Number(request.headers.get('content-length') || '0');
+  if (Number.isFinite(contentLength) && contentLength > maxBytes) throw new Error('PROXY_REQUEST_TOO_LARGE');
+  if (!request.body) return '';
+  const reader = request.body.getReader();
+  const decoder = new TextDecoder();
+  let total = 0;
+  let text = '';
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!value) continue;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel();
+        throw new Error('PROXY_REQUEST_TOO_LARGE');
+      }
+      text += decoder.decode(value, { stream: true });
+    }
+    return text + decoder.decode();
+  } finally {
+    reader.releaseLock();
+  }
+}
+
 async function readLimitedResponseText(response: Response, maxBytes = PROXY_RESPONSE_MAX_BYTES) {
   const contentLength = Number(response.headers.get('content-length') || '0');
   if (Number.isFinite(contentLength) && contentLength > maxBytes) {
@@ -129,7 +156,14 @@ async function proxy(request: NextRequest, context: { params: Promise<{ path: st
 
   let requestBody = '';
   if (!['GET', 'HEAD'].includes(request.method)) {
-    requestBody = await request.text();
+    try {
+      requestBody = await readLimitedRequestText(request);
+    } catch (error) {
+      if (error instanceof Error && error.message === 'PROXY_REQUEST_TOO_LARGE') {
+        return NextResponse.json({ error: 'İstek gövdesi boyut limitini aştı.' }, { status: 413, headers: { 'cache-control': 'no-store' } });
+      }
+      throw error;
+    }
     init.body = requestBody;
   }
 
