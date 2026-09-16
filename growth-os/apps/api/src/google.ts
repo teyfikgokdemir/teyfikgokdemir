@@ -26,6 +26,9 @@ type MerchantProductsResponse={products?:MerchantProduct[];nextPageToken?:string
 type MerchantAccountIssue={name?:string;title?:string;severity?:string;detail?:string;documentationUri?:string;impactedDestinations?:unknown[]};
 type MerchantIssuesResponse={accountIssues?:MerchantAccountIssue[];nextPageToken?:string};
 
+const GOOGLE_HTTP_TIMEOUT_MS=20_000;
+const GOOGLE_HTTP_MAX_BYTES=4*1024*1024;
+
 function required(name:string) {
   const value = process.env[name];
   if (!value) throw new Error(`${name} yapılandırılmamış.`);
@@ -34,6 +37,54 @@ function required(name:string) {
 
 function key() {
   return crypto.createHash('sha256').update(required('INTEGRATION_ENCRYPTION_KEY')).digest();
+}
+
+async function readBoundedText(response:Response,maxBytes=GOOGLE_HTTP_MAX_BYTES){
+  const contentLength=Number(response.headers.get('content-length')||0);
+  if(Number.isFinite(contentLength)&&contentLength>maxBytes){
+    await response.body?.cancel();
+    throw new Error('Google API yanıtı güvenli boyut sınırını aştı.');
+  }
+  if(!response.body)return '';
+  const reader=response.body.getReader();
+  const decoder=new TextDecoder();
+  let total=0;
+  let text='';
+  try{
+    while(true){
+      const {done,value}=await reader.read();
+      if(done)break;
+      if(!value)continue;
+      total+=value.byteLength;
+      if(total>maxBytes){
+        await reader.cancel();
+        throw new Error('Google API yanıtı güvenli boyut sınırını aştı.');
+      }
+      text+=decoder.decode(value,{stream:true});
+    }
+    return text+decoder.decode();
+  }finally{
+    reader.releaseLock();
+  }
+}
+
+async function googleRequestText(url:string,init:RequestInit={}){
+  const controller=new AbortController();
+  const upstreamSignal=init.signal;
+  const abortFromUpstream=()=>controller.abort(upstreamSignal?.reason);
+  if(upstreamSignal){
+    if(upstreamSignal.aborted)abortFromUpstream();
+    else upstreamSignal.addEventListener('abort',abortFromUpstream,{once:true});
+  }
+  const timeout=setTimeout(()=>controller.abort(new Error('Google API isteği zaman aşımına uğradı.')),GOOGLE_HTTP_TIMEOUT_MS);
+  try{
+    const response=await fetch(url,{...init,signal:controller.signal});
+    const text=await readBoundedText(response);
+    return {response,text};
+  }finally{
+    clearTimeout(timeout);
+    upstreamSignal?.removeEventListener('abort',abortFromUpstream);
+  }
 }
 
 export function encryptSecret(value:string) {
@@ -73,8 +124,8 @@ export async function exchangeGoogleCode(code:string) {
     redirect_uri: required('GOOGLE_REDIRECT_URI'),
     grant_type: 'authorization_code'
   });
-  const response = await fetch('https://oauth2.googleapis.com/token', {method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body});
-  const data = await response.json() as {access_token?:string;refresh_token?:string;expires_in?:number;scope?:string;token_type?:string;id_token?:string;error?:string;error_description?:string};
+  const {response,text}=await googleRequestText('https://oauth2.googleapis.com/token',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body});
+  const data=(text?JSON.parse(text):{}) as {access_token?:string;refresh_token?:string;expires_in?:number;scope?:string;token_type?:string;id_token?:string;error?:string;error_description?:string};
   if (!response.ok || !data.access_token) throw new Error(data.error_description || data.error || 'Google token alınamadı.');
   return data;
 }
@@ -86,8 +137,8 @@ export async function refreshGoogleAccessToken(refreshToken:string) {
     client_secret: required('GOOGLE_CLIENT_SECRET'),
     grant_type: 'refresh_token'
   });
-  const response = await fetch('https://oauth2.googleapis.com/token', {method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body});
-  const data = await response.json() as {access_token?:string;expires_in?:number;error?:string;error_description?:string};
+  const {response,text}=await googleRequestText('https://oauth2.googleapis.com/token',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body});
+  const data=(text?JSON.parse(text):{}) as {access_token?:string;expires_in?:number;error?:string;error_description?:string};
   if (!response.ok || !data.access_token) throw new Error(data.error_description || data.error || 'Google token yenilenemedi.');
   return data.access_token;
 }
@@ -100,8 +151,7 @@ export async function googleAccessForProject(projectId:string) {
 }
 
 async function getJson(url:string, accessToken:string, extraHeaders:Record<string,string>={}):Promise<unknown> {
-  const response = await fetch(url, {headers:{authorization:`Bearer ${accessToken}`,...extraHeaders}});
-  const text = await response.text();
+  const {response,text}=await googleRequestText(url,{headers:{authorization:`Bearer ${accessToken}`,...extraHeaders}});
   let data:unknown = {};
   try { data = text ? JSON.parse(text) : {}; } catch { data = {raw:text}; }
   if (!response.ok) throw new Error(`Google API ${response.status}: ${typeof data === 'object' ? JSON.stringify(data) : text}`);
@@ -109,8 +159,7 @@ async function getJson(url:string, accessToken:string, extraHeaders:Record<strin
 }
 
 async function postJson<T>(url:string, accessToken:string, body:unknown):Promise<T> {
-  const response=await fetch(url,{method:'POST',headers:{authorization:`Bearer ${accessToken}`,'content-type':'application/json'},body:JSON.stringify(body)});
-  const text=await response.text();
+  const {response,text}=await googleRequestText(url,{method:'POST',headers:{authorization:`Bearer ${accessToken}`,'content-type':'application/json'},body:JSON.stringify(body)});
   let data:unknown={};
   try { data=text?JSON.parse(text):{}; } catch { data={raw:text}; }
   if(!response.ok)throw new Error(`Google API ${response.status}: ${typeof data==='object'?JSON.stringify(data):text}`);
