@@ -16,6 +16,7 @@ type Jwks={keys?:Jwk[]};
 
 type CachedJwks={expiresAt:number;keys:Jwk[]};
 let cachedJwks:CachedJwks|null=null;
+const CF_ACCESS_JWKS_MAX_BYTES=1024*1024;
 
 function normalizeTeamDomain(value:string){
   const trimmed=value.trim().replace(/\/$/,'');
@@ -32,6 +33,36 @@ function audienceMatches(actual:string|string[]|undefined,expected:string){
   return actual===expected;
 }
 
+async function readLimitedText(response:Response,maxBytes=CF_ACCESS_JWKS_MAX_BYTES){
+  const contentLength=Number(response.headers.get('content-length')||'0');
+  if(Number.isFinite(contentLength)&&contentLength>maxBytes)throw new Error('CF_ACCESS_JWKS_UNAVAILABLE');
+  if(!response.body)return '';
+  const reader=response.body.getReader();
+  const chunks:Uint8Array[]=[];
+  let total=0;
+  try{
+    while(true){
+      const {done,value}=await reader.read();
+      if(done)break;
+      total+=value.byteLength;
+      if(total>maxBytes){
+        await reader.cancel();
+        throw new Error('CF_ACCESS_JWKS_UNAVAILABLE');
+      }
+      chunks.push(value);
+    }
+  }finally{
+    reader.releaseLock();
+  }
+  const bytes=new Uint8Array(total);
+  let offset=0;
+  for(const chunk of chunks){
+    bytes.set(chunk,offset);
+    offset+=chunk.byteLength;
+  }
+  return new TextDecoder().decode(bytes);
+}
+
 async function loadJwks(teamDomain:string){
   const now=Date.now();
   if(cachedJwks&&cachedJwks.expiresAt>now)return cachedJwks.keys;
@@ -41,7 +72,13 @@ async function loadJwks(teamDomain:string){
     signal:AbortSignal.timeout(5000)
   });
   if(!response.ok)throw new Error('CF_ACCESS_JWKS_UNAVAILABLE');
-  const payload=await response.json() as Jwks;
+  const text=await readLimitedText(response);
+  let payload:Jwks;
+  try{
+    payload=(text?JSON.parse(text):{}) as Jwks;
+  }catch{
+    throw new Error('CF_ACCESS_JWKS_UNAVAILABLE');
+  }
   const keys=Array.isArray(payload.keys)?payload.keys:[];
   if(keys.length===0)throw new Error('CF_ACCESS_JWKS_UNAVAILABLE');
   cachedJwks={keys,expiresAt:now+5*60*1000};
