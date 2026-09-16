@@ -53,6 +53,17 @@ jobs:
             assert.ok(lines.includes(required), `API .dockerignore must keep ${required} excluded.`);
           }
           NODE
+      - name: Guard ads write dual gate
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          import assert from 'node:assert/strict';
+          const source = readFileSync('src/execution-policy.ts', 'utf8');
+          assert.match(source, /EXTERNAL_EXECUTION_ENABLED[^\n]*&&[^\n]*ADS_WRITE_ENABLED/, 'External ad writes must require both global write gates.');
+          assert.match(source, /if\(!policy\.globalWriteEnabled\)throw new Error/, 'Execution must fail closed when the global write gate is disabled.');
+          assert.match(source, /if\(!policy\.projectWriteEnabled\)throw new Error/, 'Execution must also require the project write gate.');
+          assert.match(source, /if\(policy\.requireManualApproval&&!approved\)throw new Error/, 'Manual approval enforcement must remain in the execution policy.');
+          NODE
       - name: Guard Google Merchant pagination
         run: |
           node --input-type=module <<'NODE'
