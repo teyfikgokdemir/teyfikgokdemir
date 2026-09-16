@@ -158,6 +158,12 @@ function metaPurchase(items:unknown){
   return 0;
 }
 
+type MetaInsightsResponse={
+  data?:Array<Record<string,unknown>>;
+  paging?:{next?:string};
+  error?:{message?:string};
+};
+
 async function metaMetrics(projectId:string,days:number):Promise<NormalizedMetric[]>{
   const row=await integration(projectId,'meta_ads');
   const metadata=row.metadata as {accessTokenEncrypted?:string;selectedAdAccountId?:string};
@@ -178,10 +184,13 @@ async function metaMetrics(projectId:string,days:number):Promise<NormalizedMetri
   let next:string|null=url.toString();
   while(next){
     await assertProjectStillActive(projectId);
-    const {response,data:payload}=await providerFetchJson<{data?:Array<Record<string,unknown>>;paging?:{next?:string};error?:{message?:string}}>(next);
+    const pageResult:{response:Response;data:MetaInsightsResponse}=await providerFetchJson<MetaInsightsResponse>(next);
+    const response:Response=pageResult.response;
+    const payload:MetaInsightsResponse=pageResult.data;
     if(!response.ok)throw new Error(payload.error?.message||`Meta API ${response.status}`);
     all.push(...(payload.data||[]));
-    next=payload.paging?.next||null;
+    const nextPage:string|null=payload.paging?.next??null;
+    next=nextPage;
     if(next&&all.length>=5000)throw new Error('Meta Ads raporu 5000 kayıt limitini aştı; eksik veri kaydedilmedi.');
   }
   return all.map(r=>({
