@@ -131,6 +131,7 @@ async function googleMetrics(projectId:string,days:number):Promise<NormalizedMet
   if(loginCustomerId)headers['login-customer-id']=loginCustomerId;
   await assertProjectStillActive(projectId);
   const {response,text}=await providerFetchText(`https://googleads.googleapis.com/${version}/customers/${metadata.selectedCustomerId}/googleAds:searchStream`,{method:'POST',headers,body:JSON.stringify({query})});
+  if(response.status===401||response.status===403)throw new Error('Seçili Google Ads hesabına erişim kaybedildi. Bağlantıyı yenileyip hesabı yeniden seçin.');
   if(!response.ok)throw new Error(`Google Ads API ${response.status}: ${text.slice(0,500)}`);
   const batches=JSON.parse(text) as Array<{results?:Array<{campaign?:{id?:string;name?:string;status?:string};segments?:{date?:string};metrics?:Record<string,unknown>}>}>;
   return batches.flatMap(batch=>(batch.results||[]).map(r=>({

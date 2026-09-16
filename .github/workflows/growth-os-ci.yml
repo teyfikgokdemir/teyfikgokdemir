@@ -116,6 +116,7 @@ jobs:
           NODE
       - name: Guard Search Console pagination
         run: node tests/search-console-pagination.mjs
+      - run: node tests/google-resource-selection.mjs
       - run: node tests/audit-comparison.mjs
       - run: node tests/ads-pagination.mjs
       - run: node tests/ads-sync-archive.mjs postgres://postgres:postgres@127.0.0.1:5432/postgres
