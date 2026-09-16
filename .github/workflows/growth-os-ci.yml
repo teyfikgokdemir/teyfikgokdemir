@@ -67,6 +67,16 @@ jobs:
           assert.match(source, /partialProducts:Boolean\(productsResponse\.nextPageToken\)/, 'Product truncation must be surfaced.');
           assert.match(source, /partialIssues:Boolean\(issuesResponse\.nextPageToken\)/, 'Issue truncation must be surfaced.');
           NODE
+      - name: Guard Meta ad account pagination
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          import assert from 'node:assert/strict';
+          const source = readFileSync('src/meta.ts', 'utf8');
+          assert.match(source, /const META_MAX_PAGES = 100;/, 'Meta pagination must keep a hard page bound.');
+          assert.match(source, /async function getPagedCollection\([\s\S]*paging\?\.cursors\?\.after[\s\S]*seenAfter/, 'Meta pagination must follow and de-duplicate after cursors.');
+          assert.match(source, /getPagedCollection\(`\/me\/adaccounts\?fields=/, 'Meta ad account discovery must use paginated collection fetches.');
+          NODE
       - name: Guard Cloudflare JWKS rotation handling
         run: |
           node --input-type=module <<'NODE'
