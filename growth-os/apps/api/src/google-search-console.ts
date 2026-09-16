@@ -1,5 +1,5 @@
 import { pool } from './db.js';
-import { googleAccessForProject } from './google.js';
+import { googleAccessForProject, searchConsoleRows } from './google.js';
 
 type SearchConsoleRow={keys?:string[];clicks?:number;impressions?:number;ctr?:number;position?:number};
 type SearchConsoleResponse={rows?:SearchConsoleRow[]};
@@ -132,8 +132,8 @@ export async function searchConsolePerformanceForWorkspaceProject(projectId:stri
   const endpoint=`https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(site.siteUrl)}/searchAnalytics/query`;
   const [totals,queries,pages]=await Promise.all([
     postJson<SearchConsoleResponse>(endpoint,accessToken,{...base,rowLimit:1}),
-    postJson<SearchConsoleResponse>(endpoint,accessToken,{...base,rowLimit:1000,dimensions:['query']}),
-    postJson<SearchConsoleResponse>(endpoint,accessToken,{...base,rowLimit:1000,dimensions:['page']})
+    searchConsoleRows(endpoint,accessToken,base,'query'),
+    searchConsoleRows(endpoint,accessToken,base,'page')
   ]);
   const totalRow=totals.rows?.[0];
   const queryRows=queries.rows||[];
@@ -147,6 +147,7 @@ export async function searchConsolePerformanceForWorkspaceProject(projectId:stri
     selectedSearchConsoleSiteUrl:metadata?.selectedSearchConsoleSiteUrl||null,
     days:normalizedDays,
     summary:{clicks,impressions,ctr:Number(totalRow?.ctr||0),position:totalRow?.position==null?null:Number(totalRow.position)},
+    partial:queries.partial||pages.partial,partialQueries:queries.partial,partialPages:pages.partial,detailCoverage:'top_rows',
     queries:queryRows.slice(0,100),
     pages:pageRows.slice(0,100),
     sites

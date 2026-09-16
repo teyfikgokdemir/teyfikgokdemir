@@ -238,7 +238,7 @@ function searchConsoleSiteDomain(siteUrl:string){
 const SEARCH_CONSOLE_PAGE_SIZE=1000;
 const SEARCH_CONSOLE_MAX_PAGES=20;
 
-async function searchConsoleRows(endpoint:string,accessToken:string,base:Record<string,unknown>,dimension:'query'|'page'){
+export async function searchConsoleRows(endpoint:string,accessToken:string,base:Record<string,unknown>,dimension:'query'|'page'){
   const rows:SearchConsoleRow[]=[];
   const seenKeys=new Set<string>();
   for(let page=0;page<SEARCH_CONSOLE_MAX_PAGES;page++){
@@ -379,5 +379,8 @@ export async function discoverGoogleResources(projectId:string) {
     try { results[key] = await job(); }
     catch (error) { results.errors[key] = error instanceof Error ? error.message : 'Kaynak okunamadı'; }
   }));
-  return results;
+  const partialAnalytics=Boolean((results.analytics as {nextPageToken?:string}|undefined)?.nextPageToken);
+  const commerce=results.merchantCommerce as {summary?:{partialAccounts?:boolean;partialProducts?:boolean;partialIssues?:boolean}}|undefined;
+  const partialMerchant=Boolean((results.merchant as {nextPageToken?:string}|undefined)?.nextPageToken||commerce?.summary?.partialAccounts||commerce?.summary?.partialProducts||commerce?.summary?.partialIssues);
+  return {...results,partial:Object.keys(results.errors).length>0||partialAnalytics||partialMerchant||Boolean((results.analyticsPerformance as {partial?:boolean}|undefined)?.partial),partialAnalytics,partialMerchant};
 }

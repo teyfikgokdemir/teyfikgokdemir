@@ -5,6 +5,11 @@ type AnalyticsProperty={property?:string;displayName?:string;accountName?:string
 type AnalyticsStream={displayName?:string;webStreamData?:{measurementId?:string;defaultUri?:string}};
 type AnalyticsSummary={accountSummaries?:Array<{account?:string;displayName?:string;propertySummaries?:Array<{property?:string;displayName?:string}>}>;nextPageToken?:string};
 
+type ReportCoverage={rowCount?:number;metadata?:{dataLossFromOtherRow?:boolean;subjectToThresholding?:boolean;samplingMetadatas?:unknown[];dataTruncationReasons?:unknown[];emptyReason?:string;schemaRestrictionResponse?:{activeMetricRestrictions?:unknown[]}}};
+function reportIsPartial(report:ReportCoverage & {rows?:unknown[]}){
+  return (report.rowCount??0)>(report.rows?.length||0)||Boolean(report.metadata?.dataLossFromOtherRow||report.metadata?.subjectToThresholding||report.metadata?.samplingMetadatas?.length||report.metadata?.dataTruncationReasons?.length||report.metadata?.emptyReason||report.metadata?.schemaRestrictionResponse?.activeMetricRestrictions?.length);
+}
+
 const ANALYTICS_HTTP_TIMEOUT_MS=20_000;
 const ANALYTICS_HTTP_MAX_BYTES=4*1024*1024;
 const ANALYTICS_ACCOUNT_SUMMARY_MAX_PAGES=100;
@@ -160,12 +165,14 @@ export async function analyticsPerformanceForProject(projectId:string){
   if(!matched?.property)return {matched:false,properties,selectedAnalyticsProperty:metadata?.selectedAnalyticsProperty||null,message:`${domain} için GA4 web data stream otomatik eşleşmedi.`};
   const propertyId=matched.property.replace('properties/','');
   const dateRanges=[{startDate:'28daysAgo',endDate:'today'}];
-  const summary=await postJson<{rows?:Array<{metricValues?:Array<{value?:string}>}>}>(`https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,accessToken,{dateRanges,metrics:[{name:'activeUsers'},{name:'newUsers'},{name:'sessions'},{name:'screenPageViews'},{name:'keyEvents'},{name:'transactions'},{name:'totalRevenue'}]});
+  const summary=await postJson<ReportCoverage & {rows?:Array<{metricValues?:Array<{value?:string}>}>}>(`https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,accessToken,{dateRanges,metrics:[{name:'activeUsers'},{name:'newUsers'},{name:'sessions'},{name:'screenPageViews'},{name:'keyEvents'},{name:'transactions'},{name:'totalRevenue'}]});
   const values=summary.rows?.[0]?.metricValues||[];
-  const traffic=await postJson<{rows?:Array<{dimensionValues?:Array<{value?:string}>;metricValues?:Array<{value?:string}>}>}>(`https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,accessToken,{dateRanges,dimensions:[{name:'sessionDefaultChannelGroup'}],metrics:[{name:'sessions'},{name:'activeUsers'},{name:'keyEvents'},{name:'totalRevenue'}],orderBys:[{metric:{metricName:'sessions'},desc:true}],limit:50});
-  const landing=await postJson<{rows?:Array<{dimensionValues?:Array<{value?:string}>;metricValues?:Array<{value?:string}>}>}>(`https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,accessToken,{dateRanges,dimensions:[{name:'landingPagePlusQueryString'}],metrics:[{name:'sessions'},{name:'activeUsers'},{name:'keyEvents'},{name:'totalRevenue'}],orderBys:[{metric:{metricName:'sessions'},desc:true}],limit:50});
+  const traffic=await postJson<ReportCoverage & {rows?:Array<{dimensionValues?:Array<{value?:string}>;metricValues?:Array<{value?:string}>}>}>(`https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,accessToken,{dateRanges,dimensions:[{name:'sessionDefaultChannelGroup'}],metrics:[{name:'sessions'},{name:'activeUsers'},{name:'keyEvents'},{name:'totalRevenue'}],orderBys:[{metric:{metricName:'sessions'},desc:true}],limit:50});
+  const landing=await postJson<ReportCoverage & {rows?:Array<{dimensionValues?:Array<{value?:string}>;metricValues?:Array<{value?:string}>}>}>(`https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,accessToken,{dateRanges,dimensions:[{name:'landingPagePlusQueryString'}],metrics:[{name:'sessions'},{name:'activeUsers'},{name:'keyEvents'},{name:'totalRevenue'}],orderBys:[{metric:{metricName:'sessions'},desc:true}],limit:50});
   const n=(value?:string)=>Number(value||0);
   return {
+    partial:reportIsPartial(summary)||reportIsPartial(traffic)||reportIsPartial(landing),
+    partialSummary:reportIsPartial(summary),partialTraffic:reportIsPartial(traffic),partialLandingPages:reportIsPartial(landing),
     matched:true,days:28,property:matched.property,propertyName:matched.displayName,accountName:matched.accountName,stream:matched.stream||null,
     selectedAnalyticsProperty:metadata?.selectedAnalyticsProperty||null,
     metadata:{timeZone:matched.timeZone,currencyCode:matched.currencyCode},

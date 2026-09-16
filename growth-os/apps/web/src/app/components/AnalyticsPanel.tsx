@@ -3,6 +3,7 @@
 import { useEffect,useRef,useState } from 'react';
 
 type Performance={
+  partial?:boolean;
   matched?:boolean;days?:number;property?:string;propertyName?:string;accountName?:string;message?:string;selectedAnalyticsProperty?:string|null;
   stream?:{displayName?:string;measurementId?:string;defaultUri?:string}|null;
   metadata?:{currencyCode?:string;timeZone?:string};
@@ -73,6 +74,7 @@ export default function AnalyticsPanel({projectId}:{projectId:string|null}){
     <section className="moduleCard">
       <div className="reportHead compact"><div><p className="eyebrow">Google Analytics 4</p><h2>Analytics</h2></div><span>{data?.matched?'CANLI VERİ':'PROPERTY EŞLEME'}</span></div>
       {loading&&<div className="moduleLoading"><span/> GA4 verileri okunuyor…</div>}
+      {data?.partial&&<div className="moduleFoot">Bu raporda satır sınırı, örnekleme veya veri eşiği nedeniyle kısmi veri bulunuyor.</div>}
       {error&&<div className="error">{error}</div>}
       {data?.matched&&<div className="moduleFoot">{data.propertyName} · {data.stream?.measurementId||data.property} · {data.metadata?.timeZone||'timezone bilinmiyor'}</div>}
       {data&&!data.matched&&properties.length===0&&<div className="empty"><b>Bu Google hesabında erişilebilir GA4 property bulunamadı.</b><div style={{marginTop:8,opacity:.75}}>Önce ilgili GA4 property için bu Google hesabına erişim ver veya erişimi olan başka bir Google hesabı bağla.</div></div>}

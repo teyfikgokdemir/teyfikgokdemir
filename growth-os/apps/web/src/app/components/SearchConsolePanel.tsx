@@ -4,7 +4,7 @@ import { useEffect,useRef,useState } from 'react';
 
 type Row={keys?:string[];clicks?:number;impressions?:number;ctr?:number;position?:number};
 type Site={siteUrl?:string;permissionLevel?:string};
-type Performance={matched?:boolean;siteUrl?:string;permissionLevel?:string;days:number;message?:string;selectedSearchConsoleSiteUrl?:string|null;sites?:Site[];summary?:{clicks:number;impressions:number;ctr:number;position:number|null};queries?:Row[];pages?:Row[]};
+type Performance={partial?:boolean;detailCoverage?:string;matched?:boolean;siteUrl?:string;permissionLevel?:string;days:number;message?:string;selectedSearchConsoleSiteUrl?:string|null;sites?:Site[];summary?:{clicks:number;impressions:number;ctr:number;position:number|null};queries?:Row[];pages?:Row[]};
 
 const api='/api/growth';
 
@@ -66,6 +66,8 @@ export default function SearchConsolePanel({projectId}:{projectId:string|null}){
     <section className="moduleCard">
       <div className="reportHead compact"><div><p className="eyebrow">SEO / Search Performance</p><h2>Google Search Console</h2></div><select value={days} onChange={e=>setDays(Number(e.target.value))} disabled={loading||saving}><option value={7}>7 gün</option><option value={28}>28 gün</option><option value={60}>60 gün</option><option value={90}>90 gün</option></select></div>
       {loading&&<div className="moduleLoading"><span/> Search Console verileri okunuyor…</div>}
+      {data?.partial&&<div className="moduleFoot">Sorgu veya sayfa detayları güvenlik sınırında kesildi. Özet ayrı toplam raporundan gelir.</div>}
+      {data?.detailCoverage&&<div className="moduleFoot">Detay listeleri Google’ın sunduğu en güçlü satırları içerir; tüm arama verisini temsil etmeyebilir.</div>}
       {error&&<div className="error">{error}</div>}
       {data?.matched&&<><div className="moduleFoot">{data.siteUrl} · {data.permissionLevel||'erişim mevcut'}</div>{canOverride&&<div style={{display:'flex',gap:10,alignItems:'center',flexWrap:'wrap',marginTop:14}}><select value={selectedSite} onChange={e=>setSelectedSite(e.target.value)} disabled={saving}><option value="">Property seç</option>{sites.map(site=><option key={site.siteUrl} value={site.siteUrl}>{site.siteUrl} · {site.permissionLevel||'erişim mevcut'}</option>)}</select><button className="primaryAction" onClick={selectSite} disabled={!selectedSite||saving||selectedSite===data.siteUrl}>{saving?'Kaydediliyor…':'Property Değiştir'}</button><span style={{opacity:.7,fontSize:13}}>Yanlış property eşleştiyse aktif proje için değiştirebilirsin.</span></div>}</>}
       {data&&!data.matched&&sites.length===0&&<div className="empty"><b>Bu Google hesabında erişilebilir Search Console property bulunamadı.</b><div style={{marginTop:8,opacity:.75}}>Önce ilgili siteyi Google Search Console hesabına ekle veya erişimi olan başka bir Google hesabı bağla.</div></div>}

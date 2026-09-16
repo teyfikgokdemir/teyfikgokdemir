@@ -10,7 +10,7 @@ type Commerce={
   matched:boolean;domain?:string;message?:string;selectedMerchantAccountName?:string|null;
   account?:{name?:string;accountName?:string;homepage?:string|null;claimed?:boolean|null;timeZone?:string|null;languageCode?:string|null};
   accounts?:MerchantAccount[];
-  summary?:{totalProducts:number;approved:number;pending:number;disapproved:number;withIssues:number;accountIssues:number;criticalIssues:number;errorIssues:number;suggestionIssues:number;partialProducts?:boolean};
+  summary?:{totalProducts:number;approved:number;pending:number;disapproved:number;withIssues:number;accountIssues:number;criticalIssues:number;errorIssues:number;suggestionIssues:number;partialAccounts?:boolean;partialIssues?:boolean;partialProducts?:boolean};
   accountIssues?:AccountIssue[];
   products?:ProductRow[];
 };
@@ -85,8 +85,9 @@ export default function MerchantPanel({projectId}:{projectId:string|null}){
     </section>
 
     {data?.matched&&s&&<>
+      {(s.partialAccounts||s.partialProducts||s.partialIssues)&&<div className="moduleFoot">Merchant verileri sayfa sınırı nedeniyle kısmi; toplamlar yalnızca alınan kayıtları kapsıyor.</div>}
       <section className="metricTiles">
-        <div className="kpi"><span>Toplam Ürün</span><strong>{s.totalProducts}</strong><small>{s.partialProducts?'İlk 250 ürün':'işlenen ürünler'}</small></div>
+        <div className="kpi"><span>Toplam Ürün</span><strong>{s.totalProducts}</strong><small>{s.partialProducts?'Kısmi ürün toplamı':'işlenen ürünler'}</small></div>
         <div className="kpi"><span>Onaylı</span><strong>{s.approved}</strong></div>
         <div className="kpi"><span>Bekleyen</span><strong>{s.pending}</strong></div>
         <div className="kpi"><span>Reddedilen</span><strong>{s.disapproved}</strong></div>

@@ -124,7 +124,7 @@ async function getPagedCollection(path:string, accessToken:string) {
     after=nextAfter;
   }
 
-  if(after&&items.length>0&&seenAfter.size>=META_MAX_PAGES)throw new Error('Meta pagination güvenlik sayfa limitini aştı.');
+  if(after&&seenAfter.size>=META_MAX_PAGES)throw new Error('Meta pagination güvenlik sayfa limitini aştı.');
   return {...(firstPage||{}),data:items};
 }
 

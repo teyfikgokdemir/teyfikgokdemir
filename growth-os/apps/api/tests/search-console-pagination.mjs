@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import vm from 'node:vm';
 const source=await readFile(new URL('../dist/google.js',import.meta.url),'utf8');
-const section=source.slice(source.indexOf('const SEARCH_CONSOLE_PAGE_SIZE'),source.indexOf('async function merchantCommerceForProject')).replace('export async function','async function');
+const section=source.slice(source.indexOf('const SEARCH_CONSOLE_PAGE_SIZE'),source.indexOf('async function merchantCommerceForProject')).replaceAll('export async function','async function');
 let impl;const calls=[];
 const api=vm.runInNewContext(section+'\n({searchConsoleRows,searchConsolePerformanceForProject})',{
   URL,Date,Error,isoDate:d=>d.toISOString().slice(0,10),searchConsoleSiteDomain:()=> 'example.com',
