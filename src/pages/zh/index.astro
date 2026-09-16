@@ -5,7 +5,9 @@ import { content } from '../../i18n/content';
 import type { Locale } from '../../i18n/locales';
 const locale = 'zh' as Locale;
 const copy = content[locale] || content.en;
+const title = 'Teyfik Gökdemir | 技术、数字商业与全球运营';
+const description = 'Teyfik Gökdemir 的个人业务中心，连接技术、电商、增长系统、数字资产与国际贸易运营。';
 ---
-<BaseLayout locale={locale} copy={copy}>
+<BaseLayout locale={locale} copy={copy} title={title} description={description}>
   <PersonalHomePage locale={locale} />
 </BaseLayout>
