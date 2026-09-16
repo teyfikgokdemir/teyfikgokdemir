@@ -14,4 +14,30 @@ const description = 'Teyfik Gökdemir’in teknoloji, e-ticaret, büyüme sistem
   <PersonalHomePage locale={locale} />
   <PersonalHomePolish />
   <Footer copy={copy} locale={locale} />
+  <style is:global>
+    .personal-home .hero-media,
+    .personal-home .portrait-shell {
+      background: transparent !important;
+      border: 0 !important;
+      outline: 0 !important;
+      box-shadow: none !important;
+      filter: none !important;
+    }
+
+    .personal-home .hero-media::before,
+    .personal-home .hero-media::after,
+    .personal-home .portrait-shell::before,
+    .personal-home .portrait-shell::after {
+      content: none !important;
+      display: none !important;
+      background: none !important;
+      border: 0 !important;
+      box-shadow: none !important;
+    }
+
+    .personal-home .portrait-shell img {
+      box-shadow: none !important;
+      filter: none !important;
+    }
+  </style>
 </BaseLayout>
