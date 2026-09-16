@@ -16,7 +16,9 @@ type Jwks={keys?:Jwk[]};
 
 type CachedJwks={expiresAt:number;keys:Jwk[]};
 let cachedJwks:CachedJwks|null=null;
+let lastForcedJwksRefreshAt=0;
 const CF_ACCESS_JWKS_MAX_BYTES=1024*1024;
+const CF_ACCESS_JWKS_REFRESH_COOLDOWN_MS=30_000;
 
 function normalizeTeamDomain(value:string){
   const trimmed=value.trim().replace(/\/$/,'');
@@ -63,9 +65,9 @@ async function readLimitedText(response:Response,maxBytes=CF_ACCESS_JWKS_MAX_BYT
   return new TextDecoder().decode(bytes);
 }
 
-async function loadJwks(teamDomain:string){
+async function loadJwks(teamDomain:string,forceRefresh=false){
   const now=Date.now();
-  if(cachedJwks&&cachedJwks.expiresAt>now)return cachedJwks.keys;
+  if(!forceRefresh&&cachedJwks&&cachedJwks.expiresAt>now)return cachedJwks.keys;
 
   const response=await fetch(`${teamDomain}/cdn-cgi/access/certs`,{
     headers:{accept:'application/json'},
@@ -83,6 +85,13 @@ async function loadJwks(teamDomain:string){
   if(keys.length===0)throw new Error('CF_ACCESS_JWKS_UNAVAILABLE');
   cachedJwks={keys,expiresAt:now+5*60*1000};
   return keys;
+}
+
+async function refreshJwksForUnknownKid(teamDomain:string){
+  const now=Date.now();
+  if(now-lastForcedJwksRefreshAt<CF_ACCESS_JWKS_REFRESH_COOLDOWN_MS)return cachedJwks?.keys||[];
+  lastForcedJwksRefreshAt=now;
+  return loadJwks(teamDomain,true);
 }
 
 export function cloudflareAccessConfigured(){
@@ -115,8 +124,12 @@ export async function verifiedCloudflareAccessEmail(req:Request){
   if(typeof payload.exp!=='number'||payload.exp<=now)throw new Error('CF_ACCESS_JWT_INVALID');
   if(typeof payload.nbf==='number'&&payload.nbf>now+30)throw new Error('CF_ACCESS_JWT_INVALID');
 
-  const keys=await loadJwks(teamDomain);
-  const jwk=keys.find(key=>key.kid===header.kid&&key.kty==='RSA');
+  let keys=await loadJwks(teamDomain);
+  let jwk=keys.find(key=>key.kid===header.kid&&key.kty==='RSA');
+  if(!jwk){
+    keys=await refreshJwksForUnknownKid(teamDomain);
+    jwk=keys.find(key=>key.kid===header.kid&&key.kty==='RSA');
+  }
   if(!jwk)throw new Error('CF_ACCESS_JWT_INVALID');
 
   let publicKey;
