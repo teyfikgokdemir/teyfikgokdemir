@@ -6,9 +6,50 @@ type SearchConsoleResponse={rows?:SearchConsoleRow[]};
 type SearchConsoleSite={siteUrl?:string;permissionLevel?:string};
 type SearchConsoleSites={siteEntry?:SearchConsoleSite[]};
 
+const SEARCH_CONSOLE_HTTP_TIMEOUT_MS=20_000;
+const SEARCH_CONSOLE_HTTP_MAX_BYTES=4*1024*1024;
+
+async function readLimitedText(response:Response,maxBytes=SEARCH_CONSOLE_HTTP_MAX_BYTES){
+  const contentLength=Number(response.headers.get('content-length')||'0');
+  if(Number.isFinite(contentLength)&&contentLength>maxBytes)throw new Error('Search Console API yanıtı boyut limitini aştı.');
+  if(!response.body)return '';
+  const reader=response.body.getReader();
+  const chunks:Uint8Array[]=[];
+  let total=0;
+  try{
+    while(true){
+      const {done,value}=await reader.read();
+      if(done)break;
+      total+=value.byteLength;
+      if(total>maxBytes){
+        await reader.cancel();
+        throw new Error('Search Console API yanıtı boyut limitini aştı.');
+      }
+      chunks.push(value);
+    }
+  }finally{
+    reader.releaseLock();
+  }
+  const bytes=new Uint8Array(total);
+  let offset=0;
+  for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.byteLength;}
+  return new TextDecoder().decode(bytes);
+}
+
+async function fetchText(url:string,init:RequestInit={}){
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(new Error('Search Console API isteği zaman aşımına uğradı.')),SEARCH_CONSOLE_HTTP_TIMEOUT_MS);
+  try{
+    const response=await fetch(url,{...init,signal:controller.signal});
+    const text=await readLimitedText(response);
+    return {response,text};
+  }finally{
+    clearTimeout(timeout);
+  }
+}
+
 async function getJson(url:string,accessToken:string):Promise<unknown>{
-  const response=await fetch(url,{headers:{authorization:`Bearer ${accessToken}`}});
-  const text=await response.text();
+  const {response,text}=await fetchText(url,{headers:{authorization:`Bearer ${accessToken}`}});
   let data:unknown={};
   try{data=text?JSON.parse(text):{}}catch{data={raw:text}}
   if(!response.ok)throw new Error(`Search Console API ${response.status}: ${typeof data==='object'?JSON.stringify(data):text}`);
@@ -16,8 +57,7 @@ async function getJson(url:string,accessToken:string):Promise<unknown>{
 }
 
 async function postJson<T>(url:string,accessToken:string,body:unknown):Promise<T>{
-  const response=await fetch(url,{method:'POST',headers:{authorization:`Bearer ${accessToken}`,'content-type':'application/json'},body:JSON.stringify(body)});
-  const text=await response.text();
+  const {response,text}=await fetchText(url,{method:'POST',headers:{authorization:`Bearer ${accessToken}`,'content-type':'application/json'},body:JSON.stringify(body)});
   let data:unknown={};
   try{data=text?JSON.parse(text):{}}catch{data={raw:text}}
   if(!response.ok)throw new Error(`Search Console API ${response.status}: ${typeof data==='object'?JSON.stringify(data):text}`);
