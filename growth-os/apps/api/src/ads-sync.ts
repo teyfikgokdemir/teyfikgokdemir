@@ -178,10 +178,10 @@ async function metaMetrics(projectId:string,days:number):Promise<NormalizedMetri
   let next:string|null=url.toString();
   while(next){
     await assertProjectStillActive(projectId);
-    const {response,data}=await providerFetchJson<{data?:Array<Record<string,unknown>>;paging?:{next?:string};error?:{message?:string}}>(next);
-    if(!response.ok)throw new Error(data.error?.message||`Meta API ${response.status}`);
-    all.push(...(data.data||[]));
-    next=data.paging?.next||null;
+    const {response,data:payload}=await providerFetchJson<{data?:Array<Record<string,unknown>>;paging?:{next?:string};error?:{message?:string}}>(next);
+    if(!response.ok)throw new Error(payload.error?.message||`Meta API ${response.status}`);
+    all.push(...(payload.data||[]));
+    next=payload.paging?.next||null;
     if(next&&all.length>=5000)throw new Error('Meta Ads raporu 5000 kayıt limitini aştı; eksik veri kaydedilmedi.');
   }
   return all.map(r=>({
