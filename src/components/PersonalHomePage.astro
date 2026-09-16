@@ -1,0 +1,156 @@
+---
+import Header from './Header.astro';
+import FloatingActions from './FloatingActions.astro';
+import type { Locale } from '../i18n/locales';
+import { content } from '../i18n/content';
+import { site } from '../data/site';
+
+interface Props { locale: Locale | 'fa'; }
+const { locale } = Astro.props;
+const copy = content[locale as Locale] ?? content.en;
+
+const t = {
+  tr: {
+    eyebrow: 'TEKNOLOJİ · TİCARET · KÜRESEL OPERASYONLAR',
+    title: 'Dijital sistemler kuruyor, ticari operasyonlar geliştiriyorum.',
+    lead: 'Yazılım, e-ticaret, büyüme altyapıları ve uluslararası ticaret arasında çalışan yapılar geliştiriyorum. Fikirleri ölçülebilir, işletilebilir sistemlere dönüştürmeye odaklanıyorum.',
+    primary: 'Yapıları incele', secondary: 'İletişime geç',
+    coreLabel: 'ANA YAPILAR', coreTitle: 'Birbirini tamamlayan üç operasyon alanı.',
+    coreLead: 'QCT Studio teknoloji ve dijital ürün geliştirmeyi, QCT Commerce e-ticaret ve dijital büyümeyi, CTSEG ise uluslararası ticaret ve stratejik tedariki yürütür.',
+    ownedLabel: 'SAHİP OLDUĞUM DİJİTAL VARLIKLAR', ownedTitle: 'Ürün, veri ve organik erişim üreten sistemler.',
+    growthDesc: 'SEO, GEO, AEO, AIO, reklam ve büyüme operasyonlarını analiz eden, karar desteği üreten özel growth intelligence platformu.',
+    mythDesc: 'Tarot, astroloji ve sembolik farkındalık alanında organik arama görünürlüğü güçlü, çok dilli bağımsız yayın ve ürün platformu.',
+    collabLabel: 'ORTAK PROJELER', collabTitle: 'Kişisel markadan ayrı duran iş birlikleri.',
+    olivonDesc: 'E-ticaret, dijital büyüme ve marka sistemleri üzerine konumlanan ortak ajans projesi. Ortaklık yapısından bağımsız olarak burada bir iş birliği olarak temsil edilir.',
+    methodLabel: 'ÇALIŞMA MODELİ', methodTitle: 'Araştır. Kur. İşlet. Ölç. Geliştir.',
+    methodLead: 'Teknoloji ya da ticaret fark etmeksizin, karar kalitesini artıran ve tekrar edilebilir operasyon kuran sistemlere odaklanıyorum.',
+    steps: ['Araştırma ve fırsat analizi','Sistem ve operasyon tasarımı','Uygulama ve entegrasyon','Ölçüm ve optimizasyon'],
+    aboutLabel: 'HAKKIMDA', aboutTitle: 'Tek bir sektör yerine çalışan sistemlerin peşindeyim.',
+    aboutBody: 'Kariyerimde dijital ticaret, yazılım, ajans operasyonları ve uluslararası tedarik farklı dönemlerde öne çıktı. Bugün bu alanları ayrı işler olarak değil; araştırma, teknoloji, dağıtım ve operasyon disiplinlerinin birleştiği tek bir çalışma yaklaşımı içinde yönetiyorum.',
+    contactLabel: 'İLETİŞİM', contactTitle: 'Doğru yapı üzerinden konuşalım.',
+    contactBody: 'Yazılım ve dijital sistemler için QCT Studio, e-ticaret ve büyüme için QCT Commerce, uluslararası ticaret için CTSEG veya doğrudan benimle iletişime geçebilirsiniz.',
+    view: 'İncele', privateLabel: 'Özel ürün', mediaLabel: 'Dijital medya varlığı', collaborationLabel: 'Ortak proje',
+  },
+  en: {
+    eyebrow: 'TECHNOLOGY · COMMERCE · GLOBAL OPERATIONS',
+    title: 'I build digital systems and develop commercial operations.',
+    lead: 'I work across software, e-commerce, growth infrastructure and international trade, turning ideas into measurable and operable systems.',
+    primary: 'Explore the ecosystem', secondary: 'Get in touch',
+    coreLabel: 'CORE BUSINESSES', coreTitle: 'Three complementary operating areas.',
+    coreLead: 'QCT Studio leads technology and digital product work, QCT Commerce focuses on e-commerce and digital growth, and CTSEG operates international trade and strategic sourcing.',
+    ownedLabel: 'OWNED DIGITAL ASSETS', ownedTitle: 'Systems that create product, data and organic reach.',
+    growthDesc: 'A private growth intelligence platform for SEO, GEO, AEO, AIO, advertising and growth operations analysis and decision support.',
+    mythDesc: 'An independent multilingual publishing and product platform with strong organic search visibility across Tarot, astrology and symbolic reflection.',
+    collabLabel: 'COLLABORATIONS', collabTitle: 'Joint projects kept separate from the personal brand.',
+    olivonDesc: 'A collaborative agency project focused on e-commerce, digital growth and brand systems, represented here as a partnership rather than a core owned business.',
+    methodLabel: 'OPERATING MODEL', methodTitle: 'Research. Build. Operate. Measure. Improve.',
+    methodLead: 'Whether the context is technology or trade, I focus on systems that improve decision quality and create repeatable operations.',
+    steps: ['Research and opportunity analysis','System and operating design','Implementation and integration','Measurement and optimisation'],
+    aboutLabel: 'ABOUT', aboutTitle: 'I am interested in working systems, not a single industry.',
+    aboutBody: 'Digital commerce, software, agency operations and international sourcing have each been prominent at different stages of my work. Today I manage them through one operating approach that combines research, technology, distribution and execution.',
+    contactLabel: 'CONTACT', contactTitle: 'Start with the right operating structure.',
+    contactBody: 'For software and digital systems contact QCT Studio, for e-commerce and growth QCT Commerce, for international trade CTSEG, or reach me directly.',
+    view: 'Explore', privateLabel: 'Private product', mediaLabel: 'Digital media asset', collaborationLabel: 'Joint project',
+  }
+} as const;
+
+const ui = (t as any)[locale] ?? t.en;
+const homePath = locale === 'tr' ? '/' : `/${locale}/`;
+const contactHref = `mailto:${site.email}`;
+
+const core = [
+  { name: 'QCT Studio', tag: 'Technology & Digital Products', desc: locale === 'tr' ? 'Yazılım, web sistemleri, otomasyon, AI destekli dijital ürünler ve teknik uygulamalar.' : 'Software, web systems, automation, AI-enabled digital products and technical implementation.', url: site.links.qctStudio },
+  { name: 'QCT Commerce', tag: 'E-commerce & Growth', desc: locale === 'tr' ? 'E-ticaret altyapıları, platform operasyonları, dönüşüm, büyüme ve dijital ticaret sistemleri.' : 'E-commerce infrastructure, platform operations, conversion, growth and digital commerce systems.', url: site.links.qctCommerce },
+  { name: 'CTSEG', tag: 'Global Trade & Strategic Sourcing', desc: locale === 'tr' ? 'Uluslararası tedarik, B2B iş geliştirme, pazar araştırması, tedarikçi doğrulama ve sınır ötesi operasyonlar.' : 'International sourcing, B2B business development, market research, supplier verification and cross-border operations.', url: site.links.ctseg },
+];
+---
+
+<Header locale={locale} copy={copy} homePath={homePath} />
+<main class="personal-home">
+  <section class="hero" id="top">
+    <div class="hero-copy">
+      <p class="eyebrow">{ui.eyebrow}</p>
+      <h1>{ui.title}</h1>
+      <p class="lead">{ui.lead}</p>
+      <div class="actions">
+        <a class="button primary" href="#ventures">{ui.primary}</a>
+        <a class="button ghost" href={contactHref}>{ui.secondary}</a>
+      </div>
+      <div class="signal-row" aria-label="Focus areas">
+        <span>QCT Studio</span><span>QCT Commerce</span><span>CTSEG</span><span>Growth OS</span><span>Mythborn</span>
+      </div>
+    </div>
+    <div class="hero-media">
+      <div class="portrait-shell">
+        <img src={site.images.hero.path} srcset={site.images.hero.srcset} sizes="(max-width: 900px) 82vw, 420px" width={site.images.hero.width} height={site.images.hero.height} alt="Teyfik Gökdemir" loading="eager" fetchpriority="high" />
+      </div>
+      <p class="portrait-caption">Teyfik Gökdemir · Founder / Operator</p>
+    </div>
+  </section>
+
+  <section class="section" id="ventures">
+    <p class="eyebrow">{ui.coreLabel}</p>
+    <div class="section-heading"><h2>{ui.coreTitle}</h2><p>{ui.coreLead}</p></div>
+    <div class="grid core-grid">
+      {core.map((item) => (
+        <a class="card core-card" href={item.url} target="_blank" rel="noreferrer">
+          <div><span class="card-tag">{item.tag}</span><h3>{item.name}</h3><p>{item.desc}</p></div>
+          <span class="card-link">{ui.view} ↗</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section split-section" id="expertise">
+    <div class="section-intro"><p class="eyebrow">{ui.ownedLabel}</p><h2>{ui.ownedTitle}</h2></div>
+    <div class="asset-stack">
+      <a class="asset-card" href="https://growth.teyfikgokdemir.com" target="_blank" rel="noreferrer">
+        <div><span class="card-tag">{ui.privateLabel}</span><h3>Growth OS</h3><p>{ui.growthDesc}</p></div><span>growth.teyfikgokdemir.com ↗</span>
+      </a>
+      <a class="asset-card" href={site.links.mythborn} target="_blank" rel="noreferrer">
+        <div><span class="card-tag">{ui.mediaLabel}</span><h3>Mythborn</h3><p>{ui.mythDesc}</p></div><span>mythborn.co ↗</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section collaboration">
+    <p class="eyebrow">{ui.collabLabel}</p>
+    <div class="collab-card">
+      <div><span class="card-tag">{ui.collaborationLabel}</span><h2>Olivon</h2><p>{ui.olivonDesc}</p></div>
+      <a class="button ghost" href="https://olivon.com.tr" target="_blank" rel="noreferrer">olivon.com.tr ↗</a>
+    </div>
+  </section>
+
+  <section class="section method" id="journey">
+    <p class="eyebrow">{ui.methodLabel}</p>
+    <div class="section-heading"><h2>{ui.methodTitle}</h2><p>{ui.methodLead}</p></div>
+    <ol class="method-grid">
+      {ui.steps.map((step: string, index: number) => <li><span>0{index + 1}</span><strong>{step}</strong></li>)}
+    </ol>
+  </section>
+
+  <section class="section about">
+    <div class="about-copy"><p class="eyebrow">{ui.aboutLabel}</p><h2>{ui.aboutTitle}</h2><p>{ui.aboutBody}</p></div>
+    <img src={site.images.profile.path} srcset={site.images.profile.srcset} sizes="(max-width: 900px) 88vw, 420px" width={site.images.profile.width} height={site.images.profile.height} alt="Teyfik Gökdemir" loading="lazy" />
+  </section>
+
+  <section class="section contact" id="contact">
+    <p class="eyebrow">{ui.contactLabel}</p><h2>{ui.contactTitle}</h2><p>{ui.contactBody}</p>
+    <div class="contact-links">
+      <a href={site.links.qctStudio} target="_blank" rel="noreferrer">QCT Studio ↗</a>
+      <a href={site.links.qctCommerce} target="_blank" rel="noreferrer">QCT Commerce ↗</a>
+      <a href={site.links.ctseg} target="_blank" rel="noreferrer">CTSEG ↗</a>
+      <a href={contactHref}>{site.email}</a>
+    </div>
+  </section>
+</main>
+
+<footer class="personal-footer">
+  <span>© 2026 Teyfik Gökdemir</span>
+  <div><a href={site.links.linkedin} target="_blank" rel="noreferrer">LinkedIn</a><a href={site.links.github} target="_blank" rel="noreferrer">GitHub</a><a href={site.links.instagram} target="_blank" rel="noreferrer">Instagram</a></div>
+</footer>
+<FloatingActions locale={locale} />
+
+<style>
+  :global(body){background:#0b0b0a;color:#f1eee7}.personal-home{max-width:1280px;margin:0 auto;padding:0 28px}.hero{min-height:86vh;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:72px;align-items:center;padding:110px 0 70px}.eyebrow{margin:0 0 18px;color:#c9a879;font-size:.74rem;letter-spacing:.18em;font-weight:700}.hero h1,.section h2{font-family:Georgia,'Times New Roman',serif;font-weight:500;letter-spacing:-.04em}.hero h1{font-size:clamp(3.2rem,6.4vw,6.7rem);line-height:.94;max-width:900px;margin:0}.lead{font-size:clamp(1.05rem,1.5vw,1.3rem);line-height:1.7;color:#bdb9b0;max-width:760px;margin:30px 0 0}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border-radius:999px;text-decoration:none;font-weight:700}.button.primary{background:#e9e3d8;color:#0b0b0a}.button.ghost{border:1px solid #3a3834;color:#eee8de}.signal-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:40px}.signal-row span,.card-tag{font-size:.73rem;letter-spacing:.08em;text-transform:uppercase}.signal-row span{border:1px solid #292824;border-radius:999px;padding:9px 12px;color:#a9a59d}.portrait-shell{border:1px solid #292824;border-radius:26px;padding:12px;background:#121210}.portrait-shell img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;border-radius:18px;filter:saturate(.82) contrast(1.02)}.portrait-caption{color:#77736b;font-size:.8rem;margin:12px 4px 0}.section{padding:110px 0;border-top:1px solid #24231f}.section-heading{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:60px;align-items:end;margin-bottom:42px}.section h2{font-size:clamp(2.5rem,4.5vw,4.7rem);line-height:1;margin:0}.section-heading p,.asset-card p,.core-card p,.collab-card p,.about-copy>p:last-child,.contact>p{color:#aaa69d;line-height:1.7}.grid{display:grid;gap:16px}.core-grid{grid-template-columns:repeat(3,1fr)}.card,.asset-card,.collab-card{border:1px solid #2a2925;background:#11110f;border-radius:22px}.core-card{min-height:330px;padding:26px;display:flex;flex-direction:column;justify-content:space-between;text-decoration:none;color:inherit;transition:transform .25s ease,border-color .25s ease}.core-card:hover{transform:translateY(-4px);border-color:#6c5a42}.card-tag{color:#a48761}.core-card h3,.asset-card h3{font-size:1.8rem;margin:18px 0 12px}.card-link,.asset-card>span{color:#d2cabd;font-size:.9rem}.split-section{display:grid;grid-template-columns:.8fr 1.2fr;gap:70px}.section-intro h2{max-width:520px}.asset-stack{display:grid;gap:16px}.asset-card{padding:28px;text-decoration:none;color:inherit;display:grid;grid-template-columns:1fr auto;gap:30px;align-items:end}.asset-card p{max-width:720px}.collab-card{padding:34px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end}.collab-card h2{font-size:3rem;margin:14px 0}.collab-card p{max-width:760px}.method-grid{list-style:none;padding:0;margin:42px 0 0;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.method-grid li{min-height:180px;border:1px solid #2a2925;border-radius:18px;padding:22px;display:flex;flex-direction:column;justify-content:space-between}.method-grid span{color:#716b61;font-family:monospace}.method-grid strong{font-size:1rem;line-height:1.45}.about{display:grid;grid-template-columns:1fr .75fr;gap:80px;align-items:center}.about-copy h2{max-width:760px}.about img{width:100%;max-height:660px;object-fit:cover;border-radius:24px;border:1px solid #2a2925}.contact{text-align:center}.contact h2{max-width:780px;margin:0 auto}.contact>p{max-width:760px;margin:24px auto}.contact-links{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:30px}.contact-links a{border:1px solid #34322d;border-radius:999px;padding:12px 16px;color:#eee8de;text-decoration:none}.personal-footer{max-width:1280px;margin:0 auto;padding:30px 28px 50px;border-top:1px solid #24231f;display:flex;justify-content:space-between;gap:20px;color:#77736b;font-size:.84rem}.personal-footer div{display:flex;gap:16px}.personal-footer a{color:#aaa69d;text-decoration:none}@media(max-width:900px){.personal-home{padding:0 18px}.hero{grid-template-columns:1fr;gap:42px;padding:96px 0 56px;min-height:auto}.hero h1{font-size:clamp(2.8rem,12vw,4.5rem)}.hero-media{max-width:520px}.section{padding:78px 0}.section-heading,.split-section,.about{grid-template-columns:1fr;gap:32px}.core-grid,.method-grid{grid-template-columns:1fr}.asset-card,.collab-card{grid-template-columns:1fr}.method-grid li{min-height:130px}.personal-footer{padding-left:18px;padding-right:18px;flex-direction:column}.section h2{font-size:clamp(2.3rem,9vw,3.7rem)}}
+</style>
