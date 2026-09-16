@@ -116,6 +116,7 @@ jobs:
           NODE
       - name: Guard Search Console pagination
         run: node tests/search-console-pagination.mjs
+      - run: node tests/integration-failures.mjs
       - run: node tests/integration-partial.mjs
       - run: node tests/google-resource-selection.mjs
       - run: node tests/audit-comparison.mjs

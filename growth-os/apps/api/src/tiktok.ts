@@ -46,7 +46,9 @@ async function fetchJson<T>(input:string|URL,init:RequestInit={}):Promise<{respo
   try{
     const response=await fetch(input,{...init,signal:controller.signal});
     const text=await readLimitedText(response);
-    const data=(text?JSON.parse(text):{}) as T;
+    let data:T;
+    try{data=JSON.parse(text) as T}catch{throw new Error('TikTok API geçersiz JSON döndürdü.')}
+    if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('TikTok API geçersiz yanıt döndürdü.');
     return {response,data};
   }finally{
     clearTimeout(timeout);
@@ -89,7 +91,7 @@ export async function exchangeTikTokCode(authCode:string){
     body:JSON.stringify({app_id:required('TIKTOK_APP_ID'),secret:required('TIKTOK_APP_SECRET'),auth_code:authCode})
   });
   if(!response.ok||data.code!==0||!data.data?.access_token){
-    throw new Error(data.message||`TikTok token alınamadı (${response.status}).`);
+    throw new Error(`TikTok token alınamadı (${response.status}).`);
   }
   return data.data;
 }
@@ -99,8 +101,10 @@ export async function discoverTikTokAdvertisers(accessToken:string){
   url.searchParams.set('app_id',required('TIKTOK_APP_ID'));
   url.searchParams.set('secret',required('TIKTOK_APP_SECRET'));
   const {response,data:payload}=await fetchJson<{code?:number;message?:string;data?:{list?:TikTokAdvertiser[];advertisers?:TikTokAdvertiser[]}}>(url,{headers:{'Access-Token':accessToken}});
-  if(!response.ok||payload.code!==0)throw new Error(payload.message||`TikTok reklam hesapları okunamadı (${response.status}).`);
-  return payload.data?.list||payload.data?.advertisers||[];
+  if(!response.ok||payload.code!==0)throw new Error(`TikTok reklam hesapları okunamadı (${response.status}).`);
+  const advertisers=payload.data?.list||payload.data?.advertisers;
+  if(!Array.isArray(advertisers))throw new Error('TikTok hesap listesi geçersiz.');
+  return advertisers;
 }
 
 export function tikTokCredentialMetadata(accessToken:string,tokenData:TikTokTokenResponse['data'],advertisers:TikTokAdvertiser[]){

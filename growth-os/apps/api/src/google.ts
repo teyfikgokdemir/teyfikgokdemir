@@ -117,6 +117,11 @@ export function buildGoogleAuthUrl(state:string) {
   return url.toString();
 }
 
+function safeGoogleTokenJson(text:string){
+  try{const data=JSON.parse(text);if(data&&typeof data==='object'&&!Array.isArray(data))return data;}catch{}
+  throw new Error('Google token yanıtı geçersiz.');
+}
+
 export async function exchangeGoogleCode(code:string) {
   const body = new URLSearchParams({
     code,
@@ -126,8 +131,8 @@ export async function exchangeGoogleCode(code:string) {
     grant_type: 'authorization_code'
   });
   const {response,text}=await googleRequestText('https://oauth2.googleapis.com/token',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body});
-  const data=(text?JSON.parse(text):{}) as {access_token?:string;refresh_token?:string;expires_in?:number;scope?:string;token_type?:string;id_token?:string;error?:string;error_description?:string};
-  if (!response.ok || !data.access_token) throw new Error(data.error_description || data.error || 'Google token alınamadı.');
+  const data=safeGoogleTokenJson(text) as {access_token?:string;refresh_token?:string;expires_in?:number;scope?:string;token_type?:string;id_token?:string;error?:string;error_description?:string};
+  if (!response.ok || !data.access_token) throw new Error('Google token alınamadı.');
   return data;
 }
 
@@ -139,8 +144,8 @@ export async function refreshGoogleAccessToken(refreshToken:string) {
     grant_type: 'refresh_token'
   });
   const {response,text}=await googleRequestText('https://oauth2.googleapis.com/token',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body});
-  const data=(text?JSON.parse(text):{}) as {access_token?:string;expires_in?:number;error?:string;error_description?:string};
-  if (!response.ok || !data.access_token) throw new Error(data.error_description || data.error || 'Google token yenilenemedi.');
+  const data=safeGoogleTokenJson(text) as {access_token?:string;expires_in?:number;error?:string;error_description?:string};
+  if (!response.ok || !data.access_token) throw new Error('Google token yenilenemedi.');
   return data.access_token;
 }
 
@@ -154,16 +159,18 @@ export async function googleAccessForProject(projectId:string) {
 async function getJson(url:string, accessToken:string, extraHeaders:Record<string,string>={}):Promise<unknown> {
   const {response,text}=await googleRequestText(url,{headers:{authorization:`Bearer ${accessToken}`,...extraHeaders}});
   let data:unknown = {};
-  try { data = text ? JSON.parse(text) : {}; } catch { data = {raw:text}; }
-  if (!response.ok) throw new Error(`Google API ${response.status}: ${typeof data === 'object' ? JSON.stringify(data) : text}`);
+  try{data=JSON.parse(text)}catch{throw new Error('Google API geçersiz JSON döndürdü.')}
+  if(!data||typeof data!=='object'||Array.isArray(data)||'error' in data)throw new Error('Google API geçersiz yanıt döndürdü.');
+  if (!response.ok) throw new Error(`Google API ${response.status}`);
   return data;
 }
 
 async function postJson<T>(url:string, accessToken:string, body:unknown):Promise<T> {
   const {response,text}=await googleRequestText(url,{method:'POST',headers:{authorization:`Bearer ${accessToken}`,'content-type':'application/json'},body:JSON.stringify(body)});
   let data:unknown={};
-  try { data=text?JSON.parse(text):{}; } catch { data={raw:text}; }
-  if(!response.ok)throw new Error(`Google API ${response.status}: ${typeof data==='object'?JSON.stringify(data):text}`);
+  try{data=JSON.parse(text)}catch{throw new Error('Google API geçersiz JSON döndürdü.')}
+  if(!data||typeof data!=='object'||Array.isArray(data)||'error' in data)throw new Error('Google API geçersiz yanıt döndürdü.');
+  if(!response.ok)throw new Error(`Google API ${response.status}`);
   return data as T;
 }
 

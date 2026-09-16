@@ -103,7 +103,8 @@ async function providerFetchText(input:string|URL,init:RequestInit={}){
 async function providerFetchJson<T>(input:string|URL,init:RequestInit={}):Promise<{response:Response;data:T}>{
   const {response,text}=await providerFetchText(input,init);
   let data:unknown={};
-  try{data=text?JSON.parse(text):{}}catch{throw new Error(`Reklam sağlayıcısı geçersiz JSON döndürdü: ${text.slice(0,300)}`)}
+  try{data=JSON.parse(text)}catch{throw new Error('Reklam sağlayıcısı geçersiz JSON döndürdü.')}
+  if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('Reklam sağlayıcısı geçersiz yanıt döndürdü.');
   return {response,data:data as T};
 }
 
@@ -132,8 +133,11 @@ async function googleMetrics(projectId:string,days:number):Promise<NormalizedMet
   await assertProjectStillActive(projectId);
   const {response,text}=await providerFetchText(`https://googleads.googleapis.com/${version}/customers/${metadata.selectedCustomerId}/googleAds:searchStream`,{method:'POST',headers,body:JSON.stringify({query})});
   if(response.status===401||response.status===403)throw new Error('Seçili Google Ads hesabına erişim kaybedildi. Bağlantıyı yenileyip hesabı yeniden seçin.');
-  if(!response.ok)throw new Error(`Google Ads API ${response.status}: ${text.slice(0,500)}`);
-  const batches=JSON.parse(text) as Array<{results?:Array<{campaign?:{id?:string;name?:string;status?:string};segments?:{date?:string};metrics?:Record<string,unknown>}>}>;
+  if(!response.ok)throw new Error(`Google Ads API ${response.status}`);
+  let parsed:unknown;
+  try{parsed=JSON.parse(text)}catch{throw new Error('Google Ads geçersiz JSON döndürdü.')}
+  if(!Array.isArray(parsed))throw new Error('Google Ads geçersiz rapor döndürdü.');
+  const batches=parsed as Array<{results?:Array<{campaign?:{id?:string;name?:string;status?:string};segments?:{date?:string};metrics?:Record<string,unknown>}>}>;
   return batches.flatMap(batch=>(batch.results||[]).map(r=>({
     provider:'google_ads' as const,
     campaignId:String(r.campaign?.id||''),
@@ -188,7 +192,7 @@ async function metaMetrics(projectId:string,days:number):Promise<NormalizedMetri
     const pageResult:{response:Response;data:MetaInsightsResponse}=await providerFetchJson<MetaInsightsResponse>(next);
     const response:Response=pageResult.response;
     const payload:MetaInsightsResponse=pageResult.data;
-    if(!response.ok)throw new Error(payload.error?.message||`Meta API ${response.status}`);
+    if(!response.ok||payload.error)throw new Error(`Meta API ${response.status}`);
     all.push(...(payload.data||[]));
     const nextPage:string|null=payload.paging?.next??null;
     next=nextPage;
@@ -231,7 +235,7 @@ async function tiktokMetrics(projectId:string,days:number):Promise<NormalizedMet
     url.searchParams.set('page',String(page));
     await assertProjectStillActive(projectId);
     const {response,data:payload}=await providerFetchJson<{code?:number;message?:string;data?:{list?:Array<{dimensions?:Record<string,unknown>;metrics?:Record<string,unknown>}>;page_info?:{page?:number;page_size?:number;total_number?:number;total_page?:number}}}>(url,{headers:{'Access-Token':token}});
-    if(!response.ok||payload.code!==0)throw new Error(payload.message||`TikTok API ${response.status}`);
+    if(!response.ok||payload.code!==0)throw new Error(`TikTok API ${response.status}`);
     all.push(...(payload.data?.list||[]));
     const totalPages=Math.max(1,asNumber(payload.data?.page_info?.total_page)||1);
     if(totalPages>maxPages)throw new Error(`TikTok Ads raporu ${maxPages} sayfa limitini aştı; eksik veri kaydedilmedi.`);

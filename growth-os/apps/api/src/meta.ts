@@ -56,7 +56,9 @@ async function fetchJson<T>(input:string|URL):Promise<{response:Response;data:T}
   try {
     const response = await fetch(input,{signal:controller.signal});
     const text = await readLimitedText(response);
-    const data = (text ? JSON.parse(text) : {}) as T;
+    let data:T;
+    try{data=JSON.parse(text) as T}catch{throw new Error('Meta API geçersiz JSON döndürdü.')}
+    if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('Meta API geçersiz yanıt döndürdü.');
     return {response,data};
   } finally {
     clearTimeout(timeout);
@@ -81,7 +83,7 @@ export async function exchangeMetaCode(code:string) {
   url.searchParams.set('redirect_uri', required('META_REDIRECT_URI'));
   url.searchParams.set('code', code);
   const {response,data} = await fetchJson<{access_token?:string;token_type?:string;expires_in?:number;error?:{message?:string}}>(url);
-  if (!response.ok || !data.access_token) throw new Error(data.error?.message || 'Meta access token alınamadı.');
+  if (!response.ok || !data.access_token) throw new Error('Meta access token alınamadı.');
   return data;
 }
 
@@ -92,7 +94,7 @@ export async function exchangeMetaLongLivedToken(shortToken:string) {
   url.searchParams.set('client_secret', required('META_APP_SECRET'));
   url.searchParams.set('fb_exchange_token', shortToken);
   const {response,data} = await fetchJson<{access_token?:string;token_type?:string;expires_in?:number;error?:{message?:string}}>(url);
-  if (!response.ok || !data.access_token) throw new Error(data.error?.message || 'Meta uzun süreli token alınamadı.');
+  if (!response.ok || !data.access_token) throw new Error('Meta uzun süreli token alınamadı.');
   return data;
 }
 
@@ -100,7 +102,7 @@ async function getJson(path:string, accessToken:string) {
   const url = new URL(`${graphBase()}${path}`);
   url.searchParams.set('access_token', accessToken);
   const {response,data} = await fetchJson<Record<string,unknown> & {error?:{message?:string}}>(url);
-  if (!response.ok) throw new Error(data.error?.message || `Meta API ${response.status}`);
+  if (!response.ok || data.error) throw new Error(`Meta API ${response.status}`);
   return data;
 }
 
@@ -108,14 +110,13 @@ async function getPagedCollection(path:string, accessToken:string) {
   const items:Record<string,unknown>[]=[];
   const seenAfter=new Set<string>();
   let after='';
-  let firstPage:MetaCollection<Record<string,unknown>>|null=null;
 
   for(let page=0;page<META_MAX_PAGES;page++){
     const separator=path.includes('?')?'&':'?';
     const pagedPath=after?`${path}${separator}after=${encodeURIComponent(after)}`:path;
     const payload=await getJson(pagedPath,accessToken) as MetaCollection<Record<string,unknown>>;
-    if(!firstPage)firstPage=payload;
-    if(Array.isArray(payload.data))items.push(...payload.data);
+    if(!Array.isArray(payload.data))throw new Error('Meta API geçersiz koleksiyon döndürdü.');
+    items.push(...payload.data);
 
     const nextAfter=payload.paging?.cursors?.after?.trim()||'';
     if(!nextAfter)break;
@@ -125,7 +126,7 @@ async function getPagedCollection(path:string, accessToken:string) {
   }
 
   if(after&&seenAfter.size>=META_MAX_PAGES)throw new Error('Meta pagination güvenlik sayfa limitini aştı.');
-  return {...(firstPage||{}),data:items};
+  return {data:items};
 }
 
 export async function discoverMetaResources(accessToken:string) {

@@ -51,16 +51,18 @@ async function fetchText(url:string,init:RequestInit={}){
 async function getJson(url:string,accessToken:string):Promise<unknown>{
   const {response,text}=await fetchText(url,{headers:{authorization:`Bearer ${accessToken}`}});
   let data:unknown={};
-  try{data=text?JSON.parse(text):{}}catch{data={raw:text}}
-  if(!response.ok)throw new Error(`Search Console API ${response.status}: ${typeof data==='object'?JSON.stringify(data):text}`);
+  try{data=JSON.parse(text)}catch{throw new Error('Search Console API geçersiz JSON döndürdü.')}
+  if(!data||typeof data!=='object'||Array.isArray(data)||'error' in data)throw new Error('Search Console API geçersiz yanıt döndürdü.');
+  if(!response.ok)throw new Error(`Search Console API ${response.status}`);
   return data;
 }
 
 async function postJson<T>(url:string,accessToken:string,body:unknown):Promise<T>{
   const {response,text}=await fetchText(url,{method:'POST',headers:{authorization:`Bearer ${accessToken}`,'content-type':'application/json'},body:JSON.stringify(body)});
   let data:unknown={};
-  try{data=text?JSON.parse(text):{}}catch{data={raw:text}}
-  if(!response.ok)throw new Error(`Search Console API ${response.status}: ${typeof data==='object'?JSON.stringify(data):text}`);
+  try{data=JSON.parse(text)}catch{throw new Error('Search Console API geçersiz JSON döndürdü.')}
+  if(!data||typeof data!=='object'||Array.isArray(data)||'error' in data)throw new Error('Search Console API geçersiz yanıt döndürdü.');
+  if(!response.ok)throw new Error(`Search Console API ${response.status}`);
   return data as T;
 }
 
