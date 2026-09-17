@@ -1,12 +1,14 @@
 # Growth OS
 
-Private growth intelligence and execution platform for teyfikgokdemir.com.
+Private growth intelligence and execution-control platform for teyfikgokdemir.com.
 
-## Current core (v0.8)
+## Current core (v1)
 - Website audit: technical SEO, on-page SEO, schema, GEO/AEO/AIO readiness, conversion and tracking signals
-- Re-audit / Final Check with score delta, fixed/open/new issue comparison
-- Project portfolio and per-project control center
-- Ads readiness plus Google Ads / Meta Ads / TikTok Ads integration status layer
+- Re-audit / Final Check with score delta and non-overlapping fixed / still-open / new / regressed issue categories
+- Project portfolio, lifecycle controls and per-project control center
+- Google Ads / Meta Ads / TikTok Ads integration status and read-only data layer
+- GA4, Search Console and Merchant Center resource discovery and explicit project assignment
+- Bounded pagination and partial/truncated-data signalling for supported Google, Meta and analytics discovery/reporting flows
 - Analytics campaign-metric view with spend, attributed revenue, ROAS, clicks and conversions
 - CRM pipeline view with lead source, owner, status, value and won revenue
 - Profit engine with editable ROAS / CPA / MER / margin / return / shipping / fee targets
@@ -15,7 +17,7 @@ Private growth intelligence and execution platform for teyfikgokdemir.com.
 - Private production access through Cloudflare Access
 
 ## Google connector
-Growth OS contains a server-side OAuth connector for Google services. A single consent flow requests access for:
+Growth OS contains a server-side OAuth connector for Google services. A single consent flow requests read access for:
 - Google Ads API
 - Google Analytics (GA4) Admin/Data API
 - Google Search Console API
@@ -38,15 +40,33 @@ Refresh tokens are encrypted with AES-256-GCM before being stored in PostgreSQL.
    - `GOOGLE_ADS_API_VERSION=v22`
    - `INTEGRATION_ENCRYPTION_KEY=<long random secret>`
 
-### Connector API
-- `POST /projects/:id/integrations/google/connect` returns the Google authorization URL.
-- `GET /oauth/google/callback` verifies the one-time OAuth state, exchanges the code and stores the encrypted refresh token.
-- `GET /projects/:id/integrations/google/resources` discovers accessible Google Ads customers, GA4 accounts/properties, Search Console properties and Merchant Center accounts.
+Do not place real secret values in source control or documentation.
 
-The next layer is account/resource assignment: choosing which discovered Google Ads customer, GA4 property, Search Console property and Merchant account belong to a Growth OS project, followed by scheduled read-only synchronization.
+### Resource assignment and data safety
+Growth OS can discover accessible Google Ads customers, GA4 properties, Search Console properties and Merchant Center accounts, then persist explicit project selections where supported.
+
+Selection and read flows are designed to fail safely:
+- an inaccessible/stale explicit selection must not silently fall back to another account/property;
+- partial or safety-limited datasets must be surfaced as partial rather than presented as complete;
+- malformed or failed upstream responses must not be treated as legitimate zero-data responses;
+- connector error handling must not expose refresh tokens, access tokens or raw credential-bearing payloads to the browser.
+
+Search Console detail pagination is bounded. Summary totals use the appropriate aggregate query rather than treating the first page of detail rows as the site total.
 
 ## Safety model
-External ad/platform execution is intentionally not automatic. Recommendations first enter an approval queue. Connected provider credentials are required before any future execution adapter can perform an external action.
+Growth OS v1 remains read-only for external advertising platforms.
+
+External write execution is fail-closed and requires all applicable gates. In particular, both `EXTERNAL_EXECUTION_ENABLED=true` and `ADS_WRITE_ENABLED=true` are required before the global write gate can open, in addition to project policy, provider allowlisting and manual approval where configured.
+
+Production policy is to keep external ad writes disabled. Growth OS must not publish ads, mutate budgets or creatives, or perform other external advertising mutations as part of the v1 read-only operating mode.
+
+## CI and deployment gate
+Changes on the `growth-os` branch are released with an exact-SHA gate. Before starting the next unrelated change, the current commit must have all three checks green:
+1. GitHub `Growth OS CI` = completed/success
+2. Railway `Growth OS - growth-api` = success
+3. Railway `Growth OS - growth-web` = success
+
+CI includes build/tests plus regression guards for critical safety and integration invariants such as bounded pagination, audit comparison semantics, proxy bounds, Cloudflare JWKS rotation handling and external execution write gates.
 
 ## Local / server run
 1. Copy `.env.example` to `.env`.
@@ -55,4 +75,11 @@ External ad/platform execution is intentionally not automatic. Recommendations f
 4. API: http://localhost:4000/health
 
 ## Production
-Railway services deploy from the `growth-os` branch. Web root: `/growth-os/apps/web`; API root: `/growth-os/apps/api`. The public application hostname is protected by Cloudflare Access.
+Production URL: `https://growth.teyfikgokdemir.com`
+
+Railway services deploy from the `growth-os` branch:
+- Web root: `/growth-os/apps/web`
+- API root: `/growth-os/apps/api`
+- PostgreSQL: Railway Postgres service
+
+The production application hostname is protected by Cloudflare Access.
