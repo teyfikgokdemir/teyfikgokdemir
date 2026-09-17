@@ -42,6 +42,7 @@ jobs:
           cache: npm
           cache-dependency-path: growth-os/apps/api/package.json
       - run: npm install
+      - run: npm audit --omit=dev --audit-level=high
       - run: npm run build
       - name: Guard API Docker build context
         run: |
@@ -59,10 +60,15 @@ jobs:
           import { readFileSync } from 'node:fs';
           import assert from 'node:assert/strict';
           const source = readFileSync('src/execution-policy.ts', 'utf8');
+          const server = readFileSync('src/server.ts', 'utf8');
+          const envExample = readFileSync('.env.example', 'utf8');
           assert.match(source, /EXTERNAL_EXECUTION_ENABLED[^\n]*&&[^\n]*ADS_WRITE_ENABLED/, 'External ad writes must require both global write gates.');
           assert.match(source, /if\(!policy\.globalWriteEnabled\)throw new Error/, 'Execution must fail closed when the global write gate is disabled.');
           assert.match(source, /if\(!policy\.projectWriteEnabled\)throw new Error/, 'Execution must also require the project write gate.');
           assert.match(source, /if\(policy\.requireManualApproval&&!approved\)throw new Error/, 'Manual approval enforcement must remain in the execution policy.');
+          assert.match(envExample, /^EXTERNAL_EXECUTION_ENABLED=false$/m, 'External execution must default to disabled.');
+          assert.match(envExample, /^ADS_WRITE_ENABLED=false$/m, 'Ads writes must default to disabled.');
+          assert.match(server, /mode:'read_only',externalExecution:false,adPublishing:false,budgetMutation:false,creativeMutation:false/, 'Public capabilities must remain read-only.');
           NODE
       - name: Guard Google Merchant pagination
         run: |
@@ -163,4 +169,17 @@ jobs:
           assert.match(source, /readLimitedResponseText\(upstream\)/, 'Proxy must use the bounded response reader.');
           assert.match(source, /status: 413/, 'Oversized proxy requests must fail closed.');
           assert.match(source, /signal: controller\.signal/, 'Proxy upstream fetches must keep the abort signal.');
+          NODE
+      - name: Guard dashboard runtime safety
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          import assert from 'node:assert/strict';
+          const source = readFileSync('src/instrumentation-client.ts', 'utf8');
+          assert.match(source, /PROFIT_FORM_CLASS='targetGrid'/, 'Profit target form validation must remain enabled.');
+          assert.match(source, /Number\.isFinite\(numeric\)/, 'Profit targets must reject non-finite values before submission.');
+          assert.match(source, /PROJECT_MODULE_PATH=/, 'Dashboard module requests must remain explicitly scoped.');
+          assert.match(source, /window\.fetch=async/, 'Dashboard runtime safety must observe project module fetches.');
+          assert.match(source, /response\.clone\(\)\.json\(\)\.catch/, 'Malformed successful module responses must be surfaced.');
+          assert.match(source, /Boş görünen veri güncel olmayabilir/, 'Module failures must not be presented as trustworthy empty data.');
           NODE
