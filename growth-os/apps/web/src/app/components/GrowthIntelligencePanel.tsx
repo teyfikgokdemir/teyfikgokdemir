@@ -7,6 +7,7 @@ type Overview={targets?:{target_roas?:number|null;target_cpa?:number|null};metri
 type GoogleResources={analyticsPerformance?:{matched?:boolean;summary?:{sessions?:number;keyEvents?:number;transactions?:number;totalRevenue?:number}};merchantCommerce?:{matched?:boolean;summary?:{totalProducts?:number;disapproved?:number;withIssues?:number;accountIssues?:number}};errors?:Record<string,string>};
 type SearchData={summary?:{clicks?:number;impressions?:number;ctr?:number;position?:number}};
 type QueueRecommendation={source?:string;status?:string};
+type Integration={provider?:string;status?:string};
 type Signal={severity:'high'|'medium'|'good';title:string;detail:string;action?:string;source:string};
 
 const api='/api/growth';
@@ -21,29 +22,48 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
   const [queueCount,setQueueCount]=useState(0);
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState('');
+  const [setupNotice,setSetupNotice]=useState('');
   const [updatedAt,setUpdatedAt]=useState<Date|null>(null);
   const loadGeneration=useRef(0);
 
   async function refresh(id:string,generation=loadGeneration.current){
     if(generation!==loadGeneration.current)return;
-    setLoading(true);setError('');
+    setLoading(true);setError('');setSetupNotice('');
     try{
-      const [m,o,g,s,r]=await Promise.all([
+      const [m,o,r,i]=await Promise.all([
         fetch(`${api}/projects/${id}/metrics`,{cache:'no-store'}),
         fetch(`${api}/projects/${id}/overview`,{cache:'no-store'}),
-        fetch(`${api}/projects/${id}/integrations/google/resources`,{cache:'no-store'}),
-        fetch(`${api}/projects/${id}/search-console/performance?days=28`,{cache:'no-store'}),
-        fetch(`${api}/projects/${id}/recommendations`,{cache:'no-store'})
+        fetch(`${api}/projects/${id}/recommendations`,{cache:'no-store'}),
+        fetch(`${api}/projects/${id}/integrations`,{cache:'no-store'})
       ]);
-      const failedSources=[
-        ['Metrics',m],['Overview',o],['Google',g],['Search Console',s],['Recommendations',r]
-      ].filter(([,response])=>!(response as Response).ok).map(([name,response])=>`${name} (${(response as Response).status})`);
-      const [nextMetrics,nextOverview,nextGoogle,nextSearch,nextRecommendations]=await Promise.all([
+      const coreResponses:[string,Response][]=[['Metrics',m],['Overview',o],['Recommendations',r],['Integrations',i]];
+      const failedSources=coreResponses.filter(([,response])=>!response.ok).map(([name,response])=>`${name} (${response.status})`);
+      const [nextMetrics,nextOverview,nextRecommendations,nextIntegrations]=await Promise.all([
         m.ok?m.json() as Promise<Metric[]>:Promise.resolve(null),
         o.ok?o.json() as Promise<Overview>:Promise.resolve(null),
-        g.ok?g.json() as Promise<GoogleResources>:Promise.resolve(null),
-        s.ok?s.json() as Promise<SearchData>:Promise.resolve(null),
-        r.ok?r.json() as Promise<QueueRecommendation[]>:Promise.resolve(null)
+        r.ok?r.json() as Promise<QueueRecommendation[]>:Promise.resolve(null),
+        i.ok?i.json() as Promise<Integration[]>:Promise.resolve(null)
+      ]);
+      const googleConnected=Boolean(nextIntegrations?.some(x=>x.provider==='google_oauth'&&x.status==='connected'));
+      let g:Response|null=null;
+      let s:Response|null=null;
+      if(googleConnected){
+        [g,s]=await Promise.all([
+          fetch(`${api}/projects/${id}/integrations/google/resources`,{cache:'no-store'}),
+          fetch(`${api}/projects/${id}/search-console/performance?days=28`,{cache:'no-store'})
+        ]);
+      }
+      const setupSources:[string,Response][]=[];
+      const criticalOptionalSources:[string,Response][]=[];
+      for(const [name,response] of [['Google',g],['Search Console',s]] as [string,Response|null][]){
+        if(!response||response.ok)continue;
+        if(response.status===400)setupSources.push([name,response]);
+        else criticalOptionalSources.push([name,response]);
+      }
+      failedSources.push(...criticalOptionalSources.map(([name,response])=>`${name} (${response.status})`));
+      const [nextGoogle,nextSearch]=await Promise.all([
+        g?.ok?g.json() as Promise<GoogleResources>:Promise.resolve(null),
+        s?.ok?s.json() as Promise<SearchData>:Promise.resolve(null)
       ]);
       if(generation!==loadGeneration.current)return;
       setMetrics(nextMetrics??[]);
@@ -51,6 +71,7 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
       setGoogle(nextGoogle);
       setSearch(nextSearch);
       setQueueCount(nextRecommendations?nextRecommendations.filter(x=>x.source==='growth_intelligence'&&x.status==='proposed').length:0);
+      setSetupNotice(setupSources.length?`Google bağlantısı mevcut ancak kaynak seçimi/kurulumu tamamlanmalı: ${setupSources.map(([name,response])=>`${name} (${response.status})`).join(', ')}.`:'');
       setError(failedSources.length?`Bazı Growth Intelligence kaynakları okunamadı: ${failedSources.join(', ')}.`:'');
       setUpdatedAt(new Date());
     }catch(e){
@@ -74,7 +95,7 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
 
   useEffect(()=>{
     const generation=++loadGeneration.current;
-    setMetrics([]);setOverview(null);setGoogle(null);setSearch(null);setQueueCount(0);setUpdatedAt(null);setError('');
+    setMetrics([]);setOverview(null);setGoogle(null);setSearch(null);setQueueCount(0);setUpdatedAt(null);setError('');setSetupNotice('');
     if(!projectId){setLoading(false);return;}
     void refresh(projectId,generation);
   },[projectId]);
@@ -93,6 +114,7 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
     const sc=search?.summary;
 
     if(error)out.push({severity:'high',source:'Growth OS',title:'Kaynak verisi eksik',detail:error,action:'Başarısız kaynağı yeniden kontrol et; eksik veri varken sağlıklı verdict üretme.'});
+    if(setupNotice)out.push({severity:'medium',source:'Growth OS',title:'Kaynak kurulumu tamamlanmalı',detail:setupNotice,action:'Google kaynak eşlemesini tamamla veya erişimi yenile; kurulumu eksik kaynağı kritik iş arızası olarak değerlendirme.'});
     if(google?.analyticsPerformance?.matched&&n(ga?.sessions)>0&&n(ga?.keyEvents)===0)out.push({severity:'high',source:'GA4',title:'Dönüşüm sinyali yok',detail:`${n(ga?.sessions)} oturum var ancak key event görünmüyor.`,action:'Form, WhatsApp, telefon ve teklif aksiyonlarını key event olarak doğrula.'});
     if(spend>0&&targetRoas>0&&roas!==null&&roas<targetRoas*.7)out.push({severity:'high',source:'Ads',title:'ROAS hedefin belirgin altında',detail:`30 günlük ROAS ${roas.toFixed(2)}, hedef ${targetRoas.toFixed(2)}.`,action:'Kampanya, landing page ve marjı birlikte incele.'});
     if(spend>0&&targetCpa>0&&conversions>0&&spend/conversions>targetCpa*1.25)out.push({severity:'high',source:'Ads',title:'CPA hedefin üzerinde',detail:`CPA ${(spend/conversions).toFixed(2)}, hedef ${targetCpa.toFixed(2)}.`,action:'Düşük kaliteli kampanya ve trafik kaynaklarını daralt.'});
@@ -103,7 +125,7 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
 
     if(out.length===0)out.push({severity:'good',source:'Growth OS',title:'Kritik çapraz-kanal sinyal yok',detail:'Bağlı kaynaklarda mevcut eşiklere göre kritik bir çakışma görünmüyor.',action:'Verileri düzenli senkronize etmeye devam et.'});
     return out.sort((a,b)=>severityRank[b.severity]-severityRank[a.severity]);
-  },[metrics,overview,google,search,error]);
+  },[metrics,overview,google,search,error,setupNotice]);
 
   if(!projectId)return <section className="moduleCard"><div className="empty">Growth Intelligence için proje seç.</div></section>;
   if(loading&&!updatedAt&&!error)return <section className="moduleCard"><div className="moduleLoading"><span/> Growth Intelligence kaynakları analiz ediliyor…</div></section>;
@@ -112,16 +134,16 @@ export default function GrowthIntelligencePanel({projectId}:{projectId:string|nu
   const hasGoogleData=google?.analyticsPerformance?.matched===true||google?.merchantCommerce?.matched===true;
   const hasSearchData=search?.summary!=null;
   const hasDecisionData=metrics.length>0||hasOverviewMetrics||hasGoogleData||hasSearchData;
-  if(updatedAt&&!hasDecisionData&&!error)return <section className="moduleCard"><div className="empty"><b>Karar üretmek için yeterli kaynak verisi yok.</b><div style={{marginTop:8,opacity:.75}}>Ads, GA4, Search Console veya proje performans özetinden en az bir gerçek veri sinyali okunmadan Growth OS sağlıklı/risksiz verdict üretmez.</div><button className="primaryAction" style={{marginTop:14}} onClick={refreshCurrent} disabled={loading}>{loading?'Analiz ediliyor…':'Kaynakları Yeniden Kontrol Et'}</button></div></section>;
+  if(updatedAt&&!hasDecisionData&&!error&&!setupNotice)return <section className="moduleCard"><div className="empty"><b>Karar üretmek için yeterli kaynak verisi yok.</b><div style={{marginTop:8,opacity:.75}}>Ads, GA4, Search Console veya proje performans özetinden en az bir gerçek veri sinyali okunmadan Growth OS sağlıklı/risksiz verdict üretmez.</div><button className="primaryAction" style={{marginTop:14}} onClick={refreshCurrent} disabled={loading}>{loading?'Analiz ediliyor…':'Kaynakları Yeniden Kontrol Et'}</button></div></section>;
 
   const high=signals.filter(s=>s.severity==='high').length;
   const medium=signals.filter(s=>s.severity==='medium').length;
   const primary=signals[0];
-  const statusTitle=high>0?'Müdahale gerekli':medium>0?'Büyüme fırsatı var':'Kontrol altında';
+  const statusTitle=high>0?'Müdahale gerekli':medium>0?'Kurulum / büyüme fırsatı var':'Kontrol altında';
   const statusDetail=high>0
     ?`${high} kritik sinyal önce çözülmeli. En yüksek öncelik: ${primary.title}.`
     :medium>0
-      ?`${medium} optimizasyon fırsatı bulundu. En yüksek potansiyel: ${primary.title}.`
+      ?`${medium} kurulum veya optimizasyon maddesi bulundu. En yüksek öncelik: ${primary.title}.`
       :'Bağlı kaynaklarda kritik veya orta öncelikli çapraz-kanal sorun görünmüyor.';
 
   return <section className="moduleCard">
