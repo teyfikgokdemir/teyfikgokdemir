@@ -95,24 +95,48 @@ const ecosystemLinks = [
 
   <div class="mobile-menu" id="mobile-navigation" data-mobile-menu hidden>
     <div class="mobile-menu-inner">
-      <div class="mobile-section">
-        <span class="mobile-label">{labels.ecosystem}</span>
-        {ecosystemLinks.map((item) => (
-          <a class="mobile-ecosystem" href={item.href} target="_blank" rel="noopener noreferrer">
-            <span><strong>{item.name}</strong><small>{item.detail}</small></span><span aria-hidden="true">↗</span>
-          </a>
-        ))}
+      <div class="mobile-menu-head">
+        <span>TEYFİK GÖKDEMİR</span>
+        <button type="button" class="mobile-menu-close" aria-label={labels.close} data-mobile-close>×</button>
       </div>
-      <div class="mobile-section mobile-links">
-        <a href={sectionUrl('journey')}>{labels.work}</a>
-        <a href={blogUrls[locale]}>{labels.insights}</a>
-        <a href={sectionUrl('contact')}>{labels.contact}</a>
-      </div>
-      <div class="mobile-section">
-        <span class="mobile-label">{labels.language}</span>
-        <div class="mobile-languages">
-          {allLocales.map((item) => <a class={item === locale ? 'active' : ''} href={languageUrls?.[item] ?? localeUrl(item)}>{nativeLanguageNames[item]}</a>)}
+
+      <nav class="mobile-command-nav" aria-label={labels.menu}>
+        <a href={sectionUrl('journey')}><span>{labels.work}</span><span aria-hidden="true">↗</span></a>
+        <a href={blogUrls[locale]}><span>{labels.insights}</span><span aria-hidden="true">↗</span></a>
+        <a href={sectionUrl('contact')}><span>{labels.contact}</span><span aria-hidden="true">↗</span></a>
+        <a href={currentHomePath}><span>{labels.ecosystem}</span><span aria-hidden="true">↗</span></a>
+      </nav>
+
+      <section class="mobile-ecosystem-section" aria-labelledby="mobile-ecosystem-title">
+        <div class="mobile-section-head">
+          <span id="mobile-ecosystem-title">{labels.ecosystem}</span>
+          <small>{labels.owned}</small>
         </div>
+        <div class="mobile-ecosystem-grid">
+          {ecosystemLinks.map((item) => (
+            <a href={item.href} target="_blank" rel="noopener noreferrer">
+              <strong>{item.name}</strong>
+              <small>{item.detail}</small>
+              <span aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <div class="mobile-menu-utility">
+        <details class="mobile-language-picker">
+          <summary><span>{String(locale).toUpperCase()}</span><small>{labels.language}</small></summary>
+          <div class="mobile-language-panel">
+            {allLocales.map((item) => (
+              <a class={item === locale ? 'active' : ''} href={languageUrls?.[item] ?? localeUrl(item)}>
+                <span>{nativeLanguageNames[item]}</span><small>{String(item).toUpperCase()}</small>
+              </a>
+            ))}
+          </div>
+        </details>
+        <a class="mobile-contact-cta" href={sectionUrl('contact')}>
+          <span>{labels.contact}</span><span aria-hidden="true">→</span>
+        </a>
       </div>
     </div>
   </div>
@@ -129,6 +153,7 @@ const ecosystemLinks = [
     document.documentElement.classList.toggle('menu-open', open);
   };
   menuButton?.addEventListener('click', () => setMenu(menuButton.getAttribute('aria-expanded') !== 'true'));
+  mobileMenu?.querySelector('[data-mobile-close]')?.addEventListener('click', () => setMenu(false));
   mobileMenu?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)));
 
   const setupPopover = (rootSelector, triggerSelector, panelSelector) => {
@@ -154,4 +179,252 @@ const ecosystemLinks = [
   .site-header{position:sticky;top:0;z-index:80;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(11,11,10,.88);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
   .header-inner{width:min(1440px,calc(100% - 56px));height:78px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:28px}
   .brand{display:block;width:196px;line-height:0}.brand picture,.brand img{display:block;width:100%;height:auto}.desktop-nav{display:flex;align-items:center;gap:30px;margin-left:auto}.desktop-nav>a,.nav-button{color:#ddd6cb;text-decoration:none;font:600 .87rem/1.2 system-ui,sans-serif;letter-spacing:.01em;background:none;border:0;padding:12px 0;cursor:pointer}.desktop-nav>a:hover,.nav-button:hover{color:#fff}.nav-button{display:flex;align-items:center;gap:7px}.nav-dropdown,.language-dropdown{position:relative}.dropdown-panel,.language-panel{position:absolute;top:calc(100% + 14px);right:0;opacity:0;visibility:hidden;transform:translateY(-8px);transition:.18s ease;background:#11110f;border:1px solid #302e29;border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.38)}.dropdown-panel.open,.language-panel.open{opacity:1;visibility:visible;transform:none}.dropdown-panel{width:410px;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px}.dropdown-panel a{display:flex;flex-direction:column;gap:5px;padding:14px;border-radius:12px;color:#eee8df;text-decoration:none}.dropdown-panel a:hover{background:#1b1a17}.dropdown-group{color:#a68a65;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase}.dropdown-panel strong{font-size:.94rem}.dropdown-panel small{color:#8f8b83;font-size:.74rem;line-height:1.4}.header-actions{display:flex;align-items:center;gap:12px}.language-button{display:flex;align-items:center;gap:5px;background:none;border:1px solid #302e29;border-radius:999px;color:#c8c0b5;padding:9px 12px;font-size:.73rem;cursor:pointer}.language-panel{width:190px;padding:8px}.language-panel a{display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:10px;color:#d8d2c8;text-decoration:none;font-size:.82rem}.language-panel a:hover,.language-panel a[aria-current=page]{background:#1d1c19}.language-panel small{color:#756f67}.menu-toggle{display:none;width:42px;height:42px;border:1px solid #302e29;border-radius:50%;background:none;padding:11px;flex-direction:column;justify-content:center;gap:4px}.menu-toggle span{display:block;width:100%;height:1px;background:#eee8df}.mobile-menu{border-top:1px solid #25231f;background:#0d0d0b;max-height:calc(100vh - 78px);overflow:auto}.mobile-menu-inner{padding:20px 18px 34px}.mobile-section{padding:16px 0;border-bottom:1px solid #24231f}.mobile-label{display:block;color:#987c59;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}.mobile-ecosystem{display:flex;justify-content:space-between;gap:20px;padding:12px 0;color:#eee8df;text-decoration:none}.mobile-ecosystem span:first-child{display:flex;flex-direction:column;gap:4px}.mobile-ecosystem small{color:#827e76;font-size:.73rem}.mobile-links{display:grid;gap:4px}.mobile-links a{padding:12px 0;color:#eee8df;text-decoration:none;font-weight:600}.mobile-languages{display:flex;flex-wrap:wrap;gap:8px}.mobile-languages a{padding:8px 10px;border:1px solid #2b2925;border-radius:999px;color:#9f9a91;text-decoration:none;font-size:.75rem}.mobile-languages a.active{color:#f1ece3;border-color:#806a4f;background:#171511}.menu-open{overflow:hidden}@media(max-width:900px){.header-inner{width:calc(100% - 32px);height:70px}.brand{width:42px}.desktop-nav{display:none}.menu-toggle{display:flex}.language-button{padding:8px 10px}.dropdown-panel{display:none}.language-panel{right:-48px}.site-header{backdrop-filter:blur(14px)}}@media(min-width:901px){.mobile-menu{display:none!important}}
+</style>
+
+<style>
+@media(max-width:900px){
+  .mobile-menu{
+    position:fixed;
+    inset:0;
+    z-index:120;
+    max-height:100dvh;
+    overflow:auto;
+    border-top:0;
+    background:#0b0b09;
+    color:#efe8dc;
+    overscroll-behavior:contain;
+  }
+
+  .mobile-menu-inner{
+    min-height:100dvh;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    padding:14px 16px 0;
+  }
+
+  .mobile-menu-head{
+    position:sticky;
+    top:0;
+    z-index:5;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    min-height:54px;
+    padding:0 0 10px;
+    border-bottom:1px solid rgba(220,191,137,.12);
+    background:linear-gradient(180deg,#0b0b09 82%,rgba(11,11,9,0));
+  }
+
+  .mobile-menu-head>span{
+    color:#d4ae6f;
+    font:800 .72rem/1 system-ui,sans-serif;
+    letter-spacing:.15em;
+  }
+
+  .mobile-menu-close{
+    width:38px;
+    height:38px;
+    display:grid;
+    place-items:center;
+    border:1px solid rgba(220,191,137,.16);
+    border-radius:999px;
+    background:#12110f;
+    color:#efe8dc;
+    font-size:18px;
+    cursor:pointer;
+  }
+
+  .mobile-command-nav{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+
+  .mobile-command-nav a{
+    min-height:56px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    padding:12px 13px;
+    border:1px solid rgba(220,191,137,.12);
+    border-radius:14px;
+    background:#11110f;
+    color:#e7d3ad;
+    text-decoration:none;
+    font:750 .96rem/1.15 system-ui,sans-serif;
+  }
+
+  .mobile-command-nav a span:last-child{
+    color:#d4ae6f;
+    font-size:.74rem;
+  }
+
+  .mobile-ecosystem-section{
+    display:grid;
+    gap:10px;
+  }
+
+  .mobile-section-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:12px;
+  }
+
+  .mobile-section-head>span{
+    color:#b88f54;
+    font:850 .62rem/1 system-ui,sans-serif;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+  }
+
+  .mobile-section-head small{
+    color:#756e64;
+    font:500 .62rem/1 system-ui,sans-serif;
+  }
+
+  .mobile-ecosystem-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+  }
+
+  .mobile-ecosystem-grid a{
+    position:relative;
+    min-height:72px;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    gap:4px;
+    padding:11px 12px;
+    border:1px solid rgba(220,191,137,.10);
+    border-radius:13px;
+    background:#11110f;
+    color:#eee5d8;
+    text-decoration:none;
+  }
+
+  .mobile-ecosystem-grid strong{
+    max-width:85%;
+    font:800 .79rem/1.15 system-ui,sans-serif;
+  }
+
+  .mobile-ecosystem-grid small{
+    color:#81786c;
+    font:500 .64rem/1.25 system-ui,sans-serif;
+  }
+
+  .mobile-ecosystem-grid a>span{
+    position:absolute;
+    top:10px;
+    right:11px;
+    color:#d4ae6f;
+    font-size:.68rem;
+  }
+
+  .mobile-menu-utility{
+    position:sticky;
+    bottom:0;
+    z-index:6;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    align-items:end;
+    gap:9px;
+    margin-top:auto;
+    padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px));
+    border-top:1px solid rgba(220,191,137,.12);
+    background:linear-gradient(180deg,rgba(11,11,9,.88),#0b0b09 24%);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+  }
+
+  .mobile-language-picker{
+    position:relative;
+  }
+
+  .mobile-language-picker summary{
+    min-width:74px;
+    height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:0 10px;
+    border:1px solid rgba(220,191,137,.18);
+    border-radius:12px;
+    background:#11110f;
+    color:#d4ae6f;
+    list-style:none;
+    cursor:pointer;
+  }
+
+  .mobile-language-picker summary::-webkit-details-marker{display:none}
+
+  .mobile-language-picker summary span{
+    font:850 .7rem/1 system-ui,sans-serif;
+  }
+
+  .mobile-language-picker summary small{
+    color:#756e64;
+    font:600 .58rem/1 system-ui,sans-serif;
+  }
+
+  .mobile-language-panel{
+    position:absolute;
+    left:0;
+    bottom:calc(100% + 8px);
+    width:min(276px,calc(100vw - 32px));
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:6px;
+    padding:8px;
+    border:1px solid rgba(220,191,137,.16);
+    border-radius:14px;
+    background:#11110f;
+    box-shadow:0 18px 46px rgba(0,0,0,.38);
+  }
+
+  .mobile-language-panel a{
+    min-height:42px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:2px;
+    padding:7px 8px;
+    border:1px solid rgba(220,191,137,.10);
+    border-radius:9px;
+    color:#d7d0c5;
+    text-decoration:none;
+    font-size:.66rem;
+  }
+
+  .mobile-language-panel a small{color:#746d63;font-size:.55rem}
+  .mobile-language-panel a.active{border-color:#806a4f;background:#191610;color:#f2e8d8}
+
+  .mobile-contact-cta{
+    min-height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 15px;
+    border-radius:12px;
+    background:linear-gradient(90deg,#d4ae6f,#8d6c3f);
+    color:#0b0b09;
+    text-decoration:none;
+    font:850 .78rem/1 system-ui,sans-serif;
+  }
+
+  .mobile-contact-cta span:last-child{font-size:1rem}
+
+  .menu-toggle[aria-expanded="true"]{opacity:0;pointer-events:none}
+
+  @media(max-height:700px){
+    .mobile-menu-inner{gap:13px}
+    .mobile-command-nav a{min-height:49px;font-size:.88rem}
+    .mobile-ecosystem-grid a{min-height:62px}
+    .mobile-menu-utility{padding-top:8px}
+  }
+}
 </style>
