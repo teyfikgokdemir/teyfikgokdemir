@@ -88,7 +88,8 @@ const ecosystemLinks = [
         </div>
       </div>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-navigation" aria-label={labels.menu} data-menu-toggle>
-        <span></span><span></span><span></span>
+        <span class="menu-toggle__label">{labels.menu}</span>
+        <span class="menu-toggle__icon" aria-hidden="true"><i></i><i></i></span>
       </button>
     </div>
   </div>
@@ -425,6 +426,92 @@ const ecosystemLinks = [
     .mobile-command-nav a{min-height:49px;font-size:.88rem}
     .mobile-ecosystem-grid a{min-height:62px}
     .mobile-menu-utility{padding-top:8px}
+  }
+}
+</style>
+
+<style>
+@media(max-width:900px){
+  .header-actions{
+    gap:8px;
+  }
+
+  .menu-toggle{
+    width:auto!important;
+    min-width:78px!important;
+    height:40px!important;
+    padding:0 12px!important;
+    border-radius:999px!important;
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:8px!important;
+    border:1px solid rgba(212,174,111,.22)!important;
+    background:#11110f!important;
+    color:#d4ae6f!important;
+  }
+
+  .menu-toggle__label{
+    display:block!important;
+    width:auto!important;
+    height:auto!important;
+    background:none!important;
+    color:#d4ae6f!important;
+    font:800 .68rem/1 system-ui,sans-serif!important;
+    letter-spacing:.08em!important;
+    text-transform:uppercase!important;
+  }
+
+  .menu-toggle__icon{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:4px!important;
+    width:14px!important;
+  }
+
+  .menu-toggle__icon i{
+    display:block!important;
+    width:14px!important;
+    height:1px!important;
+    background:#d4ae6f!important;
+  }
+
+  .mobile-menu{
+    position:fixed!important;
+    inset:0!important;
+    z-index:140!important;
+    width:100%!important;
+    height:100dvh!important;
+    max-height:none!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    background:#0b0b09!important;
+  }
+
+  .mobile-menu-inner{
+    min-height:100dvh!important;
+    padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px))!important;
+  }
+
+  .mobile-menu-utility{
+    position:relative!important;
+    bottom:auto!important;
+    margin-top:8px!important;
+    padding:10px 0 0!important;
+    background:transparent!important;
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+  }
+
+  .mobile-contact-cta{
+    min-height:44px!important;
+  }
+
+  html.menu-open,
+  html.menu-open body{
+    overflow:hidden!important;
+    height:100%!important;
   }
 }
 </style>
