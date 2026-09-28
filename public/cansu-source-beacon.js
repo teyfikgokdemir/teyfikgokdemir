@@ -1,13 +1,11 @@
 (() => {
   const endpoint = 'https://teyfikgokdemir.com/api/sources';
   const site = document.currentScript?.dataset.site;
-  const consentKey = 'tg-cookie-consent';
   const sessionKey = 'cansu-source-sent-v1';
 
   const send = () => {
     if (!site) return;
     try {
-      if (localStorage.getItem(consentKey) !== 'accepted') return;
       if (sessionStorage.getItem(sessionKey)) return;
 
       const query = new URLSearchParams(location.search);
@@ -28,5 +26,4 @@
   };
 
   send();
-  window.addEventListener('tg:analytics-consent', send, { once: true });
 })();
