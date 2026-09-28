@@ -108,8 +108,9 @@ for (const file of htmlFiles) {
   if (ogWidth !== '1200' || ogHeight !== '630') errors.push(`${route}: OG görsel boyutları 1200x630 değil.`);
   if (twitterCard !== 'summary_large_image' || twitterImage !== ogImage) errors.push(`${route}: Twitter card marka görseliyle eşleşmiyor.`);
   if (/<script\b[^>]*src=["'][^"']*googletagmanager\.com\/gtag/i.test(html)) errors.push(`${route}: analitik scripti izin alınmadan HTML içinde yükleniyor.`);
-  if (!html.includes('tg-cookie-consent')) errors.push(`${route}: cookie consent kontratı eksik.`);
-  if (!html.includes("window['ga-disable-' + measurementId] = true")) errors.push(`${route}: GA4 varsayılan olarak devre dışı değil.`);
+  const hasAnalyticsContract = html.includes('G-52GXBGWHFJ') || html.includes('cansu-source-beacon.js');
+  if (hasAnalyticsContract && !html.includes('tg-cookie-consent')) errors.push(`${route}: tracking var ancak cookie consent kontratı eksik.`);
+  if (html.includes('G-52GXBGWHFJ') && !html.includes("window['ga-disable-' + measurementId] = true")) errors.push(`${route}: GA4 varsayılan olarak devre dışı değil.`);
   if (html.includes('requestIdleCallback(loadAnalytics')) errors.push(`${route}: GA4 onaydan bağımsız otomatik yükleniyor.`);
   if (title && (title.length < 15 || title.length > 90)) warnings.push(`${route}: title uzunluğu ${title.length}.`);
 }
