@@ -46,6 +46,18 @@ const defaultAlternates: Partial<Record<Locale | 'x-default', string>> =
     ['x-default', new URL('/', site.origin).toString()],
   ]);
 
+const ogLocales: Record<SupportedLocale, string> = {
+  tr: 'tr_TR',
+  en: 'en_US',
+  ru: 'ru_RU',
+  fa: 'fa_IR',
+  mk: 'mk_MK',
+  sr: 'sr_RS',
+  sq: 'sq_AL',
+  zh: 'zh_CN',
+  vi: 'vi_VN',
+};
+
 const alternateLinks = alternates ?? defaultAlternates;
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -160,7 +172,7 @@ const jsonLd = {
       name: 'QCT Studio',
       url: site.links.qctStudio,
       founder: { '@id': site.origin + '/#person' },
-      areaServed: ['Albania', 'North Macedonia', 'Balkans'],
+      areaServed: ['Albania', 'North Macedonia', 'Kosovo', 'Serbia', 'Balkans'],
     },
     {
       '@type': 'Organization',
@@ -238,7 +250,7 @@ const jsonLd = {
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Teyfik Gökdemir" />
-    <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : locale} />
+    <meta property="og:locale" content={ogLocales[locale]} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
