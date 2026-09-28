@@ -10,63 +10,63 @@ const { locale } = Astro.props;
 const messages = {
   tr: {
     title: 'Çerez tercihleri',
-    text: 'Zorunlu çerezler sitenin çalışması için kullanılır. Analitik çerezler yalnızca onay verirseniz etkinleştirilir.',
+    text: 'Zorunlu çerezler sitenin çalışması için kullanılır. Temel trafik ve performans ölçümü, tercih seçiminizden bağımsız olarak devam eder.',
     privacy: 'Gizlilik Politikası',
     reject: 'Reddet',
     accept: 'Onayla',
   },
   ru: {
     title: 'Файлы cookie',
-    text: 'Обязательные cookie используются для работы сайта. Аналитические cookie включаются только с вашего согласия.',
+    text: 'Обязательные cookie используются для работы сайта. Базовое измерение трафика и производительности продолжается независимо от выбранной настройки.',
     privacy: 'Политика конфиденциальности',
     reject: 'Отклонить',
     accept: 'Принять',
   },
   en: {
     title: 'Cookie preferences',
-    text: 'Essential cookies keep the site working. Analytics cookies are enabled only after you give consent.',
+    text: 'Essential cookies keep the site working. Basic traffic and performance measurement continues regardless of your preference selection.',
     privacy: 'Privacy Policy',
     reject: 'Reject',
     accept: 'Accept',
   },
   mk: {
     title: 'Поставки за колачиња',
-    text: 'Неопходните колачиња овозможуваат работа на страницата. Аналитичките колачиња се активираат само со ваша согласност.',
+    text: 'Неопходните колачиња овозможуваат работа на страницата. Основното мерење на сообраќајот и перформансите продолжува независно од изборот.',
     privacy: 'Политика за приватност',
     reject: 'Одбиј',
     accept: 'Прифати',
   },
   sr: {
     title: 'Podešavanja kolačića',
-    text: 'Neophodni kolačići omogućavaju rad sajta. Analitički kolačići se aktiviraju samo uz vašu saglasnost.',
+    text: 'Neophodni kolačići omogućavaju rad sajta. Osnovno merenje saobraćaja i performansi nastavlja se bez obzira na izbor.',
     privacy: 'Politika privatnosti',
     reject: 'Odbij',
     accept: 'Prihvati',
   },
   sq: {
     title: 'Preferencat e cookies',
-    text: 'Cookies thelbësore mundësojnë funksionimin e faqes. Cookies analitike aktivizohen vetëm pasi të jepni pëlqimin.',
+    text: 'Cookies thelbësore mundësojnë funksionimin e faqes. Matja bazë e trafikut dhe performancës vazhdon pavarësisht zgjedhjes suaj.',
     privacy: 'Politika e Privatësisë',
     reject: 'Refuzo',
     accept: 'Prano',
   },
   fa: {
     title: 'تنظیمات کوکی',
-    text: 'کوکی‌های ضروری برای کارکرد سایت استفاده می‌شوند. کوکی‌های تحلیلی فقط پس از رضایت شما فعال می‌شوند.',
+    text: 'کوکی‌های ضروری برای عملکرد سایت استفاده می‌شوند. اندازه‌گیری پایه ترافیک و عملکرد، مستقل از انتخاب شما ادامه دارد.',
     privacy: 'سیاست حفظ حریم خصوصی',
     reject: 'رد',
     accept: 'پذیرش',
   },
   zh: {
     title: 'Cookie 偏好设置',
-    text: '必要 Cookie 用于保障网站基本功能运行。分析类 Cookie 仅在您明确同意后启用。',
+    text: '必要 Cookie 用于保障网站基本功能运行。基础流量与性能测量会独立于您的偏好选择继续进行。',
     privacy: '隐私政策',
     reject: '拒绝',
     accept: '同意',
   },
   vi: {
     title: 'Tùy chọn Cookie',
-    text: 'Cookie thiết yếu giúp website vận hành chuẩn xác. Cookie phân tích chỉ được kích hoạt khi bạn đồng ý.',
+    text: 'Cookie thiết yếu giúp website vận hành chuẩn xác. Việc đo lường lưu lượng và hiệu suất cơ bản vẫn tiếp tục bất kể lựa chọn của bạn.',
     privacy: 'Chính sách bảo mật',
     reject: 'Từ chối',
     accept: 'Chấp nhận',
@@ -95,7 +95,7 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
     if (!(banner instanceof HTMLElement)) return;
 
     let analyticsLoaded = false;
-    window['ga-disable-' + measurementId] = true;
+    window['ga-disable-' + measurementId] = false;
 
     const loadAnalytics = () => {
       if (analyticsLoaded) return;
@@ -121,11 +121,10 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
       window.gtag('event', name, params);
     };
 
+    loadAnalytics();
+
     const stored = localStorage.getItem(key);
-    if (stored === 'accepted') {
-      banner.hidden = true;
-      loadAnalytics();
-    } else if (stored === 'rejected') {
+    if (stored === 'accepted' || stored === 'rejected') {
       banner.hidden = true;
     } else {
       banner.hidden = false;
@@ -134,14 +133,13 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
     banner.querySelector('[data-cookie-accept]')?.addEventListener('click', () => {
       localStorage.setItem(key, 'accepted');
       loadAnalytics();
-      track('analytics_consent', { consent_state: 'accepted' });
-      window.dispatchEvent(new CustomEvent('tg:analytics-consent'));
+      track('analytics_preference', { preference: 'accepted' });
       banner.hidden = true;
     });
 
     banner.querySelector('[data-cookie-reject]')?.addEventListener('click', () => {
       localStorage.setItem(key, 'rejected');
-      window['ga-disable-' + measurementId] = true;
+      track('analytics_preference', { preference: 'rejected' });
       banner.hidden = true;
     });
 
