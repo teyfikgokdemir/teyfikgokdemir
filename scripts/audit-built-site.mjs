@@ -145,10 +145,16 @@ const enHome = pageByRoute.get('/en/');
 if (enHome && !enHome.html.includes('I build digital systems')) errors.push('/en/: yeni İngilizce konumlandırma başlığı eksik.');
 
 for (const required of [
-  ['/reflex/', 'https://ctseg.com.tr/tr/ticari-urunler/reflex-tek-kullanimlik-eldivenler/'],
+  ['/reflex/', 'https://ctseg.com.tr/medical/reflex-disposable-gloves/'],
   ['/iran-antep-fistigi-tedarik-stratejisi/', 'https://ctseg.com.tr/tr/ticari-urunler/'],
 ]) {
   if (redirects.get(required[0]) !== required[1]) errors.push(`${required[0]}: beklenen 301 hedefi eksik veya yanlış.`);
+}
+
+for (const forbidden of ['tpe-vinyl-copolymer-gloves-b2b-buying-guide','disposable-gloves-selection-guide-for-food-businesses']) {
+  for (const page of pageByRoute.values()) {
+    if (page.indexable && page.route.includes(forbidden)) errors.push(`${page.route}: eski eldiven içeriği indexlenebilir kalmış.`);
+  }
 }
 
 const sitemapFile = path.join(dist, 'sitemap.xml');
