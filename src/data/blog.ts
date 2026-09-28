@@ -126,6 +126,317 @@ export interface BlogPost {
 
 export const posts: BlogPost[] = [
   {
+    "slug": "building-ecommerce-systems-for-growth",
+    "date": "2026-09-28",
+    "updated": "2026-09-28",
+    "readingMinutes": 8,
+    "title": {
+      "en": "Building E-commerce Systems for Growth: Beyond the Storefront",
+      "tr": "Büyüme İçin E-Ticaret Sistemi Kurmak: Vitrinin Ötesinde Ne Var?",
+      "ru": "E-commerce-система для роста: что находится за пределами витрины",
+      "mk": "E-commerce систем за раст: што има надвор од storefront-от",
+      "sr": "E-commerce sistem za rast: šta postoji iza storefronta",
+      "sq": "Sistem e-commerce për rritje: përtej storefront-it",
+      "fa": "ساخت سیستم تجارت الکترونیک برای رشد: فراتر از ویترین فروشگاه",
+      "zh": "构建可增长的电商系统：不仅仅是前台店铺",
+      "vi": "Xây dựng hệ thống e-commerce để tăng trưởng: Không chỉ là giao diện bán hàng"
+    },
+    "description": {
+      "en": "A practical framework connecting storefront UX, measurement, CRM, automation, SEO and retention into one commercial system.",
+      "tr": "Storefront deneyimi, ölçüm, CRM, otomasyon, SEO ve retention katmanlarını tek ticari sistemde birleştiren pratik çerçeve.",
+      "ru": "Практическая модель, объединяющая UX витрины, аналитику, CRM, автоматизацию, SEO и удержание в одну коммерческую систему.",
+      "mk": "Практична рамка што ги поврзува storefront UX, мерење, CRM, автоматизација, SEO и retention во еден комерцијален систем.",
+      "sr": "Praktičan okvir koji povezuje storefront UX, merenje, CRM, automatizaciju, SEO i retention u jedan komercijalni sistem.",
+      "sq": "Kornizë praktike që lidh storefront UX, matjen, CRM, automatizimin, SEO dhe retention në një sistem tregtar.",
+      "fa": "چارچوبی عملی برای اتصال تجربه فروشگاه، اندازه‌گیری، CRM، اتوماسیون، SEO و نگهداشت مشتری در یک سیستم تجاری واحد.",
+      "zh": "一套把前台体验、数据测量、CRM、自动化、SEO 与复购留存整合为统一商业系统的实用框架。",
+      "vi": "Khung thực tiễn kết nối trải nghiệm storefront, đo lường, CRM, tự động hóa, SEO và retention thành một hệ thống thương mại."
+    },
+    "intro": {
+      "en": "An e-commerce site is not a growth system by itself. Sustainable performance comes from connecting acquisition, product discovery, checkout, measurement, lifecycle communication and operational follow-up.",
+      "tr": "Bir e-ticaret sitesi tek başına büyüme sistemi değildir. Sürdürülebilir performans; trafik kazanımı, ürün keşfi, checkout, ölçüm, yaşam döngüsü iletişimi ve operasyon takibinin aynı sistemde bağlanmasıyla oluşur.",
+      "ru": "Сам интернет-магазин еще не является системой роста. Устойчивый результат появляется, когда привлечение, поиск товара, checkout, аналитика, коммуникация и операционное сопровождение связаны между собой.",
+      "mk": "Самата e-commerce страница не е систем за раст. Одржлив резултат има кога acquisition, product discovery, checkout, мерење, комуникација и оперативно следење работат како една целина.",
+      "sr": "Sama e-commerce prodavnica nije sistem za rast. Održiv rezultat nastaje kada acquisition, product discovery, checkout, merenje, komunikacija i operativni follow-up rade kao celina.",
+      "sq": "Një faqe e-commerce nuk është vetvetiu sistem rritjeje. Performanca e qëndrueshme vjen kur acquisition, zbulimi i produktit, checkout, matja, komunikimi dhe operacionet lidhen në një sistem.",
+      "fa": "یک فروشگاه آنلاین به‌تنهایی سیستم رشد نیست. عملکرد پایدار زمانی شکل می‌گیرد که جذب، کشف محصول، checkout، اندازه‌گیری، ارتباط با مشتری و پیگیری عملیاتی به هم متصل باشند.",
+      "zh": "一个电商网站本身并不是增长系统。真正可持续的表现来自获客、商品发现、结账、测量、生命周期沟通与运营跟进的系统化连接。",
+      "vi": "Một website e-commerce tự nó chưa phải là hệ thống tăng trưởng. Hiệu quả bền vững chỉ xuất hiện khi acquisition, khám phá sản phẩm, checkout, đo lường, giao tiếp vòng đời và vận hành được kết nối."
+    },
+    "sections": {
+      "en": [
+        {
+          "heading": "1. Storefront clarity comes before visual complexity",
+          "paragraphs": [
+            "A buyer should understand the product, price, trust signals, delivery expectations and next action without unnecessary friction.",
+            "Design should support the buying decision, not compete with it."
+          ]
+        },
+        {
+          "heading": "2. Measurement must follow the commercial funnel",
+          "paragraphs": [
+            "Track product views, add-to-cart, checkout start, purchase, lead events and important outbound actions. Pageviews alone are not enough.",
+            "Use the same event names and definitions across analytics, advertising and internal reporting so teams compare the same funnel."
+          ]
+        },
+        {
+          "heading": "3. Automation belongs after the event model is clear",
+          "paragraphs": [
+            "Email flows, remarketing, CRM updates, stock notifications and customer follow-up should be triggered by defined user or operational events.",
+            "Automating a broken funnel only makes the broken process run faster."
+          ]
+        },
+        {
+          "heading": "4. Growth is a loop, not a launch",
+          "paragraphs": [
+            "Search visibility, landing-page testing, product data quality, retention and operational response times should be reviewed continuously.",
+            "The strongest e-commerce systems improve from observed behavior rather than one-time redesign projects."
+          ]
+        }
+      ],
+      "tr": [
+        {
+          "heading": "1. Görsel karmaşıklıktan önce satın alma netliği gelir",
+          "paragraphs": [
+            "Kullanıcı ürünün ne olduğunu, fiyatı, güven unsurlarını, teslim beklentisini ve sonraki adımı gereksiz sürtünme olmadan anlamalıdır.",
+            "Tasarım satın alma kararını desteklemeli, onunla yarışmamalıdır."
+          ]
+        },
+        {
+          "heading": "2. Ölçüm ticari funnel’ı takip etmeli",
+          "paragraphs": [
+            "Ürün görüntüleme, sepete ekleme, checkout başlangıcı, satın alma, lead ve önemli dış bağlantı aksiyonları ölçülmelidir. Sadece pageview yeterli değildir.",
+            "Analytics, reklam ve iç raporlama aynı event isimlerini kullanırsa ekipler aynı funnel’ı okur."
+          ]
+        },
+        {
+          "heading": "3. Otomasyon event modeli netleştikten sonra gelmeli",
+          "paragraphs": [
+            "E-posta akışları, remarketing, CRM güncellemeleri, stok bildirimleri ve müşteri takibi tanımlı kullanıcı veya operasyon event’leriyle tetiklenmelidir.",
+            "Bozuk funnel’ı otomatikleştirmek yalnızca bozuk süreci daha hızlı çalıştırır."
+          ]
+        },
+        {
+          "heading": "4. Büyüme lansman değil döngüdür",
+          "paragraphs": [
+            "Arama görünürlüğü, landing page testleri, ürün veri kalitesi, retention ve operasyon yanıt süreleri sürekli gözden geçirilmelidir.",
+            "En güçlü e-ticaret sistemleri tek seferlik redesign yerine gerçek davranış verisinden öğrenir."
+          ]
+        }
+      ],
+      "ru": [
+        {
+          "heading": "1. Ясность покупки важнее визуальной сложности",
+          "paragraphs": [
+            "Покупатель должен быстро понять товар, цену, сигналы доверия, условия доставки и следующий шаг.",
+            "Дизайн должен поддерживать решение о покупке, а не конкурировать с ним."
+          ]
+        },
+        {
+          "heading": "2. Аналитика должна повторять коммерческую воронку",
+          "paragraphs": [
+            "Измеряйте просмотры товара, добавление в корзину, начало checkout, покупку, лиды и важные внешние действия. Одних pageview недостаточно.",
+            "Одинаковые события в аналитике, рекламе и отчетности позволяют команде видеть одну и ту же воронку."
+          ]
+        },
+        {
+          "heading": "3. Автоматизация идет после ясной модели событий",
+          "paragraphs": [
+            "Email-flow, remarketing, CRM, уведомления о запасах и follow-up должны запускаться определенными пользовательскими или операционными событиями.",
+            "Автоматизация сломанной воронки только ускоряет сломанный процесс."
+          ]
+        },
+        {
+          "heading": "4. Рост — это цикл",
+          "paragraphs": [
+            "Поисковая видимость, landing page, качество карточек, удержание и скорость операционного ответа требуют постоянной проверки.",
+            "Сильные e-commerce-системы улучшаются на основе реального поведения, а не разового редизайна."
+          ]
+        }
+      ],
+      "mk": [
+        {
+          "heading": "1. Јасноста за купување е поважна од визуелната сложеност",
+          "paragraphs": [
+            "Купувачот треба брзо да ги разбере производот, цената, довербата, испораката и следниот чекор.",
+            "Дизајнот треба да ја поддржи одлуката за купување."
+          ]
+        },
+        {
+          "heading": "2. Мерењето треба да го следи комерцијалниот funnel",
+          "paragraphs": [
+            "Мерете product view, add-to-cart, checkout start, purchase, lead и важни outbound акции. Само pageview не е доволно.",
+            "Исти event дефиниции низ analytics, рекламирање и интерно известување создаваат една заедничка слика."
+          ]
+        },
+        {
+          "heading": "3. Автоматизација по јасен event model",
+          "paragraphs": [
+            "Email flows, remarketing, CRM updates, stock alerts и follow-up треба да се активираат од јасно дефинирани настани.",
+            "Автоматизацијата на лош funnel само го забрзува лошиот процес."
+          ]
+        },
+        {
+          "heading": "4. Растот е циклус",
+          "paragraphs": [
+            "Search visibility, landing tests, product data, retention и оперативен response time треба постојано да се подобруваат.",
+            "Најдобрите системи учат од реално однесување, не само од еднократен redesign."
+          ]
+        }
+      ],
+      "sr": [
+        {
+          "heading": "1. Jasnoća kupovine je važnija od vizuelne složenosti",
+          "paragraphs": [
+            "Kupac treba brzo da razume proizvod, cenu, poverenje, isporuku i sledeći korak.",
+            "Dizajn treba da podrži odluku o kupovini."
+          ]
+        },
+        {
+          "heading": "2. Merenje treba da prati komercijalni funnel",
+          "paragraphs": [
+            "Merite product view, add-to-cart, checkout start, purchase, lead i važne outbound akcije. Pageview sam nije dovoljan.",
+            "Isti event nazivi u analitici, oglašavanju i internim izveštajima daju jednu istu sliku funnel-a."
+          ]
+        },
+        {
+          "heading": "3. Automatizacija dolazi posle jasnog event modela",
+          "paragraphs": [
+            "Email flows, remarketing, CRM updates, stock alerts i follow-up treba da se aktiviraju definisanim događajima.",
+            "Automatizovati loš funnel znači samo ubrzati loš proces."
+          ]
+        },
+        {
+          "heading": "4. Rast je ciklus",
+          "paragraphs": [
+            "Search visibility, landing testovi, product data, retention i operativni response time zahtevaju kontinuirano poboljšanje.",
+            "Najbolji sistemi uče iz stvarnog ponašanja, ne iz jednokratnog redesign-a."
+          ]
+        }
+      ],
+      "sq": [
+        {
+          "heading": "1. Qartësia e blerjes vjen para kompleksitetit vizual",
+          "paragraphs": [
+            "Blerësi duhet të kuptojë shpejt produktin, çmimin, besimin, dorëzimin dhe hapin tjetër.",
+            "Dizajni duhet të mbështesë vendimin e blerjes."
+          ]
+        },
+        {
+          "heading": "2. Matja duhet të ndjekë funnel-in tregtar",
+          "paragraphs": [
+            "Matni product view, add-to-cart, checkout start, purchase, lead dhe veprimet e rëndësishme outbound. Vetëm pageview nuk mjafton.",
+            "Event-et me të njëjtat emra në analytics, reklamim dhe raportim krijojnë të njëjtën pamje të funnel-it."
+          ]
+        },
+        {
+          "heading": "3. Automatizimi vjen pas modelit të qartë të event-eve",
+          "paragraphs": [
+            "Email flows, remarketing, CRM, stock alerts dhe follow-up duhet të aktivizohen nga event-e të përcaktuara.",
+            "Automatizimi i një funnel-i të prishur vetëm e përshpejton problemin."
+          ]
+        },
+        {
+          "heading": "4. Rritja është cikël",
+          "paragraphs": [
+            "Search visibility, testet e landing page, product data, retention dhe response time duhen përmirësuar vazhdimisht.",
+            "Sistemet më të mira mësojnë nga sjellja reale, jo vetëm nga redesign-i njëherësh."
+          ]
+        }
+      ],
+      "fa": [
+        {
+          "heading": "1. شفافیت خرید قبل از پیچیدگی بصری",
+          "paragraphs": [
+            "خریدار باید محصول، قیمت، نشانه‌های اعتماد، شرایط تحویل و اقدام بعدی را بدون اصطکاک اضافی بفهمد.",
+            "طراحی باید از تصمیم خرید پشتیبانی کند، نه اینکه با آن رقابت کند."
+          ]
+        },
+        {
+          "heading": "2. اندازه‌گیری باید با funnel تجاری هم‌راستا باشد",
+          "paragraphs": [
+            "مشاهده محصول، افزودن به سبد، شروع checkout، خرید، lead و اقدامات مهم خروجی باید اندازه‌گیری شوند. pageview به‌تنهایی کافی نیست.",
+            "نام‌گذاری یکسان eventها در analytics، تبلیغات و گزارش داخلی باعث می‌شود همه یک funnel را ببینند."
+          ]
+        },
+        {
+          "heading": "3. اتوماسیون بعد از مدل روشن event",
+          "paragraphs": [
+            "جریان‌های ایمیل، remarketing، CRM، هشدار موجودی و follow-up باید با رویدادهای تعریف‌شده فعال شوند.",
+            "خودکارسازی funnel خراب فقط فرایند خراب را سریع‌تر می‌کند."
+          ]
+        },
+        {
+          "heading": "4. رشد یک چرخه است",
+          "paragraphs": [
+            "دیده‌شدن در جستجو، تست landing page، کیفیت داده محصول، retention و زمان پاسخ عملیاتی باید پیوسته بهبود یابند.",
+            "سیستم‌های قوی از رفتار واقعی یاد می‌گیرند، نه فقط از redesign یک‌باره."
+          ]
+        }
+      ],
+      "zh": [
+        {
+          "heading": "1. 购买路径清晰度优先于视觉复杂度",
+          "paragraphs": [
+            "买家应该快速理解产品、价格、信任信号、交付预期以及下一步操作。",
+            "设计应服务于购买决策，而不是与购买决策争夺注意力。"
+          ]
+        },
+        {
+          "heading": "2. 数据测量必须对应商业漏斗",
+          "paragraphs": [
+            "应追踪商品浏览、加购、开始结账、购买、线索以及重要外链行为。只有 pageview 远远不够。",
+            "分析、广告和内部报告使用相同事件定义，团队才能看到同一条漏斗。"
+          ]
+        },
+        {
+          "heading": "3. 自动化应建立在明确事件模型之后",
+          "paragraphs": [
+            "邮件流、再营销、CRM 更新、库存提醒和客户跟进都应由清晰定义的用户或运营事件触发。",
+            "自动化一个有问题的漏斗，只会让问题运行得更快。"
+          ]
+        },
+        {
+          "heading": "4. 增长是循环，不是一次上线",
+          "paragraphs": [
+            "搜索可见性、landing page 测试、商品数据质量、复购留存和运营响应速度都需要持续优化。",
+            "最强的电商系统依赖真实行为数据不断改进，而不是一次性 redesign。"
+          ]
+        }
+      ],
+      "vi": [
+        {
+          "heading": "1. Sự rõ ràng khi mua hàng quan trọng hơn độ phức tạp hình ảnh",
+          "paragraphs": [
+            "Người mua cần nhanh chóng hiểu sản phẩm, giá, tín hiệu tin cậy, kỳ vọng giao hàng và bước tiếp theo.",
+            "Thiết kế phải hỗ trợ quyết định mua hàng, không cạnh tranh với nó."
+          ]
+        },
+        {
+          "heading": "2. Đo lường phải bám theo funnel thương mại",
+          "paragraphs": [
+            "Theo dõi product view, add-to-cart, checkout start, purchase, lead và các hành động outbound quan trọng. Chỉ pageview là chưa đủ.",
+            "Dùng cùng định nghĩa event trong analytics, quảng cáo và báo cáo nội bộ để toàn bộ đội ngũ nhìn cùng một funnel."
+          ]
+        },
+        {
+          "heading": "3. Tự động hóa chỉ nên đến sau khi event model rõ ràng",
+          "paragraphs": [
+            "Email flows, remarketing, CRM updates, cảnh báo tồn kho và follow-up cần được kích hoạt bởi event người dùng hoặc vận hành đã định nghĩa.",
+            "Tự động hóa một funnel hỏng chỉ khiến quy trình hỏng chạy nhanh hơn."
+          ]
+        },
+        {
+          "heading": "4. Tăng trưởng là một vòng lặp",
+          "paragraphs": [
+            "Search visibility, thử nghiệm landing page, chất lượng product data, retention và response time vận hành cần được cải tiến liên tục.",
+            "Hệ thống e-commerce mạnh học từ hành vi thực tế thay vì chỉ dựa vào một lần redesign."
+          ]
+        }
+      ]
+    }
+  },
+  {
     "slug": "ai-assisted-operations-where-automation-helps",
     "date": "2026-09-28",
     "updated": "2026-09-28",
