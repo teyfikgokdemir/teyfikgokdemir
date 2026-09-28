@@ -105,7 +105,7 @@ try {
           h1Count: document.querySelectorAll('h1').length,
           headings,
           headerVisible: visible('.site-header'),
-          footerVisible: visible('.personal-footer'),
+          footerVisible: visible('.site-footer'),
           heroVisible: visible('.hero'),
           heroImageLoaded: Boolean(heroImage?.complete && heroImage.naturalWidth > 0),
           heroImageBox: box('.hero-media img'),
