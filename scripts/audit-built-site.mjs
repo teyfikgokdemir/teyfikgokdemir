@@ -175,6 +175,13 @@ for (const locale of ['tr','en','ru','mk','sr','sq','fa','zh','vi']) {
   }
 }
 
+for (const locale of ['tr','en','ru','mk','sr','sq','fa','zh','vi']) {
+  for (const slug of ['tedarik','tedarikci-dogrulama','trade-request']) {
+    const route = locale === 'tr' ? `/instagram/${slug}/` : `/${locale}/instagram/${slug}/`;
+    if (pageByRoute.get(route)?.indexable) errors.push(`${route}: eski Instagram trade-funnel route'u indexlenebilir kalmış.`);
+  }
+}
+
 const sitemapFile = path.join(dist, 'sitemap.xml');
 if (!fs.existsSync(sitemapFile)) errors.push('sitemap.xml eksik.');
 else {
