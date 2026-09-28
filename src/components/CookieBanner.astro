@@ -135,6 +135,7 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
       localStorage.setItem(key, 'accepted');
       loadAnalytics();
       track('analytics_consent', { consent_state: 'accepted' });
+      window.dispatchEvent(new CustomEvent('tg:analytics-consent'));
       banner.hidden = true;
     });
 
