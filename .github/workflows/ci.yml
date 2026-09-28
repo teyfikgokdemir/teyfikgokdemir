@@ -18,3 +18,4 @@ jobs:
       - run: npm run build
       - run: npm run audit
       - run: npm run verify:premium
+      - run: npm run check:responsive
