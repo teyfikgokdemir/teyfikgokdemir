@@ -173,6 +173,8 @@ for (const forbidden of ['tpe-vinyl-copolymer-gloves-b2b-buying-guide','disposab
 }
 
 const sharedBlogSlugs = [
+  'building-ecommerce-systems-for-growth',
+  'ai-assisted-operations-where-automation-helps',
   'evaluating-products-for-international-b2b-portfolios',
   'b2b-product-website-should-be-more-than-a-catalogue',
   'strategic-sourcing-vs-procurement',
