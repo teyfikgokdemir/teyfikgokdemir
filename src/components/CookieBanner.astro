@@ -95,6 +95,7 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
     if (!(banner instanceof HTMLElement)) return;
 
     let analyticsLoaded = false;
+    window['ga-disable-' + measurementId] = true;
 
     const loadAnalytics = () => {
       if (analyticsLoaded) return;
@@ -103,7 +104,11 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
       window.dataLayer = window.dataLayer || [];
       window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
       window.gtag('js', new Date());
-      window.gtag('config', measurementId, { anonymize_ip: true });
+      window.gtag('config', measurementId, {
+        anonymize_ip: true,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false,
+      });
 
       const script = document.createElement('script');
       script.async = true;
@@ -111,16 +116,16 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
       document.head.appendChild(script);
     };
 
-    window.addEventListener('load', () => {
-      if (window.requestIdleCallback) {
-        window.requestIdleCallback(loadAnalytics, { timeout: 2200 });
-      } else {
-        window.setTimeout(loadAnalytics, 1600);
-      }
-    });
+    const track = (name, params = {}) => {
+      if (!analyticsLoaded || typeof window.gtag !== 'function') return;
+      window.gtag('event', name, params);
+    };
 
     const stored = localStorage.getItem(key);
-    if (stored === 'accepted' || stored === 'rejected') {
+    if (stored === 'accepted') {
+      banner.hidden = true;
+      loadAnalytics();
+    } else if (stored === 'rejected') {
       banner.hidden = true;
     } else {
       banner.hidden = false;
@@ -129,12 +134,33 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
     banner.querySelector('[data-cookie-accept]')?.addEventListener('click', () => {
       localStorage.setItem(key, 'accepted');
       loadAnalytics();
+      track('analytics_consent', { consent_state: 'accepted' });
       banner.hidden = true;
     });
 
     banner.querySelector('[data-cookie-reject]')?.addEventListener('click', () => {
       localStorage.setItem(key, 'rejected');
+      window['ga-disable-' + measurementId] = true;
       banner.hidden = true;
+    });
+
+    document.addEventListener('click', (event) => {
+      const target = event.target instanceof Element ? event.target.closest('a') : null;
+      if (!(target instanceof HTMLAnchorElement)) return;
+      const href = target.href;
+      const label = target.textContent?.trim().slice(0, 120) || '';
+      if (href.startsWith('mailto:')) {
+        track('contact_click', { contact_method: 'email', link_url: href, link_text: label });
+        return;
+      }
+      try {
+        const url = new URL(href, location.href);
+        if (url.hostname === 'wa.me') {
+          track('contact_click', { contact_method: 'whatsapp', link_url: href, link_text: label });
+        } else if (url.origin !== location.origin) {
+          track('outbound_click', { link_url: href, link_domain: url.hostname, link_text: label });
+        }
+      } catch {}
     });
   })();
 </script>
