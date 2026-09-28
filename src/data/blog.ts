@@ -10,9 +10,9 @@ export const localeMeta: Record<BlogLocale, { name: string; dir: 'ltr' | 'rtl'; 
     "read": "Читать статью",
     "related": "Похожие статьи",
     "published": "Опубликовано",
-    "description": "Практические инсайты о стратегических закупках, аудите фабрик и международных торговых операциях.",
-    "eyebrow": "Международная торговля и стратегические закупки",
-    "expertise": "Изучите экспертизу в международной торговле и закупках"
+    "description": "Практические материалы о цифровых системах, электронной коммерции, росте, AI-операциях и международной торговле.",
+    "eyebrow": "Технологии, коммерция и международные операции",
+    "expertise": "Изучите технологии, цифровую коммерцию и международные операции"
   },
   "en": {
     "name": "English",
@@ -22,9 +22,9 @@ export const localeMeta: Record<BlogLocale, { name: string; dir: 'ltr' | 'rtl'; 
     "read": "Read article",
     "related": "Related insights",
     "published": "Published",
-    "description": "Practical insights on strategic sourcing, procurement, supplier validation and international trade operations.",
-    "eyebrow": "International Trade & Strategic Sourcing",
-    "expertise": "Explore international trade and strategic sourcing expertise"
+    "description": "Practical insights on digital systems, e-commerce, growth, AI-assisted operations and international trade.",
+    "eyebrow": "Technology, Commerce & Global Operations",
+    "expertise": "Explore technology, digital commerce and global operations"
   },
   "tr": {
     "name": "Türkçe",
@@ -34,9 +34,9 @@ export const localeMeta: Record<BlogLocale, { name: string; dir: 'ltr' | 'rtl'; 
     "read": "Yazıyı oku",
     "related": "İlgili içgörüler",
     "published": "Yayın tarihi",
-    "description": "Stratejik tedarik, satın alma, tedarikçi doğrulama ve uluslararası ticaret operasyonları üzerine pratik içgörüler.",
-    "eyebrow": "Uluslararası Ticaret ve Stratejik Tedarik",
-    "expertise": "Uluslararası ticaret ve stratejik tedarik uzmanlığını inceleyin"
+    "description": "Dijital sistemler, e-ticaret, büyüme, AI destekli operasyonlar ve uluslararası ticaret üzerine pratik içgörüler.",
+    "eyebrow": "Teknoloji, Dijital Ticaret ve Küresel Operasyonlar",
+    "expertise": "Teknoloji, dijital ticaret ve küresel operasyonları inceleyin"
   },
   "mk": {
     "name": "Македонски",
@@ -46,9 +46,9 @@ export const localeMeta: Record<BlogLocale, { name: string; dir: 'ltr' | 'rtl'; 
     "read": "Прочитај",
     "related": "Поврзани увиди",
     "published": "Објавено",
-    "description": "Практични увиди за стратешко снабдување, набавка, проверка на добавувачи и меѓународна трговија.",
-    "eyebrow": "Меѓународна трговија и стратешко снабдување",
-    "expertise": "Истражете ја експертизата за меѓународна трговија и снабдување"
+    "description": "Практични увиди за дигитални системи, е-трговија, раст, AI операции и меѓународна трговија.",
+    "eyebrow": "Технологија, трговија и глобални операции",
+    "expertise": "Истражете технологија, дигитална трговија и глобални операции"
   },
   "sr": {
     "name": "Srpski",
@@ -58,9 +58,9 @@ export const localeMeta: Record<BlogLocale, { name: string; dir: 'ltr' | 'rtl'; 
     "read": "Pročitaj",
     "related": "Povezani uvidi",
     "published": "Objavljeno",
-    "description": "Praktični uvidi o strateškom snabdevanju, nabavci, proveri dobavljača i međunarodnoj trgovini.",
-    "eyebrow": "Međunarodna trgovina i strateško snabdevanje",
-    "expertise": "Istražite stručnost u međunarodnoj trgovini i snabdevanju"
+    "description": "Praktični uvidi o digitalnim sistemima, e-trgovini, rastu, AI operacijama i međunarodnoj trgovini.",
+    "eyebrow": "Tehnologija, trgovina i globalne operacije",
+    "expertise": "Istražite tehnologiju, digitalnu trgovinu i globalne operacije"
   },
   "sq": {
     "name": "Shqip",
@@ -70,9 +70,9 @@ export const localeMeta: Record<BlogLocale, { name: string; dir: 'ltr' | 'rtl'; 
     "read": "Lexo artikullin",
     "related": "Analiza të lidhura",
     "published": "Publikuar",
-    "description": "Analiza praktike për furnizimin strategjik, prokurimin, verifikimin e furnitorëve dhe tregtinë ndërkombëtare.",
-    "eyebrow": "Tregti Ndërkombëtare dhe Furnizim Strategjik",
-    "expertise": "Eksploroni ekspertizën në tregti dhe furnizim strategjik"
+    "description": "Analiza praktike për sistemet digjitale, e-commerce, rritjen, operacionet me AI dhe tregtinë ndërkombëtare.",
+    "eyebrow": "Teknologji, Tregti dhe Operacione Globale",
+    "expertise": "Eksploroni teknologjinë, tregtinë digjitale dhe operacionet globale"
   },
   "fa": {
     "name": "فارسی",
@@ -82,9 +82,9 @@ export const localeMeta: Record<BlogLocale, { name: string; dir: 'ltr' | 'rtl'; 
     "read": "مطالعه مقاله",
     "related": "مطالب مرتبط",
     "published": "تاریخ انتشار",
-    "description": "بینش‌های عملی درباره تأمین راهبردی، خرید، اعتبارسنجی تأمین‌کننده و عملیات تجارت بین‌المللی.",
-    "eyebrow": "تجارت بین‌المللی و تأمین راهبردی",
-    "expertise": "تخصص تجارت بین‌المللی و تأمین راهبردی را بررسی کنید"
+    "description": "بینش‌های عملی درباره سیستم‌های دیجیتال، تجارت الکترونیک، رشد، عملیات مبتنی بر هوش مصنوعی و تجارت بین‌المللی.",
+    "eyebrow": "فناوری، تجارت دیجیتال و عملیات بین‌المللی",
+    "expertise": "تخصص فناوری، تجارت دیجیتال و عملیات بین‌المللی را بررسی کنید"
   },
   "zh": {
     "name": "中文",
@@ -94,9 +94,9 @@ export const localeMeta: Record<BlogLocale, { name: string; dir: 'ltr' | 'rtl'; 
     "read": "阅读全文",
     "related": "相关文章",
     "published": "发布日期",
-    "description": "关于战略采购、供应链核验、工厂实地调研及跨境国际贸易实战洞察。",
-    "eyebrow": "国际贸易与战略采购",
-    "expertise": "探索国际贸易与战略采购专业体系"
+    "description": "关于数字系统、电商、增长、AI 辅助运营及国际商业实践的实用洞察。",
+    "eyebrow": "技术、数字商业与全球运营",
+    "expertise": "探索技术、数字商业与全球运营专业体系"
   },
   "vi": {
     "name": "Tiếng Việt",
@@ -106,9 +106,9 @@ export const localeMeta: Record<BlogLocale, { name: string; dir: 'ltr' | 'rtl'; 
     "read": "Đọc bài viết",
     "related": "Bài viết liên quan",
     "published": "Ngày đăng",
-    "description": "Những góc nhìn thực tiễn về thu mua chiến lược, thẩm định nhà máy và vận hành thương mại quốc tế.",
-    "eyebrow": "Thương mại quốc tế & Thu mua chiến lược",
-    "expertise": "Khám phá chuyên môn thương mại quốc tế và thu mua"
+    "description": "Những góc nhìn thực tiễn về hệ thống số, thương mại điện tử, tăng trưởng, vận hành hỗ trợ bởi AI và thương mại quốc tế.",
+    "eyebrow": "Công nghệ, Thương mại số & Vận hành toàn cầu",
+    "expertise": "Khám phá công nghệ, thương mại số và vận hành toàn cầu"
   }
 };
 
