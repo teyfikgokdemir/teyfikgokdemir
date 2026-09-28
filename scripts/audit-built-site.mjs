@@ -189,6 +189,21 @@ for (const retiredRoute of [
   if (pageByRoute.get(retiredRoute)?.indexable) errors.push(`${retiredRoute}: retired route indexlenebilir kalmış.`);
 }
 
+const visibilityGuideRoutes = [
+  '/blog/seo-geo-aeo-aio-farklari/',
+  '/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  '/ru/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  '/fa/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  '/mk/blog/razliki-seo-geo-aeo-aio/',
+  '/sr/blog/razlike-seo-geo-aeo-aio/',
+  '/sq/blog/dallimet-seo-geo-aeo-aio/',
+  '/zh/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  '/vi/blog/seo-vs-geo-vs-aeo-vs-aio/',
+];
+for (const route of visibilityGuideRoutes) {
+  if (!pageByRoute.get(route)?.indexable) errors.push(`${route}: SEO/GEO/AEO/AIO guide parity sayfası eksik.`);
+}
+
 const sitemapFile = path.join(dist, 'sitemap.xml');
 if (!fs.existsSync(sitemapFile)) errors.push('sitemap.xml eksik.');
 else {

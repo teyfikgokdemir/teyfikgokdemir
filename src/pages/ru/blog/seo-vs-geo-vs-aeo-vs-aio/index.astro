@@ -1,0 +1,41 @@
+---
+import ContentPage from '../../../../components/ContentPage.astro';
+import { site } from '../../../../data/site';
+const title='SEO, GEO, AEO и AIO: различия и практическое применение | Teyfik Gökdemir';
+const description='Практическое руководство по SEO, GEO, AEO и AIO и их совместному применению в единой системе поисковой и AI-видимости.';
+const pathname='/ru/blog/seo-vs-geo-vs-aeo-vs-aio/';
+const canonical=site.origin+pathname;
+const published='2026-07-23';
+const modified='2026-09-28';
+const articleSchema={ '@type':'Article','@id':canonical+'#article',headline:'SEO, GEO, AEO и AIO: различия и практическое применение',description,url:canonical,mainEntityOfPage:canonical,datePublished:published,dateModified:modified,inLanguage:'ru',author:{'@id':site.origin+'/#person'},publisher:{'@id':site.origin+'/#person'},isPartOf:{'@id':site.origin+'/#website'},about:['Search Engine Optimization','Generative Engine Optimization','Answer Engine Optimization','AI Optimization'] };
+const alternates = {
+  en: site.origin + '/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  tr: site.origin + '/blog/seo-geo-aeo-aio-farklari/',
+  sq: site.origin + '/sq/blog/dallimet-seo-geo-aeo-aio/',
+  mk: site.origin + '/mk/blog/razliki-seo-geo-aeo-aio/',
+  sr: site.origin + '/sr/blog/razlike-seo-geo-aeo-aio/',
+  ru: site.origin + '/ru/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  fa: site.origin + '/fa/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  zh: site.origin + '/zh/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  vi: site.origin + '/vi/blog/seo-vs-geo-vs-aeo-vs-aio/',
+  'x-default': site.origin + '/blog/seo-vs-geo-vs-aeo-vs-aio/',
+};
+---
+<ContentPage locale="ru" title={title} description={description} pathname={pathname} alternates={alternates} ogType="article" pageSchema={articleSchema} eyebrow="Руководство по поисковой видимости" heading="SEO, GEO, AEO и AIO: в чем разница." lead="Эти дисциплины пересекаются, но не заменяют друг друга. Цель — объединить их в одну систему обнаружения, понимания и доверия." articleMeta={{published,modified,readingTime:'8 минут',label:'Teyfik Gökdemir'}}>
+  <div class="answer-block"><p><strong>SEO</strong> улучшает обнаружение в классическом поиске. <strong>GEO</strong> делает информацию понятнее и полезнее для генеративных систем. <strong>AEO</strong> структурирует прямые ответы. <strong>AIO</strong> связывает техническую основу, данные о сущностях, контент и измерение.</p></div>
+  <h2>Главное различие</h2><p>Все четыре подхода решают разные части одной задачи: как бизнесу быть найденным, правильно понятым и достаточно надежным, когда человек или AI-система ищет информацию.</p>
+  <div class="content-grid">
+    <article class="content-card"><h3>SEO</h3><p>Техническая доступность, поисковое намерение, релевантность, внутренние ссылки, авторитет и эффективность в обычной выдаче.</p></article>
+    <article class="content-card"><h3>GEO</h3><p>Ясные источники, отношения между сущностями, доказательства и факты, которые генеративные системы могут интерпретировать и атрибутировать.</p></article>
+    <article class="content-card"><h3>AEO</h3><p>Прямые ответы, видимые вопросы, краткие объяснения и структура, удобная для извлечения ответа.</p></article>
+    <article class="content-card"><h3>AIO</h3><p>Координационный слой для технического SEO, сущностей, контента, измерения и AI-обнаружения.</p></article>
+  </div>
+  <h2>SEO остается фундаментом</h2><p>AI-видимость не отменяет необходимость в доступных для обхода страницах, корректных canonical URL, производительности, внутренней перелинковке и содержании, которое отвечает реальному поисковому намерению.</p>
+  <h2>Где GEO создает ценность</h2><p>GEO особенно важен там, где пользователь получает синтезированный ответ вместо списка ссылок. Факты, отношения и экспертиза должны быть представлены ясно и с проверяемым контекстом.</p>
+  <ul><li>создавайте сильные тематические страницы вместо разрозненных утверждений;</li><li>используйте согласованные названия и описания сущностей;</li><li>подкрепляйте важные заявления наблюдаемыми доказательствами;</li><li>делайте авторство и организационные связи явными.</li></ul>
+  <h2>Где AEO создает ценность</h2><p>AEO фокусируется на форме ответа. Глубокий материал должен содержать короткие и ясные ответы на основные вопросы.</p>
+  <h2>Что означает AIO на практике</h2><p>AIO полезно рассматривать как операционный слой, связывающий технический доступ, ясность сущностей, структурированные данные, контент, доказательства и измерение. Он не заменяет SEO, GEO или AEO.</p>
+  <h2>Практическая последовательность</h2>
+  <ol><li>Исправьте обход, индексацию, canonical и языковые сигналы.</li><li>Согласованно определите человека, компанию, услуги и связи.</li><li>Составьте карту коммерческих вопросов и поисковых намерений.</li><li>Создайте глубокие страницы-источники по ключевым темам.</li><li>Добавьте прямые ответы и FAQ там, где это полезно.</li><li>Используйте структурированные данные только для видимой и проверяемой информации.</li><li>Измеряйте показы, переходы, конверсии и источники трафика.</li></ol>
+  <section class="content-cta"><h2>Превратите эту модель в работающую систему.</h2><p>Изучите страницу <a href="/ru/ai-search-visibility/">AI Search Visibility</a> или напишите на <a href={"mailto:"+site.email}>{site.email}</a>.</p></section>
+</ContentPage>

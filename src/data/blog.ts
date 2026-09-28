@@ -2136,6 +2136,8 @@ export const blogPath = (locale: BlogLocale) => `${localePrefix(locale)}/blog/`;
 export const homePath = (locale: BlogLocale) => locale === 'tr' ? '/' : `/${locale}/`;
 export const legacySeoArticle: Partial<Record<BlogLocale, { path: string; title: string; description: string }>> = {
   en: { path: '/blog/seo-vs-geo-vs-aeo-vs-aio/', title: 'SEO vs GEO vs AEO vs AIO: What Is the Difference?', description: 'A practical guide to the role of each search and AI visibility discipline.' },
+  ru: { path: '/ru/blog/seo-vs-geo-vs-aeo-vs-aio/', title: 'SEO, GEO, AEO и AIO: в чем разница?', description: 'Практическое руководство по дисциплинам поисковой и AI-видимости.' },
+  fa: { path: '/fa/blog/seo-vs-geo-vs-aeo-vs-aio/', title: 'تفاوت SEO، GEO، AEO و AIO چیست؟', description: 'راهنمای عملی حوزه‌های دیده‌شدن در جستجو و سیستم‌های هوش مصنوعی.' },
   tr: { path: '/blog/seo-geo-aeo-aio-farklari/', title: 'SEO, GEO, AEO ve AIO Arasındaki Farklar', description: 'Arama ve yapay zekâ görünürlüğü disiplinlerinin rolünü açıklayan pratik rehber.' },
   mk: { path: '/mk/blog/razliki-seo-geo-aeo-aio/', title: 'Разлики помеѓу SEO, GEO, AEO и AIO', description: 'Практичен водич за улогата на секоја дисциплина за пребарување и AI видливост.' },
   sr: { path: '/sr/blog/razlike-seo-geo-aeo-aio/', title: 'Razlike između SEO, GEO, AEO i AIO', description: 'Praktičan vodič kroz discipline vidljivosti u pretrazi i AI sistemima.' },
