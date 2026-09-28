@@ -68,17 +68,6 @@ fs.writeFileSync(path.join(dist, 'sitemap-index.xml'), [
   '</sitemapindex>',
   '',
 ].join('\n'), 'utf8');
-if (fs.existsSync(publicDir)) {
-  fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap, 'utf8');
-  fs.writeFileSync(path.join(publicDir, 'sitemap-index.xml'), [
-    '<?xml version="1.0" encoding="UTF-8"?>',
-    '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-    `  <sitemap><loc>${origin}/sitemap.xml</loc></sitemap>`,
-    '</sitemapindex>',
-    '',
-  ].join('\n'), 'utf8');
-}
-
 const slashRedirects = pages
   .filter(({ route }) => route !== '/')
   .map(({ route }) => `${encodeURI(route.slice(0, -1))} ${encodeURI(route)} 301`);
