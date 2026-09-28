@@ -116,6 +116,7 @@ for (const file of htmlFiles) {
   if (html.includes('G-52GXBGWHFJ') && !html.includes("window['ga-disable-' + measurementId] = false")) errors.push(`${route}: GA4 sürekli ölçüm kontratı eksik.`);
   if (html.includes('G-52GXBGWHFJ') && !html.includes('loadAnalytics();')) errors.push(`${route}: GA4 sayfa yükünde başlatılmıyor.`);
   if (title && (title.length < 15 || title.length > 90)) warnings.push(`${route}: title uzunluğu ${title.length}.`);
+  if (/\breflex\b/i.test(html)) errors.push(`${route}: retired REFLEX entity leaked into indexable HTML.`);
 }
 
 for (const page of pageByRoute.values()) {
@@ -165,7 +166,7 @@ const enHome = pageByRoute.get('/en/');
 if (enHome && !enHome.html.includes('I build digital systems')) errors.push('/en/: yeni İngilizce konumlandırma başlığı eksik.');
 
 for (const required of [
-  ['/reflex/', 'https://ctseg.com.tr/medical/reflex-disposable-gloves/'],
+  ['/reflex/', 'https://ctseg.com.tr/tr/ticari-urunler/'],
   ['/iran-antep-fistigi-tedarik-stratejisi/', 'https://ctseg.com.tr/tr/ticari-urunler/'],
 ]) {
   if (redirects.get(required[0]) !== required[1]) errors.push(`${required[0]}: beklenen 301 hedefi eksik veya yanlış.`);
