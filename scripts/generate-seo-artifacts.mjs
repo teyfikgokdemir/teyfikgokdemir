@@ -6,10 +6,10 @@ const dist = path.join(root, 'dist');
 const origin = 'https://teyfikgokdemir.com';
 const publicDir = path.join(root, 'public');
 const manualRedirects = fs.existsSync(path.join(publicDir, '_redirects'))
-  ? fs.readFileSync(path.join(publicDir, '_redirects'), 'utf8').trim().split(/\\r?\\n/).filter((line) => line && !line.trim().startsWith('#'))
+  ? fs.readFileSync(path.join(publicDir, '_redirects'), 'utf8').trim().split(/\r?\n/).filter((line) => line && !line.trim().startsWith('#'))
   : [];
 const redirectRules = manualRedirects.map((line) => {
-  const [source, target, status] = line.trim().split(/\\s+/);
+  const [source, target, status] = line.trim().split(/\s+/);
   return { source: decodeURI(source ?? ''), target, status };
 }).filter((rule) => rule.source && ['301', '308'].includes(rule.status));
 const isManualRedirectSource = (route) => redirectRules.some(({ source }) =>
@@ -79,9 +79,6 @@ if (fs.existsSync(publicDir)) {
   ].join('\n'), 'utf8');
 }
 
-const manualRedirects = fs.existsSync(path.join(root, 'public', '_redirects'))
-  ? fs.readFileSync(path.join(root, 'public', '_redirects'), 'utf8').trim().split(/\r?\n/).filter(Boolean)
-  : [];
 const slashRedirects = pages
   .filter(({ route }) => route !== '/')
   .map(({ route }) => `${encodeURI(route.slice(0, -1))} ${encodeURI(route)} 301`);
