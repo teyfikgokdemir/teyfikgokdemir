@@ -25,6 +25,11 @@ const titleText = (html) => html.match(/<title>([\s\S]*?)<\/title>/i)?.[1].repla
 const pathnameFor = (value) => { try { return decodeURI(new URL(value, origin).pathname); } catch { return undefined; } };
 const normalize = (value) => { try { return new URL(value, origin).href; } catch { return value; } };
 
+
+if (fs.existsSync(path.join('public', 'sitemap.xml')) || fs.existsSync(path.join('public', 'sitemap-index.xml'))) {
+  errors.push('Sitemap kaynak dosyaları public/ altında tutulmamalı; build sırasında üretilmeli.');
+}
+
 if (!fs.existsSync(dist)) throw new Error('dist/ bulunamadı. Önce npm run build çalıştırın.');
 walk(dist);
 

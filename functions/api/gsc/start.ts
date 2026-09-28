@@ -4,12 +4,26 @@ interface Env {
   CANSU_GSC_TOKENS?: KVNamespace;
 }
 
+function sameOriginBrowser(request: Request) {
+  const url = new URL(request.url);
+  const secFetchSite = request.headers.get('sec-fetch-site');
+  const origin = request.headers.get('origin');
+  const referer = request.headers.get('referer');
+  if (secFetchSite && !['same-origin', 'none'].includes(secFetchSite)) return false;
+  if (origin && origin !== url.origin) return false;
+  if (referer) {
+    try { if (new URL(referer).origin !== url.origin) return false; } catch { return false; }
+  }
+  return true;
+}
+
 const json = (data: unknown, status = 200) => new Response(JSON.stringify(data), {
   status,
-  headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' },
+  headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', 'x-robots-tag': 'noindex, nofollow' },
 });
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
+  if (!sameOriginBrowser(request)) return new Response('Forbidden', { status: 403, headers: { 'cache-control': 'no-store', 'x-robots-tag': 'noindex, nofollow' } });
   if (!env.GSC_CLIENT_ID || !env.GSC_REDIRECT_URI || !env.CANSU_GSC_TOKENS) {
     return json({ ok: false, error: 'Search Console OAuth yapılandırması eksik' }, 503);
   }

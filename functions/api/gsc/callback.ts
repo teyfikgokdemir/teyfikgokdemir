@@ -8,7 +8,7 @@ interface Env {
 const redirect = (request: Request, path: string, status = 302) => Response.redirect(new URL(path, request.url).toString(), status);
 const json = (data: unknown, status = 200) => new Response(JSON.stringify(data), {
   status,
-  headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' },
+  headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', 'x-robots-tag': 'noindex, nofollow' },
 });
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
