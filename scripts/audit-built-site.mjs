@@ -157,6 +157,20 @@ for (const forbidden of ['tpe-vinyl-copolymer-gloves-b2b-buying-guide','disposab
   }
 }
 
+const sharedBlogSlugs = [
+  'evaluating-products-for-international-b2b-portfolios',
+  'b2b-product-website-should-be-more-than-a-catalogue',
+  'strategic-sourcing-vs-procurement',
+  'how-to-evaluate-an-international-supplier',
+  'rfq-process-comparable-supplier-quotes',
+];
+for (const locale of ['tr','en','ru','mk','sr','sq','fa','zh','vi']) {
+  for (const slug of sharedBlogSlugs) {
+    const route = locale === 'tr' ? `/blog/${slug}/` : `/${locale}/blog/${slug}/`;
+    if (!pageByRoute.get(route)?.indexable) errors.push(`${route}: ortak blog parity sayfası eksik.`);
+  }
+}
+
 const sitemapFile = path.join(dist, 'sitemap.xml');
 if (!fs.existsSync(sitemapFile)) errors.push('sitemap.xml eksik.');
 else {

@@ -12,7 +12,6 @@ import {
   blogPath,
   postPath,
   homePath,
-  legacySeoArticle,
   type BlogLocale,
   type BlogPost,
 } from '../data/blog';
@@ -36,25 +35,13 @@ const alternates = Object.fromEntries([
   ]),
   ['x-default', origin + (post ? postPath('en', post.slug) : blogPath('en'))],
 ]);
-const legacy = legacySeoArticle[locale];
-const indexArticles = [
-  ...(legacy
-    ? [{
-        href: legacy.path,
-        title: legacy.title,
-        description: legacy.description,
-        eyebrow: 'SEO · GEO · AEO · AIO',
-        date: '',
-      }]
-    : []),
-  ...posts.map((item) => ({
-    href: postPath(locale, item.slug),
-    title: item.title[locale],
-    description: item.description[locale],
-    eyebrow: meta.eyebrow,
-    date: item.date,
-  })),
-];
+const indexArticles = posts.map((item) => ({
+  href: postPath(locale, item.slug),
+  title: item.title[locale],
+  description: item.description[locale],
+  eyebrow: meta.eyebrow,
+  date: item.date,
+}));
 const featured = indexArticles[0];
 const remaining = indexArticles.slice(1);
 const indexItems = indexArticles.map((item) => ({
