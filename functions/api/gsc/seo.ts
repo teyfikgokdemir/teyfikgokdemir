@@ -72,6 +72,32 @@ function summary(rows: SearchRow[]) {
   return { clicks, impressions, ctr, position: impressions ? positionWeight / impressions : 0 };
 }
 
+
+function opportunityRows(rows: SearchRow[]) {
+  return rows
+    .filter((row) => {
+      const impressions = row.impressions || 0;
+      const position = row.position || 0;
+      return impressions >= 10 && position >= 4 && position <= 20 && Boolean(row.keys?.[0]);
+    })
+    .map((row) => {
+      const impressions = row.impressions || 0;
+      const position = row.position || 0;
+      const ctr = row.ctr || 0;
+      const opportunityScore = impressions * Math.max(1, 21 - position) * Math.max(0.2, 1 - ctr);
+      return {
+        value: row.keys?.[0] || 'Bilinmeyen sorgu',
+        clicks: row.clicks || 0,
+        impressions,
+        ctr,
+        position,
+        opportunityScore,
+      };
+    })
+    .sort((a, b) => b.opportunityScore - a.opportunityScore)
+    .slice(0, 10);
+}
+
 function topRows(rows: SearchRow[], type: 'query' | 'page') {
   const sorted = [...rows].sort((a, b) => {
     const clickDiff = (b.clicks || 0) - (a.clicks || 0);
@@ -110,7 +136,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
           queryProperty(property, token, periods.thirtyDays.startDate, periods.thirtyDays.endDate, ['query']),
           queryProperty(property, token, periods.thirtyDays.startDate, periods.thirtyDays.endDate, ['page']),
         ]);
-        return { ...property, ok: true, periods: { sevenDays: summary(sevenSummaryRows), thirtyDays: summary(thirtySummaryRows) }, topQueries: topRows(queries, 'query'), topPages: topRows(pages, 'page') };
+        return { ...property, ok: true, periods: { sevenDays: summary(sevenSummaryRows), thirtyDays: summary(thirtySummaryRows) }, topQueries: topRows(queries, 'query'), topPages: topRows(pages, 'page'), opportunities: opportunityRows(queries) };
       } catch (error) {
         return { ...property, ok: false, error: error instanceof Error ? error.message : 'Search Console verisi alınamadı' };
       }
