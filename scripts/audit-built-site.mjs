@@ -182,6 +182,13 @@ for (const locale of ['tr','en','ru','mk','sr','sq','fa','zh','vi']) {
   }
 }
 
+for (const retiredRoute of [
+  '/blog/yapay-zeka-caginda-dijital-otomasyon-stratejileri/',
+  '/iran-antep-fistigi-tedarik-stratejisi/',
+]) {
+  if (pageByRoute.get(retiredRoute)?.indexable) errors.push(`${retiredRoute}: retired route indexlenebilir kalmış.`);
+}
+
 const sitemapFile = path.join(dist, 'sitemap.xml');
 if (!fs.existsSync(sitemapFile)) errors.push('sitemap.xml eksik.');
 else {
