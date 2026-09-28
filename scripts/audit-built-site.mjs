@@ -130,6 +130,17 @@ for (const page of pageByRoute.values()) {
   }
 }
 
+const expectedBlogLinks = {
+  '/': '/blog/',
+  '/en/': '/en/blog/',
+  '/ru/': '/ru/blog/',
+  '/mk/': '/mk/blog/',
+  '/sr/': '/sr/blog/',
+  '/sq/': '/sq/blog/',
+  '/fa/': '/fa/blog/',
+  '/zh/': '/zh/blog/',
+  '/vi/': '/vi/blog/',
+};
 const homeRoutes = ['/', '/en/', '/ru/', '/mk/', '/sr/', '/sq/', '/fa/', '/zh/', '/vi/'];
 const ecosystemMarkers = [
   'QCT Studio','QCT Commerce','CTSEG','Growth OS','Mythborn','Olivon',
@@ -139,6 +150,8 @@ const ecosystemMarkers = [
 for (const route of homeRoutes) {
   const page = pageByRoute.get(route);
   if (!page?.indexable) { errors.push(`${route}: locale ana sayfası eksik veya indexlenebilir değil.`); continue; }
+  const expectedBlog = expectedBlogLinks[route];
+  if (expectedBlog && !page.html.includes(`href=\"${expectedBlog}\"`)) errors.push(`${route}: blog navigasyon hedefi eksik veya yanlış (${expectedBlog}).`);
   for (const marker of ecosystemMarkers) if (!page.html.includes(marker)) errors.push(`${route}: ekosistem işareti eksik (${marker}).`);
   if (/data-trade-focus-link|data-specialist-link|data-commercial-evaluations/.test(page.html)) errors.push(`${route}: eski CTSEG ürün-katalog ana sayfa blokları hâlâ mevcut.`);
 }
