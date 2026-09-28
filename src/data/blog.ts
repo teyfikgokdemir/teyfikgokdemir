@@ -126,6 +126,317 @@ export interface BlogPost {
 
 export const posts: BlogPost[] = [
   {
+    "slug": "ai-assisted-operations-where-automation-helps",
+    "date": "2026-09-28",
+    "updated": "2026-09-28",
+    "readingMinutes": 8,
+    "title": {
+      "en": "AI-Assisted Operations: Where Automation Helps and Where Human Judgment Still Matters",
+      "tr": "AI Destekli Operasyonlar: Otomasyon Nerede Değer Katar, İnsan Kararı Nerede Kalmalı?",
+      "ru": "AI-операции: где автоматизация помогает, а где остается человеческое решение",
+      "mk": "AI-поддржани операции: каде помага автоматизацијата, а каде останува човечката одлука",
+      "sr": "AI-podržane operacije: gde automatizacija pomaže, a gde ostaje ljudska odluka",
+      "sq": "Operacione me AI: ku ndihmon automatizimi dhe ku mbetet vendimi njerëzor",
+      "fa": "عملیات مبتنی بر هوش مصنوعی: کجا اتوماسیون ارزش ایجاد می‌کند و کجا تصمیم انسانی ضروری است؟",
+      "zh": "AI 辅助运营：哪些环节适合自动化，哪些决策仍应由人负责",
+      "vi": "Vận hành hỗ trợ bởi AI: Khi nào nên tự động hóa và khi nào cần phán đoán con người"
+    },
+    "description": {
+      "en": "A practical operating model for using AI in research, content, analytics and workflow automation without outsourcing commercial judgment.",
+      "tr": "Araştırma, içerik, analitik ve iş akışlarında AI kullanımını hızlandırırken ticari kararı insanda tutan pratik operasyon modeli.",
+      "ru": "Практическая модель применения AI в исследованиях, контенте, аналитике и автоматизации без передачи коммерческого решения алгоритму.",
+      "mk": "Практичен модел за AI во истражување, содржина, аналитика и автоматизација без пренесување на деловната одлука на алгоритам.",
+      "sr": "Praktičan model za AI u istraživanju, sadržaju, analitici i automatizaciji bez prepuštanja poslovne odluke algoritmu.",
+      "sq": "Model praktik për përdorimin e AI në kërkim, përmbajtje, analitikë dhe automatizim pa ia deleguar vendimin tregtar algoritmit.",
+      "fa": "مدلی عملی برای استفاده از AI در پژوهش، محتوا، تحلیل و اتوماسیون بدون واگذاری قضاوت تجاری به الگوریتم.",
+      "zh": "一套面向研究、内容、分析与工作流自动化的实用 AI 运营模型，同时保留关键商业判断。",
+      "vi": "Mô hình thực tiễn để ứng dụng AI vào nghiên cứu, nội dung, phân tích và tự động hóa mà vẫn giữ quyết định thương mại ở con người."
+    },
+    "intro": {
+      "en": "AI is most useful when it reduces repetitive work, organizes evidence and accelerates iteration. It becomes risky when a team treats generated output as verified fact or delegates high-impact commercial decisions to a model.",
+      "tr": "AI en çok tekrar eden işleri azalttığında, kanıtları düzenlediğinde ve iterasyonu hızlandırdığında değerlidir. Üretilen çıktının doğrulanmış gerçek gibi kabul edilmesi veya yüksek etkili ticari kararların modele bırakılması ise riski büyütür.",
+      "ru": "AI особенно полезен, когда сокращает повторяющуюся работу, структурирует доказательства и ускоряет итерации. Риск начинается там, где сгенерированный результат принимают за проверенный факт или передают модели важные коммерческие решения.",
+      "mk": "AI е најкорисен кога ја намалува повторливата работа, ги организира доказите и ја забрзува итерацијата. Ризикот почнува кога генерираниот резултат се третира како проверен факт или важните деловни одлуки му се препуштаат на модел.",
+      "sr": "AI je najkorisniji kada smanjuje ponavljajući rad, organizuje dokaze i ubrzava iteracije. Rizik nastaje kada se generisani rezultat tretira kao proverena činjenica ili kada se važne poslovne odluke prepuste modelu.",
+      "sq": "AI është më i dobishëm kur ul punën përsëritëse, organizon provat dhe përshpejton iterimin. Rreziku nis kur rezultati i gjeneruar trajtohet si fakt i verifikuar ose vendimet me ndikim të lartë i delegohen modelit.",
+      "fa": "هوش مصنوعی زمانی بیشترین ارزش را دارد که کارهای تکراری را کاهش دهد، شواهد را سامان‌دهی کند و سرعت تکرار و بهبود را بالا ببرد. ریسک از جایی شروع می‌شود که خروجی تولیدشده به‌عنوان حقیقت تأییدشده پذیرفته شود یا تصمیم‌های تجاری مهم به مدل واگذار شوند.",
+      "zh": "AI 最有价值的场景，是减少重复劳动、整理证据并加快迭代。当团队把生成结果当作已验证事实，或把高影响商业决策直接交给模型时，风险就会迅速上升。",
+      "vi": "AI tạo nhiều giá trị nhất khi giúp giảm công việc lặp lại, sắp xếp bằng chứng và tăng tốc vòng lặp cải tiến. Rủi ro xuất hiện khi đầu ra được coi như sự thật đã kiểm chứng hoặc khi các quyết định thương mại quan trọng bị giao hẳn cho mô hình."
+    },
+    "sections": {
+      "en": [
+        {
+          "heading": "1. Automate the repetitive layer",
+          "paragraphs": [
+            "Use AI for first-pass research, summarization, classification, draft generation, data cleanup and repetitive workflow steps. These tasks benefit from speed and consistency more than from final judgment.",
+            "The output should enter a review queue, not become the final answer automatically."
+          ]
+        },
+        {
+          "heading": "2. Keep evidence and source checks explicit",
+          "paragraphs": [
+            "Any claim that affects pricing, compliance, supplier choice, legal exposure or customer communication should be traceable to an observable source.",
+            "A useful workflow stores the source, the extracted fact, the confidence level and the human who approved the decision."
+          ]
+        },
+        {
+          "heading": "3. Human judgment belongs at decision points",
+          "paragraphs": [
+            "Negotiation strategy, supplier acceptance, market-entry commitments, pricing changes and sensitive customer decisions need accountable human ownership.",
+            "AI can prepare options, identify anomalies and surface trade-offs. The final decision should remain with the person responsible for the commercial outcome."
+          ]
+        },
+        {
+          "heading": "4. Measure the system, not the novelty",
+          "paragraphs": [
+            "The useful metrics are cycle time, error rate, rework, conversion, response time and decision quality—not how many AI tools are connected.",
+            "If automation adds complexity without reducing work or improving outcomes, remove it."
+          ]
+        }
+      ],
+      "tr": [
+        {
+          "heading": "1. Tekrarlayan katmanı otomatikleştirin",
+          "paragraphs": [
+            "AI’ı ilk araştırma, özetleme, sınıflandırma, taslak üretimi, veri temizleme ve tekrar eden iş akışlarında kullanmak yüksek verim sağlar.",
+            "Çıktı doğrudan nihai sonuç olmamalı; kontrol kuyruğuna girmeli."
+          ]
+        },
+        {
+          "heading": "2. Kanıt ve kaynak kontrolünü görünür tutun",
+          "paragraphs": [
+            "Fiyat, mevzuat, tedarikçi seçimi, hukuki risk veya müşteri iletişimini etkileyen her iddia gözlemlenebilir bir kaynağa bağlanmalıdır.",
+            "İyi bir akış; kaynağı, çıkarılan bilgiyi, güven düzeyini ve kararı onaylayan kişiyi birlikte saklar."
+          ]
+        },
+        {
+          "heading": "3. Karar noktalarında insan sorumluluğu kalmalı",
+          "paragraphs": [
+            "Müzakere stratejisi, tedarikçi kabulü, pazara giriş taahhütleri, fiyat değişiklikleri ve hassas müşteri kararları hesap verebilir insan sahipliğinde olmalıdır.",
+            "AI seçenek hazırlayabilir, anomali bulabilir ve trade-off’ları gösterebilir; nihai ticari karar sorumluda kalmalıdır."
+          ]
+        },
+        {
+          "heading": "4. Aracı değil sistemi ölçün",
+          "paragraphs": [
+            "Asıl metrikler çevrim süresi, hata oranı, yeniden işleme, dönüşüm, yanıt süresi ve karar kalitesidir; bağlı AI aracı sayısı değil.",
+            "Otomasyon işi azaltmıyor veya sonucu iyileştirmiyorsa kaldırılmalıdır."
+          ]
+        }
+      ],
+      "ru": [
+        {
+          "heading": "1. Автоматизируйте повторяющийся слой",
+          "paragraphs": [
+            "AI хорошо подходит для первичного исследования, суммаризации, классификации, черновиков, очистки данных и повторяющихся шагов процесса.",
+            "Результат должен попадать на проверку, а не автоматически становиться окончательным ответом."
+          ]
+        },
+        {
+          "heading": "2. Делайте проверку источников явной",
+          "paragraphs": [
+            "Любое утверждение, влияющее на цену, соответствие требованиям, выбор поставщика или коммуникацию с клиентом, должно быть связано с проверяемым источником.",
+            "Полезный процесс хранит источник, извлеченный факт, уровень уверенности и имя человека, одобрившего решение."
+          ]
+        },
+        {
+          "heading": "3. Решение остается у человека",
+          "paragraphs": [
+            "Стратегия переговоров, принятие поставщика, обязательства по выходу на рынок, изменение цен и чувствительные решения требуют ответственного владельца.",
+            "AI может подготовить варианты и показать компромиссы, но финальное решение должен принимать человек, отвечающий за результат."
+          ]
+        },
+        {
+          "heading": "4. Измеряйте систему",
+          "paragraphs": [
+            "Важны время цикла, ошибки, повторная работа, конверсия, скорость ответа и качество решений, а не количество подключенных AI-инструментов.",
+            "Если автоматизация не снижает нагрузку и не улучшает результат, ее следует убрать."
+          ]
+        }
+      ],
+      "mk": [
+        {
+          "heading": "1. Автоматизирајте го повторливиот слој",
+          "paragraphs": [
+            "AI е корисен за првично истражување, сумирање, класификација, нацрти, чистење податоци и повторливи чекори.",
+            "Резултатот треба да оди на проверка, а не автоматски да стане финален одговор."
+          ]
+        },
+        {
+          "heading": "2. Проверувајте извори експлицитно",
+          "paragraphs": [
+            "Тврдење што влијае на цена, усогласеност, избор на добавувач или клиентска комуникација треба да има проверлив извор.",
+            "Добриот процес ги чува изворот, фактот, нивото на сигурност и лицето што ја одобрило одлуката."
+          ]
+        },
+        {
+          "heading": "3. Човекот останува сопственик на одлуката",
+          "paragraphs": [
+            "Преговори, прифаќање добавувач, пазарни обврски, промени на цени и чувствителни одлуки бараат човечка одговорност.",
+            "AI може да предложи опции и компромиси, но финалната одлука останува кај одговорното лице."
+          ]
+        },
+        {
+          "heading": "4. Мерете го системот",
+          "paragraphs": [
+            "Следете време на циклус, грешки, повторна работа, конверзија, време на одговор и квалитет на одлуката.",
+            "Ако автоматизацијата не го намалува трудот или не го подобрува резултатот, отстранете ја."
+          ]
+        }
+      ],
+      "sr": [
+        {
+          "heading": "1. Automatizujte ponavljajući sloj",
+          "paragraphs": [
+            "AI je koristan za početno istraživanje, sažimanje, klasifikaciju, nacrte, čišćenje podataka i ponavljajuće korake.",
+            "Rezultat treba da ide na proveru, a ne automatski da postane konačan odgovor."
+          ]
+        },
+        {
+          "heading": "2. Provera izvora mora biti eksplicitna",
+          "paragraphs": [
+            "Tvrdnja koja utiče na cenu, usklađenost, izbor dobavljača ili komunikaciju sa klijentom mora imati proverljiv izvor.",
+            "Dobar proces čuva izvor, izdvojenu činjenicu, nivo pouzdanosti i osobu koja je odobrila odluku."
+          ]
+        },
+        {
+          "heading": "3. Čovek ostaje vlasnik odluke",
+          "paragraphs": [
+            "Pregovori, prihvatanje dobavljača, tržišne obaveze, promene cena i osetljive odluke zahtevaju odgovornu osobu.",
+            "AI može ponuditi opcije i kompromise, ali konačna odluka ostaje kod onoga ko odgovara za ishod."
+          ]
+        },
+        {
+          "heading": "4. Merite sistem",
+          "paragraphs": [
+            "Pratite vreme ciklusa, greške, ponovni rad, konverziju, brzinu odgovora i kvalitet odluka.",
+            "Ako automatizacija ne smanjuje rad ili ne poboljšava rezultat, uklonite je."
+          ]
+        }
+      ],
+      "sq": [
+        {
+          "heading": "1. Automatizoni shtresën përsëritëse",
+          "paragraphs": [
+            "AI është i dobishëm për kërkim fillestar, përmbledhje, klasifikim, draftim, pastrim të të dhënave dhe hapa të përsëritur.",
+            "Rezultati duhet të kalojë në rishikim dhe jo të bëhet automatikisht përgjigjja përfundimtare."
+          ]
+        },
+        {
+          "heading": "2. Mbani kontrollin e burimeve të dukshëm",
+          "paragraphs": [
+            "Çdo pretendim që ndikon në çmim, përputhshmëri, zgjedhje furnizuesi ose komunikim me klientin duhet të lidhet me një burim të verifikueshëm.",
+            "Një proces i mirë ruan burimin, faktin, nivelin e besimit dhe personin që miratoi vendimin."
+          ]
+        },
+        {
+          "heading": "3. Vendimi mbetet përgjegjësi njerëzore",
+          "paragraphs": [
+            "Negocimi, pranimi i furnizuesit, angazhimet e hyrjes në treg, ndryshimet e çmimeve dhe vendimet e ndjeshme kërkojnë pronësi njerëzore.",
+            "AI mund të përgatisë opsione dhe kompromiset, por vendimi final mbetet te personi përgjegjës për rezultatin."
+          ]
+        },
+        {
+          "heading": "4. Matni sistemin",
+          "paragraphs": [
+            "Matni kohën e ciklit, gabimet, ripunimin, konvertimin, kohën e përgjigjes dhe cilësinë e vendimit.",
+            "Nëse automatizimi nuk ul punën ose nuk përmirëson rezultatin, hiqeni."
+          ]
+        }
+      ],
+      "fa": [
+        {
+          "heading": "1. لایه تکراری را خودکار کنید",
+          "paragraphs": [
+            "AI برای پژوهش اولیه، خلاصه‌سازی، طبقه‌بندی، تولید پیش‌نویس، پاک‌سازی داده و مراحل تکراری بسیار مفید است.",
+            "خروجی باید وارد صف بازبینی شود، نه اینکه به‌طور خودکار پاسخ نهایی تلقی شود."
+          ]
+        },
+        {
+          "heading": "2. کنترل منبع و شواهد را شفاف نگه دارید",
+          "paragraphs": [
+            "هر ادعایی که بر قیمت، انطباق، انتخاب تأمین‌کننده یا ارتباط با مشتری اثر می‌گذارد باید به منبع قابل بررسی متصل باشد.",
+            "یک جریان خوب منبع، واقعیت استخراج‌شده، سطح اطمینان و فرد تأییدکننده تصمیم را ثبت می‌کند."
+          ]
+        },
+        {
+          "heading": "3. مسئولیت تصمیم نهایی با انسان بماند",
+          "paragraphs": [
+            "مذاکره، پذیرش تأمین‌کننده، تعهد ورود به بازار، تغییر قیمت و تصمیم‌های حساس نیازمند مسئول انسانی مشخص است.",
+            "AI می‌تواند گزینه‌ها و تضادها را آماده کند، اما تصمیم نهایی باید نزد فرد مسئول نتیجه تجاری بماند."
+          ]
+        },
+        {
+          "heading": "4. سیستم را اندازه‌گیری کنید",
+          "paragraphs": [
+            "زمان چرخه، نرخ خطا، دوباره‌کاری، تبدیل، زمان پاسخ و کیفیت تصمیم معیارهای واقعی هستند؛ نه تعداد ابزارهای AI.",
+            "اگر اتوماسیون کار را کم نمی‌کند یا نتیجه را بهتر نمی‌کند، حذفش کنید."
+          ]
+        }
+      ],
+      "zh": [
+        {
+          "heading": "1. 先自动化重复性工作",
+          "paragraphs": [
+            "AI 适合用于初步研究、摘要、分类、草稿生成、数据清洗和重复流程步骤。",
+            "输出应进入人工复核队列，而不是直接成为最终结论。"
+          ]
+        },
+        {
+          "heading": "2. 明确保留证据与来源核验",
+          "paragraphs": [
+            "凡是影响价格、合规、供应商选择或客户沟通的事实，都应能追溯到可验证来源。",
+            "成熟流程会记录来源、提取事实、置信度以及最终批准决策的人。"
+          ]
+        },
+        {
+          "heading": "3. 决策节点必须保留人工责任",
+          "paragraphs": [
+            "谈判策略、供应商准入、市场进入承诺、价格调整和敏感客户决策都需要明确的人类责任主体。",
+            "AI 可以准备选项、发现异常和呈现权衡，但最终商业决策应由结果负责人做出。"
+          ]
+        },
+        {
+          "heading": "4. 衡量系统，而不是工具数量",
+          "paragraphs": [
+            "真正重要的指标是流程周期、错误率、返工、转化、响应时间和决策质量，而不是接入了多少 AI 工具。",
+            "如果自动化没有减少工作或改善结果，就应删除。"
+          ]
+        }
+      ],
+      "vi": [
+        {
+          "heading": "1. Tự động hóa lớp công việc lặp lại",
+          "paragraphs": [
+            "AI phù hợp cho nghiên cứu bước đầu, tóm tắt, phân loại, tạo bản nháp, làm sạch dữ liệu và các bước lặp lại trong quy trình.",
+            "Đầu ra nên đi vào hàng chờ kiểm duyệt, không nên tự động trở thành kết luận cuối cùng."
+          ]
+        },
+        {
+          "heading": "2. Giữ việc kiểm tra nguồn thật rõ ràng",
+          "paragraphs": [
+            "Mọi thông tin ảnh hưởng đến giá, tuân thủ, lựa chọn nhà cung cấp hoặc giao tiếp với khách hàng cần truy vết được đến nguồn có thể kiểm chứng.",
+            "Một quy trình tốt lưu nguồn, dữ kiện rút ra, mức độ tin cậy và người phê duyệt quyết định."
+          ]
+        },
+        {
+          "heading": "3. Con người vẫn sở hữu điểm quyết định",
+          "paragraphs": [
+            "Chiến lược đàm phán, chấp nhận nhà cung cấp, cam kết vào thị trường, thay đổi giá và quyết định nhạy cảm cần có người chịu trách nhiệm rõ ràng.",
+            "AI có thể chuẩn bị lựa chọn, phát hiện bất thường và nêu đánh đổi; quyết định cuối cùng vẫn thuộc về người chịu trách nhiệm kết quả thương mại."
+          ]
+        },
+        {
+          "heading": "4. Đo lường hệ thống",
+          "paragraphs": [
+            "Các chỉ số cần theo dõi là thời gian chu kỳ, lỗi, làm lại, chuyển đổi, thời gian phản hồi và chất lượng quyết định, không phải số lượng công cụ AI.",
+            "Nếu tự động hóa không giảm việc hoặc cải thiện kết quả, hãy loại bỏ nó."
+          ]
+        }
+      ]
+    }
+  },
+  {
     "slug": "evaluating-products-for-international-b2b-portfolios",
     "date": "2026-08-08",
     "updated": "2026-08-08",
