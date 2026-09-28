@@ -919,8 +919,8 @@ export const posts: BlogPost[] = [
           "heading": "10. Son Karar: Ürün mü, Sistem mi?",
           "paragraphs": [
             "Son kararı verirken yalnızca tek bir ürünü değil, ürünün içinde yer aldığı tedarik sistemini seçeriz.",
-            "Örnek Vaka Context: Reflex Plastik ve Ambalaj San. A.Ş. tarafından üretilen Reflex eldiven portföyünü değerlendirirken tam olarak bu 10 adımlı disiplini uyguladık. Ürünün 7 uzman modeli, net ambalaj standartları ve <a href=\"https://ctseg.com.tr/\" target=\"_blank\" rel=\"noopener noreferrer\">CTSEG Sanayi ve Ticaret Limited Şirketi</a> üzerinden yürüttüğümüz B2B tedarik koordinasyonu ile sürdürülebilir bir ticari sistem kurduk.",
-            "<a class=\"button primary\" href=\"/reflex/\">Reflex B2B Ürün Sistemini İnceleyin →</a>"
+            "Örnek vaka olarak, doğrulanmış bir üretici portföyünü değerlendirirken bu 10 adımlı disiplini uyguladık. Teknik spesifikasyonları, ambalaj standartlarını, tedarikçi doğrulamasını ve <a href=\"https://ctseg.com.tr/\" target=\"_blank\" rel=\"noopener noreferrer\">CTSEG Sanayi ve Ticaret Limited Şirketi</a> üzerinden yürütülen B2B tedarik koordinasyonunu tek bir sürdürülebilir ticari sistemde birleştirdik.",
+            "<a class=\"button primary\" href=\"https://ctseg.com.tr/tr/ticari-urunler/\" target=\"_blank\" rel=\"noopener noreferrer\">CTSEG Ticari Ürün Yapısını İnceleyin →</a>"
           ],
           "callout": "Kurucu Notu: CTSEG bir üretici değil, uluslararası tedarik ve ticaret operasyonlarını yapılandıran ana ticari platformumuzdur.",
           "faq": [
@@ -937,8 +937,8 @@ export const posts: BlogPost[] = [
               "answer": "Uluslararası nakliye maliyetleri palet ve koli yükleme yoğunluğuna bağlıdır; eksik ambalaj verisi nakliye maliyetini artırır."
             },
             {
-              "question": "Reflex eldiven portföyü bu çerçevede nasıl konumlandırılmıştır?",
-              "answer": "Reflex Plastik üretici firmadır; CTSEG ise bu ürünlerin B2B tedarik, ihracat ve kurumsal satış koordinasyonunu yürütür."
+              "question": "Doğrulanmış bir ürün portföyü bu çerçevede nasıl konumlandırılır?",
+              "answer": "Üretici teknik ve ticari verileri sağlar; CTSEG ise doğrulama, B2B tedarik, ihracat ve kurumsal satış koordinasyonunu yapılandırır."
             },
             {
               "question": "CTSEG bu değerlendirme sürecinde nasıl bir rol oynar?",
@@ -1006,8 +1006,8 @@ export const posts: BlogPost[] = [
           "heading": "10. Final Decision: Product or Commercial System?",
           "paragraphs": [
             "The final decision is never just about buying a product; it is about establishing a repeatable commercial operating system.",
-            "Case Example: When evaluating the Reflex glove portfolio manufactured by Reflex Plastik ve Ambalaj San. A.Ş., we applied this exact 10-step framework. By organizing 7 specialized models, clean carton packing, and B2B export coordination through <a href=\"https://ctseg.com.tr/en/\" target=\"_blank\" rel=\"noopener noreferrer\">CTSEG</a>, we created a resilient supply system.",
-            "<a class=\"button primary\" href=\"/en/reflex/\">Explore REFLEX B2B Product System →</a>"
+            "Case example: when evaluating a verified manufacturer portfolio, we applied this exact 10-step framework. We combined technical specifications, packaging standards, supplier verification and B2B export coordination through <a href=\"https://ctseg.com.tr/en/\" target=\"_blank\" rel=\"noopener noreferrer\">CTSEG</a> into a resilient supply system.",
+            "<a class=\"button primary\" href=\"https://ctseg.com.tr/en/trade-products/\" target=\"_blank\" rel=\"noopener noreferrer\">Explore CTSEG Trade Products →</a>"
           ],
           "callout": "Founder Note: CTSEG is not a manufacturer; it is our principal commercial company structuring international trade, sourcing, and supply operations.",
           "faq": [
@@ -1024,8 +1024,8 @@ export const posts: BlogPost[] = [
               "answer": "Freight costs depend on carton and pallet packing density; incomplete packaging data leads to shipping inefficiencies."
             },
             {
-              "question": "How is the Reflex glove portfolio positioned?",
-              "answer": "Reflex Plastik is the manufacturer; CTSEG acts as the official B2B trade operator and export coordinator."
+              "question": "How should a verified B2B product portfolio be positioned?",
+              "answer": "The manufacturer supplies verifiable technical and commercial data; CTSEG structures supplier verification, B2B trade and export coordination."
             },
             {
               "question": "What role does CTSEG play in this framework?",
@@ -1092,8 +1092,8 @@ export const posts: BlogPost[] = [
         {
           "heading": "10. Крајна одлука: Производ или систем?",
           "paragraphs": [
-            "Примерот со ракавиците Reflex произведени од Reflex Plastik и координирани од CTSEG покажува стабилен систем.",
-            "<a class=\"button primary\" href=\"/mk/reflex/\">Истражете го REFLEX B2B системот →</a>"
+            "Пример со проверено производно портфолио координирано преку CTSEG покажува како се гради стабилен B2B систем.",
+            "<a class=\"button primary\" href=\"https://ctseg.com.tr/en/trade-products/\" target=\"_blank\" rel=\"noopener noreferrer\">Истражете го CTSEG B2B системот →</a>"
           ],
           "callout": "Забелешка: CTSEG не е производител, туку главен трговски оператор за меѓународно снабдување.",
           "faq": [
@@ -1166,8 +1166,8 @@ export const posts: BlogPost[] = [
         {
           "heading": "10. Konačna odluka: Proizvod ili sistem?",
           "paragraphs": [
-            "Primer sa rukavicama Reflex koje proizvodi Reflex Plastik i koordiniše CTSEG pokazuje stabilan sistem.",
-            "<a class=\"button primary\" href=\"/sr/reflex/\">Istražite REFLEX B2B sistem →</a>"
+            "Primer verifikovanog proizvodnog portfolija koji koordinira CTSEG pokazuje kako se gradi stabilan B2B sistem.",
+            "<a class=\"button primary\" href=\"https://ctseg.com.tr/en/trade-products/\" target=\"_blank\" rel=\"noopener noreferrer\">Istražite CTSEG B2B sistem →</a>"
           ],
           "callout": "Napomena: CTSEG nije proizvođač, već glavni komercijalni operater za međunarodno snabdevanje.",
           "faq": [
@@ -1240,8 +1240,8 @@ export const posts: BlogPost[] = [
         {
           "heading": "10. Vendimi përfundimtar: Produkt apo sistem?",
           "paragraphs": [
-            "Shembulli i dorezave Reflex të prodhuara nga Reflex Plastik dhe të koordinuara nga CTSEG tregon një sistem të qëndrueshëm.",
-            "<a class=\"button primary\" href=\"/sq/reflex/\">Eksploroni Sistemin REFLEX B2B →</a>"
+            "Një portofol produktesh i verifikuar dhe i koordinuar nga CTSEG tregon se si ndërtohet një sistem i qëndrueshëm B2B.",
+            "<a class=\"button primary\" href=\"https://ctseg.com.tr/en/trade-products/\" target=\"_blank\" rel=\"noopener noreferrer\">Eksploroni Sistemin B2B të CTSEG →</a>"
           ],
           "callout": "Njoftim: CTSEG nuk është prodhues, por kompania kryesore tregtare që strukturon furnizimin ndërkombëtar.",
           "faq": [
@@ -1314,8 +1314,8 @@ export const posts: BlogPost[] = [
         {
           "heading": "۱۰. تصمیم نهایی: محصول یا سیستم تجاری؟",
           "paragraphs": [
-            "نمونه دستکش‌های رفلکس که توسط Reflex Plastik تولید و توسط CTSEG هماهنگی تجاری می‌شود نشان‌دهنده یک سیستم پایدار است.",
-            "<a class=\"button primary\" href=\"/fa/reflex/\">بررسی سیستم B2B دستکش‌های رفلکس →</a>"
+            "نمونه یک سبد محصول تأییدشده که هماهنگی تجاری آن توسط CTSEG انجام می‌شود، نشان می‌دهد چگونه یک سیستم پایدار B2B شکل می‌گیرد.",
+            "<a class=\"button primary\" href=\"https://ctseg.com.tr/fa/\" target=\"_blank\" rel=\"noopener noreferrer\">بررسی ساختار تجاری B2B شرکت CTSEG →</a>"
           ],
           "callout": "نکته بنیان‌گذار: شرکت CTSEG تولیدکننده نیست؛ بلکه شرکت اصلی ما برای ساختاردهی تجارت و تأمین بین‌المللی است.",
           "faq": [
@@ -1485,7 +1485,7 @@ export const posts: BlogPost[] = [
         {
           "heading": "Çok Dilli B2B Ürün Sunumu",
           "paragraphs": [
-            "Uluslararası pazarlara hitap eden bir B2B sitesi; Türkçe, İngilizce, Makedonca, Sırpça, Arnavutça ve Farsça gibi hedef pazar dillerinde doğrudan URL yapıları (Örn. /reflex/, /en/reflex/, /fa/reflex/) sunmalıdır. Otomatik çeviri yerine yerelleştirilmiş içerik güven yaratır."
+            "Uluslararası pazarlara hitap eden bir B2B sitesi, hedef pazar dillerinde doğrudan ve indekslenebilir URL yapıları sunmalıdır. Otomatik çeviri yerine yerelleştirilmiş içerik ve sayfa bazlı hreflang eşleşmeleri güven yaratır."
           ]
         },
         {
@@ -1499,7 +1499,7 @@ export const posts: BlogPost[] = [
             "AEO (Answer Engine Optimization): Kullanıcı sorularına doğrudan yanıt sunma.",
             "AIO (AI Optimization): Yapay zekâ ajanları için veri entegrasyonu.",
             "Structured Data (JSON-LD): Ürün, organizasyon ve FAQ verisini makine dilinde tanımlama.",
-            "Entity Clarity: Üretici (Reflex Plastik) ve Tedarikçi (CTSEG) ilişkisini netleştirme."
+            "Entity Clarity: Üretici, tedarikçi ve ticari koordinatör rollerini yapılandırılmış veri ve açık içerikle birbirinden ayırma."
           ]
         },
         {
@@ -1522,13 +1522,13 @@ export const posts: BlogPost[] = [
           ]
         },
         {
-          "heading": "Reflex Üzerinden Bir Örnek",
+          "heading": "Doğrulanmış B2B Portföyü Üzerinden Bir Örnek",
           "paragraphs": [
-            "Bu web sitesinde kurduğumuz <a href=\"/reflex/\">Reflex B2B Ürün Bölümü</a>, katalog mantığının ötesine geçen canlı bir örnektir. 7 Reflex ürününün (<a href=\"/reflex/flex-hi-tech/\">Flex Hi-Tech</a>, <a href=\"/reflex/winlyex-powder-free/\">Winlyex Powder-Free</a> vb.) tüm teknik verileri, ambalaj detayları ve SSS alanları 6 dilde yapılandırılmıştır.",
+            "CTSEG için geliştirdiğimiz <a href=\"https://ctseg.com.tr/tr/ticari-urunler/\" target=\"_blank\" rel=\"noopener noreferrer\">ticari ürün mimarisi</a>, katalog mantığının ötesine geçen canlı bir örnektir. Ürün teknik verileri, ambalaj detayları, kullanım alanları, RFQ yönlendirmeleri ve SSS alanları çok dilli ve makine tarafından okunabilir bir yapıda sunulur.",
             "Sonuç olarak: B2B web sitesi bir katalog değil, satın alma kararını kolaylaştıran ticari bir bilgi sistemi olmalıdır.",
-            "<a class=\"button primary\" href=\"/reflex/\">Reflex B2B Ürün Yapısını İnceleyin →</a>"
+            "<a class=\"button primary\" href=\"https://ctseg.com.tr/tr/ticari-urunler/\" target=\"_blank\" rel=\"noopener noreferrer\">CTSEG B2B Ürün Yapısını İnceleyin →</a>"
           ],
-          "callout": "Sistem Notu: Ürün verileri üretici firma Reflex Plastik’e aittir; B2B tedarik koordinasyonu CTSEG tarafından yönetilir.",
+          "callout": "Sistem Notu: Ürün verileri doğrulanabilir üretici kaynaklarına dayanır; B2B tedarik ve ticari koordinasyon CTSEG tarafından yapılandırılır.",
           "faq": [
             {
               "question": "PDF katalog neden dijital B2B sunumu için yetersizdir?",
@@ -1594,7 +1594,7 @@ export const posts: BlogPost[] = [
         {
           "heading": "Multilingual B2B Product Presentation",
           "paragraphs": [
-            "International trade websites must provide dedicated, indexable language URLs (e.g. /reflex/, /en/reflex/, /fa/reflex/). Localized content builds international credibility."
+            "International trade websites should provide dedicated, indexable language URLs with reciprocal hreflang mapping. Properly localized content builds international credibility and clearer machine-readable market signals."
           ]
         },
         {
@@ -1631,13 +1631,13 @@ export const posts: BlogPost[] = [
           ]
         },
         {
-          "heading": "A Concrete Example: The Reflex B2B Showcase",
+          "heading": "A Concrete Example: A Verified B2B Product Architecture",
           "paragraphs": [
-            "The <a href=\"/en/reflex/\">Reflex B2B Product Showcase</a> built on this website demonstrates this system in action. All 7 Reflex models (<a href=\"/en/reflex/flex-hi-tech/\">Flex Hi-Tech</a>, <a href=\"/en/reflex/winlyex-powder-free/\">Winlyex Powder-Free</a>, etc.) feature structured technical specs, packaging data, and FAQs across 6 languages.",
+            "The <a href=\"https://ctseg.com.tr/en/trade-products/\" target=\"_blank\" rel=\"noopener noreferrer\">CTSEG trade-product architecture</a> demonstrates this system in action. Technical specifications, packaging data, use cases, RFQ pathways and FAQs are organized as localized, machine-readable commercial content.",
             "In conclusion: A B2B website is not a catalogue; it must be a commercial decision system that streamlines purchasing decisions.",
-            "<a class=\"button primary\" href=\"/en/reflex/\">Explore REFLEX B2B Product Showcase →</a>"
+            "<a class=\"button primary\" href=\"https://ctseg.com.tr/en/trade-products/\" target=\"_blank\" rel=\"noopener noreferrer\">Explore CTSEG B2B Product Architecture →</a>"
           ],
-          "callout": "System Note: Product specifications belong to manufacturer Reflex Plastik; B2B procurement coordination is operated by CTSEG.",
+          "callout": "System Note: Product specifications should be grounded in verifiable manufacturer sources; B2B procurement and commercial coordination are structured by CTSEG.",
           "faq": [
             {
               "question": "Why are PDF catalogues insufficient for digital B2B sales?",
@@ -1688,11 +1688,11 @@ export const posts: BlogPost[] = [
           ]
         },
         {
-          "heading": "Пример со ракавиците Reflex",
+          "heading": "Пример со проверено B2B портфолио",
           "paragraphs": [
-            "Делот за <a href=\"/mk/reflex/\">Reflex ракавици</a> го покажа овој модел во пракса.",
+            "Структурирано и проверено B2B продуктно портфолио го покажува овој модел во пракса.",
             "Заклучок: B2B веб-страницата мора да биде систем за комерцијални одлуки.",
-            "<a class=\"button primary\" href=\"/mk/reflex/\">Истражете ги REFLEX ракавиците →</a>"
+            "<a class=\"button primary\" href=\"https://ctseg.com.tr/en/trade-products/\" target=\"_blank\" rel=\"noopener noreferrer\">Истражете ја CTSEG продуктната архитектура →</a>"
           ],
           "faq": [
             {
@@ -1732,11 +1732,11 @@ export const posts: BlogPost[] = [
           ]
         },
         {
-          "heading": "Primer sa rukavicama Reflex",
+          "heading": "Primer verifikovanog B2B portfolija",
           "paragraphs": [
-            "Deo za <a href=\"/sr/reflex/\">Reflex rukavice</a> pokazuje ovaj model u praksi.",
+            "Strukturiran i verifikovan B2B portfolio pokazuje ovaj model u praksi.",
             "Zaključak: B2B veb-sajt mora biti sistem komercijalnog odlučivanja.",
-            "<a class=\"button primary\" href=\"/sr/reflex/\">Istražite REFLEX rukavice →</a>"
+            "<a class=\"button primary\" href=\"https://ctseg.com.tr/en/trade-products/\" target=\"_blank\" rel=\"noopener noreferrer\">Istražite CTSEG produktnu arhitekturu →</a>"
           ],
           "faq": [
             {
@@ -1776,11 +1776,11 @@ export const posts: BlogPost[] = [
           ]
         },
         {
-          "heading": "Shembulli me dorezat Reflex",
+          "heading": "Shembull me një portofol B2B të verifikuar",
           "paragraphs": [
-            "Seksioni i <a href=\"/sq/reflex/\">dorezave Reflex</a> tregon këtë model në praktikë.",
+            "Një portofol produktesh B2B i strukturuar dhe i verifikuar e tregon këtë model në praktikë.",
             "Përfundim: Faqja e produktit B2B duhet të jetë një sistem vendimmarrjeje tregtare.",
-            "<a class=\"button primary\" href=\"/sq/reflex/\">Eksploroni Dorezat REFLEX →</a>"
+            "<a class=\"button primary\" href=\"https://ctseg.com.tr/en/trade-products/\" target=\"_blank\" rel=\"noopener noreferrer\">Eksploroni arkitekturën e produkteve CTSEG →</a>"
           ],
           "faq": [
             {
@@ -1822,9 +1822,9 @@ export const posts: BlogPost[] = [
         {
           "heading": "نمونه عملی دستکش‌های رفلکس",
           "paragraphs": [
-            "بخش <a href=\"/fa/reflex/\">دستکش‌های رفلکس B2B</a> این مدل را در عمل نشان می‌دهد.",
+            "یک سبد محصول B2B ساختاریافته و تأییدشده، این مدل را در عمل نشان می‌دهد.",
             "نتیجه‌گیری: وب‌سایت B2B باید یک سیستم تصمیم‌گیری تجاری باشد.",
-            "<a class=\"button primary\" href=\"/fa/reflex/\">بررسی دستکش‌های B2B رفلکس →</a>"
+            "<a class=\"button primary\" href=\"https://ctseg.com.tr/fa/\" target=\"_blank\" rel=\"noopener noreferrer\">بررسی معماری تجاری CTSEG →</a>"
           ],
           "faq": [
             {
