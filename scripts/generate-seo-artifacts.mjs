@@ -4,6 +4,17 @@ import path from 'node:path';
 const root = process.cwd();
 const dist = path.join(root, 'dist');
 const origin = 'https://teyfikgokdemir.com';
+const publicDir = path.join(root, 'public');
+const manualRedirects = fs.existsSync(path.join(publicDir, '_redirects'))
+  ? fs.readFileSync(path.join(publicDir, '_redirects'), 'utf8').trim().split(/\\r?\\n/).filter((line) => line && !line.trim().startsWith('#'))
+  : [];
+const redirectRules = manualRedirects.map((line) => {
+  const [source, target, status] = line.trim().split(/\\s+/);
+  return { source: decodeURI(source ?? ''), target, status };
+}).filter((rule) => rule.source && ['301', '308'].includes(rule.status));
+const isManualRedirectSource = (route) => redirectRules.some(({ source }) =>
+  source.endsWith('*') ? route.startsWith(source.slice(0, -1)) : route === source
+);
 
 if (!fs.existsSync(dist)) {
   throw new Error('dist/ bulunamadı. Önce npm run build çalıştırın.');
@@ -29,6 +40,7 @@ const pages = [];
 
 for (const file of htmlFiles) {
   const route = routeFor(file);
+  if (isManualRedirectSource(route)) continue;
   const html = fs.readFileSync(file, 'utf8');
   const metaTags = html.match(/<meta\b[^>]*>/gi) ?? [];
   const robots = attr(metaTags.find((tag) => attr(tag, 'name')?.toLowerCase() === 'robots'), 'content') ?? '';
@@ -56,7 +68,6 @@ fs.writeFileSync(path.join(dist, 'sitemap-index.xml'), [
   '</sitemapindex>',
   '',
 ].join('\n'), 'utf8');
-const publicDir = path.join(root, 'public');
 if (fs.existsSync(publicDir)) {
   fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap, 'utf8');
   fs.writeFileSync(path.join(publicDir, 'sitemap-index.xml'), [
