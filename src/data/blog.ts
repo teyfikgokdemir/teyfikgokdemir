@@ -1345,7 +1345,7 @@ export const posts: BlogPost[] = [
       "en": "A B2B Product Website Must Be More Than a Catalogue",
       "mk": "B2B веб-страницата за производи мора да биде повеќе од каталог",
       "sr": "B2B veb-sajt za proizvode mora biti više od kataloga",
-      "sq": "Faqja e Produktit B2B Duhet të Jetë Më Çok se një Katalog",
+      "sq": "Faqja e Produktit B2B Duhet të Jetë Më Shumë se një Katalog",
       "fa": "وب‌سایت محصول B2B باید فراتر از یک کاتالوگ باشد"
     },
     "description": {
