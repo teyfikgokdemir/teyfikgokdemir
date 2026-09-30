@@ -1367,7 +1367,7 @@ export const posts: BlogPost[] = [
       "en": "Traditional B2B trade product presentation often relies on static PDF catalogues or printed brochures. However, modern institutional buyers and automated search engines demand rapidly accessible, verifiable technical data formatted into structured, multilingual digital product systems. A B2B website is not a brochure; it is a commercial decision system.",
       "mk": "Традиционалната B2B презентација се потпира на статички PDF каталози. Но модерните купувачи и AI системи бараат брз пристап до структурирани податоци.",
       "sr": "Tradicionalna B2B prezentacija se oslanja na statičke PDF kataloge. Ali moderni kupci i AI sistemi traže brz pristup strukturisanim podacima.",
-      "sq": "Prezantimi traditional B2B mbështetet te katalogët PDF statikë. Por blerësit modernë dhe sistemet AI kërkojnë të dhëna të strukturuara.",
+      "sq": "Prezantimi tradicional B2B mbështetet te katalogët PDF statikë. Por blerësit modernë dhe sistemet AI kërkojnë të dhëna të strukturuara.",
       "fa": "ارائه традиционный B2B غالباً متکی بر کاتالوگ‌های پی‌دی‌اف ایستا است. اما خریداران امروز و موتورهای هوش مصنوعی نیازمند داده‌های ساختاریافته، چندزبانه و قابل اعتبارسنجی هستند."
     },
     "sections": {
@@ -1760,7 +1760,7 @@ export const posts: BlogPost[] = [
         {
           "heading": "Të dhënat që kërkojnë blerësit B2B",
           "paragraphs": [
-            "Nevoiten materiali, specifikimet teknike, ngjyrat, madhësitë dhe paketimi."
+            "Nevojiten materiali, specifikimet teknike, ngjyrat, madhësitë dhe paketimi."
           ]
         },
         {
