@@ -35,8 +35,14 @@ import PersonalHomePalette from './PersonalHomePalette.astro';
   }
 
   .personal-home .hero-media {
+    position: relative !important;
     min-height: 0 !important;
+    max-height: calc(100svh - 140px) !important;
     align-self: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    overflow: hidden !important;
   }
 
   .personal-home .hero-media::before,
@@ -56,10 +62,13 @@ import PersonalHomePalette from './PersonalHomePalette.astro';
   }
 
   .personal-home .portrait-shell {
+    width: 100% !important;
+    max-width: 480px !important;
+    margin-inline: auto !important;
     padding: 0 !important;
     background: transparent !important;
     border-radius: 22px !important;
-    overflow: hidden;
+    overflow: hidden !important;
     box-shadow: none !important;
     filter: none !important;
   }
@@ -71,11 +80,18 @@ import PersonalHomePalette from './PersonalHomePalette.astro';
   }
 
   .personal-home .portrait-shell img {
-    max-height: calc(100svh - 150px) !important;
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: calc(100svh - 165px) !important;
+    aspect-ratio: 3 / 4 !important;
     border-radius: 20px !important;
     box-shadow: none !important;
     filter: none !important;
     object-fit: cover !important;
+    object-position: 50% 18% !important;
   }
 
   .personal-home .section {
