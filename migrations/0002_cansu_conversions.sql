@@ -4,8 +4,9 @@ CREATE TABLE IF NOT EXISTS conversion_events (
   event_type TEXT NOT NULL,
   landing_path TEXT NOT NULL DEFAULT '/',
   source TEXT NOT NULL DEFAULT 'unknown',
+  event_quality TEXT NOT NULL DEFAULT 'browser',
   count INTEGER NOT NULL DEFAULT 0,
-  PRIMARY KEY (site, day, event_type, landing_path, source)
+  PRIMARY KEY (site, day, event_type, landing_path, source, event_quality)
 );
 
 CREATE INDEX IF NOT EXISTS idx_conversion_events_day_site
