@@ -76,7 +76,7 @@ const ecosystemLinks = [
 
     <div class="header-actions">
       <div class="language-dropdown" data-language-dropdown>
-        <button type="button" class="language-button" aria-expanded="false" aria-label={labels.language} data-language-trigger>
+        <button type="button" class="language-button" aria-expanded="false" aria-label={`${labels.language}: ${String(locale).toUpperCase()}`} data-language-trigger>
           {String(locale).toUpperCase()}<span aria-hidden="true">⌄</span>
         </button>
         <div class="language-panel" data-language-panel>
@@ -174,6 +174,16 @@ const ecosystemLinks = [
   };
   setupPopover('[data-nav-dropdown]','[data-dropdown-trigger]','[data-dropdown-panel]');
   setupPopover('[data-language-dropdown]','[data-language-trigger]','[data-language-panel]');
+  header?.querySelectorAll('.language-panel a, .mobile-language-panel a').forEach((link) => {
+    if (!(link instanceof HTMLAnchorElement)) return;
+    try {
+      const target = new URL(link.href, location.origin);
+      if (location.search) target.search = location.search;
+      if (location.hash) target.hash = location.hash;
+      link.href = target.pathname + target.search + target.hash;
+      link.dataset.languageStatePreserved = 'true';
+    } catch {}
+  });
 </script>
 
 <style>
