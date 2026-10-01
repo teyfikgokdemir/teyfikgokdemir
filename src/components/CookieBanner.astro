@@ -10,63 +10,63 @@ const { locale } = Astro.props;
 const messages = {
   tr: {
     title: 'Çerez tercihleri',
-    text: 'Zorunlu çerezler sitenin çalışması için kullanılır. Temel trafik ve performans ölçümü, tercih seçiminizden bağımsız olarak devam eder.',
+    text: 'Zorunlu çerezler sitenin çalışması için kullanılır. İsteğe bağlı trafik ve performans analitiği yalnızca onay vermeniz halinde etkinleşir.',
     privacy: 'Gizlilik Politikası',
     reject: 'Reddet',
     accept: 'Onayla',
   },
   ru: {
     title: 'Файлы cookie',
-    text: 'Обязательные cookie используются для работы сайта. Базовое измерение трафика и производительности продолжается независимо от выбранной настройки.',
+    text: 'Обязательные cookie используются для работы сайта. Необязательная аналитика трафика и производительности включается только после вашего согласия.',
     privacy: 'Политика конфиденциальности',
     reject: 'Отклонить',
     accept: 'Принять',
   },
   en: {
     title: 'Cookie preferences',
-    text: 'Essential cookies keep the site working. Basic traffic and performance measurement continues regardless of your preference selection.',
+    text: 'Essential cookies keep the site working. Optional traffic and performance analytics are enabled only after you give consent.',
     privacy: 'Privacy Policy',
     reject: 'Reject',
     accept: 'Accept',
   },
   mk: {
     title: 'Поставки за колачиња',
-    text: 'Неопходните колачиња овозможуваат работа на страницата. Основното мерење на сообраќајот и перформансите продолжува независно од изборот.',
+    text: 'Неопходните колачиња овозможуваат работа на страницата. Опционалната аналитика за сообраќај и перформанси се активира само со ваша согласност.',
     privacy: 'Политика за приватност',
     reject: 'Одбиј',
     accept: 'Прифати',
   },
   sr: {
     title: 'Podešavanja kolačića',
-    text: 'Neophodni kolačići omogućavaju rad sajta. Osnovno merenje saobraćaja i performansi nastavlja se bez obzira na izbor.',
+    text: 'Neophodni kolačići omogućavaju rad sajta. Opciona analitika saobraćaja i performansi aktivira se samo uz vašu saglasnost.',
     privacy: 'Politika privatnosti',
     reject: 'Odbij',
     accept: 'Prihvati',
   },
   sq: {
     title: 'Preferencat e cookies',
-    text: 'Cookies thelbësore mundësojnë funksionimin e faqes. Matja bazë e trafikut dhe performancës vazhdon pavarësisht zgjedhjes suaj.',
+    text: 'Cookies thelbësore mundësojnë funksionimin e faqes. Analitika opsionale e trafikut dhe performancës aktivizohet vetëm pasi të jepni pëlqimin.',
     privacy: 'Politika e Privatësisë',
     reject: 'Refuzo',
     accept: 'Prano',
   },
   fa: {
     title: 'تنظیمات کوکی',
-    text: 'کوکی‌های ضروری برای عملکرد سایت استفاده می‌شوند. اندازه‌گیری پایه ترافیک و عملکرد، مستقل از انتخاب شما ادامه دارد.',
+    text: 'کوکی‌های ضروری برای عملکرد سایت استفاده می‌شوند. تحلیل اختیاری ترافیک و عملکرد فقط پس از تأیید شما فعال می‌شود.',
     privacy: 'سیاست حفظ حریم خصوصی',
     reject: 'رد',
     accept: 'پذیرش',
   },
   zh: {
     title: 'Cookie 偏好设置',
-    text: '必要 Cookie 用于保障网站基本功能运行。基础流量与性能测量会独立于您的偏好选择继续进行。',
+    text: '必要 Cookie 用于保障网站基本功能运行。可选的流量与性能分析仅在您明确同意后启用。',
     privacy: '隐私政策',
     reject: '拒绝',
     accept: '同意',
   },
   vi: {
     title: 'Tùy chọn Cookie',
-    text: 'Cookie thiết yếu giúp website vận hành chuẩn xác. Việc đo lường lưu lượng và hiệu suất cơ bản vẫn tiếp tục bất kể lựa chọn của bạn.',
+    text: 'Cookie thiết yếu giúp website vận hành chuẩn xác. Phân tích lưu lượng và hiệu suất tùy chọn chỉ được bật sau khi bạn đồng ý.',
     privacy: 'Chính sách bảo mật',
     reject: 'Từ chối',
     accept: 'Chấp nhận',
@@ -95,14 +95,22 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
     if (!(banner instanceof HTMLElement)) return;
 
     let analyticsLoaded = false;
-    window['ga-disable-' + measurementId] = false;
+    let sourceBeaconLoaded = false;
+    window['ga-disable-' + measurementId] = true;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+    window.gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+    });
 
     const loadAnalytics = () => {
       if (analyticsLoaded) return;
       analyticsLoaded = true;
       window['ga-disable-' + measurementId] = false;
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+      window.gtag('consent', 'update', { analytics_storage: 'granted' });
       window.gtag('js', new Date());
       window.gtag('config', measurementId, {
         anonymize_ip: true,
@@ -116,16 +124,39 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
       document.head.appendChild(script);
     };
 
+    const loadSourceBeacon = () => {
+      if (sourceBeaconLoaded || document.querySelector('script[data-tg-source-beacon]')) return;
+      sourceBeaconLoaded = true;
+      const script = document.createElement('script');
+      script.src = '/cansu-source-beacon.js';
+      script.defer = true;
+      script.dataset.site = 'teyfikgokdemir';
+      script.dataset.tgSourceBeacon = 'true';
+      document.body.appendChild(script);
+    };
+
+    const clearAnalyticsCookies = () => {
+      document.cookie.split(';').map((item) => item.trim().split('=')[0]).filter((name) => name === '_ga' || name.startsWith('_ga_')).forEach((name) => {
+        document.cookie = `${name}=; Path=/; Max-Age=0; SameSite=Lax; Secure`;
+        document.cookie = `${name}=; Domain=.teyfikgokdemir.com; Path=/; Max-Age=0; SameSite=Lax; Secure`;
+      });
+    };
+
     const track = (name, params = {}) => {
       if (!analyticsLoaded || typeof window.gtag !== 'function') return;
       window.gtag('event', name, params);
     };
 
-    loadAnalytics();
-
     const stored = localStorage.getItem(key);
-    if (stored === 'accepted' || stored === 'rejected') {
+    if (stored === 'accepted') {
       banner.hidden = true;
+      loadAnalytics();
+      loadSourceBeacon();
+    } else if (stored === 'rejected') {
+      banner.hidden = true;
+      window['ga-disable-' + measurementId] = true;
+      window.gtag('consent', 'update', { analytics_storage: 'denied' });
+      clearAnalyticsCookies();
     } else {
       banner.hidden = false;
     }
@@ -133,13 +164,16 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
     banner.querySelector('[data-cookie-accept]')?.addEventListener('click', () => {
       localStorage.setItem(key, 'accepted');
       loadAnalytics();
+      loadSourceBeacon();
       track('analytics_preference', { preference: 'accepted' });
       banner.hidden = true;
     });
 
     banner.querySelector('[data-cookie-reject]')?.addEventListener('click', () => {
       localStorage.setItem(key, 'rejected');
-      track('analytics_preference', { preference: 'rejected' });
+      window['ga-disable-' + measurementId] = true;
+      window.gtag('consent', 'update', { analytics_storage: 'denied' });
+      clearAnalyticsCookies();
       banner.hidden = true;
     });
 
@@ -204,9 +238,9 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
     font-weight: 800;
   }
   .cookie-button.primary {
-    border-color: var(--accent);
-    background: var(--accent);
-    color: #fff;
+    border-color: #763821;
+    background: #763821;
+    color: #fffaf3;
   }
   .cookie-button:focus-visible {
     outline: 3px solid #ffffff;
@@ -214,8 +248,20 @@ const copy = (messages[locale] || messages.en) ?? messages.en;
   }
   .cookie-button:hover { border-color: var(--accent-soft); }
   @media (max-width: 720px) {
-    .cookie-banner { align-items: stretch; flex-direction: column; }
-    .cookie-actions { width: 100%; }
-    .cookie-button { flex: 1; }
+    .cookie-banner {
+      right: .75rem;
+      bottom: .75rem;
+      left: .75rem;
+      width: calc(100% - 1.5rem);
+      align-items: stretch;
+      flex-direction: column;
+      gap: .75rem;
+      padding: .85rem;
+      border-radius: 15px;
+    }
+    .cookie-copy strong { margin-bottom: .2rem; font-size: .92rem; }
+    .cookie-copy p { font-size: .78rem; line-height: 1.4; }
+    .cookie-actions { width: 100%; gap: .5rem; }
+    .cookie-button { flex: 1; min-height: 40px; padding: .55rem .75rem; font-size: .82rem; }
   }
 </style>
