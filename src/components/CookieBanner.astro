@@ -10,63 +10,63 @@ const { locale } = Astro.props;
 const messages = {
   tr: {
     title: 'Çerez tercihleri',
-    text: 'Zorunlu çerezler sitenin çalışması için kullanılır. Temel trafik ve performans ölçümü test süresince tercihinizden bağımsız olarak devam eder.',
+    text: 'Zorunlu çerezler sitenin çalışması için kullanılır. Analitik ve performans ölçümü yalnızca onay verdiğinizde etkinleştirilir.',
     privacy: 'Gizlilik Politikası',
     reject: 'Reddet',
     accept: 'Onayla',
   },
   ru: {
     title: 'Файлы cookie',
-    text: 'Обязательные cookie используются для работы сайта. Базовое измерение трафика и производительности продолжается в тестовый период независимо от вашего выбора.',
+    text: 'Обязательные cookie используются для работы сайта. Аналитика и измерение производительности включаются только после вашего согласия.',
     privacy: 'Политика конфиденциальности',
     reject: 'Отклонить',
     accept: 'Принять',
   },
   en: {
     title: 'Cookie preferences',
-    text: 'Essential cookies keep the site working. Basic traffic and performance measurement continues during the test period regardless of your preference.',
+    text: 'Essential cookies keep the site working. Analytics and performance measurement are enabled only after you give consent.',
     privacy: 'Privacy Policy',
     reject: 'Reject',
     accept: 'Accept',
   },
   mk: {
     title: 'Поставки за колачиња',
-    text: 'Неопходните колачиња овозможуваат работа на страницата. Основното мерење на сообраќајот и перформансите продолжува во тест периодот без оглед на изборот.',
+    text: 'Неопходните колачиња овозможуваат работа на страницата. Аналитиката и мерењето на перформансите се активираат само по ваша согласност.',
     privacy: 'Политика за приватност',
     reject: 'Одбиј',
     accept: 'Прифати',
   },
   sr: {
     title: 'Podešavanja kolačića',
-    text: 'Neophodni kolačići omogućavaju rad sajta. Osnovno merenje saobraćaja i performansi nastavlja se tokom testnog perioda bez obzira na izbor.',
+    text: 'Neophodni kolačići omogućavaju rad sajta. Analitika i merenje performansi aktiviraju se samo nakon vaše saglasnosti.',
     privacy: 'Politika privatnosti',
     reject: 'Odbij',
     accept: 'Prihvati',
   },
   sq: {
     title: 'Preferencat e cookies',
-    text: 'Cookies thelbësore mundësojnë funksionimin e faqes. Matja bazë e trafikut dhe performancës vazhdon gjatë periudhës së testimit pavarësisht zgjedhjes suaj.',
+    text: 'Cookies thelbësore mundësojnë funksionimin e faqes. Analitika dhe matja e performancës aktivizohen vetëm pasi të jepni pëlqimin.',
     privacy: 'Politika e Privatësisë',
     reject: 'Refuzo',
     accept: 'Prano',
   },
   fa: {
     title: 'تنظیمات کوکی',
-    text: 'کوکی‌های ضروری برای عملکرد سایت استفاده می‌شوند. اندازه‌گیری پایه ترافیک و عملکرد در دوره آزمایشی مستقل از انتخاب شما ادامه دارد.',
+    text: 'کوکی‌های ضروری برای عملکرد سایت استفاده می‌شوند. تحلیل و اندازه‌گیری عملکرد فقط پس از رضایت شما فعال می‌شود.',
     privacy: 'سیاست حفظ حریم خصوصی',
     reject: 'رد',
     accept: 'پذیرش',
   },
   zh: {
     title: 'Cookie 偏好设置',
-    text: '必要 Cookie 用于保障网站基本功能运行。测试期间，基础流量与性能测量会独立于您的偏好选择继续进行。',
+    text: '必要 Cookie 用于保障网站基本功能运行。分析和性能测量仅在您明确同意后启用。',
     privacy: '隐私政策',
     reject: '拒绝',
     accept: '同意',
   },
   vi: {
     title: 'Tùy chọn Cookie',
-    text: 'Cookie thiết yếu giúp website vận hành chuẩn xác. Trong thời gian thử nghiệm, việc đo lường lưu lượng và hiệu suất cơ bản vẫn tiếp tục bất kể lựa chọn của bạn.',
+    text: 'Cookie thiết yếu giúp website vận hành. Phân tích và đo lường hiệu suất chỉ được bật sau khi bạn đồng ý.',
     privacy: 'Chính sách bảo mật',
     reject: 'Từ chối',
     accept: 'Chấp nhận',
@@ -97,11 +97,11 @@ const privacyHref = locale === 'tr' ? '/privacy-policy/' : `/${locale}/privacy-p
 
     let analyticsLoaded = false;
     let sourceBeaconLoaded = false;
-    window['ga-disable-' + measurementId] = false;
+    window['ga-disable-' + measurementId] = true;
     window.dataLayer = window.dataLayer || [];
     window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
     window.gtag('consent', 'default', {
-      analytics_storage: 'granted',
+      analytics_storage: 'denied',
       ad_storage: 'denied',
       ad_user_data: 'denied',
       ad_personalization: 'denied',
@@ -149,11 +149,14 @@ const privacyHref = locale === 'tr' ? '/privacy-policy/' : `/${locale}/privacy-p
     };
 
     const stored = localStorage.getItem(key);
-    loadAnalytics();
-    loadSourceBeacon();
-    window['ga-disable-' + measurementId] = false;
-    window.gtag('consent', 'update', { analytics_storage: 'granted' });
-    if (stored === 'accepted' || stored === 'rejected') {
+    if (stored === 'accepted') {
+      loadAnalytics();
+      loadSourceBeacon();
+      banner.hidden = true;
+    } else if (stored === 'rejected') {
+      window['ga-disable-' + measurementId] = true;
+      window.gtag('consent', 'update', { analytics_storage: 'denied' });
+      clearAnalyticsCookies();
       banner.hidden = true;
     } else {
       banner.hidden = false;
@@ -169,10 +172,9 @@ const privacyHref = locale === 'tr' ? '/privacy-policy/' : `/${locale}/privacy-p
 
     banner.querySelector('[data-cookie-reject]')?.addEventListener('click', () => {
       localStorage.setItem(key, 'rejected');
-      window['ga-disable-' + measurementId] = false;
-      window.gtag('consent', 'update', { analytics_storage: 'granted' });
-      loadAnalytics();
-      loadSourceBeacon();
+      window['ga-disable-' + measurementId] = true;
+      window.gtag('consent', 'update', { analytics_storage: 'denied' });
+      clearAnalyticsCookies();
       banner.hidden = true;
     });
 
