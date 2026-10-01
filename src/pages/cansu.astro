@@ -1,6 +1,6 @@
 ---
-const title = 'Growth Intelligence Center';
-const description = 'Otonom Büyüme ve Yönetim Paneli';
+const title = 'Cansu Operations Center';
+const description = 'Kaynak bazlı web operasyon, trafik, SEO ve deployment merkezi';
 const canonical = 'https://teyfikgokdemir.com/cansu/';
 ---
 <!DOCTYPE html>
@@ -150,6 +150,78 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             .country-row { grid-template-columns: 1.2rem minmax(4rem,1.2fr) minmax(3rem,1fr) auto; gap: .35rem; }
             .country-row__traffic { display: none; }
         }
+
+        .module-nav {
+            position: sticky;
+            top: .75rem;
+            z-index: 30;
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0,1fr));
+            gap: .45rem;
+            padding: .45rem;
+            margin: 0 0 1.5rem;
+            border: 1px solid rgba(71,85,105,.55);
+            border-radius: 1rem;
+            background: rgba(2,6,23,.88);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 18px 50px rgba(0,0,0,.28);
+        }
+        .module-tab {
+            border: 0;
+            border-radius: .72rem;
+            padding: .78rem .7rem;
+            background: transparent;
+            color: #94a3b8;
+            font: inherit;
+            font-size: .72rem;
+            font-weight: 780;
+            letter-spacing: .01em;
+            cursor: pointer;
+            transition: background .18s ease, color .18s ease, box-shadow .18s ease;
+            white-space: nowrap;
+        }
+        .module-tab:hover { color: #e2e8f0; background: rgba(30,41,59,.65); }
+        .module-tab.is-active {
+            color: #f8fafc;
+            background: linear-gradient(135deg, rgba(14,116,144,.32), rgba(30,41,59,.86));
+            box-shadow: inset 0 0 0 1px rgba(56,189,248,.22), 0 8px 22px rgba(2,6,23,.28);
+        }
+        [data-dashboard-panel] { display: none !important; }
+        [data-dashboard-panel].is-active-panel { display: block !important; }
+        #stats-grid.is-active-panel { display: grid !important; }
+        .ops-section {
+            background: radial-gradient(circle at 15% 0%, rgba(56,189,248,.07), transparent 30%), linear-gradient(145deg, rgba(15,23,42,.95), rgba(2,6,23,.97));
+            border: 1px solid rgba(148,163,184,.18);
+            border-radius: 1.15rem;
+            padding: 1.35rem;
+            box-shadow: 0 20px 55px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.035);
+            margin-bottom: 1.5rem;
+        }
+        .ops-section__head { display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; flex-wrap:wrap; margin-bottom:1rem; }
+        .ops-section__title { margin:0; font-size:1.05rem; color:#f8fafc; }
+        .ops-section__copy { color:#94a3b8; font-size:.75rem; line-height:1.55; margin:.35rem 0 0; max-width:54rem; }
+        .source-chip { display:inline-flex; align-items:center; gap:.35rem; border-radius:999px; padding:.3rem .55rem; font-size:.6rem; font-weight:800; letter-spacing:.035em; border:1px solid rgba(148,163,184,.22); background:rgba(15,23,42,.72); color:#cbd5e1; }
+        .quality-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:.8rem; }
+        .quality-card { border:1px solid rgba(71,85,105,.55); border-radius:.85rem; padding:.9rem; background:rgba(2,6,23,.56); }
+        .quality-card__head { display:flex; justify-content:space-between; gap:.7rem; align-items:flex-start; }
+        .quality-card__name { font-size:.72rem; font-weight:800; color:#e2e8f0; text-transform:uppercase; letter-spacing:.055em; }
+        .quality-lines { display:grid; gap:.45rem; margin-top:.7rem; }
+        .quality-line { display:flex; justify-content:space-between; gap:.8rem; padding-top:.45rem; border-top:1px solid rgba(51,65,85,.48); font-size:.65rem; color:#94a3b8; }
+        .quality-line strong { color:#e2e8f0; font-weight:700; text-align:right; }
+        .attention-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:.8rem; }
+        .attention-card { border:1px solid rgba(71,85,105,.5); border-radius:.9rem; padding:1rem; background:rgba(2,6,23,.55); }
+        .attention-card strong { display:block; color:#f8fafc; font-size:.75rem; }
+        .attention-card span { display:block; color:#94a3b8; font-size:.67rem; line-height:1.5; margin-top:.35rem; }
+        .status-pill { display:inline-flex; align-items:center; border-radius:999px; padding:.25rem .48rem; font-size:.58rem; font-weight:850; letter-spacing:.04em; }
+        @media (max-width: 900px) {
+            .module-nav { grid-template-columns: repeat(3, minmax(0,1fr)); position:relative; top:auto; }
+        }
+        @media (max-width: 560px) {
+            .module-nav { display:flex; overflow-x:auto; scrollbar-width:none; padding:.4rem; }
+            .module-nav::-webkit-scrollbar { display:none; }
+            .module-tab { min-width:8.8rem; }
+        }
+
     </style>
 </head>
 <body>
@@ -164,11 +236,11 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             <div>
                 <h1 style="font-size: 1.875rem; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; margin: 0;">
                     <span style="display: inline-block; width: 3rem; height: 3rem; border-radius: 9999px; overflow: hidden; border: 2px solid #f43f5e; vertical-align: middle; box-shadow: 0 5px 15px rgba(244,63,94,0.4);">
-                        <img src="/images/cansu/uF2GI.jpg" alt="Growth Intelligence Center" style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%;">
+                        <img src="/images/cansu/uF2GI.jpg" alt="Cansu Operations Center" style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%;">
                     </span>
                     Growth Intelligence Center
                 </h1>
-                <p style="color: #cbd5e1; font-size: 0.875rem; margin-top: 0.35rem;">Cloudflare &amp; GitHub Actions Otomasyon Sağlık ve İzleme Merkezi</p>
+                <p style="color: #cbd5e1; font-size: 0.875rem; margin-top: 0.35rem;">6 site · kaynak bazlı operasyon, trafik, SEO ve deployment merkezi</p>
             </div>
             <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
                 <span id="live-status" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 9999px; background: rgba(251, 191, 36, 0.2); color: #fbbf24; font-size: 0.75rem; font-weight: 500; border: 1px solid rgba(251, 191, 36, 0.4);">
@@ -180,32 +252,52 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             </div>
         </header>
 
+        <nav class="module-nav" aria-label="Cansu modülleri">
+            <button class="module-tab is-active" type="button" data-tab="overview">Genel Bakış</button>
+            <button class="module-tab" type="button" data-tab="traffic">Trafik &amp; Kaynaklar</button>
+            <button class="module-tab" type="button" data-tab="seo">SEO</button>
+            <button class="module-tab" type="button" data-tab="health">Sistem Sağlığı</button>
+            <button class="module-tab" type="button" data-tab="deployments">Deployments</button>
+            <button class="module-tab" type="button" data-tab="data-quality">Veri Kalitesi</button>
+        </nav>
+
         <!-- Stats Grid -->
-        <div id="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem;">
+        <div id="stats-grid" data-dashboard-panel="overview" class="is-active-panel" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem;">
             <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
-                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Toplam Repolar</p>
-                <h3 id="site-count" style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">7 Site</h3>
+                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Portföy</p>
+                <h3 id="site-count" style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">6 Site</h3>
                 <p id="health-summary" style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Canlı sağlık kontrolü bekleniyor</p>
             </div>
             <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
-                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Aktif Workflow</p>
-                <h3 id="workflow-summary" style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">GitHub Actions</h3>
-                <p id="workflow-detail" style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Durum sorgulanıyor</p>
+                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Kritik Durum</p>
+                <h3 id="ops-issue-summary" style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">Kontrol ediliyor</h3>
+                <p id="workflow-detail" style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">HTTP · SSL · deployment</p>
             </div>
             <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
-                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Büyüme Motorları</p>
-                <h3 id="bot-summary-title" style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">5 Aktif Site</h3>
-                <p id="bot-summary-detail" style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Resmi Bot API'si Enterprise gerektirir; otonom sinyal kartlarda izleniyor.</p>
+                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Dönüşüm · 30 Gün</p>
+                <h3 id="conversion-overview" style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">—</h3>
+                <p id="conversion-overview-detail" style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Form · RFQ · CTA olayları</p>
             </div>
             <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
-                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Güvenlik Zırhı</p>
-                <h3 style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">Aktif</h3>
-                <p style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Cloudflare Analytics dashboard</p>
+                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Veri Sağlığı</p>
+                <h3 id="data-health-summary" style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">Kaynaklar</h3>
+                <p id="data-health-detail" style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Cloudflare · GitHub · GSC · D1</p>
             </div>
         </div>
 
+        <section class="ops-section is-active-panel" data-dashboard-panel="overview">
+            <div class="ops-section__head">
+                <div>
+                    <h2 class="ops-section__title">Dikkat Gerektirenler</h2>
+                    <p class="ops-section__copy">Yalnızca aksiyon gerektiren erişim, SSL, GitHub veya veri kaynağı sorunları burada görünür. Sorun yoksa panel bunu açıkça belirtir.</p>
+                </div>
+                <span class="source-chip">Kaynak: canlı kontroller</span>
+            </div>
+            <div id="attention-grid" class="attention-grid"><div class="country-empty">Kontroller yükleniyor…</div></div>
+        </section>
+
         <!-- Live Data Summary -->
-        <section class="glass" style="border-radius: 1rem; padding: 1.5rem 2rem; margin-bottom: 2.5rem;">
+        <section class="glass" data-dashboard-panel="health" style="border-radius: 1rem; padding: 1.5rem 2rem; margin-bottom: 2.5rem;">
             <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
                 <div>
                     <h2 style="font-size:1.15rem; margin:0;">Canlı Site Sağlığı ve GitHub Durumu</h2>
@@ -216,34 +308,65 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             <div id="live-summary-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:1rem;"></div>
         </section>
 
-        <section class="country-section" style="margin-bottom:2.5rem;">
+        <section class="country-section" data-dashboard-panel="traffic" style="margin-bottom:2.5rem;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
                 <div>
-                    <h2 style="font-size:1.15rem; margin:0;">Ülkelere Göre Trafik</h2>
-                    <p style="color:#94a3b8; font-size:.78rem; margin:.4rem 0 0;">Son 24 saatteki Cloudflare istek ve trafik dağılımı. Ziyaretçi trendleri üst site kartlarında gösterilir.</p>
+                    <h2 style="font-size:1.15rem; margin:0;">Ülkelere Göre HTTP Trafiği</h2>
+                    <p style="color:#94a3b8; font-size:.78rem; margin:.4rem 0 0;">Son 24 saatte Cloudflare üzerinden geçen HTTP isteklerinin ülke dağılımı. Bu alan insan ziyaretçi sayısı değildir.</p>
                 </div>
                 <div style="display:flex; gap:.75rem; align-items:center; flex-wrap:wrap; color:#64748b; font-size:.7rem;"><span>İlk 15 ülke · request payı</span><span style="color:#475569;">Bar uzunluğu: en yüksek ülkeye göre istek yoğunluğu</span></div>
             </div>
             <div id="country-grid" class="country-grid"></div>
         </section>
 
-        <section class="insights-section" style="margin-bottom:2.5rem;">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
+        <section class="ops-section" data-dashboard-panel="traffic">
+            <div class="ops-section__head">
                 <div>
-                    <h2 style="font-size:1.15rem; margin:0;">Ziyaretçi Kaynakları &amp; SEO</h2>
-                    <p style="color:#94a3b8; font-size:.78rem; margin:.4rem 0 0;">Ziyaretçinin siteye hangi kaynaktan geldiğini ve Search Console bağlandığında hangi aramalardan bulunduğunu gösterir.</p>
+                    <h2 class="ops-section__title">Dönüşümler</h2>
+                    <p class="ops-section__copy">Form, RFQ, WhatsApp ve diğer iş sonuçları ayrı olaylar olarak tutulur. Sunucu tarafında doğrulanabilen olaylar, tarayıcı tıklamalarından daha yüksek güven seviyesinde değerlendirilir.</p>
                 </div>
-                <div style="display:flex; gap:.75rem; align-items:center; flex-wrap:wrap; color:#64748b; font-size:.7rem;"><span>Cloudflare · canlı</span><span style="color:#475569;">Search Console · bağlantı bekliyor</span></div>
+                <span class="source-chip">D1 · conversion events</span>
             </div>
-            <div id="source-grid" class="source-grid"></div>
-            <div class="seo-panel" style="margin-top:1rem;">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:.75rem; flex-wrap:wrap;"><div><strong style="color:#f8fafc; font-size:.86rem;">Google Search Console performansı</strong><p style="color:#94a3b8; font-size:.7rem; line-height:1.5; margin:.35rem 0 0;">Bağlantı tamamlandığında son 7 gün ve 30 gün için sorgular, tıklamalar, gösterimler, CTR, ortalama pozisyon ve landing page verileri burada görünecek.</p></div><span class="seo-panel__badge">GSC HAZIR</span></div>
-                <div id="seo-content"><div class="seo-periods"><div class="seo-period"><span class="seo-period__label">Son 7 gün</span><strong class="seo-period__value">Bağlantı bekliyor</strong></div><div class="seo-period"><span class="seo-period__label">Son 30 gün</span><strong class="seo-period__value">Bağlantı bekliyor</strong></div></div><div style="margin-top:.85rem;"><a class="seo-connect" href="/api/gsc/start"><i class="fa-brands fa-google"></i> Search Console'u bağla</a></div></div>
+            <div id="conversion-summary" class="quality-grid">
+                <div class="quality-card"><div class="quality-card__name">Son 24 saat</div><strong id="conv-1d" style="display:block;font-size:1.55rem;margin-top:.45rem;color:#f8fafc;">—</strong><span style="color:#64748b;font-size:.64rem;">ölçülen dönüşüm</span></div>
+                <div class="quality-card"><div class="quality-card__name">Son 7 gün</div><strong id="conv-7d" style="display:block;font-size:1.55rem;margin-top:.45rem;color:#f8fafc;">—</strong><span style="color:#64748b;font-size:.64rem;">ölçülen dönüşüm</span></div>
+                <div class="quality-card"><div class="quality-card__name">Son 30 gün</div><strong id="conv-30d" style="display:block;font-size:1.55rem;margin-top:.45rem;color:#f8fafc;">—</strong><span style="color:#64748b;font-size:.64rem;">ölçülen dönüşüm</span></div>
             </div>
+            <div id="conversion-types" class="attention-grid" style="margin-top:.9rem;"></div>
         </section>
 
+        <section class="insights-section" data-dashboard-panel="traffic" style="margin-bottom:2.5rem;">
+            <div class="ops-section__head">
+                <div>
+                    <h2 class="ops-section__title">Trafik Kaynakları</h2>
+                    <p class="ops-section__copy">D1 üzerinde kaydedilen referrer/UTM sayfa olaylarını gösterir. Bu alan HTTP istek sayısını insan oturumu gibi yorumlamaz.</p>
+                </div>
+                <span class="source-chip">D1 · referrer / UTM</span>
+            </div>
+            <div id="source-grid" class="source-grid"></div>
+        </section>
+
+        <section class="insights-section" data-dashboard-panel="seo" style="margin-bottom:2.5rem;">
+            <div class="ops-section__head">
+                <div>
+                    <h2 class="ops-section__title">Google Search Console</h2>
+                    <p class="ops-section__copy">Google organik arama performansı: tıklama, gösterim, CTR, ortalama konum, sorgu ve landing page verileri.</p>
+                </div>
+                <span class="source-chip">Günlük / gecikmeli kaynak</span>
+            </div>
+            <div class="seo-panel">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:.75rem; flex-wrap:wrap;">
+                    <div>
+                        <strong style="color:#f8fafc; font-size:.86rem;">Arama performansı</strong>
+                        <p style="color:#94a3b8; font-size:.7rem; line-height:1.5; margin:.35rem 0 0;">Bağlantı durumuna göre son 7 ve 30 gün raporları burada gösterilir. Search Console verisi anlık trafik metriği değildir.</p>
+                    </div>
+                    <span class="seo-panel__badge">SEARCH CONSOLE</span>
+                </div>
+                <div id="seo-content"><div class="seo-periods"><div class="seo-period"><span class="seo-period__label">Son 7 gün</span><strong class="seo-period__value">Bağlantı kontrol ediliyor</strong></div><div class="seo-period"><span class="seo-period__label">Son 30 gün</span><strong class="seo-period__value">Bağlantı kontrol ediliyor</strong></div></div></div>
+            </div>
+        </section>
         <!-- Repositories Table -->
-        <div class="glass" style="border-radius: 1rem; overflow: hidden; margin-bottom: 3rem;">
+        <div class="glass" data-dashboard-panel="deployments" style="border-radius: 1rem; overflow: hidden; margin-bottom: 3rem;">
             <div style="padding: 1.5rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="font-weight: 700; font-size: 1.25rem; margin: 0;">Proje Otomasyon Durumları</h3>
                 <span id="last-updated" style="color: #94a3b8; font-size: 0.75rem;">GitHub Actions ve HTTP kontrolleri</span>
@@ -313,6 +436,17 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 </table>
             </div>
         </div>
+
+        <section class="ops-section" data-dashboard-panel="data-quality">
+            <div class="ops-section__head">
+                <div>
+                    <h2 class="ops-section__title">Veri Kalitesi &amp; Kaynak Sağlığı</h2>
+                    <p class="ops-section__copy">Her veri kaynağı kendi statüsüyle gösterilir. Doğrulanamayan bağlantılar artık “sağlıklı” kabul edilmez; ölçüm, tahmin ve hata durumları birbirinden ayrılır.</p>
+                </div>
+                <span class="source-chip">source · data time · sync state</span>
+            </div>
+            <div id="data-quality-grid" class="quality-grid"><div class="country-empty">Kaynak sağlık bilgileri yükleniyor…</div></div>
+        </section>
     </div>
 
     <script>
@@ -324,6 +458,19 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         const seoContent = document.getElementById('seo-content');
         const refreshButton = document.getElementById('refresh-data');
         const headerRefresh = document.getElementById('header-refresh');
+        const attentionGrid = document.getElementById('attention-grid');
+        const dataQualityGrid = document.getElementById('data-quality-grid');
+        const conversionTypes = document.getElementById('conversion-types');
+        const conversionOverview = document.getElementById('conversion-overview');
+        const conversionOverviewDetail = document.getElementById('conversion-overview-detail');
+        const issueSummary = document.getElementById('ops-issue-summary');
+        const dataHealthSummary = document.getElementById('data-health-summary');
+        const dataHealthDetail = document.getElementById('data-health-detail');
+        const conv1d = document.getElementById('conv-1d');
+        const conv7d = document.getElementById('conv-7d');
+        const conv30d = document.getElementById('conv-30d');
+        const moduleTabs = Array.from(document.querySelectorAll('[data-tab]'));
+        const dashboardPanels = Array.from(document.querySelectorAll('[data-dashboard-panel]'));
         const formatTime = (value) => value ? new Date(value).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'medium' }) : '—';
         const formatNumber = (value) => typeof value === 'number' ? new Intl.NumberFormat('tr-TR').format(value) : '—';
         const formatBytes = (value) => typeof value === 'number' ? `${(value / 1024 / 1024).toFixed(1)} MB` : '—';
@@ -431,14 +578,16 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         };
         const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;' }[char]));
         const card = (site) => {
-            const h = site.health;
-            const g = site.github;
+            const h = site.health || {};
+            const g = site.github || {};
             const traffic = site.cloudflare?.last24h;
-            const healthy = h.ok && h.ssl?.valid !== false && (!g.latest || g.latest.conclusion === 'success');
-            const tone = healthy ? '#34d399' : '#f87171';
-            const status = healthy ? 'SAĞLIKLI' : 'KONTROL GEREKLİ';
-            const statusBg = healthy ? 'rgba(52,211,153,.12)' : 'rgba(248,113,113,.12)';
-            const githubStatus = g.errorType === 'authentication' ? 'GitHub bağlantısı doğrulanamadı' : g.errorType === 'repository' ? 'Repository kullanılamıyor' : g.latest?.conclusion || (g.ok ? 'veri yok' : 'erişilemiyor');
+            const githubFailed = g.ok && g.latest?.conclusion === 'failure';
+            const githubUnknown = !g.ok;
+            const healthFailed = !h.ok || h.ssl?.valid === false;
+            const status = healthFailed ? 'ERİŞİM SORUNU' : githubFailed ? 'DEPLOY HATASI' : githubUnknown ? 'VERİ EKSİK' : 'SAĞLIKLI';
+            const tone = healthFailed || githubFailed ? '#f87171' : githubUnknown ? '#fbbf24' : '#34d399';
+            const statusBg = healthFailed || githubFailed ? 'rgba(248,113,113,.12)' : githubUnknown ? 'rgba(251,191,36,.12)' : 'rgba(52,211,153,.12)';
+            const githubStatus = g.errorType === 'authentication' ? 'Bağlantı doğrulanamadı' : g.errorType === 'repository' ? 'Repository kullanılamıyor' : g.latest?.conclusion || (g.ok ? 'run verisi yok' : 'bağlantı hatası');
             const signal = site.cloudflare?.automationSignal;
             const signalStyle = signalMeta(signal);
             const sslColor = h.ssl?.valid ? '#34d399' : '#f87171';
@@ -450,18 +599,18 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                     <span class="analytics-card__status" style="color:${tone};background:${statusBg};border:1px solid ${tone}55"><span class="analytics-card__status-dot"></span>${status}</span>
                 </div>
                 <div class="analytics-card__metrics">
-                    <div class="analytics-metric"><span class="analytics-metric__label">Toplam HTTP istekleri / 24s</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.requests) : '—'}</strong></div>
-                    <div class="analytics-metric"><span class="analytics-metric__label">Tahmini ziyaret / oturum · 24s</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.uniqueVisitors) : '—'}</strong></div>
-                    <div class="analytics-metric analytics-metric--period"><span class="analytics-metric__label">Tahmini ziyaret / oturum · 7g</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.uniqueVisitors7d) : '—'}</strong></div>
-                    <div class="analytics-metric analytics-metric--period"><span class="analytics-metric__label">Tahmini ziyaret / oturum · 30g</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.uniqueVisitors30d) : '—'}</strong></div>
-                    <div class="analytics-metric"><span class="analytics-metric__label">Trafik / 24s</span><strong class="analytics-metric__value">${traffic ? formatBytes(traffic.bytes) : '—'}</strong></div>
-                    <div class="analytics-metric"><span class="analytics-metric__label">Otomatik trafik sinyali</span><strong class="analytics-metric__value" style="color:${signalStyle.color};font-size:.78rem">${signalStyle.label}</strong><span class="analytics-metric__hint">${signal ? `${signal.requestPerVisitor} istek/ziyaret · üst ülke ${signal.topCountryShare}%` : '—'}</span></div>
-                    <div class="analytics-metric"><span class="analytics-metric__label">Yanıt süresi</span><strong class="analytics-metric__value">${h.ms} ms</strong></div>
+                    <div class="analytics-metric"><span class="analytics-metric__label">HTTP istekleri · 24s</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.requests) : '—'}</strong></div>
+                    <div class="analytics-metric"><span class="analytics-metric__label">Cloudflare unique sinyali · 24s</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.uniqueVisitors) : '—'}</strong><span class="analytics-metric__hint">İnsan oturumu değildir</span></div>
+                    <div class="analytics-metric analytics-metric--period"><span class="analytics-metric__label">Unique sinyal · 7g</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.uniqueVisitors7d) : '—'}</strong></div>
+                    <div class="analytics-metric analytics-metric--period"><span class="analytics-metric__label">Unique sinyal · 30g</span><strong class="analytics-metric__value">${traffic ? formatNumber(traffic.uniqueVisitors30d) : '—'}</strong></div>
+                    <div class="analytics-metric"><span class="analytics-metric__label">Aktarılan veri · 24s</span><strong class="analytics-metric__value">${traffic ? formatBytes(traffic.bytes) : '—'}</strong></div>
+                    <div class="analytics-metric"><span class="analytics-metric__label">Heuristik trafik sinyali</span><strong class="analytics-metric__value" style="color:${signalStyle.color};font-size:.78rem">${signalStyle.label}</strong><span class="analytics-metric__hint">${signal ? `${signal.requestPerVisitor} istek/unique · üst ülke ${signal.topCountryShare}%` : '—'}</span></div>
+                    <div class="analytics-metric"><span class="analytics-metric__label">Yanıt süresi</span><strong class="analytics-metric__value">${typeof h.ms === 'number' ? h.ms + ' ms' : '—'}</strong></div>
                     <div class="analytics-metric"><span class="analytics-metric__label">SSL / TLS</span><strong class="analytics-metric__value" style="color:${sslColor}">${sslText}</strong></div>
                 </div>
                 <div class="analytics-card__footer"><span><i class="fa-solid fa-code-branch" style="margin-right:.3rem"></i>GitHub: ${githubStatus}</span><a href="${site.actions}" target="_blank" rel="noreferrer">Logları aç <i class="fa-solid fa-arrow-up-right-from-square" style="margin-left:.25rem"></i></a></div>
                 ${commitHtml}
-                <div class="analytics-card__check">HTTP ${h.status || '—'} · Son kontrol: ${formatTime(h.checkedAt)}</div>
+                <div class="analytics-card__check">HTTP ${h.status || '—'} · Kontrol: ${formatTime(h.checkedAt)}</div>
             </article>`;
         };
         const formatPercent = (value) => `${(Number(value || 0) * 100).toFixed(1)}%`;
@@ -500,6 +649,60 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             liveStatus.style.background = `${color}22`;
             liveStatus.lastChild.textContent = ` ${text}`;
         }
+        const statusBadge = (label, tone = 'neutral') => {
+            const palette = {
+                good: ['#34d399','rgba(52,211,153,.12)'],
+                warn: ['#fbbf24','rgba(251,191,36,.12)'],
+                bad: ['#f87171','rgba(248,113,113,.12)'],
+                neutral: ['#94a3b8','rgba(148,163,184,.12)'],
+            }[tone] || ['#94a3b8','rgba(148,163,184,.12)'];
+            return `<span class="status-pill" style="color:${palette[0]};background:${palette[1]};border:1px solid ${palette[0]}44">${label}</span>`;
+        };
+
+        const renderAttention = (sites) => {
+            const issues = [];
+            for (const site of sites || []) {
+                if (!site.health?.ok) issues.push({ site: site.name, title: 'Site erişilemiyor', detail: `HTTP ${site.health?.status || 'yanıt yok'} · ${formatTime(site.health?.checkedAt)}` });
+                else if (site.health?.ssl?.valid === false) issues.push({ site: site.name, title: 'SSL/TLS kontrolü başarısız', detail: site.health?.ssl?.error || 'Sertifika doğrulanamadı' });
+                if (!site.github?.ok) issues.push({ site: site.name, title: 'GitHub bağlantısı doğrulanamadı', detail: site.github?.error || 'Workflow durumu bilinmiyor' });
+                else if (site.github?.latest?.conclusion === 'failure') issues.push({ site: site.name, title: 'Son workflow başarısız', detail: formatTime(site.github?.latest?.updated_at) });
+            }
+            if (!issues.length) {
+                attentionGrid.innerHTML = `<div class="attention-card" style="border-color:rgba(52,211,153,.35)"><strong style="color:#34d399">Kritik aksiyon yok</strong><span>HTTP, SSL ve doğrulanabilen GitHub kontrollerinde şu an kritik bir sorun görünmüyor.</span></div>`;
+                return;
+            }
+            attentionGrid.innerHTML = issues.slice(0, 12).map((item) => `<div class="attention-card" style="border-color:rgba(248,113,113,.28)"><strong>${escapeHtml(item.site)} · ${escapeHtml(item.title)}</strong><span>${escapeHtml(item.detail)}</span></div>`).join('');
+        };
+
+        const renderDataQuality = (sites, generatedAt) => {
+            dataQualityGrid.innerHTML = (sites || []).map((site) => {
+                const cf = site.cloudflare?.available ? statusBadge('CANLI','good') : statusBadge('VERİ YOK','warn');
+                const gh = site.github?.ok ? statusBadge('CANLI','good') : statusBadge('BAĞLANTI HATASI','bad');
+                const http = site.health?.ok ? statusBadge('CANLI','good') : statusBadge('HATA','bad');
+                return `<article class="quality-card">
+                    <div class="quality-card__head"><div class="quality-card__name">${escapeHtml(site.name)}</div>${site.health?.ok ? statusBadge('ONLINE','good') : statusBadge('OFFLINE','bad')}</div>
+                    <div class="quality-lines">
+                        <div class="quality-line"><span>HTTP / SSL</span><strong>${http} · ${formatTime(site.health?.checkedAt)}</strong></div>
+                        <div class="quality-line"><span>Cloudflare GraphQL</span><strong>${cf}</strong></div>
+                        <div class="quality-line"><span>GitHub Actions</span><strong>${gh}</strong></div>
+                        <div class="quality-line"><span>Panel senkronizasyonu</span><strong>${formatTime(generatedAt)}</strong></div>
+                    </div>
+                </article>`;
+            }).join('');
+        };
+
+        const activateTab = (tab, pushHash = true) => {
+            const allowed = new Set(['overview','traffic','seo','health','deployments','data-quality']);
+            const target = allowed.has(tab) ? tab : 'overview';
+            moduleTabs.forEach((button) => button.classList.toggle('is-active', button.dataset.tab === target));
+            dashboardPanels.forEach((panel) => panel.classList.toggle('is-active-panel', panel.dataset.dashboardPanel === target));
+            if (pushHash && window.location.hash !== `#${target}`) history.replaceState(null, '', `#${target}`);
+        };
+
+        moduleTabs.forEach((button) => button.addEventListener('click', () => activateTab(button.dataset.tab || 'overview')));
+        activateTab(window.location.hash.replace('#','') || 'overview', false);
+        window.addEventListener('hashchange', () => activateTab(window.location.hash.replace('#','') || 'overview', false));
+
         async function loadOverview() {
             setLiveState('Canlı veriler yükleniyor...', '#fbbf24');
             const controller = new AbortController();
@@ -513,18 +716,23 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 const sslValid = data.sites.filter((site) => site.health.ssl?.valid).length;
                 const failed = data.sites.reduce((sum, site) => sum + (site.github.failed24h || 0), 0);
                 const cfActive = data.sites.filter((site) => site.cloudflare?.available).length;
-                document.getElementById('health-summary').textContent = `${healthy}/${data.sites.length} site erişilebilir · ${sslValid} SSL geçerli`;
-                document.getElementById('workflow-summary').textContent = `${data.sites.length} repo izleniyor`;
-                document.getElementById('workflow-detail').textContent = failed ? `${failed} başarısız run (24 saat)` : 'Son 24 saatte failure yok';
-                document.getElementById('bot-summary-title').textContent = `${cfActive} Aktif Motor`;
-                document.getElementById('bot-summary-detail').textContent = `Resmi Bot API'si Enterprise gerektirir; kartlarda otonom sinyal izleniyor.`;
+                document.getElementById('site-count').textContent = `${data.sites.length} Site`;
+                document.getElementById('health-summary').textContent = `${healthy}/${data.sites.length} erişilebilir · ${sslValid} SSL geçerli`;
+                const connectionIssues = data.sites.filter((site) => !site.health?.ok || site.health?.ssl?.valid === false || !site.github?.ok || site.github?.latest?.conclusion === 'failure').length;
+                issueSummary.textContent = connectionIssues ? `${connectionIssues} Uyarı` : '0 Kritik';
+                issueSummary.style.color = connectionIssues ? '#fbbf24' : '#34d399';
+                document.getElementById('workflow-detail').textContent = failed ? `${failed} başarısız run · son 24 saat` : 'HTTP · SSL · doğrulanan workflowlar';
+                dataHealthSummary.textContent = `${cfActive}/${data.sites.length} CF`;
+                dataHealthDetail.textContent = `Cloudflare aktif · GitHub ve GSC ayrı doğrulanır`;
                 
                 const sortedSites = sortOverviewSites(data.sites);
+                renderAttention(sortedSites);
+                renderDataQuality(sortedSites, data.generatedAt);
                 summaryGrid.innerHTML = sortedSites.map((site) => card(site)).join('');
                 sourceGrid.innerHTML = sortedSites.map((site) => {
                     const sortedSources = sortSources(site.cloudflare?.sources).slice(0, 8);
-                    const sourceRows = sortedSources.map((item) => `<div class="source-row"><div><div class="source-row__host" title="${item.host}">${item.host}</div><div class="source-row__meta">${formatNumber(item.requests)} istek · ${formatBytes(item.bytes)}</div></div><strong class="source-row__value">${formatNumber(item.visits)} visit</strong></div>`).join('');
-                    return `<article class="source-panel"><div class="source-panel__head"><div><div class="source-panel__name">${site.name}</div><div class="source-panel__summary">Son 24 saat · referrer kaynakları</div></div><span class="seo-panel__badge">TOP 12</span></div>${sourceRows || '<div class="country-empty">Kaynak verisi bekleniyor</div>'}</article>`;
+                    const sourceRows = sortedSources.map((item) => `<div class="source-row"><div><div class="source-row__host" title="${item.host}">${item.host}</div><div class="source-row__meta">${formatNumber(item.requests)} istek · ${formatBytes(item.bytes)}</div></div><strong class="source-row__value">${formatNumber(item.visits)} görüntüleme</strong></div>`).join('');
+                    return `<article class="source-panel"><div class="source-panel__head"><div><div class="source-panel__name">${site.name}</div><div class="source-panel__summary">Son 24 saat · referrer / UTM olayları</div></div><span class="seo-panel__badge">TOP 12</span></div>${sourceRows || '<div class="country-empty">Kaynak verisi bekleniyor</div>'}</article>`;
                 }).join('');
                 countryGrid.innerHTML = sortedSites.map((site) => {
                     const sortedCountries = sortCountries(site.cloudflare?.countries);
@@ -556,11 +764,48 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 setLiveState(isTimeout ? 'Zaman aşımı' : 'Veri alınamadı', '#f87171');
             }
         }
-        function refreshAll() { loadOverview(); loadSeo(); }
+        const conversionLabels = {
+            form_submit: 'Form gönderimi',
+            rfq_submit: 'RFQ / teklif talebi',
+            whatsapp_click: 'WhatsApp tıklaması',
+            phone_click: 'Telefon tıklaması',
+            email_click: 'E-posta tıklaması',
+            purchase: 'Satın alma',
+            lead: 'Nitelikli lead',
+        };
+
+        async function loadConversions() {
+            try {
+                const response = await fetch('/api/conversions', { cache: 'no-store' });
+                const data = await response.json();
+                if (!response.ok || !data.ok) throw new Error(data.error || 'conversion API failed');
+                conv1d.textContent = formatNumber(data.periods?.oneDay?.total || 0);
+                conv7d.textContent = formatNumber(data.periods?.sevenDays?.total || 0);
+                conv30d.textContent = formatNumber(data.periods?.thirtyDays?.total || 0);
+                conversionOverview.textContent = formatNumber(data.periods?.thirtyDays?.total || 0);
+                const verified = Number(data.periods?.thirtyDays?.byQuality?.server || 0);
+                const browser = Number(data.periods?.thirtyDays?.byQuality?.browser || 0);
+                conversionOverviewDetail.textContent = verified ? `${formatNumber(verified)} doğrulanmış · ${formatNumber(browser)} tarayıcı olayı` : `${formatNumber(browser)} tarayıcı olayı · server event bekleniyor`;
+                const byType = Object.entries(data.periods?.thirtyDays?.byType || {}).sort((a,b) => Number(b[1]) - Number(a[1]));
+                conversionTypes.innerHTML = byType.length
+                    ? byType.map(([type,count]) => `<div class="attention-card"><strong>${escapeHtml(conversionLabels[type] || type)}</strong><span>${formatNumber(Number(count))} · son 30 gün</span></div>`).join('')
+                    : '<div class="attention-card"><strong>Henüz dönüşüm olayı yok</strong><span>Form, RFQ ve CTA event entegrasyonları bağlandıkça burada görünecek.</span></div>';
+            } catch {
+                conv1d.textContent = '—';
+                conv7d.textContent = '—';
+                conv30d.textContent = '—';
+                conversionOverview.textContent = '—';
+                conversionOverviewDetail.textContent = 'Dönüşüm kaynağı henüz hazır değil';
+                conversionTypes.innerHTML = '<div class="attention-card" style="border-color:rgba(251,191,36,.3)"><strong style="color:#fbbf24">Dönüşüm kaynağı hazır değil</strong><span>D1 migration veya event entegrasyonu henüz tamamlanmamış olabilir.</span></div>';
+            }
+        }
+
+        function refreshAll() { loadOverview(); loadSeo(); loadConversions(); }
         refreshButton.addEventListener('click', refreshAll);
         headerRefresh.addEventListener('click', refreshAll);
         loadOverview();
         loadSeo();
+        loadConversions();
         setInterval(refreshAll, 5 * 60 * 1000);
     </script>
 </body>
