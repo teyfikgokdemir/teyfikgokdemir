@@ -58,21 +58,41 @@ async function checkSite(site: Site) {
 }
 
 async function githubRun(repo: string, env: Env) {
-  const headers: Record<string, string> = {
+  const baseHeaders: Record<string, string> = {
     accept: 'application/vnd.github+json',
     'user-agent': 'cansu-dashboard',
-    ...(env.GITHUB_TOKEN ? { authorization: `Bearer ${env.GITHUB_TOKEN}` } : {}),
   };
+  const requestPair = async (authenticated: boolean, signal: AbortSignal) => {
+    const headers: Record<string, string> = {
+      ...baseHeaders,
+      ...(authenticated && env.GITHUB_TOKEN ? { authorization: `Bearer ${env.GITHUB_TOKEN}` } : {}),
+    };
+    return Promise.all([
+      fetch(`https://api.github.com/repos/teyfikgokdemir/${repo}/actions/runs?per_page=10`, { headers, signal }),
+      fetch(`https://api.github.com/repos/teyfikgokdemir/${repo}/commits?per_page=1`, { headers, signal }),
+    ]);
+  };
+
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 15_000);
   try {
-    const [runsResponse, commitsResponse] = await Promise.all([
-      fetch(`https://api.github.com/repos/teyfikgokdemir/${repo}/actions/runs?per_page=10`, { headers, signal: controller.signal }),
-      fetch(`https://api.github.com/repos/teyfikgokdemir/${repo}/commits?per_page=1`, { headers, signal: controller.signal }),
-    ]);
+    let [runsResponse, commitsResponse] = await requestPair(Boolean(env.GITHUB_TOKEN), controller.signal);
+    let authFallback = false;
+
+    if (env.GITHUB_TOKEN && (runsResponse.status === 401 || runsResponse.status === 403)) {
+      const remaining = runsResponse.headers.get('x-ratelimit-remaining');
+      const isRateLimit = runsResponse.status === 403 && remaining === '0';
+      if (!isRateLimit) {
+        [runsResponse, commitsResponse] = await requestPair(false, controller.signal);
+        authFallback = runsResponse.ok;
+      }
+    }
+
     clearTimeout(timer);
     if (!runsResponse.ok) {
-      if (runsResponse.status === 401 || runsResponse.status === 403) return { ok: false, error: 'GitHub authentication failed', errorType: 'authentication' as const, status: runsResponse.status };
+      if (runsResponse.status === 401) return { ok: false, error: 'GitHub token geçersiz', errorType: 'authentication' as const, status: runsResponse.status };
+      if (runsResponse.status === 403 && runsResponse.headers.get('x-ratelimit-remaining') === '0') return { ok: false, error: 'GitHub API rate limit', errorType: 'rate-limit' as const, status: runsResponse.status };
+      if (runsResponse.status === 403) return { ok: false, error: 'GitHub erişimi reddedildi', errorType: 'authentication' as const, status: runsResponse.status };
       if (runsResponse.status === 404) return { ok: false, error: 'Repository unavailable', errorType: 'repository' as const, status: runsResponse.status };
       return { ok: false, error: `GitHub ${runsResponse.status}`, errorType: 'api' as const, status: runsResponse.status };
     }
@@ -102,6 +122,7 @@ async function githubRun(repo: string, env: Env) {
       latest: latest ? { name: latest.name, status: latest.status, conclusion: latest.conclusion, updated_at: latest.updated_at, html_url: latest.html_url } : null,
       failed24h,
       latestCommit,
+      authFallback,
     };
   } catch {
     clearTimeout(timer);
