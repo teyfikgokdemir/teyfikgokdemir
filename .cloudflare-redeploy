@@ -1,2 +1,2 @@
-production-redeploy: 2026-09-28T20:18:00+03:00
-reason: live-production-sync-after-seo-and-ui-regression-fixes
+production-redeploy: 2026-10-01T14:29:00+03:00
+reason: sync-whatsapp-contact-routing-and-consent-updates
