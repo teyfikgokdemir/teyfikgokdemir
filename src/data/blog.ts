@@ -139,7 +139,7 @@ export const posts: BlogPost[] = [
       "sq": "Sistem e-commerce për rritje: përtej storefront-it",
       "fa": "ساخت سیستم تجارت الکترونیک برای رشد: فراتر از ویترین فروشگاه",
       "zh": "构建可增长的电商系统：不仅仅是前台店铺",
-      "vi": "Xây dựng hệ thống e-commerce để tăng trưởng: Không chỉ là giao diện bán hàng"
+      "vi": "Hệ thống e-commerce tăng trưởng: Vượt xa giao diện bán hàng"
     },
     "description": {
       "en": "A practical framework connecting storefront UX, measurement, CRM, automation, SEO and retention into one commercial system.",
@@ -442,15 +442,15 @@ export const posts: BlogPost[] = [
     "updated": "2026-09-28",
     "readingMinutes": 8,
     "title": {
-      "en": "AI-Assisted Operations: Where Automation Helps and Where Human Judgment Still Matters",
-      "tr": "AI Destekli Operasyonlar: Otomasyon Nerede Değer Katar, İnsan Kararı Nerede Kalmalı?",
-      "ru": "AI-операции: где автоматизация помогает, а где остается человеческое решение",
-      "mk": "AI-поддржани операции: каде помага автоматизацијата, а каде останува човечката одлука",
-      "sr": "AI-podržane operacije: gde automatizacija pomaže, a gde ostaje ljudska odluka",
+      "en": "AI-Assisted Operations: Where Automation Helps—and Where It Should Stop",
+      "tr": "AI Destekli Operasyonlar: Otomasyon Nerede Değer Katar?",
+      "ru": "AI-операции: где автоматизация помогает, а где нужен человек",
+      "mk": "AI операции: каде помага автоматизацијата, а каде е потребен човек",
+      "sr": "AI operacije: gde automatizacija pomaže, a gde je potreban čovek",
       "sq": "Operacione me AI: ku ndihmon automatizimi dhe ku mbetet vendimi njerëzor",
-      "fa": "عملیات مبتنی بر هوش مصنوعی: کجا اتوماسیون ارزش ایجاد می‌کند و کجا تصمیم انسانی ضروری است؟",
+      "fa": "عملیات مبتنی بر هوش مصنوعی: کجا اتوماسیون مفید است؟",
       "zh": "AI 辅助运营：哪些环节适合自动化，哪些决策仍应由人负责",
-      "vi": "Vận hành hỗ trợ bởi AI: Khi nào nên tự động hóa và khi nào cần phán đoán con người"
+      "vi": "Vận hành với AI: Khi nào nên tự động hóa?"
     },
     "description": {
       "en": "A practical operating model for using AI in research, content, analytics and workflow automation without outsourcing commercial judgment.",
