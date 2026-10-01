@@ -8,14 +8,26 @@ import { site } from '../../data/site';
 
 const locale = 'tr';
 const copy = content.tr;
+const alternates = {
+  tr: site.origin + '/terms/',
+  en: site.origin + '/en/terms/',
+  ru: site.origin + '/ru/terms/',
+  fa: site.origin + '/fa/terms/',
+  mk: site.origin + '/mk/terms/',
+  sr: site.origin + '/sr/terms/',
+  sq: site.origin + '/sq/terms/',
+  zh: site.origin + '/zh/terms/',
+  vi: site.origin + '/vi/terms/',
+  'x-default': site.origin + '/terms/',
+};
 ---
-<BaseLayout alternates={{}} locale={locale} copy={copy} title="Kullanım Koşulları | Teyfik Gökdemir" description="TeyfikGokdemir.com internet sitesinin kullanım koşulları, fikri mülkiyet ve sorumluluk esasları." pathname="/terms/">
-  <Header locale={locale} copy={copy} homePath="/en/" />
+<BaseLayout alternates={alternates} locale={locale} copy={copy} title="Kullanım Koşulları | Teyfik Gökdemir" description="TeyfikGokdemir.com internet sitesinin kullanım koşulları, fikri mülkiyet ve sorumluluk esasları." pathname="/terms/">
+  <Header locale={locale} copy={copy} homePath="/" />
   <main id="main-content" class="legal-page">
     <article class="shell legal-card" data-reveal="legal-content">
       <p class="section-label">Yasal bilgiler</p>
       <h1>Kullanım Koşulları</h1>
-      <p class="legal-updated">Son güncelleme: 23 Temmuz 2026</p>
+      <p class="legal-updated">Son güncelleme: 1 Ekim 2026</p>
       <section><h2>1. Kapsam</h2><p>Bu koşullar teyfikgokdemir.com internet sitesinin kullanımını düzenler. Siteyi kullanarak bu koşulları kabul etmiş sayılırsınız.</p></section>
       <section><h2>2. Bilgilendirme amacı</h2><p>Sitedeki içerikler genel bilgilendirme ve profesyonel portföy sunumu amacı taşır. İçerikler hukuki, mali veya yatırım danışmanlığı niteliğinde değildir ve tek başına ticari karar dayanağı olarak kullanılmamalıdır.</p></section>
       <section><h2>3. Fikri mülkiyet</h2><p>Sitedeki metinler, tasarım, görseller, marka unsurları ve özgün içerikler aksi belirtilmedikçe Teyfik Gökdemir’e veya ilgili hak sahiplerine aittir. Yazılı izin olmadan ticari amaçla kopyalanamaz, çoğaltılamaz veya yeniden yayımlanamaz.</p></section>

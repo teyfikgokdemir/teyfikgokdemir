@@ -10,15 +10,27 @@ const locale = 'tr';
 const copy = content.tr;
 const title = 'Gizlilik ve Çerez Politikası | Teyfik Gökdemir';
 const description = 'TeyfikGokdemir.com üzerinde kişisel verilerin, zorunlu ve analitik çerezlerin nasıl kullanıldığını açıklayan gizlilik ve çerez politikası.';
+const alternates = {
+  tr: site.origin + '/privacy-policy/',
+  en: site.origin + '/en/privacy-policy/',
+  ru: site.origin + '/ru/privacy-policy/',
+  fa: site.origin + '/fa/privacy-policy/',
+  mk: site.origin + '/mk/privacy-policy/',
+  sr: site.origin + '/sr/privacy-policy/',
+  sq: site.origin + '/sq/privacy-policy/',
+  zh: site.origin + '/zh/privacy-policy/',
+  vi: site.origin + '/vi/privacy-policy/',
+  'x-default': site.origin + '/privacy-policy/',
+};
 ---
 
-<BaseLayout alternates={{}} locale={locale} copy={copy} title={title} description={description} pathname="/privacy-policy/">
+<BaseLayout alternates={alternates} locale={locale} copy={copy} title={title} description={description} pathname="/privacy-policy/">
   <Header locale={locale} copy={copy} homePath="/" />
   <main id="main-content" class="legal-page">
     <article class="shell legal-card" data-reveal="legal-content">
       <p class="section-label">Yasal bilgiler</p>
       <h1>Gizlilik ve Çerez Politikası</h1>
-      <p class="legal-updated">Son güncelleme: 23 Temmuz 2026</p>
+      <p class="legal-updated">Son güncelleme: 1 Ekim 2026</p>
 
       <section>
         <h2>1. Veri sorumlusu</h2>
