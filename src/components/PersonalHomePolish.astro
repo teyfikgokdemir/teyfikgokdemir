@@ -110,6 +110,22 @@ import PersonalHomePalette from './PersonalHomePalette.astro';
     font-size: clamp(2rem, 3.6vw, 3.8rem) !important;
   }
 
+  .personal-home.locale-en .centered-section-heading h2,
+  .personal-home.locale-sr .centered-section-heading h2,
+  .personal-home.locale-sq .centered-section-heading h2 {
+    font-size: clamp(1.9rem, 3.15vw, 3.35rem) !important;
+  }
+
+  .personal-home.locale-ru .centered-section-heading h2,
+  .personal-home.locale-mk .centered-section-heading h2,
+  .personal-home.locale-vi .centered-section-heading h2 {
+    font-size: clamp(1.65rem, 2.55vw, 2.75rem) !important;
+  }
+
+  .personal-home.locale-fa .centered-section-heading h2 {
+    font-size: clamp(1.9rem, 3vw, 3.15rem) !important;
+  }
+
   .personal-home .centered-section-heading p {
     max-width: 820px !important;
     margin-inline: auto !important;
@@ -293,6 +309,17 @@ import PersonalHomePalette from './PersonalHomePalette.astro';
   }
 
   @media (max-width: 900px) {
+    .personal-home.locale-en .centered-section-heading h2,
+    .personal-home.locale-ru .centered-section-heading h2,
+    .personal-home.locale-mk .centered-section-heading h2,
+    .personal-home.locale-sr .centered-section-heading h2,
+    .personal-home.locale-sq .centered-section-heading h2,
+    .personal-home.locale-fa .centered-section-heading h2,
+    .personal-home.locale-vi .centered-section-heading h2 {
+      white-space: normal !important;
+      text-wrap: balance !important;
+      font-size: clamp(1.65rem, 6.4vw, 2.35rem) !important;
+    }
     .personal-home {
       padding-inline: 18px !important;
     }
