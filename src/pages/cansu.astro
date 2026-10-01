@@ -319,6 +319,22 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             <div id="country-grid" class="country-grid"></div>
         </section>
 
+        <section class="ops-section" data-dashboard-panel="traffic">
+            <div class="ops-section__head">
+                <div>
+                    <h2 class="ops-section__title">Dönüşümler</h2>
+                    <p class="ops-section__copy">Form, RFQ, WhatsApp ve diğer iş sonuçları ayrı olaylar olarak tutulur. Sunucu tarafında doğrulanabilen olaylar, tarayıcı tıklamalarından daha yüksek güven seviyesinde değerlendirilir.</p>
+                </div>
+                <span class="source-chip">D1 · conversion events</span>
+            </div>
+            <div id="conversion-summary" class="quality-grid">
+                <div class="quality-card"><div class="quality-card__name">Son 24 saat</div><strong id="conv-1d" style="display:block;font-size:1.55rem;margin-top:.45rem;color:#f8fafc;">—</strong><span style="color:#64748b;font-size:.64rem;">ölçülen dönüşüm</span></div>
+                <div class="quality-card"><div class="quality-card__name">Son 7 gün</div><strong id="conv-7d" style="display:block;font-size:1.55rem;margin-top:.45rem;color:#f8fafc;">—</strong><span style="color:#64748b;font-size:.64rem;">ölçülen dönüşüm</span></div>
+                <div class="quality-card"><div class="quality-card__name">Son 30 gün</div><strong id="conv-30d" style="display:block;font-size:1.55rem;margin-top:.45rem;color:#f8fafc;">—</strong><span style="color:#64748b;font-size:.64rem;">ölçülen dönüşüm</span></div>
+            </div>
+            <div id="conversion-types" class="attention-grid" style="margin-top:.9rem;"></div>
+        </section>
+
         <section class="insights-section" data-dashboard-panel="traffic" style="margin-bottom:2.5rem;">
             <div class="ops-section__head">
                 <div>
@@ -444,6 +460,10 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         const headerRefresh = document.getElementById('header-refresh');
         const attentionGrid = document.getElementById('attention-grid');
         const dataQualityGrid = document.getElementById('data-quality-grid');
+        const conversionTypes = document.getElementById('conversion-types');
+        const conv1d = document.getElementById('conv-1d');
+        const conv7d = document.getElementById('conv-7d');
+        const conv30d = document.getElementById('conv-30d');
         const moduleTabs = Array.from(document.querySelectorAll('[data-tab]'));
         const dashboardPanels = Array.from(document.querySelectorAll('[data-dashboard-panel]'));
         const formatTime = (value) => value ? new Date(value).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'medium' }) : '—';
@@ -737,11 +757,42 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 setLiveState(isTimeout ? 'Zaman aşımı' : 'Veri alınamadı', '#f87171');
             }
         }
-        function refreshAll() { loadOverview(); loadSeo(); }
+        const conversionLabels = {
+            form_submit: 'Form gönderimi',
+            rfq_submit: 'RFQ / teklif talebi',
+            whatsapp_click: 'WhatsApp tıklaması',
+            phone_click: 'Telefon tıklaması',
+            email_click: 'E-posta tıklaması',
+            purchase: 'Satın alma',
+            lead: 'Nitelikli lead',
+        };
+
+        async function loadConversions() {
+            try {
+                const response = await fetch('/api/conversions', { cache: 'no-store' });
+                const data = await response.json();
+                if (!response.ok || !data.ok) throw new Error(data.error || 'conversion API failed');
+                conv1d.textContent = formatNumber(data.periods?.oneDay?.total || 0);
+                conv7d.textContent = formatNumber(data.periods?.sevenDays?.total || 0);
+                conv30d.textContent = formatNumber(data.periods?.thirtyDays?.total || 0);
+                const byType = Object.entries(data.periods?.thirtyDays?.byType || {}).sort((a,b) => Number(b[1]) - Number(a[1]));
+                conversionTypes.innerHTML = byType.length
+                    ? byType.map(([type,count]) => `<div class="attention-card"><strong>${escapeHtml(conversionLabels[type] || type)}</strong><span>${formatNumber(Number(count))} · son 30 gün</span></div>`).join('')
+                    : '<div class="attention-card"><strong>Henüz dönüşüm olayı yok</strong><span>Form, RFQ ve CTA event entegrasyonları bağlandıkça burada görünecek.</span></div>';
+            } catch {
+                conv1d.textContent = '—';
+                conv7d.textContent = '—';
+                conv30d.textContent = '—';
+                conversionTypes.innerHTML = '<div class="attention-card" style="border-color:rgba(251,191,36,.3)"><strong style="color:#fbbf24">Dönüşüm kaynağı hazır değil</strong><span>D1 migration veya event entegrasyonu henüz tamamlanmamış olabilir.</span></div>';
+            }
+        }
+
+        function refreshAll() { loadOverview(); loadSeo(); loadConversions(); }
         refreshButton.addEventListener('click', refreshAll);
         headerRefresh.addEventListener('click', refreshAll);
         loadOverview();
         loadSeo();
+        loadConversions();
         setInterval(refreshAll, 5 * 60 * 1000);
     </script>
 </body>
