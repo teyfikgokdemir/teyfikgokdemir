@@ -70,14 +70,16 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
 
       const landingPath = clean(body.landing_path, 180) || '/';
       const source = sourceName(body);
+      const requestedQuality = clean(body.event_quality, 20).toLowerCase();
+      const eventQuality = requestedQuality === 'server' ? 'server' : 'browser';
       const day = dayString();
 
       await env.CANSU_ANALYTICS_DB.prepare(
-        `INSERT INTO conversion_events (site, day, event_type, landing_path, source, count)
-         VALUES (?, ?, ?, ?, ?, 1)
-         ON CONFLICT(site, day, event_type, landing_path, source)
+        `INSERT INTO conversion_events (site, day, event_type, landing_path, source, event_quality, count)
+         VALUES (?, ?, ?, ?, ?, ?, 1)
+         ON CONFLICT(site, day, event_type, landing_path, source, event_quality)
          DO UPDATE SET count = count + 1`
-      ).bind(site, day, eventType, landingPath, source).run();
+      ).bind(site, day, eventType, landingPath, source, eventQuality).run();
 
       return json({ ok: true }, 202, origin);
     } catch {
@@ -92,10 +94,10 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
 
     const queryPeriod = async (since: string) => {
       const sql = siteFilter
-        ? `SELECT site, event_type, SUM(count) AS count
+        ? `SELECT site, event_type, event_quality, SUM(count) AS count
            FROM conversion_events
            WHERE day >= ? AND site = ?
-           GROUP BY site, event_type
+           GROUP BY site, event_type, event_quality
            ORDER BY count DESC`
         : `SELECT site, event_type, SUM(count) AS count
            FROM conversion_events
@@ -105,7 +107,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
 
       const statement = env.CANSU_ANALYTICS_DB.prepare(sql);
       const result = siteFilter
-        ? await statement.bind(since, siteFilter).all<{ site: string; event_type: string; count: number }>()
+        ? await statement.bind(since, siteFilter).all<{ site: string; event_type: string; event_quality: string; count: number }>()
         : await statement.bind(since).all<{ site: string; event_type: string; count: number }>();
 
       return result.results ?? [];
@@ -117,10 +119,14 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
       queryPeriod(dayString(30)),
     ]);
 
-    const summarize = (rows: Array<{ site: string; event_type: string; count: number }>) => ({
+    const summarize = (rows: Array<{ site: string; event_type: string; event_quality: string; count: number }>) => ({
       total: rows.reduce((sum, row) => sum + Number(row.count || 0), 0),
       bySite: rows.reduce<Record<string, number>>((acc, row) => {
         acc[row.site] = (acc[row.site] || 0) + Number(row.count || 0);
+        return acc;
+      }, {}),
+      byQuality: rows.reduce<Record<string, number>>((acc, row) => {
+        acc[row.event_quality] = (acc[row.event_quality] || 0) + Number(row.count || 0);
         return acc;
       }, {}),
       byType: rows.reduce<Record<string, number>>((acc, row) => {
