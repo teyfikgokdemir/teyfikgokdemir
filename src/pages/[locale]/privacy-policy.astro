@@ -1,0 +1,6 @@
+---
+import LocalizedLegalPage from '../../components/LocalizedLegalPage.astro';
+export function getStaticPaths(){return ['en','ru','fa','mk','sr','sq','zh','vi'].map(locale=>({params:{locale},props:{locale}}));}
+const {locale}=Astro.props;
+---
+<LocalizedLegalPage locale={locale} kind="privacy"/>
