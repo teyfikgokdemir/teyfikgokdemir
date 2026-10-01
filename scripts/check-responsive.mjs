@@ -147,7 +147,7 @@ try {
         state.assetCards !== 2 ||
         state.collabCards !== 1 ||
         state.methodSteps !== 4 ||
-        state.contactLinks !== 4 ||
+        state.contactLinks !== 3 ||
         !coreLinksOk ||
         (mobile ? !state.mobileToggleVisible || state.desktopNavVisible : state.mobileToggleVisible || !state.desktopNavVisible);
 
