@@ -34,6 +34,21 @@ const alternates = {
   vi: site.origin + '/vi/ai-search-visibility/',
   'x-default': site.origin + '/ai-search-visibility/',
 };
+
+const pageSchema = {
+  '@type': ['WebPage', 'FAQPage'],
+  '@id': canonical + '#webpage',
+  url: canonical,
+  name: title,
+  description,
+  inLanguage: 'vi-VN',
+  isPartOf: { '@id': site.origin + '/#website' },
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
 ---
 
 <ContentPage
@@ -46,16 +61,37 @@ const alternates = {
   pathname={pathname}
   alternates={alternates}
   faq={faq}
+  pageSchema={pageSchema}
 >
-  <section class="prose">
-    <h2>Tại sao khả năng hiển thị tìm kiếm AI lại quan trọng vào lúc này?</h2>
-    <p>Ngày càng nhiều nhà ra quyết định mua sắm B2B quốc tế và khách hàng doanh nghiệp sử dụng các công cụ AI tạo sinh như ChatGPT, Claude, Perplexity để tìm kiếm nhà cung cấp, đối chiếu thông số kỹ thuật và thẩm định uy tín chuỗi cung ứng.</p>
-    <h2>Bốn trụ cột của khả năng hiển thị tìm kiếm trong kỷ nguyên AI</h2>
-    <ul>
-      <li><strong>SEO (Search Engine Optimization):</strong> Khả năng truy cập kỹ thuật, độ sâu lập chỉ mục và nền tảng quyền hạn tìm kiếm truyền thống.</li>
-      <li><strong>GEO (Generative Engine Optimization):</strong> Trình bày có cấu trúc quan hệ thực thể và mật độ dữ kiện phục vụ mô hình ngôn ngữ lớn.</li>
-      <li><strong>AEO (Answer Engine Optimization):</strong> Cấu trúc hỏi đáp trực diện và trích xuất dữ liệu trả lời thẳng thắn các câu hỏi mua sắm trọng tâm.</li>
-      <li><strong>AIO (AI Optimization):</strong> Tối ưu hóa tổng thể tài sản kỹ thuật số kết nối dữ liệu nền tảng, giao thức kỹ thuật và hệ sinh thái tương tác AI.</li>
-    </ul>
-  </section>
+  <div class="answer-block">
+    <p><strong>Khả năng hiển thị trong tìm kiếm AI</strong> không phải là một tệp đơn lẻ hay một thủ thuật ngắn hạn. Đó là hệ thống kết hợp khả năng truy cập kỹ thuật, thông tin thực thể rõ ràng, nội dung trả lời đúng nhu cầu và bằng chứng có thể kiểm chứng để công cụ tìm kiếm và AI hiểu doanh nghiệp chính xác hơn.</p>
+  </div>
+
+  <h2>Hệ thống này bao gồm những gì?</h2>
+  <div class="content-grid">
+    <article class="content-card"><h3>Khả năng được khám phá về mặt kỹ thuật</h3><p>Canonical, quy tắc thu thập dữ liệu, sitemap, hreflang, hiệu suất và dữ liệu có cấu trúc.</p></article>
+    <article class="content-card"><h3>Độ rõ ràng của thực thể và thương hiệu</h3><p>Mô tả nhất quán doanh nghiệp, chuyên môn, dự án, hồ sơ công khai và mối quan hệ giữa các thương hiệu.</p></article>
+    <article class="content-card"><h3>Nội dung định hướng câu trả lời</h3><p>Trả lời trực tiếp các câu hỏi quan trọng, định nghĩa rõ ràng, FAQ hiển thị và kiến trúc thông tin dễ hiểu.</p></article>
+    <article class="content-card"><h3>Bằng chứng và nguồn tham chiếu</h3><p>Hỗ trợ các tuyên bố bằng dự án thực tế, kết quả, hồ sơ công khai và nguồn bên ngoài đáng tin cậy.</p></article>
+  </div>
+
+  <h2>SEO, GEO, AEO và AIO cần hoạt động cùng nhau</h2>
+  <p><strong>SEO</strong> tạo nền tảng cho tìm kiếm truyền thống. <strong>GEO</strong> tăng khả năng để hệ thống tạo sinh hiểu và tham chiếu thông tin. <strong>AEO</strong> tổ chức nội dung quanh câu trả lời trực tiếp. <strong>AIO</strong> kết nối website, dữ liệu thực thể và nội dung thành một hệ thống hiển thị thống nhất cho AI.</p>
+
+  <h2>Cách triển khai</h2>
+  <ol>
+    <li><strong>Kiểm toán khả năng khám phá:</strong> kiểm tra crawl, canonical, index, cấu trúc ngôn ngữ và xung đột kỹ thuật.</li>
+    <li><strong>Định nghĩa thực thể:</strong> làm rõ doanh nghiệp là ai, làm gì, hoạt động ở đâu và các thương hiệu liên hệ với nhau như thế nào.</li>
+    <li><strong>Câu hỏi thương mại:</strong> xác định những câu hỏi mà khách hàng tiềm năng và hệ thống nghiên cứu thực sự đặt ra.</li>
+    <li><strong>Trang nguồn:</strong> xây dựng nội dung chuyên sâu, tập trung và có thể kiểm chứng.</li>
+    <li><strong>Dữ liệu có cấu trúc:</strong> chỉ đánh dấu những thông tin thực sự xuất hiện và có thể xác minh trên trang.</li>
+    <li><strong>Mạng lưới bằng chứng:</strong> kết nối chuyên môn với dự án, kết quả, hồ sơ và nguồn tham chiếu bên ngoài.</li>
+    <li><strong>Đo lường:</strong> theo dõi lượt hiển thị, truy vấn thương hiệu, referral và các mẫu trích dẫn có thể quan sát.</li>
+  </ol>
+
+  <h2>Công việc này không đảm bảo điều gì?</h2>
+  <p>Không thể bảo đảm ChatGPT, Google, Perplexity, Claude hoặc một hệ thống khác sẽ trích dẫn một trang cụ thể. Mục tiêu là loại bỏ rào cản kỹ thuật, làm rõ thông tin và tạo ra nguồn nội dung đáng tin cậy hơn.</p>
+
+  <h2>Câu hỏi thường gặp</h2>
+  <div class="faq-list">{faq.map((item) => (<details><summary>{item.question}</summary><p>{item.answer}</p></details>))}</div>
 </ContentPage>
