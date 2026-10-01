@@ -322,6 +322,23 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         <section class="ops-section" data-dashboard-panel="traffic">
             <div class="ops-section__head">
                 <div>
+                    <h2 class="ops-section__title">Umami Analytics</h2>
+                    <p class="ops-section__copy">Gerçek tarayıcı oturumları, ziyaretçiler ve sayfa görüntülemeleri. Cloudflare HTTP isteklerinden ayrı bir kullanıcı analitiği katmanıdır.</p>
+                </div>
+                <span id="umami-source-chip" class="source-chip">Umami · bağlantı bekleniyor</span>
+            </div>
+            <div id="umami-portfolio-summary" class="quality-grid">
+                <div class="quality-card"><div class="quality-card__name">Visits · 24s</div><strong id="umami-visits-1d" style="display:block;font-size:1.55rem;margin-top:.45rem;color:#f8fafc;">—</strong><span style="color:#64748b;font-size:.64rem;">analytics visits</span></div>
+                <div class="quality-card"><div class="quality-card__name">Visitors · 24s</div><strong id="umami-visitors-1d" style="display:block;font-size:1.55rem;margin-top:.45rem;color:#f8fafc;">—</strong><span style="color:#64748b;font-size:.64rem;">anonim ziyaretçi</span></div>
+                <div class="quality-card"><div class="quality-card__name">Pageviews · 24s</div><strong id="umami-pageviews-1d" style="display:block;font-size:1.55rem;margin-top:.45rem;color:#f8fafc;">—</strong><span style="color:#64748b;font-size:.64rem;">sayfa görüntüleme</span></div>
+                <div class="quality-card"><div class="quality-card__name">Visits · 30g</div><strong id="umami-visits-30d" style="display:block;font-size:1.55rem;margin-top:.45rem;color:#f8fafc;">—</strong><span style="color:#64748b;font-size:.64rem;">analytics visits</span></div>
+            </div>
+            <div id="umami-site-grid" class="quality-grid" style="margin-top:.9rem;"></div>
+        </section>
+
+        <section class="ops-section" data-dashboard-panel="traffic">
+            <div class="ops-section__head">
+                <div>
                     <h2 class="ops-section__title">Dönüşümler</h2>
                     <p class="ops-section__copy">Form, RFQ, WhatsApp ve diğer iş sonuçları ayrı olaylar olarak tutulur. Sunucu tarafında doğrulanabilen olaylar, tarayıcı tıklamalarından daha yüksek güven seviyesinde değerlendirilir.</p>
                 </div>
@@ -461,6 +478,12 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         const attentionGrid = document.getElementById('attention-grid');
         const dataQualityGrid = document.getElementById('data-quality-grid');
         const conversionTypes = document.getElementById('conversion-types');
+        const umamiSourceChip = document.getElementById('umami-source-chip');
+        const umamiSiteGrid = document.getElementById('umami-site-grid');
+        const umamiVisits1d = document.getElementById('umami-visits-1d');
+        const umamiVisitors1d = document.getElementById('umami-visitors-1d');
+        const umamiPageviews1d = document.getElementById('umami-pageviews-1d');
+        const umamiVisits30d = document.getElementById('umami-visits-30d');
         const conversionOverview = document.getElementById('conversion-overview');
         const conversionOverviewDetail = document.getElementById('conversion-overview-detail');
         const issueSummary = document.getElementById('ops-issue-summary');
@@ -798,6 +821,55 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             lead: 'Nitelikli lead',
         };
 
+        async function loadUmami() {
+            try {
+                const response = await fetch('/api/umami', { cache: 'no-store' });
+                const data = await response.json();
+                if (!response.ok || !data.ok) throw new Error(data.error || 'Umami API failed');
+
+                if (!data.configured) {
+                    umamiSourceChip.textContent = 'Umami · kurulum bekleniyor';
+                    umamiSourceChip.style.color = '#fbbf24';
+                    umamiVisits1d.textContent = '—';
+                    umamiVisitors1d.textContent = '—';
+                    umamiPageviews1d.textContent = '—';
+                    umamiVisits30d.textContent = '—';
+                    umamiSiteGrid.innerHTML = '<div class="attention-card" style="border-color:rgba(251,191,36,.3)"><strong style="color:#fbbf24">Umami backend hazır, instance bekleniyor</strong><span>UMAMI_BASE_URL ve UMAMI_API_KEY tanımlandığında gerçek session/pageview verisi otomatik açılacak.</span></div>';
+                    return;
+                }
+
+                const connected = (data.sites || []).filter((site) => site.connected);
+                const sum = (period, metric) => connected.reduce((total, site) => total + Number(site.periods?.[period]?.[metric] || 0), 0);
+                umamiVisits1d.textContent = formatNumber(sum('oneDay','visits'));
+                umamiVisitors1d.textContent = formatNumber(sum('oneDay','visitors'));
+                umamiPageviews1d.textContent = formatNumber(sum('oneDay','pageviews'));
+                umamiVisits30d.textContent = formatNumber(sum('thirtyDays','visits'));
+                umamiSourceChip.textContent = `Umami · ${connected.length}/${data.sites?.length || 6} bağlı`;
+                umamiSourceChip.style.color = connected.length === (data.sites?.length || 6) ? '#34d399' : '#fbbf24';
+
+                umamiSiteGrid.innerHTML = (data.sites || []).map((site) => {
+                    if (!site.connected) {
+                        return `<article class="quality-card"><div class="quality-card__head"><div class="quality-card__name">${escapeHtml(site.name)}</div>${statusBadge('VERİ YOK','warn')}</div><div class="quality-lines"><div class="quality-line"><span>Umami</span><strong>${escapeHtml(site.reason || 'website kaydı bekleniyor')}</strong></div></div></article>`;
+                    }
+                    const day = site.periods?.oneDay || {};
+                    const month = site.periods?.thirtyDays || {};
+                    return `<article class="quality-card">
+                        <div class="quality-card__head"><div class="quality-card__name">${escapeHtml(site.name)}</div>${statusBadge('CANLI','good')}</div>
+                        <div class="quality-lines">
+                            <div class="quality-line"><span>Visits · 24s</span><strong>${formatNumber(day.visits || 0)}</strong></div>
+                            <div class="quality-line"><span>Visitors · 24s</span><strong>${formatNumber(day.visitors || 0)}</strong></div>
+                            <div class="quality-line"><span>Pageviews · 24s</span><strong>${formatNumber(day.pageviews || 0)}</strong></div>
+                            <div class="quality-line"><span>Visits · 30g</span><strong>${formatNumber(month.visits || 0)}</strong></div>
+                        </div>
+                    </article>`;
+                }).join('');
+            } catch {
+                umamiSourceChip.textContent = 'Umami · bağlantı hatası';
+                umamiSourceChip.style.color = '#f87171';
+                umamiSiteGrid.innerHTML = '<div class="attention-card" style="border-color:rgba(248,113,113,.3)"><strong style="color:#f87171">Umami API alınamadı</strong><span>Instance veya API anahtarı kontrol edilmeli.</span></div>';
+            }
+        }
+
         async function loadConversions() {
             try {
                 const response = await fetch('/api/conversions', { cache: 'no-store' });
@@ -824,11 +896,12 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             }
         }
 
-        function refreshAll() { loadOverview(); loadSeo(); loadConversions(); }
+        function refreshAll() { loadOverview(); loadSeo(); loadUmami(); loadConversions(); }
         refreshButton.addEventListener('click', refreshAll);
         headerRefresh.addEventListener('click', refreshAll);
         loadOverview();
         loadSeo();
+        loadUmami();
         loadConversions();
         setInterval(refreshAll, 5 * 60 * 1000);
     </script>
