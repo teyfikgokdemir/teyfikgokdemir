@@ -45,8 +45,24 @@ const t=L[locale]||L.en;
 const title=kind==='privacy'?t.p:t.t;
 const sections=kind==='privacy'?t.ps:t.ts;
 const pathname=kind==='privacy'?privacyPath:termsPath;
+const legalPath = (code) => {
+  const suffix = kind === 'privacy' ? 'privacy-policy/' : 'terms/';
+  return code === 'tr' ? '/' + suffix : '/' + code + '/' + suffix;
+};
+const alternates = {
+  tr: site.origin + legalPath('tr'),
+  en: site.origin + legalPath('en'),
+  ru: site.origin + legalPath('ru'),
+  fa: site.origin + legalPath('fa'),
+  mk: site.origin + legalPath('mk'),
+  sr: site.origin + legalPath('sr'),
+  sq: site.origin + legalPath('sq'),
+  zh: site.origin + legalPath('zh'),
+  vi: site.origin + legalPath('vi'),
+  'x-default': site.origin + legalPath('tr'),
+};
 ---
-<BaseLayout alternates={{}} locale={locale} copy={copy} title={title+' | Teyfik Gökdemir'} description={title+' — teyfikgokdemir.com'} pathname={pathname}>
+<BaseLayout alternates={alternates} locale={locale} copy={copy} title={title+' | Teyfik Gökdemir'} description={title+' — teyfikgokdemir.com'} pathname={pathname}>
 <Header locale={locale} copy={copy} homePath={homePath}/>
 <main id="main-content" class="legal-page"><article class="shell legal-card" data-reveal="legal-content">
 <p class="section-label">{t.l}</p><h1>{title}</h1><p class="legal-updated">{t.u}</p>

@@ -137,7 +137,7 @@ const core = [
 
   <section class="section" id="ventures">
     <p class="eyebrow">{ui.coreLabel}</p><div class="section-heading"><h2>{ui.coreTitle}</h2><p>{ui.coreLead}</p></div>
-    <div class="grid core-grid">{core.map((item) => <a class="card core-card" href={item.url} target="_blank" rel="noopener noreferrer"><div><span class="card-tag">{item.tag}</span><h3>{item.name}</h3><p>{item.desc}</p></div><span class="card-link">{ui.view} ↗</span></a>)}</div>
+    <div class="grid core-grid">{core.map((item) => <a class="card core-card" href={item.url} target="_blank" rel="noopener noreferrer" data-venture-link="true"><div><span class="card-tag">{item.tag}</span><h3>{item.name}</h3><p>{item.desc}</p></div><span class="card-link">{ui.view} ↗</span></a>)}</div>
   </section>
 
   <section class="section split-section" id="expertise">
