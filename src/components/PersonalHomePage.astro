@@ -125,7 +125,7 @@ const core = [
 ];
 ---
 <Header locale={locale} copy={copy} homePath={homePath} />
-<main class="personal-home">
+<main id="main-content" class="personal-home">
   <section class="hero" id="top">
     <div class="hero-copy">
       <p class="eyebrow">{ui.eyebrow}</p><h1>{ui.title}</h1><p class="lead">{ui.lead}</p>
@@ -152,7 +152,7 @@ const core = [
 
   <section class="section method" id="journey"><p class="eyebrow">{ui.methodLabel}</p><div class="section-heading"><h2>{ui.methodTitle}</h2><p>{ui.methodLead}</p></div><ol class="method-grid">{ui.steps.map((step,index) => <li><span>0{index+1}</span><strong>{step}</strong></li>)}</ol></section>
 
-  <section class="section about"><div class="about-copy"><p class="eyebrow">{ui.aboutLabel}</p><h2>{ui.aboutTitle}</h2><p>{ui.aboutBody}</p></div><img src={site.images.profile.path} srcset={site.images.profile.srcset} sizes="(max-width:900px) 88vw, 420px" width={site.images.profile.width} height={site.images.profile.height} alt="Teyfik Gökdemir" loading="lazy" /></section>
+  <section class="section about" id="about"><div class="about-copy"><p class="eyebrow">{ui.aboutLabel}</p><h2>{ui.aboutTitle}</h2><p>{ui.aboutBody}</p></div><img src={site.images.profile.path} srcset={site.images.profile.srcset} sizes="(max-width:900px) 88vw, 420px" width={site.images.profile.width} height={site.images.profile.height} alt="Teyfik Gökdemir" loading="lazy" /></section>
 
   <section class="section contact" id="contact"><p class="eyebrow">{ui.contactLabel}</p><h2>{ui.contactTitle}</h2><p>{ui.contactBody}</p><div class="contact-links"><a href={site.links.qctStudio} target="_blank" rel="noopener noreferrer">QCT Studio ↗</a><a href={site.links.qctCommerce} target="_blank" rel="noopener noreferrer">QCT Commerce ↗</a><a href={site.links.ctseg} target="_blank" rel="noopener noreferrer">CTSEG ↗</a><a href={contactHref}>{site.email}</a></div></section>
 </main>
