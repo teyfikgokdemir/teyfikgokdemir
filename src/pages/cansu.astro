@@ -661,17 +661,36 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
 
         const renderAttention = (sites) => {
             const issues = [];
-            for (const site of sites || []) {
-                if (!site.health?.ok) issues.push({ site: site.name, title: 'Site erişilemiyor', detail: `HTTP ${site.health?.status || 'yanıt yok'} · ${formatTime(site.health?.checkedAt)}` });
-                else if (site.health?.ssl?.valid === false) issues.push({ site: site.name, title: 'SSL/TLS kontrolü başarısız', detail: site.health?.ssl?.error || 'Sertifika doğrulanamadı' });
-                if (!site.github?.ok) issues.push({ site: site.name, title: 'GitHub bağlantısı doğrulanamadı', detail: site.github?.error || 'Workflow durumu bilinmiyor' });
-                else if (site.github?.latest?.conclusion === 'failure') issues.push({ site: site.name, title: 'Son workflow başarısız', detail: formatTime(site.github?.latest?.updated_at) });
+            const githubFailures = (sites || []).filter((site) => !site.github?.ok);
+            const sameGithubError = githubFailures.length > 1 && new Set(githubFailures.map((site) => `${site.github?.errorType || ''}:${site.github?.error || ''}`)).size === 1;
+
+            if (sameGithubError) {
+                const sample = githubFailures[0]?.github;
+                issues.push({
+                    site: 'GitHub entegrasyonu',
+                    title: `${githubFailures.length} site aynı bağlantı sorunundan etkileniyor`,
+                    detail: `${sample?.error || 'Workflow verisi alınamıyor'} · tek entegrasyon sorunu olarak gruplanmıştır`,
+                    tone: 'warn',
+                });
             }
+
+            for (const site of sites || []) {
+                if (!site.health?.ok) issues.push({ site: site.name, title: 'Site erişilemiyor', detail: `HTTP ${site.health?.status || 'yanıt yok'} · ${formatTime(site.health?.checkedAt)}`, tone: 'bad' });
+                else if (site.health?.ssl?.valid === false) issues.push({ site: site.name, title: 'SSL/TLS kontrolü başarısız', detail: site.health?.ssl?.error || 'Sertifika doğrulanamadı', tone: 'bad' });
+
+                if (!site.github?.ok && !sameGithubError) issues.push({ site: site.name, title: 'GitHub bağlantısı doğrulanamadı', detail: site.github?.error || 'Workflow durumu bilinmiyor', tone: 'warn' });
+                else if (site.github?.ok && site.github?.latest?.conclusion === 'failure') issues.push({ site: site.name, title: 'Son workflow başarısız', detail: formatTime(site.github?.latest?.updated_at), tone: 'bad' });
+            }
+
             if (!issues.length) {
                 attentionGrid.innerHTML = `<div class="attention-card" style="border-color:rgba(52,211,153,.35)"><strong style="color:#34d399">Kritik aksiyon yok</strong><span>HTTP, SSL ve doğrulanabilen GitHub kontrollerinde şu an kritik bir sorun görünmüyor.</span></div>`;
                 return;
             }
-            attentionGrid.innerHTML = issues.slice(0, 12).map((item) => `<div class="attention-card" style="border-color:rgba(248,113,113,.28)"><strong>${escapeHtml(item.site)} · ${escapeHtml(item.title)}</strong><span>${escapeHtml(item.detail)}</span></div>`).join('');
+            attentionGrid.innerHTML = issues.slice(0, 12).map((item) => {
+                const border = item.tone === 'bad' ? 'rgba(248,113,113,.32)' : 'rgba(251,191,36,.34)';
+                const color = item.tone === 'bad' ? '#f8fafc' : '#fbbf24';
+                return `<div class="attention-card" style="border-color:${border}"><strong style="color:${color}">${escapeHtml(item.site)} · ${escapeHtml(item.title)}</strong><span>${escapeHtml(item.detail)}</span></div>`;
+            }).join('');
         };
 
         const renderDataQuality = (sites, generatedAt) => {
@@ -718,7 +737,12 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 const cfActive = data.sites.filter((site) => site.cloudflare?.available).length;
                 document.getElementById('site-count').textContent = `${data.sites.length} Site`;
                 document.getElementById('health-summary').textContent = `${healthy}/${data.sites.length} erişilebilir · ${sslValid} SSL geçerli`;
-                const connectionIssues = data.sites.filter((site) => !site.health?.ok || site.health?.ssl?.valid === false || !site.github?.ok || site.github?.latest?.conclusion === 'failure').length;
+                const siteIssues = data.sites.filter((site) => !site.health?.ok || site.health?.ssl?.valid === false || site.github?.latest?.conclusion === 'failure').length;
+                const githubFailures = data.sites.filter((site) => !site.github?.ok);
+                const githubIssueCount = githubFailures.length
+                    ? (new Set(githubFailures.map((site) => `${site.github?.errorType || ''}:${site.github?.error || ''}`)).size === 1 ? 1 : githubFailures.length)
+                    : 0;
+                const connectionIssues = siteIssues + githubIssueCount;
                 issueSummary.textContent = connectionIssues ? `${connectionIssues} Uyarı` : '0 Kritik';
                 issueSummary.style.color = connectionIssues ? '#fbbf24' : '#34d399';
                 document.getElementById('workflow-detail').textContent = failed ? `${failed} başarısız run · son 24 saat` : 'HTTP · SSL · doğrulanan workflowlar';
