@@ -99,16 +99,16 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
            WHERE day >= ? AND site = ?
            GROUP BY site, event_type, event_quality
            ORDER BY count DESC`
-        : `SELECT site, event_type, SUM(count) AS count
+        : `SELECT site, event_type, event_quality, SUM(count) AS count
            FROM conversion_events
            WHERE day >= ?
-           GROUP BY site, event_type
+           GROUP BY site, event_type, event_quality
            ORDER BY count DESC`;
 
       const statement = env.CANSU_ANALYTICS_DB.prepare(sql);
       const result = siteFilter
         ? await statement.bind(since, siteFilter).all<{ site: string; event_type: string; event_quality: string; count: number }>()
-        : await statement.bind(since).all<{ site: string; event_type: string; count: number }>();
+        : await statement.bind(since).all<{ site: string; event_type: string; event_quality: string; count: number }>();
 
       return result.results ?? [];
     };
