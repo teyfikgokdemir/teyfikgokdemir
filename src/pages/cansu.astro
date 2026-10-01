@@ -269,19 +269,19 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 <p id="health-summary" style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Canlı sağlık kontrolü bekleniyor</p>
             </div>
             <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
-                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Deployment Sağlığı</p>
-                <h3 id="workflow-summary" style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">GitHub Actions</h3>
-                <p id="workflow-detail" style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Durum sorgulanıyor</p>
+                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Kritik Durum</p>
+                <h3 id="ops-issue-summary" style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">Kontrol ediliyor</h3>
+                <p id="workflow-detail" style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">HTTP · SSL · deployment</p>
             </div>
             <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
-                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Veri Kaynakları</p>
-                <h3 id="bot-summary-title" style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">6 Kaynak</h3>
-                <p id="bot-summary-detail" style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Kaynaklar doğrulanıyor; tahmin ile ölçüm ayrı gösterilir.</p>
+                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Dönüşüm · 30 Gün</p>
+                <h3 id="conversion-overview" style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">—</h3>
+                <p id="conversion-overview-detail" style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Form · RFQ · CTA olayları</p>
             </div>
             <div class="glass" style="border-radius: 1rem; padding: 1.5rem;">
-                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Altyapı Durumu</p>
-                <h3 style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">İzleniyor</h3>
-                <p style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Cloudflare · HTTP · SSL · uptime</p>
+                <p style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin: 0;">Veri Sağlığı</p>
+                <h3 id="data-health-summary" style="font-size: 1.875rem; font-weight: 700; margin: 0.5rem 0 0 0;">Kaynaklar</h3>
+                <p id="data-health-detail" style="color: #94a3b8; font-size: 0.75rem; margin: 0.5rem 0 0 0;">Cloudflare · GitHub · GSC · D1</p>
             </div>
         </div>
 
@@ -461,6 +461,11 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         const attentionGrid = document.getElementById('attention-grid');
         const dataQualityGrid = document.getElementById('data-quality-grid');
         const conversionTypes = document.getElementById('conversion-types');
+        const conversionOverview = document.getElementById('conversion-overview');
+        const conversionOverviewDetail = document.getElementById('conversion-overview-detail');
+        const issueSummary = document.getElementById('ops-issue-summary');
+        const dataHealthSummary = document.getElementById('data-health-summary');
+        const dataHealthDetail = document.getElementById('data-health-detail');
         const conv1d = document.getElementById('conv-1d');
         const conv7d = document.getElementById('conv-7d');
         const conv30d = document.getElementById('conv-30d');
@@ -713,10 +718,12 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 const cfActive = data.sites.filter((site) => site.cloudflare?.available).length;
                 document.getElementById('site-count').textContent = `${data.sites.length} Site`;
                 document.getElementById('health-summary').textContent = `${healthy}/${data.sites.length} erişilebilir · ${sslValid} SSL geçerli`;
-                document.getElementById('workflow-summary').textContent = `${data.sites.length} repo izleniyor`;
-                document.getElementById('workflow-detail').textContent = failed ? `${failed} başarısız run · son 24 saat` : 'Doğrulanan runlarda failure yok';
-                document.getElementById('bot-summary-title').textContent = `${cfActive}/${data.sites.length} Cloudflare`;
-                document.getElementById('bot-summary-detail').textContent = 'HTTP trafiği ile kullanıcı analitiği ayrı kaynaklar olarak tutulur.';
+                const connectionIssues = data.sites.filter((site) => !site.health?.ok || site.health?.ssl?.valid === false || !site.github?.ok || site.github?.latest?.conclusion === 'failure').length;
+                issueSummary.textContent = connectionIssues ? `${connectionIssues} Uyarı` : '0 Kritik';
+                issueSummary.style.color = connectionIssues ? '#fbbf24' : '#34d399';
+                document.getElementById('workflow-detail').textContent = failed ? `${failed} başarısız run · son 24 saat` : 'HTTP · SSL · doğrulanan workflowlar';
+                dataHealthSummary.textContent = `${cfActive}/${data.sites.length} CF`;
+                dataHealthDetail.textContent = `Cloudflare aktif · GitHub ve GSC ayrı doğrulanır`;
                 
                 const sortedSites = sortOverviewSites(data.sites);
                 renderAttention(sortedSites);
@@ -775,6 +782,10 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 conv1d.textContent = formatNumber(data.periods?.oneDay?.total || 0);
                 conv7d.textContent = formatNumber(data.periods?.sevenDays?.total || 0);
                 conv30d.textContent = formatNumber(data.periods?.thirtyDays?.total || 0);
+                conversionOverview.textContent = formatNumber(data.periods?.thirtyDays?.total || 0);
+                const verified = Number(data.periods?.thirtyDays?.byQuality?.server || 0);
+                const browser = Number(data.periods?.thirtyDays?.byQuality?.browser || 0);
+                conversionOverviewDetail.textContent = verified ? `${formatNumber(verified)} doğrulanmış · ${formatNumber(browser)} tarayıcı olayı` : `${formatNumber(browser)} tarayıcı olayı · server event bekleniyor`;
                 const byType = Object.entries(data.periods?.thirtyDays?.byType || {}).sort((a,b) => Number(b[1]) - Number(a[1]));
                 conversionTypes.innerHTML = byType.length
                     ? byType.map(([type,count]) => `<div class="attention-card"><strong>${escapeHtml(conversionLabels[type] || type)}</strong><span>${formatNumber(Number(count))} · son 30 gün</span></div>`).join('')
@@ -783,6 +794,8 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 conv1d.textContent = '—';
                 conv7d.textContent = '—';
                 conv30d.textContent = '—';
+                conversionOverview.textContent = '—';
+                conversionOverviewDetail.textContent = 'Dönüşüm kaynağı henüz hazır değil';
                 conversionTypes.innerHTML = '<div class="attention-card" style="border-color:rgba(251,191,36,.3)"><strong style="color:#fbbf24">Dönüşüm kaynağı hazır değil</strong><span>D1 migration veya event entegrasyonu henüz tamamlanmamış olabilir.</span></div>';
             }
         }
