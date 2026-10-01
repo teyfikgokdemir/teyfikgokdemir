@@ -49,6 +49,24 @@ const dayString = (daysAgo = 0) => {
   return d.toISOString().slice(0, 10);
 };
 
+const ensureSchema = async (env: Env) => {
+  await env.CANSU_ANALYTICS_DB.prepare(
+    `CREATE TABLE IF NOT EXISTS conversion_events (
+      site TEXT NOT NULL,
+      day TEXT NOT NULL,
+      event_type TEXT NOT NULL,
+      landing_path TEXT NOT NULL DEFAULT '/',
+      source TEXT NOT NULL DEFAULT 'unknown',
+      event_quality TEXT NOT NULL DEFAULT 'browser',
+      count INTEGER NOT NULL DEFAULT 0,
+      PRIMARY KEY (site, day, event_type, landing_path, source, event_quality)
+    )`
+  ).run();
+  await env.CANSU_ANALYTICS_DB.prepare(
+    'CREATE INDEX IF NOT EXISTS idx_conversion_events_day_site ON conversion_events(day, site)'
+  ).run();
+};
+
 export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   const origin = request.headers.get('origin');
 
@@ -59,6 +77,8 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   if (!env.CANSU_ANALYTICS_DB) {
     return json({ ok: false, error: 'Analytics database is not configured' }, 503, origin);
   }
+
+  await ensureSchema(env);
 
   if (request.method === 'POST') {
     try {
