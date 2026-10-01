@@ -34,6 +34,21 @@ const alternates = {
   vi: site.origin + '/vi/ai-search-visibility/',
   'x-default': site.origin + '/ai-search-visibility/',
 };
+
+const pageSchema = {
+  '@type': ['WebPage', 'FAQPage'],
+  '@id': canonical + '#webpage',
+  url: canonical,
+  name: title,
+  description,
+  inLanguage: 'zh-CN',
+  isPartOf: { '@id': site.origin + '/#website' },
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
 ---
 
 <ContentPage
@@ -46,16 +61,37 @@ const alternates = {
   pathname={pathname}
   alternates={alternates}
   faq={faq}
+  pageSchema={pageSchema}
 >
-  <section class="prose">
-    <h2>为什么 AI 搜索可见性在当下至关重要？</h2>
-    <p>越来越多的跨国 B2B 采购决策者与商业客户正在通过 ChatGPT、Claude、Perplexity 等生成式 AI 工具寻找供应商、对比产品规格与评估供应链信誉。</p>
-    <h2>AI 时代搜索可见性的四大支柱</h2>
-    <ul>
-      <li><strong>SEO (Search Engine Optimization):</strong> 传统搜索的技术可访问性、索引深度与权威基础。</li>
-      <li><strong>GEO (Generative Engine Optimization):</strong> 面向大语言模型的内容事实密度与实体关系结构化呈现。</li>
-      <li><strong>AEO (Answer Engine Optimization):</strong> 直击用户核心采购提问的清晰问答与数据提炼结构。</li>
-      <li><strong>AIO (AI Optimization):</strong> 连接底层数据、技术协议与 AI 交互体系的全局数字化资产优化。</li>
-    </ul>
-  </section>
+  <div class="answer-block">
+    <p><strong>AI 搜索可见性</strong>并不是依靠单一文件或短期技巧实现的。它需要把技术可访问性、清晰的品牌实体信息、可回答问题的内容以及可验证的证据结合起来，让搜索引擎与生成式 AI 更准确地发现、理解并引用企业信息。</p>
+  </div>
+
+  <h2>这套体系包含哪些部分？</h2>
+  <div class="content-grid">
+    <article class="content-card"><h3>技术可发现性</h3><p>Canonical、抓取规则、站点地图、hreflang、性能与结构化数据。</p></article>
+    <article class="content-card"><h3>实体与品牌清晰度</h3><p>统一描述企业、专业能力、项目、公开资料以及品牌之间的关系。</p></article>
+    <article class="content-card"><h3>面向答案的内容</h3><p>直接回答关键问题，提供清晰定义、可见 FAQ 与易于理解的信息架构。</p></article>
+    <article class="content-card"><h3>证据与来源</h3><p>用真实项目、结果、公开资料与可靠外部来源支持重要主张。</p></article>
+  </div>
+
+  <h2>SEO、GEO、AEO 与 AIO 应协同工作</h2>
+  <p><strong>SEO</strong>建立传统搜索的技术和内容基础；<strong>GEO</strong>提升信息在生成式系统中的可理解性与可引用性；<strong>AEO</strong>围绕直接答案组织内容；<strong>AIO</strong>则把网站、实体信息和内容体系整合为面向 AI 发现的整体架构。</p>
+
+  <h2>实施方法</h2>
+  <ol>
+    <li><strong>发现性审计：</strong>检查抓取、canonical、索引、语言结构与技术冲突。</li>
+    <li><strong>实体定义：</strong>明确企业是谁、做什么、服务哪些市场以及品牌之间的关系。</li>
+    <li><strong>商业问题：</strong>整理潜在客户与研究型 AI 系统会实际提出的问题。</li>
+    <li><strong>来源页面：</strong>建设深入、聚焦且事实可验证的内容。</li>
+    <li><strong>结构化数据：</strong>仅标记页面中真实可见且可验证的信息。</li>
+    <li><strong>证据网络：</strong>把专业能力与项目、成果、公开资料和外部引用连接起来。</li>
+    <li><strong>持续测量：</strong>观察展示、品牌搜索、引荐流量和可监测的引用变化。</li>
+  </ol>
+
+  <h2>这项工作不能保证什么？</h2>
+  <p>任何负责任的服务都不能保证 ChatGPT、Google、Perplexity、Claude 或其他系统一定引用某个页面。目标是减少技术障碍、增强信息清晰度，并建立更可信的来源材料。</p>
+
+  <h2>常见问题</h2>
+  <div class="faq-list">{faq.map((item) => (<details><summary>{item.question}</summary><p>{item.answer}</p></details>))}</div>
 </ContentPage>
