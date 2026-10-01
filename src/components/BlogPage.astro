@@ -183,7 +183,7 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
                 </p>
                 <h2>{item.title}</h2>
                 <p>{item.description}</p>
-                <span class="article-arrow" aria-hidden="true">↗</span>
+                <span class="article-arrow" aria-hidden="true"></span>
               </a>
             ))}
           </div>
@@ -261,7 +261,7 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
               <a href={postPath(locale, item.slug)}>
                 <strong>{item.title[locale]}</strong>
                 <span>{item.description[locale]}</span>
-                <b aria-hidden="true">↗</b>
+                <b aria-hidden="true"></b>
               </a>
             ))}
           </div>

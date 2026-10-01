@@ -42,18 +42,18 @@ const ecosystem = [
     </div>
     <div class="footer-group">
       <span class="footer-label">{text.connect}</span>
-      <nav aria-label={text.connect}>{social.map(([name,href]) => <a href={href} target="_blank" rel="noopener noreferrer"><span>{name}</span><span aria-hidden="true">↗</span></a>)}</nav>
+      <nav aria-label={text.connect}>{social.map(([name,href]) => <a href={href} target="_blank" rel="noopener noreferrer"><span>{name}</span><span aria-hidden="true"></span></a>)}</nav>
     </div>
     <div class="footer-group footer-group--ecosystem">
       <span class="footer-label">{text.ecosystem}</span>
-      <nav aria-label={text.ecosystem}>{ecosystem.map(([name,href]) => <a href={href} target="_blank" rel="noopener noreferrer"><span>{name}</span><span aria-hidden="true">↗</span></a>)}</nav>
+      <nav aria-label={text.ecosystem}>{ecosystem.map(([name,href]) => <a href={href} target="_blank" rel="noopener noreferrer"><span>{name}</span><span aria-hidden="true"></span></a>)}</nav>
     </div>
     <div class="footer-group footer-group--contact">
       <span class="footer-label">{text.contact}</span>
       <nav aria-label={text.contact}>
         <a href={`mailto:${site.email}`}>{site.email}</a>
         <a href={`mailto:${site.directEmail}`}>{site.directEmail}</a>
-        <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener noreferrer"><span>WhatsApp</span><span aria-hidden="true">↗</span></a>
+        <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener noreferrer"><span>WhatsApp</span><span aria-hidden="true"></span></a>
       </nav>
     </div>
   </div>

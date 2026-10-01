@@ -383,7 +383,7 @@ const text = copy[locale];const guideLinks = guides[locale === 'tr' ? 'tr' : 'de
           <h3>{text.oil.title}</h3>
           <p>{text.oil.text}</p>
           <ul>{text.oil.checks.map((check) => <li>{check}</li>)}</ul>
-          <a class="trade-focus-card__link" href={guideLinks[0]} target="_blank" rel="noopener noreferrer" data-trade-focus-link="oil">{text.oil.cta}<span aria-hidden="true">↗</span></a>
+          <a class="trade-focus-card__link" href={guideLinks[0]} target="_blank" rel="noopener noreferrer" data-trade-focus-link="oil">{text.oil.cta}<span aria-hidden="true"></span></a>
         </div>
       </article>
 
@@ -396,7 +396,7 @@ const text = copy[locale];const guideLinks = guides[locale === 'tr' ? 'tr' : 'de
           <h3>{text.nuts.title}</h3>
           <p>{text.nuts.text}</p>
           <ul>{text.nuts.checks.map((check) => <li>{check}</li>)}</ul>
-          <a class="trade-focus-card__link" href={guideLinks[1]} target="_blank" rel="noopener noreferrer" data-trade-focus-link="nuts">{text.nuts.cta}<span aria-hidden="true">↗</span></a>
+          <a class="trade-focus-card__link" href={guideLinks[1]} target="_blank" rel="noopener noreferrer" data-trade-focus-link="nuts">{text.nuts.cta}<span aria-hidden="true"></span></a>
         </div>
       </article>
     </div>
@@ -412,7 +412,7 @@ const text = copy[locale];const guideLinks = guides[locale === 'tr' ? 'tr' : 'de
           <a href={specialistLinks[locale][index]} target="_blank" rel="noopener noreferrer" data-specialist-link={['carpet', 'silk', 'textile'][index]}>
             <span>0{index + 1}</span>
             <b>{specialist.title}</b>
-            <em>{specialist.cta} <i aria-hidden="true">↗</i></em>
+            <em>{specialist.cta} <i aria-hidden="true"></i></em>
           </a>
         ))}
       </div>

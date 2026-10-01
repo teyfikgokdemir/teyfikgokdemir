@@ -145,23 +145,23 @@ const trIntentCards = [
   {locale === 'tr' && <section class="section intent-routing" aria-labelledby="intent-routing-title">
     <p class="eyebrow">NEREDE BAŞLAYALIM?</p>
     <div class="section-heading"><h2 id="intent-routing-title">İhtiyaca göre doğru yapıya ilerleyin.</h2><p>İngilizce üst etiketler marka dili olarak korunur; açıklamalar hangi yapının hangi ihtiyaca hizmet ettiğini Türkçe olarak netleştirir.</p></div>
-    <div class="intent-grid">{trIntentCards.map((item,index) => <a class="intent-card" href={item.href} target={index < 3 ? '_blank' : '_blank'} rel="noopener noreferrer"><span class="card-tag">{item.label}</span><h3>{item.title}</h3><p>{item.text}</p><span class="card-link">İlerle ↗</span></a>)}</div>
+    <div class="intent-grid">{trIntentCards.map((item,index) => <a class="intent-card" href={item.href} target={index < 3 ? '_blank' : '_blank'} rel="noopener noreferrer"><span class="card-tag">{item.label}</span><h3>{item.title}</h3><p>{item.text}</p><span class="card-link">İlerle</span></a>)}</div>
   </section>}
 
   <section class="section" id="ventures">
     <p class="eyebrow">{ui.coreLabel}</p><div class="section-heading"><h2>{ui.coreTitle}</h2><p>{ui.coreLead}</p></div>
-    <div class="grid core-grid">{core.map((item) => <a class="card core-card" href={item.url} target="_blank" rel="noopener noreferrer" data-venture-link="true"><div><span class="card-tag">{item.tag}</span><h3>{item.name}</h3><p>{item.desc}</p>{locale === 'tr' && <dl class="project-proof"><div><dt>Rolüm</dt><dd>{item.role}</dd></div><div><dt>Çıktı</dt><dd>{item.output}</dd></div></dl>}</div><span class="card-link">{ui.view} ↗</span></a>)}</div>
+    <div class="grid core-grid">{core.map((item) => <a class="card core-card" href={item.url} target="_blank" rel="noopener noreferrer" data-venture-link="true"><div><span class="card-tag">{item.tag}</span><h3>{item.name}</h3><p>{item.desc}</p>{locale === 'tr' && <dl class="project-proof"><div><dt>Rolüm</dt><dd>{item.role}</dd></div><div><dt>Çıktı</dt><dd>{item.output}</dd></div></dl>}</div><span class="card-link">{ui.view}</span></a>)}</div>
   </section>
 
   <section class="section split-section" id="expertise">
     <div class="section-intro"><p class="eyebrow">{ui.ownedLabel}</p><h2>{ui.ownedTitle}</h2></div>
     <div class="asset-stack">
-      <a class="asset-card" href="https://growth.teyfikgokdemir.com" target="_blank" rel="noopener noreferrer"><div><span class="card-tag">{ui.privateLabel}</span><h3>Growth OS</h3><p>{ui.growthDesc}</p></div><span>growth.teyfikgokdemir.com ↗</span></a>
-      <a class="asset-card" href={site.links.mythborn} target="_blank" rel="noopener noreferrer"><div><span class="card-tag">{ui.mediaLabel}</span><h3>Mythborn</h3><p>{ui.mythDesc}</p></div><span>mythborn.co ↗</span></a>
+      <a class="asset-card" href="https://growth.teyfikgokdemir.com" target="_blank" rel="noopener noreferrer"><div><span class="card-tag">{ui.privateLabel}</span><h3>Growth OS</h3><p>{ui.growthDesc}</p></div><span>growth.teyfikgokdemir.com</span></a>
+      <a class="asset-card" href={site.links.mythborn} target="_blank" rel="noopener noreferrer"><div><span class="card-tag">{ui.mediaLabel}</span><h3>Mythborn</h3><p>{ui.mythDesc}</p></div><span>mythborn.co</span></a>
     </div>
   </section>
 
-  <section class="section collaboration"><p class="eyebrow">{ui.collabLabel}</p><div class="collab-card"><div><span class="card-tag">{ui.collaborationLabel}</span><h2>Olivon</h2><p>{ui.olivonDesc}</p></div><a class="button ghost" href="https://olivon.com.tr" target="_blank" rel="noopener noreferrer">olivon.com.tr ↗</a></div></section>
+  <section class="section collaboration"><p class="eyebrow">{ui.collabLabel}</p><div class="collab-card"><div><span class="card-tag">{ui.collaborationLabel}</span><h2>Olivon</h2><p>{ui.olivonDesc}</p></div><a class="button ghost" href="https://olivon.com.tr" target="_blank" rel="noopener noreferrer">olivon.com.tr</a></div></section>
 
   <section class="section method" id="journey"><p class="eyebrow">{ui.methodLabel}</p><div class="section-heading"><h2>{ui.methodTitle}</h2><p>{ui.methodLead}</p></div><ol class="method-grid">{ui.steps.map((step,index) => <li><span>0{index+1}</span><strong>{step}</strong></li>)}</ol></section>
 
@@ -175,7 +175,7 @@ const trIntentCards = [
       <label class="contact-form-wide"><span>Kısa mesaj</span><textarea name="message" rows="4" required placeholder="Ne üzerinde konuşmak istediğinizi kısaca yazın."></textarea></label>
       <button class="button primary contact-form-wide" type="submit">WhatsApp’ta gönder</button>
     </form>}
-    <div class="contact-links"><a href={site.links.qctStudio} target="_blank" rel="noopener noreferrer">QCT Studio ↗</a><a href={site.links.qctCommerce} target="_blank" rel="noopener noreferrer">QCT Commerce ↗</a><a href={site.links.ctseg} target="_blank" rel="noopener noreferrer">CTSEG ↗</a></div>
+    <div class="contact-links"><a href={site.links.qctStudio} target="_blank" rel="noopener noreferrer">QCT Studio</a><a href={site.links.qctCommerce} target="_blank" rel="noopener noreferrer">QCT Commerce</a><a href={site.links.ctseg} target="_blank" rel="noopener noreferrer">CTSEG</a></div>
   </section>
 </main>
 <footer class="personal-footer"><span>© 2026 Teyfik Gökdemir</span><div><a href={site.links.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a><a href={site.links.github} target="_blank" rel="noopener noreferrer">GitHub</a><a href={site.links.instagram} target="_blank" rel="noopener noreferrer">Instagram</a></div></footer>

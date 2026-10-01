@@ -102,10 +102,10 @@ const ecosystemLinks = [
       </div>
 
       <nav class="mobile-command-nav" aria-label={labels.menu}>
-        <a href={sectionUrl('journey')}><span>{labels.work}</span><span aria-hidden="true">↗</span></a>
-        <a href={blogUrls[locale]}><span>{labels.insights}</span><span aria-hidden="true">↗</span></a>
-        <a href={sectionUrl('contact')}><span>{labels.contact}</span><span aria-hidden="true">↗</span></a>
-        <a href={currentHomePath}><span>{labels.ecosystem}</span><span aria-hidden="true">↗</span></a>
+        <a href={sectionUrl('journey')}><span>{labels.work}</span><span aria-hidden="true"></span></a>
+        <a href={blogUrls[locale]}><span>{labels.insights}</span><span aria-hidden="true"></span></a>
+        <a href={sectionUrl('contact')}><span>{labels.contact}</span><span aria-hidden="true"></span></a>
+        <a href={currentHomePath}><span>{labels.ecosystem}</span><span aria-hidden="true"></span></a>
       </nav>
 
       <section class="mobile-ecosystem-section" aria-labelledby="mobile-ecosystem-title">
@@ -118,7 +118,7 @@ const ecosystemLinks = [
             <a href={item.href} target="_blank" rel="noopener noreferrer">
               <strong>{item.name}</strong>
               <small>{item.detail}</small>
-              <span aria-hidden="true">↗</span>
+              <span aria-hidden="true"></span>
             </a>
           ))}
         </div>

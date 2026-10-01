@@ -924,7 +924,7 @@ const displayedYear = (title: string, year: string) =>
             {reflex.ctaInternal} <span aria-hidden="true">→</span>
           </a>
           <a class="button reflex-card__button-alt" href={localeCtsegLinks.reflex} target="_blank" rel="noopener noreferrer">
-            {reflex.ctaExternal} <span aria-hidden="true">↗</span>
+            {reflex.ctaExternal} <span aria-hidden="true"></span>
           </a>
         </div>
       </div>
@@ -969,7 +969,7 @@ const displayedYear = (title: string, year: string) =>
             <div class="venture-meta"><span class="tag">{item.status}</span><span class="tag">{item.region}</span></div>
             <h3>{item.name}</h3>
             <p>{item.description}</p>
-            <span class="venture-arrow" aria-hidden="true">↗</span>
+            <span class="venture-arrow" aria-hidden="true"></span>
           </a>
         ) : (
           <article class="venture-card" aria-label={item.aria} data-reveal="item" style={`--reveal-order:${index}`}>
@@ -1086,7 +1086,7 @@ const displayedYear = (title: string, year: string) =>
             <label class="form-field--full"><span>{formCopy.message} *</span><textarea name="message" rows="5" required aria-required="true"></textarea></label>
           </div>
           <button class="button primary" type="submit">{formCopy.submit}</button>
-          <a class="form-ctseg-link" href={localeCtsegLinks.contact} target="_blank" rel="noopener noreferrer">{localPositioning.ctseg.secondary} <span aria-hidden="true">↗</span></a>
+          <a class="form-ctseg-link" href={localeCtsegLinks.contact} target="_blank" rel="noopener noreferrer">{localPositioning.ctseg.secondary} <span aria-hidden="true"></span></a>
           <p class="form-note">{formCopy.note}</p>
           <p class="form-status" data-form-status role="status" aria-live="polite"></p>
         </form>
