@@ -152,7 +152,26 @@ import PersonalHomePalette from './PersonalHomePalette.astro';
   }
 
   .personal-home .split-section .section-intro h2 {
-    max-width: 900px !important;
+    max-width: 100% !important;
+    white-space: nowrap !important;
+    text-wrap: nowrap !important;
+    font-size: clamp(2rem, 3.45vw, 3.65rem) !important;
+  }
+
+  .personal-home.locale-en .split-section .section-intro h2,
+  .personal-home.locale-sr .split-section .section-intro h2,
+  .personal-home.locale-sq .split-section .section-intro h2 {
+    font-size: clamp(1.85rem, 3vw, 3.2rem) !important;
+  }
+
+  .personal-home.locale-ru .split-section .section-intro h2,
+  .personal-home.locale-mk .split-section .section-intro h2,
+  .personal-home.locale-vi .split-section .section-intro h2 {
+    font-size: clamp(1.45rem, 2.35vw, 2.5rem) !important;
+  }
+
+  .personal-home.locale-fa .split-section .section-intro h2 {
+    font-size: clamp(1.75rem, 2.8vw, 3rem) !important;
   }
 
   .personal-home .asset-stack {
@@ -309,6 +328,18 @@ import PersonalHomePalette from './PersonalHomePalette.astro';
   }
 
   @media (max-width: 900px) {
+    .personal-home.locale-en .split-section .section-intro h2,
+    .personal-home.locale-ru .split-section .section-intro h2,
+    .personal-home.locale-mk .split-section .section-intro h2,
+    .personal-home.locale-sr .split-section .section-intro h2,
+    .personal-home.locale-sq .split-section .section-intro h2,
+    .personal-home.locale-fa .split-section .section-intro h2,
+    .personal-home.locale-vi .split-section .section-intro h2 {
+      white-space: normal !important;
+      text-wrap: balance !important;
+      font-size: clamp(1.65rem, 6.2vw, 2.3rem) !important;
+    }
+
     .personal-home.locale-en .centered-section-heading h2,
     .personal-home.locale-ru .centered-section-heading h2,
     .personal-home.locale-mk .centered-section-heading h2,
