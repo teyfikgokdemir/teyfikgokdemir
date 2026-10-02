@@ -134,6 +134,321 @@ export const localizedPostValue = <T>(
 ): T | undefined => field[locale] ?? field.tr ?? field.en;
 
 export const posts: BlogPost[] = [
+
+  {
+    slug: 'chatgpt-ads-2026-ai-native-reklamcilik',
+    date: '2026-10-03',
+    updated: '2026-10-03',
+    readingMinutes: 8,
+    locales: ['tr'],
+    title: { tr: 'ChatGPT Ads 2026: AI-Native Reklamcılık Yeni Bir Dağıtım Kanalı mı?' },
+    description: { tr: 'ChatGPT Ads, Sponsored Agents ve AI-native reklam modellerinin 2026’da performans pazarlaması, landing page ve CRM mimarisini nasıl değiştirdiğine dair pratik rehber.' },
+    intro: { tr: '2026’da reklamcılık yalnızca Google ve Meta arasında dağıtılan bir bütçe oyunu değil. ChatGPT Ads, Sponsored Agents ve konuşma tabanlı reklam deneyimleri, kullanıcının araştırma ile karar arasındaki yolculuğunu yeni bir yüzeye taşıyor. Asıl soru “buraya reklam verelim mi?” değil; teklif, veri, landing page ve satış takibi bu yeni davranışa hazır mı?' },
+    sections: { tr: [
+      { heading: '1. Reklam yüzeyi konuşmanın içine taşınıyor', paragraphs: [
+        'OpenAI, 2026 boyunca ChatGPT Ads için self-serve Ads Manager, CPC satın alma, ölçüm araçları ve daha sonra Sponsored Agents gibi yeni formatlar duyurdu. Bu gelişme, reklamın klasik bir banner veya arama sonucu olmaktan çıkıp kullanıcının karar sürecine daha yakın bir noktaya yerleştiğini gösteriyor.',
+        'Bu yüzden AI-native reklamcılıkta yalnızca kreatif değil, teklifin açıklığı ve devam eden deneyim önem kazanıyor. Kullanıcı reklamı gördükten sonra landing page’e, forma, WhatsApp’a veya bir marka ajanına geçtiğinde aynı bağlamı görmelidir.'
+      ], callout: 'Kaynaklar: <a href="https://openai.com/index/new-ways-to-buy-chatgpt-ads/" target="_blank" rel="noopener noreferrer">OpenAI — New ways to buy ChatGPT ads</a> · <a href="https://openai.com/index/reimagining-advertising-with-ai/" target="_blank" rel="noopener noreferrer">OpenAI — Reimagining advertising with AI</a>' },
+      { heading: '2. AI Ads için en kritik varlık landing page değil, bağlam sürekliliği', paragraphs: [
+        'Kullanıcının ChatGPT içinde gördüğü mesaj ile açılan sayfadaki teklif farklıysa klasik reklam kampanyalarındaki message mismatch problemi burada da oluşur. İyi sistem, reklam metni, ürün/hizmet kanıtı, fiyatlama mantığı, form alanları ve takip mesajını tek akışta düşünür.',
+        'Bu nedenle QCT Studio tarafındaki landing page yaklaşımı ile Growth OS tarafındaki ölçüm mantığı aynı yerde birleşir: reklamın tıklanması tek başına başarı değildir; doğru kullanıcıyı doğru konuşmaya ve ölçülebilir ticari adıma taşımak gerekir.'
+      ]},
+      { heading: '3. Ölçüm modeli değişiyor', paragraphs: [
+        'AI-native kanallar büyüdükçe sadece son tıklamaya bakmak daha da yetersiz hale gelir. Kaynak, kampanya, landing page davranışı, form kalitesi, CRM durumu ve kapanan fırsat aynı zincirde tutulmalıdır.',
+        'Yeni kanalı test ederken ayrı bir ölçüm taksonomisi kurmak yerine mevcut first-party event modeline eklemek daha sağlıklıdır. Böylece ChatGPT Ads, Google Ads, Meta Ads ve organik AI görünürlüğü aynı ticari funnel içinde karşılaştırılabilir.'
+      ]},
+      { heading: '4. 2026 için pratik hazırlık listesi', paragraphs: [
+        'AI-native reklam kanalına girmeden önce teklifin tek cümlede anlaşılabilir olması, marka ve ürün verisinin güncel tutulması, mobil landing page’in hızlı olması, lead source bilgisinin CRM’e taşınması ve satış ekibinin yeni kaynağı ayrı izleyebilmesi gerekir.',
+        'En doğru yaklaşım küçük bir bütçe ile test etmek, lead kalitesini ölçmek ve yalnızca tıklama maliyetine göre karar vermemektir. Yeni kanalın gerçek değeri, daha iyi niyetli ve daha iyi bağlamlanmış talep üretip üretmediğinde ortaya çıkar.'
+      ]}
+    ] }
+  },
+  {
+    slug: 'agentic-ai-operasyonlari-2026',
+    date: '2026-10-03',
+    updated: '2026-10-03',
+    readingMinutes: 8,
+    locales: ['tr'],
+    title: { tr: 'Agentic AI Operasyonları 2026: AI Ajanları İşin Neresinde Kullanılmalı?' },
+    description: { tr: 'AI ajanlarını araştırma, lead routing, raporlama, tedarik ve operasyon süreçlerinde güvenli biçimde kullanmak için pratik bir işletim modeli.' },
+    intro: { tr: 'AI ajanları artık yalnızca içerik üreten araçlar değil; uygulamalar arasında hareket eden, veri toplayan, görev oluşturan ve belirli hedefleri takip eden operasyon katmanlarına dönüşüyor. Fakat bir süreci otonomlaştırmak, o sürecin zaten iyi tasarlanmış olduğu anlamına gelmez.' },
+    sections: { tr: [
+      { heading: '1. Ajan eklemeden önce süreci tarif edin', paragraphs: [
+        'Bir workflow’un girdisi, sahibi, karar noktası, istisnaları ve başarısızlık koşulları tanımlı değilse AI ajanı sadece belirsizliği hızlandırır. İlk adım otomasyon değil süreç haritasıdır.',
+        'Örneğin bir tedarik talebinde ürün spesifikasyonu, hedef ülke, miktar, Incoterm, kalite belgesi ve teslim süresi standart alanlara ayrılabiliyorsa AI bu bilgiyi sınıflandırabilir. Ancak tedarikçi seçimi, sözleşme riski veya fiyat kabulü gibi yüksek etkili kararlar insan onayı gerektirir.'
+      ]},
+      { heading: '2. En iyi başlangıç alanları', bullets: [
+        'Gelen lead ve RFQ taleplerini sınıflandırma',
+        'E-posta ve dokümanlardan yapılandırılmış veri çıkarma',
+        'Tekrarlayan pazar ve rakip araştırmalarını özetleme',
+        'CRM görevleri ve follow-up hatırlatmaları oluşturma',
+        'Analytics anomalilerini ve operasyon sapmalarını işaretleme'
+      ], paragraphs: [
+        'Bu alanların ortak özelliği, kararın kendisini değil karar öncesi hazırlığı hızlandırmalarıdır. İnsan ekibi daha az veri toplar, daha çok değerlendirme yapar.'
+      ]},
+      { heading: '3. Ajanların yetkisini sınırlayın', paragraphs: [
+        'İyi bir agentic sistemde “ne yapabilir?” kadar “ne yapamaz?” da açık olmalıdır. Ödeme yapmak, fiyat değiştirmek, müşteri taahhüdü vermek, sözleşme kabul etmek veya veri silmek gibi eylemler ayrı onay katmanı gerektirir.',
+        'Log tutmak, kaynak göstermek ve geri alınabilir aksiyonlar kullanmak operasyon güvenliğini artırır. Otonomi, sınırsız erişim anlamına gelmemelidir.'
+      ]},
+      { heading: '4. Ekosistem açısından fırsat', paragraphs: [
+        'CTSEG’de tedarik ve ticaret verisinin standardizasyonu, QCT Commerce’te e-commerce ve lead akışları, QCT Studio’da müşteri journey’leri ve Growth OS’ta ölçüm katmanı aynı prensiple birbirine bağlanabilir.',
+        'Agentic AI’ın değeri tek başına “AI kullanıyoruz” demek değildir. Doğru veri, net süreç, kontrollü yetki ve ölçülebilir çıktı birleştiğinde gerçek operasyon avantajı oluşur.'
+      ]}
+    ] }
+  },
+  {
+    slug: 'ai-arama-gorunurlugu-2026-seo-geo-aeo-aio',
+    date: '2026-10-03',
+    updated: '2026-10-03',
+    readingMinutes: 9,
+    locales: ['tr'],
+    title: { tr: 'AI Arama Görünürlüğü 2026: SEO, GEO, AEO ve AIO Tek Sistem Olarak Nasıl Çalışır?' },
+    description: { tr: 'Google ve AI cevap motorlarında görünürlük için teknik SEO, entity yapısı, cevap odaklı içerik ve machine-readable sinyalleri tek sistemde birleştiren 2026 rehberi.' },
+    intro: { tr: 'Arama görünürlüğü artık yalnızca mavi link sıralaması değildir. Kullanıcılar Google, ChatGPT ve diğer AI arayüzlerinde doğrudan cevap, karşılaştırma ve öneri bekliyor. Bu nedenle SEO, GEO, AEO ve AIO birbirinden bağımsız hizmetler değil; aynı bilgi mimarisinin farklı yüzleridir.' },
+    sections: { tr: [
+      { heading: '1. SEO temel katmandır', paragraphs: [
+        'Crawl edilebilirlik, canonical, hreflang, Core Web Vitals, indexation, internal linking ve doğru metadata olmadan AI görünürlüğü için sağlam bir temel oluşmaz. Arama motoru sayfayı güvenilir biçimde anlayamıyorsa generative sistemlerin de aynı varlığı doğru yorumlaması zorlaşır.',
+        'Bu nedenle GEO veya AEO çalışması teknik SEO’nun yerine geçmez; onun üzerine kurulur.'
+      ]},
+      { heading: '2. GEO ve AEO içeriğin nasıl anlaşılacağını düzenler', paragraphs: [
+        'GEO, bir işletmenin entity, hizmet, kanıt ve uzmanlık sinyallerini generative sistemlerin daha rahat anlayacağı biçimde düzenler. AEO ise doğrudan sorulara kısa, açık ve doğrulanabilir cevaplar üretmeyi hedefler.',
+        'İyi içerik; başlık hiyerarşisi, FAQ yapısı, kaynak gösterimi, somut tanımlar ve tutarlı entity bilgileriyle hem insan hem makine için daha az belirsizlik yaratır.'
+      ]},
+      { heading: '3. AIO operasyon katmanıdır', paragraphs: [
+        'AIO’yu yalnızca “AI için optimizasyon” olarak görmek eksik kalır. Asıl mesele site, schema, knowledge layer, marka açıklamaları, hizmet verisi, case study kanıtları ve dağıtım kanallarının tutarlı olmasıdır.',
+        'Bir marka kendi sitesinde başka, LinkedIn’de başka, marketplace’te başka ve AI sistemlerine açık dokümanlarında başka bir kimlik anlatıyorsa visibility sinyalleri parçalanır.'
+      ]},
+      { heading: '4. 2026 çalışma modeli', paragraphs: [
+        'Her ay teknik sağlık, Search Console sorguları, AI referansları, içerik boşlukları, internal linking, schema ve conversion verisi birlikte incelenmelidir. Böylece görünürlük bir defalık proje değil çalışan bir sistem haline gelir.',
+        'QCT Studio’da Dynamic SEO yaklaşımını bu nedenle SEO + GEO + AEO + AIO olarak birlikte ele alıyoruz: amaç daha fazla içerik üretmek değil, daha iyi anlaşılan ve daha iyi kanıtlanan bir dijital varlık kurmaktır.'
+      ]}
+    ] }
+  },
+  {
+    slug: 'whatsapp-commerce-2026-mesajdan-siparise',
+    date: '2026-10-03',
+    updated: '2026-10-03',
+    readingMinutes: 8,
+    locales: ['tr'],
+    title: { tr: 'WhatsApp Commerce 2026: Mesajdan Siparişe Geçen Yeni Ticaret Katmanı' },
+    description: { tr: 'WhatsApp ve business messaging’in 2026’da satış, destek, ürün keşfi ve CRM akışlarını nasıl birleştirdiğini anlatan pratik commerce rehberi.' },
+    intro: { tr: 'Birçok pazarda müşteri artık form doldurmak yerine mesaj atmak istiyor. WhatsApp Commerce bu davranışı “bize yazın” butonundan çıkarıp ürün, teklif, sipariş ve takip katmanına dönüştürüyor. Asıl fark, sohbeti ölçülebilir bir satış sürecine bağlamakta.' },
+    sections: { tr: [
+      { heading: '1. Mesajlaşma artık ticari bir kanal', paragraphs: [
+        'WhatsApp Business’ın 2026 tüketici araştırmasında katılımcıların büyük bölümü işletmelerle iletişimde mesajlaşmayı tercih ettiğini belirtiyor. Bu, messaging’in yalnızca destek kanalı değil güven ve satın alma sürecinin parçası olduğunu gösteriyor.',
+        'Ancak yüksek mesaj hacmi tek başına başarı değildir. Mesajın hangi ürün, reklam veya sayfadan geldiği bilinmiyorsa satış ekibi bağlamı yeniden toplamaya çalışır.'
+      ], callout: 'Kaynak: <a href="https://whatsappbusiness.com/resources/resource-library/state-of-business-messaging/" target="_blank" rel="noopener noreferrer">WhatsApp Business — State of Business Messaging 2026</a>' },
+      { heading: '2. Website ve WhatsApp birlikte tasarlanmalı', paragraphs: [
+        'Ürün sayfası müşterinin temel sorularını cevaplamalı; WhatsApp daha ileri niyet için devreye girmelidir. Fiyat, ölçü, teslimat, stok veya temel özellikler web sayfasında yoksa ekip her konuşmada aynı bilgiyi tekrar eder.',
+        'İyi yapı, mesajı daha başlamadan zenginleştirir: ürün adı, SKU, kampanya kaynağı, tercih edilen varyant ve sayfa URL’si konuşmaya bağlanabilir.'
+      ]},
+      { heading: '3. CRM ve attribution şart', paragraphs: [
+        'Click-to-WhatsApp veya organik mesaj akışlarında source bilgisi CRM’e geçmiyorsa kanalın gerçek ticari etkisi ölçülemez. Aynı müşteri birden fazla mesaj attığında tek lead olarak birleştirmek de önemlidir.',
+        'Ölçüm modeli en azından message start, qualified conversation, quote sent, order created ve won/lost gibi ticari event’leri ayırmalıdır.'
+      ]},
+      { heading: '4. AI nerede kullanılmalı?', paragraphs: [
+        'AI, sık sorulan soruları hazırlamak, ürün bilgisini bulmak, mesajı doğru ekibe yönlendirmek ve ilk yanıtı taslaklamak için değerlidir. Ancak fiyat istisnası, ticari taahhüt veya hassas müşteri durumu gibi konular insan kontrolünde kalmalıdır.',
+        'WhatsApp Commerce’in geleceği botlaştırılmış müşteri hizmeti değil; insan ekibi daha hızlı ve daha bağlamlı çalıştıran bir mesajlaşma sistemidir.'
+      ]}
+    ] }
+  },
+  {
+    slug: 'tedarik-stratejisi-2026-coklu-kaynak',
+    date: '2026-10-03',
+    updated: '2026-10-03',
+    readingMinutes: 9,
+    locales: ['tr'],
+    title: { tr: '2026 Tedarik Stratejisi: Tek Tedarikçiden Çoklu Kaynak Modeline Geçiş' },
+    description: { tr: 'Jeopolitik risk, tarife belirsizliği ve teslimat baskısı altında supplier diversification, dual sourcing ve doğrulama modelini anlatan 2026 tedarik rehberi.' },
+    intro: { tr: '2026’da en ucuz tedarikçi her zaman en doğru tedarikçi değil. Tarifeler, regülasyonlar, lojistik sapmaları ve jeopolitik riskler şirketleri maliyet odaklı tek kaynak modelinden dayanıklılık odaklı çoklu kaynak modeline itiyor.' },
+    sections: { tr: [
+      { heading: '1. Tedarik zinciri yeniden risk hesabı yapıyor', paragraphs: [
+        'UNCTAD’ın 2026 görünümünde tedarik zincirlerinin yalnız maliyet için değil risk yönetimi için yeniden konumlandığı; şirketlerin tedarikçi çeşitlendirmesi ve üretimi hedef pazarlara yaklaştırma gibi stratejilere yöneldiği vurgulanıyor.',
+        'Bu değişim satın alma ekibinin KPI’ını da değiştiriyor. Birim fiyatın yanına lead time, alternatif rota, kapasite, regülasyon uyumu ve kriz anında yeniden planlama kabiliyeti ekleniyor.'
+      ], callout: 'Kaynak: <a href="https://unctad.org/news/10-trends-shaping-global-trade-2026" target="_blank" rel="noopener noreferrer">UNCTAD — 10 trends shaping global trade in 2026</a>' },
+      { heading: '2. Dual sourcing her ürün için aynı anlama gelmez', paragraphs: [
+        'Standart commodity ürünlerde iki veya üç onaylı üretici yeterli olabilir. Teknik ürünlerde ise ikinci kaynağın kalıp, spesifikasyon, kalite sistemi ve sertifikasyon uyumunu önceden tamamlaması gerekir.',
+        'Alternatif tedarikçi listede var ama teknik olarak üretime hazır değilse kriz anında gerçek alternatif değildir.'
+      ]},
+      { heading: '3. Supplier verification veri katmanı olmalı', paragraphs: [
+        'Şirket kaydı, üretim kapasitesi, kalite belgeleri, ihracat geçmişi, banka bilgisi ve ticari referanslar ayrı ayrı doğrulanmalıdır. İlk görüşmede verilen PDF’ler doğrulama değil sadece başlangıç verisidir.',
+        'CTSEG yaklaşımında tedarikçi değerlendirmesini bu nedenle sourcing’den ayrı bir katman olarak ele almak gerekir: önce bulunur, sonra doğrulanır, sonra RFQ ve numune sürecine girilir.'
+      ]},
+      { heading: '4. En iyi tedarik stratejisi opsiyon üretir', paragraphs: [
+        'Birincil tedarikçi iyi çalışırken ikinci kaynağa ihtiyaç yokmuş gibi görünür. Fakat gerçek dayanıklılık, alternatifin ihtiyaç doğmadan önce hazırlanmasıyla oluşur.',
+        '2026’da sourcing avantajı yalnız daha düşük fiyat değil; daha fazla ticari seçenek, daha hızlı yeniden yönlendirme ve daha az operasyonel sürprizdir.'
+      ]}
+    ] }
+  },
+  {
+    slug: 'landed-cost-2026-gumruk-tarife-marj',
+    date: '2026-10-03',
+    updated: '2026-10-03',
+    readingMinutes: 9,
+    locales: ['tr'],
+    title: { tr: 'Landed Cost 2026: Gümrük, Tarife ve Lojistik Değişirken Marj Nasıl Korunur?' },
+    description: { tr: 'İthalat ve ihracatta birim fiyat yerine gerçek teslim maliyetini hesaplamak için tarife, vergi, freight, sigorta, finansman ve operasyon risklerini birleştiren rehber.' },
+    intro: { tr: 'FOB veya EXW fiyatı artık satın alma kararının yalnızca başlangıcıdır. 2026’daki tarife ve regülasyon oynaklığı, gerçek maliyetin sipariş verildikten sonra değil RFQ aşamasında hesaplanmasını zorunlu hale getiriyor.' },
+    sections: { tr: [
+      { heading: '1. Landed cost hangi kalemlerden oluşur?', paragraphs: [
+        'Ürün bedeli, iç nakliye, ihracat masrafları, navlun, sigorta, gümrük vergisi, ek mali yükümlülükler, liman/terminal giderleri, müşavirlik, iç dağıtım ve finansman maliyeti aynı tabloda görülmelidir.',
+        'Sektöre ve ülkeye göre anti-dumping, safeguard, çevresel düzenleme veya ürün bazlı ek belge maliyetleri de oluşabilir.'
+      ]},
+      { heading: '2. Tarife belirsizliği teklif sürecine taşınmalı', paragraphs: [
+        'UNCTAD 2026 görünümü, tarifelerin stratejik ve korumacı politika aracı olarak daha yoğun kullanıldığını vurguluyor. Bu nedenle uzun geçerlilik süreli sabit fiyat teklifleri giderek daha riskli hale geliyor.',
+        'RFQ’da HS code, menşe, teslim şekli ve teklif geçerlilik tarihi net değilse tedarikçilerin verdiği fiyatlar birbirine gerçekten karşılaştırılabilir değildir.'
+      ]},
+      { heading: '3. “Ton başı ucuz” ürün pahalıya gelebilir', paragraphs: [
+        'Düşük fabrika çıkış fiyatı; yüksek navlun, düşük konteyner verimliliği, pahalı finansman veya yüksek vergiyle avantajını kaybedebilir. Bu nedenle karar metriği landed cost per unit olmalıdır.',
+        'Özellikle ağır ve düşük değer yoğunluklu ürünlerde lojistik birim maliyeti, ürün fiyatından daha hızlı marj aşındırabilir.'
+      ]},
+      { heading: '4. Senaryo analizi kullanın', paragraphs: [
+        'Tek sayı yerine normal, kötü ve stres senaryosu üretmek daha sağlıklıdır. Navlun +%15, kur +%10 veya gümrük yükü değiştiğinde marjın ne kadar kaldığını önceden görmek gerekir.',
+        'Ticari karar güçlü olduğunda bile sınır maliyeti bilinmiyorsa şirket aslında fiyat değil risk satın alır.'
+      ]}
+    ] }
+  },
+  {
+    slug: 'nearshoring-balkanlar-turkiye-2026',
+    date: '2026-10-03',
+    updated: '2026-10-03',
+    readingMinutes: 8,
+    locales: ['tr'],
+    title: { tr: 'Nearshoring 2026: Türkiye ve Balkanlar Neden Yeni Tedarik Haritasında Öne Çıkıyor?' },
+    description: { tr: 'Tedarik zincirlerinin kısalması, Avrupa’ya yakın üretim, çoklu kaynak ve pazar erişimi açısından Türkiye-Balkanlar hattındaki fırsatları değerlendiren analiz.' },
+    intro: { tr: 'Küresel şirketler üretimi tamamen tek bir ülkeye taşımaktan çok, kritik kategorilerde tedarik haritasını çeşitlendiriyor. Türkiye ve Balkanlar bu dönüşümde Avrupa’ya yakınlık, üretim kabiliyeti ve daha kısa lead time avantajıyla doğal bir ara bölge oluşturuyor.' },
+    sections: { tr: [
+      { heading: '1. Nearshoring yalnız coğrafi yakınlık değildir', paragraphs: [
+        'Yakın üretim; daha kısa transit, daha kolay fabrika ziyareti, daha düşük minimum sipariş riski ve daha hızlı numune döngüsü sağlayabilir. Fakat bu avantajlar otomatik değildir; gümrük, kapasite, enerji maliyeti ve tedarikçi olgunluğu kategori bazında değişir.',
+        'Bu nedenle nearshoring kararı ülke seçimi değil kategori ve tedarikçi seviyesinde yapılmalıdır.'
+      ]},
+      { heading: '2. Balkanlar küçük ama stratejik pazarlar', paragraphs: [
+        'Balkan pazarları tek tek sınırlı hacimlere sahip olabilir; ancak çok dilli e-commerce, distribütör ağı ve bölgesel satış operasyonu birlikte planlandığında daha geniş bir ticari alan oluşur.',
+        'QCT Studio’nun Balkan odaklı dijital büyüme yaklaşımı ile CTSEG’in sourcing/ticaret perspektifi bu noktada birbirini tamamlar: bir tarafta arz, diğer tarafta pazara erişim.'
+      ]},
+      { heading: '3. Türkiye’nin rolü köprü değil üretim düğümü', paragraphs: [
+        'Türkiye’yi yalnız Avrupa ile Asya arasında lojistik geçiş noktası olarak görmek eksik kalır. Otomotiv yan sanayi, cam, metal, tekstil, gıda, makine ve çok sayıda işlenmiş ürün kategorisinde doğrudan üretim ve ihracat kabiliyeti bulunuyor.',
+        'Doğru kategori için Türkiye, hem nearshore tedarik kaynağı hem de Balkanlar, Orta Doğu ve Avrupa’ya dağıtım merkezi rolü oynayabilir.'
+      ]},
+      { heading: '4. Fırsatın şartı dijital ve operasyonel şeffaflık', paragraphs: [
+        'Yeni tedarikçinin teknik kabiliyeti, kapasitesi, sertifikaları, fiyatlama modeli ve teslim performansı görünür değilse coğrafi yakınlık tek başına güven yaratmaz.',
+        '2026’nın kazanan modeli “yakın tedarikçi bulmak” değil; doğrulanmış tedarikçi, hesaplanmış landed cost ve ölçülebilir teslim performansını aynı sistemde yönetmektir.'
+      ]}
+    ] }
+  },
+  {
+    slug: 'cross-border-ecommerce-2026-operasyon-sistemi',
+    date: '2026-10-03',
+    updated: '2026-10-03',
+    readingMinutes: 9,
+    locales: ['tr'],
+    title: { tr: 'Cross-Border E-commerce 2026: Çok Dilli Mağazadan Operasyon Sistemine Geçiş' },
+    description: { tr: 'Sınır ötesi e-commerce büyümesinde dil, ödeme, lojistik, vergi, içerik, müşteri desteği ve ölçüm katmanlarını tek sistemde planlama rehberi.' },
+    intro: { tr: 'Bir mağazayı İngilizceye çevirmek cross-border e-commerce değildir. Gerçek sınır ötesi büyüme; ürün, ödeme, teslimat, iade, içerik, müşteri desteği ve ölçümün hedef pazarın davranışına göre yeniden tasarlanmasıdır.' },
+    sections: { tr: [
+      { heading: '1. Lokalizasyon çeviriden büyüktür', paragraphs: [
+        'Dil, fiyat para birimi, ölçü birimi, teslimat beklentisi, güven sinyalleri ve müşteri hizmeti tonu aynı pazarda tutarlı olmalıdır. Otomatik çeviriyle ürün sayfası üretmek kolaydır; karar verme bağlamını lokalize etmek daha zordur.',
+        'Özellikle Balkanlar gibi çok dilli pazarlarda dil seçimi SEO, paid media ve müşteri destek akışlarını doğrudan etkiler.'
+      ]},
+      { heading: '2. Checkout ülkeye göre değişir', paragraphs: [
+        'Kart kullanımı, banka transferi, kapıda ödeme, dijital cüzdan ve taksit gibi tercihler ülkeden ülkeye farklılaşır. Aynı şekilde iade adresi, vergi gösterimi ve teslim süresi de conversion üzerinde etkili olabilir.',
+        'Bu nedenle tek bir global checkout’u her pazara zorlamak yerine ortak altyapı üzerinde yerel modüller kullanmak daha sağlıklıdır.'
+      ]},
+      { heading: '3. Operasyon kapasitesi büyümeden önce test edilmeli', paragraphs: [
+        'Sipariş sayısı artmadan önce kargo SLA’ları, stok senkronizasyonu, müşteri destek kapasitesi ve iade süreci test edilmelidir. Pazarlama operasyonun taşıyamayacağı talep üretirse büyüme kârlılığı düşürür.',
+        'QCT Commerce tarafındaki e-commerce yaklaşımının temelinde bu nedenle mağaza ile operasyonu ayrı değil tek sistem olarak düşünmek var.'
+      ]},
+      { heading: '4. Pazar bazlı P&L görünürlüğü gerekir', paragraphs: [
+        'Her ülkenin revenue, ad spend, payment fee, shipping, return rate ve support cost verisi ayrı izlenmelidir. Toplam ciro büyürken bir pazar zarar ediyor olabilir.',
+        'Cross-border e-commerce’te doğru soru “hangi ülkeye açılalım?” değil; “hangi pazarda tekrar edilebilir, ölçülebilir ve kârlı bir operasyon kurabiliyoruz?” olmalıdır.'
+      ]}
+    ] }
+  },
+  {
+    slug: 'first-party-measurement-2026-ga4-server-side-ai',
+    date: '2026-10-03',
+    updated: '2026-10-03',
+    readingMinutes: 8,
+    locales: ['tr'],
+    title: { tr: 'First-Party Measurement 2026: GA4, Server-Side ve AI Çağında Ölçüm Mimarisi' },
+    description: { tr: 'Web, e-commerce, WhatsApp, reklam ve CRM verisini ortak event modeliyle bağlayan first-party measurement yaklaşımı.' },
+    intro: { tr: '2026’da ölçümün en büyük sorunu veri eksikliği değil veri parçalanması. Web analytics başka, reklam platformu başka, WhatsApp başka ve CRM başka bir gerçeklik gösterdiğinde ekip aynı müşteriyi dört farklı sistemde yorumlar.' },
+    sections: { tr: [
+      { heading: '1. Event isimleri ticari süreci anlatmalı', paragraphs: [
+        'Page_view veya click tek başına yeterli değildir. İşletmenin gerçek akışına göre product_view, rfq_start, qualified_lead, quote_sent, checkout_start, purchase veya meeting_booked gibi event’ler tanımlanmalıdır.',
+        'Aynı event mantığı GA4, reklam platformları, CRM ve iç raporlarda korunursa attribution tartışmaları azalır.'
+      ]},
+      { heading: '2. First-party veri sahiplik sağlar', paragraphs: [
+        'Platform raporları değerlidir ama işletmenin tek veri kaynağı olmamalıdır. Lead’in kaynağı, kampanyası, ilk sayfası ve CRM sonucu kendi sisteminde tutulursa reklam platformu değişse bile öğrenme kaybolmaz.',
+        'Bu yaklaşım Growth OS gibi bir üst raporlama katmanının temelini oluşturur.'
+      ]},
+      { heading: '3. Server-side her sorunu çözmez', paragraphs: [
+        'Server-side tracking veri kalitesini ve kontrolü artırabilir; ancak yanlış event tasarımını düzeltemez. Önce hangi davranışın iş sonucu olduğunu tanımlamak gerekir.',
+        'Ayrıca consent, veri minimizasyonu ve platform politikaları teknik mimarinin parçası olmalıdır. Daha fazla veri toplamak yerine doğru veriyi toplamak hedeflenmelidir.'
+      ]},
+      { heading: '4. AI için temiz measurement daha değerlidir', paragraphs: [
+        'AI modelleri dağınık ve çelişkili veriden iyi karar üretemez. Temiz event taksonomisi, düzenli CRM statüleri ve güvenilir kaynak alanları otomatik analiz ve ajan tabanlı optimizasyon için daha sağlam zemin oluşturur.',
+        'AI çağında measurement’ın görevi dashboard üretmek değil; insan ve makinenin aynı ticari gerçeğe bakmasını sağlamaktır.'
+      ]}
+    ] }
+  },
+  {
+    slug: 'b2b-dijital-guven-supplier-verification-rfq',
+    date: '2026-10-03',
+    updated: '2026-10-03',
+    readingMinutes: 9,
+    locales: ['tr'],
+    title: { tr: 'B2B Dijital Güven 2026: Supplier Verification, RFQ ve Evidence-Led Growth' },
+    description: { tr: 'B2B alıcı ve tedarikçi kararlarında web sitesi, doğrulanabilir şirket verisi, RFQ disiplini ve kanıt odaklı içerikle güven oluşturma rehberi.' },
+    intro: { tr: 'B2B’de iyi görünmek yeterli değil; doğrulanabilir olmak gerekiyor. Alıcılar bir tedarikçiyle konuşmadan önce şirket kaydı, ürün kabiliyeti, sertifika, teslimat, referans ve dijital ayak izini çapraz kontrol ediyor. Dijital güven bu nedenle tasarım değil kanıt mimarisidir.' },
+    sections: { tr: [
+      { heading: '1. Website bir doğrulama yüzeyidir', paragraphs: [
+        'Kurumsal site yalnız hizmet anlatmamalı; legal entity, adres, iletişim kanalları, kapasite, ürün kapsamı, kalite belgeleri ve ticari süreç hakkında doğrulanabilir bilgi sunmalıdır.',
+        'Belirsiz “global leader” söylemleri yerine somut capabilities ve sınırları açık bilgiler B2B güveni daha hızlı artırır.'
+      ]},
+      { heading: '2. RFQ standardı kaliteyi yükseltir', paragraphs: [
+        'Ürün tanımı, teknik spesifikasyon, miktar, hedef teslim noktası, Incoterm, ambalaj, sertifika, numune ve ödeme beklentisi aynı RFQ içinde olduğunda tedarikçi cevapları karşılaştırılabilir hale gelir.',
+        'Serbest formatta gelen teklifler, düşük görünen fiyatın hangi varsayımlarla oluştuğunu gizleyebilir.'
+      ]},
+      { heading: '3. Supplier verification satıştan önce gelir', paragraphs: [
+        'Bir tedarikçinin web sitesinin profesyonel olması üretim kabiliyetini kanıtlamaz. Şirket kayıtları, fabrika bilgisi, belge doğrulaması, ihracat geçmişi ve gerektiğinde bağımsız kontrol ayrı adımlardır.',
+        'CTSEG modelinde sourcing ile verification’ı ayırmak tam olarak bu yüzden önemlidir: bulunan şirket henüz onaylanmış tedarikçi değildir.'
+      ]},
+      { heading: '4. Evidence-led growth neden daha kalıcıdır?', paragraphs: [
+        'Case study, ürün verisi, teknik doküman, kaynak gösterimi ve açık süreç anlatımı hem arama motorlarına hem AI sistemlerine hem de gerçek alıcılara aynı şeyi söyler: bu şirket ne yaptığını biliyor ve iddiasını destekleyebiliyor.',
+        '2026’da B2B dijital büyümenin en güçlü avantajı daha yüksek sesle konuşmak değil; daha kolay doğrulanabilir olmaktır.'
+      ]}
+    ] }
+  },
+  {
+    slug: 'global-ticaret-2026-ai-dijitallesme-deger-zinciri',
+    date: '2026-10-03',
+    updated: '2026-10-03',
+    readingMinutes: 8,
+    locales: ['tr'],
+    title: { tr: 'Global Ticaret 2026: AI, Dijitalleşme ve Değişen Değer Zincirleri' },
+    description: { tr: 'WTO ve UNCTAD’ın 2026 görünümünden hareketle AI, dijital ticaret, değer zinciri yeniden yapılanması ve yeni ticaret risklerini iş dünyası açısından yorumlayan analiz.' },
+    intro: { tr: 'Global ticaret büyümeye devam ederken oyunun kuralları daha karmaşık hale geliyor. AI, dijital hizmetler, yeni tarifeler ve yeniden şekillenen değer zincirleri şirketlerin hem tedarik hem satış tarafında daha fazla veriyle ve daha kısa karar döngüleriyle çalışmasını gerektiriyor.' },
+    sections: { tr: [
+      { heading: '1. Ticaretin yapısı değişiyor', paragraphs: [
+        'WTO’nun 2026 değerlendirmesi, global value chain yapılarının, dijitalleşmenin, AI’ın ve çevresel politikaların ticaretin ne olduğunu ve sınır ötesi etkilerin nasıl yayıldığını değiştirdiğini vurguluyor.',
+        'Bu, ürün ticareti ile dijital hizmetleri birbirinden ayrı düşünmenin giderek zorlaşması anlamına geliyor. Bir fiziksel ürünün satışında bile yazılım, veri, ödeme, reklam ve müşteri iletişimi kritik katmanlar.'
+      ], callout: 'Kaynak: <a href="https://www.wto.org/english/res_e/publications_e/world-trade-report-2026_execsum_e.htm" target="_blank" rel="noopener noreferrer">WTO — World Trade Report 2026, Executive Summary</a>' },
+      { heading: '2. AI ticaret maliyetini dolaylı biçimde düşürebilir', paragraphs: [
+        'AI’ın en hızlı etkisi gümrüğü ortadan kaldırmak değil, bilgi maliyetini azaltmaktır. Tedarikçi araştırması, doküman analizi, çeviri, sınıflandırma, müşteri desteği ve pazar araştırması daha hızlı yapılabilir.',
+        'Ancak yanlış bilgi de aynı hızla çoğalabilir. Bu yüzden kaynak doğrulama ve human approval, AI destekli ticaret süreçlerinin temel kontrol noktası olmalıdır.'
+      ]},
+      { heading: '3. Küçük şirketler için fırsat erişimdir', paragraphs: [
+        'Eskiden ayrı ekipler gerektiren çok dilli içerik, pazar analizi, lead qualification ve teklif hazırlama süreçleri daha küçük ekipler tarafından yönetilebilir hale geliyor.',
+        'Bu teknoloji farkı kapatabilir; fakat yalnızca şirketin ürün, fiyat, operasyon ve müşteri verisi düzenliyse.'
+      ]},
+      { heading: '4. Ekosistem mantığı neden önemli?', paragraphs: [
+        'Ticaret, e-commerce, dijital görünürlük ve operasyon otomasyonu artık birbirinden kopuk disiplinler değil. CTSEG, QCT Commerce, QCT Studio ve Growth OS gibi yapıların aynı ekosistem içinde birbirini tamamlamasının mantığı burada ortaya çıkıyor.',
+        'Geleceğin avantajı tek bir güçlü kanal değil; sourcing’den satışa ve ölçüme kadar verinin kopmadan hareket ettiği bir sistem kurmak.'
+      ]}
+    ] }
+  },
+
   {
     "slug": "building-ecommerce-systems-for-growth",
     "date": "2026-09-28",
