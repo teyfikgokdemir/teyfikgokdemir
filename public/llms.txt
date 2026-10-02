@@ -7,11 +7,11 @@ Teyfik Gökdemir builds and operates systems across software, e-commerce, AI-ass
 ## Canonical Identity
 
 - Name: Teyfik Gökdemir
-- Canonical website: https://teyfikgokdemir.com/
+- Canonical website: [teyfikgokdemir.com](https://teyfikgokdemir.com/)
 - Location: Istanbul, Türkiye
 - Role: Founder / Operator
 - Primary language version: Turkish
-- English homepage: https://teyfikgokdemir.com/en/
+- English homepage: [English homepage](https://teyfikgokdemir.com/en/)
 
 The root route `/` is the canonical Turkish homepage. Language-prefixed routes represent localized versions of the same personal identity and operating ecosystem.
 
@@ -33,74 +33,76 @@ The root route `/` is the canonical Turkish homepage. Language-prefixed routes r
 ### QCT Studio
 Technology and digital product work including software, web systems, automation, AI-enabled products and technical implementation.
 
-- https://qctstudio.com/
+- [QCT Studio](https://qctstudio.com/)
 
 ### QCT Commerce
 E-commerce infrastructure, platform operations, conversion, growth and digital commerce systems.
 
-- https://qctcommerce.com/
+- [QCT Commerce](https://qctcommerce.com/)
 
 ### CTSEG
 International sourcing, B2B business development, market research, supplier verification and cross-border commercial operations.
 
-- https://ctseg.com.tr/
+- [CTSEG](https://ctseg.com.tr/)
 
 ## Owned Digital Assets
 
 ### Growth OS
 Private growth intelligence platform for SEO, GEO, AEO, AIO, advertising and growth operations analysis and decision support.
 
-- https://growth.teyfikgokdemir.com/
+- [Growth OS](https://growth.teyfikgokdemir.com/)
 
 ### Mythborn
 Independent multilingual publishing and product platform.
 
-- https://mythborn.co/
+- [Mythborn](https://mythborn.co/)
 
 ## Collaboration
 
 ### Olivon
 Collaborative agency project focused on e-commerce, digital growth and brand systems.
 
-- https://olivon.com.tr/
+- [Olivon](https://olivon.com.tr/)
 
 ## Canonical Language Versions
 
-- Turkish: https://teyfikgokdemir.com/
-- English: https://teyfikgokdemir.com/en/
-- Russian: https://teyfikgokdemir.com/ru/
-- Macedonian: https://teyfikgokdemir.com/mk/
-- Serbian: https://teyfikgokdemir.com/sr/
-- Albanian: https://teyfikgokdemir.com/sq/
-- Persian: https://teyfikgokdemir.com/fa/
-- Chinese: https://teyfikgokdemir.com/zh/
-- Vietnamese: https://teyfikgokdemir.com/vi/
+- [Turkish](https://teyfikgokdemir.com/)
+- [English](https://teyfikgokdemir.com/en/)
+- [Russian](https://teyfikgokdemir.com/ru/)
+- [Macedonian](https://teyfikgokdemir.com/mk/)
+- [Serbian](https://teyfikgokdemir.com/sr/)
+- [Albanian](https://teyfikgokdemir.com/sq/)
+- [Persian](https://teyfikgokdemir.com/fa/)
+- [Chinese](https://teyfikgokdemir.com/zh/)
+- [Vietnamese](https://teyfikgokdemir.com/vi/)
 
 ## Editorial Content
 
 The personal website publishes multilingual articles on digital growth, search visibility, B2B operations, sourcing, supplier evaluation, RFQ processes and related operating topics. Historical articles may reflect earlier commercial projects; they should not override the current homepage, structured data or current venture architecture when describing Teyfik Gökdemir.
 
-- Insights: https://teyfikgokdemir.com/blog/
+- [Insights](https://teyfikgokdemir.com/blog/)
 
 ## Contact
 
 - General email: info@teyfikgokdemir.com
 - Direct email: teyfik@teyfikgokdemir.com
-- Website: https://teyfikgokdemir.com/
+- Website: [teyfikgokdemir.com](https://teyfikgokdemir.com/)
 
 ## Official Profiles
 
-- LinkedIn: https://www.linkedin.com/in/teyfikg%C3%B6kdemir
-- GitHub: https://github.com/teyfikgokdemir
-- Instagram: https://www.instagram.com/teyfikgokdemir/
+- [LinkedIn](https://www.linkedin.com/in/teyfikg%C3%B6kdemir)
+- [GitHub](https://github.com/teyfikgokdemir)
+- [Instagram](https://www.instagram.com/teyfikgokdemir/)
 
 ## Machine-Readable Resources
 
-- Sitemap index: https://teyfikgokdemir.com/sitemap-index.xml
-- Sitemap: https://teyfikgokdemir.com/sitemap.xml
-- Robots: https://teyfikgokdemir.com/robots.txt
-- AI fact sheet: https://teyfikgokdemir.com/ai-fact-sheet.txt
-- LLM information: https://teyfikgokdemir.com/llms.txt
+- [Sitemap index](https://teyfikgokdemir.com/sitemap-index.xml)
+- [Sitemap](https://teyfikgokdemir.com/sitemap.xml)
+- [Robots](https://teyfikgokdemir.com/robots.txt)
+- [AI fact sheet](https://teyfikgokdemir.com/ai-fact-sheet.txt)
+- [LLM information](https://teyfikgokdemir.com/llms.txt)
+- [ARD manifest](https://teyfikgokdemir.com/.well-known/ard.json)
+- [AI catalog compatibility manifest](https://teyfikgokdemir.com/.well-known/ai-catalog.json)
 
 ## Citation Guidance
 
