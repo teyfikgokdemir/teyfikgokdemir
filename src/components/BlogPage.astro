@@ -19,6 +19,7 @@ import {
   type BlogPost,
 } from '../data/blog';
 import { localizedGlassGuides, glassGuideSlugs, type GlassGuideLocale } from '../data/glass-guides-localized';
+import { blogLongFormSections } from '../data/blog-longform';
 
 interface Props { locale: BlogLocale; post?: BlogPost }
 
@@ -31,7 +32,12 @@ const canonical = origin + canonicalPath;
 const postTitle = post ? localizedPostValue(post.title, locale) ?? '' : '';
 const postDescription = post ? localizedPostValue(post.description, locale) ?? '' : '';
 const postIntro = post ? localizedPostValue(post.intro, locale) ?? '' : '';
-const postSections = post ? localizedPostValue(post.sections, locale) ?? [] : [];
+const postSections = post
+  ? [
+      ...(localizedPostValue(post.sections, locale) ?? []),
+      ...(blogLongFormSections[post.slug]?.[locale] ?? []),
+    ]
+  : [];
 const title = post
   ? `${postTitle} | Teyfik Gökdemir`
   : `${meta.blog} | Teyfik Gökdemir`;
