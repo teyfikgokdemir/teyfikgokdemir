@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/generate-seo-artifacts.mjs",
+    "build": "npm run audit:trend-blog-parity && astro build && node scripts/generate-seo-artifacts.mjs",
     "audit": "node scripts/audit-built-site.mjs",
     "indexnow:submit": "node scripts/indexnow-submit.mjs",
     "check:responsive": "node scripts/check-responsive.mjs",
@@ -16,7 +16,8 @@
     "test:seo": "npm run audit",
     "verify:premium": "node scripts/verify-premium-upgrade.mjs",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "audit:trend-blog-parity": "node scripts/audit-trend-blog-parity.mjs"
   },
   "dependencies": {
     "astro": "^7.3.4"
