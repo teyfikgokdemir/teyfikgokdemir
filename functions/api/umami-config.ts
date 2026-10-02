@@ -27,10 +27,11 @@ const apiBase = (value: string) => {
   const base = cleanBase(value);
   if (/api\.umami\.is\/v1(?:\/|$)/i.test(base)) return base;
   if (/api\.umami\.is$/i.test(base)) return `${base}/v1`;
+  if (/cloud\.umami\.is$/i.test(base)) return 'https://api.umami.is/v1';
   return `${base}/api`;
 };
 
-const isCloudApi = (value: string) => /api\.umami\.is(?:\/v1)?(?:\/|$)/i.test(cleanBase(value));
+const isCloudApi = (value: string) => /(?:api|cloud)\.umami\.is(?:\/v1)?(?:\/|$)/i.test(cleanBase(value));
 const apiUrl = (base: string, path: string) => `${apiBase(base)}/${path.replace(/^\/+/, '')}`;
 const cors = (origin: string | null) => ({
   'access-control-allow-origin': origin && ORIGINS.has(origin) ? origin : 'null',
