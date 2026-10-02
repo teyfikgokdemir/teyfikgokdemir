@@ -10,7 +10,7 @@ const { locale } = Astro.props;
 const messages = {
   tr: {
     title: 'Çerez tercihleri',
-    text: 'Zorunlu çerezler sitenin çalışması için kullanılır. Analitik ve performans ölçümü yalnızca onay verdiğinizde etkinleştirilir.',
+    text: 'Zorunlu çerezler sitenin çalışması için kullanılır. Test süresince analitik ve performans ölçümü tercihten bağımsız çalışır.',
     privacy: 'Gizlilik Politikası',
     reject: 'Reddet',
     accept: 'Onayla',
@@ -24,7 +24,7 @@ const messages = {
   },
   en: {
     title: 'Cookie preferences',
-    text: 'Essential cookies keep the site working. Analytics and performance measurement are enabled only after you give consent.',
+    text: 'Essential cookies keep the site working. During testing, analytics and performance measurement run regardless of preference.',
     privacy: 'Privacy Policy',
     reject: 'Reject',
     accept: 'Accept',
@@ -97,11 +97,11 @@ const privacyHref = locale === 'tr' ? '/privacy-policy/' : `/${locale}/privacy-p
 
     let analyticsLoaded = false;
     let sourceBeaconLoaded = false;
-    window['ga-disable-' + measurementId] = true;
+    window['ga-disable-' + measurementId] = false;
     window.dataLayer = window.dataLayer || [];
     window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
     window.gtag('consent', 'default', {
-      analytics_storage: 'denied',
+      analytics_storage: 'granted',
       ad_storage: 'denied',
       ad_user_data: 'denied',
       ad_personalization: 'denied',
@@ -148,19 +148,11 @@ const privacyHref = locale === 'tr' ? '/privacy-policy/' : `/${locale}/privacy-p
       window.gtag('event', name, params);
     };
 
+    // TEMP TEST MODE: analytics stays active regardless of preference.
+    loadAnalytics();
+    loadSourceBeacon();
     const stored = localStorage.getItem(key);
-    if (stored === 'accepted') {
-      loadAnalytics();
-      loadSourceBeacon();
-      banner.hidden = true;
-    } else if (stored === 'rejected') {
-      window['ga-disable-' + measurementId] = true;
-      window.gtag('consent', 'update', { analytics_storage: 'denied' });
-      clearAnalyticsCookies();
-      banner.hidden = true;
-    } else {
-      banner.hidden = false;
-    }
+    banner.hidden = stored === 'accepted' || stored === 'rejected';
 
     banner.querySelector('[data-cookie-accept]')?.addEventListener('click', () => {
       localStorage.setItem(key, 'accepted');
@@ -172,9 +164,6 @@ const privacyHref = locale === 'tr' ? '/privacy-policy/' : `/${locale}/privacy-p
 
     banner.querySelector('[data-cookie-reject]')?.addEventListener('click', () => {
       localStorage.setItem(key, 'rejected');
-      window['ga-disable-' + measurementId] = true;
-      window.gtag('consent', 'update', { analytics_storage: 'denied' });
-      clearAnalyticsCookies();
       banner.hidden = true;
     });
 
