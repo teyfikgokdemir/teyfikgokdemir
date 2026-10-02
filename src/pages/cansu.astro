@@ -858,91 +858,150 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
             lead: 'Nitelikli lead',
         };
 
+        const UMAMI_CACHE_KEY = 'cansu-umami-last-success-v2';
+
+        function renderUmamiData(data, options = {}) {
+            const cached = Boolean(options.cached);
+            if (!data?.configured) {
+                const missing = Array.isArray(data?.missing) && data.missing.length ? ` · eksik: ${data.missing.join(', ')}` : '';
+                umamiSourceChip.textContent = `Umami · kurulum bekleniyor${missing}`;
+                umamiSourceChip.style.color = '#fbbf24';
+                overviewUmamiSourceChip.textContent = umamiSourceChip.textContent;
+                overviewUmamiSourceChip.style.color = '#fbbf24';
+                return false;
+            }
+
+            const connected = (data.sites || []).filter((site) => site.connected);
+            const sum = (period, metric) => connected.reduce((total, site) => total + Number(site.periods?.[period]?.[metric] || 0), 0);
+            const portfolioVisits1d = sum('oneDay','visits');
+            const portfolioVisitors1d = sum('oneDay','visitors');
+            const portfolioPageviews1d = sum('oneDay','pageviews');
+
+            umamiVisits1d.textContent = formatNumber(portfolioVisits1d);
+            umamiVisitors1d.textContent = formatNumber(portfolioVisitors1d);
+            umamiPageviews1d.textContent = formatNumber(portfolioPageviews1d);
+            umamiVisits30d.textContent = formatNumber(sum('thirtyDays','visits'));
+            overviewUmamiVisits1d.textContent = formatNumber(portfolioVisits1d);
+            overviewUmamiVisitors1d.textContent = formatNumber(portfolioVisitors1d);
+            overviewUmamiPageviews1d.textContent = formatNumber(portfolioPageviews1d);
+
+            const allConnected = connected.length === (data.sites?.length || 6);
+            const suffix = cached ? ' · son başarılı veri' : '';
+            umamiSourceChip.textContent = `Umami · ${connected.length}/${data.sites?.length || 6} bağlı${suffix}`;
+            umamiSourceChip.style.color = cached ? '#7dd3fc' : (allConnected ? '#34d399' : '#fbbf24');
+            overviewUmamiSourceChip.textContent = umamiSourceChip.textContent;
+            overviewUmamiSourceChip.style.color = umamiSourceChip.style.color;
+
+            const sortedUmamiSites = [...(data.sites || [])].sort((a,b) => Number(b.periods?.oneDay?.visits || 0) - Number(a.periods?.oneDay?.visits || 0));
+            umamiOverviewGrid.innerHTML = sortedUmamiSites.map((site) => {
+                if (!site.connected) {
+                    return `<article class="quality-card"><div class="quality-card__head"><div class="quality-card__name">${escapeHtml(site.name)}</div>${statusBadge('VERİ YOK','warn')}</div><div class="quality-lines"><div class="quality-line"><span>Umami</span><strong>${escapeHtml(site.reason || 'bağlantı bekleniyor')}</strong></div></div></article>`;
+                }
+                const day = site.periods?.oneDay || {};
+                const week = site.periods?.sevenDays || {};
+                return `<article class="quality-card">
+                    <div class="quality-card__head"><div class="quality-card__name">${escapeHtml(site.name)}</div>${statusBadge(cached ? 'ÖNBELLEK' : 'CANLI',cached ? 'warn' : 'good')}</div>
+                    <div class="quality-lines">
+                        <div class="quality-line"><span>Oturum · 24s</span><strong>${formatNumber(day.visits || 0)}</strong></div>
+                        <div class="quality-line"><span>Ziyaretçi · 24s</span><strong>${formatNumber(day.visitors || 0)}</strong></div>
+                        <div class="quality-line"><span>Görüntüleme · 24s</span><strong>${formatNumber(day.pageviews || 0)}</strong></div>
+                        <div class="quality-line"><span>Oturum · 7g</span><strong>${formatNumber(week.visits || 0)}</strong></div>
+                    </div>
+                </article>`;
+            }).join('');
+
+            umamiSiteGrid.innerHTML = sortedUmamiSites.map((site) => {
+                if (!site.connected) {
+                    return `<article class="quality-card"><div class="quality-card__head"><div class="quality-card__name">${escapeHtml(site.name)}</div>${statusBadge('VERİ YOK','warn')}</div><div class="quality-lines"><div class="quality-line"><span>Umami</span><strong>${escapeHtml(site.reason || 'website kaydı bekleniyor')}</strong></div></div></article>`;
+                }
+                const day = site.periods?.oneDay || {};
+                const month = site.periods?.thirtyDays || {};
+                return `<article class="quality-card">
+                    <div class="quality-card__head"><div class="quality-card__name">${escapeHtml(site.name)}</div>${statusBadge(cached ? 'ÖNBELLEK' : 'CANLI',cached ? 'warn' : 'good')}</div>
+                    <div class="quality-lines">
+                        <div class="quality-line"><span>Oturumlar · 24s</span><strong>${formatNumber(day.visits || 0)}</strong></div>
+                        <div class="quality-line"><span>Ziyaretçiler · 24s</span><strong>${formatNumber(day.visitors || 0)}</strong></div>
+                        <div class="quality-line"><span>Sayfa Görüntüleme · 24s</span><strong>${formatNumber(day.pageviews || 0)}</strong></div>
+                        <div class="quality-line"><span>Oturumlar · 30g</span><strong>${formatNumber(month.visits || 0)}</strong></div>
+                    </div>
+                </article>`;
+            }).join('');
+            return true;
+        }
+
         async function loadUmami() {
+            let cachedData = null;
             try {
-                const response = await fetch('https://cansu.teyfikgokdemir.com/api/umami', { cache: 'no-store' });
+                const cachedRaw = localStorage.getItem(UMAMI_CACHE_KEY);
+                if (cachedRaw) {
+                    const parsed = JSON.parse(cachedRaw);
+                    if (parsed?.data?.ok && parsed?.data?.configured) {
+                        cachedData = parsed.data;
+                        renderUmamiData(cachedData, { cached: true });
+                    }
+                }
+            } catch {}
+
+            if (cachedData) {
+                umamiSourceChip.textContent = umamiSourceChip.textContent.replace('son başarılı veri','yenileniyor');
+                overviewUmamiSourceChip.textContent = umamiSourceChip.textContent;
+            } else {
+                umamiSourceChip.textContent = 'Umami · canlı veri yükleniyor';
+                umamiSourceChip.style.color = '#fbbf24';
+                overviewUmamiSourceChip.textContent = 'Umami · canlı veri yükleniyor';
+                overviewUmamiSourceChip.style.color = '#fbbf24';
+            }
+
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), 8000);
+            try {
+                const response = await fetch('https://cansu.teyfikgokdemir.com/api/umami', {
+                    cache: 'no-store',
+                    signal: controller.signal,
+                });
+                clearTimeout(timer);
                 const data = await response.json();
                 if (!response.ok || !data.ok) throw new Error(data.error || 'Umami API failed');
 
                 if (!data.configured) {
-                    umamiSourceChip.textContent = 'Umami · kurulum bekleniyor';
-                    umamiSourceChip.style.color = '#fbbf24';
-                    umamiVisits1d.textContent = '—';
-                    umamiVisitors1d.textContent = '—';
-                    umamiPageviews1d.textContent = '—';
-                    umamiVisits30d.textContent = '—';
-                    overviewUmamiVisits1d.textContent = '—';
-                    overviewUmamiVisitors1d.textContent = '—';
-                    overviewUmamiPageviews1d.textContent = '—';
-                    overviewUmamiSourceChip.textContent = 'Umami · kurulum bekleniyor';
-                    overviewUmamiSourceChip.style.color = '#fbbf24';
-                    umamiOverviewGrid.innerHTML = '<div class="attention-card" style="border-color:rgba(251,191,36,.3)"><strong style="color:#fbbf24">Umami verisi hazır değil</strong><span>Bağlantı tamamlandığında 6 sitenin gerçek trafik önizlemesi burada görünecek.</span></div>';
-                    umamiSiteGrid.innerHTML = '<div class="attention-card" style="border-color:rgba(251,191,36,.3)"><strong style="color:#fbbf24">Umami backend hazır, instance bekleniyor</strong><span>UMAMI_BASE_URL ve UMAMI_API_KEY tanımlandığında gerçek session/pageview verisi otomatik açılacak.</span></div>';
+                    renderUmamiData(data);
+                    if (!cachedData) {
+                        umamiVisits1d.textContent = '—';
+                        umamiVisitors1d.textContent = '—';
+                        umamiPageviews1d.textContent = '—';
+                        umamiVisits30d.textContent = '—';
+                        overviewUmamiVisits1d.textContent = '—';
+                        overviewUmamiVisitors1d.textContent = '—';
+                        overviewUmamiPageviews1d.textContent = '—';
+                    }
                     return;
                 }
 
-                const connected = (data.sites || []).filter((site) => site.connected);
-                const sum = (period, metric) => connected.reduce((total, site) => total + Number(site.periods?.[period]?.[metric] || 0), 0);
-                const portfolioVisits1d = sum('oneDay','visits');
-                const portfolioVisitors1d = sum('oneDay','visitors');
-                const portfolioPageviews1d = sum('oneDay','pageviews');
-                umamiVisits1d.textContent = formatNumber(portfolioVisits1d);
-                umamiVisitors1d.textContent = formatNumber(portfolioVisitors1d);
-                umamiPageviews1d.textContent = formatNumber(portfolioPageviews1d);
-                umamiVisits30d.textContent = formatNumber(sum('thirtyDays','visits'));
-                overviewUmamiVisits1d.textContent = formatNumber(portfolioVisits1d);
-                overviewUmamiVisitors1d.textContent = formatNumber(portfolioVisitors1d);
-                overviewUmamiPageviews1d.textContent = formatNumber(portfolioPageviews1d);
-                const allConnected = connected.length === (data.sites?.length || 6);
-                umamiSourceChip.textContent = `Umami · ${connected.length}/${data.sites?.length || 6} bağlı`;
-                umamiSourceChip.style.color = allConnected ? '#34d399' : '#fbbf24';
-                overviewUmamiSourceChip.textContent = `Umami · ${connected.length}/${data.sites?.length || 6} bağlı`;
-                overviewUmamiSourceChip.style.color = allConnected ? '#34d399' : '#fbbf24';
+                renderUmamiData(data);
+                try {
+                    localStorage.setItem(UMAMI_CACHE_KEY, JSON.stringify({ savedAt: Date.now(), data }));
+                } catch {}
+            } catch (error) {
+                clearTimeout(timer);
+                if (cachedData) {
+                    const timedOut = error?.name === 'AbortError';
+                    umamiSourceChip.textContent = timedOut ? 'Umami · son veri · canlı yanıt gecikti' : 'Umami · son veri · canlı yenileme başarısız';
+                    umamiSourceChip.style.color = '#fbbf24';
+                    overviewUmamiSourceChip.textContent = umamiSourceChip.textContent;
+                    overviewUmamiSourceChip.style.color = '#fbbf24';
+                    return;
+                }
 
-                const sortedUmamiSites = [...(data.sites || [])].sort((a,b) => Number(b.periods?.oneDay?.visits || 0) - Number(a.periods?.oneDay?.visits || 0));
-                umamiOverviewGrid.innerHTML = sortedUmamiSites.map((site) => {
-                    if (!site.connected) {
-                        return `<article class="quality-card"><div class="quality-card__head"><div class="quality-card__name">${escapeHtml(site.name)}</div>${statusBadge('VERİ YOK','warn')}</div><div class="quality-lines"><div class="quality-line"><span>Umami</span><strong>${escapeHtml(site.reason || 'bağlantı bekleniyor')}</strong></div></div></article>`;
-                    }
-                    const day = site.periods?.oneDay || {};
-                    const week = site.periods?.sevenDays || {};
-                    return `<article class="quality-card">
-                        <div class="quality-card__head"><div class="quality-card__name">${escapeHtml(site.name)}</div>${statusBadge('CANLI','good')}</div>
-                        <div class="quality-lines">
-                            <div class="quality-line"><span>Oturum · 24s</span><strong>${formatNumber(day.visits || 0)}</strong></div>
-                            <div class="quality-line"><span>Ziyaretçi · 24s</span><strong>${formatNumber(day.visitors || 0)}</strong></div>
-                            <div class="quality-line"><span>Görüntüleme · 24s</span><strong>${formatNumber(day.pageviews || 0)}</strong></div>
-                            <div class="quality-line"><span>Oturum · 7g</span><strong>${formatNumber(week.visits || 0)}</strong></div>
-                        </div>
-                    </article>`;
-                }).join('');
-
-                umamiSiteGrid.innerHTML = sortedUmamiSites.map((site) => {
-                    if (!site.connected) {
-                        return `<article class="quality-card"><div class="quality-card__head"><div class="quality-card__name">${escapeHtml(site.name)}</div>${statusBadge('VERİ YOK','warn')}</div><div class="quality-lines"><div class="quality-line"><span>Umami</span><strong>${escapeHtml(site.reason || 'website kaydı bekleniyor')}</strong></div></div></article>`;
-                    }
-                    const day = site.periods?.oneDay || {};
-                    const month = site.periods?.thirtyDays || {};
-                    return `<article class="quality-card">
-                        <div class="quality-card__head"><div class="quality-card__name">${escapeHtml(site.name)}</div>${statusBadge('CANLI','good')}</div>
-                        <div class="quality-lines">
-                            <div class="quality-line"><span>Oturumlar · 24s</span><strong>${formatNumber(day.visits || 0)}</strong></div>
-                            <div class="quality-line"><span>Ziyaretçiler · 24s</span><strong>${formatNumber(day.visitors || 0)}</strong></div>
-                            <div class="quality-line"><span>Sayfa Görüntüleme · 24s</span><strong>${formatNumber(day.pageviews || 0)}</strong></div>
-                            <div class="quality-line"><span>Oturumlar · 30g</span><strong>${formatNumber(month.visits || 0)}</strong></div>
-                        </div>
-                    </article>`;
-                }).join('');
-            } catch {
-                umamiSourceChip.textContent = 'Umami · bağlantı hatası';
+                const timedOut = error?.name === 'AbortError';
+                umamiSourceChip.textContent = timedOut ? 'Umami · yanıt gecikiyor' : 'Umami · bağlantı hatası';
                 umamiSourceChip.style.color = '#f87171';
-                overviewUmamiSourceChip.textContent = 'Umami · bağlantı hatası';
+                overviewUmamiSourceChip.textContent = umamiSourceChip.textContent;
                 overviewUmamiSourceChip.style.color = '#f87171';
                 overviewUmamiVisits1d.textContent = '—';
                 overviewUmamiVisitors1d.textContent = '—';
                 overviewUmamiPageviews1d.textContent = '—';
-                umamiOverviewGrid.innerHTML = '<div class="attention-card" style="border-color:rgba(248,113,113,.3)"><strong style="color:#f87171">Umami verisi alınamadı</strong><span>Gerçek trafik önizlemesi geçici olarak kullanılamıyor.</span></div>';
-                umamiSiteGrid.innerHTML = '<div class="attention-card" style="border-color:rgba(248,113,113,.3)"><strong style="color:#f87171">Umami API alınamadı</strong><span>Instance veya API anahtarı kontrol edilmeli.</span></div>';
+                umamiOverviewGrid.innerHTML = `<div class="attention-card" style="border-color:rgba(248,113,113,.3)"><strong style="color:#f87171">${timedOut ? 'Umami yanıtı gecikiyor' : 'Umami verisi alınamadı'}</strong><span>${timedOut ? 'Son başarılı veri henüz bu cihazda yok. Bir sonraki başarılı yüklemeden sonra panel anında açılacak.' : 'Canlı API geçici olarak kullanılamıyor.'}</span></div>`;
+                umamiSiteGrid.innerHTML = umamiOverviewGrid.innerHTML;
             }
         }
 
