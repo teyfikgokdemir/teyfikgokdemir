@@ -360,10 +360,10 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         <section class="insights-section" data-dashboard-panel="traffic" style="margin-bottom:2.5rem;">
             <div class="ops-section__head">
                 <div>
-                    <h2 class="ops-section__title">Trafik Kaynakları</h2>
-                    <p class="ops-section__copy">D1 üzerinde kaydedilen referrer/UTM sayfa olaylarını gösterir. Bu alan HTTP istek sayısını insan oturumu gibi yorumlamaz.</p>
+                    <h2 class="ops-section__title">Cloudflare HTTP Kaynakları</h2>
+                    <p class="ops-section__copy">Cloudflare üzerinden görülen referrer/UTM ve HTTP istek sinyalleridir. Bunlar gerçek ziyaretçi veya oturum sayısı değildir; kullanıcı trafiği için üstteki Umami Analytics esas alınır.</p>
                 </div>
-                <span class="source-chip">D1 · referrer / UTM</span>
+                <span class="source-chip">Cloudflare · HTTP sinyali</span>
             </div>
             <div id="source-grid" class="source-grid"></div>
         </section>
@@ -371,8 +371,8 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
         <section class="country-section" data-dashboard-panel="traffic" style="margin-bottom:2.5rem;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
                 <div>
-                    <h2 style="font-size:1.15rem; margin:0;">Ülkelere Göre HTTP Trafiği</h2>
-                    <p style="color:#94a3b8; font-size:.78rem; margin:.4rem 0 0;">Son 24 saatte Cloudflare üzerinden geçen HTTP isteklerinin ülke dağılımı. </p>
+                    <h2 style="font-size:1.15rem; margin:0;">Cloudflare HTTP İstekleri · Ülke Dağılımı</h2>
+                    <p style="color:#94a3b8; font-size:.78rem; margin:.4rem 0 0;">Son 24 saatte Cloudflare üzerinden geçen HTTP isteklerinin ülke dağılımıdır. Botlar ve teknik istekler dahil olabilir; ziyaretçi metriği değildir.</p>
                 </div>
                 <div style="display:flex; gap:.75rem; align-items:center; flex-wrap:wrap; color:#64748b; font-size:.7rem;"><span>İlk 15 ülke · request payı</span><span style="color:#475569;">Bar uzunluğu: en yüksek ülkeye göre istek yoğunluğu</span></div>
             </div>
@@ -805,7 +805,9 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 const connectionIssues = siteIssues + githubIssueCount;
                 issueSummary.textContent = connectionIssues ? `${connectionIssues} Uyarı` : '0 Kritik';
                 issueSummary.style.color = connectionIssues ? '#fbbf24' : '#34d399';
-                document.getElementById('workflow-detail').textContent = failed ? `${failed} başarısız run · son 24 saat` : 'HTTP · SSL · doğrulanan workflowlar';
+                document.getElementById('workflow-detail').textContent = connectionIssues
+                    ? (failed ? `${failed} geçmiş başarısız run · son 24 saat · güncel durum kontrol edilmeli` : 'HTTP · SSL · güncel workflow uyarısı')
+                    : (failed ? `Güncel durum sağlıklı · ${failed} eski başarısız run sonradan düzeldi` : 'HTTP · SSL · güncel workflowlar sağlıklı');
                 
                 const sortedSites = sortOverviewSites(data.sites);
                 renderAttention(sortedSites);
@@ -814,7 +816,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 sourceGrid.innerHTML = sortedSites.map((site) => {
                     const sortedSources = sortSources(site.cloudflare?.sources).slice(0, 8);
                     const sourceRows = sortedSources.map((item) => `<div class="source-row"><div><div class="source-row__host" title="${item.host}">${item.host}</div><div class="source-row__meta">${formatNumber(item.requests)} istek · ${formatBytes(item.bytes)}</div></div><strong class="source-row__value">${formatNumber(item.visits)} görüntüleme</strong></div>`).join('');
-                    return `<article class="source-panel"><div class="source-panel__head"><div><div class="source-panel__name">${site.name}</div><div class="source-panel__summary">Son 24 saat · referrer / UTM olayları</div></div><span class="seo-panel__badge">TOP 12</span></div>${sourceRows || '<div class="country-empty">Kaynak verisi bekleniyor</div>'}</article>`;
+                    return `<article class="source-panel"><div class="source-panel__head"><div><div class="source-panel__name">${site.name}</div><div class="source-panel__summary">Son 24 saat · Cloudflare HTTP kaynak sinyalleri</div></div><span class="seo-panel__badge">TOP 12</span></div>${sourceRows || '<div class="country-empty">Kaynak verisi bekleniyor</div>'}</article>`;
                 }).join('');
                 countryGrid.innerHTML = sortedSites.map((site) => {
                     const sortedCountries = sortCountries(site.cloudflare?.countries);
