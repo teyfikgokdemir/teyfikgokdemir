@@ -21,7 +21,7 @@
     "check:blog-responsive": "node scripts/check-blog-responsive.mjs"
   },
   "dependencies": {
-    "astro": "^7.3.4"
+    "astro": "^7.3.5"
   },
   "devDependencies": {
     "playwright-core": "^1.62.1",
