@@ -67,14 +67,14 @@ for (const slug of slugs) {
     const localeEnd = nextLocale.length ? Math.min(...nextLocale) : longBlock.length;
     const localeBlock = longBlock.slice(localeStart, localeEnd);
 
-    const headingCount = (localeBlock.match(/heading:/g) || []).length;
+    const headingCount = (localeBlock.match(/["']?heading["']?\s*:/g) || []).length;
     if (headingCount < 4) {
       errors.push(`${slug}/${locale}: expected at least 4 long-form sections, found ${headingCount}`);
     }
-    if (!localeBlock.includes('faq:')) {
+    if (!/["']?faq["']?\s*:/.test(localeBlock)) {
       errors.push(`${slug}/${locale}: missing FAQ section`);
     }
-    if (!localeBlock.includes('table:')) {
+    if (!/["']?table["']?\s*:/.test(localeBlock)) {
       errors.push(`${slug}/${locale}: missing decision/measurement table`);
     }
   }
