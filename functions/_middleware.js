@@ -1,5 +1,5 @@
 const CANSU_HOST = 'cansu.teyfikgokdemir.com';
-const PUBLIC_PATHS = new Set(['/login', '/api/access/request', '/api/access/verify']);
+const PUBLIC_PATHS = new Set(['/login', '/login/', '/api/access/request', '/api/access/request/', '/api/access/verify', '/api/access/verify/']);
 const MACHINE_PATHS = new Set(['/api/umami-config', '/api/conversions', '/api/sources']);
 const enc = new TextEncoder();
 
