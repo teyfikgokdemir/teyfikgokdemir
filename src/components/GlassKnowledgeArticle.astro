@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import FloatingActions from './FloatingActions.astro';
+import { content } from '../i18n/content';
+import { glassKnowledgePages } from '../data/glass-knowledge';
+import type { GlassKnowledgePage, GlassKnowledgeLocale } from '../data/glass-knowledge';
+const {page,locale='tr'}=Astro.props as {page:GlassKnowledgePage;locale?:GlassKnowledgeLocale};
+const tr=locale==='tr'; const copy=content[locale];
+const path=tr?`/blog/cam-rehberi/${page.slug}/`:`/en/blog/glass-guide/${page.slug}/`; const canonical='https://teyfikgokdemir.com'+path;
+const c=page[locale]; const alt={tr:`https://teyfikgokdemir.com/blog/cam-rehberi/${page.slug}/`,en:`https://teyfikgokdemir.com/en/blog/glass-guide/${page.slug}/`,'x-default':`https://teyfikgokdemir.com/en/blog/glass-guide/${page.slug}/`};
+const schema=[{'@type':'BlogPosting','@id':canonical+'#article',headline:c.metaTitle,description:c.description,inLanguage:locale,mainEntityOfPage:canonical,author:{'@type':'Person',name:'Teyfik Gökdemir',url:'https://teyfikgokdemir.com/'}},{'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:tr?'Ana Sayfa':'Home',item:tr?'https://teyfikgokdemir.com/':'https://teyfikgokdemir.com/en/'},{'@type':'ListItem',position:2,name:tr?'Cam Rehberi':'Glass Guide',item:tr?'https://teyfikgokdemir.com/blog/turkiyeden-cam-tedariki/':'https://teyfikgokdemir.com/en/blog/glass-sourcing-from-turkiye/'},{'@type':'ListItem',position:3,name:c.title,item:canonical}]}];
+---
+<BaseLayout locale={locale} copy={copy} title={c.metaTitle} description={c.description} pathname={path} alternates={alt} ogType="article" pageSchema={schema}>
+<Header locale={locale} copy={copy} homePath={tr?'/':'/en/'} languageUrls={alt}/>
+<main class="glass-article"><article class="shell"><p class="label">{c.eyebrow}</p><h1>{c.title}</h1><p class="lead">{c.intro}</p><div class="body">{c.sections.map(([h,p])=><section><h2>{h}</h2><p>{p}</p></section>)}</div><aside class="commercial"><p>{tr?'Aktif bir satın alma veya ihracat talebiniz varsa bilgilendirici rehberden ticari RFQ aşamasına geçebilirsiniz.':'If you have an active procurement or export requirement, move from the informational guide to a commercial RFQ.'}</p><a href={c.ctaHref} rel="noopener">{c.ctaText} ↗</a></aside><nav class="related"><h2>{tr?'Cam sektörü rehberleri':'Glass industry guides'}</h2>{glassKnowledgePages.filter(x=>x.slug!==page.slug).map(x=><a href={tr?`/blog/cam-rehberi/${x.slug}/`:`/en/blog/glass-guide/${x.slug}/`}>{x[locale].title}<span>↗</span></a>)}</nav></article></main>
+<Footer copy={copy} locale={locale}/><FloatingActions locale={locale}/></BaseLayout>
+<style>
+.glass-article{background:var(--scene-paper);min-height:70vh;padding:clamp(4rem,8vw,7rem) 0}.shell{width:min(1040px,calc(100% - 3rem));margin:auto}.label{text-align:center;color:var(--accent);font-size:.78rem;font-weight:800;letter-spacing:.09em}.shell>h1{max-width:1000px;margin:.7rem auto 1.2rem;text-align:center;font-size:clamp(2.45rem,5.2vw,5rem);line-height:var(--leading-display);letter-spacing:var(--tracking-display);text-wrap:balance}.lead{max-width:800px;margin:0 auto clamp(3rem,6vw,5rem);text-align:center;color:var(--text-muted);font-size:clamp(1.05rem,1.6vw,1.25rem);line-height:1.7}.body{max-width:800px;margin:auto}.body section{padding:2rem 0;border-top:1px solid var(--border)}.body h2{margin:0 0 1rem;font-size:clamp(1.6rem,3vw,2.45rem);line-height:1.15}.body p{margin:0;color:var(--text-muted);font-size:1.05rem;line-height:1.8}.commercial{max-width:800px;margin:3rem auto;padding:1.5rem;border:1px solid var(--border);background:var(--surface)}.commercial p{margin:0 0 1rem;color:var(--text-muted);line-height:1.7}.commercial a{color:var(--accent);font-weight:800;text-decoration:none}.related{max-width:800px;margin:3rem auto 0}.related h2{font-size:1.4rem}.related a{display:flex;justify-content:space-between;gap:1rem;padding:1rem 0;border-top:1px solid var(--border);color:inherit;text-decoration:none}.related a:last-child{border-bottom:1px solid var(--border)}@media(max-width:640px){.shell{width:min(100% - 2rem,1040px)}.shell>h1{font-size:clamp(2.05rem,9.5vw,3.05rem)}}
+</style>
