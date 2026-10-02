@@ -177,6 +177,15 @@ function glassSeoInsights(rows: SearchRow[]) {
     return { query, clicks:value.clicks, impressions:value.impressions, ctr, position, pages };
   });
 
+  const earlySignals = queries
+    .filter((row) => row.impressions >= 1 && row.impressions < 10 && row.position > 0)
+    .map((row) => ({ ...row, page: row.pages[0]?.page || '' }))
+    .sort((a,b) => {
+      if (b.impressions !== a.impressions) return b.impressions - a.impressions;
+      return a.position - b.position;
+    })
+    .slice(0, 15);
+
   const opportunities = queries
     .filter((row) => row.impressions >= 5 && row.position >= 4 && row.position <= 30)
     .map((row) => ({
@@ -216,7 +225,7 @@ function glassSeoInsights(rows: SearchRow[]) {
     .sort((a,b) => b.impressions - a.impressions)
     .slice(0, 15);
 
-  return { rows: glassRows.length, opportunities, lowCtr, cannibalization, topPages };
+  return { rows: glassRows.length, earlySignals, opportunities, lowCtr, cannibalization, topPages };
 }
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
