@@ -9,7 +9,25 @@ import type { GlassKnowledgePage, GlassKnowledgeLocale } from '../data/glass-kno
 const {page,locale='tr'}=Astro.props as {page:GlassKnowledgePage;locale?:GlassKnowledgeLocale};
 const tr=locale==='tr'; const copy=content[locale];
 const path=tr?`/blog/cam-rehberi/${page.slug}/`:`/en/blog/glass-guide/${page.slug}/`; const canonical='https://teyfikgokdemir.com'+path;
-const c=page[locale]; const alt={tr:`https://teyfikgokdemir.com/blog/cam-rehberi/${page.slug}/`,en:`https://teyfikgokdemir.com/en/blog/glass-guide/${page.slug}/`,'x-default':`https://teyfikgokdemir.com/en/blog/glass-guide/${page.slug}/`};
+const c=page[locale];
+const localizedSlugMap:Record<string,string>={
+  'cam-turleri-secim-rehberi':'glass-types-guide',
+  'cam-rfq-checklist':'glass-rfq-checklist',
+  'cam-konteyner-paketleme-lojistik':'glass-logistics-guide',
+  'turkiyede-cam-tedarikci-bulma':'find-glass-suppliers-turkiye'
+};
+const localizedSlug=localizedSlugMap[page.slug];
+const alt={
+  tr:`https://teyfikgokdemir.com/blog/cam-rehberi/${page.slug}/`,
+  en:`https://teyfikgokdemir.com/en/blog/glass-guide/${page.slug}/`,
+  ...(localizedSlug?{
+    fa:`https://teyfikgokdemir.com/fa/blog/glass-guide/${localizedSlug}/`,
+    ru:`https://teyfikgokdemir.com/ru/blog/glass-guide/${localizedSlug}/`,
+    zh:`https://teyfikgokdemir.com/zh/blog/glass-guide/${localizedSlug}/`,
+    vi:`https://teyfikgokdemir.com/vi/blog/glass-guide/${localizedSlug}/`
+  }:{}),
+  'x-default':`https://teyfikgokdemir.com/en/blog/glass-guide/${page.slug}/`
+};
 const schema=[{'@type':'BlogPosting','@id':canonical+'#article',headline:c.metaTitle,description:c.description,inLanguage:locale,mainEntityOfPage:canonical,author:{'@type':'Person',name:'Teyfik Gökdemir',url:'https://teyfikgokdemir.com/'}},{'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:tr?'Ana Sayfa':'Home',item:tr?'https://teyfikgokdemir.com/':'https://teyfikgokdemir.com/en/'},{'@type':'ListItem',position:2,name:tr?'Cam Rehberi':'Glass Guide',item:tr?'https://teyfikgokdemir.com/blog/turkiyeden-cam-tedariki/':'https://teyfikgokdemir.com/en/blog/glass-sourcing-from-turkiye/'},{'@type':'ListItem',position:3,name:c.title,item:canonical}]}];
 ---
 <BaseLayout locale={locale} copy={copy} title={c.metaTitle} description={c.description} pathname={path} alternates={alt} ogType="article" pageSchema={schema}>
