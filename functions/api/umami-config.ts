@@ -22,6 +22,16 @@ const ORIGINS = new Set([
 ]);
 
 const cleanBase = (value: string) => value.trim().replace(/\/+$/, '');
+
+const apiBase = (value: string) => {
+  const base = cleanBase(value);
+  if (/api\.umami\.is\/v1(?:\/|$)/i.test(base)) return base;
+  if (/api\.umami\.is$/i.test(base)) return `${base}/v1`;
+  return `${base}/api`;
+};
+
+const isCloudApi = (value: string) => /api\.umami\.is(?:\/v1)?(?:\/|$)/i.test(cleanBase(value));
+const apiUrl = (base: string, path: string) => `${apiBase(base)}/${path.replace(/^\/+/, '')}`;
 const cors = (origin: string | null) => ({
   'access-control-allow-origin': origin && ORIGINS.has(origin) ? origin : 'null',
   'access-control-allow-methods': 'GET, OPTIONS',
@@ -54,7 +64,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   if (!base || !apiKey) return respond({ ok: true, enabled: false, reason: 'not-configured' }, 200, origin);
 
   try {
-    const response = await fetch(`${base}/api/websites`, {
+    const response = await fetch(apiUrl(base, 'websites'), {
       headers: { accept: 'application/json', authorization: `Bearer ${apiKey}` },
       cf: { cacheTtl: 600, cacheEverything: false },
     });
@@ -75,8 +85,8 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
       ok: true,
       enabled: true,
       websiteId,
-      scriptUrl: `${base}/script.js`,
-      hostUrl: base,
+      scriptUrl: isCloudApi(base) ? 'https://cloud.umami.is/script.js' : `${base}/script.js`,
+      hostUrl: isCloudApi(base) ? 'https://cloud.umami.is' : base,
       domain: host,
       performance: true,
     }, 200, origin, 'public, max-age=900');
