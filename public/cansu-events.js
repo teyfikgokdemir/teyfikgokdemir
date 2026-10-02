@@ -1,7 +1,7 @@
 (() => {
   const current = document.currentScript;
   const site = current?.dataset.site;
-  const endpoint = current?.dataset.endpoint || 'https://teyfikgokdemir.com/api/conversions';
+  const endpoint = current?.dataset.endpoint || 'https://cansu.teyfikgokdemir.com/api/conversions';
   if (!site || !endpoint) return;
 
   const context = () => {
