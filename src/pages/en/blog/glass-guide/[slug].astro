@@ -1,0 +1,7 @@
+---
+import GlassKnowledgeArticle from '../../../../components/GlassKnowledgeArticle.astro';
+import { glassKnowledgePages } from '../../../../data/glass-knowledge';
+export function getStaticPaths(){return glassKnowledgePages.map(page=>({params:{slug:page.slug},props:{page}}));}
+const {page}=Astro.props;
+---
+<GlassKnowledgeArticle page={page} locale="en"/>
