@@ -674,6 +674,43 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
             const body = orderedRows.slice(0, 5).map((row) => `<tr><td title="${escapeHtml(row.value)}">${escapeHtml(row.value)}</td><td>${formatNumber(row.clicks)}</td><td>${formatNumber(row.impressions)}</td><td>${formatPercent(row.ctr)}</td><td>${formatPosition(row.position)}</td></tr>`).join('');
             return `<div style="margin-top:1rem;"><div style="color:#7dd3fc;font-size:.65rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;">${title}</div>${body ? `<table class="seo-table"><thead><tr><th>${type === 'query' ? 'Sorgu' : 'Landing page'}</th><th>Tık.</th><th>Göst.</th><th>CTR</th><th>Ort.</th></tr></thead><tbody>${body}</tbody></table>` : '<div class="country-empty">Bu dönem için veri yok</div>'}</div>`;
         };
+        const shortPagePath = (value) => {
+            try { return new URL(String(value || '')).pathname; } catch { return String(value || ''); }
+        };
+        const glassSeoTable = (title, rows, tone = '#7dd3fc') => {
+            const body = (rows || []).slice(0, 8).map((row) => `<tr>
+                <td title="${escapeHtml(row.query || row.value)}">${escapeHtml(row.query || row.value || '—')}</td>
+                <td title="${escapeHtml(row.page || '')}">${escapeHtml(shortPagePath(row.page || '—'))}</td>
+                <td>${formatNumber(row.impressions)}</td>
+                <td>${formatPercent(row.ctr)}</td>
+                <td>${formatPosition(row.position)}</td>
+            </tr>`).join('');
+            return `<div style="margin-top:1rem;"><div style="color:${tone};font-size:.65rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;">${title}</div>
+                ${body ? `<table class="seo-table"><thead><tr><th>Sorgu</th><th>Landing</th><th>Göst.</th><th>CTR</th><th>Ort.</th></tr></thead><tbody>${body}</tbody></table>` : '<div class="country-empty">Henüz yeterli cam sorgu sinyali yok</div>'}
+            </div>`;
+        };
+        const glassCannibalizationTable = (rows) => {
+            const body = (rows || []).slice(0, 8).map((row) => {
+                const pages = (row.pages || []).map((page) => shortPagePath(page.page)).join(' · ');
+                return `<tr><td title="${escapeHtml(row.query)}">${escapeHtml(row.query)}</td><td title="${escapeHtml(pages)}">${escapeHtml(pages)}</td><td>${formatNumber(row.impressions)}</td><td>${formatPosition(row.position)}</td></tr>`;
+            }).join('');
+            return `<div style="margin-top:1rem;"><div style="color:#fbbf24;font-size:.65rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;">Cannibalization sinyali · CTSEG cam</div>
+                ${body ? `<table class="seo-table"><thead><tr><th>Sorgu</th><th>Yarışan landing'ler</th><th>Göst.</th><th>Ort.</th></tr></thead><tbody>${body}</tbody></table>` : '<div class="country-empty">Belirgin cannibalization sinyali yok</div>'}
+            </div>`;
+        };
+        const glassSeoBlock = (site) => {
+            if (site.key !== 'ctseg' || !site.glassSeo) return '';
+            const glass = site.glassSeo;
+            return `<div style="margin-top:1.15rem;padding:1rem;border:1px solid rgba(56,189,248,.24);border-radius:.85rem;background:rgba(14,116,144,.07);">
+                <div style="display:flex;justify-content:space-between;gap:.75rem;align-items:flex-start;flex-wrap:wrap;">
+                    <div><strong style="color:#e0f2fe;font-size:.78rem;">CTSEG Glass · Ranking Signals</strong><div style="color:#64748b;font-size:.61rem;margin-top:.2rem;">Search Console query + landing eşleşmesi · son 30 gün · ${formatNumber(glass.rows)} satır</div></div>
+                    <span class="seo-panel__badge">GLASS SEO</span>
+                </div>
+                ${glassSeoTable('Fırsat sorguları · pozisyon 4–30', glass.opportunities)}
+                ${glassSeoTable('Düşük CTR · ilk 10', glass.lowCtr, '#fb7185')}
+                ${glassCannibalizationTable(glass.cannibalization)}
+            </div>`;
+        };
         async function loadSeo() {
             const controller = new AbortController();
             const timer = setTimeout(() => controller.abort(), 15000);
@@ -689,7 +726,7 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
                     if (!site.ok) return `<article class="seo-site"><div class="seo-site__head"><div><div class="seo-site__name">${escapeHtml(site.name)}</div><div class="seo-site__property">${escapeHtml(site.property)}</div></div><span class="seo-panel__badge">VERİ YOK</span></div><div class="country-empty">${escapeHtml(site.error || 'Search Console verisi alınamadı')}</div></article>`;
                     const seven = site.periods?.sevenDays || {};
                     const thirty = site.periods?.thirtyDays || {};
-                    return `<article class="seo-site"><div class="seo-site__head"><div><div class="seo-site__name">${escapeHtml(site.name)}</div><div class="seo-site__property">${escapeHtml(site.property)}</div></div><span class="seo-panel__badge">CANLI RAPOR</span></div><div class="seo-periods"><div class="seo-period"><span class="seo-period__label">7 gün · tıklama</span><strong class="seo-period__value">${formatNumber(seven.clicks)}</strong><span class="seo-row-note">${formatNumber(seven.impressions)} gösterim · ${formatPercent(seven.ctr)}</span></div><div class="seo-period"><span class="seo-period__label">30 gün · tıklama</span><strong class="seo-period__value">${formatNumber(thirty.clicks)}</strong><span class="seo-row-note">${formatNumber(thirty.impressions)} gösterim · ${formatPercent(thirty.ctr)}</span></div></div><div style="color:#64748b;font-size:.62rem;margin-top:.65rem;">Ort. konum: 7g ${formatPosition(seven.position)} · 30g ${formatPosition(thirty.position)}</div>${seoTable('SEO fırsatları · 30 gün', site.opportunities, 'query')}${seoTable('En iyi sorgular · 30 gün', site.topQueries, 'query')}${seoTable("En iyi landing page'ler · 30 gün", site.topPages, 'page')}</article>`;
+                    return `<article class="seo-site"><div class="seo-site__head"><div><div class="seo-site__name">${escapeHtml(site.name)}</div><div class="seo-site__property">${escapeHtml(site.property)}</div></div><span class="seo-panel__badge">CANLI RAPOR</span></div><div class="seo-periods"><div class="seo-period"><span class="seo-period__label">7 gün · tıklama</span><strong class="seo-period__value">${formatNumber(seven.clicks)}</strong><span class="seo-row-note">${formatNumber(seven.impressions)} gösterim · ${formatPercent(seven.ctr)}</span></div><div class="seo-period"><span class="seo-period__label">30 gün · tıklama</span><strong class="seo-period__value">${formatNumber(thirty.clicks)}</strong><span class="seo-row-note">${formatNumber(thirty.impressions)} gösterim · ${formatPercent(thirty.ctr)}</span></div></div><div style="color:#64748b;font-size:.62rem;margin-top:.65rem;">Ort. konum: 7g ${formatPosition(seven.position)} · 30g ${formatPosition(thirty.position)}</div>${seoTable('SEO fırsatları · 30 gün', site.opportunities, 'query')}${seoTable('En iyi sorgular · 30 gün', site.topQueries, 'query')}${seoTable("En iyi landing page'ler · 30 gün", site.topPages, 'page')}${glassSeoBlock(site)}</article>`;
                 }).join('');
                 seoContent.innerHTML = `<div style="color:#64748b;font-size:.65rem;margin-top:1rem;">Son Search Console verisi: ${escapeHtml(data.dataThrough || '—')} · Google verileri genellikle birkaç gün gecikmeli gelir.</div><div class="seo-sites-grid">${siteCards}</div>`;
             } catch {
