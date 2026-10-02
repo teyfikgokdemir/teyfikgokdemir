@@ -13,6 +13,8 @@ import {
   postPath,
   homePath,
   legacySeoArticle,
+  postSupportsLocale,
+  localizedPostValue,
   type BlogLocale,
   type BlogPost,
 } from '../data/blog';
@@ -26,17 +28,23 @@ const copy = content[locale as Locale] ?? content.en;
 const origin = 'https://teyfikgokdemir.com';
 const canonicalPath = post ? postPath(locale, post.slug) : blogPath(locale);
 const canonical = origin + canonicalPath;
+const postTitle = post ? localizedPostValue(post.title, locale) ?? '' : '';
+const postDescription = post ? localizedPostValue(post.description, locale) ?? '' : '';
+const postIntro = post ? localizedPostValue(post.intro, locale) ?? '' : '';
+const postSections = post ? localizedPostValue(post.sections, locale) ?? [] : [];
 const title = post
-  ? `${post.title[locale]} | Teyfik Gökdemir`
+  ? `${postTitle} | Teyfik Gökdemir`
   : `${meta.blog} | Teyfik Gökdemir`;
-const description = post ? post.description[locale] : meta.description;
+const description = post ? postDescription : meta.description;
 const legacy = legacySeoArticle[locale];
+const postLocales = post ? (post.locales ?? blogLocales) : blogLocales;
+const defaultAlternateLocale: BlogLocale = post && postLocales.includes('en') ? 'en' : post && postLocales.includes('tr') ? 'tr' : 'en';
 const alternates = Object.fromEntries([
-  ...blogLocales.map((item) => [
+  ...postLocales.map((item) => [
     item,
     origin + (post ? postPath(item, post.slug) : blogPath(item)),
   ]),
-  ['x-default', origin + (post ? postPath('en', post.slug) : blogPath('en'))],
+  ['x-default', origin + (post ? postPath(defaultAlternateLocale, post.slug) : blogPath('en'))],
 ]);
 const glassGuideArticles = (['fa','ru','mk','sr','sq','zh','vi'] as const).includes(locale as any)
   ? glassGuideSlugs.map((slug)=>({
@@ -56,10 +64,10 @@ const indexArticles = [
     date: '',
   }] : []),
   ...glassGuideArticles,
-  ...posts.map((item) => ({
+  ...posts.filter((item) => postSupportsLocale(item, locale)).map((item) => ({
     href: postPath(locale, item.slug),
-    title: item.title[locale],
-    description: item.description[locale],
+    title: localizedPostValue(item.title, locale) ?? '',
+    description: localizedPostValue(item.description, locale) ?? '',
     eyebrow: meta.eyebrow,
     date: item.date,
   })),
@@ -71,7 +79,7 @@ const indexItems = indexArticles.map((item) => ({
   name: item.title,
 }));
 const postFaqs = post
-  ? (post.sections[locale] ?? []).flatMap((s) => s.faq ?? [])
+  ? (postSections).flatMap((s) => s.faq ?? [])
   : [];
 
 const graph = post
@@ -79,8 +87,8 @@ const graph = post
       {
         '@type': 'BlogPosting',
         '@id': canonical + '#article',
-        headline: post.title[locale],
-        description: post.description[locale],
+        headline: postTitle,
+        description: postDescription,
         datePublished: post.date,
         dateModified: post.updated,
         inLanguage: locale,
@@ -94,7 +102,7 @@ const graph = post
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: meta.home, item: origin + homePath(locale) },
           { '@type': 'ListItem', position: 2, name: meta.blog, item: origin + blogPath(locale) },
-          { '@type': 'ListItem', position: 3, name: post.title[locale], item: canonical },
+          { '@type': 'ListItem', position: 3, name: postTitle, item: canonical },
         ],
       },
       ...(postFaqs.length > 0
@@ -138,7 +146,7 @@ const graph = post
         ],
       },
     ];
-const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
+const related = post ? posts.filter((item) => item.slug !== post.slug && postSupportsLocale(item, locale)) : [];
 ---
 
 <BaseLayout
@@ -210,8 +218,8 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
 
         <header class="article-head" data-reveal="content-hero">
           <p class="section-label">{meta.eyebrow}</p>
-          <h1>{post.title[locale]}</h1>
-          <p class="article-lead">{post.intro[locale]}</p>
+          <h1>{postTitle}</h1>
+          <p class="article-lead">{postIntro}</p>
           <p class="article-date">
             {meta.published}: <time datetime={post.date}>{post.date}</time>
             <span>·</span>
@@ -220,7 +228,7 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
         </header>
 
         <div class="article-content">
-          {(post.sections[locale] || post.sections.en).map((section, index) => (
+          {postSections.map((section, index) => (
             <section data-reveal="content-section" style={`--reveal-order:${Math.min(index, 3)}`}>
               <h2>{section.heading}</h2>
               {section.paragraphs.map((paragraph) => <p set:html={paragraph} />)}
@@ -270,8 +278,8 @@ const related = post ? posts.filter((item) => item.slug !== post.slug) : [];
           <div>
             {related.map((item) => (
               <a href={postPath(locale, item.slug)}>
-                <strong>{item.title[locale]}</strong>
-                <span>{item.description[locale]}</span>
+                <strong>{localizedPostValue(item.title, locale) ?? ''}</strong>
+                <span>{localizedPostValue(item.description, locale) ?? ''}</span>
                 <b aria-hidden="true"></b>
               </a>
             ))}
