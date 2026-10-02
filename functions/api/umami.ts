@@ -98,7 +98,8 @@ export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
       ok: true,
       configured: false,
       source: 'Umami',
-      message: 'UMAMI_BASE_URL / UMAMI_API_KEY bekleniyor',
+      message: 'Umami environment eksik',
+      missing: [!base ? 'UMAMI_BASE_URL' : '', !apiKey ? 'UMAMI_API_KEY' : ''].filter(Boolean),
       sites: PORTFOLIO.map((site) => ({ ...site, connected: false })),
     });
   }
