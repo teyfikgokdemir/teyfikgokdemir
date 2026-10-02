@@ -1,0 +1,60 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Teyfik Gökdemir",
+    "identifier": "did:web:teyfikgokdemir.com",
+    "documentationUrl": "https://teyfikgokdemir.com/ai-fact-sheet.md"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:teyfikgokdemir.com:resource:ai-fact-sheet",
+      "displayName": "Teyfik Gökdemir AI Fact Sheet",
+      "type": "text/markdown",
+      "url": "https://teyfikgokdemir.com/ai-fact-sheet.md",
+      "description": "Canonical machine-readable profile and operating-context reference for Teyfik Gökdemir.",
+      "tags": [
+        "identity",
+        "software",
+        "digital-commerce",
+        "international-trade",
+        "seo",
+        "geo",
+        "aeo",
+        "aio"
+      ],
+      "capabilities": [
+        "IdentityReference",
+        "BusinessContext",
+        "PublicWebResource"
+      ],
+      "representativeQueries": [
+        "Who is Teyfik Gökdemir and what does he work on?",
+        "What are Teyfik Gökdemir's official businesses and operating areas?"
+      ],
+      "version": "1.0.0",
+      "updatedAt": "2026-10-02T18:30:00Z"
+    },
+    {
+      "identifier": "urn:air:teyfikgokdemir.com:resource:llms",
+      "displayName": "Teyfik Gökdemir LLM Information",
+      "type": "text/plain",
+      "url": "https://teyfikgokdemir.com/llms.txt",
+      "description": "Concise LLM-oriented site summary with canonical links and machine-readable resources.",
+      "tags": [
+        "llms",
+        "discovery",
+        "site-summary"
+      ],
+      "capabilities": [
+        "SiteDiscovery",
+        "CanonicalLinks"
+      ],
+      "representativeQueries": [
+        "What are the canonical pages on teyfikgokdemir.com?",
+        "Which machine-readable resources does teyfikgokdemir.com publish?"
+      ],
+      "version": "1.0.0",
+      "updatedAt": "2026-10-02T18:30:00Z"
+    }
+  ]
+}
