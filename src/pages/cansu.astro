@@ -706,6 +706,7 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
                     <div><strong style="color:#e0f2fe;font-size:.78rem;">CTSEG Glass · Ranking Signals</strong><div style="color:#64748b;font-size:.61rem;margin-top:.2rem;">Search Console query + landing eşleşmesi · son 30 gün · ${formatNumber(glass.rows)} satır</div></div>
                     <span class="seo-panel__badge">GLASS SEO</span>
                 </div>
+                ${glassSeoTable('Erken sinyaller · 1–9 gösterim', glass.earlySignals, '#a78bfa')}
                 ${glassSeoTable('Fırsat sorguları · pozisyon 4–30', glass.opportunities)}
                 ${glassSeoTable('Düşük CTR · ilk 10', glass.lowCtr, '#fb7185')}
                 ${glassCannibalizationTable(glass.cannibalization)}
