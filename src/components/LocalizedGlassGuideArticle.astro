@@ -19,7 +19,7 @@ sq:{home:'Kryefaqja',guides:'Udhëzues për industrinë e xhamit',cta:'Nëse ken
 zh:{home:'首页',guides:'玻璃行业指南',cta:'如有实际采购或出口需求，可从信息指南进入商业RFQ阶段。'},
 vi:{home:'Trang chủ',guides:'Hướng dẫn ngành kính',cta:'Nếu bạn có nhu cầu mua hàng hoặc xuất khẩu thực tế, hãy chuyển từ hướng dẫn thông tin sang RFQ thương mại.'}
 }[locale];
-const schema=[{'@type':'BlogPosting','@id':canonical+'#article',headline:c.metaTitle,description:c.description,inLanguage:locale,mainEntityOfPage:canonical,author:{'@type':'Person',name:'Teyfik Gökdemir',url:'https://teyfikgokdemir.com/'}},{'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:labels.home,item:`https://teyfikgokdemir.com/${locale}/`},{'@type':'ListItem',position:2,name:labels.guides,item:`https://teyfikgokdemir.com/${locale}/blog/`},{'@type':'ListItem',position:3,name:c.title,item:canonical}]}];
+const schema=[{'@type':'BlogPosting','@id':canonical+'#article',headline:c.metaTitle,description:c.description,inLanguage:locale,mainEntityOfPage:canonical,author:{'@type':'Person',name:'Teyfik Gökdemir',url:'https://teyfikgokdemir.com/'}},{'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:labels.home,item:`https://teyfikgokdemir.com/${locale}/`},{'@type':'ListItem',position:2,name:labels.guides,item:`https://teyfikgokdemir.com/${locale}/blog/glass-guide/`},{'@type':'ListItem',position:3,name:c.title,item:canonical}]}];
 ---
 <BaseLayout locale={locale} copy={copy} title={c.metaTitle} description={c.description} pathname={path} alternates={alt} ogType="article" pageSchema={schema}>
 <Header locale={locale} copy={copy} homePath={`/${locale}/`} languageUrls={alt}/>
