@@ -118,11 +118,20 @@ export interface BlogPost {
   date: string;
   updated: string;
   readingMinutes: number;
-  title: Record<BlogLocale, string>;
-  description: Record<BlogLocale, string>;
-  intro: Record<BlogLocale, string>;
-  sections: Record<BlogLocale, BlogSection[]>;
+  locales?: BlogLocale[];
+  title: Partial<Record<BlogLocale, string>>;
+  description: Partial<Record<BlogLocale, string>>;
+  intro: Partial<Record<BlogLocale, string>>;
+  sections: Partial<Record<BlogLocale, BlogSection[]>>;
 }
+
+export const postSupportsLocale = (post: BlogPost, locale: BlogLocale) =>
+  (post.locales ?? blogLocales).includes(locale);
+
+export const localizedPostValue = <T>(
+  field: Partial<Record<BlogLocale, T>>,
+  locale: BlogLocale,
+): T | undefined => field[locale] ?? field.tr ?? field.en;
 
 export const posts: BlogPost[] = [
   {
