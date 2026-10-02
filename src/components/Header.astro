@@ -31,9 +31,6 @@ const labels = ({
   vi:{ ecosystem:'Hệ sinh thái', work:'Mô hình vận hành', insights:'Góc nhìn', contact:'Liên hệ', menu:'Menu', close:'Đóng menu', language:'Ngôn ngữ', owned:'Cấu trúc chính', assets:'Tài sản số', collaboration:'Hợp tác' },
 }[locale] ?? { ecosystem:'Ecosystem', work:'Operating model', insights:'Insights', contact:'Contact', menu:'Menu', close:'Close menu', language:'Language', owned:'Core businesses', assets:'Digital assets', collaboration:'Collaboration' });
 
-const blogUrls: Record<string,string> = {
-  tr:'/blog/', en:'/en/blog/', ru:'/ru/blog/', mk:'/mk/blog/', sr:'/sr/blog/', sq:'/sq/blog/', fa:'/fa/blog/', zh:'/zh/blog/', vi:'/vi/blog/'
-};
 const ctsegUrl = locale === 'tr' ? 'https://ctseg.com.tr/' : locale === 'fa' ? 'https://ctseg.com.tr/fa/' : locale === 'zh' ? 'https://ctseg.com.tr/zh/' : locale === 'vi' ? 'https://ctseg.com.tr/vi/' : 'https://ctseg.com.tr/en/';
 const ecosystemLinks = [
   { name:'QCT Studio', detail:'Technology & Digital Products', href:site.links.qctStudio, group:labels.owned },
@@ -70,7 +67,6 @@ const ecosystemLinks = [
         </div>
       </div>
       <a href={sectionUrl('journey')}>{labels.work}</a>
-      <a href={blogUrls[locale]}>{labels.insights}</a>
       <a href={sectionUrl('contact')}>{labels.contact}</a>
     </nav>
 
@@ -103,7 +99,6 @@ const ecosystemLinks = [
 
       <nav class="mobile-command-nav" aria-label={labels.menu}>
         <a href={sectionUrl('journey')}><span>{labels.work}</span><span aria-hidden="true"></span></a>
-        <a href={blogUrls[locale]}><span>{labels.insights}</span><span aria-hidden="true"></span></a>
         <a href={sectionUrl('contact')}><span>{labels.contact}</span><span aria-hidden="true"></span></a>
         <a href={currentHomePath}><span>{labels.ecosystem}</span><span aria-hidden="true"></span></a>
       </nav>
