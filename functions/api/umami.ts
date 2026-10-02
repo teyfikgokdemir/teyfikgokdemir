@@ -24,6 +24,15 @@ const json = (body: unknown, status = 200) => new Response(JSON.stringify(body),
 
 const cleanBase = (value: string) => value.trim().replace(/\/+$/, '');
 
+const apiBase = (value: string) => {
+  const base = cleanBase(value);
+  if (/api\.umami\.is\/v1(?:\/|$)/i.test(base)) return base;
+  if (/api\.umami\.is$/i.test(base)) return `${base}/v1`;
+  return `${base}/api`;
+};
+
+const apiUrl = (base: string, path: string) => `${apiBase(base)}/${path.replace(/^\/+/, '')}`;
+
 const metricValue = (value: unknown) => {
   if (typeof value === 'number' && Number.isFinite(value)) return value;
   if (value && typeof value === 'object' && 'value' in value) {
@@ -41,7 +50,7 @@ const dateRange = (days: number) => {
 };
 
 async function getWebsites(base: string, apiKey: string) {
-  const response = await fetch(`${base}/api/websites`, {
+  const response = await fetch(apiUrl(base, 'websites'), {
     headers: { accept: 'application/json', authorization: `Bearer ${apiKey}` },
     cf: { cacheTtl: 300, cacheEverything: false },
   });
@@ -61,7 +70,7 @@ const findWebsite = (rows: Array<Record<string, unknown>>, host: string) => rows
 
 async function getStats(base: string, apiKey: string, websiteId: string, days: number) {
   const { startAt, endAt } = dateRange(days);
-  const url = new URL(`${base}/api/websites/${websiteId}/stats`);
+  const url = new URL(apiUrl(base, `websites/${websiteId}/stats`));
   url.searchParams.set('startAt', String(startAt));
   url.searchParams.set('endAt', String(endAt));
   const response = await fetch(url.toString(), {
@@ -130,6 +139,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
       generatedAt: new Date().toISOString(),
       source: 'Umami API',
       baseUrl: base,
+      apiBaseUrl: apiBase(base),
       sites,
     });
   } catch (error) {
