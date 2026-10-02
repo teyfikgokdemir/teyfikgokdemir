@@ -407,15 +407,28 @@ const related = post ? posts.filter((item) => item.slug !== post.slug && postSup
   .crumbs { display: flex; gap: .55rem; margin-bottom: clamp(2rem, 5vw, 4rem); color: var(--text-muted); font-size: .85rem; }
   .article-head {
     max-width: 1120px;
-    padding-bottom: clamp(2.5rem, 5vw, 4rem);
+    min-height: min(68vh, 640px);
+    margin-inline: auto;
+    padding-bottom: clamp(2rem, 4vw, 3rem);
     border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
   }
-  .article-head h1 { font-size: clamp(2.8rem, 6vw, 5.9rem); line-height: var(--leading-title); letter-spacing: var(--tracking-title); }
-  .article-lead { max-width: 780px; margin: 0; color: var(--text-muted); font-size: clamp(1.1rem, 1.8vw, 1.35rem); line-height: 1.7; }
-  .article-date { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.5rem 0 0; color: var(--text-muted); font-size: .85rem; }
+  .article-head h1 {
+    max-width: 1080px;
+    margin: .45rem auto 1.2rem;
+    font-size: clamp(2.35rem, 4.8vw, 4.65rem);
+    line-height: 1.02;
+    letter-spacing: var(--tracking-title);
+    text-wrap: balance;
+  }
+  .article-lead { max-width: 820px; margin: 0 auto; color: var(--text-muted); font-size: clamp(1.05rem, 1.55vw, 1.28rem); line-height: 1.7; text-wrap: balance; }
+  .article-date { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin: 1.35rem 0 0; color: var(--text-muted); font-size: .85rem; }
   .article-content { width: min(720px, 100%); margin: clamp(3rem, 6vw, 5rem) auto; }
   .article-content section { padding-block: .5rem 2rem; }
-  .article-content h2 { margin: 2.5rem 0 1rem; font-size: clamp(1.85rem, 3.5vw, 2.8rem); line-height: 1.12; letter-spacing: var(--tracking-heading); }
+  .article-content h2 { margin: 2.5rem 0 1rem; font-size: clamp(1.7rem, 2.8vw, 2.45rem); line-height: 1.12; letter-spacing: var(--tracking-heading); text-wrap: balance; }
   .article-content p,
   .article-content li { color: var(--text-muted); font-size: 1.06rem; line-height: 1.82; }
   .article-content li + li { margin-top: .55rem; }
@@ -533,6 +546,9 @@ const related = post ? posts.filter((item) => item.slug !== post.slug && postSup
   }
   @media (max-width: 680px) {
     .blog-shell { width: min(100% - 1.25rem, 1180px); }
+    .article-head { min-height: auto; padding-block: 1rem 2.25rem; }
+    .article-head h1 { font-size: clamp(2rem, 10vw, 3.05rem); line-height: 1.04; }
+    .article-lead { font-size: 1.02rem; line-height: 1.65; }
     .article-list > a { grid-template-columns: 1fr auto; }
     .article-list .article-meta-line,
     .article-list > a > p:not(.article-meta-line) { grid-column: 1 / -1; }
