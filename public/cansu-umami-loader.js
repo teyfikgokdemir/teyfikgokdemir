@@ -3,7 +3,7 @@
   const site = current?.dataset.site;
   if (!site || document.querySelector('script[data-cansu-umami-loaded="true"]')) return;
 
-  const endpoint = 'https://teyfikgokdemir.com/api/umami-config?site=' + encodeURIComponent(site);
+  const endpoint = 'https://cansu.teyfikgokdemir.com/api/umami-config?site=' + encodeURIComponent(site);
 
   fetch(endpoint, { mode: 'cors', credentials: 'omit', cache: 'default' })
     .then((response) => response.ok ? response.json() : null)
