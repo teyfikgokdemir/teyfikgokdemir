@@ -624,13 +624,24 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
             const h = site.health || {};
             const g = site.github || {};
             const traffic = site.cloudflare?.last24h;
-            const githubFailed = g.ok && g.latest?.conclusion === 'failure';
+            const productionFailed = g.ok && g.workflow?.production?.conclusion === 'failure';
+            const ciFailed = g.ok && g.workflow?.ci?.conclusion === 'failure';
+            const prCheckFailed = g.ok && g.workflow?.prCheck?.conclusion === 'failure';
             const githubUnknown = !g.ok;
             const healthFailed = !h.ok || h.ssl?.valid === false;
-            const status = healthFailed ? 'ERİŞİM SORUNU' : githubFailed ? 'DEPLOY HATASI' : githubUnknown ? 'VERİ EKSİK' : 'SAĞLIKLI';
-            const tone = healthFailed || githubFailed ? '#f87171' : githubUnknown ? '#fbbf24' : '#34d399';
-            const statusBg = healthFailed || githubFailed ? 'rgba(248,113,113,.12)' : githubUnknown ? 'rgba(251,191,36,.12)' : 'rgba(52,211,153,.12)';
-            const githubStatus = g.errorType === 'authentication' ? 'Bağlantı doğrulanamadı' : g.errorType === 'repository' ? 'Repository kullanılamıyor' : g.latest?.conclusion || (g.ok ? 'run verisi yok' : 'bağlantı hatası');
+            const status = healthFailed ? 'ERİŞİM SORUNU'
+                : productionFailed ? 'DEPLOY HATASI'
+                : ciFailed ? 'CI HATASI'
+                : prCheckFailed ? 'PR KONTROL HATASI'
+                : githubUnknown ? 'GITHUB BAĞLANTISI YOK'
+                : 'SAĞLIKLI';
+            const workflowFailed = productionFailed || ciFailed || prCheckFailed;
+            const tone = healthFailed || productionFailed ? '#f87171' : (ciFailed || prCheckFailed || githubUnknown) ? '#fbbf24' : '#34d399';
+            const statusBg = healthFailed || productionFailed ? 'rgba(248,113,113,.12)' : (ciFailed || prCheckFailed || githubUnknown) ? 'rgba(251,191,36,.12)' : 'rgba(52,211,153,.12)';
+            const activeWorkflow = productionFailed ? g.workflow?.production : ciFailed ? g.workflow?.ci : prCheckFailed ? g.workflow?.prCheck : g.workflow?.production || g.workflow?.ci || g.latest;
+            const githubStatus = g.errorType === 'authentication' ? 'Bağlantı doğrulanamadı'
+                : g.errorType === 'repository' ? 'Repository kullanılamıyor'
+                : activeWorkflow?.conclusion || (g.ok ? 'run verisi yok' : 'bağlantı hatası');
             const signal = site.cloudflare?.automationSignal;
             const signalStyle = signalMeta(signal);
             const sslColor = h.ssl?.valid ? '#34d399' : '#f87171';
@@ -651,7 +662,7 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                     <div class="analytics-metric"><span class="analytics-metric__label">Yanıt süresi</span><strong class="analytics-metric__value">${typeof h.ms === 'number' ? h.ms + ' ms' : '—'}</strong></div>
                     <div class="analytics-metric"><span class="analytics-metric__label">SSL / TLS</span><strong class="analytics-metric__value" style="color:${sslColor}">${sslText}</strong></div>
                 </div>
-                <div class="analytics-card__footer"><span><i class="fa-solid fa-code-branch" style="margin-right:.3rem"></i>GitHub: ${githubStatus}</span><a href="${site.actions}" target="_blank" rel="noreferrer">Logları aç <i class="fa-solid fa-arrow-up-right-from-square" style="margin-left:.25rem"></i></a></div>
+                <div class="analytics-card__footer"><span><i class="fa-solid fa-code-branch" style="margin-right:.3rem"></i>GitHub: ${productionFailed ? 'deploy failure' : ciFailed ? 'CI failure' : prCheckFailed ? 'PR check failure' : githubStatus}</span><a href="${site.actions}" target="_blank" rel="noreferrer">Logları aç <i class="fa-solid fa-arrow-up-right-from-square" style="margin-left:.25rem"></i></a></div>
                 ${commitHtml}
                 <div class="analytics-card__check">HTTP ${h.status || '—'} · Kontrol: ${formatTime(h.checkedAt)}</div>
             </article>`;
@@ -722,7 +733,9 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 else if (site.health?.ssl?.valid === false) issues.push({ site: site.name, title: 'SSL/TLS kontrolü başarısız', detail: site.health?.ssl?.error || 'Sertifika doğrulanamadı', tone: 'bad' });
 
                 if (!site.github?.ok && !sameGithubError) issues.push({ site: site.name, title: 'GitHub bağlantısı doğrulanamadı', detail: site.github?.error || 'Workflow durumu bilinmiyor', tone: 'warn' });
-                else if (site.github?.ok && site.github?.latest?.conclusion === 'failure') issues.push({ site: site.name, title: 'Son workflow başarısız', detail: formatTime(site.github?.latest?.updated_at), tone: 'bad' });
+                else if (site.github?.ok && site.github?.workflow?.production?.conclusion === 'failure') issues.push({ site: site.name, title: 'Production deploy başarısız', detail: formatTime(site.github?.workflow?.production?.updated_at), tone: 'bad' });
+                else if (site.github?.ok && site.github?.workflow?.ci?.conclusion === 'failure') issues.push({ site: site.name, title: 'CI kontrolü başarısız', detail: formatTime(site.github?.workflow?.ci?.updated_at), tone: 'warn' });
+                else if (site.github?.ok && site.github?.workflow?.prCheck?.conclusion === 'failure') issues.push({ site: site.name, title: 'PR kontrolü başarısız', detail: formatTime(site.github?.workflow?.prCheck?.updated_at), tone: 'warn' });
             }
 
             if (!issues.length) {
@@ -778,7 +791,13 @@ const canonical = 'https://teyfikgokdemir.com/cansu/';
                 const sslValid = data.sites.filter((site) => site.health.ssl?.valid).length;
                 const failed = data.sites.reduce((sum, site) => sum + (site.github.failed24h || 0), 0);
                 const cfActive = data.sites.filter((site) => site.cloudflare?.available).length;
-                const siteIssues = data.sites.filter((site) => !site.health?.ok || site.health?.ssl?.valid === false || site.github?.latest?.conclusion === 'failure').length;
+                const siteIssues = data.sites.filter((site) =>
+                    !site.health?.ok ||
+                    site.health?.ssl?.valid === false ||
+                    site.github?.workflow?.production?.conclusion === 'failure' ||
+                    site.github?.workflow?.ci?.conclusion === 'failure' ||
+                    site.github?.workflow?.prCheck?.conclusion === 'failure'
+                ).length;
                 const githubFailures = data.sites.filter((site) => !site.github?.ok);
                 const githubIssueCount = githubFailures.length
                     ? (new Set(githubFailures.map((site) => `${site.github?.errorType || ''}:${site.github?.error || ''}`)).size === 1 ? 1 : githubFailures.length)

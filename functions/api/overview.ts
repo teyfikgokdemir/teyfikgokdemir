@@ -57,6 +57,41 @@ async function checkSite(site: Site) {
   }
 }
 
+const runSummary = (run: Record<string, unknown> | undefined) => run ? ({
+  name: String(run.name ?? ''),
+  status: String(run.status ?? ''),
+  conclusion: run.conclusion ? String(run.conclusion) : null,
+  event: String(run.event ?? ''),
+  branch: String(run.head_branch ?? ''),
+  created_at: String(run.created_at ?? ''),
+  updated_at: String(run.updated_at ?? ''),
+  html_url: String(run.html_url ?? ''),
+}) : null;
+
+const latestRun = (runs: Array<Record<string, unknown>>, predicate: (run: Record<string, unknown>) => boolean) =>
+  runs.find(predicate);
+
+const isMainPush = (run: Record<string, unknown>) =>
+  String(run.event ?? '') === 'push' && String(run.head_branch ?? '') === 'main';
+
+const isDeployRun = (run: Record<string, unknown>) => {
+  if (!isMainPush(run)) return false;
+  const name = String(run.name ?? '').toLowerCase();
+  return /deploy|cloudflare pages|cloudflare workers|publish/.test(name);
+};
+
+const isCiRun = (run: Record<string, unknown>) => {
+  if (!isMainPush(run)) return false;
+  const name = String(run.name ?? '').toLowerCase();
+  return /(^|\b)ci(\b|$)|quality|validation|verify|verification|security|audit|test/.test(name) && !isDeployRun(run);
+};
+
+const isPrCheckRun = (run: Record<string, unknown>) => {
+  if (String(run.event ?? '') !== 'pull_request') return false;
+  const name = String(run.name ?? '').toLowerCase();
+  return /preview|ci|quality|validation|verify|verification|security|audit|test/.test(name);
+};
+
 async function githubRun(repo: string, env: Env) {
   const baseHeaders: Record<string, string> = {
     accept: 'application/vnd.github+json',
@@ -68,7 +103,7 @@ async function githubRun(repo: string, env: Env) {
       ...(authenticated && env.GITHUB_TOKEN ? { authorization: `Bearer ${env.GITHUB_TOKEN}` } : {}),
     };
     return Promise.all([
-      fetch(`https://api.github.com/repos/teyfikgokdemir/${repo}/actions/runs?per_page=10`, { headers, signal }),
+      fetch(`https://api.github.com/repos/teyfikgokdemir/${repo}/actions/runs?per_page=30`, { headers, signal }),
       fetch(`https://api.github.com/repos/teyfikgokdemir/${repo}/commits?per_page=1`, { headers, signal }),
     ]);
   };
@@ -99,9 +134,27 @@ async function githubRun(repo: string, env: Env) {
     const data = await runsResponse.json() as { workflow_runs?: Array<Record<string, unknown>> };
     const runs = data.workflow_runs ?? [];
     const latest = runs[0];
+    const productionRun = latestRun(runs, isDeployRun);
+    const ciRun = latestRun(runs, isCiRun);
+    const mainRun = latestRun(runs, isMainPush);
+    const prRun = latestRun(runs, isPrCheckRun);
+
+    const production = runSummary(productionRun);
+    const ci = runSummary(ciRun);
+    const latestMain = runSummary(mainRun);
+    const prCheckCandidate = runSummary(prRun);
+    const prCheckResolved = Boolean(
+      prCheckCandidate?.conclusion === 'failure' &&
+      latestMain?.updated_at &&
+      Date.parse(latestMain.updated_at) >= Date.parse(prCheckCandidate.updated_at || prCheckCandidate.created_at || ''),
+    );
+    const prCheck = prCheckResolved ? null : prCheckCandidate;
+
     const failed24h = runs.filter((run) => {
       const created = Date.parse(String(run.created_at ?? ''));
-      return Date.now() - created < 24 * 60 * 60 * 1000 && run.conclusion === 'failure';
+      return Date.now() - created < 24 * 60 * 60 * 1000 &&
+        run.conclusion === 'failure' &&
+        (isDeployRun(run) || isCiRun(run));
     }).length;
     let latestCommit: { sha: string; message: string; author: string; date: string; url: string } | null = null;
     if (commitsResponse.ok) {
@@ -119,7 +172,13 @@ async function githubRun(repo: string, env: Env) {
     }
     return {
       ok: true,
-      latest: latest ? { name: latest.name, status: latest.status, conclusion: latest.conclusion, updated_at: latest.updated_at, html_url: latest.html_url } : null,
+      latest: runSummary(latest),
+      workflow: {
+        production,
+        ci,
+        prCheck,
+        latestMain,
+      },
       failed24h,
       latestCommit,
       authFallback,
