@@ -26,7 +26,7 @@ const { locale, post } = Astro.props;
 const meta = localeMeta[locale];
 const copy = content[locale as Locale] ?? content.en;
 const origin = 'https://teyfikgokdemir.com';
-const canonicalPath = post ? postPath(locale, post.slug) : blogPath(locale);
+const canonicalPath = post ? postPath(locale, post.slug, post) : blogPath(locale);
 const canonical = origin + canonicalPath;
 const postTitle = post ? localizedPostValue(post.title, locale) ?? '' : '';
 const postDescription = post ? localizedPostValue(post.description, locale) ?? '' : '';
@@ -42,9 +42,9 @@ const defaultAlternateLocale: BlogLocale = post && postLocales.includes('en') ? 
 const alternates = Object.fromEntries([
   ...postLocales.map((item) => [
     item,
-    origin + (post ? postPath(item, post.slug) : blogPath(item)),
+    origin + (post ? postPath(item, post.slug, post) : blogPath(item)),
   ]),
-  ['x-default', origin + (post ? postPath(defaultAlternateLocale, post.slug) : blogPath('en'))],
+  ['x-default', origin + (post ? postPath(defaultAlternateLocale, post.slug, post) : blogPath('en'))],
 ]);
 const glassGuideArticles = (['fa','ru','mk','sr','sq','zh','vi'] as const).includes(locale as any)
   ? glassGuideSlugs.map((slug)=>({
@@ -65,7 +65,7 @@ const indexArticles = [
   }] : []),
   ...glassGuideArticles,
   ...posts.filter((item) => postSupportsLocale(item, locale)).map((item) => ({
-    href: postPath(locale, item.slug),
+    href: postPath(locale, item.slug, item),
     title: localizedPostValue(item.title, locale) ?? '',
     description: localizedPostValue(item.description, locale) ?? '',
     eyebrow: meta.eyebrow,
@@ -277,7 +277,7 @@ const related = post ? posts.filter((item) => item.slug !== post.slug && postSup
           <p class="section-label">{meta.related}</p>
           <div>
             {related.map((item) => (
-              <a href={postPath(locale, item.slug)}>
+              <a href={postPath(locale, item.slug, item)}>
                 <strong>{localizedPostValue(item.title, locale) ?? ''}</strong>
                 <span>{localizedPostValue(item.description, locale) ?? ''}</span>
                 <b aria-hidden="true"></b>
