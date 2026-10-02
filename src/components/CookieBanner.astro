@@ -92,16 +92,17 @@ const privacyHref = locale === 'tr' ? '/privacy-policy/' : `/${locale}/privacy-p
   (() => {
     const key = 'tg-cookie-consent';
     const measurementId = 'G-52GXBGWHFJ';
+    const ANALYTICS_TEST_MODE = true;
     const banner = document.querySelector('[data-cookie-banner]');
     if (!(banner instanceof HTMLElement)) return;
 
     let analyticsLoaded = false;
     let sourceBeaconLoaded = false;
-    window['ga-disable-' + measurementId] = true;
+    window['ga-disable-' + measurementId] = !ANALYTICS_TEST_MODE;
     window.dataLayer = window.dataLayer || [];
     window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
     window.gtag('consent', 'default', {
-      analytics_storage: 'denied',
+      analytics_storage: ANALYTICS_TEST_MODE ? 'granted' : 'denied',
       ad_storage: 'denied',
       ad_user_data: 'denied',
       ad_personalization: 'denied',
@@ -148,15 +149,18 @@ const privacyHref = locale === 'tr' ? '/privacy-policy/' : `/${locale}/privacy-p
       window.gtag('event', name, params);
     };
 
+    if (ANALYTICS_TEST_MODE) { loadAnalytics(); loadSourceBeacon(); }
     const stored = localStorage.getItem(key);
     if (stored === 'accepted') {
       loadAnalytics();
       loadSourceBeacon();
       banner.hidden = true;
     } else if (stored === 'rejected') {
-      window['ga-disable-' + measurementId] = true;
-      window.gtag('consent', 'update', { analytics_storage: 'denied' });
-      clearAnalyticsCookies();
+      if (!ANALYTICS_TEST_MODE) {
+        window['ga-disable-' + measurementId] = true;
+        window.gtag('consent', 'update', { analytics_storage: 'denied' });
+        clearAnalyticsCookies();
+      }
       banner.hidden = true;
     } else {
       banner.hidden = false;
