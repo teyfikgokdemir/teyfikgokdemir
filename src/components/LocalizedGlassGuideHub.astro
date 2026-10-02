@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import FloatingActions from './FloatingActions.astro';
+import { content } from '../i18n/content';
+import { localizedGlassGuides, glassGuideSlugs, type GlassGuideLocale } from '../data/glass-guides-localized';
+
+const { locale }=Astro.props as {locale:GlassGuideLocale};
+const copy=content[locale];
+const hubCopy={
+fa:{title:'راهنمای تأمین و خرید شیشه',description:'راهنماهای تخصصی برای انتخاب شیشه، RFQ، لجستیک صادرات و یافتن تولیدکننده یا تأمین‌کننده در ترکیه.',eyebrow:'مرکز دانش صنعت شیشه',cta:'مرکز تجاری تأمین شیشه CTSEG',home:'خانه'},
+ru:{title:'Гид по закупке и поставке стекла',description:'Практические материалы по выбору стекла, RFQ, экспортной логистике и поиску производителей или поставщиков в Турции.',eyebrow:'ЦЕНТР ЗНАНИЙ О СТЕКЛЕ',cta:'CTSEG Glass Sourcing',home:'Главная'},
+mk:{title:'Водич за набавка и снабдување со стакло',description:'Практични водичи за избор на стакло, RFQ, извозна логистика и пронаоѓање производители или добавувачи во Турција.',eyebrow:'ЦЕНТАР ЗА ЗНАЕЊЕ · СТАКЛО',cta:'CTSEG Glass Sourcing',home:'Почетна'},
+sr:{title:'Vodič za nabavku i snabdevanje staklom',description:'Praktični vodiči za izbor stakla, RFQ, izvoznu logistiku i pronalaženje proizvođača ili dobavljača u Turskoj.',eyebrow:'CENTAR ZNANJA · STAKLO',cta:'CTSEG Glass Sourcing',home:'Početna'},
+sq:{title:'Udhëzues për prokurimin dhe furnizimin me xham',description:'Udhëzues praktikë për zgjedhjen e xhamit, RFQ, logjistikën e eksportit dhe gjetjen e prodhuesve ose furnizuesve në Turqi.',eyebrow:'QENDRA E NJOHURIVE · XHAM',cta:'CTSEG Glass Sourcing',home:'Kryefaqja'},
+zh:{title:'玻璃采购与供应指南',description:'关于玻璃选型、RFQ、出口物流以及在土耳其寻找制造商和供应商的实用指南。',eyebrow:'玻璃行业知识中心',cta:'CTSEG玻璃采购中心',home:'首页'},
+vi:{title:'Hướng dẫn sourcing và mua hàng kính',description:'Các hướng dẫn thực tế về chọn kính, RFQ, logistics xuất khẩu và tìm nhà sản xuất hoặc nhà cung cấp tại Thổ Nhĩ Kỳ.',eyebrow:'TRUNG TÂM KIẾN THỨC · NGÀNH KÍNH',cta:'CTSEG Glass Sourcing',home:'Trang chủ'}
+}[locale];
+const path=`/${locale}/blog/glass-guide/`;
+const canonical='https://teyfikgokdemir.com'+path;
+const alt={
+tr:'https://teyfikgokdemir.com/blog/turkiyeden-cam-tedariki/',
+en:'https://teyfikgokdemir.com/en/blog/glass-sourcing-from-turkiye/',
+fa:'https://teyfikgokdemir.com/fa/blog/glass-guide/',
+ru:'https://teyfikgokdemir.com/ru/blog/glass-guide/',
+mk:'https://teyfikgokdemir.com/mk/blog/glass-guide/',
+sr:'https://teyfikgokdemir.com/sr/blog/glass-guide/',
+sq:'https://teyfikgokdemir.com/sq/blog/glass-guide/',
+zh:'https://teyfikgokdemir.com/zh/blog/glass-guide/',
+vi:'https://teyfikgokdemir.com/vi/blog/glass-guide/',
+'x-default':'https://teyfikgokdemir.com/en/blog/glass-sourcing-from-turkiye/'
+};
+const schema=[
+{'@type':'CollectionPage','@id':canonical+'#glass-guide',name:hubCopy.title,description:hubCopy.description,url:canonical,inLanguage:locale},
+{'@type':'ItemList','itemListElement':glassGuideSlugs.map((slug,index)=>({'@type':'ListItem',position:index+1,name:localizedGlassGuides[locale][slug].title,url:`https://teyfikgokdemir.com/${locale}/blog/glass-guide/${slug}/`}))},
+{'@type':'BreadcrumbList','itemListElement':[{'@type':'ListItem',position:1,name:hubCopy.home,item:`https://teyfikgokdemir.com/${locale}/`},{'@type':'ListItem',position:2,name:hubCopy.title,item:canonical}]}
+];
+---
+<BaseLayout locale={locale} copy={copy} title={`${hubCopy.title} | Teyfik Gökdemir`} description={hubCopy.description} pathname={path} alternates={alt} pageSchema={schema}>
+<Header locale={locale} copy={copy} homePath={`/${locale}/`} languageUrls={alt}/>
+<main class="glass-hub">
+  <header class="hero"><div class="shell"><p class="label">{hubCopy.eyebrow}</p><h1>{hubCopy.title}</h1><p>{hubCopy.description}</p></div></header>
+  <section class="shell guides" aria-label={hubCopy.title}>
+    {glassGuideSlugs.map((slug)=><a href={`/${locale}/blog/glass-guide/${slug}/`}><span>{localizedGlassGuides[locale][slug].eyebrow}</span><h2>{localizedGlassGuides[locale][slug].title}</h2><p>{localizedGlassGuides[locale][slug].description}</p><b aria-hidden="true">↗</b></a>)}
+  </section>
+  <aside class="shell commercial"><p>{hubCopy.cta}</p><a href="https://ctseg.com.tr/en/glass/" rel="noopener">CTSEG ↗</a></aside>
+</main>
+<Footer copy={copy} locale={locale}/><FloatingActions locale={locale}/>
+</BaseLayout>
+<style>
+.glass-hub{background:var(--scene-paper);min-height:70vh}.shell{width:min(1120px,calc(100% - 3rem));margin:auto}.hero{padding:clamp(4.5rem,8vw,7rem) 0;background:var(--scene-stone);border-bottom:1px solid var(--border)}.hero .label{text-align:center;color:var(--accent);font-size:.78rem;font-weight:800;letter-spacing:.09em}.hero h1{max-width:1000px;margin:.6rem auto 1rem;text-align:center;font-size:clamp(2.5rem,5.2vw,5rem);line-height:var(--leading-display);letter-spacing:var(--tracking-display);text-wrap:balance}.hero p:not(.label){max-width:780px;margin:auto;text-align:center;color:var(--text-muted);font-size:1.1rem;line-height:1.7}.guides{padding:clamp(3rem,6vw,6rem) 0}.guides>a{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 28px;gap:.4rem 1rem;padding:1.6rem 0;border-top:1px solid var(--border);color:inherit;text-decoration:none}.guides>a:last-child{border-bottom:1px solid var(--border)}.guides span{grid-column:1;color:var(--accent);font-size:.72rem;font-weight:800;letter-spacing:.06em}.guides h2{grid-column:1;margin:0;font-size:clamp(1.5rem,2.5vw,2.4rem);line-height:1.08}.guides p{grid-column:1;max-width:760px;margin:.35rem 0 0;color:var(--text-muted);line-height:1.65}.guides b{grid-column:2;grid-row:1/4;align-self:center;color:var(--accent)}.commercial{margin-bottom:clamp(3rem,6vw,6rem);padding:1.4rem;border:1px solid var(--border);background:var(--surface);display:flex;justify-content:space-between;align-items:center;gap:1rem}.commercial p{margin:0;font-weight:800}.commercial a{color:var(--accent);font-weight:800;text-decoration:none}@media(max-width:640px){.shell{width:min(100% - 2rem,1120px)}.hero h1{font-size:clamp(2.1rem,9vw,3.15rem)}.commercial{align-items:flex-start;flex-direction:column}}
+</style>
