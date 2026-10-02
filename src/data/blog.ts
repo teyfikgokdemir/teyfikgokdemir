@@ -119,6 +119,7 @@ export interface BlogPost {
   updated: string;
   readingMinutes: number;
   locales?: BlogLocale[];
+  slugs?: Partial<Record<BlogLocale, string>>;
   title: Partial<Record<BlogLocale, string>>;
   description: Partial<Record<BlogLocale, string>>;
   intro: Partial<Record<BlogLocale, string>>;
@@ -3062,4 +3063,7 @@ export const legacySeoArticle: Partial<Record<BlogLocale, { path: string; title:
   zh: { path: '/zh/blog/seo-vs-geo-vs-aeo-vs-aio/', title: 'SEO、GEO、AEO 与 AIO 的核心差异与落地指南', description: '系统阐述现代搜索引擎优化与生成式 AI 搜索可见性各学科的定位与协同。' },
   vi: { path: '/vi/blog/seo-vs-geo-vs-aeo-vs-aio/', title: 'SEO, GEO, AEO & AIO: Phân biệt & Thực thi Thực tế', description: 'Cẩm nang phân biệt vai trò của các lĩnh vực tối ưu hóa tìm kiếm và AI.' },
 };
-export const postPath = (locale: BlogLocale, slug: string) => `${blogPath(locale)}${slug}/`;
+export const postPath = (locale: BlogLocale, slug: string, post?: BlogPost) => {
+  const localizedSlug = post?.slugs?.[locale] ?? slug;
+  return `${blogPath(locale)}${localizedSlug}/`;
+};
