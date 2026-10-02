@@ -7,16 +7,16 @@ import SitewidePalette from './SitewidePalette.astro';
 interface Props { copy: SiteContent; locale?: Locale | 'fa'; }
 const { copy, locale = 'en' } = Astro.props;
 const text = ({
-  tr:{ position:'Teknoloji, dijital ticaret ve küresel operasyonlar arasında çalışan sistemler kuruyorum.', connect:'Bağlantılar', ecosystem:'Ekosistem', contact:'İletişim' },
-  en:{ position:'Building working systems across technology, digital commerce and global operations.', connect:'Connect', ecosystem:'Ecosystem', contact:'Contact' },
-  ru:{ position:'Создаю работающие системы на стыке технологий, цифровой коммерции и глобальных операций.', connect:'Связи', ecosystem:'Экосистема', contact:'Контакты' },
-  mk:{ position:'Градам функционални системи меѓу технологија, дигитална трговија и глобални операции.', connect:'Поврзување', ecosystem:'Екосистем', contact:'Контакт' },
-  sr:{ position:'Gradim funkcionalne sisteme između tehnologije, digitalne trgovine i globalnih operacija.', connect:'Povezivanje', ecosystem:'Ekosistem', contact:'Kontakt' },
-  sq:{ position:'Ndërtoj sisteme funksionale mes teknologjisë, tregtisë digjitale dhe operacioneve globale.', connect:'Lidhje', ecosystem:'Ekosistemi', contact:'Kontakt' },
-  fa:{ position:'در تقاطع فناوری، تجارت دیجیتال و عملیات جهانی، سیستم‌های اجرایی می‌سازم.', connect:'ارتباطات', ecosystem:'اکوسیستم', contact:'تماس' },
-  zh:{ position:'在技术、数字商业与全球运营之间构建可执行、可衡量的系统。', connect:'连接', ecosystem:'业务生态', contact:'联系' },
-  vi:{ position:'Xây dựng các hệ thống vận hành giữa công nghệ, thương mại số và hoạt động toàn cầu.', connect:'Kết nối', ecosystem:'Hệ sinh thái', contact:'Liên hệ' },
-}[locale] ?? { position:'Building working systems across technology, digital commerce and global operations.', connect:'Connect', ecosystem:'Ecosystem', contact:'Contact' });
+  tr:{ position:'Teknoloji, dijital ticaret ve küresel operasyonlar arasında çalışan sistemler kuruyorum.', connect:'Bağlantılar', ecosystem:'Ekosistem', contact:'İletişim', blog:'Blog' },
+  en:{ position:'Building working systems across technology, digital commerce and global operations.', connect:'Connect', ecosystem:'Ecosystem', contact:'Contact', blog:'Blog' },
+  ru:{ position:'Создаю работающие системы на стыке технологий, цифровой коммерции и глобальных операций.', connect:'Связи', ecosystem:'Экосистема', contact:'Контакты', blog:'Блог' },
+  mk:{ position:'Градам функционални системи меѓу технологија, дигитална трговија и глобални операции.', connect:'Поврзување', ecosystem:'Екосистем', contact:'Контакт', blog:'Блог' },
+  sr:{ position:'Gradim funkcionalne sisteme između tehnologije, digitalne trgovine i globalnih operacija.', connect:'Povezivanje', ecosystem:'Ekosistem', contact:'Kontakt', blog:'Blog' },
+  sq:{ position:'Ndërtoj sisteme funksionale mes teknologjisë, tregtisë digjitale dhe operacioneve globale.', connect:'Lidhje', ecosystem:'Ekosistemi', contact:'Kontakt', blog:'Blog' },
+  fa:{ position:'در تقاطع فناوری، تجارت دیجیتال و عملیات جهانی، سیستم‌های اجرایی می‌سازم.', connect:'ارتباطات', ecosystem:'اکوسیستم', contact:'تماس', blog:'وبلاگ' },
+  zh:{ position:'在技术、数字商业与全球运营之间构建可执行、可衡量的系统。', connect:'连接', ecosystem:'业务生态', contact:'联系', blog:'博客' },
+  vi:{ position:'Xây dựng các hệ thống vận hành giữa công nghệ, thương mại số và hoạt động toàn cầu.', connect:'Kết nối', ecosystem:'Hệ sinh thái', contact:'Liên hệ', blog:'Blog' },
+}[locale] ?? { position:'Building working systems across technology, digital commerce and global operations.', connect:'Connect', ecosystem:'Ecosystem', contact:'Contact', blog:'Blog' });
 const ctseg = locale === 'tr' ? 'https://ctseg.com.tr/' : locale === 'fa' ? 'https://ctseg.com.tr/fa/' : locale === 'zh' ? 'https://ctseg.com.tr/zh/' : locale === 'vi' ? 'https://ctseg.com.tr/vi/' : 'https://ctseg.com.tr/en/';
 const legal = ({
   tr:{privacy:'Gizlilik Politikası',cookies:'Çerez Politikası',terms:'Kullanım Koşulları',kvkk:'KVKK Aydınlatma Metni',rights:'© 2026 Teyfik Gökdemir. Tüm hakları saklıdır.'},
@@ -32,6 +32,7 @@ const legal = ({
 const legalPrivacy = locale === 'tr' ? '/privacy-policy/' : `/${locale}/privacy-policy/`;
 const legalTerms = locale === 'tr' ? '/terms/' : `/${locale}/terms/`;
 const legalCookie = legalPrivacy;
+const blogUrl = locale === 'tr' ? '/blog/' : `/${locale}/blog/`;
 const social = [['LinkedIn',site.links.linkedin],['Instagram',site.links.instagram],['GitHub',site.links.github]] as const;
 const ecosystem = [
   ['QCT Studio',site.links.qctStudio],['QCT Commerce',site.links.qctCommerce],['CTSEG',ctseg],['Growth OS','https://growth.teyfikgokdemir.com'],['Mythborn',site.links.mythborn],['Olivon','https://olivon.com.tr']
@@ -48,7 +49,7 @@ const ecosystem = [
     </div>
     <div class="footer-group">
       <span class="footer-label">{text.connect}</span>
-      <nav aria-label={text.connect}>{social.map(([name,href]) => <a href={href} target="_blank" rel="noopener noreferrer"><span>{name}</span><span aria-hidden="true"></span></a>)}</nav>
+      <nav aria-label={text.connect}><a href={blogUrl}><span>{text.blog}</span><span aria-hidden="true"></span></a>{social.map(([name,href]) => <a href={href} target="_blank" rel="noopener noreferrer"><span>{name}</span><span aria-hidden="true"></span></a>)}</nav>
     </div>
     <div class="footer-group footer-group--ecosystem">
       <span class="footer-label">{text.ecosystem}</span>
