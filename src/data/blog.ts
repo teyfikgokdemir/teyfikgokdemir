@@ -420,36 +420,7 @@ export const posts: BlogPost[] = [
       ]}
     ] }
   },
-  {
-    slug: 'global-ticaret-2026-ai-dijitallesme-deger-zinciri',
-    date: '2026-10-03',
-    updated: '2026-10-03',
-    readingMinutes: 8,
-    locales: ['tr'],
-    title: { tr: 'Global Ticaret 2026: AI, Dijitalleşme ve Değişen Değer Zincirleri' },
-    description: { tr: 'WTO ve UNCTAD’ın 2026 görünümünden hareketle AI, dijital ticaret, değer zinciri yeniden yapılanması ve yeni ticaret risklerini iş dünyası açısından yorumlayan analiz.' },
-    intro: { tr: 'Global ticaret büyümeye devam ederken oyunun kuralları daha karmaşık hale geliyor. AI, dijital hizmetler, yeni tarifeler ve yeniden şekillenen değer zincirleri şirketlerin hem tedarik hem satış tarafında daha fazla veriyle ve daha kısa karar döngüleriyle çalışmasını gerektiriyor.' },
-    sections: { tr: [
-      { heading: '1. Ticaretin yapısı değişiyor', paragraphs: [
-        'WTO’nun 2026 değerlendirmesi, global value chain yapılarının, dijitalleşmenin, AI’ın ve çevresel politikaların ticaretin ne olduğunu ve sınır ötesi etkilerin nasıl yayıldığını değiştirdiğini vurguluyor.',
-        'Bu, ürün ticareti ile dijital hizmetleri birbirinden ayrı düşünmenin giderek zorlaşması anlamına geliyor. Bir fiziksel ürünün satışında bile yazılım, veri, ödeme, reklam ve müşteri iletişimi kritik katmanlar.'
-      ], callout: 'Kaynak: <a href="https://www.wto.org/english/res_e/publications_e/world-trade-report-2026_execsum_e.htm" target="_blank" rel="noopener noreferrer">WTO — World Trade Report 2026, Executive Summary</a>' },
-      { heading: '2. AI ticaret maliyetini dolaylı biçimde düşürebilir', paragraphs: [
-        'AI’ın en hızlı etkisi gümrüğü ortadan kaldırmak değil, bilgi maliyetini azaltmaktır. Tedarikçi araştırması, doküman analizi, çeviri, sınıflandırma, müşteri desteği ve pazar araştırması daha hızlı yapılabilir.',
-        'Ancak yanlış bilgi de aynı hızla çoğalabilir. Bu yüzden kaynak doğrulama ve human approval, AI destekli ticaret süreçlerinin temel kontrol noktası olmalıdır.'
-      ]},
-      { heading: '3. Küçük şirketler için fırsat erişimdir', paragraphs: [
-        'Eskiden ayrı ekipler gerektiren çok dilli içerik, pazar analizi, lead qualification ve teklif hazırlama süreçleri daha küçük ekipler tarafından yönetilebilir hale geliyor.',
-        'Bu teknoloji farkı kapatabilir; fakat yalnızca şirketin ürün, fiyat, operasyon ve müşteri verisi düzenliyse.'
-      ]},
-      { heading: '4. Ekosistem mantığı neden önemli?', paragraphs: [
-        'Ticaret, e-commerce, dijital görünürlük ve operasyon otomasyonu artık birbirinden kopuk disiplinler değil. CTSEG, QCT Commerce, QCT Studio ve Growth OS gibi yapıların aynı ekosistem içinde birbirini tamamlamasının mantığı burada ortaya çıkıyor.',
-        'Geleceğin avantajı tek bir güçlü kanal değil; sourcing’den satışa ve ölçüme kadar verinin kopmadan hareket ettiği bir sistem kurmak.'
-      ]}
-    ] }
-  },
-
-  {
+{
     "slug": "building-ecommerce-systems-for-growth",
     "date": "2026-09-28",
     "updated": "2026-09-28",
