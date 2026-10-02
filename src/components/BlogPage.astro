@@ -38,7 +38,7 @@ const alternates = Object.fromEntries([
   ]),
   ['x-default', origin + (post ? postPath('en', post.slug) : blogPath('en'))],
 ]);
-const glassGuideArticles = (['fa','ru','zh','vi'] as const).includes(locale as any)
+const glassGuideArticles = (['fa','ru','mk','sr','sq','zh','vi'] as const).includes(locale as any)
   ? glassGuideSlugs.map((slug)=>({
       href:`/${locale}/blog/glass-guide/${slug}/`,
       title:localizedGlassGuides[locale as GlassGuideLocale][slug].title,
