@@ -28,6 +28,7 @@ const apiBase = (value: string) => {
   const base = cleanBase(value);
   if (/api\.umami\.is\/v1(?:\/|$)/i.test(base)) return base;
   if (/api\.umami\.is$/i.test(base)) return `${base}/v1`;
+  if (/cloud\.umami\.is$/i.test(base)) return 'https://api.umami.is/v1';
   return `${base}/api`;
 };
 
