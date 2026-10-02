@@ -34,6 +34,6 @@ export async function onRequestPost(context){
       text:'Cansu Operations Center erişim talebi.\n\nTek kullanımlık kod: '+code+'\nGeçerlilik: 10 dakika.\n\nIP hash: '+ipHash.slice(0,12)
     })
   });
-  if(!mail.ok) return json({ok:false,error:'mail_failed'},502);
+  if(!mail.ok) {\n    let detail='';\n    try { detail=(await mail.text()).slice(0,500); } catch {}\n    console.error('Cansu access mail failed', mail.status, detail);\n    return json({ok:false,error:'mail_failed',status:mail.status,detail},502);\n  }
   return json({ok:true,expiresIn:600});
 }
