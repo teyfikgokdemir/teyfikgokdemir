@@ -5,7 +5,7 @@ import { blogLocales, posts, postSupportsLocale } from '../../../data/blog';
 export function getStaticPaths() {
   return blogLocales
     .filter((locale) => locale !== 'tr')
-    .flatMap((locale) => posts.filter((post) => postSupportsLocale(post, locale)).map((post) => ({ params: { lang: locale, slug: post.slug }, props: { locale, post } })));
+    .flatMap((locale) => posts.filter((post) => postSupportsLocale(post, locale)).map((post) => ({ params: { lang: locale, slug: post.slugs?.[locale] ?? post.slug }, props: { locale, post } })));
 }
 const { locale, post } = Astro.props;
 ---
