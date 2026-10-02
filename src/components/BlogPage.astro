@@ -16,6 +16,7 @@ import {
   type BlogLocale,
   type BlogPost,
 } from '../data/blog';
+import { localizedGlassGuides, glassGuideSlugs, type GlassGuideLocale } from '../data/glass-guides-localized';
 
 interface Props { locale: BlogLocale; post?: BlogPost }
 
@@ -37,6 +38,15 @@ const alternates = Object.fromEntries([
   ]),
   ['x-default', origin + (post ? postPath('en', post.slug) : blogPath('en'))],
 ]);
+const glassGuideArticles = (['fa','ru','zh','vi'] as const).includes(locale as any)
+  ? glassGuideSlugs.map((slug)=>({
+      href:`/${locale}/blog/glass-guide/${slug}/`,
+      title:localizedGlassGuides[locale as GlassGuideLocale][slug].title,
+      description:localizedGlassGuides[locale as GlassGuideLocale][slug].description,
+      eyebrow:localizedGlassGuides[locale as GlassGuideLocale][slug].eyebrow,
+      date:'',
+    }))
+  : [];
 const indexArticles = [
   ...(legacy ? [{
     href: legacy.path,
@@ -45,6 +55,7 @@ const indexArticles = [
     eyebrow: 'SEO · GEO · AEO · AIO',
     date: '',
   }] : []),
+  ...glassGuideArticles,
   ...posts.map((item) => ({
     href: postPath(locale, item.slug),
     title: item.title[locale],
