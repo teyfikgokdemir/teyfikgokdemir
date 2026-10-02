@@ -38,7 +38,7 @@ export async function onRequestPost(context){
     let detail='';
     try { detail=(await mail.text()).slice(0,500); } catch {}
     console.error('Cansu access mail failed', mail.status, detail);
-    return json({ok:false,error:'mail_failed',status:mail.status,detail},502);
+    return json({ok:false,error:'mail_failed'},502);
   }
   return json({ok:true,expiresIn:600});
 }
