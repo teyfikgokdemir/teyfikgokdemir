@@ -1,0 +1,10 @@
+---
+import LocalizedGlassGuideArticle from '../../../../components/LocalizedGlassGuideArticle.astro';
+import { glassGuideSlugs, type GlassGuideLocale, type GlassGuideSlug } from '../../../../data/glass-guides-localized';
+export function getStaticPaths(){
+  const locales:GlassGuideLocale[]=['fa','ru','zh','vi'];
+  return locales.flatMap((locale)=>glassGuideSlugs.map((slug)=>({params:{locale,slug}})));
+}
+const {locale,slug}=Astro.params as {locale:GlassGuideLocale;slug:GlassGuideSlug};
+---
+<LocalizedGlassGuideArticle locale={locale} slug={slug}/>
