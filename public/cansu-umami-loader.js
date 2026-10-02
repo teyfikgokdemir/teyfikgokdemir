@@ -17,7 +17,6 @@
       script.dataset.websiteId = config.websiteId;
       script.dataset.domains = config.domain || location.hostname;
       script.dataset.performance = config.performance ? 'true' : 'false';
-      script.dataset.doNotTrack = 'true';
       script.dataset.excludeHash = 'true';
       script.dataset.cansuUmamiLoaded = 'true';
       document.head.appendChild(script);
