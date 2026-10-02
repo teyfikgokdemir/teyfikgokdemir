@@ -14,6 +14,7 @@ const HOSTS: Record<string, string> = {
 
 const ORIGINS = new Set([
   'https://teyfikgokdemir.com',
+  'https://cansu.teyfikgokdemir.com',
   'https://ctseg.com.tr',
   'https://mythborn.co',
   'https://qctstudio.com',
