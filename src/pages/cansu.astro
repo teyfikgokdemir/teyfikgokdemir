@@ -361,9 +361,9 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
             <div class="ops-section__head">
                 <div>
                     <h2 class="ops-section__title">Cansu First-Party Oturum Kaynakları</h2>
-                    <p class="ops-section__copy">Her tarayıcı oturumunda bir kez, kendi first-party endpointimize kaydedilen kaynak sinyali. Umami/GA4 engellense bile çalışır; adblock kaynaklı kaybı azaltmak için ayrı tutulur.</p>
+                    <p class="ops-section__copy">Yalnızca canlı production hostlarında, otomasyon/CI tarayıcıları filtrelenerek kaydedilen doğrulanmış first-party oturum sinyali. Umami/GA4'ten bağımsız tutulur.</p>
                 </div>
-                <span class="source-chip">D1 · first-party session beacon</span>
+                <span class="source-chip">D1 · temiz first-party v2</span>
             </div>
             <div id="first-party-source-grid" class="source-grid"><div class="country-empty">First-party oturum kaynakları yükleniyor…</div></div>
         </section>
@@ -1089,7 +1089,7 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
             ];
             try {
                 const results = await Promise.all(sites.map(async ([key,name]) => {
-                    const response = await fetch('/api/sources?site=' + encodeURIComponent(key) + '&period=today', { cache: 'no-store' });
+                    const response = await fetch('/api/sources?site=' + encodeURIComponent(key) + '&period=today&version=v2', { cache: 'no-store' });
                     const data = await response.json();
                     if (!response.ok || !data.ok) throw new Error(data.error || key);
                     const total = (data.sources || []).reduce((sum,item) => sum + Number(item.views || 0), 0);
