@@ -360,6 +360,17 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
         <section class="insights-section" data-dashboard-panel="traffic" style="margin-bottom:2.5rem;">
             <div class="ops-section__head">
                 <div>
+                    <h2 class="ops-section__title">Cansu First-Party Oturum Kaynakları</h2>
+                    <p class="ops-section__copy">Her tarayıcı oturumunda bir kez, kendi first-party endpointimize kaydedilen kaynak sinyali. Umami/GA4 engellense bile çalışır; adblock kaynaklı kaybı azaltmak için ayrı tutulur.</p>
+                </div>
+                <span class="source-chip">D1 · first-party session beacon</span>
+            </div>
+            <div id="first-party-source-grid" class="source-grid"><div class="country-empty">First-party oturum kaynakları yükleniyor…</div></div>
+        </section>
+
+        <section class="insights-section" data-dashboard-panel="traffic" style="margin-bottom:2.5rem;">
+            <div class="ops-section__head">
+                <div>
                     <h2 class="ops-section__title">Cloudflare HTTP Kaynakları</h2>
                     <p class="ops-section__copy">Cloudflare üzerinden görülen referrer/UTM ve HTTP istek sinyalleridir. Bunlar gerçek ziyaretçi veya oturum sayısı değildir; kullanıcı trafiği için üstteki Umami Analytics esas alınır.</p>
                 </div>
@@ -489,6 +500,7 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
         const summaryGrid = document.getElementById('live-summary-grid');
         const countryGrid = document.getElementById('country-grid');
         const sourceGrid = document.getElementById('source-grid');
+        const firstPartySourceGrid = document.getElementById('first-party-source-grid');
         const seoContent = document.getElementById('seo-content');
         const refreshButton = document.getElementById('refresh-data');
         const headerRefresh = document.getElementById('header-refresh');
@@ -1066,6 +1078,34 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
             }
         }
 
+        async function loadFirstPartySources() {
+            const sites = [
+                ['teyfikgokdemir','TEYFIKGOKDEMIR'],
+                ['ctseg','CTSEG'],
+                ['mythborn','MYTHBORN'],
+                ['qct-studio','QCT-STUDIO'],
+                ['qct-commerce-tr','QCT-COMMERCE-TR'],
+                ['olivon-agency','OLIVON-AGENCY'],
+            ];
+            try {
+                const results = await Promise.all(sites.map(async ([key,name]) => {
+                    const response = await fetch('/api/sources?site=' + encodeURIComponent(key) + '&period=today', { cache: 'no-store' });
+                    const data = await response.json();
+                    if (!response.ok || !data.ok) throw new Error(data.error || key);
+                    const total = (data.sources || []).reduce((sum,item) => sum + Number(item.views || 0), 0);
+                    return { key, name, total, sources: data.sources || [] };
+                }));
+                firstPartySourceGrid.innerHTML = results.map((site) => {
+                    const rows = site.sources.slice(0,8).map((item) =>
+                        `<div class="source-row"><div><div class="source-row__host">${escapeHtml(item.source || 'Bilinmiyor')}</div><div class="source-row__meta">first-party session source</div></div><strong class="source-row__value">${formatNumber(Number(item.views || 0))}</strong></div>`
+                    ).join('');
+                    return `<article class="source-panel"><div class="source-panel__head"><div><div class="source-panel__name">${escapeHtml(site.name)}</div><div class="source-panel__summary">Bugün · ${formatNumber(site.total)} first-party oturum sinyali</div></div><span class="seo-panel__badge">FIRST-PARTY</span></div>${rows || '<div class="country-empty">Bugün henüz first-party oturum sinyali yok</div>'}</article>`;
+                }).join('');
+            } catch (error) {
+                firstPartySourceGrid.innerHTML = '<div class="attention-card" style="border-color:rgba(251,191,36,.3)"><strong style="color:#fbbf24">First-party kaynak verisi alınamadı</strong><span>Source beacon deployu veya D1 endpointi kontrol edilmeli.</span></div>';
+            }
+        }
+
         async function loadConversions() {
             try {
                 const response = await fetch('/api/conversions', { cache: 'no-store' });
@@ -1092,12 +1132,13 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
             }
         }
 
-        function refreshAll() { loadOverview(); loadSeo(); loadUmami(); loadConversions(); }
+        function refreshAll() { loadOverview(); loadSeo(); loadUmami(); loadFirstPartySources(); loadConversions(); }
         refreshButton.addEventListener('click', refreshAll);
         headerRefresh.addEventListener('click', refreshAll);
         loadOverview();
         loadSeo();
         loadUmami();
+        loadFirstPartySources();
         loadConversions();
         setInterval(refreshAll, 5 * 60 * 1000);
     </script>
