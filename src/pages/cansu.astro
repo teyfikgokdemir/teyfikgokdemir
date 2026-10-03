@@ -371,10 +371,10 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
         <section class="insights-section" data-dashboard-panel="traffic" style="margin-bottom:2.5rem;">
             <div class="ops-section__head">
                 <div>
-                    <h2 class="ops-section__title">Cloudflare HTTP Kaynakları</h2>
-                    <p class="ops-section__copy">Cloudflare üzerinden görülen referrer/UTM ve HTTP istek sinyalleridir. Bunlar gerçek ziyaretçi veya oturum sayısı değildir; kullanıcı trafiği için üstteki Umami Analytics esas alınır.</p>
+                    <h2 class="ops-section__title">Kaynak / Yönlendirme Sinyalleri</h2>
+                    <p class="ops-section__copy">Öncelikle Cansu first-party source beacon ile kaydedilen referrer/UTM sinyalleridir; veri yoksa Cloudflare HTTP sinyali fallback olarak gösterilebilir. Ziyaretçi sayısı için Umami, yönlendirme kaynağı için bu bölüm kullanılır.</p>
                 </div>
-                <span class="source-chip">Cloudflare · HTTP sinyali</span>
+                <span class="source-chip">Cansu D1 · source attribution</span>
             </div>
             <div id="source-grid" class="source-grid"></div>
         </section>
