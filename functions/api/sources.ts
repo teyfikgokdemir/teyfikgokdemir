@@ -124,11 +124,14 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
     }
     const site = clean(url.searchParams.get('site'), 40);
     if (!SITES.has(site)) return response({ ok: false, error: 'Unknown site' }, 400, origin);
-    const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    const period = clean(url.searchParams.get('period'), 20).toLowerCase();
+    const since = period === 'today'
+      ? new Date().toISOString().slice(0, 10)
+      : new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
     const result = await env.CANSU_ANALYTICS_DB.prepare(
       'SELECT source, SUM(views) AS views FROM source_events WHERE site = ? AND day >= ? GROUP BY source ORDER BY views DESC LIMIT 12',
     ).bind(site, since).all<{ source: string; views: number }>();
-    return response({ ok: true, site, since, sources: result.results ?? [] }, 200, origin);
+    return response({ ok: true, site, period: period === 'today' ? 'today' : 'rolling-day-buckets', since, sources: result.results ?? [] }, 200, origin);
   }
 
   return response({ ok: false, error: 'Method not allowed' }, 405, origin);
