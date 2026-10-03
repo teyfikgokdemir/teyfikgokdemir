@@ -3,7 +3,7 @@ interface Env {
 }
 
 const SITES = new Set(['teyfikgokdemir', 'ctseg', 'mythborn', 'qct-studio', 'qct-commerce-tr', 'olivon-agency']);
-const EVENT_TYPES = new Set(['form_submit', 'rfq_submit', 'whatsapp_click', 'phone_click', 'email_click', 'purchase', 'lead']);
+const EVENT_TYPES = new Set(['form_submit', 'rfq_submit', 'whatsapp_click', 'telegram_click', 'phone_click', 'email_click', 'purchase', 'lead']);
 const ORIGINS = new Set([
   'https://teyfikgokdemir.com',
   'https://ctseg.com.tr',
