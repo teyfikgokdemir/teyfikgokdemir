@@ -20,14 +20,14 @@ export function createAnalytics(config: Config) {
 }
 function build(config: Config) {
   const w = window as any;
-  let consent: Consent = { analytics: false, marketing: false };
+  let consent: Consent = { analytics: true, marketing: false, recording: true };
   let gaLoaded = false, extrasLoaded = false, clarityLoaded = false, lastPage = '', classifiedPage = '';
   let attribution: Params = {};
   const scrolls = new Set<number>();
   w.dataLayer = w.dataLayer || [];
   w.gtag = w.gtag || function () { w.dataLayer.push(arguments); };
   const googleConsent = (kind: string) => w.gtag('consent', kind, {
-    analytics_storage: consent.analytics ? 'granted' : 'denied',
+    analytics_storage: 'granted',
     ad_storage: consent.marketing ? 'granted' : 'denied',
     ad_user_data: consent.marketing ? 'granted' : 'denied',
     ad_personalization: consent.marketing ? 'granted' : 'denied',
@@ -39,7 +39,6 @@ function build(config: Config) {
     document.head.appendChild(s);
   };
   function captureAttribution() {
-    if (!consent.analytics) return;
     const key = config.site + '-analytics-attribution-v2';
     const allowed = ['utm_source', 'utm_medium', 'utm_campaign'];
     try {
@@ -72,7 +71,6 @@ function build(config: Config) {
   }
   function page() {
     const path = safePath(location.href);
-    if (!consent.analytics && !config.advanced) return;
     if (path !== lastPage) {
       lastPage = path; scrolls.clear();
       loadGa();
@@ -86,46 +84,32 @@ function build(config: Config) {
     }
   }
   function extras() {
-    if (consent.analytics && !extrasLoaded && /^GTM-[A-Z0-9]+$/.test(config.gtm || '')) {
+    if (!extrasLoaded && /^GTM-[A-Z0-9]+$/.test(config.gtm || '')) {
       extrasLoaded = true;
       w.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
       load('qct-gtm', 'https://www.googletagmanager.com/gtm.js?id=' + config.gtm);
     }
     // Recording never starts on URLs containing potentially sensitive query/hash data.
-    if (!clarityLoaded && (config.clarityCookieless || (consent.analytics && consent.recording === true)) && /^[a-z0-9]{5,20}$/.test(config.clarity || '') && !location.search && !location.hash) {
+    if (!clarityLoaded && /^[a-z0-9]{5,20}$/.test(config.clarity || '') && !location.search && !location.hash) {
       clarityLoaded = true;
       w.clarity = w.clarity || function () { (w.clarity.q = w.clarity.q || []).push(arguments); };
       document.body.setAttribute('data-clarity-mask', 'true');
-      w.clarity('consentv2', { analytics_Storage: consent.analytics && consent.recording ? 'granted' : 'denied', ad_Storage: consent.marketing ? 'granted' : 'denied' });
+      w.clarity('consentv2', { analytics_Storage: 'granted', ad_Storage: consent.marketing ? 'granted' : 'denied' });
       load('qct-clarity', 'https://www.clarity.ms/tag/' + config.clarity);
     }
   }
   function setConsent(next: Consent) {
-    const revoked = consent.analytics && next.analytics !== true;
-    consent = { analytics: next.analytics === true, marketing: next.marketing === true, recording: next.recording === true };
+    consent = { analytics: true, marketing: next.marketing === true, recording: true };
     googleConsent('update');
-    if (w.clarity) w.clarity('consentv2', { analytics_Storage: consent.analytics && consent.recording ? 'granted' : 'denied', ad_Storage: consent.marketing ? 'granted' : 'denied' });
-    if (revoked) {
-      attribution = {}; w.__ctsegAttribution = {};
-      try { sessionStorage.removeItem(config.site + '-analytics-attribution-v2'); } catch {}
-      for (const item of document.cookie.split(';')) {
-        const name = item.trim().split('=')[0];
-        if (!/^(_ga|_gid|_gat|_clck|_clsk)(_|$)/.test(name)) continue;
-        const parts = location.hostname.split('.');
-        document.cookie = name + '=; Max-Age=0; path=/';
-        for (let i = 0; i < parts.length - 1; i++) document.cookie = name + '=; Max-Age=0; path=/; domain=.' + parts.slice(i).join('.');
-      }
-      // Loaded third-party scripts cannot be unloaded reliably. Reload after persisting choice.
-      location.reload();
-      return;
-    }
-    if (consent.analytics) { captureAttribution(); w.__ctsegAttribution = { ...attribution }; loadGa(); extras(); }
-    else if (config.advanced) loadGa();
+    if (w.clarity) w.clarity('consentv2', { analytics_Storage: 'granted', ad_Storage: consent.marketing ? 'granted' : 'denied' });
+    captureAttribution();
+    w.__ctsegAttribution = { ...attribution };
+    loadGa();
     extras();
     page();
   }
   function track(name: string, params: Params = {}) {
-    if ((!consent.analytics && !config.advanced) || !names.has(name)) return false;
+    if (!names.has(name)) return false;
     const clean: Params = {};
     for (const [key, value] of Object.entries(params || {})) {
       if (!keys.has(key)) continue;
@@ -154,7 +138,6 @@ function build(config: Config) {
     else if (link.matches('[data-cta], [data-qct-cta], .button, .qct-btn, .nav-cta, .v2-btn, .btn')) track('cta_click', { destination: safePath(url.href) });
   }
   function onScroll() {
-    if (!consent.analytics && !config.advanced) return;
     const height = document.documentElement.scrollHeight - innerHeight;
     if (height <= 0) return;
     const percent = scrollY / height * 100;
