@@ -157,7 +157,7 @@ const pageSchema = { '@type': 'HowTo', '@id': siteUrl(locale) + '#howto', name: 
   document.querySelectorAll('[data-supplier-route]').forEach((link) => {
     link.addEventListener('click', () => {
       const destination = link.getAttribute('data-supplier-route') || 'unknown';
-      if (typeof window.gtag === 'function') window.gtag('event', 'instagram_supplier_verification_click', { destination, source: 'instagram', medium: 'post', campaign: 'supplier_verification', content: 'third_post' });
+      if (typeof window.tgTrackEvent === 'function') window.tgTrackEvent('cta_click', { destination, source: 'instagram', medium: 'post', campaign: 'supplier_verification', content: 'third_post' });
     });
   });
 </script>

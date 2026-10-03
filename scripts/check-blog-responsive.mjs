@@ -5,11 +5,15 @@ import { extname, join, resolve } from 'node:path';
 import { chromium } from 'playwright-core';
 
 const executablePath = [
+  process.env.CHROME_EXECUTABLE_PATH,
   '/usr/bin/chromium',
   '/usr/bin/chromium-browser',
   '/usr/bin/google-chrome',
   '/usr/bin/google-chrome-stable',
-].find(existsSync);
+  'C:\\Users\\teyfi\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1243\\chrome-headless-shell-win64\\chrome-headless-shell.exe',
+  'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+  'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+].filter(Boolean).find(existsSync);
 
 if (!executablePath) throw new Error('Chrome/Chromium executable was not found.');
 

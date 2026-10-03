@@ -18,7 +18,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "audit:trend-blog-parity": "node scripts/audit-trend-blog-parity.mjs",
-    "check:blog-responsive": "node scripts/check-blog-responsive.mjs"
+    "check:blog-responsive": "node scripts/check-blog-responsive.mjs",
+    "check:analytics": "node scripts/check-analytics.mjs"
   },
   "dependencies": {
     "astro": "^7.3.4"

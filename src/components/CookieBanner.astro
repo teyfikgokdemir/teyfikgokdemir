@@ -1,4 +1,5 @@
 ---
+import { analyticsDisclosure } from '../lib/analytics-disclosure';
 import type { Locale } from '../i18n/locales';
 
 interface Props {
@@ -80,7 +81,7 @@ const privacyHref = locale === 'tr' ? '/privacy-policy/' : `/${locale}/privacy-p
 <aside class="cookie-banner" data-cookie-banner hidden aria-labelledby="cookie-title" aria-live="polite">
   <div class="cookie-copy">
     <strong id="cookie-title">{copy.title}</strong>
-    <p>{copy.text} <a href={privacyHref}>{copy.privacy}</a></p>
+    <p>{analyticsDisclosure[locale] || analyticsDisclosure.en} <a href={privacyHref}>{copy.privacy}</a></p>
   </div>
   <div class="cookie-actions">
     <button type="button" class="cookie-button secondary" data-cookie-reject>{copy.reject}</button>
@@ -88,122 +89,27 @@ const privacyHref = locale === 'tr' ? '/privacy-policy/' : `/${locale}/privacy-p
   </div>
 </aside>
 
-<script is:inline>
-  (() => {
-    const key = 'tg-cookie-consent';
-    const measurementId = 'G-52GXBGWHFJ';
-    const ANALYTICS_TEST_MODE = true;
-    const banner = document.querySelector('[data-cookie-banner]');
-    if (!(banner instanceof HTMLElement)) return;
-
-    let analyticsLoaded = false;
-    let sourceBeaconLoaded = false;
-    window['ga-disable-' + measurementId] = !ANALYTICS_TEST_MODE;
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
-    window.gtag('consent', 'default', {
-      analytics_storage: ANALYTICS_TEST_MODE ? 'granted' : 'denied',
-      ad_storage: 'denied',
-      ad_user_data: 'denied',
-      ad_personalization: 'denied',
-    });
-
-    const loadAnalytics = () => {
-      if (analyticsLoaded) return;
-      analyticsLoaded = true;
-      window['ga-disable-' + measurementId] = false;
-      window.gtag('consent', 'update', { analytics_storage: 'granted' });
-      window.gtag('js', new Date());
-      window.gtag('config', measurementId, {
-        anonymize_ip: true,
-        allow_google_signals: false,
-        allow_ad_personalization_signals: false,
-      });
-
-      const script = document.createElement('script');
-      script.async = true;
-      script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
-      document.head.appendChild(script);
-    };
-
-    const loadSourceBeacon = () => {
-      if (sourceBeaconLoaded || document.querySelector('script[data-tg-source-beacon]')) return;
-      sourceBeaconLoaded = true;
-      const script = document.createElement('script');
-      script.src = '/cansu-source-beacon.js';
-      script.defer = true;
-      script.dataset.site = 'teyfikgokdemir';
-      script.dataset.tgSourceBeacon = 'true';
-      document.body.appendChild(script);
-    };
-
-    const clearAnalyticsCookies = () => {
-      document.cookie.split(';').map((item) => item.trim().split('=')[0]).filter((name) => name === '_ga' || name.startsWith('_ga_')).forEach((name) => {
-        document.cookie = `${name}=; Path=/; Max-Age=0; SameSite=Lax; Secure`;
-        document.cookie = `${name}=; Domain=.teyfikgokdemir.com; Path=/; Max-Age=0; SameSite=Lax; Secure`;
-      });
-    };
-
-    const track = (name, params = {}) => {
-      if (!analyticsLoaded || typeof window.gtag !== 'function') return;
-      window.gtag('event', name, params);
-    };
-
-    if (ANALYTICS_TEST_MODE) { loadAnalytics(); loadSourceBeacon(); }
-    const stored = localStorage.getItem(key);
-    if (stored === 'accepted') {
-      loadAnalytics();
-      loadSourceBeacon();
-      banner.hidden = true;
-    } else if (stored === 'rejected') {
-      if (!ANALYTICS_TEST_MODE) {
-        window['ga-disable-' + measurementId] = true;
-        window.gtag('consent', 'update', { analytics_storage: 'denied' });
-        clearAnalyticsCookies();
-      }
-      banner.hidden = true;
-    } else {
-      banner.hidden = false;
-    }
-
-    banner.querySelector('[data-cookie-accept]')?.addEventListener('click', () => {
-      localStorage.setItem(key, 'accepted');
-      loadAnalytics();
-      loadSourceBeacon();
-      track('analytics_preference', { preference: 'accepted' });
-      banner.hidden = true;
-    });
-
-    banner.querySelector('[data-cookie-reject]')?.addEventListener('click', () => {
-      localStorage.setItem(key, 'rejected');
-      window['ga-disable-' + measurementId] = true;
-      window.gtag('consent', 'update', { analytics_storage: 'denied' });
-      clearAnalyticsCookies();
-      banner.hidden = true;
-    });
-
-    document.addEventListener('click', (event) => {
-      const target = event.target instanceof Element ? event.target.closest('a') : null;
-      if (!(target instanceof HTMLAnchorElement)) return;
-      const href = target.href;
-      const label = target.textContent?.trim().slice(0, 120) || '';
-      if (href.startsWith('mailto:')) {
-        track('mailto_click', { link_url: href, link_text: label });
-        return;
-      }
-      try {
-        const url = new URL(href, location.href);
-        if (url.hostname === 'wa.me') {
-          track('whatsapp_click', { link_url: href, link_text: label });
-        } else if (target.dataset.ventureLink === 'true') {
-          track('venture_click', { link_url: href, link_domain: url.hostname, link_text: label });
-          track('outbound_click', { link_url: href, link_domain: url.hostname, link_text: label });
-        } else if (url.origin !== location.origin) {
-          track('outbound_click', { link_url: href, link_domain: url.hostname, link_text: label });
-        }
-      } catch {}
-    });
-  })();
+<button type="button" data-cookie-settings style="display:block;margin:12px auto;min-height:44px;padding:8px 16px;background:transparent;color:inherit;border:0;text-decoration:underline;cursor:pointer">{copy.title}</button>
+<script>
+  import { createAnalytics } from '../lib/analytics-stack';
+  import { analyticsConfig } from '../lib/analytics-config';
+  const analytics = createAnalytics(analyticsConfig);
+  (window as any).tgTrackEvent = analytics.track;
+  const key = 'tg-cookie-consent';
+  const banner = document.querySelector<HTMLElement>('[data-cookie-banner]');
+  let saved: string | null = null;
+  let recording = false;
+  try { saved = localStorage.getItem(key); recording = localStorage.getItem('qct-recording-consent-v1') === 'granted'; } catch {}
+  analytics.setConsent({ analytics: saved === 'accepted', recording });
+  if (banner) banner.hidden = saved === 'rejected' || (saved === 'accepted' && (!analyticsConfig.clarity || recording));
+  const choose = (accepted: boolean) => {
+    try { localStorage.setItem(key, accepted ? 'accepted' : 'rejected'); localStorage.setItem('qct-recording-consent-v1', accepted ? 'granted' : 'denied'); } catch {}
+    analytics.setConsent({ analytics: accepted, recording: accepted });
+    if (banner) banner.hidden = true;
+  };
+  document.querySelector('[data-cookie-accept]')?.addEventListener('click', () => choose(true));
+  document.querySelector('[data-cookie-reject]')?.addEventListener('click', () => choose(false));
+  document.querySelector('[data-cookie-settings]')?.addEventListener('click', () => { if (banner) banner.hidden = false; });
 </script>
 
 <style>
