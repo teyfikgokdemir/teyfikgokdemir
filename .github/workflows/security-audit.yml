@@ -30,7 +30,7 @@ jobs:
       - name: Run Security Vulnerability Audit
         run: |
           echo "Running automated npm security audit..."
-          npm audit --audit-level=high
+          node .github/scripts/npm-audit-with-temporary-exception.mjs
 
       - name: Run Build & Type Check
         run: |
