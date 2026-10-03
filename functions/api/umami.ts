@@ -1,4 +1,4 @@
-interface Env {
+﻿interface Env {
   UMAMI_BASE_URL?: string;
   UMAMI_API_KEY?: string;
 }
@@ -50,11 +50,47 @@ const dateRange = (days: number) => {
   return { startAt, endAt };
 };
 
+const FETCH_TIMEOUT_MS = 12000;
+
+// One controlled retry for transient failures (cold start, 5xx, network/timeout).
+async function umamiFetch(url: string, apiKey: string, cacheTtl: number, label: string): Promise<Response> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        headers: { accept: 'application/json', authorization: `Bearer ${apiKey}` },
+        cf: { cacheTtl, cacheEverything: false },
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+      });
+      if (response.status >= 500 && attempt === 0) { lastError = new Error(`${label} HTTP ${response.status}`); continue; }
+      return response;
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  const timedOut = lastError instanceof Error && (lastError.name === 'TimeoutError' || lastError.name === 'AbortError');
+  throw new Error(timedOut ? `${label} zaman aÅŸÄ±mÄ± (${FETCH_TIMEOUT_MS / 1000}s)` : `${label} eriÅŸilemedi`);
+}
+
+const LAST_OK_KEY = 'https://cansu.internal/umami-last-success';
+
+async function readLastSuccess(): Promise<Record<string, string>> {
+  try {
+    const hit = await caches.default.match(LAST_OK_KEY);
+    return hit ? await hit.json() as Record<string, string> : {};
+  } catch { return {}; }
+}
+
+async function writeLastSuccess(map: Record<string, string>) {
+  try {
+    await caches.default.put(LAST_OK_KEY, new Response(JSON.stringify(map), {
+      headers: { 'content-type': 'application/json', 'cache-control': 'public, max-age=2592000' },
+    }));
+  } catch { /* cache is best-effort */ }
+}
+
 async function getWebsites(base: string, apiKey: string) {
-  const response = await fetch(apiUrl(base, 'websites'), {
-    headers: { accept: 'application/json', authorization: `Bearer ${apiKey}` },
-    cf: { cacheTtl: 300, cacheEverything: false },
-  });
+  const response = await umamiFetch(apiUrl(base, 'websites'), apiKey, 300, 'Umami websites');
   if (!response.ok) throw new Error(`Umami websites HTTP ${response.status}`);
   const payload = await response.json() as unknown;
   if (Array.isArray(payload)) return payload as Array<Record<string, unknown>>;
@@ -74,10 +110,7 @@ async function getStats(base: string, apiKey: string, websiteId: string, days: n
   const url = new URL(apiUrl(base, `websites/${websiteId}/stats`));
   url.searchParams.set('startAt', String(startAt));
   url.searchParams.set('endAt', String(endAt));
-  const response = await fetch(url.toString(), {
-    headers: { accept: 'application/json', authorization: `Bearer ${apiKey}` },
-    cf: { cacheTtl: days === 1 ? 120 : 600, cacheEverything: false },
-  });
+  const response = await umamiFetch(url.toString(), apiKey, days === 1 ? 120 : 600, 'Umami stats');
   if (!response.ok) throw new Error(`Umami stats HTTP ${response.status}`);
   const stats = await response.json() as Record<string, unknown>;
   return {
@@ -89,7 +122,10 @@ async function getStats(base: string, apiKey: string, websiteId: string, days: n
   };
 }
 
+type Health = 'healthy' | 'degraded' | 'unavailable';
+
 export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
+  const startedAt = Date.now();
   const base = env.UMAMI_BASE_URL ? cleanBase(env.UMAMI_BASE_URL) : '';
   const apiKey = env.UMAMI_API_KEY?.trim() || '';
 
@@ -100,45 +136,77 @@ export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
       source: 'Umami',
       message: 'Umami environment eksik',
       missing: [!base ? 'UMAMI_BASE_URL' : '', !apiKey ? 'UMAMI_API_KEY' : ''].filter(Boolean),
-      sites: PORTFOLIO.map((site) => ({ ...site, connected: false })),
+      generatedAt: new Date().toISOString(),
+      latencyMs: Date.now() - startedAt,
+      websiteCount: PORTFOLIO.length,
+      connectedCount: 0,
+      health: 'unavailable' satisfies Health,
+      sites: PORTFOLIO.map((site) => ({
+        ...site,
+        connected: false,
+        websiteId: null,
+        domain: site.host,
+        lastSuccessfulFetch: null,
+        latencyMs: null,
+        reason: 'Umami environment eksik',
+      })),
     });
   }
+
+  const lastSuccess = await readLastSuccess();
 
   try {
     const websites = await getWebsites(base, apiKey);
     const sites = await Promise.all(PORTFOLIO.map(async (site) => {
+      const siteStart = Date.now();
       const website = findWebsite(websites, site.host);
-      if (!website) return { ...site, connected: false, reason: 'Umami website kaydı bulunamadı' };
+      const common = { ...site, domain: site.host, lastSuccessfulFetch: lastSuccess[site.key] || null };
+      if (!website) return { ...common, connected: false, websiteId: null, latencyMs: Date.now() - siteStart, reason: 'Umami website kaydÄ± bulunamadÄ±' };
       const websiteId = String(website.id ?? '');
-      if (!websiteId) return { ...site, connected: false, reason: 'Umami website ID bulunamadı' };
+      if (!websiteId) return { ...common, connected: false, websiteId: null, latencyMs: Date.now() - siteStart, reason: 'Umami website ID bulunamadÄ±' };
       try {
         const [oneDay, sevenDays, thirtyDays] = await Promise.all([
           getStats(base, apiKey, websiteId, 1),
           getStats(base, apiKey, websiteId, 7),
           getStats(base, apiKey, websiteId, 30),
         ]);
+        const fetchedAt = new Date().toISOString();
+        lastSuccess[site.key] = fetchedAt;
         return {
           ...site,
           connected: true,
           websiteId,
           umamiName: String(website.name ?? site.name),
           domain: String(website.domain ?? site.host),
+          lastSuccessfulFetch: fetchedAt,
+          latencyMs: Date.now() - siteStart,
+          reason: null,
           periods: { oneDay, sevenDays, thirtyDays },
         };
       } catch (error) {
         return {
-          ...site,
+          ...common,
           connected: false,
           websiteId,
-          reason: error instanceof Error ? error.message : 'Umami stats alınamadı',
+          domain: String(website.domain ?? site.host),
+          latencyMs: Date.now() - siteStart,
+          reason: error instanceof Error ? error.message : 'Umami stats alÄ±namadÄ±',
         };
       }
     }));
+
+    const connectedCount = sites.filter((site) => site.connected).length;
+    const health: Health = connectedCount === sites.length ? 'healthy' : connectedCount > 0 ? 'degraded' : 'unavailable';
+    if (connectedCount > 0) await writeLastSuccess(lastSuccess);
 
     return json({
       ok: true,
       configured: true,
       generatedAt: new Date().toISOString(),
+      latencyMs: Date.now() - startedAt,
+      websiteCount: sites.length,
+      connectedCount,
+      health,
       source: 'Umami API',
       baseUrl: base,
       apiBaseUrl: apiBase(base),
@@ -149,7 +217,21 @@ export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
       ok: false,
       configured: true,
       source: 'Umami API',
-      error: error instanceof Error ? error.message : 'Umami API erişilemedi',
+      generatedAt: new Date().toISOString(),
+      latencyMs: Date.now() - startedAt,
+      websiteCount: PORTFOLIO.length,
+      connectedCount: 0,
+      health: 'unavailable' satisfies Health,
+      error: error instanceof Error ? error.message : 'Umami API eriÅŸilemedi',
+      sites: PORTFOLIO.map((site) => ({
+        ...site,
+        connected: false,
+        websiteId: null,
+        domain: site.host,
+        lastSuccessfulFetch: lastSuccess[site.key] || null,
+        latencyMs: null,
+        reason: error instanceof Error ? error.message : 'Umami API eriÅŸilemedi',
+      })),
     }, 502);
   }
 };
