@@ -81,6 +81,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   await ensureSchema(env);
 
   if (request.method === 'POST') {
+    if (!(origin && ORIGINS.has(origin))) return json({ ok: false, error: 'Origin not allowed' }, 403, origin);
     try {
       const body = await request.json() as Record<string, unknown>;
       const site = clean(body.site, 40);
