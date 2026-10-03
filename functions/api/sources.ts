@@ -29,6 +29,8 @@ const response = (body: unknown, status: number, origin: string | null) => new R
 
 const clean = (value: unknown, max: number) => String(value ?? '').trim().slice(0, max).replace(/[\u0000-\u001f\u007f]/g, '');
 
+const allowedOrigin = (origin: string | null) => Boolean(origin && ORIGINS.has(origin));
+
 const sourceName = (body: Record<string, unknown>) => {
   const utmSource = clean(body.utm_source, 80).toLowerCase();
   const utmMedium = clean(body.utm_medium, 80).toLowerCase();
@@ -39,6 +41,26 @@ const sourceName = (body: Record<string, unknown>) => {
   if (referrer.includes('bing.')) return 'Bing';
   if (referrer.includes('facebook.') || referrer.includes('instagram.') || referrer.includes('linkedin.') || referrer.includes('t.co')) return referrer;
   return referrer;
+};
+
+const ensureFirstPartyV2 = async (env: Env) => {
+  await env.CANSU_ANALYTICS_DB.prepare(
+    `CREATE TABLE IF NOT EXISTS first_party_sessions_v2 (
+      site TEXT NOT NULL,
+      session_id TEXT NOT NULL,
+      occurred_at TEXT NOT NULL,
+      day TEXT NOT NULL,
+      source TEXT NOT NULL DEFAULT 'Doğrudan / bilinmiyor',
+      landing_path TEXT NOT NULL DEFAULT '/',
+      country TEXT NOT NULL DEFAULT 'Bilinmiyor',
+      region TEXT NOT NULL DEFAULT 'Bilinmiyor',
+      city TEXT NOT NULL DEFAULT 'Bilinmiyor',
+      PRIMARY KEY (site, session_id)
+    )`
+  ).run();
+  await env.CANSU_ANALYTICS_DB.prepare(
+    'CREATE INDEX IF NOT EXISTS idx_first_party_sessions_v2_day_site ON first_party_sessions_v2(day, site)'
+  ).run();
 };
 
 type RequestWithCf = Request & {
@@ -78,6 +100,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   if (!env.CANSU_ANALYTICS_DB) return response({ ok: false, error: 'Analytics database is not configured' }, 503, origin);
 
   if (request.method === 'POST') {
+    if (!allowedOrigin(origin)) return response({ ok: false, error: 'Origin not allowed' }, 403, origin);
     try {
       const body = await request.json() as Record<string, unknown>;
       const site = clean(body.site, 40);
@@ -85,11 +108,28 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
       const source = sourceName(body);
       const path = clean(body.landing_path, 180) || '/';
       const day = new Date().toISOString().slice(0, 10);
+
+      if (clean(body.collector_version, 10) === '3') {
+        const sessionId = clean(body.session_id, 80);
+        if (!/^[a-zA-Z0-9_-]{12,80}$/.test(sessionId)) return response({ ok: false, error: 'Invalid session id' }, 400, origin);
+        await ensureFirstPartyV2(env);
+        const cf = (request as RequestWithCf).cf;
+        const country = clean(cf?.country, 80) || 'Bilinmiyor';
+        const region = clean(cf?.region, 120) || 'Bilinmiyor';
+        const city = clean(cf?.city, 120) || 'Bilinmiyor';
+        await env.CANSU_ANALYTICS_DB.prepare(
+          `INSERT OR IGNORE INTO first_party_sessions_v2
+           (site, session_id, occurred_at, day, source, landing_path, country, region, city)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        ).bind(site, sessionId, new Date().toISOString(), day, source, path, country, region, city).run();
+        return response({ ok: true, collector: 'v3' }, 202, origin);
+      }
+
       await env.CANSU_ANALYTICS_DB.prepare(
         'INSERT INTO source_events (site, day, source, landing_path, views) VALUES (?, ?, ?, ?, 1) ON CONFLICT(site, day, source, landing_path) DO UPDATE SET views = views + 1',
       ).bind(site, day, source, path).run();
       await recordGeo(env, request, site, day);
-      return response({ ok: true }, 202, origin);
+      return response({ ok: true, collector: 'legacy' }, 202, origin);
     } catch {
       return response({ ok: false, error: 'Invalid analytics event' }, 400, origin);
     }
@@ -108,6 +148,9 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
     }
     const eventSite = clean(url.searchParams.get('event_site'), 40);
     if (eventSite) {
+      let refererOrigin = '';
+      try { refererOrigin = new URL(request.headers.get('referer') || '').origin; } catch {}
+      if (!allowedOrigin(refererOrigin)) return response({ ok: false, error: 'Legacy source origin not allowed' }, 403, origin);
       if (!SITES.has(eventSite)) return response({ ok: false, error: 'Unknown site' }, 400, origin);
       const source = sourceName({
         referrer_host: url.searchParams.get('referrer_host'),
@@ -124,7 +167,19 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
     }
     const site = clean(url.searchParams.get('site'), 40);
     if (!SITES.has(site)) return response({ ok: false, error: 'Unknown site' }, 400, origin);
+    const version = clean(url.searchParams.get('version'), 10).toLowerCase();
     const period = clean(url.searchParams.get('period'), 20).toLowerCase();
+
+    if (version === 'v2') {
+      await ensureFirstPartyV2(env);
+      const since = period === 'today'
+        ? new Date().toISOString().slice(0, 10)
+        : new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+      const result = await env.CANSU_ANALYTICS_DB.prepare(
+        'SELECT source, COUNT(*) AS views FROM first_party_sessions_v2 WHERE site = ? AND day >= ? GROUP BY source ORDER BY views DESC LIMIT 12'
+      ).bind(site, since).all<{ source: string; views: number }>();
+      return response({ ok: true, collector: 'v2-clean', site, period: period === 'today' ? 'today' : 'rolling-day-buckets', since, sources: result.results ?? [] }, 200, origin);
+    }
     const since = period === 'today'
       ? new Date().toISOString().slice(0, 10)
       : new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
