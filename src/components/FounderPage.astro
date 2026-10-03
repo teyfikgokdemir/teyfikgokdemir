@@ -1103,12 +1103,7 @@ const displayedYear = (title: string, year: string) =>
   const requestForm = document.querySelector('[data-commercial-request-form]');
   const formStatus = document.querySelector('[data-form-status]');
   const trackFormEvent = (name, form) => {
-    if (typeof window.gtag !== 'function') return;
-    window.gtag('event', name, {
-      form_id: 'commercial_request',
-      locale: form?.dataset.formLocale || document.documentElement.lang,
-      transport_type: 'beacon',
-    });
+    (window as any).tgTrackEvent?.(name, { form_name: 'commercial_request' });
   };
   document.querySelectorAll('a[href="#contact"]').forEach((link) => {
     link.addEventListener('click', () => trackFormEvent('contact_cta_click', requestForm));
@@ -1150,8 +1145,7 @@ const displayedYear = (title: string, year: string) =>
       `${messageLabel}:\n${values.get('message') || ''}`,
     ].join('\n');
     const recipient = form.dataset.recipient || 'info@teyfikgokdemir.com';
-    trackFormEvent('generate_lead', form);
-    trackFormEvent('mailto_open', form);
+    trackFormEvent('email_draft_open', form);
     window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     if (formStatus) formStatus.textContent = form.dataset.msgSuccess || '';
   });

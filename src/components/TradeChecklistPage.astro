@@ -171,7 +171,7 @@ const pageSchema = {
   document.querySelectorAll('[data-trade-route]').forEach((link) => {
     link.addEventListener('click', () => {
       const destination = link.getAttribute('data-trade-route') || 'unknown';
-      if (typeof window.gtag === 'function') window.gtag('event', 'instagram_trade_checklist_click', { destination, source: 'instagram', medium: 'post', campaign: 'trade_checklist', content: 'second_post' });
+      if (typeof window.tgTrackEvent === 'function') window.tgTrackEvent('cta_click', { destination, source: 'instagram', medium: 'post', campaign: 'trade_checklist', content: 'second_post' });
     });
   });
 </script>

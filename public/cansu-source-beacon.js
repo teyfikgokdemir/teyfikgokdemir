@@ -1,5 +1,5 @@
 (() => {
-  const endpoint = 'https://teyfikgokdemir.com/api/sources';
+  const endpoint = 'https://cansu.teyfikgokdemir.com/api/sources';
   const current = document.currentScript;
   const site = current?.dataset.site;
   if (!site) return;

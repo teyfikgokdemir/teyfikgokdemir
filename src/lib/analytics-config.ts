@@ -1,0 +1,1 @@
+export const analyticsConfig = { hostname: 'teyfikgokdemir.com', site: 'personal-site', ga: 'G-52GXBGWHFJ', advanced: true, clarityCookieless: true, gtm: import.meta.env.PUBLIC_GTM_ID ?? 'GTM-NF39NFFG', clarity: import.meta.env.PUBLIC_CLARITY_ID ?? 'ypu8xlb2wv' };

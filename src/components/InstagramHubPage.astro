@@ -344,8 +344,8 @@ const whatsappHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(w
   document.querySelectorAll('[data-instagram-route]').forEach((link) => {
     link.addEventListener('click', () => {
       const destination = link.getAttribute('data-instagram-route') || 'unknown';
-      if (typeof window.gtag === 'function') {
-        window.gtag('event', 'instagram_hub_click', {
+      if (typeof window.tgTrackEvent === 'function') {
+        window.tgTrackEvent('cta_click', {
           destination,
           source: 'instagram',
           medium: 'bio',

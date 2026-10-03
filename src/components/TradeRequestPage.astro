@@ -119,7 +119,7 @@ const pageSchema = { '@type': 'CollectionPage', '@id': siteUrl(locale) + '#trade
   document.querySelectorAll('[data-intent]').forEach((link) => {
     link.addEventListener('click', () => {
       const intent = link.getAttribute('data-intent') || 'unknown';
-      if (typeof window.gtag === 'function') window.gtag('event', 'trade_intent_click', { intent, source: 'instagram', medium: 'post', campaign: 'trade_intent' });
+      if (typeof window.tgTrackEvent === 'function') window.tgTrackEvent('trade_intent_click', { intent, source: 'instagram', medium: 'post', campaign: 'trade_intent' });
     });
   });
 </script>

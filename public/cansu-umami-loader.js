@@ -8,10 +8,10 @@
   window.__cansuUmamiLoader = true;
   if (document.querySelector('script[data-cansu-umami-loaded="true"]')) return;
 
-  // Primary host is allowed by every portfolio site CSP; the Cansu subdomain is the single fallback.
+  // The Cansu subdomain is the primary analytics control plane; the apex path stays as a legacy fallback.
   const endpoints = [
-    'https://teyfikgokdemir.com/api/umami-config?site=' + encodeURIComponent(site),
     'https://cansu.teyfikgokdemir.com/api/umami-config?site=' + encodeURIComponent(site),
+    'https://teyfikgokdemir.com/api/umami-config?site=' + encodeURIComponent(site),
   ];
   const RETRY_DELAY_MS = 1200;
 
