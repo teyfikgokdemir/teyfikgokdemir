@@ -5,6 +5,9 @@ const state = document.getElementById('portfolio-state');
 const source = document.getElementById('portfolio-source');
 const sourceTabs = [...document.querySelectorAll('[data-source]')];
 const clarityPanel = document.getElementById('clarity-source-panel');
+const clarityState = document.getElementById('clarity-api-state');
+const clarityStatus = document.getElementById('clarity-api-status');
+const clarityUpdated = document.getElementById('clarity-api-updated');
 const snapshots = {};
 const number = value => new Intl.NumberFormat('tr-TR').format(value);
 function render() {
@@ -13,7 +16,7 @@ function render() {
   rows.replaceChildren();
   if (clarityPanel) clarityPanel.hidden = !isClarity;
   sourceTabs.forEach(tab => { const active = tab.dataset.source === source.value; tab.classList.toggle('is-active', active); tab.setAttribute('aria-selected', String(active)); });
-  if (isClarity) { state.textContent = 'Clarity davranış görünümü etkin · ayrıntılar Clarity çalışma alanında'; return; }
+  if (isClarity) { state.textContent = 'Clarity davranış görünümü etkin'; loadClarity(); return; }
   const snapshot = snapshots[source.value];
   if (!snapshot) { state.textContent = 'Veri kaynağı yükleniyor…'; return; }
   const { data, cached } = snapshot;
@@ -44,6 +47,21 @@ if (window.cansuUmamiSnapshot) snapshots.umami = window.cansuUmamiSnapshot;
 render();
 source.addEventListener('change', render);
 sourceTabs.forEach(tab => tab.addEventListener('click', () => { source.value = tab.dataset.source; render(); }));
+async function loadClarity() {
+  if (clarityState?.dataset.loading === 'true') return;
+  if (clarityState) clarityState.dataset.loading = 'true';
+  try {
+    const response = await fetch('/api/clarity?numOfDays=1', { signal: AbortSignal.timeout(15000) });
+    const payload = await response.json();
+    if (!response.ok || !payload.ok) throw new Error(payload.reason || 'Clarity API kullanılamıyor');
+    if (clarityState) clarityState.textContent = 'Clarity · bağlı';
+    if (clarityStatus) clarityStatus.textContent = 'API verisi alındı';
+    if (clarityUpdated) clarityUpdated.textContent = new Date(payload.generatedAt).toLocaleString('tr-TR');
+  } catch (error) {
+    if (clarityState) { clarityState.textContent = 'Clarity · token bekleniyor'; clarityState.classList.add('is-warning'); }
+    if (clarityStatus) clarityStatus.textContent = error instanceof Error ? error.message : 'API verisi alınamadı';
+  } finally { if (clarityState) clarityState.dataset.loading = 'false'; }
+}
 async function loadGa4() {
   try {
     const response = await fetch('/api/ga4', {signal:AbortSignal.timeout(30000)});
