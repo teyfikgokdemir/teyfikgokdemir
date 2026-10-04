@@ -1,5 +1,5 @@
 const CANSU_HOST = 'cansu.teyfikgokdemir.com';
-const PUBLIC_PATHS = new Set(['/login', '/login/', '/api/access/request', '/api/access/request/', '/api/access/verify', '/api/access/verify/']);
+const PUBLIC_PATHS = new Set(['/login', '/login/', '/api/access/request', '/api/access/request/', '/api/access/verify', '/api/access/verify/', '/api/gsc/callback']);
 const MACHINE_PATHS = new Set(['/api/umami-config', '/api/conversions', '/api/sources']);
 // Public measurement clients must load without a dashboard session.
 const MEASUREMENT_ASSETS = new Set(['/cansu-source-beacon.js', '/cansu-umami-loader.js', '/cansu-events.js']);
@@ -29,7 +29,7 @@ async function sessionValid(context) {
 export async function onRequest(context) {
   const url = new URL(context.request.url);
   if (url.hostname !== CANSU_HOST) {
-    const isReport = ['/api/overview', '/api/umami', '/api/sources', '/api/conversions'].includes(url.pathname);
+    const isReport = ['/api/overview', '/api/umami', '/api/ga4', '/api/sources', '/api/conversions'].includes(url.pathname);
     if (isReport && !['POST', 'OPTIONS'].includes(context.request.method)) {
       return new Response(JSON.stringify({ ok:false, error:'Use authenticated Cansu dashboard' }), { status:401, headers:{'content-type':'application/json', 'cache-control':'no-store'} });
     }

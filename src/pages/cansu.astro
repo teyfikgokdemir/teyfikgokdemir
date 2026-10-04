@@ -222,6 +222,15 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
             .module-tab { min-width:8.8rem; }
         }
 
+        #portfolio-title { font-size:1.15rem; letter-spacing:-.02em; margin:0 0 .8rem; }
+        [aria-labelledby="portfolio-title"] label { display:inline-flex; align-items:center; gap:.6rem; font-size:.85rem; color:#cbd5e1; }
+        #portfolio-source { padding:.65rem; border:1px solid #64748b; border-radius:.5rem; background:#0f172a; color:#f8fafc; font:inherit; }
+        #portfolio-connect { color:#7dd3fc; margin-left:1rem; }
+        [aria-labelledby="portfolio-title"] th { padding:.75rem .6rem; color:#94a3b8; font-size:.7rem; letter-spacing:.05em; }
+        [aria-labelledby="portfolio-title"] tbody tr:hover { background:rgba(56,189,248,.07); }
+        [aria-labelledby="portfolio-title"] td { font-size:.85rem; font-variant-numeric:tabular-nums; }
+        button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible { outline:2px solid #7dd3fc; outline-offset:3px; }
+        @media(prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none!important; animation:none!important; } }
     </style>
 </head>
 <body>
@@ -254,10 +263,12 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
 
         <section class="ops-section" aria-labelledby="portfolio-title">
             <h2 id="portfolio-title">Site karşılaştırması</h2>
-            <p style="color:#94a3b8">Umami oturumları, ziyaretçiler ve etkileşim süresi. Site ziyaretçileri toplamı, siteler arasında tekil kişi sayısı değildir.</p>
+            <label>Veri kaynağı <select id="portfolio-source"><option value="umami">Umami</option><option value="ga4">GA4</option></select></label>
+            <a id="portfolio-connect" href="/api/gsc/start?analytics=1" hidden>Google Analytics salt okunur bağlantısını tamamla</a>
+            <p style="color:#94a3b8">Seçilen kaynağın oturumları, ziyaretçileri ve ortalama oturum süresi. GA4 dönemleri mülkün saat dilimindeki takvim günleridir; Umami dönemleri geriye dönük zaman aralıklarıdır. Site ziyaretçileri toplamı, siteler arasında tekil kişi sayısı değildir.</p>
             <div style="display:flex;gap:1rem;flex-wrap:wrap;margin:1rem 0">
                 <label>Dönem <select id="portfolio-period" style="padding:.65rem;background:#0f172a;color:#f8fafc;border:1px solid #64748b;border-radius:.5rem"><option value="oneDay">Son 24 saat</option><option value="sevenDays" selected>Son 7 gün</option><option value="thirtyDays">Son 30 gün</option></select></label>
-                <label>Site ara <input id="portfolio-search" type="search" placeholder="Site adı" style="padding:.65rem;background:#0f172a;color:#f8fafc;border:1px solid #64748b;border-radius:.5rem" /></label>
+                <label>Site <select id="portfolio-search" style="padding:.65rem;background:#0f172a;color:#f8fafc;border:1px solid #64748b;border-radius:.5rem"><option value="">Tüm siteler</option><option value="qct-commerce-tr">QCT Commerce</option><option value="ctseg">CTSEG</option><option value="qct-studio">QCT Studio</option><option value="olivon-agency">Olivon</option><option value="teyfikgokdemir">Kişisel site</option><option value="mythborn">Mythborn</option></select></label>
             </div>
             <p id="portfolio-state" role="status" style="color:#94a3b8">Ölçüm verisi yükleniyor…</p>
             <div style="overflow:auto"><table style="width:100%;border-collapse:collapse;text-align:left" aria-label="Sitelerin Umami ölçüm karşılaştırması"><thead><tr><th>Site</th><th>Oturum</th><th>Ziyaretçi</th><th>Sayfa</th><th>Ort. süre</th><th>Hemen çıkma</th><th>Durum</th></tr></thead><tbody id="portfolio-rows"></tbody></table></div>
@@ -1069,6 +1080,7 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
                 clearTimeout(timer);
                 const timedOut = error?.name === 'AbortError';
                 const reason = timedOut ? 'yanıt gecikti' : (error?.message || 'bağlantı hatası');
+                if (!cachedData) window.dispatchEvent(new CustomEvent('cansu:umami', {detail:{data:{ok:false,reason:'Umami verisi alınamadı: ' + reason}}}));
                 if (cachedData) {
                     const text = `Umami · API erişilemiyor (${reason}) · önbellek verisi gösteriliyor`;
                     umamiSourceChip.textContent = text;
