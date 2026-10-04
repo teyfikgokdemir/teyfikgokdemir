@@ -252,6 +252,17 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
             </div>
         </header>
 
+        <section class="ops-section" aria-labelledby="portfolio-title">
+            <h2 id="portfolio-title">Site karşılaştırması</h2>
+            <p style="color:#94a3b8">Umami oturumları, ziyaretçiler ve etkileşim süresi. Site ziyaretçileri toplamı, siteler arasında tekil kişi sayısı değildir.</p>
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;margin:1rem 0">
+                <label>Dönem <select id="portfolio-period" style="padding:.65rem;background:#0f172a;color:#f8fafc;border:1px solid #64748b;border-radius:.5rem"><option value="oneDay">Son 24 saat</option><option value="sevenDays" selected>Son 7 gün</option><option value="thirtyDays">Son 30 gün</option></select></label>
+                <label>Site ara <input id="portfolio-search" type="search" placeholder="Site adı" style="padding:.65rem;background:#0f172a;color:#f8fafc;border:1px solid #64748b;border-radius:.5rem" /></label>
+            </div>
+            <p id="portfolio-state" role="status" style="color:#94a3b8">Ölçüm verisi yükleniyor…</p>
+            <div style="overflow:auto"><table style="width:100%;border-collapse:collapse;text-align:left" aria-label="Sitelerin Umami ölçüm karşılaştırması"><thead><tr><th>Site</th><th>Oturum</th><th>Ziyaretçi</th><th>Sayfa</th><th>Ort. süre</th><th>Hemen çıkma</th><th>Durum</th></tr></thead><tbody id="portfolio-rows"></tbody></table></div>
+        </section>
+        <script>import '../scripts/cansu-portfolio.js';</script>
         <nav class="module-nav" aria-label="Cansu modülleri">
             <button class="module-tab is-active" type="button" data-tab="overview">Genel Bakış</button>
             <button class="module-tab" type="button" data-tab="traffic">Trafik &amp; Kaynaklar</button>
@@ -912,6 +923,7 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
         const UMAMI_CACHE_KEY = 'cansu-umami-last-success-v2';
 
         function renderUmamiData(data, options = {}) {
+            window.dispatchEvent(new CustomEvent('cansu:umami', { detail: { data, cached: Boolean(options.cached) } }));
             const cached = Boolean(options.cached);
             if (!data?.configured) {
                 const missing = Array.isArray(data?.missing) && data.missing.length ? ` · eksik: ${data.missing.join(', ')}` : '';
