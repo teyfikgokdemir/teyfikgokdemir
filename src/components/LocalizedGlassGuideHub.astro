@@ -39,8 +39,8 @@ const schema=[
 ---
 <BaseLayout locale={locale} copy={copy} title={`${hubCopy.title} | Teyfik Gökdemir`} description={hubCopy.description} pathname={path} alternates={alt} pageSchema={schema}>
 <Header locale={locale} copy={copy} homePath={`/${locale}/`} languageUrls={alt}/>
-<main class="glass-hub">
-  <header class="hero"><div class="shell"><p class="label">{hubCopy.eyebrow}</p><h1>{hubCopy.title}</h1><p>{hubCopy.description}</p></div></header>
+<main id="main-content" class="glass-hub">
+  <header id="top" class="hero"><div class="shell"><p class="label">{hubCopy.eyebrow}</p><h1>{hubCopy.title}</h1><p>{hubCopy.description}</p></div></header>
   <section class="shell guides" aria-label={hubCopy.title}>
     {glassGuideSlugs.map((slug)=><a href={`/${locale}/blog/glass-guide/${slug}/`}><span>{localizedGlassGuides[locale][slug].eyebrow}</span><h2>{localizedGlassGuides[locale][slug].title}</h2><p>{localizedGlassGuides[locale][slug].description}</p><b aria-hidden="true">↗</b></a>)}
   </section>
