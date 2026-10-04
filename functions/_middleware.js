@@ -1,4 +1,8 @@
 const CANSU_HOST = 'cansu.teyfikgokdemir.com';
+// Temporary dashboard access while the GA4 OAuth connection is repaired.
+// This expires automatically on 2026-10-06 23:59 Europe/Istanbul.
+const TEMP_PUBLIC_UNTIL = Date.parse('2026-10-06T23:59:59+03:00');
+const TEMP_PUBLIC_ACCESS = Date.now() < TEMP_PUBLIC_UNTIL;
 const PUBLIC_PATHS = new Set(['/login', '/login/', '/api/access/request', '/api/access/request/', '/api/access/verify', '/api/access/verify/', '/api/gsc/callback']);
 const MACHINE_PATHS = new Set(['/api/umami-config', '/api/conversions', '/api/sources']);
 // Public measurement clients must load without a dashboard session.
@@ -43,6 +47,8 @@ export async function onRequest(context) {
   if (MACHINE_PATHS.has(url.pathname) && ['POST', 'OPTIONS'].includes(context.request.method)) return context.next();
   if (MEASUREMENT_ASSETS.has(url.pathname)) return context.next();
   if (PUBLIC_PATHS.has(url.pathname)) return context.next();
+
+  if (TEMP_PUBLIC_ACCESS) return context.next();
 
   if (!(await sessionValid(context))) {
     if (url.pathname.startsWith('/api/')) {
