@@ -231,7 +231,25 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
         [aria-labelledby="portfolio-title"] td { font-size:.85rem; font-variant-numeric:tabular-nums; }
         button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible { outline:2px solid #7dd3fc; outline-offset:3px; }
         @media(prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none!important; animation:none!important; } }
-    </style>
+            /* Source navigation: fuchsia identity with lime health accents. */
+        :root { --cansu-accent: #f472b6; --cansu-accent-strong: #e879f9; --cansu-lime: #bef264; }
+        .source-tabs { display: inline-flex; gap: .35rem; padding: .35rem; margin: .2rem 0 1rem; border: 1px solid rgba(244,114,182,.28); border-radius: .9rem; background: rgba(30,10,29,.42); }
+        .source-tab { min-height: 2.65rem; padding: .65rem 1rem; border: 0; border-radius: .65rem; background: transparent; color: #cbd5e1; font: inherit; font-size: .78rem; font-weight: 800; cursor: pointer; }
+        .source-tab:hover { color: #fce7f3; background: rgba(190,24,93,.18); }
+        .source-tab.is-active { color: #fff1f2; background: linear-gradient(135deg, rgba(190,24,93,.82), rgba(217,70,239,.55)); box-shadow: 0 0 0 1px rgba(244,114,182,.42), 0 8px 22px rgba(190,24,93,.2); }
+        #portfolio-source { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+        #portfolio-connect { display: none !important; }
+        .source-insight-panel { margin-bottom: 1.15rem; padding: 1.15rem 1.3rem; border: 1px solid rgba(244,114,182,.24); border-radius: 1.15rem; background: linear-gradient(145deg, rgba(45,12,45,.78), rgba(10,14,29,.94)); }
+        .source-chip--lime { color: #d9f99d; border-color: rgba(190,242,100,.35); background: rgba(101,163,13,.16); }
+        .clarity-insight-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: .7rem; }
+        .clarity-insight-grid > div { padding: .85rem; border: 1px solid rgba(190,242,100,.18); border-radius: .8rem; background: rgba(20,35,12,.38); }
+        .clarity-insight-grid strong { display: block; color: #f7fee7; font-size: .78rem; }
+        .clarity-insight-grid span { display: block; margin-top: .3rem; color: #bef264; font-size: .67rem; }
+        .dash-header h1 > span { border-color: rgba(244,114,182,.9) !important; box-shadow: 0 0 0 4px rgba(244,114,182,.1), 0 8px 22px rgba(0,0,0,.3) !important; }
+        .module-tab.is-active { background: linear-gradient(135deg, rgba(190,24,93,.55), rgba(126,34,206,.3)); box-shadow: inset 0 0 0 1px rgba(244,114,182,.4), 0 8px 20px rgba(190,24,93,.2); }
+        #header-refresh:hover, #refresh-data:hover { border-color: rgba(190,242,100,.65) !important; background: rgba(101,163,13,.16) !important; }
+        #live-status { color: #bef264 !important; border-color: rgba(190,242,100,.35) !important; background: rgba(101,163,13,.12) !important; }
+        @media (max-width: 640px) { .source-tabs { display: flex; width: 100%; } .source-tab { flex: 1; padding-inline: .55rem; } .clarity-insight-grid { grid-template-columns: 1fr; } }</style>
 </head>
 <body>
     <div class="bg-overlay"></div>
@@ -263,8 +281,12 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
 
         <section class="ops-section" aria-labelledby="portfolio-title">
             <h2 id="portfolio-title">Site karşılaştırması</h2>
-            <label>Veri kaynağı <select id="portfolio-source"><option value="umami">Umami</option><option value="ga4">GA4</option></select></label>
-            <a id="portfolio-connect" href="/api/gsc/start?analytics=1" style="display:inline-flex;align-items:center;gap:.4rem;margin-top:.8rem;color:#7dd3fc;border:1px solid rgba(125,211,252,.45);border-radius:.6rem;padding:.6rem .75rem;text-decoration:none" aria-label="GA4 salt okunur bağlantısını başlat">GA4 bağlantısını başlat (salt okunur)</a>
+            <div class="source-tabs" role="tablist" aria-label="Ölçüm kaynakları">
+                <button class="source-tab is-active" type="button" role="tab" aria-selected="true" data-source="umami">Umami</button>
+                <button class="source-tab" type="button" role="tab" aria-selected="false" data-source="ga4">GA4</button>
+                <button class="source-tab" type="button" role="tab" aria-selected="false" data-source="clarity">Clarity</button>
+            </div>
+            <select id="portfolio-source" aria-hidden="true" tabindex="-1"><option value="umami">Umami</option><option value="ga4">GA4</option><option value="clarity">Clarity</option></select>
             <p style="color:#94a3b8">Seçilen kaynağın oturumları, ziyaretçileri ve ortalama oturum süresi. GA4 dönemleri mülkün saat dilimindeki takvim günleridir; Umami dönemleri geriye dönük zaman aralıklarıdır. Site ziyaretçileri toplamı, siteler arasında tekil kişi sayısı değildir.</p>
             <div style="display:flex;gap:1rem;flex-wrap:wrap;margin:1rem 0">
                 <label>Dönem <select id="portfolio-period" style="padding:.65rem;background:#0f172a;color:#f8fafc;border:1px solid #64748b;border-radius:.5rem"><option value="oneDay">Son 24 saat</option><option value="sevenDays" selected>Son 7 gün</option><option value="thirtyDays">Son 30 gün</option></select></label>
@@ -274,6 +296,10 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
             <div style="overflow:auto"><table style="width:100%;border-collapse:collapse;text-align:left" aria-label="Sitelerin Umami ölçüm karşılaştırması"><thead><tr><th>Site</th><th>Oturum</th><th>Ziyaretçi</th><th>Sayfa</th><th>Ort. süre</th><th>Hemen çıkma</th><th>Durum</th></tr></thead><tbody id="portfolio-rows"></tbody></table></div>
         </section>
         <script>import '../scripts/cansu-portfolio.js';</script>
+        <section id="clarity-source-panel" class="source-insight-panel" hidden aria-live="polite">
+            <div class="ops-section__head"><div><h2 class="ops-section__title">Clarity · davranış içgörüleri</h2><p class="ops-section__copy">Oturum kayıtları, ısı haritaları ve etkileşim sinyalleri Microsoft Clarity tarafında tutulur. Bu görünüm bağlantı durumunu gösterir; ham kayıtlar Clarity çalışma alanında açılır.</p></div><span class="source-chip source-chip--lime">Clarity · canlı ölçüm</span></div>
+            <div class="clarity-insight-grid"><div><strong>Oturum kayıtları</strong><span>Clarity çalışma alanında</span></div><div><strong>Isı haritaları</strong><span>Sayfa bazlı davranış</span></div><div><strong>Maskeleme</strong><span>PII koruması etkin</span></div></div>
+        </section>
         <nav class="module-nav" aria-label="Cansu modülleri">
             <button class="module-tab is-active" type="button" data-tab="overview">Genel Bakış</button>
             <button class="module-tab" type="button" data-tab="traffic">Trafik &amp; Kaynaklar</button>
