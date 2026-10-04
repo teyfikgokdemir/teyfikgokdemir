@@ -1117,11 +1117,16 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
                 conversionOverview.textContent = formatNumber(data.periods?.thirtyDays?.total || 0);
                 const verified = Number(data.periods?.thirtyDays?.byQuality?.server || 0);
                 const browser = Number(data.periods?.thirtyDays?.byQuality?.browser || 0);
-                conversionOverviewDetail.textContent = verified ? `${formatNumber(verified)} doğrulanmış · ${formatNumber(browser)} tarayıcı olayı` : `${formatNumber(browser)} tarayıcı olayı · server event bekleniyor`;
+                conversionOverviewDetail.textContent = `${formatNumber(browser)} tarayıcı olayı · ${formatNumber(verified)} server etiketli olay (doğrulanmamış)`;
                 const byType = Object.entries(data.periods?.thirtyDays?.byType || {}).sort((a,b) => Number(b[1]) - Number(a[1]));
-                conversionTypes.innerHTML = byType.length
+                const contactTypes = ['whatsapp_click', 'telegram_click', 'phone_click', 'email_click'];
+                const totals = data.periods?.thirtyDays?.byType || {};
+                const contactIntent = contactTypes.reduce((sum, type) => sum + Number(totals[type] || 0), 0);
+                const formSignals = Number(totals.form_submit || 0) + Number(totals.rfq_submit || 0);
+                const signalSummary = `<div class="attention-card"><strong>İletişim niyeti</strong><span>${formatNumber(contactIntent)} tıklama · son 30 gün</span></div><div class="attention-card"><strong>Form / RFQ sinyali</strong><span>${formatNumber(formSignals)} olay · gönderim başarısı ayrıca doğrulanmalı</span></div><div class="attention-card"><strong>Gerçek lead</strong><span>Doğrulanmış backend / CRM bağlantısı henüz yok. Tıklamalar lead sayılmaz.</span></div>`;
+                conversionTypes.innerHTML = signalSummary + (byType.length
                     ? byType.map(([type,count]) => `<div class="attention-card"><strong>${escapeHtml(conversionLabels[type] || type)}</strong><span>${formatNumber(Number(count))} · son 30 gün</span></div>`).join('')
-                    : '<div class="attention-card"><strong>Henüz dönüşüm olayı yok</strong><span>Form, RFQ ve CTA event entegrasyonları bağlandıkça burada görünecek.</span></div>';
+                    : '<div class="attention-card"><strong>Henüz dönüşüm olayı yok</strong><span>Form, RFQ ve CTA event entegrasyonları bağlandıkça burada görünecek.</span></div>');
             } catch {
                 conv1d.textContent = '—';
                 conv7d.textContent = '—';
