@@ -17,6 +17,7 @@ interface Props {
   alternates?: Partial<Record<Locale | 'fa' | 'x-default', string>>;
   ogType?: 'website' | 'article';
   pageSchema?: Record<string, unknown>;
+  noindex?: boolean;
   articleMeta?: {
     published: string;
     modified: string;
@@ -36,6 +37,7 @@ const {
   alternates,
   ogType = 'website',
   pageSchema,
+  noindex = false,
   articleMeta,
 } = Astro.props;
 
@@ -51,6 +53,7 @@ const homePath = locale === 'tr' ? '/' : `/${locale}/`;
   alternates={alternates}
   ogType={ogType}
   pageSchema={pageSchema}
+  noindex={noindex}
 >
   <Header locale={locale as Locale} copy={copy} homePath={homePath} languageUrls={alternates} />
 

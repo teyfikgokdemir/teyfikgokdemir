@@ -16,6 +16,7 @@ interface Props {
   alternates?: Partial<Record<Locale | 'fa' | 'x-default', string>>;
   ogType?: 'website' | 'article';
   pageSchema?: Record<string, unknown> | Record<string, unknown>[];
+  noindex?: boolean;
 }
 
 const {
@@ -27,6 +28,7 @@ const {
   alternates,
   ogType = 'website',
   pageSchema,
+  noindex = false,
 } = Astro.props;
 
 const localeUrl = (item: SupportedLocale) => item === 'tr' ? '/' : '/' + item + '/';
@@ -235,7 +237,7 @@ const jsonLd = {
     <link rel="manifest" href="/site.webmanifest?v=7" />
     <link rel="ai-catalog" href="/.well-known/ai-catalog.json" type="application/ai-catalog+json" />
     <link rel="ard" href="/.well-known/ard.json" type="application/ai-catalog+json" />
-    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1" />
+    <meta name="robots" content={noindex ? 'noindex,follow' : 'index,follow,max-image-preview:large,max-snippet:-1'} />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
