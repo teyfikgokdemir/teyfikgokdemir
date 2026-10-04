@@ -4,7 +4,7 @@ import { extname, join, resolve } from 'node:path';
 import { existsSync } from 'node:fs';
 import { chromium } from 'playwright-core';
 
-const executablePath = ['/usr/bin/chromium', '/usr/bin/google-chrome'].find((candidate) => existsSync(candidate));
+const executablePath = [process.env.CHROME_PATH, '/usr/bin/chromium', '/usr/bin/google-chrome', 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe'].filter(Boolean).find((candidate) => existsSync(candidate));
 if (!executablePath) throw new Error('Chrome or Chromium executable was not found.');
 
 const dist = resolve('dist');
@@ -37,10 +37,10 @@ try {
   for (const viewport of viewports) {
     const page = await browser.newPage({ viewport, reducedMotion: 'no-preference' });
     await page.goto('http://127.0.0.1:4324/', { waitUntil: 'networkidle' });
-    await page.locator('.venture-marquee').scrollIntoViewIfNeeded();
+    await page.locator('.gap-marquee').scrollIntoViewIfNeeded();
     const result = await page.evaluate(async () => {
-      const root = document.querySelector('.venture-marquee');
-      const track = document.querySelector('.venture-marquee__track');
+      const root = document.querySelector('.gap-marquee');
+      const track = document.querySelector('.gap-marquee-track');
       const style = getComputedStyle(track);
       const first = style.transform;
       await new Promise((resolvePromise) => setTimeout(resolvePromise, 1200));
@@ -58,12 +58,13 @@ try {
         rootScrollWidth: root.scrollWidth,
         documentScrollWidth: document.documentElement.scrollWidth,
         trackWidth: track.getBoundingClientRect().width,
-        groupCount: document.querySelectorAll('.venture-marquee__group').length,
-        linkCount: document.querySelectorAll('.venture-marquee__item').length,
+        groupCount: document.querySelectorAll('.gap-marquee-group').length,
+        itemCount: document.querySelectorAll('.gap-marquee-group span').length,
+        matchingGroups: document.querySelectorAll('.gap-marquee-group')[0].textContent === document.querySelectorAll('.gap-marquee-group')[1].textContent,
       };
     });
     console.log(`${viewport.name}: ${JSON.stringify(result)}`);
-    if (result.reducedMotion || result.animationName !== 'ventureMarqueeFlow' || result.animationPlayState !== 'running' || !result.moved || result.documentScrollWidth !== result.width || result.groupCount !== 2 || result.linkCount !== 8) {
+    if (result.reducedMotion || result.animationName !== 'gapMarquee' || result.animationPlayState !== 'running' || !result.moved || result.documentScrollWidth !== result.width || result.groupCount !== 2 || result.itemCount !== 10 || !result.matchingGroups || parseFloat(result.animationDuration) <= 0) {
       failures.push(`${viewport.name}: ${JSON.stringify(result)}`);
     }
     await page.close();
@@ -72,8 +73,8 @@ try {
   const reducedPage = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
   await reducedPage.goto('http://127.0.0.1:4324/', { waitUntil: 'networkidle' });
   const reduced = await reducedPage.evaluate(() => {
-    const track = document.querySelector('.venture-marquee__track');
-    const hiddenGroup = document.querySelector('.venture-marquee__group[aria-hidden="true"]');
+    const track = document.querySelector('.gap-marquee-track');
+    const hiddenGroup = document.querySelector('.gap-marquee-group[aria-hidden="true"]');
     const style = getComputedStyle(track);
     return { animationName: style.animationName, animationPlayState: style.animationPlayState, hiddenGroupDisplay: getComputedStyle(hiddenGroup).display, trackWidth: track.getBoundingClientRect().width, viewportWidth: innerWidth };
   });
