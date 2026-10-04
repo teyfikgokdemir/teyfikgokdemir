@@ -222,6 +222,15 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
             .module-tab { min-width:8.8rem; }
         }
 
+        #portfolio-title { font-size:1.15rem; letter-spacing:-.02em; margin:0 0 .8rem; }
+        [aria-labelledby="portfolio-title"] label { display:inline-flex; align-items:center; gap:.6rem; font-size:.85rem; color:#cbd5e1; }
+        #portfolio-source { padding:.65rem; border:1px solid #64748b; border-radius:.5rem; background:#0f172a; color:#f8fafc; font:inherit; }
+        #portfolio-connect { color:#7dd3fc; margin-left:1rem; }
+        [aria-labelledby="portfolio-title"] th { padding:.75rem .6rem; color:#94a3b8; font-size:.7rem; letter-spacing:.05em; }
+        [aria-labelledby="portfolio-title"] tbody tr:hover { background:rgba(56,189,248,.07); }
+        [aria-labelledby="portfolio-title"] td { font-size:.85rem; font-variant-numeric:tabular-nums; }
+        button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible { outline:2px solid #7dd3fc; outline-offset:3px; }
+        @media(prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none!important; animation:none!important; } }
     </style>
 </head>
 <body>
@@ -1071,6 +1080,7 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
                 clearTimeout(timer);
                 const timedOut = error?.name === 'AbortError';
                 const reason = timedOut ? 'yanıt gecikti' : (error?.message || 'bağlantı hatası');
+                if (!cachedData) window.dispatchEvent(new CustomEvent('cansu:umami', {detail:{data:{ok:false,reason:'Umami verisi alınamadı: ' + reason}}}));
                 if (cachedData) {
                     const text = `Umami · API erişilemiyor (${reason}) · önbellek verisi gösteriliyor`;
                     umamiSourceChip.textContent = text;
