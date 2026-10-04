@@ -657,6 +657,7 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
         const moduleTabs = Array.from(document.querySelectorAll('[data-tab]'));
         const dashboardPanels = Array.from(document.querySelectorAll('[data-dashboard-panel]'));
         const portfolioSection = document.getElementById('portfolio-section');
+        const portfolioSource = document.getElementById('portfolio-source');
         const claritySourcePanel = document.getElementById('clarity-source-panel');
         const formatTime = (value) => value ? new Date(value).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'medium' }) : '—';
         const formatNumber = (value) => typeof value === 'number' ? new Intl.NumberFormat('tr-TR').format(value) : '—';
@@ -960,9 +961,9 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
             });
             if (portfolioSection) portfolioSection.hidden = !['umami','ga4'].includes(target);
             if (claritySourcePanel) claritySourcePanel.hidden = target !== 'clarity';
-            if (source && ['umami','ga4','clarity'].includes(target) && source.value !== target) {
-                source.value = target;
-                source.dispatchEvent(new Event('change'));
+            if (portfolioSource && ['umami','ga4','clarity'].includes(target) && portfolioSource.value !== target) {
+                portfolioSource.value = target;
+                portfolioSource.dispatchEvent(new Event('change'));
             }
             if (pushHash && window.location.hash !== `#${target}`) history.replaceState(null, '', `#${target}`);
         };
