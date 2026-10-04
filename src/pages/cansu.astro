@@ -908,7 +908,12 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
                     const ok = h.ok && (!g.latest || g.latest.conclusion === 'success');
                     statusCell.innerHTML = `<span style="padding:.25rem .75rem;border-radius:9999px;background:${ok ? 'rgba(52,211,153,.2)' : 'rgba(248,113,113,.2)'};color:${ok ? '#34d399' : '#f87171'};font-size:.75rem;border:1px solid ${ok ? 'rgba(52,211,153,.4)' : 'rgba(248,113,113,.4)'}">${ok ? 'Sağlıklı' : 'Kontrol gerekli'}</span><div style="color:#94a3b8;font-size:.7rem;margin-top:.35rem">${h.status || '—'} · ${h.ms} ms${h.ssl?.valid ? ' · SSL ✓' : ''}</div>`;
                 });
-                document.getElementById('data-source-note').textContent = data.source.cloudflareAnalytics ? 'Cloudflare trafik + HTTP sağlık + GitHub Actions; 5 dakikada bir yenilenir.' : 'HTTP sağlık + GitHub Actions; Cloudflare Analytics secret yapılandırılmadı.';
+                const githubActive = data.sites.filter((site) => site.github?.ok).length;
+                const healthActive = data.sites.filter((site) => site.health?.ok && site.health?.ssl?.valid !== false).length;
+                const cloudflareLabel = `${cfActive}/${data.sites.length} Cloudflare`;
+                const githubLabel = `${githubActive}/${data.sites.length} GitHub`;
+                const healthLabel = `${healthActive}/${data.sites.length} HTTP/SSL`;
+                document.getElementById('data-source-note').textContent = `${cloudflareLabel} · ${githubLabel} · ${healthLabel}; yalnızca başarılı kaynaklar canlı olarak işaretlenir. 5 dakikada bir yenilenir.`;
                 document.getElementById('last-updated').textContent = `Son güncelleme: ${formatTime(data.generatedAt)}`;
                 setLiveState(`Canlı kontrol: ${formatTime(data.generatedAt)}`);
             } catch (error) {
