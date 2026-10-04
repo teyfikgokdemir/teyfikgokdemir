@@ -5,7 +5,11 @@ interface Env {
   CANSU_GSC_TOKENS?: KVNamespace;
 }
 
-const redirect = (request: Request, path: string, status = 302) => Response.redirect(new URL(path, request.url).toString(), status);
+const CANSU_ORIGIN = 'https://cansu.teyfikgokdemir.com';
+const redirect = (request: Request, path: string, status = 302) => {
+  const target = path.startsWith('http') ? path : new URL(path, CANSU_ORIGIN).toString();
+  return Response.redirect(target, status);
+};
 const json = (data: unknown, status = 200) => new Response(JSON.stringify(data), {
   status,
   headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', 'x-robots-tag': 'noindex, nofollow' },
