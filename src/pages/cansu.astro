@@ -934,6 +934,7 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
         const UMAMI_CACHE_KEY = 'cansu-umami-last-success-v2';
 
         function renderUmamiData(data, options = {}) {
+            window.cansuUmamiSnapshot = { data, cached: Boolean(options.cached) };
             window.dispatchEvent(new CustomEvent('cansu:umami', { detail: { data, cached: Boolean(options.cached) } }));
             const cached = Boolean(options.cached);
             if (!data?.configured) {
@@ -1044,7 +1045,7 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
             }
 
             const controller = new AbortController();
-            const timer = setTimeout(() => controller.abort(), 25000);
+            const timer = setTimeout(() => controller.abort(), 60000);
             try {
                 const response = await fetch('/api/umami', {
                     cache: 'no-store',

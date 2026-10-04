@@ -37,6 +37,8 @@ function render() {
   if (!sites.length) state.textContent += ' · Seçilen site için veri bulunamadı';
 }
 window.addEventListener('cansu:umami', event => { snapshots.umami = event.detail; render(); });
+if (window.cansuUmamiSnapshot) snapshots.umami = window.cansuUmamiSnapshot;
+render();
 source.addEventListener('change', render);
 async function loadGa4() {
   try {
