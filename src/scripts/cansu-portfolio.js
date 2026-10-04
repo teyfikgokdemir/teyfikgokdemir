@@ -10,6 +10,11 @@ const clarityStatus = document.getElementById('clarity-api-status');
 const clarityUpdated = document.getElementById('clarity-api-updated');
 const claritySessions = document.getElementById('clarity-sessions');
 const clarityVisitors = document.getElementById('clarity-visitors');
+const claritySiteGrid = document.getElementById('clarity-site-grid');
+const claritySites = [
+  ['qct-commerce-tr', 'QCT Commerce'], ['ctseg', 'CTSEG'], ['qct-studio', 'QCT Studio'],
+  ['olivon-agency', 'Olivon'], ['teyfikgokdemir', 'Kişisel site'], ['mythborn', 'Mythborn']
+];
 const snapshots = {};
 const number = value => new Intl.NumberFormat('tr-TR').format(value);
 function render() {
@@ -53,16 +58,24 @@ async function loadClarity() {
   if (clarityState?.dataset.loading === 'true') return;
   if (clarityState) clarityState.dataset.loading = 'true';
   try {
-    const response = await fetch(`/api/clarity?numOfDays=1&site=${encodeURIComponent(search.value || 'ctseg')}`, { signal: AbortSignal.timeout(15000) });
-    const payload = await response.json();
-    if (!response.ok || !payload.ok) throw new Error(payload.reason || 'Clarity API kullanılamıyor');
+    const selected = search.value ? claritySites.filter(([key]) => key === search.value) : claritySites;
+    const results = await Promise.all(selected.map(async ([key, name]) => {
+      try { const response = await fetch(`/api/clarity?numOfDays=1&site=${encodeURIComponent(key)}`, { signal: AbortSignal.timeout(15000) }); const payload = await response.json(); return { key, name, payload, ok: response.ok && payload.ok }; }
+      catch (error) { return { key, name, payload: { reason: error instanceof Error ? error.message : 'API verisi alınamadı' }, ok: false }; }
+    }));
+    if (!results.some(result => result.ok)) throw new Error(results[0]?.payload?.reason || 'Clarity API kullanılamıyor');
     if (clarityState) clarityState.textContent = 'Clarity · bağlı';
     if (clarityStatus) clarityStatus.textContent = 'API verisi alındı';
     if (clarityUpdated) clarityUpdated.textContent = new Date(payload.generatedAt).toLocaleString('tr-TR');
-    const traffic = payload.data?.find(item => item.metricName === 'Traffic')?.information || [];
+    const trafficFor = result => result.payload.data?.find(item => item.metricName === 'Traffic')?.information || [];
+    const traffic = results.flatMap(trafficFor);
     const sum = key => traffic.reduce((total, row) => total + Number(row[key] || 0), 0);
     if (claritySessions) claritySessions.textContent = number(sum('totalSessionCount'));
     if (clarityVisitors) clarityVisitors.textContent = number(sum('distinctUserCount'));
+    if (claritySiteGrid) claritySiteGrid.innerHTML = results.map(result => {
+      const rows = trafficFor(result); const sessions = rows.reduce((total, row) => total + Number(row.totalSessionCount || 0), 0); const visitors = rows.reduce((total, row) => total + Number(row.distinctUserCount || 0), 0);
+      return `<article class="quality-card"><div class="quality-card__head"><div class="quality-card__name">${result.name}</div><span class="status-pill ${result.ok ? 'status-pill--good' : 'status-pill--warn'}">${result.ok ? 'BAĞLI' : 'BEKLENİYOR'}</span></div><div class="quality-lines"><div class="quality-line"><span>Oturum · 24s</span><strong>${result.ok ? number(sessions) : '—'}</strong></div><div class="quality-line"><span>Tekil ziyaretçi · 24s</span><strong>${result.ok ? number(visitors) : '—'}</strong></div><div class="quality-line"><span>Durum</span><strong>${result.ok ? 'Clarity API verisi alındı' : (result.payload.reason || 'Veri yok')}</strong></div></div></article>`;
+    }).join('');
   } catch (error) {
     if (clarityState) { clarityState.textContent = 'Clarity · token bekleniyor'; clarityState.classList.add('is-warning'); }
     if (clarityStatus) clarityStatus.textContent = error instanceof Error ? error.message : 'API verisi alınamadı';
