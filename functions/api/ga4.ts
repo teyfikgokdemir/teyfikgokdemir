@@ -12,6 +12,17 @@ async function fetchJson(url: string, init: RequestInit) {
   if (!body || typeof body !== 'object' || Array.isArray(body)) throw new Error('invalid_response');
   return body;
 }
+const metricNames = ['sessions','totalUsers','screenPageViews','averageSessionDuration','bounceRate'];
+async function runPeriod(property: string, accessToken: string, startDate: string, endDate: string) {
+  const report = await fetchJson(`https://analyticsdata.googleapis.com/v1beta/properties/${property}:runReport`, {
+    method:'POST',
+    headers:{authorization:`Bearer ${accessToken}`,'content-type':'application/json'},
+    body:JSON.stringify({dateRanges:[{startDate,endDate}],metrics:metricNames.map(name=>({name}))}),
+  });
+  const values = report.rows?.[0]?.metricValues?.map((v:any)=>Number(v.value)) || [0,0,0,0,0];
+  if (values.length !== metricNames.length || values.some((v:number)=>!Number.isFinite(v))) throw new Error('invalid_metrics');
+  return {visits:values[0], visitors:values[1], pageviews:values[2], totaltime:values[3]*values[0], bounces:values[4]*values[0]};
+}
 export const onRequestGet: PagesFunction<Env> = async ({env}) => {
   const refresh = await env.CANSU_GSC_TOKENS?.get('ga4_refresh_token');
   if (!refresh || !env.GSC_CLIENT_ID || !env.GSC_CLIENT_SECRET) return json({ok:false, configured:false, source:'GA4', connectUrl:'/api/gsc/start?analytics=1', reason:'GA4 salt okunur Google bağlantısı gerekli'});
@@ -20,14 +31,11 @@ export const onRequestGet: PagesFunction<Env> = async ({env}) => {
     if (typeof token.access_token !== 'string') throw new Error('invalid_token');
     const results = await Promise.all(sites.map(async ([key,name,property]) => {
       try {
-        const report = await fetchJson(`https://analyticsdata.googleapis.com/v1beta/properties/${property}:runReport`, {method:'POST',headers:{authorization:`Bearer ${token.access_token}`,'content-type':'application/json'},body:JSON.stringify({dateRanges:[{name:'oneDay',startDate:'today',endDate:'today'},{name:'sevenDays',startDate:'6daysAgo',endDate:'today'},{name:'thirtyDays',startDate:'29daysAgo',endDate:'today'}],metrics:['sessions','totalUsers','screenPageViews','averageSessionDuration','bounceRate'].map(name=>({name}))})});
-        const periods: Record<string, unknown> = {};
-        for (const [index, period] of ['oneDay','sevenDays','thirtyDays'].entries()) {
-          const row = (report.rows || []).find((r:any) => r.dimensionValues?.some((d:any)=>d.value === period));
-          const values = row?.metricValues?.map((v:any)=>Number(v.value)) || [0,0,0,0,0];
-          if (values.some((v:number)=>!Number.isFinite(v))) throw new Error('invalid_metrics');
-          periods[period] = {visits:values[0], visitors:values[1], pageviews:values[2], totaltime:values[3]*values[0], bounces:values[4]*values[0]};
-        }
+        const periods = {
+          oneDay: await runPeriod(property, token.access_token, 'today', 'today'),
+          sevenDays: await runPeriod(property, token.access_token, '6daysAgo', 'today'),
+          thirtyDays: await runPeriod(property, token.access_token, '29daysAgo', 'today'),
+        };
         return {key,name,connected:true,property,periods};
       } catch { return {key,name,connected:false,reason:'GA4 rapor erişimi / API yapılandırması kontrol edilmeli'}; }
     }));
