@@ -231,25 +231,88 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
         [aria-labelledby="portfolio-title"] td { font-size:.85rem; font-variant-numeric:tabular-nums; }
         button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible { outline:2px solid #7dd3fc; outline-offset:3px; }
         @media(prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none!important; animation:none!important; } }
-            /* Source navigation: fuchsia identity with lime health accents. */
-        :root { --cansu-accent: #f472b6; --cansu-accent-strong: #e879f9; --cansu-lime: #bef264; }
-        .source-tabs { display: inline-flex; gap: .35rem; padding: .35rem; margin: .2rem 0 1rem; border: 1px solid rgba(244,114,182,.28); border-radius: .9rem; background: rgba(30,10,29,.42); }
-        .source-tab { min-height: 2.65rem; padding: .65rem 1rem; border: 0; border-radius: .65rem; background: transparent; color: #cbd5e1; font: inherit; font-size: .78rem; font-weight: 800; cursor: pointer; }
-        .source-tab:hover { color: #fce7f3; background: rgba(190,24,93,.18); }
-        .source-tab.is-active { color: #fff1f2; background: linear-gradient(135deg, rgba(190,24,93,.82), rgba(217,70,239,.55)); box-shadow: 0 0 0 1px rgba(244,114,182,.42), 0 8px 22px rgba(190,24,93,.2); }
-        #portfolio-source { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
-        #portfolio-connect { display: none !important; }
-        .source-insight-panel { margin-bottom: 1.15rem; padding: 1.15rem 1.3rem; border: 1px solid rgba(244,114,182,.24); border-radius: 1.15rem; background: linear-gradient(145deg, rgba(45,12,45,.78), rgba(10,14,29,.94)); }
-        .source-chip--lime { color: #d9f99d; border-color: rgba(190,242,100,.35); background: rgba(101,163,13,.16); }
-        .clarity-insight-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: .7rem; }
-        .clarity-insight-grid > div { padding: .85rem; border: 1px solid rgba(190,242,100,.18); border-radius: .8rem; background: rgba(20,35,12,.38); }
-        .clarity-insight-grid strong { display: block; color: #f7fee7; font-size: .78rem; }
-        .clarity-insight-grid span { display: block; margin-top: .3rem; color: #bef264; font-size: .67rem; }
-        .dash-header h1 > span { border-color: rgba(244,114,182,.9) !important; box-shadow: 0 0 0 4px rgba(244,114,182,.1), 0 8px 22px rgba(0,0,0,.3) !important; }
-        .module-tab.is-active { background: linear-gradient(135deg, rgba(190,24,93,.55), rgba(126,34,206,.3)); box-shadow: inset 0 0 0 1px rgba(244,114,182,.4), 0 8px 20px rgba(190,24,93,.2); }
-        #header-refresh:hover, #refresh-data:hover { border-color: rgba(190,242,100,.65) !important; background: rgba(101,163,13,.16) !important; }
-        #live-status { color: #bef264 !important; border-color: rgba(190,242,100,.35) !important; background: rgba(101,163,13,.12) !important; }
-        @media (max-width: 640px) { .source-tabs { display: flex; width: 100%; } .source-tab { flex: 1; padding-inline: .55rem; } .clarity-insight-grid { grid-template-columns: 1fr; } }</style>
+
+        /* Cansu v2 visual system: calm surfaces, clearer hierarchy, touch-first controls. */
+        :root {
+            --cansu-bg: #050816;
+            --cansu-surface: rgba(12, 20, 39, .88);
+            --cansu-surface-strong: rgba(15, 27, 51, .96);
+            --cansu-line: rgba(148, 163, 184, .18);
+            --cansu-muted: #9aa9c0;
+            --cansu-accent: #67e8f9;
+            --cansu-accent-2: #a78bfa;
+        }
+        body { background: var(--cansu-bg); letter-spacing: .005em; }
+        .dashboard-bg { opacity: .42; filter: saturate(.72) contrast(1.08); }
+        .bg-overlay { background: radial-gradient(circle at 50% -10%, rgba(14, 116, 144, .16), transparent 46%), rgba(3, 7, 18, .78); }
+        .content-layer { max-width: 82rem; margin-inline: auto; }
+        #dashboard-content { padding: 1.5rem clamp(.85rem, 3vw, 2.25rem) 3rem !important; }
+        .dash-header {
+            margin-bottom: 1.25rem !important;
+            padding: 1.15rem 1.25rem !important;
+            border: 1px solid var(--cansu-line) !important;
+            border-radius: 1.35rem;
+            background: linear-gradient(135deg, rgba(15, 31, 57, .88), rgba(7, 13, 29, .82));
+            box-shadow: 0 18px 48px rgba(0, 0, 0, .24), inset 0 1px 0 rgba(255,255,255,.05);
+        }
+        .dash-header h1 { font-size: clamp(1.35rem, 2.7vw, 1.85rem) !important; letter-spacing: -.035em; }
+        .dash-header h1 > span { border-color: rgba(103, 232, 249, .85) !important; box-shadow: 0 0 0 4px rgba(103,232,249,.08), 0 8px 22px rgba(0,0,0,.3) !important; }
+        .dash-header p { color: var(--cansu-muted) !important; }
+        #live-status { background: rgba(34, 197, 94, .1) !important; color: #86efac !important; border-color: rgba(74, 222, 128, .28) !important; }
+        #header-refresh, #refresh-data { min-height: 2.75rem; border-color: rgba(103, 232, 249, .28) !important; background: rgba(15, 23, 42, .72) !important; transition: border-color .18s ease, transform .18s ease, background .18s ease; }
+        #header-refresh:hover, #refresh-data:hover { border-color: rgba(103, 232, 249, .65) !important; background: rgba(14, 116, 144, .18) !important; transform: translateY(-1px); }
+        .glass, .ops-section, .insights-section, .country-section { border-color: var(--cansu-line); box-shadow: 0 20px 60px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.035); }
+        .ops-section { padding: clamp(1rem, 2vw, 1.5rem); border-radius: 1.35rem; background: linear-gradient(145deg, rgba(15, 29, 54, .92), rgba(5, 12, 27, .94)); }
+        .ops-section__title { font-size: clamp(1rem, 1.8vw, 1.15rem); letter-spacing: -.02em; }
+        .ops-section__copy { max-width: 68rem; color: var(--cansu-muted); }
+        .module-nav { margin-bottom: 1.15rem; border-color: var(--cansu-line); background: rgba(5, 12, 27, .82); box-shadow: 0 16px 42px rgba(0,0,0,.2); }
+        .module-tab { min-height: 2.7rem; }
+        .module-tab.is-active { background: linear-gradient(135deg, rgba(14,116,144,.42), rgba(79,70,229,.22)); box-shadow: inset 0 0 0 1px rgba(103,232,249,.28), 0 8px 20px rgba(0,0,0,.2); }
+        .analytics-card, .quality-card, .attention-card, .source-panel, .country-panel, .seo-site { border-color: rgba(148,163,184,.16); background: linear-gradient(145deg, rgba(15,27,51,.9), rgba(5,12,27,.9)); }
+        .analytics-card:hover, .country-panel:hover { border-color: rgba(103,232,249,.38); }
+        #portfolio-title { font-size: clamp(1.15rem, 2.2vw, 1.35rem); }
+        [aria-labelledby="portfolio-title"] label { color: #cbd5e1; font-weight: 650; }
+        #portfolio-source, #portfolio-period, #portfolio-search { min-height: 2.75rem; padding: .65rem .8rem !important; border: 1px solid rgba(148,163,184,.32) !important; border-radius: .7rem !important; background: rgba(3, 10, 24, .82) !important; color: #f8fafc !important; }
+        #portfolio-source:focus, #portfolio-period:focus, #portfolio-search:focus { border-color: rgba(103,232,249,.75) !important; }
+        #portfolio-connect { margin-left: 0; margin-top: .75rem !important; color: #a5f3fc !important; border-color: rgba(103,232,249,.3) !important; background: rgba(14,116,144,.12); border-radius: .7rem !important; min-height: 2.75rem; padding-inline: .9rem !important; }
+        #portfolio-connect:hover { background: rgba(14,116,144,.25); }
+        #portfolio-state { display: inline-flex; padding: .45rem .7rem; border: 1px solid rgba(148,163,184,.16); border-radius: .65rem; background: rgba(3,10,24,.42); }
+        [aria-labelledby="portfolio-title"] table { min-width: 46rem; }
+        [aria-labelledby="portfolio-title"] th { padding: .85rem .7rem; background: rgba(3,10,24,.58); }
+        [aria-labelledby="portfolio-title"] td { padding: .9rem .7rem; }
+        @media (max-width: 640px) {
+            #dashboard-content { padding: .75rem .7rem 2rem !important; }
+            .dash-header { padding: 1rem !important; border-radius: 1.1rem; gap: .9rem !important; }
+            .dash-header > div:last-child { width: 100%; justify-content: space-between; }
+            #live-status { flex: 1; justify-content: center; }
+            #header-refresh { padding-inline: .9rem !important; }
+            .ops-section { margin-bottom: 1rem; border-radius: 1.05rem; }
+            .ops-section__head { margin-bottom: .8rem; }
+            [aria-labelledby="portfolio-title"] label { width: 100%; justify-content: space-between; }
+            #portfolio-source, #portfolio-period, #portfolio-search { flex: 1; min-width: 0; }
+            #portfolio-connect { width: 100%; justify-content: center; box-sizing: border-box; }
+            .module-nav { top: .35rem; margin-bottom: .9rem; }
+            .module-tab { min-width: 8.4rem; min-height: 2.8rem; }
+        }
+        /* Source navigation: fuchsia identity with lime health accents. */
+        :root { --cansu-accent: #f472b6; --cansu-lime: #bef264; }
+        .source-tabs { display:inline-flex; gap:.35rem; padding:.35rem; margin:.2rem 0 1rem; border:1px solid rgba(244,114,182,.28); border-radius:.9rem; background:rgba(30,10,29,.42); }
+        .source-tab { min-height:2.65rem; padding:.65rem 1rem; border:0; border-radius:.65rem; background:transparent; color:#cbd5e1; font:inherit; font-size:.78rem; font-weight:800; cursor:pointer; }
+        .source-tab:hover { color:#fce7f3; background:rgba(190,24,93,.18); }
+        .source-tab.is-active { color:#fff1f2; background:linear-gradient(135deg,rgba(190,24,93,.82),rgba(217,70,239,.55)); box-shadow:0 0 0 1px rgba(244,114,182,.42),0 8px 22px rgba(190,24,93,.2); }
+        #portfolio-source { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
+        #portfolio-connect { display:none !important; }
+        .source-insight-panel { margin-bottom:1.15rem; padding:1.15rem 1.3rem; border:1px solid rgba(244,114,182,.24); border-radius:1.15rem; background:linear-gradient(145deg,rgba(45,12,45,.78),rgba(10,14,29,.94)); }
+        .source-chip--lime { color:#d9f99d; border-color:rgba(190,242,100,.35); background:rgba(101,163,13,.16); }
+        .clarity-insight-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.7rem; }
+        .clarity-insight-grid > div { padding:.85rem; border:1px solid rgba(190,242,100,.18); border-radius:.8rem; background:rgba(20,35,12,.38); }
+        .clarity-insight-grid strong { display:block; color:#f7fee7; font-size:.78rem; }
+        .clarity-insight-grid span { display:block; margin-top:.3rem; color:#bef264; font-size:.67rem; }
+        .module-tab.is-active { background:linear-gradient(135deg,rgba(190,24,93,.55),rgba(126,34,206,.3)); }
+        #header-refresh:hover,#refresh-data:hover { border-color:rgba(190,242,100,.65)!important; background:rgba(101,163,13,.16)!important; }
+        #live-status { color:#bef264!important; border-color:rgba(190,242,100,.35)!important; background:rgba(101,163,13,.12)!important; }
+        @media(max-width:640px) { .source-tabs{display:flex;width:100%;}.source-tab{flex:1;padding-inline:.55rem;}.clarity-insight-grid{grid-template-columns:1fr;} }
+    </style>
 </head>
 <body>
     <div class="bg-overlay"></div>
@@ -281,11 +344,7 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
 
         <section class="ops-section" aria-labelledby="portfolio-title">
             <h2 id="portfolio-title">Site karşılaştırması</h2>
-            <div class="source-tabs" role="tablist" aria-label="Ölçüm kaynakları">
-                <button class="source-tab is-active" type="button" role="tab" aria-selected="true" data-source="umami">Umami</button>
-                <button class="source-tab" type="button" role="tab" aria-selected="false" data-source="ga4">GA4</button>
-                <button class="source-tab" type="button" role="tab" aria-selected="false" data-source="clarity">Clarity</button>
-            </div>
+            <div class="source-tabs" role="tablist" aria-label="Ölçüm kaynakları"><button class="source-tab is-active" type="button" role="tab" aria-selected="true" data-source="umami">Umami</button><button class="source-tab" type="button" role="tab" aria-selected="false" data-source="ga4">GA4</button><button class="source-tab" type="button" role="tab" aria-selected="false" data-source="clarity">Clarity</button></div>
             <select id="portfolio-source" aria-hidden="true" tabindex="-1"><option value="umami">Umami</option><option value="ga4">GA4</option><option value="clarity">Clarity</option></select>
             <p style="color:#94a3b8">Seçilen kaynağın oturumları, ziyaretçileri ve ortalama oturum süresi. GA4 dönemleri mülkün saat dilimindeki takvim günleridir; Umami dönemleri geriye dönük zaman aralıklarıdır. Site ziyaretçileri toplamı, siteler arasında tekil kişi sayısı değildir.</p>
             <div style="display:flex;gap:1rem;flex-wrap:wrap;margin:1rem 0">
@@ -296,10 +355,7 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
             <div style="overflow:auto"><table style="width:100%;border-collapse:collapse;text-align:left" aria-label="Sitelerin Umami ölçüm karşılaştırması"><thead><tr><th>Site</th><th>Oturum</th><th>Ziyaretçi</th><th>Sayfa</th><th>Ort. süre</th><th>Hemen çıkma</th><th>Durum</th></tr></thead><tbody id="portfolio-rows"></tbody></table></div>
         </section>
         <script>import '../scripts/cansu-portfolio.js';</script>
-        <section id="clarity-source-panel" class="source-insight-panel" hidden aria-live="polite">
-            <div class="ops-section__head"><div><h2 class="ops-section__title">Clarity · davranış içgörüleri</h2><p class="ops-section__copy">Oturum kayıtları, ısı haritaları ve etkileşim sinyalleri Microsoft Clarity tarafında tutulur. Bu görünüm bağlantı durumunu gösterir; ham kayıtlar Clarity çalışma alanında açılır.</p></div><span class="source-chip source-chip--lime">Clarity · canlı ölçüm</span></div>
-            <div class="clarity-insight-grid"><div><strong>Oturum kayıtları</strong><span>Clarity çalışma alanında</span></div><div><strong>Isı haritaları</strong><span>Sayfa bazlı davranış</span></div><div><strong>Maskeleme</strong><span>PII koruması etkin</span></div></div>
-        </section>
+        <section id="clarity-source-panel" class="source-insight-panel" hidden aria-live="polite"><div class="ops-section__head"><div><h2 class="ops-section__title">Clarity · davranış içgörüleri</h2><p class="ops-section__copy">Oturum kayıtları, ısı haritaları ve etkileşim sinyalleri Microsoft Clarity tarafında tutulur. Bu görünüm bağlantı durumunu gösterir; ham kayıtlar Clarity çalışma alanında açılır.</p></div><span class="source-chip source-chip--lime">Clarity · canlı ölçüm</span></div><div class="clarity-insight-grid"><div><strong>Oturum kayıtları</strong><span>Clarity çalışma alanında</span></div><div><strong>Isı haritaları</strong><span>Sayfa bazlı davranış</span></div><div><strong>Maskeleme</strong><span>PII koruması etkin</span></div></div></section>
         <nav class="module-nav" aria-label="Cansu modülleri">
             <button class="module-tab is-active" type="button" data-tab="overview">Genel Bakış</button>
             <button class="module-tab" type="button" data-tab="traffic">Trafik &amp; Kaynaklar</button>
