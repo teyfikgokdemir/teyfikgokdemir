@@ -66,7 +66,8 @@ async function loadClarity() {
     if (!results.some(result => result.ok)) throw new Error(results[0]?.payload?.reason || 'Clarity API kullanılamıyor');
     if (clarityState) clarityState.textContent = 'Clarity · bağlı';
     if (clarityStatus) clarityStatus.textContent = 'API verisi alındı';
-    if (clarityUpdated) clarityUpdated.textContent = new Date(payload.generatedAt).toLocaleString('tr-TR');
+    const generatedAt = results.find(result => result.payload?.generatedAt)?.payload.generatedAt;
+    if (clarityUpdated) clarityUpdated.textContent = generatedAt ? new Date(generatedAt).toLocaleString('tr-TR') : '—';
     const trafficFor = result => result.payload.data?.find(item => item.metricName === 'Traffic')?.information || [];
     const traffic = results.flatMap(trafficFor);
     const sum = key => traffic.reduce((total, row) => total + Number(row[key] || 0), 0);
