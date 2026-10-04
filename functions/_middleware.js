@@ -30,7 +30,8 @@ export async function onRequest(context) {
   const url = new URL(context.request.url);
   if (url.hostname !== CANSU_HOST) return context.next();
 
-  if (MACHINE_PATHS.has(url.pathname)) return context.next();
+  if (url.pathname === '/api/umami-config') return context.next();
+  if (MACHINE_PATHS.has(url.pathname) && ['POST', 'OPTIONS'].includes(context.request.method)) return context.next();
   if (MEASUREMENT_ASSETS.has(url.pathname)) return context.next();
   if (PUBLIC_PATHS.has(url.pathname)) return context.next();
 
