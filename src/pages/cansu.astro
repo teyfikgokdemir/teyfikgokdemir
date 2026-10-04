@@ -312,6 +312,13 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
         #header-refresh:hover,#refresh-data:hover { border-color:rgba(190,242,100,.65)!important; background:rgba(101,163,13,.16)!important; }
         #live-status { color:#bef264!important; border-color:rgba(190,242,100,.35)!important; background:rgba(101,163,13,.12)!important; }
         @media(max-width:640px) { .source-tabs{display:flex;width:100%;}.source-tab{flex:1;padding-inline:.55rem;}.clarity-insight-grid{grid-template-columns:1fr;} }
+        .module-nav { grid-template-columns: repeat(10, minmax(7.2rem, 1fr)); }
+        .module-tab[data-tab="umami"], .module-tab[data-tab="ga4"], .module-tab[data-tab="clarity"], .module-tab[data-tab="cloudflare"] { color: #f9a8d4; }
+        .module-tab[data-tab="umami"].is-active, .module-tab[data-tab="ga4"].is-active, .module-tab[data-tab="clarity"].is-active { background: linear-gradient(135deg, rgba(190,24,93,.72), rgba(217,70,239,.38)); }
+        .module-tab[data-tab="cloudflare"].is-active { color: #d9f99d; background: linear-gradient(135deg, rgba(101,163,13,.5), rgba(190,24,93,.35)); }
+        #portfolio-section[hidden], #clarity-source-panel[hidden] { display: none !important; }
+        @media(max-width:900px) { .module-nav { grid-template-columns: repeat(10, minmax(8rem, 1fr)); } }
+        @media(max-width:560px) { .module-nav { display:flex; overflow-x:auto; } .module-tab { min-width:8.6rem; } }
     </style>
 </head>
 <body>
@@ -342,7 +349,7 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
             </div>
         </header>
 
-        <section class="ops-section" aria-labelledby="portfolio-title">
+        <section class="ops-section" aria-labelledby="portfolio-title" id="portfolio-section">
             <h2 id="portfolio-title">Site karşılaştırması</h2>
             <div class="source-tabs" role="tablist" aria-label="Ölçüm kaynakları"><button class="source-tab is-active" type="button" role="tab" aria-selected="true" data-source="umami">Umami</button><button class="source-tab" type="button" role="tab" aria-selected="false" data-source="ga4">GA4</button><button class="source-tab" type="button" role="tab" aria-selected="false" data-source="clarity">Clarity</button></div>
             <select id="portfolio-source" aria-hidden="true" tabindex="-1"><option value="umami">Umami</option><option value="ga4">GA4</option><option value="clarity">Clarity</option></select>
@@ -358,6 +365,10 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
         <section id="clarity-source-panel" class="source-insight-panel" hidden aria-live="polite"><div class="ops-section__head"><div><h2 class="ops-section__title">Clarity · davranış içgörüleri</h2><p class="ops-section__copy">Oturum kayıtları, ısı haritaları ve etkileşim sinyalleri Microsoft Clarity tarafında tutulur. Son 24 saatlik API özeti burada, ayrıntılı kayıtlar Clarity çalışma alanında açılır.</p></div><span id="clarity-api-state" class="source-chip source-chip--lime">Clarity · yükleniyor</span></div><div class="clarity-insight-grid"><div><strong>Oturumlar · 24s</strong><span id="clarity-sessions">—</span></div><div><strong>Tekil ziyaretçi · 24s</strong><span id="clarity-visitors">—</span></div><div><strong>API durumu</strong><span id="clarity-api-status">Kontrol ediliyor</span></div></div><p id="clarity-api-updated" class="clarity-updated">—</p></section>
         <nav class="module-nav" aria-label="Cansu modülleri">
             <button class="module-tab is-active" type="button" data-tab="overview">Genel Bakış</button>
+            <button class="module-tab" type="button" data-tab="umami">Umami</button>
+            <button class="module-tab" type="button" data-tab="ga4">GA4</button>
+            <button class="module-tab" type="button" data-tab="clarity">Clarity</button>
+            <button class="module-tab" type="button" data-tab="cloudflare">Cloudflare</button>
             <button class="module-tab" type="button" data-tab="traffic">Trafik &amp; Kaynaklar</button>
             <button class="module-tab" type="button" data-tab="seo">SEO</button>
             <button class="module-tab" type="button" data-tab="health">Sistem Sağlığı</button>
@@ -630,6 +641,8 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
         const conv30d = document.getElementById('conv-30d');
         const moduleTabs = Array.from(document.querySelectorAll('[data-tab]'));
         const dashboardPanels = Array.from(document.querySelectorAll('[data-dashboard-panel]'));
+        const portfolioSection = document.getElementById('portfolio-section');
+        const claritySourcePanel = document.getElementById('clarity-source-panel');
         const formatTime = (value) => value ? new Date(value).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'medium' }) : '—';
         const formatNumber = (value) => typeof value === 'number' ? new Intl.NumberFormat('tr-TR').format(value) : '—';
         const formatBytes = (value) => typeof value === 'number' ? `${(value / 1024 / 1024).toFixed(1)} MB` : '—';
@@ -921,10 +934,17 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
         };
 
         const activateTab = (tab, pushHash = true) => {
-            const allowed = new Set(['overview','traffic','seo','health','deployments','data-quality']);
+            const allowed = new Set(['overview','umami','ga4','clarity','cloudflare','traffic','seo','health','deployments','data-quality']);
             const target = allowed.has(tab) ? tab : 'overview';
             moduleTabs.forEach((button) => button.classList.toggle('is-active', button.dataset.tab === target));
-            dashboardPanels.forEach((panel) => panel.classList.toggle('is-active-panel', panel.dataset.dashboardPanel === target));
+            const sourcePanels = { umami: ['traffic'], ga4: [], cloudflare: ['health','data-quality','deployments'] };
+            const sourceMode = ['umami','ga4','clarity','cloudflare'].includes(target);
+            dashboardPanels.forEach((panel) => {
+                const visible = sourceMode ? (sourcePanels[target] || []).includes(panel.dataset.dashboardPanel) : panel.dataset.dashboardPanel === target;
+                panel.classList.toggle('is-active-panel', visible);
+            });
+            if (portfolioSection) portfolioSection.hidden = !['umami','ga4'].includes(target);
+            if (claritySourcePanel) claritySourcePanel.hidden = target !== 'clarity';
             if (pushHash && window.location.hash !== `#${target}`) history.replaceState(null, '', `#${target}`);
         };
 
