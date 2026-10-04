@@ -37,7 +37,10 @@ export const onRequestGet: PagesFunction<Env> = async ({env}) => {
           thirtyDays: await runPeriod(property, token.access_token, '29daysAgo', 'today'),
         };
         return {key,name,connected:true,property,periods};
-      } catch { return {key,name,connected:false,reason:'GA4 rapor erişimi / API yapılandırması kontrol edilmeli'}; }
+      } catch (error) {
+        const detail = error instanceof Error && /^upstream_\d+$/.test(error.message) ? error.message : 'unavailable';
+        return {key,name,connected:false,reason:`GA4 rapor erişimi / API yapılandırması kontrol edilmeli (${detail})`};
+      }
     }));
     return json({ok:true,configured:true,source:'GA4',generatedAt:new Date().toISOString(),connectedCount:results.filter(s=>s.connected).length,sites:results});
   } catch { return json({ok:false,configured:true,source:'GA4',reason:'Google bağlantısı yenilenmeli veya API erişimi kontrol edilmeli'},502); }
