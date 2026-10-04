@@ -11,7 +11,7 @@ function cookie(request, name) {
   const raw = request.headers.get('cookie') || '';
   for (const part of raw.split(';')) {
     const [k, ...v] = part.trim().split('=');
-    if (k === name) return decodeURIComponent(v.join('='));
+    if (k === name) { try { return decodeURIComponent(v.join('=')); } catch { return ''; } }
   }
   return '';
 }
@@ -28,7 +28,16 @@ async function sessionValid(context) {
 
 export async function onRequest(context) {
   const url = new URL(context.request.url);
-  if (url.hostname !== CANSU_HOST) return context.next();
+  if (url.hostname !== CANSU_HOST) {
+    const isReport = ['/api/overview', '/api/umami', '/api/sources', '/api/conversions'].includes(url.pathname);
+    if (isReport && !['POST', 'OPTIONS'].includes(context.request.method)) {
+      return new Response(JSON.stringify({ ok:false, error:'Use authenticated Cansu dashboard' }), { status:401, headers:{'content-type':'application/json', 'cache-control':'no-store'} });
+    }
+    if (url.pathname === '/cansu' || url.pathname.startsWith('/cansu/')) {
+      return Response.redirect(`https://${CANSU_HOST}/`, 302);
+    }
+    return context.next();
+  }
 
   if (url.pathname === '/api/umami-config') return context.next();
   if (MACHINE_PATHS.has(url.pathname) && ['POST', 'OPTIONS'].includes(context.request.method)) return context.next();
