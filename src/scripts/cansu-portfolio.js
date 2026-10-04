@@ -53,7 +53,7 @@ async function loadClarity() {
   if (clarityState?.dataset.loading === 'true') return;
   if (clarityState) clarityState.dataset.loading = 'true';
   try {
-    const response = await fetch('/api/clarity?numOfDays=1', { signal: AbortSignal.timeout(15000) });
+    const response = await fetch(`/api/clarity?numOfDays=1&site=${encodeURIComponent(search.value || 'ctseg')}`, { signal: AbortSignal.timeout(15000) });
     const payload = await response.json();
     if (!response.ok || !payload.ok) throw new Error(payload.reason || 'Clarity API kullanılamıyor');
     if (clarityState) clarityState.textContent = 'Clarity · bağlı';
