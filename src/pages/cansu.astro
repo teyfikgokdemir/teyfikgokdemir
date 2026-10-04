@@ -430,6 +430,18 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
             </div>
             <div id="umami-overview-grid" class="quality-grid"><div class="country-empty">Umami verisi yükleniyor…</div></div>
         </section>
+        <section class="ops-section is-active-panel overview-source-preview" data-dashboard-panel="overview">
+            <div class="ops-section__head"><div><h2 class="ops-section__title">GA4 · En çok veri üreten 3 site</h2><p class="ops-section__copy">Bağlantı kurulduğunda son rapor dönemine göre sıralanır.</p></div><span class="source-chip">GA4</span></div>
+            <div id="ga4-overview-grid" class="quality-grid"><div class="country-empty">GA4 verisi bekleniyor…</div></div>
+        </section>
+        <section class="ops-section is-active-panel overview-source-preview" data-dashboard-panel="overview">
+            <div class="ops-section__head"><div><h2 class="ops-section__title">Clarity · En çok veri üreten 3 site</h2><p class="ops-section__copy">Clarity API bağlantısına göre en yüksek oturum hacmi.</p></div><span class="source-chip">CLARITY</span></div>
+            <div id="clarity-overview-grid" class="quality-grid"><div class="country-empty">Clarity verisi sekmede yüklenir.</div></div>
+        </section>
+        <section class="ops-section is-active-panel overview-source-preview" data-dashboard-panel="overview">
+            <div class="ops-section__head"><div><h2 class="ops-section__title">Cloudflare · En çok istek alan 3 site</h2><p class="ops-section__copy">Son 24 saatin HTTP isteklerine göre sıralanır.</p></div><span class="source-chip">CLOUDFLARE</span></div>
+            <div id="cloudflare-overview-grid" class="quality-grid"><div class="country-empty">Cloudflare verisi yükleniyor…</div></div>
+        </section>
 
         <section class="ops-section is-active-panel" data-dashboard-panel="overview">
             <div class="ops-section__head">
@@ -640,6 +652,9 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
         const umamiSourceChip = document.getElementById('umami-source-chip');
         const overviewUmamiSourceChip = document.getElementById('overview-umami-source-chip');
         const umamiOverviewGrid = document.getElementById('umami-overview-grid');
+        const ga4OverviewGrid = document.getElementById('ga4-overview-grid');
+        const clarityOverviewGrid = document.getElementById('clarity-overview-grid');
+        const cloudflareOverviewGrid = document.getElementById('cloudflare-overview-grid');
         const overviewUmamiVisits1d = document.getElementById('overview-umami-visits-1d');
         const overviewUmamiVisitors1d = document.getElementById('overview-umami-visitors-1d');
         const overviewUmamiPageviews1d = document.getElementById('overview-umami-pageviews-1d');
@@ -1004,6 +1019,11 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
                     : (failed ? `Güncel durum sağlıklı · ${failed} eski başarısız run sonradan düzeldi` : 'HTTP · SSL · güncel workflowlar sağlıklı');
                 
                 const sortedSites = sortOverviewSites(data.sites);
+                const metricCard = (site, label, value, detail) => `<article class="quality-card"><div class="quality-card__head"><div class="quality-card__name">${escapeHtml(site.name)}</div><span class="status-pill status-pill--good">CANLI</span></div><div class="quality-lines"><div class="quality-line"><span>${label}</span><strong>${formatNumber(value)}</strong></div><div class="quality-line"><span>Durum</span><strong>${detail}</strong></div></div></article>`;
+                const topCloudflare = [...data.sites].sort((a,b) => numericValue(b.cloudflare?.requests24h) - numericValue(a.cloudflare?.requests24h)).slice(0,3);
+                if (cloudflareOverviewGrid) cloudflareOverviewGrid.innerHTML = topCloudflare.map(site => metricCard(site, 'HTTP istekleri · 24s', numericValue(site.cloudflare?.requests24h), 'Cloudflare GraphQL')).join('') || '<div class="country-empty">Cloudflare verisi bekleniyor…</div>';
+                if (ga4OverviewGrid) ga4OverviewGrid.innerHTML = '<div class="country-empty">GA4 rapor bağlantısı kurulduğunda ilk 3 site burada görünecek.</div>';
+                if (clarityOverviewGrid) clarityOverviewGrid.innerHTML = '<div class="country-empty">Clarity ilk 3 sıralaması Clarity sekmesindeki ayrı site kartlarından yüklenir.</div>';
                 renderAttention(sortedSites);
                 renderDataQuality(sortedSites, data.generatedAt);
                 summaryGrid.innerHTML = sortedSites.map((site) => card(site)).join('');
