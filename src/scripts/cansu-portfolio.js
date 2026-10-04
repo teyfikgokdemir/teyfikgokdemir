@@ -8,6 +8,8 @@ const clarityPanel = document.getElementById('clarity-source-panel');
 const clarityState = document.getElementById('clarity-api-state');
 const clarityStatus = document.getElementById('clarity-api-status');
 const clarityUpdated = document.getElementById('clarity-api-updated');
+const claritySessions = document.getElementById('clarity-sessions');
+const clarityVisitors = document.getElementById('clarity-visitors');
 const snapshots = {};
 const number = value => new Intl.NumberFormat('tr-TR').format(value);
 function render() {
@@ -57,6 +59,10 @@ async function loadClarity() {
     if (clarityState) clarityState.textContent = 'Clarity · bağlı';
     if (clarityStatus) clarityStatus.textContent = 'API verisi alındı';
     if (clarityUpdated) clarityUpdated.textContent = new Date(payload.generatedAt).toLocaleString('tr-TR');
+    const traffic = payload.data?.find(item => item.metricName === 'Traffic')?.information || [];
+    const sum = key => traffic.reduce((total, row) => total + Number(row[key] || 0), 0);
+    if (claritySessions) claritySessions.textContent = number(sum('totalSessionCount'));
+    if (clarityVisitors) clarityVisitors.textContent = number(sum('distinctUserCount'));
   } catch (error) {
     if (clarityState) { clarityState.textContent = 'Clarity · token bekleniyor'; clarityState.classList.add('is-warning'); }
     if (clarityStatus) clarityStatus.textContent = error instanceof Error ? error.message : 'API verisi alınamadı';
