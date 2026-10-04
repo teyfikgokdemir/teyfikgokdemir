@@ -10,12 +10,11 @@ function render() {
   period.options[0].textContent = source.value === 'ga4' ? 'Bugün' : 'Son 24 saat';
   rows.replaceChildren();
   const snapshot = snapshots[source.value];
-  connect.hidden = true;
+  connect.hidden = false;
   if (!snapshot) { state.textContent = 'Veri kaynağı yükleniyor…'; return; }
   const { data, cached } = snapshot;
   if (!data.configured || data.ok === false) {
     state.textContent = data.reason || 'Veri kaynağı hazır değil';
-    connect.hidden = source.value !== 'ga4';
     return;
   }
   state.textContent = `${cached ? 'Önbellek' : 'Son alınan veri'} · ${data.connectedCount ?? 0}/6 site bağlı · ${data.generatedAt ? new Date(data.generatedAt).toLocaleString('tr-TR') : 'zaman bilgisi yok'}`;
