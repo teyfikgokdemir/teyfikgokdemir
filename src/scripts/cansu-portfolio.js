@@ -3,14 +3,18 @@ const search = document.getElementById('portfolio-search');
 const rows = document.getElementById('portfolio-rows');
 const state = document.getElementById('portfolio-state');
 const source = document.getElementById('portfolio-source');
-const connect = document.getElementById('portfolio-connect');
+const sourceTabs = [...document.querySelectorAll('[data-source]')];
+const clarityPanel = document.getElementById('clarity-source-panel');
 const snapshots = {};
 const number = value => new Intl.NumberFormat('tr-TR').format(value);
 function render() {
+  const isClarity = source.value === 'clarity';
   period.options[0].textContent = source.value === 'ga4' ? 'Bugün' : 'Son 24 saat';
   rows.replaceChildren();
+  if (clarityPanel) clarityPanel.hidden = !isClarity;
+  sourceTabs.forEach(tab => { const active = tab.dataset.source === source.value; tab.classList.toggle('is-active', active); tab.setAttribute('aria-selected', String(active)); });
+  if (isClarity) { state.textContent = 'Clarity davranış görünümü etkin · ayrıntılar Clarity çalışma alanında'; return; }
   const snapshot = snapshots[source.value];
-  connect.hidden = false;
   if (!snapshot) { state.textContent = 'Veri kaynağı yükleniyor…'; return; }
   const { data, cached } = snapshot;
   if (!data.configured || data.ok === false) {
@@ -39,6 +43,7 @@ window.addEventListener('cansu:umami', event => { snapshots.umami = event.detail
 if (window.cansuUmamiSnapshot) snapshots.umami = window.cansuUmamiSnapshot;
 render();
 source.addEventListener('change', render);
+sourceTabs.forEach(tab => tab.addEventListener('click', () => { source.value = tab.dataset.source; render(); }));
 async function loadGa4() {
   try {
     const response = await fetch('/api/ga4', {signal:AbortSignal.timeout(30000)});
