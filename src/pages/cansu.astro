@@ -960,6 +960,10 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
             });
             if (portfolioSection) portfolioSection.hidden = !['umami','ga4'].includes(target);
             if (claritySourcePanel) claritySourcePanel.hidden = target !== 'clarity';
+            if (source && ['umami','ga4','clarity'].includes(target) && source.value !== target) {
+                source.value = target;
+                source.dispatchEvent(new Event('change'));
+            }
             if (pushHash && window.location.hash !== `#${target}`) history.replaceState(null, '', `#${target}`);
         };
 
