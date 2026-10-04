@@ -19,7 +19,7 @@ function render() {
     return;
   }
   state.textContent = `${cached ? 'Önbellek' : 'Son alınan veri'} · ${data.connectedCount ?? 0}/6 site bağlı · ${data.generatedAt ? new Date(data.generatedAt).toLocaleString('tr-TR') : 'zaman bilgisi yok'}`;
-  const sites = (data.sites || []).filter(site => String(site.name).toLocaleLowerCase('tr-TR').includes(search.value.toLocaleLowerCase('tr-TR')));
+  const sites = (data.sites || []).filter(site => !search.value || site.key === search.value);
   sites.sort((a,b) => (b.periods?.[period.value]?.visits || 0) - (a.periods?.[period.value]?.visits || 0));
   for (const site of sites) {
     const metrics = site.periods?.[period.value];
@@ -34,7 +34,7 @@ function render() {
     }
     rows.append(row);
   }
-  if (!sites.length) state.textContent += ' · Aramaya uygun site bulunamadı';
+  if (!sites.length) state.textContent += ' · Seçilen site için veri bulunamadı';
 }
 window.addEventListener('cansu:umami', event => { snapshots.umami = event.detail; render(); });
 source.addEventListener('change', render);
@@ -48,4 +48,4 @@ async function loadGa4() {
 }
 loadGa4();
 period.addEventListener('change', render);
-search.addEventListener('input', render);
+search.addEventListener('change', render);
