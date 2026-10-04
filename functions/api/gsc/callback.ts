@@ -32,7 +32,9 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   if (!tokenResponse.ok || !tokenPayload.refresh_token) {
     return json({ ok: false, error: tokenPayload.error_description || tokenPayload.error || `Google token ${tokenResponse.status}` }, 502);
   }
-  await env.CANSU_GSC_TOKENS.put('gsc_refresh_token', tokenPayload.refresh_token);
+  if (stateValue === 'pending' || tokenPayload.scope?.split(' ').includes('https://www.googleapis.com/auth/webmasters.readonly')) {
+    await env.CANSU_GSC_TOKENS.put('gsc_refresh_token', tokenPayload.refresh_token);
+  }
   if (stateValue === 'pending:analytics' && tokenPayload.scope?.split(' ').includes('https://www.googleapis.com/auth/analytics.readonly')) {
     await env.CANSU_GSC_TOKENS.put('ga4_refresh_token', tokenPayload.refresh_token);
   }
