@@ -19,7 +19,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   if (oauthError) return redirect(request, `/cansu/?gsc=error&reason=${encodeURIComponent(oauthError)}`);
   if (!code || !state || !env.CANSU_GSC_TOKENS) return json({ ok: false, error: 'OAuth callback eksik veya geçersiz' }, 400);
   const stateValue = await env.CANSU_GSC_TOKENS.get(`oauth_state:${state}`);
-  if (stateValue !== 'pending') return json({ ok: false, error: 'OAuth state geçersiz veya süresi dolmuş' }, 400);
+  if (stateValue !== 'pending' && stateValue !== 'pending:analytics') return json({ ok: false, error: 'OAuth state geçersiz veya süresi dolmuş' }, 400);
   await env.CANSU_GSC_TOKENS.delete(`oauth_state:${state}`);
   if (!env.GSC_CLIENT_ID || !env.GSC_CLIENT_SECRET || !env.GSC_REDIRECT_URI) return json({ ok: false, error: 'Search Console OAuth secret yapılandırması eksik' }, 503);
 
@@ -28,10 +28,13 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     headers: { 'content-type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({ code, client_id: env.GSC_CLIENT_ID, client_secret: env.GSC_CLIENT_SECRET, redirect_uri: env.GSC_REDIRECT_URI, grant_type: 'authorization_code' }),
   });
-  const tokenPayload = await tokenResponse.json() as { refresh_token?: string; error?: string; error_description?: string };
+  const tokenPayload = await tokenResponse.json() as { refresh_token?: string; scope?: string; error?: string; error_description?: string };
   if (!tokenResponse.ok || !tokenPayload.refresh_token) {
     return json({ ok: false, error: tokenPayload.error_description || tokenPayload.error || `Google token ${tokenResponse.status}` }, 502);
   }
   await env.CANSU_GSC_TOKENS.put('gsc_refresh_token', tokenPayload.refresh_token);
+  if (stateValue === 'pending:analytics' && tokenPayload.scope?.split(' ').includes('https://www.googleapis.com/auth/analytics.readonly')) {
+    await env.CANSU_GSC_TOKENS.put('ga4_refresh_token', tokenPayload.refresh_token);
+  }
   return redirect(request, '/cansu/?gsc=connected');
 };

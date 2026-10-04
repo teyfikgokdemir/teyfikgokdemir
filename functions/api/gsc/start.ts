@@ -30,12 +30,13 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   const stateBytes = new Uint8Array(24);
   crypto.getRandomValues(stateBytes);
   const state = Array.from(stateBytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
-  await env.CANSU_GSC_TOKENS.put(`oauth_state:${state}`, 'pending', { expirationTtl: 600 });
+  const analytics = new URL(request.url).searchParams.get('analytics') === '1';
+  await env.CANSU_GSC_TOKENS.put(`oauth_state:${state}`, analytics ? 'pending:analytics' : 'pending', { expirationTtl: 600 });
   const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
   authUrl.searchParams.set('client_id', env.GSC_CLIENT_ID);
   authUrl.searchParams.set('redirect_uri', env.GSC_REDIRECT_URI);
   authUrl.searchParams.set('response_type', 'code');
-  authUrl.searchParams.set('scope', 'https://www.googleapis.com/auth/webmasters.readonly');
+  authUrl.searchParams.set('scope', 'https://www.googleapis.com/auth/webmasters.readonly' + (analytics ? ' https://www.googleapis.com/auth/analytics.readonly' : ''));
   authUrl.searchParams.set('access_type', 'offline');
   authUrl.searchParams.set('prompt', 'consent');
   authUrl.searchParams.set('state', state);

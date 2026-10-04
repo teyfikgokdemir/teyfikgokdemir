@@ -254,7 +254,9 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
 
         <section class="ops-section" aria-labelledby="portfolio-title">
             <h2 id="portfolio-title">Site karşılaştırması</h2>
-            <p style="color:#94a3b8">Umami oturumları, ziyaretçiler ve etkileşim süresi. Site ziyaretçileri toplamı, siteler arasında tekil kişi sayısı değildir.</p>
+            <label>Veri kaynağı <select id="portfolio-source"><option value="umami">Umami</option><option value="ga4">GA4</option></select></label>
+            <a id="portfolio-connect" href="/api/gsc/start?analytics=1" hidden>Google Analytics salt okunur bağlantısını tamamla</a>
+            <p style="color:#94a3b8">Seçilen kaynağın oturumları, ziyaretçileri ve ortalama oturum süresi. GA4 dönemleri mülkün saat dilimindeki takvim günleridir; Umami dönemleri geriye dönük zaman aralıklarıdır. Site ziyaretçileri toplamı, siteler arasında tekil kişi sayısı değildir.</p>
             <div style="display:flex;gap:1rem;flex-wrap:wrap;margin:1rem 0">
                 <label>Dönem <select id="portfolio-period" style="padding:.65rem;background:#0f172a;color:#f8fafc;border:1px solid #64748b;border-radius:.5rem"><option value="oneDay">Son 24 saat</option><option value="sevenDays" selected>Son 7 gün</option><option value="thirtyDays">Son 30 gün</option></select></label>
                 <label>Site ara <input id="portfolio-search" type="search" placeholder="Site adı" style="padding:.65rem;background:#0f172a;color:#f8fafc;border:1px solid #64748b;border-radius:.5rem" /></label>
