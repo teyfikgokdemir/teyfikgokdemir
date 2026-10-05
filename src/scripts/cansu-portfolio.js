@@ -16,6 +16,9 @@ const claritySites = [
   ['olivon-agency', 'Olivon'], ['teyfikgokdemir', 'Kişisel site'], ['mythborn', 'Mythborn']
 ];
 const snapshots = {};
+const claritySnapshots = new Map();
+const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+const clarityFailureLabel = code => ({ missing_token: 'token bekleniyor', rate_limited: 'istek limiti aşıldı', auth_error: 'yetkilendirme hatası' }[code] || 'API kullanılamıyor');
 const number = value => new Intl.NumberFormat('tr-TR').format(value);
 function render() {
   const isClarity = source.value === 'clarity';
@@ -60,26 +63,41 @@ async function loadClarity() {
   try {
     const selected = search.value ? claritySites.filter(([key]) => key === search.value) : claritySites;
     const results = await Promise.all(selected.map(async ([key, name]) => {
-      try { const response = await fetch(`/api/clarity?numOfDays=1&site=${encodeURIComponent(key)}`, { signal: AbortSignal.timeout(15000) }); const payload = await response.json(); return { key, name, payload, ok: response.ok && payload.ok }; }
+      const cached = claritySnapshots.get(key);
+      if (cached && cached.expiresAt > Date.now()) return cached.result;
+      try {
+        const response = await fetch(`/api/clarity?numOfDays=1&site=${encodeURIComponent(key)}`, { signal: AbortSignal.timeout(15000) });
+        const payload = await response.json();
+        if (!payload.code && response.status === 429) payload.code = 'rate_limited';
+        const result = { key, name, payload, ok: response.ok && payload.ok };
+        claritySnapshots.set(key, { result, expiresAt: Date.now() + (result.ok ? 3600000 : 300000) });
+        return result;
+      }
       catch (error) { return { key, name, payload: { reason: error instanceof Error ? error.message : 'API verisi alınamadı' }, ok: false }; }
     }));
-    if (!results.some(result => result.ok)) throw new Error(results[0]?.payload?.reason || 'Clarity API kullanılamıyor');
-    if (clarityState) clarityState.textContent = 'Clarity · bağlı';
-    if (clarityStatus) clarityStatus.textContent = 'API verisi alındı';
+    const connected = results.filter(result => result.ok).length;
+    const failed = results.filter(result => !result.ok);
+    const failureLabel = failed.every(result => result.payload.code === failed[0]?.payload.code) ? clarityFailureLabel(failed[0]?.payload.code) : 'API bağlantıları kontrol edilmeli';
+    if (clarityState) {
+      clarityState.textContent = `Clarity · ${connected === results.length ? 'bağlı' : connected ? 'kısmen bağlı' : failureLabel}`;
+      clarityState.classList.toggle('is-warning', failed.length > 0);
+    }
+    if (clarityStatus) clarityStatus.textContent = failed.length ? `${connected}/${results.length} site bağlı · ${failed.map(result => `${result.name}: ${result.payload.reason || 'Veri yok'}`).join(' · ')}` : 'API verisi alındı';
     const generatedAt = results.find(result => result.payload?.generatedAt)?.payload.generatedAt;
     if (clarityUpdated) clarityUpdated.textContent = generatedAt ? new Date(generatedAt).toLocaleString('tr-TR') : '—';
     const trafficFor = result => result.payload.data?.find(item => item.metricName === 'Traffic')?.information || [];
     const traffic = results.flatMap(trafficFor);
     const sum = key => traffic.reduce((total, row) => total + Number(row[key] || 0), 0);
-    if (claritySessions) claritySessions.textContent = number(sum('totalSessionCount'));
-    if (clarityVisitors) clarityVisitors.textContent = number(sum('distinctUserCount'));
+    if (claritySessions) claritySessions.textContent = connected ? number(sum('totalSessionCount')) : '—';
+    if (clarityVisitors) clarityVisitors.textContent = connected ? number(sum('distinctUserCount')) : '—';
     if (claritySiteGrid) claritySiteGrid.innerHTML = results.map(result => {
       const rows = trafficFor(result); const sessions = rows.reduce((total, row) => total + Number(row.totalSessionCount || 0), 0); const visitors = rows.reduce((total, row) => total + Number(row.distinctUserCount || 0), 0);
-      return `<article class="quality-card"><div class="quality-card__head"><div class="quality-card__name">${result.name}</div><span class="status-pill ${result.ok ? 'status-pill--good' : 'status-pill--warn'}">${result.ok ? 'BAĞLI' : 'BEKLENİYOR'}</span></div><div class="quality-lines"><div class="quality-line"><span>Oturum · 24s</span><strong>${result.ok ? number(sessions) : '—'}</strong></div><div class="quality-line"><span>Tekil ziyaretçi · 24s</span><strong>${result.ok ? number(visitors) : '—'}</strong></div><div class="quality-line"><span>Durum</span><strong>${result.ok ? 'Clarity API verisi alındı' : (result.payload.reason || 'Veri yok')}</strong></div></div></article>`;
+      return `<article class="quality-card"><div class="quality-card__head"><div class="quality-card__name">${result.name}</div><span class="status-pill ${result.ok ? 'status-pill--good' : 'status-pill--warn'}">${result.ok ? 'BAĞLI' : escapeHtml(clarityFailureLabel(result.payload.code))}</span></div><div class="quality-lines"><div class="quality-line"><span>Oturum · 24s</span><strong>${result.ok ? number(sessions) : '—'}</strong></div><div class="quality-line"><span>Tekil ziyaretçi · 24s</span><strong>${result.ok ? number(visitors) : '—'}</strong></div><div class="quality-line"><span>Durum</span><strong>${result.ok ? 'Clarity API verisi alındı' : escapeHtml(result.payload.reason || 'Veri yok')}</strong></div></div></article>`;
     }).join('');
   } catch (error) {
-    if (clarityState) { clarityState.textContent = 'Clarity · token bekleniyor'; clarityState.classList.add('is-warning'); }
+    if (clarityState) { clarityState.textContent = 'Clarity · API kullanılamıyor'; clarityState.classList.add('is-warning'); }
     if (clarityStatus) clarityStatus.textContent = error instanceof Error ? error.message : 'API verisi alınamadı';
+    if (claritySiteGrid) claritySiteGrid.textContent = 'Clarity verisi alınamadı.';
   } finally { if (clarityState) clarityState.dataset.loading = 'false'; }
 }
 async function loadGa4() {
