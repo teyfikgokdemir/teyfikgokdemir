@@ -3,7 +3,7 @@ const SITES = Object.freeze({
   ctseg: 'https://ctseg.com.tr',
   commerce: 'https://qctcommerce.com',
   studio: 'https://qctstudio.com',
-  mythborn: 'https://mythborn.com',
+  mythborn: 'https://mythborn.co',
   personal: 'https://teyfikgokdemir.com'
 });
 const JSON_HEADERS={'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff','access-control-allow-origin':'none'};
