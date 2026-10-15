@@ -35,11 +35,11 @@ async function technicalAudit(site){
     }catch{return {httpStatus:null,contentType:'',body:'',robotsHeader:'',error:'unreachable'}}
   }
   const [home,robots,sitemap]=await Promise.all([read('/'),read('/robots.txt'),read('/sitemap.xml')]);
-  const metaRobots=home.body.match(/<meta\\s+[^>]*name=['"]robots['"][^>]*content=['"]([^'"]*)['"]/i)?.[1]||'';
-  const noindex=/(^|[,\\s])noindex([,\\s]|$)/i.test(metaRobots+' '+home.robotsHeader);
-  const canonical=home.body.match(/<link\\s+[^>]*rel=['"]canonical['"][^>]*href=['"]([^'"]+)['"]/i)?.[1]||null;
-  const robotsDisallowAll=/(?:^|\\n)\\s*User-agent:\\s*\\*\\s*\\r?\\n\\s*Disallow:\\s*\\/\\s*(?:\\r?\\n|$)/i.test(robots.body);
-  const sitemapXml=/<(?:urlset|sitemapindex)(?:\\s|>)/i.test(sitemap.body);
+  const metaRobots=home.body.match(/<meta\s+[^>]*name=['"]robots['"][^>]*content=['"]([^'"]*)['"]/i)?.[1]||'';
+  const noindex=/(^|[,\s])noindex([,\s]|$)/i.test(metaRobots+' '+home.robotsHeader);
+  const canonical=home.body.match(/<link\s+[^>]*rel=['"]canonical['"][^>]*href=['"]([^'"]+)['"]/i)?.[1]||null;
+  const robotsDisallowAll=/(?:^|\n)\s*User-agent:\s*\*\s*\r?\n\s*Disallow:\s*\/\s*(?:\r?\n|$)/i.test(robots.body);
+  const sitemapXml=/<(?:urlset|sitemapindex)(?:\s|>)/i.test(sitemap.body);
   const signals=[
     {id:'homepage',label:'Ana sayfa erişimi',state:home.httpStatus===200?'pass':home.httpStatus===null?'unknown':'warning',detail:'HTTP '+(home.httpStatus??'erişilemedi')},
     {id:'robots',label:'robots.txt',state:robots.httpStatus===200?'pass':robots.httpStatus===null?'unknown':'warning',detail:'HTTP '+(robots.httpStatus??'erişilemedi')},
