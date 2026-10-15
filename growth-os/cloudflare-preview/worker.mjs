@@ -51,6 +51,34 @@ async function technicalAudit(site){
   return {site,checkedAt:new Date().toISOString(),signals,disclaimer:'Bu denetim yalnızca ana sayfa ve iki standart dosyayı kontrol eder; gerçek Google indekslenmesini ve kapsamlı robots değerlendirmesini doğrulamaz.'};
 }
 
+// Bounded homepage hreflang inspection; no external destinations are fetched.
+async function localeAudit(site){
+ const target=SITES[site];if(!target)return null;
+ try{
+  const response=await fetch(target,{signal:AbortSignal.timeout(6500),redirect:'follow'});
+  if(!response.ok)return {site,status:'http-error',httpStatus:response.status,alternates:[],warnings:['Ana sayfa HTTP hatası']};
+  const html=(await response.text()).slice(0,200000);
+  const tags=html.match(/<link\\b[^>]*>/gi)||[];
+  const attr=(tag,key)=>tag.match(new RegExp('\\\\b'+key+'\\\\s*=\\\\s*([\\x22\\x27])([\\\\s\\\\S]*?)\\\\1','i'))?.[2]||'';
+  const alternates=[];
+  for(const tag of tags){
+   if(!attr(tag,'rel').toLowerCase().split(/\\s+/).includes('alternate'))continue;
+   const lang=attr(tag,'hreflang'),href=attr(tag,'href');if(!lang||!href)continue;
+   let parsed;try{parsed=new URL(href,response.url)}catch{continue}
+   alternates.push({lang:lang.slice(0,32),url:parsed.href.slice(0,250),sameHost:parsed.hostname===new URL(response.url).hostname});
+   if(alternates.length>=80)break;
+  }
+  const langs=new Set(),duplicates=[];
+  for(const a of alternates){if(langs.has(a.lang.toLowerCase()))duplicates.push(a.lang);langs.add(a.lang.toLowerCase())}
+  const canonicalTag=tags.find(tag=>attr(tag,'rel').toLowerCase().split(/\\s+/).includes('canonical'));
+  const canonical=canonicalTag?attr(canonicalTag,'href'):null;
+  const warnings=[];
+  if(duplicates.length)warnings.push('Tekrarlanan hreflang: '+duplicates.join(', '));
+  if(!alternates.length)warnings.push('Ana sayfada hreflang bağlantısı tespit edilmedi; tek dilli sitelerde normal olabilir.');
+  return {site,checkedAt:new Date().toISOString(),httpStatus:response.status,canonical,alternates,warnings,scope:'Yalnızca ana sayfa HTML link etiketleri kontrol edildi; karşılıklı hreflang, tüm dil sayfaları ve sitemap kapsamı doğrulanmadı.'};
+ }catch{return {site,status:'unreachable',alternates:[],warnings:['Ana sayfa okunamadı']}}
+}
+
 const DASHBOARD = `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Growth OS | Kontrol Merkezi</title><style>
 :root{color-scheme:dark;font-family:Inter,system-ui,-apple-system,sans-serif;background:#090e1b;color:#e9f0ff}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 85% 0%,#17264c 0%,#090e1b 52%);min-height:100vh}header{padding:24px max(24px,calc((100vw - 1120px)/2));border-bottom:1px solid #263550;display:flex;align-items:center;justify-content:space-between;gap:14px}h1{font-size:clamp(29px,4vw,45px);letter-spacing:-1.4px;margin:14px 0}p{color:#aabbd5;line-height:1.6}.brand{font-weight:750;letter-spacing:.3px}.badge{font-size:12px;color:#acc8fa;border:1px solid #344867;padding:8px 11px;border-radius:999px}main{max-width:1120px;margin:auto;padding:55px 24px 80px}.lead{max-width:690px}.eyebrow{color:#75b7ff;font-size:12px;text-transform:uppercase;letter-spacing:2px;font-weight:750}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px;margin-top:32px}.card{background:#121c31;border:1px solid #273956;border-radius:16px;padding:26px;min-height:154px}.card h2{margin:0 0 10px;font-size:20px}.card p{font-size:14px;margin:6px 0 18px}.action{background:#3478f6;color:white;border:none;border-radius:9px;padding:11px 15px;font-weight:700;cursor:pointer}.action:disabled{opacity:.6;cursor:wait}.result{border-top:1px solid #283b57;margin-top:17px;padding-top:14px;color:#b1cbe7;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}.status{display:inline-flex;gap:8px;align-items:center;background:#162740;border-radius:9px;padding:10px 13px;font-size:13px;color:#a9c4e8;margin-top:22px}footer{margin-top:42px;font-size:13px;color:#8197ba}a{color:#81b4ff}@media(max-width:580px){header{padding:18px 22px}main{padding:35px 22px}.badge{font-size:10px}}
 </style></head><body><header><div class="brand">◈ &nbsp;Growth OS</div><div class="badge">Cloudflare · Geliştirme sürümü</div></header><main><div class="eyebrow">Merkezi yönetim platformu</div><h1>Growth Intelligence</h1><section class="grid" id="sites"></section></main><script>
@@ -73,7 +101,7 @@ function sitePage(id){
   const title=escapeHtml(SITE_LABELS[id]),domain=escapeHtml(new URL(SITES[id]).hostname);
   return `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>${title} | Growth OS</title><style>
 :root{color-scheme:dark;font-family:system-ui,-apple-system,sans-serif;background:#090e1b;color:#eaf1ff}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 90% 0,#17284e,#090e1b 56%)}header,main{max-width:1120px;margin:auto;padding:24px}header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #2c3b54}a{color:#91bfff;text-decoration:none}.tag{font-size:12px;padding:7px 11px;border:1px solid #425576;border-radius:22px}main{padding-top:52px}h1{font-size:clamp(32px,5vw,52px);margin:12px 0}h2{font-size:19px;margin:0 0 18px}p{color:#adbfda;line-height:1.65}.eyebrow{font-size:12px;letter-spacing:2px;color:#80b6ff;text-transform:uppercase}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:27px}.box{background:#121d32;border:1px solid #2a3a57;padding:23px;border-radius:17px;min-height:145px}button{background:#357efa;color:white;border:0;border-radius:9px;padding:12px 16px;font-weight:700;cursor:pointer}button:disabled{opacity:.6}.value{font-size:27px;font-weight:700}.muted{font-size:13px;color:#99abc7}.row{padding:11px 0;border-bottom:1px solid #2a3a57;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}#message{margin-left:15px;color:#aabed9}.warning{padding:13px;border:1px solid #544c39;background:#2b281e;border-radius:8px;font-size:13px;margin-top:28px}@media(max-width:600px){header{gap:10px}main{padding-top:28px}}
-</style></head><body><header><a href="/">← Growth OS / Projeler</a><span class="tag">Proje çalışma alanı</span></header><main><div class="eyebrow">Site Intelligence</div><h1>${title}</h1><p>${domain} · Teknik kontrol, geçmiş ölçümler ve değişiklik takibi</p><button id="run">Yeni kontrol çalıştır</button><span id="message" role="status">Geçmiş veriler yükleniyor…</span><section class="grid"><article class="box"><h2>Son ölçüm</h2><div class="value" id="last">—</div><p class="muted" id="lastdate">Henüz veri yok</p></article><article class="box"><h2>SEO sinyalleri</h2><div id="signals">Bekleniyor…</div></article><article class="box"><h2>Son değişiklikler</h2><div id="diff">Bekleniyor…</div></article></section><section class="box" style="margin-top:18px"><h2>Teknik SEO denetimi</h2><button id="technicalRun">Robots / Sitemap / Index kontrolü</button><p class="muted" id="technicalMessage">Kontrol henüz çalıştırılmadı.</p><div id="technicalResults"></div></section><section class="box" style="margin-top:18px"><h2>Son 10 kontrol</h2><div id="history" class="muted">Yükleniyor…</div></section><div class="warning">Bu ekran yalnızca kamuya açık sayfa sinyallerini analiz eder. Search Console, GA4, sıralama ve tam tarama sonuçları henüz entegre değildir.</div></main><script>
+</style></head><body><header><a href="/">← Growth OS / Projeler</a><span class="tag">Proje çalışma alanı</span></header><main><div class="eyebrow">Site Intelligence</div><h1>${title}</h1><p>${domain} · Teknik kontrol, geçmiş ölçümler ve değişiklik takibi</p><button id="run">Yeni kontrol çalıştır</button><span id="message" role="status">Geçmiş veriler yükleniyor…</span><section class="grid"><article class="box"><h2>Son ölçüm</h2><div class="value" id="last">—</div><p class="muted" id="lastdate">Henüz veri yok</p></article><article class="box"><h2>SEO sinyalleri</h2><div id="signals">Bekleniyor…</div></article><article class="box"><h2>Son değişiklikler</h2><div id="diff">Bekleniyor…</div></article></section><section class="box" style="margin-top:18px"><h2>Teknik SEO denetimi</h2><button id="technicalRun">Robots / Sitemap / Index kontrolü</button><p class="muted" id="technicalMessage">Kontrol henüz çalıştırılmadı.</p><div id="technicalResults"></div></section><section class="box" style="margin-top:18px"><h2>Çok dilli SEO / hreflang</h2><button id="localeRun">Dil bağlantılarını incele</button><p class="muted" id="localeMessage">Henüz kontrol yapılmadı.</p><div id="localeResults"></div></section><section class="box" style="margin-top:18px"><h2>Son 10 kontrol</h2><div id="history" class="muted">Yükleniyor…</div></section><div class="warning">Bu ekran yalnızca kamuya açık sayfa sinyallerini analiz eder. Search Console, GA4, sıralama ve tam tarama sonuçları henüz entegre değildir.</div></main><script>
 const site=${JSON.stringify(id)};
 const pick=id=>document.getElementById(id);
 const format=v=>v?'Var':'Yok';
@@ -93,6 +121,16 @@ if(!history.length)el.textContent='Kayıt yok.';
 setText('message','Sonuçlar yüklendi.');
 }catch{setText('message','Kontrol geçmişine erişilemedi.');setText('history','Veri alınamadı.')}
 }
+pick('localeRun').addEventListener('click',async()=>{
+ const btn=pick('localeRun');btn.disabled=true;setText('localeMessage','Hreflang kontrolü sürüyor…');
+ try{
+  const r=await fetch('/api/locale-audit?site='+site,{cache:'no-store'});if(!r.ok)throw Error('AUDIT_FAILED');
+  const data=await r.json();const box=pick('localeResults');box.replaceChildren();
+  const details=document.createElement('p');details.className='muted';details.textContent='Canonical: '+(data.canonical||'Bulunamadı')+' · Dil bağlantısı: '+data.alternates.length;box.append(details);
+  for(const a of data.alternates){const row=document.createElement('div');row.className='row';const lang=document.createElement('strong');lang.textContent=a.lang;const url=document.createElement('span');url.textContent=a.url;row.append(lang,url);box.append(row)}
+  setText('localeMessage',(data.warnings||[]).join(' | ')||'Belirgin tekrar tespit edilmedi.');
+ }catch{setText('localeMessage','Dil analizi gerçekleştirilemedi.')}finally{btn.disabled=false}
+});
 pick('technicalRun').addEventListener('click',async()=>{
 const btn=pick('technicalRun');btn.disabled=true;setText('technicalMessage','Kontrol sürüyor…');
 try{const r=await fetch('/api/technical-audit?site='+site,{cache:'no-store'});if(!r.ok)throw Error('AUDIT_FAILED');const data=await r.json();const container=pick('technicalResults');container.replaceChildren();for(const item of data.signals){const row=document.createElement('div');row.className='row';const name=document.createElement('span');name.textContent=item.label;const status=document.createElement('strong');status.textContent=(item.state==='pass'?'✓ ':item.state==='warning'?'! ':'? ')+item.detail;row.append(name,status);container.append(row)}setText('technicalMessage','Tamamlandı: '+data.checkedAt+' · Sonuçlar yalnızca gözlemlenen teknik sinyallerdir.')}catch{setText('technicalMessage','Teknik denetim gerçekleştirilemedi.')}finally{btn.disabled=false}
@@ -116,6 +154,11 @@ export default {
       let database='unavailable';
       try{const r=await env.PREVIEW_DB.prepare("SELECT value FROM migration_meta WHERE key = 'state'").first();if(r?.value==='preview-infrastructure-only')database='ready'}catch{}
       return json({service:'growth-os-cloudflare-preview',phase:'public-diagnostics',applicationReady:false,database},database==='ready'?200:503);
+    }
+    if(path==='/api/locale-audit'){
+      const site=u.searchParams.get('site')||'';
+      if(!Object.hasOwn(SITES,site))return json({error:'UNKNOWN_SITE'},400);
+      return json(await localeAudit(site));
     }
     if(path==='/api/technical-audit'){
       const site=u.searchParams.get('site')||'';
