@@ -239,6 +239,12 @@ if(site==='ctseg'||site==='commerce'){
    const response=await fetch('/api/trade-reference?site='+site,{cache:'no-store'});if(!response.ok)throw Error('UPSTREAM');
    const data=await response.json(),container=pick('tradeData');container.replaceChildren();
    const fx=document.createElement('div');fx.className='row';fx.textContent=data.fx?'ECB referans · '+data.fx.date+' · 1 EUR = '+data.fx.USD+' USD / '+data.fx.TRY+' TRY':'Döviz kaynağına erişilemedi';container.append(fx);
+   if(data.fx&&Number.isFinite(data.fx.USD)&&data.fx.USD>0&&Number.isFinite(data.fx.TRY)){
+    const usd=document.createElement('div');usd.className='row';
+    const eurPerUsd=1/data.fx.USD,tryPerUsd=data.fx.TRY/data.fx.USD;
+    usd.textContent='ECB referans · '+data.fx.date+' · 1 USD = '+eurPerUsd.toFixed(4)+' EUR / '+tryPerUsd.toFixed(4)+' TRY';
+    container.append(usd);
+   }
    for(const item of data.gdp||[]){const row=document.createElement('div');row.className='row';const country=document.createElement('strong');country.textContent=item.country+' ('+item.year+')';const number=document.createElement('span');number.textContent=item.usd===null?'Veri yok':new Intl.NumberFormat('tr-TR',{notation:'compact',maximumFractionDigits:2}).format(item.usd)+' USD (GSYİH)';row.append(country,number);container.append(row)}
    setText('tradeStatus','Kaynaklar: Frankfurter / World Bank · Güncelleme: '+data.asOf+' · Veriler yalnızca referanstır.');
   }catch{setText('tradeStatus','Veri alınamadı; değer gösterilmiyor.')}finally{btn.disabled=false}
