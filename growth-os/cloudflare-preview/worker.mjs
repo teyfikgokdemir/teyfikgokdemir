@@ -52,31 +52,46 @@ async function technicalAudit(site){
 }
 
 // Bounded homepage hreflang inspection; no external destinations are fetched.
+function htmlLinks(html){
+ const links=html.match(/<link\b[^>]*>/gi)||[];
+ const attr=(tag,name)=>{const m=tag.match(new RegExp('\\b'+name+'\\s*=\\s*(["\\x27])([^"\\x27]*?)\\1','i'));return m?.[2]||''};
+ return {attr,links};
+}
 async function localeAudit(site){
  const target=SITES[site];if(!target)return null;
  try{
   const response=await fetch(target,{signal:AbortSignal.timeout(6500),redirect:'follow'});
-  if(!response.ok)return {site,status:'http-error',httpStatus:response.status,alternates:[],warnings:['Ana sayfa HTTP hatası']};
-  const html=(await response.text()).slice(0,200000);
-  const tags=html.match(/<link\\b[^>]*>/gi)||[];
-  const attr=(tag,key)=>tag.match(new RegExp('\\\\b'+key+'\\\\s*=\\\\s*([\\x22\\x27])([\\\\s\\\\S]*?)\\\\1','i'))?.[2]||'';
+  if(!response.ok)return {site,status:'http-error',httpStatus:response.status,alternates:[],warnings:['Ana sayfa HTTP hatası'],reciprocal:[]};
+  const html=(await response.text()).slice(0,220000);
+  const {attr,links}=htmlLinks(html);
   const alternates=[];
-  for(const tag of tags){
-   if(!attr(tag,'rel').toLowerCase().split(/\\s+/).includes('alternate'))continue;
+  for(const tag of links){
+   if(!attr(tag,'rel').toLowerCase().split(/\s+/).includes('alternate'))continue;
    const lang=attr(tag,'hreflang'),href=attr(tag,'href');if(!lang||!href)continue;
-   let parsed;try{parsed=new URL(href,response.url)}catch{continue}
-   alternates.push({lang:lang.slice(0,32),url:parsed.href.slice(0,250),sameHost:parsed.hostname===new URL(response.url).hostname});
+   try{const u=new URL(href,response.url);if(!['https:','http:'].includes(u.protocol))continue;alternates.push({lang:lang.slice(0,32),url:u.href.slice(0,350),sameHost:u.hostname===new URL(response.url).hostname})}catch{}
    if(alternates.length>=80)break;
   }
-  const langs=new Set(),duplicates=[];
-  for(const a of alternates){if(langs.has(a.lang.toLowerCase()))duplicates.push(a.lang);langs.add(a.lang.toLowerCase())}
-  const canonicalTag=tags.find(tag=>attr(tag,'rel').toLowerCase().split(/\\s+/).includes('canonical'));
+  const seen=new Set(),duplicates=[];
+  for(const a of alternates){if(seen.has(a.lang.toLowerCase()))duplicates.push(a.lang);seen.add(a.lang.toLowerCase())}
+  const canonicalTag=links.find(t=>attr(t,'rel').toLowerCase().split(/\s+/).includes('canonical'));
   const canonical=canonicalTag?attr(canonicalTag,'href'):null;
+  const origin=new URL(response.url);
+  const sameOrigin=alternates.filter(a=>{try{return new URL(a.url).origin===origin.origin}catch{return false}}).slice(0,5);
+  const reciprocal=await Promise.all(sameOrigin.map(async a=>{
+   try{
+    const r=await fetch(a.url,{signal:AbortSignal.timeout(4500),redirect:'manual'});
+    if(!r.ok)return {lang:a.lang,url:a.url,state:'unknown',detail:'HTTP '+r.status};
+    const h=(await r.text()).slice(0,150000),parsed=htmlLinks(h);
+    const entries=parsed.links.filter(t=>parsed.attr(t,'rel').toLowerCase().split(/\s+/).includes('alternate')).map(t=>parsed.attr(t,'href'));
+    const back=entries.some(x=>{try{return new URL(x,a.url).href===response.url}catch{return false}});
+    return {lang:a.lang,url:a.url,state:back?'pass':'warning',detail:back?'Geri bağlantı bulundu':'Başlangıç adresine geri bağlantı tespit edilmedi'};
+   }catch{return {lang:a.lang,url:a.url,state:'unknown',detail:'Kontrol edilemedi'}}
+  }));
   const warnings=[];
   if(duplicates.length)warnings.push('Tekrarlanan hreflang: '+duplicates.join(', '));
-  if(!alternates.length)warnings.push('Ana sayfada hreflang bağlantısı tespit edilmedi; tek dilli sitelerde normal olabilir.');
-  return {site,checkedAt:new Date().toISOString(),httpStatus:response.status,canonical,alternates,warnings,scope:'Yalnızca ana sayfa HTML link etiketleri kontrol edildi; karşılıklı hreflang, tüm dil sayfaları ve sitemap kapsamı doğrulanmadı.'};
- }catch{return {site,status:'unreachable',alternates:[],warnings:['Ana sayfa okunamadı']}}
+  if(!alternates.length)warnings.push('Hreflang bulunamadı (tek dilde normal olabilir)');
+  return {site,checkedAt:new Date().toISOString(),httpStatus:response.status,canonical,alternates,reciprocal,warnings,scope:'En fazla 5 aynı origin dil URL adresinde geri bağlantı aranır. Diğer alan adları, sitemap ve tam dil eşitliği doğrulanmaz.'};
+ }catch{return {site,status:'unreachable',alternates:[],reciprocal:[],warnings:['Ana sayfa okunamadı']}}
 }
 
 const DASHBOARD = `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Growth OS | Kontrol Merkezi</title><style>
@@ -128,7 +143,8 @@ pick('localeRun').addEventListener('click',async()=>{
   const data=await r.json();const box=pick('localeResults');box.replaceChildren();
   const details=document.createElement('p');details.className='muted';details.textContent='Canonical: '+(data.canonical||'Bulunamadı')+' · Dil bağlantısı: '+data.alternates.length;box.append(details);
   for(const a of data.alternates){const row=document.createElement('div');row.className='row';const lang=document.createElement('strong');lang.textContent=a.lang;const url=document.createElement('span');url.textContent=a.url;row.append(lang,url);box.append(row)}
-  setText('localeMessage',(data.warnings||[]).join(' | ')||'Belirgin tekrar tespit edilmedi.');
+  for(const item of data.reciprocal||[]){const row=document.createElement('div');row.className='row';const label=document.createElement('strong');label.textContent='Geri bağlantı · '+item.lang;const detail=document.createElement('span');detail.textContent=item.state+' · '+item.detail;row.append(label,detail);box.append(row)}
+  setText('localeMessage',(data.warnings||[]).join(' | ')||'Kontrol tamamlandı; yalnızca aynı origin adresleri için sınırlı doğrulama yapıldı.');
  }catch{setText('localeMessage','Dil analizi gerçekleştirilemedi.')}finally{btn.disabled=false}
 });
 pick('technicalRun').addEventListener('click',async()=>{
