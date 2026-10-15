@@ -30,7 +30,7 @@ const names={ctseg:'CTSEG',commerce:'QCT Commerce',studio:'QCT Studio',mythborn:
 const escapeHtml=value=>String(value??'—').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 (async()=>{try{const r=await fetch('/health',{cache:'no-store'});const data=await r.json();document.getElementById('status').textContent='● Worker: '+(r.ok?'aktif':'kontrol gerekli')+' · Veritabanı: '+escapeHtml(data.database)}catch{document.getElementById('status').textContent='● Sağlık kontrolüne erişilemedi'}})();
 const grid=document.getElementById('sites');
-Object.entries(names).forEach(([id,name])=>{const card=document.createElement('article');card.className='card';const title=document.createElement('h2');title.textContent=name;const desc=document.createElement('p');desc.textContent='HTTP, başlık, açıklama, canonical ve yapılandırılmış veri kontrolü.';const button=document.createElement('button');button.className='action';button.textContent='Kontrol et';const result=document.createElement('div');result.className='result';result.textContent='Henüz kontrol yapılmadı.';button.onclick=async()=>{button.disabled=true;button.textContent='Kontrol ediliyor…';try{const res=await fetch('/api/public-site-check?site='+encodeURIComponent(id),{cache:'no-store'});const d=await res.json();result.textContent=d.status==='request-failed'?'Erişim hatası: '+d.reason:'HTTP: '+(d.httpStatus??'—')+'\\nBaşlık: '+(d.title??'Bulunamadı')+'\\nMeta açıklama: '+(d.hasDescription?'Var':'Yok')+'\\nCanonical: '+(d.hasCanonical?'Var':'Yok')+'\\nJSON-LD: '+(d.hasStructuredData?'Var':'Yok')+'\\nYanıt: '+(d.durationMs??'—')+' ms'}catch{result.textContent='Kontrol servisine ulaşılamadı.'}finally{button.disabled=false;button.textContent='Yeniden kontrol et'}};card.append(title,desc,button,result);grid.append(card)});
+Object.entries(names).forEach(([id,name])=>{const card=document.createElement('article');card.className='card';const title=document.createElement('h2');title.textContent=name;const desc=document.createElement('p');desc.textContent='HTTP, başlık, açıklama, canonical ve yapılandırılmış veri kontrolü.';const button=document.createElement('button');button.className='action';button.textContent='Kontrol et';const result=document.createElement('div');result.className='result';result.textContent='Geçmiş yükleniyor…';fetch('/api/public-site-history?site='+encodeURIComponent(id),{cache:'no-store'}).then(r=>r.json()).then(d=>{const h=d.history||[];result.textContent=h.length?'Son kontrol: '+h[0].checked_at+' | HTTP '+(h[0].http_status??'—')+' | Canonical '+(h[0].has_canonical?'Var':'Yok'):'Henüz kontrol yapılmadı.'}).catch(()=>{result.textContent='Geçmiş bilgisi alınamadı.'});button.onclick=async()=>{button.disabled=true;button.textContent='Kontrol ediliyor…';try{const res=await fetch('/api/public-site-check?site='+encodeURIComponent(id),{cache:'no-store'});const d=await res.json();result.textContent=d.status==='request-failed'?'Erişim hatası: '+d.reason:'HTTP: '+(d.httpStatus??'—')+'\\nBaşlık: '+(d.title??'Bulunamadı')+'\\nMeta açıklama: '+(d.hasDescription?'Var':'Yok')+'\\nCanonical: '+(d.hasCanonical?'Var':'Yok')+'\\nJSON-LD: '+(d.hasStructuredData?'Var':'Yok')+'\\nYanıt: '+(d.durationMs??'—')+' ms'}catch{result.textContent='Kontrol servisine ulaşılamadı.'}finally{button.disabled=false;button.textContent='Yeniden kontrol et'}};card.append(title,desc,button,result);grid.append(card)});
 </script></body></html>`;
 
 export default {
@@ -46,7 +46,21 @@ export default {
     if(path==='/api/public-site-check'){
       const site=u.searchParams.get('site')||'';
       if(!Object.hasOwn(SITES,site))return json({error:'UNKNOWN_SITE',validSites:Object.keys(SITES)},400);
-      return json(await checkSite(site));
+      const result=await checkSite(site);
+      try {
+        await env.PREVIEW_DB.prepare("INSERT INTO public_site_checks(site,checked_at,http_status,ok,title,has_description,has_canonical,has_structured_data,duration_ms,error_code) VALUES (?,?,?,?,?,?,?,?,?,?)")
+          .bind(site,result.checkedAt||new Date().toISOString(),result.httpStatus??null,result.ok?1:0,result.title??null,result.hasDescription?1:0,result.hasCanonical?1:0,result.hasStructuredData?1:0,result.durationMs??null,result.status==='request-failed'?result.reason:null).run();
+        result.saved=true;
+      } catch {result.saved=false;}
+      return json(result);
+    }
+    if(path==='/api/public-site-history'){
+      const site=u.searchParams.get('site')||'';
+      if(!Object.hasOwn(SITES,site))return json({error:'UNKNOWN_SITE'},400);
+      try{
+        const rows=await env.PREVIEW_DB.prepare('SELECT checked_at,http_status,ok,title,has_description,has_canonical,has_structured_data,duration_ms,error_code FROM public_site_checks WHERE site=? ORDER BY id DESC LIMIT 10').bind(site).all();
+        return json({site,history:rows.results||[]});
+      }catch{return json({error:'HISTORY_UNAVAILABLE'},503)}
     }
     if(path==='/api/public-sites')return json({sites:Object.entries(SITES).map(([id,url])=>({id,host:new URL(url).hostname})),disclaimer:'Public website diagnostics only; not authenticated Growth OS'});
     return json({error:'PREVIEW_NOT_CONFIGURED'},403);
