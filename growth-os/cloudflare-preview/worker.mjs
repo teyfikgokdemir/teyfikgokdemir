@@ -44,7 +44,7 @@ async function technicalAudit(site){
     {id:'homepage',label:'Ana sayfa erişimi',state:home.httpStatus===200?'pass':home.httpStatus===null?'unknown':'warning',detail:'HTTP '+(home.httpStatus??'erişilemedi')},
     {id:'robots',label:'robots.txt',state:robots.httpStatus===200?'pass':robots.httpStatus===null?'unknown':'warning',detail:'HTTP '+(robots.httpStatus??'erişilemedi')},
     {id:'robots_block',label:'Genel robots engeli',state:robots.httpStatus!==200?'unknown':robotsDisallowAll?'warning':'pass',detail:robotsDisallowAll?'Genel Disallow: / kuralı tespit edildi':'Genel tam engel tespit edilmedi'},
-    {id:'sitemap',label:'XML Sitemap',state:sitemapXml?'pass':sitemap.httpStatus===200?'warning':'unknown',detail:'HTTP '+(sitemap.httpStatus??'erişilemedi')},
+    {id:'sitemap',label:'XML Sitemap',state:sitemapXml?'pass':sitemap.httpStatus===200||sitemap.httpStatus===404?'warning':'unknown',detail:'HTTP '+(sitemap.httpStatus??'erişilemedi')},
     {id:'index',label:'Ana sayfa noindex sinyali',state:home.httpStatus!==200?'unknown':noindex?'warning':'pass',detail:noindex?'Noindex direktifi bulundu':'Noindex direktifi tespit edilmedi'},
     {id:'canonical',label:'Canonical',state:home.httpStatus!==200?'unknown':canonical?'pass':'warning',detail:canonical||'Bulunamadı'}
   ];
@@ -131,7 +131,7 @@ async function auditCenter(site,env){
  const weight={high:0,medium:1,low:2,info:3,unknown:4};
  findings.sort((a,b)=>(weight[a.severity]??5)-(weight[b.severity]??5));
  const high=findings.filter(x=>x.severity==='high').length,medium=findings.filter(x=>x.severity==='medium').length,unknown=findings.filter(x=>x.severity==='unknown').length;
- const score=Math.max(0,100-high*20-medium*8);
+ const score=Math.max(0,100-high*20-medium*8-unknown*3);
  const report={site,createdAt:new Date().toISOString(),score,scoreType:'heuristic_preview',counts:{high,medium,unknown},findings,technical,locale,schema,disclaimer:'Bu puan yalnızca kontrol edilen teknik sinyallere göre hesaplanan önizleme göstergesidir; SEO/GEO/AEO/AIO performans veya Google sıralama puanı değildir.'};
  try{
   const saved=await env.PREVIEW_DB.prepare('INSERT INTO audit_center_runs (site,created_at,score,high_count,medium_count,unknown_count,report_json) VALUES (?,?,?,?,?,?,?)').bind(site,report.createdAt,score,high,medium,unknown,JSON.stringify(report)).run();
@@ -145,7 +145,7 @@ async function tradeReference(){
   const sources={fx:'Frankfurter (ECB reference rates)',countries:'World Bank Indicators API'};
   const jobs=[
     fetch('https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD,TRY',{signal:AbortSignal.timeout(6500)}).then(async r=>{if(!r.ok)throw Error('FX_UPSTREAM');const d=await r.json();if(!d.date||!Number.isFinite(d.rates?.USD)||!Number.isFinite(d.rates?.TRY))throw Error('FX_DATA_INVALID');return {date:d.date,base:'EUR',USD:d.rates.USD,TRY:d.rates.TRY}}),
-    fetch('https://api.worldbank.org/v2/country/TR;DOM;IRN/indicator/NY.GDP.MKTP.CD?format=json&per_page=12',{signal:AbortSignal.timeout(6500)}).then(async r=>{if(!r.ok)throw Error('WB_UPSTREAM');const d=await r.json();if(!Array.isArray(d)||!Array.isArray(d[1]))throw Error('WB_DATA_INVALID');const latest=new Map();for(const v of d[1]){const id=v.countryiso3code||v.country?.id;if(v.value!==null&&!latest.has(id))latest.set(id,{country:v.country?.value,year:v.date,usd:v.value})}return Array.from(latest.entries()).map(([code,data])=>({code,...data}))})
+    fetch('https://api.worldbank.org/v2/country/TR;DOM;IRN/indicator/NY.GDP.MKTP.CD?format=json&mrv=1&per_page=50',{signal:AbortSignal.timeout(6500)}).then(async r=>{if(!r.ok)throw Error('WB_UPSTREAM');const d=await r.json();if(!Array.isArray(d)||!Array.isArray(d[1]))throw Error('WB_DATA_INVALID');const latest=new Map();for(const v of d[1]){const id=v.countryiso3code||v.country?.id;if(v.value!==null&&!latest.has(id))latest.set(id,{country:v.country?.value,year:v.date,usd:v.value})}return [['TUR','Türkiye'],['DOM','Dominik Cumhuriyeti'],['IRN','İran']].map(([code,name])=>({code,country:name,...(latest.get(code)||{year:null,usd:null})}))})
   ];
   const settled=await Promise.allSettled(jobs);
   return {asOf:new Date().toISOString(),sources,fx:settled[0].status==='fulfilled'?settled[0].value:null,gdp:settled[1].status==='fulfilled'?settled[1].value:[],unavailable:{fx:settled[0].status==='rejected',gdp:settled[1].status==='rejected'},notes:'Dövizler işlem/anlık teklif kuru değildir; GSYİH son yayımlanan yıllık gözlemdir. Ticari kararlar için bağımsız doğrulama gerekir.'};
