@@ -1,0 +1,44 @@
+name: Growth OS Cloudflare Migration Assessment
+
+on:
+  push:
+    branches: [growth-os-cloudflare-migration-20261015]
+    paths:
+      - 'growth-os/**'
+      - '.github/workflows/growth-os-cloudflare-assessment.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  api-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: growth-os/apps/api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: TypeScript compile
+        run: npm run build
+  frontend-compatibility:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: growth-os/apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install legacy dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Baseline Next.js build
+        run: npm run build
+      - name: Run vinext compatibility check (read-only)
+        run: npx --yes vinext@latest check
