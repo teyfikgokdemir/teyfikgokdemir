@@ -22,6 +22,23 @@ const ORIGINS = new Set([
   'https://olivon.com.tr',
 ]);
 
+// Cloudflare Pages project qct-commerce-tr owns this exact preview namespace.
+const allowedOrigin = (origin: string | null, site: string): string | null => {
+  if (!origin) return null;
+  if (ORIGINS.has(origin)) return origin;
+  if (site !== 'qct-commerce-tr') return null;
+  try {
+    const url = new URL(origin);
+    if (url.protocol !== 'https:' || url.port || url.origin !== origin) return null;
+    const host = url.hostname;
+    if (host === 'www.qctcommerce.com' || host === 'qct-commerce-tr.pages.dev' ||
+      /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.qct-commerce-tr\.pages\.dev$/.test(host)) return origin;
+  } catch {
+    // Malformed and opaque origins must never receive an allow-origin header.
+  }
+  return null;
+};
+
 const cleanBase = (value: string) => value.trim().replace(/\/+$/, '');
 
 const apiBase = (value: string) => {
@@ -35,7 +52,7 @@ const apiBase = (value: string) => {
 const isCloudApi = (value: string) => /(?:api|cloud)\.umami\.is(?:\/v1)?(?:\/|$)/i.test(cleanBase(value));
 const apiUrl = (base: string, path: string) => `${apiBase(base)}/${path.replace(/^\/+/, '')}`;
 const cors = (origin: string | null) => ({
-  'access-control-allow-origin': origin && ORIGINS.has(origin) ? origin : 'null',
+  ...(origin ? { 'access-control-allow-origin': origin } : {}),
   'access-control-allow-methods': 'GET, OPTIONS',
   'access-control-allow-headers': 'content-type',
   'vary': 'origin',
@@ -52,12 +69,12 @@ const respond = (body: unknown, status: number, origin: string | null, cache = '
   });
 
 export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
-  const origin = request.headers.get('origin');
+  const url = new URL(request.url);
+  const site = (url.searchParams.get('site') || '').trim();
+  const origin = allowedOrigin(request.headers.get('origin'), site);
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors(origin) });
   if (request.method !== 'GET') return respond({ ok: false }, 405, origin, 'no-store');
 
-  const url = new URL(request.url);
-  const site = (url.searchParams.get('site') || '').trim();
   const host = HOSTS[site];
   if (!host) return respond({ ok: false, enabled: false, reason: 'unknown-site' }, 400, origin);
 
