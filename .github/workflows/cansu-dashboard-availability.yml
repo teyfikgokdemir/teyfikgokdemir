@@ -1,0 +1,31 @@
+name: Cansu dashboard availability
+
+on:
+  schedule:
+    - cron: "17,47 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-dashboard-route:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Check dashboard routing and expected content
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE="https://cansu.teyfikgokdemir.com"
+          headers="$(mktemp)"
+          body="$(mktemp)"
+          trap 'rm -f "$headers" "$body"' EXIT
+          code="$(curl --retry 2 --retry-delay 3 --max-time 25 -sSL -D "$headers" -o "$body" -w '%{http_code}' "$BASE/")"
+          echo "HTTP: $code"
+          test "$code" = "200" || { echo "::error::Panel root did not return HTTP 200"; exit 1; }
+          if ! grep -Eiq '<title>[^<]*(Cansu Operations Center|Cansu · Güvenli Erişim)' "$body"; then
+            echo "::error::Panel root does not render either the Cansu dashboard or its authenticated login page (possible DNS/proxy/redirect drift)"
+            exit 1
+          fi
+          echo "Cansu dashboard or secure login title verified"
