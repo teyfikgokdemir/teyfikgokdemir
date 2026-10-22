@@ -13,7 +13,7 @@ const clarityVisitors = document.getElementById('clarity-visitors');
 const claritySiteGrid = document.getElementById('clarity-site-grid');
 const claritySites = [
   ['qct-commerce-tr', 'QCT Commerce'], ['ctseg', 'CTSEG'], ['qct-studio', 'QCT Studio'],
-  ['olivon-agency', 'Olivon'], ['teyfikgokdemir', 'Kişisel site'], ['mythborn', 'Mythborn']
+  ['olivon-agency', 'Olivon'], ['teyfikgokdemir', 'Kişisel site'], ['mythborn', 'Mythborn'], ['qctone', 'QCTONE']
 ];
 const snapshots = {};
 const claritySnapshots = new Map();
@@ -34,7 +34,7 @@ function render() {
     state.textContent = data.reason || 'Veri kaynağı hazır değil';
     return;
   }
-  state.textContent = `${cached ? 'Önbellek' : 'Son alınan veri'} · ${data.connectedCount ?? 0}/6 site bağlı · ${data.generatedAt ? new Date(data.generatedAt).toLocaleString('tr-TR') : 'zaman bilgisi yok'}`;
+  state.textContent = `${cached ? 'Önbellek' : 'Son alınan veri'} · ${data.connectedCount ?? 0}/${data.sites?.length ?? 7} site bağlı · ${data.generatedAt ? new Date(data.generatedAt).toLocaleString('tr-TR') : 'zaman bilgisi yok'}`;
   const sites = (data.sites || []).filter(site => !search.value || site.key === search.value);
   sites.sort((a,b) => (b.periods?.[period.value]?.visits || 0) - (a.periods?.[period.value]?.visits || 0));
   for (const site of sites) {
