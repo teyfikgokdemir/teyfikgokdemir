@@ -111,6 +111,22 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
       const path = clean(body.landing_path, 180) || '/';
       const day = new Date().toISOString().slice(0, 10);
 
+      // Consent-free QCTONE aggregate: no session ID, identity, referrer, geo or UTM is stored.
+      if (site === 'qctone' && clean(body.collector_version, 10) === '4') {
+        await env.CANSU_ANALYTICS_DB.prepare(
+          `CREATE TABLE IF NOT EXISTS qctone_cookieless_daily (
+            day TEXT NOT NULL,
+            path TEXT NOT NULL,
+            views INTEGER NOT NULL DEFAULT 0,
+            PRIMARY KEY (day, path)
+          )`
+        ).run();
+        await env.CANSU_ANALYTICS_DB.prepare(
+          'INSERT INTO qctone_cookieless_daily (day, path, views) VALUES (?, ?, 1) ON CONFLICT(day, path) DO UPDATE SET views = views + 1'
+        ).bind(day, path).run();
+        return response({ ok: true, collector: 'qctone-anonymous-v4' }, 202, origin);
+      }
+
       if (clean(body.collector_version, 10) === '3') {
         const sessionId = clean(body.session_id, 80);
         if (!/^[a-zA-Z0-9_-]{12,80}$/.test(sessionId)) return response({ ok: false, error: 'Invalid session id' }, 400, origin);
