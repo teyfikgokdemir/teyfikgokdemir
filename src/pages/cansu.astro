@@ -887,7 +887,7 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
                 clearTimeout(timer);
                 const data = await response.json();
                 if (!data.connected) {
-                    seoContent.innerHTML = `<div class="seo-periods"><div class="seo-period"><span class="seo-period__label">Son 7 gün</span><strong class="seo-period__value">Yetkilendirme bekliyor</strong></div><div class="seo-period"><span class="seo-period__label">Son 30 gün</span><strong class="seo-period__value">Yetkilendirme bekliyor</strong></div></div><div style="margin-top:.85rem;"><a class="seo-connect" href="/api/gsc/start"><i class="fa-brands fa-google"></i> Search Console'u bağla</a></div>`;
+                    seoContent.innerHTML = `<div class="seo-periods"><div class="seo-period"><span class="seo-period__label">Son 7 gün</span><strong class="seo-period__value">Yetkilendirme bekliyor</strong></div><div class="seo-period"><span class="seo-period__label">Son 30 gün</span><strong class="seo-period__value">Yetkilendirme bekliyor</strong></div></div><div style="margin-top:.85rem;display:flex;gap:.55rem;flex-wrap:wrap;"><a class="seo-connect" href="/api/gsc/start"><i class="fa-brands fa-google"></i> Search Console'u bağla</a><a class="seo-connect" href="/api/gsc/start?analytics=1"><i class="fa-brands fa-google"></i> GA4'ü bağla (salt okunur)</a></div>`;
                     return;
                 }
                 const siteCards = sortGscSites(data.sites).map((site) => {
