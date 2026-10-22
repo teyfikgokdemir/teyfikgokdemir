@@ -25,7 +25,7 @@ const json = (data: unknown, status = 200) => new Response(JSON.stringify(data),
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   if (!sameOriginBrowser(request)) return new Response('Forbidden', { status: 403, headers: { 'cache-control': 'no-store', 'x-robots-tag': 'noindex, nofollow' } });
   if (!env.GSC_CLIENT_ID || !env.GSC_REDIRECT_URI || !env.CANSU_GSC_TOKENS) {
-    return json({ ok: false, error: 'Search Console OAuth yapılandırması eksik' }, 503);
+    return json({ ok: false, error: 'Search Console OAuth yapılandırması eksik', missing: { clientId: !env.GSC_CLIENT_ID, redirectUri: !env.GSC_REDIRECT_URI, kv: !env.CANSU_GSC_TOKENS } }, 503);
   }
   const stateBytes = new Uint8Array(24);
   crypto.getRandomValues(stateBytes);
