@@ -26,7 +26,7 @@ jobs:
           node-version: '22'
           cache: npm
       - name: Refresh Vite lockfile only
-        run: npm update vite --package-lock-only --ignore-scripts --no-audit --no-fund
+        run: npm install vite@8.1.6 --save-dev --save-exact --ignore-scripts --no-audit --no-fund
       - name: Verify target
         shell: bash
         run: |
@@ -36,7 +36,7 @@ jobs:
       - name: Commit updated lockfile on isolated branch
         shell: bash
         run: |
-          git add package-lock.json
+          git add package.json package-lock.json
           if git diff --cached --quiet; then echo "No changes"; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
