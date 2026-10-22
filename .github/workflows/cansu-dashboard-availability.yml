@@ -24,8 +24,8 @@ jobs:
           code="$(curl --retry 2 --retry-delay 3 --max-time 25 -sSL -D "$headers" -o "$body" -w '%{http_code}' "$BASE/")"
           echo "HTTP: $code"
           test "$code" = "200" || { echo "::error::Panel root did not return HTTP 200"; exit 1; }
-          if ! grep -Eiq '<title>[^<]*Cansu Operations Center' "$body"; then
-            echo "::error::Panel root does not render the expected Cansu Operations Center (possible DNS/proxy/redirect drift)"
+          if ! grep -Eiq '<title>[^<]*(Cansu Operations Center|Cansu · Güvenli Erişim)' "$body"; then
+            echo "::error::Panel root does not render either the Cansu dashboard or its authenticated login page (possible DNS/proxy/redirect drift)"
             exit 1
           fi
-          echo "Cansu dashboard title verified"
+          echo "Cansu dashboard or secure login title verified"
