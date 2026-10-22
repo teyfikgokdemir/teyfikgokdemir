@@ -1,0 +1,44 @@
+name: Regenerate Vite security lockfile
+
+on:
+  push:
+    branches:
+      - fix/vite-security-lock-20261022
+    paths:
+      - .github/workflows/vite-security-lock.yml
+      - package-lock.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate-lock:
+    if: github.repository == 'teyfikgokdemir/teyfikgokdemir' && github.ref == 'refs/heads/fix/vite-security-lock-20261022'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Refresh Vite lockfile only
+        run: npm install vite@8.1.6 --package-lock-only --ignore-scripts --save=false --no-audit --no-fund
+      - name: Verify target
+        shell: bash
+        run: |
+          node -e "const x=require('./package-lock.json'); if(x.packages['node_modules/vite']?.version!=='8.1.6') process.exit(1)"
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run build
+      - name: Commit updated lockfile on isolated branch
+        shell: bash
+        run: |
+          git add package-lock.json
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "fix(deps): update Vite lockfile to 8.1.6"
+          git push origin HEAD:fix/vite-security-lock-20261022
