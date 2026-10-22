@@ -188,6 +188,24 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
     const version = clean(url.searchParams.get('version'), 10).toLowerCase();
     const period = clean(url.searchParams.get('period'), 20).toLowerCase();
 
+    if (site === 'qctone' && version === 'anonymous') {
+      await env.CANSU_ANALYTICS_DB.prepare(
+        `CREATE TABLE IF NOT EXISTS qctone_cookieless_daily (
+          day TEXT NOT NULL,
+          path TEXT NOT NULL,
+          views INTEGER NOT NULL DEFAULT 0,
+          PRIMARY KEY (day, path)
+        )`
+      ).run();
+      const since = period === 'today'
+        ? new Date().toISOString().slice(0, 10)
+        : new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+      const totals = await env.CANSU_ANALYTICS_DB.prepare(
+        'SELECT SUM(views) AS views FROM qctone_cookieless_daily WHERE day >= ?'
+      ).bind(since).first<{ views: number | null }>();
+      return response({ ok: true, site, collector: 'anonymous-pageviews', period: period === 'today' ? 'today' : 'rolling-day-buckets', pageviews: Number(totals?.views || 0), uniqueVisitors: null, sessions: null }, 200, origin);
+    }
+
     if (version === 'v2') {
       await ensureFirstPartyV2(env);
       const since = period === 'today'
