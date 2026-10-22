@@ -1,6 +1,7 @@
 interface Env {
   CF_API_TOKEN?: string;
   CF_API_TOKEN_OLIVON?: string;
+  CF_API_TOKEN_QCTONE?: string;
   CF_ACCOUNT_ID?: string;
   GITHUB_TOKEN?: string;
   CANSU_ANALYTICS_DB?: D1Database;
@@ -191,7 +192,7 @@ async function githubRun(repo: string, env: Env) {
 }
 
 async function cloudflareTraffic(site: Site, env: Env) {
-  const token = site.key === 'olivon-agency' ? env.CF_API_TOKEN_OLIVON : env.CF_API_TOKEN;
+  const token = site.key === 'olivon-agency' ? env.CF_API_TOKEN_OLIVON : site.key === 'qctone' ? env.CF_API_TOKEN_QCTONE : env.CF_API_TOKEN;
   if (!token || !site.zoneTag) return { ok: false, available: false, reason: 'Cloudflare secret yapılandırılmadı' };
   const query = `query($zoneTag:String!, $date:Date!, $date7:Date!, $date30:Date!, $since:Time!, $until:Time!) { viewer { zones(filter:{zoneTag:$zoneTag}) { daily:httpRequests1dGroups(limit:1, filter:{date_geq:$date}) { sum { requests bytes cachedBytes } uniq { uniques } } sevenDays:httpRequests1dGroups(limit:7, filter:{date_geq:$date7}) { uniq { uniques } } thirtyDays:httpRequests1dGroups(limit:30, filter:{date_geq:$date30}) { uniq { uniques } } hourly:httpRequests1hGroups(limit:24, filter:{datetime_geq:$since, datetime_leq:$until}, orderBy:[datetime_ASC]) { dimensions { datetime } sum { requests countryMap { clientCountryName requests bytes } } uniq { uniques } } } } }`;
   const controller = new AbortController();
