@@ -23,6 +23,7 @@ const sites: Site[] = [
   { key: 'qct-commerce-tr', name: 'qct-commerce-tr', url: 'https://qctcommerce.com/', repo: 'qct-commerce-tr', actions: 'https://github.com/teyfikgokdemir/qct-commerce-tr/actions', zoneTag: '851672489bf8dd324e518cf18d3af4c6' },
   { key: 'qctone', name: 'QCTONE', url: 'https://qctone.com/', repo: 'qct-global', actions: 'https://github.com/teyfikgokdemir/qct-global/actions' },
   { key: 'olivon-agency', name: 'olivon-agency', url: 'https://olivon.com.tr/', repo: 'olivon-agency', actions: 'https://github.com/teyfikgokdemir/olivon-agency/actions', zoneTag: 'bd2fd5274ec14f49ba3c16f98f8a2cda' },
+  { key: 'qctone', name: 'qctone', url: 'https://qctone.com/', repo: 'qctone', actions: 'https://github.com/teyfikgokdemir/qctone/actions' },
 ];
 
 const json = (data: unknown, status = 200) => new Response(JSON.stringify(data), {

@@ -1,4 +1,4 @@
-interface Env { GSC_CLIENT_ID?: string; GSC_CLIENT_SECRET?: string; CANSU_GSC_TOKENS?: KVNamespace; }
+interface Env { GSC_CLIENT_ID?: string; GSC_CLIENT_SECRET?: string; GA4_PROPERTY_QCTONE?: string; CANSU_GSC_TOKENS?: KVNamespace; }
 const sites = [
   ['qct-commerce-tr','QCT Commerce','537161539'], ['ctseg','CTSEG','547090229'],
   ['qct-studio','QCT Studio','546070664'], ['olivon-agency','Olivon','553540693'],
@@ -29,7 +29,9 @@ export const onRequestGet: PagesFunction<Env> = async ({env}) => {
   try {
     const token = await fetchJson('https://oauth2.googleapis.com/token', {method:'POST', body:new URLSearchParams({client_id:env.GSC_CLIENT_ID, client_secret:env.GSC_CLIENT_SECRET, refresh_token:refresh, grant_type:'refresh_token'})});
     if (typeof token.access_token !== 'string') throw new Error('invalid_token');
-    const results = await Promise.all(sites.map(async ([key,name,property]) => {
+    const allSites = [...sites, ['qctone','QCT One', env.GA4_PROPERTY_QCTONE || '']];
+    const results = await Promise.all(allSites.map(async ([key,name,property]) => {
+      if (!property) return {key,name,connected:false,reason:'QCT One GA4 property ID bekleniyor'};
       try {
         const periods = {
           oneDay: await runPeriod(property, token.access_token, 'today', 'today'),

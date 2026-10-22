@@ -10,6 +10,7 @@ const HOSTS: Record<string, string> = {
   'qct-studio': 'qctstudio.com',
   'qct-commerce-tr': 'qctcommerce.com',
   'olivon-agency': 'olivon.com.tr',
+  qctone: 'qctone.com',
 };
 
 const ORIGINS = new Set([
@@ -20,6 +21,7 @@ const ORIGINS = new Set([
   'https://qctstudio.com',
   'https://qctcommerce.com',
   'https://olivon.com.tr',
+  'https://qctone.com',
 ]);
 
 // Cloudflare Pages project qct-commerce-tr owns this exact preview namespace.
