@@ -37,7 +37,7 @@ const canonical = new URL(pagePath, site.origin).toString();
 const profileImage =
   site.origin + site.images.profile.originalPath;
 const brandPrimaryImage = site.origin + '/brand/teyfik-gokdemir-primary.png';
-const brandOgImage = site.origin + '/brand/teyfik-gokdemir-og.webp';
+const brandOgImage = site.origin + '/brand/teyfik-gokdemir-og.jpg';
 
 const defaultAlternates: Partial<Record<Locale | 'x-default', string>> =
   Object.fromEntries([
@@ -251,6 +251,8 @@ const jsonLd = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={brandOgImage} />
+    <meta property="og:image:secure_url" content={brandOgImage} />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Teyfik Gökdemir" />
