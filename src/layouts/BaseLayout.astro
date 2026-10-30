@@ -516,26 +516,6 @@ const jsonLd = {
     color: var(--muted);
     font-size: .92rem;
   }
-  .hero-media { position: relative; align-self: stretch; min-height: 520px; }
-  .hero-media::before {
-    content: "";
-    position: absolute;
-    inset: 6% -4% 0 8%;
-    border: 1px solid var(--line);
-    border-radius: 15rem 15rem var(--radius) var(--radius);
-    background: var(--surface-olive);
-  }
-  .hero-media img {
-    position: absolute;
-    inset: 0 0 0 auto;
-    width: min(100%, 480px);
-    height: 100%;
-    object-fit: cover;
-    object-position: 50% 18%;
-    border-radius: 15rem 15rem var(--radius) var(--radius);
-    filter: saturate(.88) contrast(1.03);
-  }
-
   .intro-grid, .regional-grid {
     display: grid;
     grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
@@ -934,9 +914,6 @@ const jsonLd = {
   @media (max-width: 800px) {
     .shell { width: min(100% - 2rem, var(--max)); }
     .hero { min-height: auto; grid-template-columns: 1fr; padding-top: 3.5rem; }
-    .hero-media { min-height: 480px; order: 2; }
-    .hero-media::before { inset-inline: 3%; }
-    .hero-media img { inset-inline: 0; margin: auto; }
     .intro-grid, .regional-grid, .journey-layout { grid-template-columns: 1fr; }
     .journey-image { position: static; }
     .journey-image img { max-height: 520px; }
@@ -965,9 +942,6 @@ const jsonLd = {
     .section { padding-block: clamp(3.5rem, 10vw, 5rem); }
     .hero { padding-top: 1.5rem; }
     .hero h1 { font-size: clamp(2.2rem, 11.5vw, 3.6rem); }
-    .hero-media { min-height: 390px; }
-    .hero-media img { width: 100%; }
-    .hero-media::before { inset-inline: 3%; }
     .hero-actions { display: grid; }
     .button { width: 100%; }
     .focus-list, .venture-grid, .expertise-grid, .method-grid { grid-template-columns: 1fr; }
@@ -982,7 +956,6 @@ const jsonLd = {
 
   @media (max-width: 360px) {
     .brand strong { display: none; }
-    .hero-media { min-height: 350px; }
     .language-switcher a { min-width: 42px; }
   }
 

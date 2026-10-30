@@ -886,10 +886,7 @@ const intentCards: IntentItem[] = [
   <!-- STAGE 1: MIDNIGHT SAPPHIRE HERO -->
   <div class="midnight-stage">
     <div class="stage-container">
-      <div class="dossier-bar" aria-label="Operating coordinates">
-        <span class="dossier-bar__coord">{ui.dossierLocation}</span>
-        <span class="dossier-bar__scope">{ui.dossierScope}</span>
-      </div>
+
 
       <section class="hero" id="top">
         <div class="hero-copy">
@@ -930,10 +927,7 @@ const intentCards: IntentItem[] = [
                 fetchpriority="high"
               />
             </div>
-            <div class="portrait-badge">
-              <span class="badge-role">FOUNDER / OPERATOR</span>
-              <span class="badge-base">IST · BLK · GLOBAL</span>
-            </div>
+
           </div>
         </div>
       </section>
@@ -1238,23 +1232,9 @@ const intentCards: IntentItem[] = [
     border-bottom: 0;
   }
 
-  .dossier-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 14px 0;
-    border-bottom: 1px solid rgba(212, 175, 106, 0.16);
-    font-size: 0.69rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: #8fa0bc;
-  }
+  
 
-  .dossier-bar__coord {
-    color: #d4af6a;
-    font-weight: 600;
-  }
+  
 
   .hero {
     position: relative;
@@ -1461,64 +1441,104 @@ const intentCards: IntentItem[] = [
     transform: translateY(-1px);
   }
 
+  @keyframes heroFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(22px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-copy {
+    animation: heroFadeIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
   .hero-media {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     max-width: 440px;
     width: 100%;
     justify-self: end;
+    animation: heroFadeIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 0.12s;
   }
 
   .portrait-shell {
     position: relative;
-    border: 1px solid rgba(212, 175, 106, 0.38);
-    border-radius: 16px;
+    width: 100%;
+    border: 1px solid rgba(212, 175, 106, 0.36);
+    border-radius: 22px;
     padding: 10px;
-    background: linear-gradient(180deg, rgba(18, 34, 64, 0.85), rgba(7, 13, 25, 0.98));
-    box-shadow: 0 34px 80px -20px rgba(0, 0, 0, 0.8), 0 0 70px rgba(30, 62, 122, 0.3);
+    background: radial-gradient(80% 100% at 50% 0%, rgba(30, 62, 122, 0.36) 0%, rgba(14, 25, 48, 0.85) 60%, rgba(7, 13, 25, 0.98) 100%);
+    box-shadow: 0 32px 84px -16px rgba(0, 0, 0, 0.85), 0 0 70px rgba(30, 62, 122, 0.35);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.4s ease;
+  }
+
+  .portrait-shell:hover {
+    transform: translateY(-4px);
+    border-color: rgba(212, 175, 106, 0.6);
+    box-shadow: 0 42px 96px -16px rgba(0, 0, 0, 0.9), 0 0 90px rgba(212, 175, 106, 0.22);
   }
 
   .portrait-frame {
     position: relative;
     overflow: hidden;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #091224;
   }
 
+  .portrait-frame img,
   .portrait-shell img {
     display: block;
     width: 100%;
     height: auto;
     aspect-ratio: 3 / 4;
     object-fit: cover;
-    object-position: 50% 18%;
-    border-radius: 10px;
-    transition: transform 0.4s ease;
+    object-position: 50% 16%;
+    border-radius: 14px;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .portrait-shell:hover img {
-    transform: scale(1.015);
+    transform: scale(1.028);
   }
 
-  .portrait-badge {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 14px 4px;
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+  /* Micro-interactions & animations for cards */
+  .core-card,
+  .asset-card,
+  .intent-item,
+  .collab-card {
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, border-color 0.28s ease;
   }
 
-  .badge-role {
-    color: #dfbe7f;
-    font-weight: 700;
+  .core-card:hover,
+  .asset-card:hover,
+  .intent-item:hover {
+    transform: translateY(-4px);
   }
 
-  .badge-base {
-    color: #8fa0bc;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
+  .collab-card:hover {
+    transform: translateY(-3px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-copy,
+    .hero-media,
+    .portrait-shell,
+    .portrait-shell img,
+    .core-card,
+    .asset-card,
+    .intent-item,
+    .collab-card {
+      animation: none !important;
+      transition: none !important;
+      transform: none !important;
+    }
   }
 
   /* ==========================================================================
@@ -2205,12 +2225,7 @@ const intentCards: IntentItem[] = [
   }
 
   @media (max-width: 900px) {
-    .dossier-bar {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
-      font-size: 0.64rem;
-    }
+    
 
     .hero,
     .section-ledger-head,
