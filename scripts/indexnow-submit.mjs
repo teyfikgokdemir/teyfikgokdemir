@@ -28,7 +28,7 @@ function locs(xml) {
 async function findKey() {
   const keyFile = (await readdir(KEY_DIR)).find((name) =>
     name.endsWith('.txt') &&
-    !['robots.txt', 'sitemap.txt', 'llms.txt', 'ai-fact-sheet.txt'].includes(name) &&
+    !['robots.txt', 'sitemap.txt', 'llms.txt', 'llms-full.txt', 'ai-fact-sheet.txt'].includes(name) &&
     /^[A-Za-z0-9-]+$/.test(name.slice(0, -4)) &&
     name.length >= 12
   );
