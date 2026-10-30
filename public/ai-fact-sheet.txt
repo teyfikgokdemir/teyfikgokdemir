@@ -1,6 +1,6 @@
 # Teyfik Gökdemir — AI Fact Sheet
 
-**Repository alignment reviewed:** 2026-09-28
+**Repository alignment reviewed:** 2026-10-30
 
 ## Current identity
 
@@ -21,7 +21,7 @@ The website is Teyfik Gökdemir’s personal operating hub. It connects core bus
 Current visible positioning spans:
 - software and digital systems
 - e-commerce and digital commerce operations
-- growth infrastructure and search visibility
+- growth infrastructure and search visibility (SEO, GEO, AEO, AIO)
 - AI-assisted research and operations
 - international trade and strategic sourcing
 

@@ -109,7 +109,7 @@ for (const file of htmlFiles) {
   const ogHeight = attr(selectedTag(html, 'meta', 'property', 'og:image:height'), 'content');
   const twitterCard = attr(selectedTag(html, 'meta', 'name', 'twitter:card'), 'content');
   const twitterImage = attr(selectedTag(html, 'meta', 'name', 'twitter:image'), 'content');
-  if (ogImage !== `${origin}/brand/teyfik-gokdemir-og.webp`) errors.push(`${route}: marka OG görseli yanlış.`);
+  if (![`${origin}/brand/teyfik-gokdemir-og.jpg`, `${origin}/brand/teyfik-gokdemir-og.webp`].includes(ogImage)) errors.push(`${route}: marka OG görseli yanlış.`);
   if (ogWidth !== '1200' || ogHeight !== '630') errors.push(`${route}: OG görsel boyutları 1200x630 değil.`);
   if (twitterCard !== 'summary_large_image' || twitterImage !== ogImage) errors.push(`${route}: Twitter card marka görseliyle eşleşmiyor.`);
   if (/<script\b[^>]*src=["'][^"']*googletagmanager\.com\/gtag/i.test(html)) errors.push(`${route}: analitik scripti izin alınmadan HTML içinde yükleniyor.`);
