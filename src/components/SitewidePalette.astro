@@ -1,92 +1,90 @@
 <style is:global>
   :root {
     color-scheme: dark !important;
-    --scene-paper: #0c0b0a !important;
-    --scene-stone: #100f0d !important;
-    --scene-mineral: #1a1713 !important;
-    --scene-sage: #1d1914 !important;
-    --scene-olive: #18140f !important;
-    --scene-smoke: #0c0b0a !important;
-    --accent-rust: #c48845 !important;
-    --accent-coral: #e4c497 !important;
-    --accent-gold-muted: #c99b82 !important;
-    --bg: #0c0b0a !important;
-    --bg-alt: #100f0d !important;
-    --surface: #12110e !important;
-    --surface-dark: #0c0b0a !important;
-    --surface-olive: #18140f !important;
-    --text: #f3ede2 !important;
-    --text-muted: #a89f93 !important;
-    --border: #2c2620 !important;
-    --accent: #c48845 !important;
-    --accent-hover: #e4c497 !important;
-    --accent-secondary: #c99b82 !important;
-    --trust: #b79d7d !important;
-    --focus: #e4c497 !important;
-    --page-background: #0c0b0a !important;
-    --surface-elevated: #12110e !important;
-    --muted-background: #100f0d !important;
-    --text-primary: #f3ede2 !important;
-    --text-secondary: #a89f93 !important;
-    --primary-accent: #c48845 !important;
-    --accent-muted: rgba(196, 136, 69, .12) !important;
-    --bg-deep: #0c0b0a !important;
-    --panel: #12110e !important;
-    --panel-soft: #171511 !important;
-    --muted: #a89f93 !important;
-    --accent-soft: #e4c497 !important;
-    --line: #2c2620 !important;
-    --line-strong: #574536 !important;
+    --scene-paper: #060b16 !important;
+    --scene-stone: #091224 !important;
+    --scene-mineral: #0f1c36 !important;
+    --scene-sage: #11203d !important;
+    --scene-olive: #0c172e !important;
+    --scene-smoke: #060b16 !important;
+    --accent-rust: #d4af6a !important;
+    --accent-coral: #e6ca92 !important;
+    --accent-gold-muted: #b89658 !important;
+    --bg: #060b16 !important;
+    --bg-alt: #091224 !important;
+    --surface: #0b1528 !important;
+    --surface-dark: #060b16 !important;
+    --surface-olive: #0c172e !important;
+    --text: #f4f1ea !important;
+    --text-muted: #98a7c2 !important;
+    --border: #1b2c4b !important;
+    --accent: #d4af6a !important;
+    --accent-hover: #e6ca92 !important;
+    --accent-secondary: #7aa2e3 !important;
+    --trust: #b8c5dc !important;
+    --focus: #e6ca92 !important;
+    --page-background: #060b16 !important;
+    --surface-elevated: #0b1528 !important;
+    --muted-background: #091224 !important;
+    --text-primary: #f4f1ea !important;
+    --text-secondary: #98a7c2 !important;
+    --primary-accent: #d4af6a !important;
+    --accent-muted: rgba(212, 175, 106, .14) !important;
+    --bg-deep: #060b16 !important;
+    --panel: #0b1528 !important;
+    --panel-soft: #101e38 !important;
+    --muted: #98a7c2 !important;
+    --accent-soft: #e6ca92 !important;
+    --line: #1b2c4b !important;
+    --line-strong: #35507e !important;
   }
 
   html,
   body {
-    background: #0c0b0a !important;
-    color: #f3ede2 !important;
+    background: #060b16 !important;
+    color: #f4f1ea !important;
   }
 
   .section-label,
-  .eyebrow,
-  .card-tag,
   .footer-label,
   .dropdown-group,
   .mobile-label,
   .article-meta-line,
   .text-link {
-    color: #c48845 !important;
+    color: #d4af6a !important;
   }
 
   .tg-footer {
-    background: #0c0b0a !important;
-    color: #f3ede2 !important;
-    border-color: #26211c !important;
+    background: #060b16 !important;
+    color: #f4f1ea !important;
+    border-color: #192946 !important;
   }
 
   .tg-footer .footer-intro p,
   .tg-footer .footer-bottom {
-    color: #9f9487 !important;
+    color: #93a3bf !important;
   }
 
   .tg-footer .footer-group a:hover {
-    color: #e4c497 !important;
+    color: #e6ca92 !important;
   }
 
   .tg-footer .footer-group a span:last-child {
-    color: #c48845 !important;
+    color: #d4af6a !important;
   }
 
   .blog-page,
   .content-page,
   .legal-page,
   .instagram-hub,
-  main {
-    background-color: #0c0b0a !important;
+  main:not(.personal-home) {
+    background-color: #060b16 !important;
   }
 
   .blog-hero,
   .content-hero {
-    background: #100f0d !important;
-    border-color: #2c2620 !important;
+    background: radial-gradient(80% 90% at 80% 10%, rgba(30, 62, 122, 0.32) 0%, rgba(9, 18, 36, 0) 65%), #091224 !important;
+    border-color: #1b2c4b !important;
   }
 
   .featured-article,
@@ -98,9 +96,9 @@
   .answer-block,
   .venture-card,
   .focus-list span {
-    background: #12110e !important;
-    border-color: #2c2620 !important;
-    box-shadow: none !important;
+    background: #0b1528 !important;
+    border-color: #1b2c4b !important;
+    box-shadow: 0 20px 44px rgba(3, 7, 15, 0.35) !important;
   }
 
   .featured-article::before,
@@ -114,7 +112,7 @@
   .featured-article h2,
   .venture-card,
   .venture-card h3 {
-    color: #f3ede2 !important;
+    color: #f4f1ea !important;
   }
 
   .featured-article p,
@@ -125,38 +123,38 @@
   .content-body p,
   .content-body li,
   .legal-card p {
-    color: #a89f93 !important;
+    color: #98a7c2 !important;
   }
 
   .article-table th {
-    background: #171511 !important;
-    color: #f3ede2 !important;
+    background: #101e38 !important;
+    color: #f4f1ea !important;
   }
 
   .article-table td {
-    color: #a89f93 !important;
+    color: #98a7c2 !important;
   }
 
   .article-list > a:hover,
   .article-list > a:focus-visible {
-    background: #100f0d !important;
+    background: #0b1528 !important;
   }
 
   .tag {
-    border-color: rgba(196, 136, 69, .3) !important;
-    background: rgba(196, 136, 69, .07) !important;
-    color: #e4c497 !important;
+    border-color: rgba(212, 175, 106, .34) !important;
+    background: rgba(212, 175, 106, .09) !important;
+    color: #e6ca92 !important;
   }
 
   main:not(.personal-home) .button.primary {
-    background: #c48845 !important;
-    border-color: #c48845 !important;
-    color: #160f09 !important;
+    background: #d4af6a !important;
+    border-color: #d4af6a !important;
+    color: #060c18 !important;
   }
 
   main:not(.personal-home) .button.primary:hover {
-    background: #e4c497 !important;
-    border-color: #e4c497 !important;
+    background: #e6ca92 !important;
+    border-color: #e6ca92 !important;
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -172,7 +170,7 @@
     .content-card:hover,
     .legal-card:hover,
     .venture-card:hover {
-      border-color: #574536 !important;
+      border-color: rgba(212, 175, 106, 0.55) !important;
     }
   }
 </style>

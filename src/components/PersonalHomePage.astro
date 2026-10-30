@@ -30,7 +30,6 @@ const featuredArticles = [
         title: legacyArticle.title,
         description: legacyArticle.description,
         tag: 'SEO · GEO · AEO · AIO',
-        date: '2026',
       }]
     : []),
   ...posts
@@ -41,11 +40,10 @@ const featuredArticles = [
       title: localizedPostValue(item.title, blogLoc) ?? '',
       description: localizedPostValue(item.description, blogLoc) ?? '',
       tag: blogMeta.blog,
-      date: item.date.slice(0, 7),
     })),
 ].slice(0, 4);
 
-type IntentItem = { label: string; title: string; text: string; action: string; href: string; external?: boolean };
+type IntentItem = { label: string; title: string; text: string; action: string; href: string };
 type CoreProof = { roleLabel: string; outputLabel: string; studioRole: string; studioOut: string; commerceRole: string; commerceOut: string; ctsegRole: string; ctsegOut: string };
 type FormCopy = { topicLabel: string; selectPlaceholder: string; topics: string[]; companyLabel: string; companyPlaceholder: string; messageLabel: string; messagePlaceholder: string; submit: string; introLine: string };
 
@@ -109,7 +107,7 @@ type HomeCopy = {
 const t: Record<string, HomeCopy> = {
   tr: {
     dossierLocation: 'İSTANBUL · BALKANLAR · KÜRESEL OPERASYONLAR',
-    dossierScope: '03 ANA ŞİRKET · 02 ÖZEL PLATFORM · 09 DİL',
+    dossierScope: 'ANA ŞİRKETLER · ÖZEL PLATFORMLAR · ÇOK DİLLİ EKOSİSTEM',
     eyebrow: 'TEKNOLOJİ · TİCARET · KÜRESEL OPERASYONLAR',
     title: 'Dijital sistemler kuruyor, ticari operasyonlar geliştiriyorum.',
     lead: 'Yazılım, e-ticaret, büyüme altyapıları ve uluslararası ticaret arasında çalışan yapılar geliştiriyorum. Fikirleri sunum dosyalarında bırakmak yerine ölçülebilir, işletilebilir sistemlere dönüştürmeye odaklanıyorum.',
@@ -119,10 +117,10 @@ const t: Record<string, HomeCopy> = {
     intentTitle: 'Hangi alanda çalışmak istiyorsunuz?',
     intentLead: 'İhtiyacınıza en yakın başlığı seçin; sizi aracı katmanlar olmadan doğrudan ilgili yapıya veya çalışma masama yönlendirelim.',
     intents: [
-      { label: '01 · YAZILIM & ÜRÜN', title: 'Bir teknoloji ürünü veya sistem geliştirmek istiyorum.', text: 'Web sistemleri, özel yazılım, otomasyon ve AI destekli operasyon araçları.', action: 'QCT Studio’ya git' },
-      { label: '02 · E-TİCARET & BÜYÜME', title: 'E-ticaret ve arama görünürlüğü altyapısı kurmak istiyorum.', text: 'Dönüşüm mimarisi, çok dilli ticaret, SEO / GEO / AEO / AIO ve dijital büyüme.', action: 'QCT Commerce’e git' },
-      { label: '03 · KÜRESEL TİCARET & TEDARİK', title: 'Uluslararası tedarik veya B2B pazar operasyonu yürütmek istiyorum.', text: 'Stratejik sourcing, tedarikçi doğrulama, RFQ yönetimi ve sınır ötesi ticaret.', action: 'CTSEG’e git' },
-      { label: '04 · KURUCU MASASI', title: 'Ortaklık, yatırım veya özel bir proje görüşmek istiyorum.', text: 'Standart kalıpların dışındaki iş birlikleri ve stratejik projeler için doğrudan iletişim.', action: 'WhatsApp’tan yaz' },
+      { label: 'YAZILIM & DİJİTAL ÜRÜN', title: 'Bir teknoloji ürünü veya sistem geliştirmek istiyorum.', text: 'Web sistemleri, özel yazılım, otomasyon ve AI destekli operasyon araçları.', action: 'QCT Studio’ya git' },
+      { label: 'E-TİCARET & BÜYÜME', title: 'E-ticaret ve arama görünürlüğü altyapısı kurmak istiyorum.', text: 'Dönüşüm mimarisi, çok dilli ticaret, SEO / GEO / AEO / AIO ve dijital büyüme.', action: 'QCT Commerce’e git' },
+      { label: 'KÜRESEL TİCARET & TEDARİK', title: 'Uluslararası tedarik veya B2B pazar operasyonu yürütmek istiyorum.', text: 'Stratejik sourcing, tedarikçi doğrulama, RFQ yönetimi ve sınır ötesi ticaret.', action: 'CTSEG’e git' },
+      { label: 'KURUCU MASASI', title: 'Ortaklık, yatırım veya özel bir proje görüşmek istiyorum.', text: 'Standart kalıpların dışındaki iş birlikleri ve stratejik projeler için doğrudan iletişim.', action: 'WhatsApp’tan yaz' },
     ],
     coreLabel: 'ANA YAPILAR',
     coreTitle: 'Birbirini tamamlayan üç operasyon alanı.',
@@ -189,7 +187,7 @@ const t: Record<string, HomeCopy> = {
   },
   en: {
     dossierLocation: 'ISTANBUL · BALKANS · GLOBAL OPERATIONS',
-    dossierScope: '03 CORE COMPANIES · 02 OWNED PLATFORMS · 09 LANGUAGES',
+    dossierScope: 'CORE COMPANIES · OWNED PLATFORMS · MULTILINGUAL ECOSYSTEM',
     eyebrow: 'TECHNOLOGY · COMMERCE · GLOBAL OPERATIONS',
     title: 'I build digital systems and develop commercial operations.',
     lead: 'I work across software, e-commerce, growth infrastructure and international trade, turning ideas into measurable and operable systems rather than slide decks.',
@@ -199,10 +197,10 @@ const t: Record<string, HomeCopy> = {
     intentTitle: 'Where do you want to start?',
     intentLead: 'Select the track closest to your objective to connect directly with the relevant operating company or my desk.',
     intents: [
-      { label: '01 · SOFTWARE & PRODUCT', title: 'I want to build a digital product or technical system.', text: 'Web systems, custom software, workflow automation and AI-assisted operational tools.', action: 'Go to QCT Studio' },
-      { label: '02 · E-COMMERCE & GROWTH', title: 'I want to scale e-commerce and search visibility.', text: 'Conversion systems, multilingual commerce, SEO / GEO / AEO / AIO and digital growth.', action: 'Go to QCT Commerce' },
-      { label: '03 · GLOBAL TRADE & SOURCING', title: 'I want to run international sourcing or B2B trade.', text: 'Strategic sourcing, supplier verification, comparable RFQs and cross-border operations.', action: 'Go to CTSEG' },
-      { label: '04 · FOUNDER DESK', title: 'I want to discuss a partnership or special venture.', text: 'Direct founder communication for joint ventures, advisory or bespoke commercial initiatives.', action: 'Write on WhatsApp' },
+      { label: 'SOFTWARE & PRODUCT', title: 'I want to build a digital product or technical system.', text: 'Web systems, custom software, workflow automation and AI-assisted operational tools.', action: 'Go to QCT Studio' },
+      { label: 'E-COMMERCE & GROWTH', title: 'I want to scale e-commerce and search visibility.', text: 'Conversion systems, multilingual commerce, SEO / GEO / AEO / AIO and digital growth.', action: 'Go to QCT Commerce' },
+      { label: 'GLOBAL TRADE & SOURCING', title: 'I want to run international sourcing or B2B trade.', text: 'Strategic sourcing, supplier verification, comparable RFQs and cross-border operations.', action: 'Go to CTSEG' },
+      { label: 'FOUNDER DESK', title: 'I want to discuss a partnership or special venture.', text: 'Direct founder communication for joint ventures, advisory or bespoke commercial initiatives.', action: 'Write on WhatsApp' },
     ],
     coreLabel: 'CORE BUSINESSES',
     coreTitle: 'Three complementary operating areas.',
@@ -269,7 +267,7 @@ const t: Record<string, HomeCopy> = {
   },
   ru: {
     dossierLocation: 'СТАМБУЛ · БАЛКАНЫ · ГЛОБАЛЬНЫЕ ОПЕРАЦИИ',
-    dossierScope: '03 КОМПАНИИ · 02 ПЛАТФОРМЫ · 09 ЯЗЫКОВ',
+    dossierScope: 'ОСНОВНЫЕ СТРУКТУРЫ · ЦИФРОВЫЕ АКТИВЫ · МЕЖДУНАРОДНАЯ СЕТЬ',
     eyebrow: 'ТЕХНОЛОГИИ · КОММЕРЦИЯ · ГЛОБАЛЬНЫЕ ОПЕРАЦИИ',
     title: 'Я создаю цифровые системы и развиваю коммерческие операции.',
     lead: 'Работаю на стыке программного обеспечения, электронной коммерции, инфраструктуры роста и международной торговли, превращая идеи в измеримые и управляемые системы.',
@@ -279,10 +277,10 @@ const t: Record<string, HomeCopy> = {
     intentTitle: 'С какого направления начнем?',
     intentLead: 'Выберите задачу — мы сразу направим вас в нужную операционную структуру или на прямую связь со мной.',
     intents: [
-      { label: '01 · СОФТ И ПРОДУКТЫ', title: 'Разработать цифровой продукт или веб-систему.', text: 'Веб-платформы, автоматизация процессов и AI-инструменты для бизнеса.', action: 'Перейти в QCT Studio' },
-      { label: '02 · E-COMMERCE И РОСТ', title: 'Выстроить электронную коммерцию и поисковую видимость.', text: 'Конверсионная архитектура, SEO / GEO / AEO / AIO и системы цифровых продаж.', action: 'Перейти в QCT Commerce' },
-      { label: '03 · МЕЖДУНАРОДНАЯ ТОРГОВЛЯ', title: 'Организовать международный сорсинг или B2B-поставки.', text: 'Проверка поставщиков, управление RFQ, анализ рынков и трансграничные сделки.', action: 'Перейти в CTSEG' },
-      { label: '04 · ПРЯМОЙ КОНТАКТ', title: 'Обсудить партнерство или специальный проект.', text: 'Прямая связь со мной для совместных проектов и нестандартных коммерческих задач.', action: 'Написать в WhatsApp' },
+      { label: 'СОФТ И ПРОДУКТЫ', title: 'Разработать цифровой продукт или веб-систему.', text: 'Веб-платформы, автоматизация процессов и AI-инструменты для бизнеса.', action: 'Перейти в QCT Studio' },
+      { label: 'E-COMMERCE И РОСТ', title: 'Выстроить электронную коммерцию и поисковую видимость.', text: 'Конверсионная архитектура, SEO / GEO / AEO / AIO и системы цифровых продаж.', action: 'Перейти в QCT Commerce' },
+      { label: 'МЕЖДУНАРОДНАЯ ТОРГОВЛЯ', title: 'Организовать международный сорсинг или B2B-поставки.', text: 'Проверка поставщиков, управление RFQ, анализ рынков и трансграничные сделки.', action: 'Перейти в CTSEG' },
+      { label: 'ПРЯМОЙ КОНТАКТ', title: 'Обсудить партнерство или специальный проект.', text: 'Прямая связь со мной для совместных проектов и нестандартных коммерческих задач.', action: 'Написать в WhatsApp' },
     ],
     coreLabel: 'ОСНОВНЫЕ СТРУКТУРЫ',
     coreTitle: 'Три взаимодополняющих направления.',
@@ -349,7 +347,7 @@ const t: Record<string, HomeCopy> = {
   },
   mk: {
     dossierLocation: 'ИСТАНБУЛ · БАЛКАН · ГЛОБАЛНИ ОПЕРАЦИИ',
-    dossierScope: '03 КОМПАНИИ · 02 ПЛАТФОРМИ · 09 ЈАЗИЦИ',
+    dossierScope: 'ГЛАВНИ СТРУКТУРИ · ДИГИТАЛНИ СРЕДСТВА · ПОВЕЌЕЈАЗИЧЕН СИСТЕМ',
     eyebrow: 'ТЕХНОЛОГИЈА · ТРГОВИЈА · ГЛОБАЛНИ ОПЕРАЦИИ',
     title: 'Градам дигитални системи и развивам комерцијални операции.',
     lead: 'Работам меѓу софтвер, е-трговија, инфраструктура за раст и меѓународна трговија, претворајќи идеи во мерливи и управливи системи.',
@@ -359,10 +357,10 @@ const t: Record<string, HomeCopy> = {
     intentTitle: 'Во која област сакате да соработуваме?',
     intentLead: 'Изберете ја областа најблиска до вашата цел за директно поврзување со соодветната структура.',
     intents: [
-      { label: '01 · СОФТВЕР И ПРОИЗВОДИ', title: 'Сакам да развијам технолошки производ или систем.', text: 'Веб-системи, автоматизација и дигитални производи поддржани со ВИ.', action: 'Кон QCT Studio' },
-      { label: '02 · Е-ТРГОВИЈА И РАСТ', title: 'Сакам да изградам е-трговија и видливост во пребарување.', text: 'Конверзија, повеќејазична е-трговија, SEO / GEO / AEO / AIO и дигитален раст.', action: 'Кон QCT Commerce' },
-      { label: '03 · МЕЃУНАРОДНА ТРГОВИЈА', title: 'Сакам да водам меѓународна набавка или B2B операција.', text: 'Стратешки сорсинг, проверка на добавувачи, RFQ и прекугранична трговија.', action: 'Кон CTSEG' },
-      { label: '04 · ДИРЕКТЕН КОНТАКТ', title: 'Сакам да разговарам за партнерство или посебен проект.', text: 'Директна комуникација за нови соработки и стратешки проекти.', action: 'Пишете на WhatsApp' },
+      { label: 'СОФТВЕР И ПРОИЗВОДИ', title: 'Сакам да развијам технолошки производ или систем.', text: 'Веб-системи, автоматизација и дигитални производи поддржани со ВИ.', action: 'Кон QCT Studio' },
+      { label: 'Е-ТРГОВИЈА И РАСТ', title: 'Сакам да изградам е-трговија и видливост во пребарување.', text: 'Конверзија, повеќејазична е-трговија, SEO / GEO / AEO / AIO и дигитален раст.', action: 'Кон QCT Commerce' },
+      { label: 'МЕЃУНАРОДНА ТРГОВИЈА', title: 'Сакам да водам меѓународна набавка или B2B операција.', text: 'Стратешки сорсинг, проверка на добавувачи, RFQ и прекугранична трговија.', action: 'Кон CTSEG' },
+      { label: 'ДИРЕКТЕН КОНТАКТ', title: 'Сакам да разговарам за партнерство или посебен проект.', text: 'Директна комуникација за нови соработки и стратешки проекти.', action: 'Пишете на WhatsApp' },
     ],
     coreLabel: 'ГЛАВНИ СТРУКТУРИ',
     coreTitle: 'Три комплементарни оперативни области.',
@@ -429,7 +427,7 @@ const t: Record<string, HomeCopy> = {
   },
   sr: {
     dossierLocation: 'ISTANBUL · BALKAN · GLOBALNE OPERACIJE',
-    dossierScope: '03 KOMPANIJE · 02 PLATFORME · 09 JEZIKA',
+    dossierScope: 'GLAVNE STRUKTURE · DIGITALNA IMOVINA · VIŠEJEZIČNI EKOSISTEM',
     eyebrow: 'TEHNOLOGIJA · TRGOVINA · GLOBALNE OPERACIJE',
     title: 'Gradim digitalne sisteme i razvijam komercijalne operacije.',
     lead: 'Radim na spoju softvera, e-trgovine, infrastrukture rasta i međunarodne trgovine, pretvarajući ideje u merljive i operativne sisteme.',
@@ -439,10 +437,10 @@ const t: Record<string, HomeCopy> = {
     intentTitle: 'U kojoj oblasti želite da sarađujemo?',
     intentLead: 'Izaberite oblast najbližu vašem cilju kako bismo vas odmah povezali sa odgovarajućom strukturom.',
     intents: [
-      { label: '01 · SOFTVER I PROIZVODI', title: 'Želim da razvijem tehnološki proizvod ili web sistem.', text: 'Softver, web sistemi, automatizacija i digitalni proizvodi podržani veštačkom inteligencijom.', action: 'Idi na QCT Studio' },
-      { label: '02 · E-TRGOVINA I RAST', title: 'Želim da izgradim e-commerce i vidljivost u pretrazi.', text: 'Konverzija, višejezična e-trgovina, SEO / GEO / AEO / AIO i digitalni rast.', action: 'Idi na QCT Commerce' },
-      { label: '03 · MEĐUNARODNA TRGOVINA', title: 'Želim da vodim međunarodni sourcing ili B2B operacije.', text: 'Verifikacija dobavljača, upravljanje RFQ procesima i prekogranična trgovina.', action: 'Idi na CTSEG' },
-      { label: '04 · DIREKTAN KONTAKT', title: 'Želim da razgovaram o partnerstvu ili posebnom projektu.', text: 'Direktna komunikacija za strateške saradnje i zajedničke poduhvate.', action: 'Pišite na WhatsApp' },
+      { label: 'SOFTVER I PROIZVODI', title: 'Želim da razvijem tehnološki proizvod ili web sistem.', text: 'Softver, web sistemi, automatizacija i digitalni proizvodi podržani veštačkom inteligencijom.', action: 'Idi na QCT Studio' },
+      { label: 'E-TRGOVINA I RAST', title: 'Želim da izgradim e-commerce i vidljivost u pretrazi.', text: 'Konverzija, višejezična e-trgovina, SEO / GEO / AEO / AIO i digitalni rast.', action: 'Idi na QCT Commerce' },
+      { label: 'MEĐUNARODNA TRGOVINA', title: 'Želim da vodim međunarodni sourcing ili B2B operacije.', text: 'Verifikacija dobavljača, upravljanje RFQ procesima i prekogranična trgovina.', action: 'Idi na CTSEG' },
+      { label: 'DIREKTAN KONTAKT', title: 'Želim da razgovaram o partnerstvu ili posebnom projektu.', text: 'Direktna komunikacija za strateške saradnje i zajedničke poduhvate.', action: 'Pišite na WhatsApp' },
     ],
     coreLabel: 'GLAVNE STRUKTURE',
     coreTitle: 'Tri komplementarna operativna područja.',
@@ -509,7 +507,7 @@ const t: Record<string, HomeCopy> = {
   },
   sq: {
     dossierLocation: 'STAMBOLL · BALLKAN · OPERACIONE GLOBALE',
-    dossierScope: '03 KOMPANI · 02 PLATFORMA · 09 GJUHË',
+    dossierScope: 'STRUKTURAT KRYESORE · ASETET DIGJITALE · EKOSISTEM SHUMËGJUHËSH',
     eyebrow: 'TEKNOLOGJI · TREGTI · OPERACIONE GLOBALE',
     title: 'Ndërtoj sisteme digjitale dhe zhvilloj operacione tregtare.',
     lead: 'Punoj mes software-it, e-commerce, infrastrukturës së rritjes dhe tregtisë ndërkombëtare, duke i kthyer idetë në sisteme të matshme dhe të operueshme.',
@@ -519,10 +517,10 @@ const t: Record<string, HomeCopy> = {
     intentTitle: 'Në cilën fushë dëshironi të punojmë?',
     intentLead: 'Zgjidhni drejtimin më të afërt me objektivin tuaj për t’u lidhur drejtpërdrejt me strukturën përkatëse.',
     intents: [
-      { label: '01 · SOFTWARE & PRODUKTE', title: 'Dua të zhvilloj një produkt teknologjik ose sistem web.', text: 'Software, sisteme web, automatizim dhe produkte digjitale me AI.', action: 'Shko te QCT Studio' },
-      { label: '02 · E-COMMERCE & RRITJE', title: 'Dua të ndërtoj e-commerce dhe dukshmëri në kërkim.', text: 'Konvertim, e-commerce shumëgjuhëshe, SEO / GEO / AEO / AIO dhe rritje digjitale.', action: 'Shko te QCT Commerce' },
-      { label: '03 · TREGTI NDËRKOMBËTARE', title: 'Dua të zhvilloj sourcing ndërkombëtar ose operacione B2B.', text: 'Verifikim furnitorësh, menaxhim RFQ dhe operacione tregtare ndërkufitare.', action: 'Shko te CTSEG' },
-      { label: '04 · KONTAKT DIREKT', title: 'Dua të diskutoj një partneritet ose projekt të veçantë.', text: 'Komunikim i drejtpërdrejtë për bashkëpunime strategjike dhe nisma të reja.', action: 'Shkruaj në WhatsApp' },
+      { label: 'SOFTWARE & PRODUKTE', title: 'Dua të zhvilloj një produkt teknologjik ose sistem web.', text: 'Software, sisteme web, automatizim dhe produkte digjitale me AI.', action: 'Shko te QCT Studio' },
+      { label: 'E-COMMERCE & RRITJE', title: 'Dua të ndërtoj e-commerce dhe dukshmëri në kërkim.', text: 'Konvertim, e-commerce shumëgjuhëshe, SEO / GEO / AEO / AIO dhe rritje digjitale.', action: 'Shko te QCT Commerce' },
+      { label: 'TREGTI NDËRKOMBËTARE', title: 'Dua të zhvilloj sourcing ndërkombëtar ose operacione B2B.', text: 'Verifikim furnitorësh, menaxhim RFQ dhe operacione tregtare ndërkufitare.', action: 'Shko te CTSEG' },
+      { label: 'KONTAKT DIREKT', title: 'Dua të diskutoj një partneritet ose projekt të veçantë.', text: 'Komunikim i drejtpërdrejtë për bashkëpunime strategjike dhe nisma të reja.', action: 'Shkruaj në WhatsApp' },
     ],
     coreLabel: 'STRUKTURAT KRYESORE',
     coreTitle: 'Tre fusha operative që plotësojnë njëra-tjetrën.',
@@ -589,7 +587,7 @@ const t: Record<string, HomeCopy> = {
   },
   fa: {
     dossierLocation: 'استانبول · بالکان · عملیات بین‌المللی',
-    dossierScope: '۰۳ شرکت اصلی · ۰۲ پلتفرم اختصاصی · ۰۹ زبان',
+    dossierScope: 'شرکت‌های اصلی · پلتفرم‌های اختصاصی · اکوسیستم چندزبانه',
     eyebrow: 'فناوری · تجارت · عملیات جهانی',
     title: 'سیستم‌های دیجیتال می‌سازم و عملیات تجاری را توسعه می‌دهم.',
     lead: 'در تقاطع نرم‌افزار، تجارت الکترونیک، زیرساخت رشد و تجارت بین‌المللی کار می‌کنم و ایده‌ها را به سیستم‌های قابل‌اندازه‌گیری و قابل‌اجرا تبدیل می‌کنم.',
@@ -599,10 +597,10 @@ const t: Record<string, HomeCopy> = {
     intentTitle: 'در چه حوزه‌ای می‌خواهید همکاری کنیم؟',
     intentLead: 'مسیر نزدیک به هدف خود را انتخاب کنید تا مستقیماً به ساختار اجرایی مرتبط یا میز کار من متصل شوید.',
     intents: [
-      { label: '۰۱ · نرم‌افزار و محصول دیجیتال', title: 'می‌خواهم یک محصول فناورانه یا سیستم وب توسعه دهم.', text: 'سیستم‌های وب، اتوماسیون فرآیندها و محصولات دیجیتال مبتنی بر هوش مصنوعی.', action: 'ورود به QCT Studio' },
-      { label: '۰۲ · تجارت الکترونیک و رشد', title: 'می‌خواهم زیرساخت فروش آنلاین و دیده‌شدن در جستجو بسازم.', text: 'معماری تبدیل، تجارت چندزبانه، SEO / GEO / AEO / AIO و رشد دیجیتال.', action: 'ورود به QCT Commerce' },
-      { label: '۰۳ · تجارت بین‌المللی و تأمین', title: 'می‌خواهم تأمین کالا یا عملیات تجاری B2B انجام دهم.', text: 'تأمین راهبردی، اعتبارسنجی تأمین‌کننده، مدیریت RFQ و عملیات فرامرزی.', action: 'ورود به CTSEG' },
-      { label: '۰۴ · ارتباط مستقیم با بنیان‌گذار', title: 'می‌خواهم درباره مشارکت یا پروژه ویژه گفت‌وگو کنم.', text: 'ارتباط مستقیم برای همکاری‌های راهبردی و پروژه‌های خاص.', action: 'پیام در واتساپ' },
+      { label: 'نرم‌افزار و محصول دیجیتال', title: 'می‌خواهم یک محصول فناورانه یا سیستم وب توسعه دهم.', text: 'سیستم‌های وب، اتوماسیون فرآیندها و محصولات دیجیتال مبتنی بر هوش مصنوعی.', action: 'ورود به QCT Studio' },
+      { label: 'تجارت الکترونیک و رشد', title: 'می‌خواهم زیرساخت فروش آنلاین و دیده‌شدن در جستجو بسازم.', text: 'معماری تبدیل، تجارت چندزبانه، SEO / GEO / AEO / AIO و رشد دیجیتال.', action: 'ورود به QCT Commerce' },
+      { label: 'تجارت بین‌المللی و تأمین', title: 'می‌خواهم تأمین کالا یا عملیات تجاری B2B انجام دهم.', text: 'تأمین راهبردی، اعتبارسنجی تأمین‌کننده، مدیریت RFQ و عملیات فرامرزی.', action: 'ورود به CTSEG' },
+      { label: 'ارتباط مستقیم با بنیان‌گذار', title: 'می‌خواهم درباره مشارکت یا پروژه ویژه گفت‌وگو کنم.', text: 'ارتباط مستقیم برای همکاری‌های راهبردی و پروژه‌های خاص.', action: 'پیام در واتساپ' },
     ],
     coreLabel: 'ساختارهای اصلی',
     coreTitle: 'سه حوزه عملیاتی مکمل یکدیگر.',
@@ -669,7 +667,7 @@ const t: Record<string, HomeCopy> = {
   },
   zh: {
     dossierLocation: '伊斯坦布尔 · 巴尔干 · 全球运营',
-    dossierScope: '03 核心企业 · 02 自有平台 · 09 种语言',
+    dossierScope: '核心企业 · 自有平台 · 多语言业务生态',
     eyebrow: '技术 · 商业 · 全球运营',
     title: '我构建数字系统，并推动商业运营落地。',
     lead: '我的工作横跨软件、电商、增长基础设施与国际贸易，将想法转化为可衡量、可运营的系统。',
@@ -679,10 +677,10 @@ const t: Record<string, HomeCopy> = {
     intentTitle: '您希望从哪个方向开始合作？',
     intentLead: '选择最贴近您需求的方向，直接对接相应的运营实体或与我本人沟通。',
     intents: [
-      { label: '01 · 软件与数字产品', title: '我希望开发技术产品或数字化系统。', text: '网站系统、定制软件、工作流自动化与 AI 辅助工具。', action: '前往 QCT Studio' },
-      { label: '02 · 电商与数字增长', title: '我希望搭建电商体系并提升搜索可见度。', text: '转化架构、多语言电商、SEO / GEO / AEO / AIO 与增长运营。', action: '前往 QCT Commerce' },
-      { label: '03 · 国际贸易与战略采购', title: '我希望开展跨境采购或 B2B 贸易运营。', text: '供应商核验、RFQ 报价管理、市场调研与跨境供应链执行。', action: '前往 CTSEG' },
-      { label: '04 · 创始人直联', title: '我希望探讨战略合作或特定项目。', text: '针对联合项目、长期合作或定制化商业需求的直接沟通。', action: '通过 WhatsApp 联系' },
+      { label: '软件与数字产品', title: '我希望开发技术产品或数字化系统。', text: '网站系统、定制软件、工作流自动化与 AI 辅助工具。', action: '前往 QCT Studio' },
+      { label: '电商与数字增长', title: '我希望搭建电商体系并提升搜索可见度。', text: '转化架构、多语言电商、SEO / GEO / AEO / AIO 与增长运营。', action: '前往 QCT Commerce' },
+      { label: '国际贸易与战略采购', title: '我希望开展跨境采购或 B2B 贸易运营。', text: '供应商核验、RFQ 报价管理、市场调研与跨境供应链执行。', action: '前往 CTSEG' },
+      { label: '创始人直联', title: '我希望探讨战略合作或特定项目。', text: '针对联合项目、长期合作或定制化商业需求的直接沟通。', action: '通过 WhatsApp 联系' },
     ],
     coreLabel: '核心业务',
     coreTitle: '三个互相补充的运营方向。',
@@ -716,7 +714,7 @@ const t: Record<string, HomeCopy> = {
     steps: ['研究与机会分析', '系统与运营设计', '实施与集成', '衡量与优化'],
     stepNotes: [
       '在投入资源前，结合真实数据验证市场需求、搜索意图与供应链可行性。',
-      '将分散的业务流程转化为清晰的权责架构、数据模型与可重复的执行标准。',
+      '将分散的业务流程转化为清晰的权责架构、数据模型与可重复的执行标准.',
       '亲自推进代码交付、电商基础设施搭建与跨境商业条款落地。',
       '基于真实的转化率、成本结构与自然搜索可见度指标持续迭代系统。',
     ],
@@ -749,7 +747,7 @@ const t: Record<string, HomeCopy> = {
   },
   vi: {
     dossierLocation: 'ISTANBUL · BALKANS · VẬN HÀNH TOÀN CẦU',
-    dossierScope: '03 CÔNG TY CỐT LÕI · 02 NỀN TẢNG SỞ HỮU · 09 NGÔN NGỮ',
+    dossierScope: 'CÔNG TY CỐT LÕI · NỀN TẢNG SỞ HỮU · HỆ SINH THÁI ĐA NGÔN NGỮ',
     eyebrow: 'CÔNG NGHỆ · THƯƠNG MẠI · VẬN HÀNH TOÀN CẦU',
     title: 'Tôi xây dựng hệ thống số và phát triển các hoạt động thương mại.',
     lead: 'Tôi làm việc tại giao điểm của phần mềm, thương mại điện tử, hạ tầng tăng trưởng và thương mại quốc tế, biến ý tưởng thành hệ thống có thể đo lường và vận hành.',
@@ -759,10 +757,10 @@ const t: Record<string, HomeCopy> = {
     intentTitle: 'Bạn muốn bắt đầu từ lĩnh vực nào?',
     intentLead: 'Chọn hướng phù hợp nhất với mục tiêu của bạn để kết nối trực tiếp với đơn vị vận hành tương ứng hoặc bàn làm việc của tôi.',
     intents: [
-      { label: '01 · PHẦN MỀM & SẢN PHẨM SỐ', title: 'Tôi muốn phát triển sản phẩm công nghệ hoặc hệ thống web.', text: 'Hệ thống web, phần mềm tùy chỉnh, tự động hóa quy trình và sản phẩm ứng dụng AI.', action: 'Đến QCT Studio' },
-      { label: '02 · E-COMMERCE & TĂNG TRƯỞNG', title: 'Tôi muốn xây dựng thương mại điện tử và khả năng hiển thị tìm kiếm.', text: 'Kiến trúc chuyển đổi, e-commerce đa ngôn ngữ, SEO / GEO / AEO / AIO và tăng trưởng số.', action: 'Đến QCT Commerce' },
-      { label: '03 · THƯƠNG MẠI QUỐC TẾ', title: 'Tôi muốn triển khai sourcing quốc tế hoặc giao dịch B2B.', text: 'Xác minh nhà cung cấp, quản lý RFQ, nghiên cứu thị trường và thương mại xuyên biên giới.', action: 'Đến CTSEG' },
-      { label: '04 · LIÊN HỆ TRỰC TIẾP', title: 'Tôi muốn trao đổi về hợp tác chiến lược hoặc dự án riêng.', text: 'Kết nối trực tiếp cho các dự án liên doanh, hợp tác hoặc bài toán thương mại đặc thù.', action: 'Nhắn qua WhatsApp' },
+      { label: 'PHẦN MỀM & SẢN PHẨM SỐ', title: 'Tôi muốn phát triển sản phẩm công nghệ hoặc hệ thống web.', text: 'Hệ thống web, phần mềm tùy chỉnh, tự động hóa quy trình và sản phẩm ứng dụng AI.', action: 'Đến QCT Studio' },
+      { label: 'E-COMMERCE & TĂNG TRƯỞNG', title: 'Tôi muốn xây dựng thương mại điện tử và khả năng hiển thị tìm kiếm.', text: 'Kiến trúc chuyển đổi, e-commerce đa ngôn ngữ, SEO / GEO / AEO / AIO và tăng trưởng số.', action: 'Đến QCT Commerce' },
+      { label: 'THƯƠNG MẠI QUỐC TẾ', title: 'Tôi muốn triển khai sourcing quốc tế hoặc giao dịch B2B.', text: 'Xác minh nhà cung cấp, quản lý RFQ, nghiên cứu thị trường và thương mại xuyên biên giới.', action: 'Đến CTSEG' },
+      { label: 'LIÊN HỆ TRỰC TIẾP', title: 'Tôi muốn trao đổi về hợp tác chiến lược hoặc dự án riêng.', text: 'Kết nối trực tiếp cho các dự án liên doanh, hợp tác hoặc bài toán thương mại đặc thù.', action: 'Nhắn qua WhatsApp' },
     ],
     coreLabel: 'CẤU TRÚC CỐT LÕI',
     coreTitle: 'Ba lĩnh vực vận hành bổ trợ cho nhau.',
@@ -848,7 +846,6 @@ const whatsappHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(u
 
 const core = [
   {
-    index: '01',
     name: 'QCT Studio',
     domain: 'qctstudio.com',
     tag: 'Technology & Digital Products',
@@ -858,7 +855,6 @@ const core = [
     output: ui.proof.studioOut,
   },
   {
-    index: '02',
     name: 'QCT Commerce',
     domain: 'qctcommerce.com',
     tag: 'E-Commerce & Growth',
@@ -868,7 +864,6 @@ const core = [
     output: ui.proof.commerceOut,
   },
   {
-    index: '03',
     name: 'CTSEG',
     domain: 'ctseg.com.tr',
     tag: 'Global Trade & Strategic Sourcing',
@@ -888,269 +883,290 @@ const intentCards: IntentItem[] = [
 ---
 <Header locale={locale} copy={copy} homePath={homePath} />
 <main id="main-content" class={`personal-home locale-${locale}`}>
-  <div class="dossier-bar" aria-label="Operating coordinates">
-    <span class="dossier-bar__coord">{ui.dossierLocation}</span>
-    <span class="dossier-bar__scope">{ui.dossierScope}</span>
+  <!-- STAGE 1: MIDNIGHT SAPPHIRE HERO -->
+  <div class="midnight-stage">
+    <div class="stage-container">
+      <div class="dossier-bar" aria-label="Operating coordinates">
+        <span class="dossier-bar__coord">{ui.dossierLocation}</span>
+        <span class="dossier-bar__scope">{ui.dossierScope}</span>
+      </div>
+
+      <section class="hero" id="top">
+        <div class="hero-copy">
+          <p class="eyebrow">{ui.eyebrow}</p>
+          <h1>{ui.title}</h1>
+          <p class="lead">{ui.lead}</p>
+          <div class="actions">
+            <a class="button primary" href="#ventures">{ui.primary}</a>
+            <a class="button ghost" href={whatsappHref} target="_blank" rel="noopener noreferrer">{ui.secondary}</a>
+          </div>
+          <div class="signal-row" aria-label="Focus areas">
+            <span>QCT Studio</span>
+            <span>QCT Commerce</span>
+            <span>CTSEG</span>
+            <span>Growth OS</span>
+            <span>Mythborn</span>
+          </div>
+        </div>
+        <div class="hero-media">
+          <div class="portrait-shell">
+            <img
+              src={site.images.hero.path}
+              srcset={site.images.hero.srcset}
+              sizes="(max-width:900px) 84vw, 440px"
+              width={site.images.hero.width}
+              height={site.images.hero.height}
+              alt="Teyfik Gökdemir"
+              loading="eager"
+              fetchpriority="high"
+            />
+          </div>
+          <div class="portrait-meta">
+            <p class="portrait-caption">Teyfik Gökdemir · Founder / Operator</p>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 
-  <section class="hero" id="top">
-    <div class="hero-copy">
-      <p class="eyebrow">{ui.eyebrow}</p>
-      <h1>{ui.title}</h1>
-      <p class="lead">{ui.lead}</p>
-      <div class="actions">
-        <a class="button primary" href="#ventures">{ui.primary}</a>
-        <a class="button ghost" href={whatsappHref} target="_blank" rel="noopener noreferrer">{ui.secondary}</a>
-      </div>
-      <div class="signal-row" aria-label="Focus areas">
-        <span><i>01</i> QCT Studio</span>
-        <span><i>02</i> QCT Commerce</span>
-        <span><i>03</i> CTSEG</span>
-        <span><i>04</i> Growth OS</span>
-        <span><i>05</i> Mythborn</span>
-      </div>
-    </div>
-    <div class="hero-media">
-      <div class="portrait-shell">
-        <img
-          src={site.images.hero.path}
-          srcset={site.images.hero.srcset}
-          sizes="(max-width:900px) 84vw, 440px"
-          width={site.images.hero.width}
-          height={site.images.hero.height}
-          alt="Teyfik Gökdemir"
-          loading="eager"
-          fetchpriority="high"
-        />
-      </div>
-      <div class="portrait-meta">
-        <p class="portrait-caption">Teyfik Gökdemir · Founder / Operator</p>
-        <span class="portrait-index">IST / BK / GLB</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="section intent-routing" aria-labelledby="intent-routing-title">
-    <div class="section-ledger-head">
-      <div>
-        <p class="eyebrow">{ui.intentEyebrow}</p>
-        <h2 id="intent-routing-title">{ui.intentTitle}</h2>
-      </div>
-      <p class="section-lead-note">{ui.intentLead}</p>
-    </div>
-    <div class="intent-grid">
-      {intentCards.map((item) => (
-        <a class="intent-card" href={item.href} target="_blank" rel="noopener noreferrer">
-          <div class="intent-card-copy">
-            <span class="card-tag">{item.label}</span>
-            <h3>{item.title}</h3>
-            <p>{item.text}</p>
-          </div>
-          <span class="card-link">{item.action}<span aria-hidden="true"> ↗</span></span>
-        </a>
-      ))}
-    </div>
-  </section>
-
-  <section class="section" id="ventures">
-    <div class="section-ledger-head">
-      <div>
-        <p class="eyebrow">{ui.coreLabel}</p>
-        <h2>{ui.coreTitle}</h2>
-      </div>
-      <p class="section-lead-note">{ui.coreLead}</p>
-    </div>
-    <div class="grid core-grid">
-      {core.map((item) => (
-        <a class="card core-card" href={item.url} target="_blank" rel="noopener noreferrer" data-venture-link="true">
+  <!-- STAGE 2: WARM ALABASTER GALLERY (INTENT ROUTING & CORE COMPANIES) -->
+  <div class="alabaster-stage">
+    <div class="stage-container">
+      <section class="section intent-routing" aria-labelledby="intent-routing-title">
+        <div class="section-ledger-head">
           <div>
-            <div class="card-top-meta">
-              <span class="card-index-code">{item.index}</span>
-              <span class="card-domain">{item.domain}</span>
-            </div>
-            <span class="card-tag">{item.tag}</span>
-            <h3>{item.name}</h3>
-            <p>{item.desc}</p>
-            <dl class="project-proof">
-              <div>
-                <dt>{ui.proof.roleLabel}</dt>
-                <dd>{item.role}</dd>
-              </div>
-              <div>
-                <dt>{ui.proof.outputLabel}</dt>
-                <dd>{item.output}</dd>
-              </div>
-            </dl>
+            <p class="eyebrow">{ui.intentEyebrow}</p>
+            <h2 id="intent-routing-title">{ui.intentTitle}</h2>
           </div>
-          <span class="card-link">{ui.view} <span aria-hidden="true">↗</span></span>
-        </a>
-      ))}
-    </div>
-  </section>
-
-  <section class="section split-section" id="expertise">
-    <div class="section-ledger-head">
-      <div>
-        <p class="eyebrow">{ui.ownedLabel}</p>
-        <h2>{ui.ownedTitle}</h2>
-      </div>
-      <p class="section-lead-note">{ui.ownedLead}</p>
-    </div>
-    <div class="asset-stack">
-      <a class="asset-card" href="https://growth.teyfikgokdemir.com" target="_blank" rel="noopener noreferrer">
-        <div>
-          <div class="card-top-meta">
-            <span class="card-index-code">04</span>
-            <span class="card-domain">growth.teyfikgokdemir.com</span>
-          </div>
-          <span class="card-tag">{ui.privateLabel}</span>
-          <h3>Growth OS</h3>
-          <p>{ui.growthDesc}</p>
-          <p class="asset-spec">{ui.growthSpec}</p>
+          <p class="section-lead-note">{ui.intentLead}</p>
         </div>
-        <span>growth.teyfikgokdemir.com ↗</span>
-      </a>
-      <a class="asset-card" href={site.links.mythborn} target="_blank" rel="noopener noreferrer">
-        <div>
-          <div class="card-top-meta">
-            <span class="card-index-code">05</span>
-            <span class="card-domain">mythborn.co</span>
-          </div>
-          <span class="card-tag">{ui.mediaLabel}</span>
-          <h3>Mythborn</h3>
-          <p>{ui.mythDesc}</p>
-          <p class="asset-spec">{ui.mythSpec}</p>
+        <div class="intent-grid">
+          {intentCards.map((item) => (
+            <a class="intent-card" href={item.href} target="_blank" rel="noopener noreferrer">
+              <div class="intent-card-copy">
+                <span class="card-tag">{item.label}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </div>
+              <span class="card-link">{item.action}<span aria-hidden="true"> ↗</span></span>
+            </a>
+          ))}
         </div>
-        <span>mythborn.co ↗</span>
-      </a>
-    </div>
-  </section>
+      </section>
 
-  <div class="gap-marquee" aria-label="Core operating themes">
-    <div class="gap-marquee-track">
-      <div class="gap-marquee-group">
-        {activeMarquee.map((item) => <><span>{item}</span><i>•</i></>)}
-      </div>
-      <div class="gap-marquee-group" aria-hidden="true">
-        {activeMarquee.map((item) => <><span>{item}</span><i>•</i></>)}
-      </div>
+      <section class="section" id="ventures">
+        <div class="section-ledger-head">
+          <div>
+            <p class="eyebrow">{ui.coreLabel}</p>
+            <h2>{ui.coreTitle}</h2>
+          </div>
+          <p class="section-lead-note">{ui.coreLead}</p>
+        </div>
+        <div class="grid core-grid">
+          {core.map((item) => (
+            <a class="card core-card" href={item.url} target="_blank" rel="noopener noreferrer" data-venture-link="true">
+              <div>
+                <div class="card-top-meta">
+                  <span class="card-tag">{item.tag}</span>
+                  <span class="card-domain">{item.domain}</span>
+                </div>
+                <h3>{item.name}</h3>
+                <p>{item.desc}</p>
+                <dl class="project-proof">
+                  <div>
+                    <dt>{ui.proof.roleLabel}</dt>
+                    <dd>{item.role}</dd>
+                  </div>
+                  <div>
+                    <dt>{ui.proof.outputLabel}</dt>
+                    <dd>{item.output}</dd>
+                  </div>
+                </dl>
+              </div>
+              <span class="card-link">{ui.view} <span aria-hidden="true">↗</span></span>
+            </a>
+          ))}
+        </div>
+      </section>
     </div>
   </div>
 
-  <section class="section collaboration">
-    <p class="eyebrow">{ui.collabLabel}</p>
-    <div class="collab-card">
-      <div>
-        <span class="card-tag">{ui.collaborationLabel}</span>
-        <h2>Olivon</h2>
-        <p>{ui.olivonDesc}</p>
-      </div>
-      <a class="button ghost" href="https://olivon.com.tr" target="_blank" rel="noopener noreferrer">olivon.com.tr ↗</a>
-    </div>
-  </section>
-
-  <section class="section method" id="journey">
-    <div class="section-ledger-head">
-      <div>
-        <p class="eyebrow">{ui.methodLabel}</p>
-        <h2>{ui.methodTitle}</h2>
-      </div>
-      <p class="section-lead-note">{ui.methodLead}</p>
-    </div>
-    <ol class="method-grid">
-      {ui.steps.map((step, index) => (
-        <li>
-          <span class="method-step-index">0{index + 1}</span>
-          <strong>{step}</strong>
-          <p class="method-step-note">{ui.stepNotes[index]}</p>
-        </li>
-      ))}
-    </ol>
-  </section>
-
-  <section class="section insights-section" id="insights">
-    <div class="section-ledger-head">
-      <div>
-        <p class="eyebrow">{ui.insightsLabel}</p>
-        <h2>{ui.insightsTitle}</h2>
-      </div>
-      <div class="insights-head-aside">
-        <p class="section-lead-note">{ui.insightsLead}</p>
-        <a class="insights-all-link" href={blogIndexUrl}>{ui.insightsAll} <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-    <div class="insights-ledger">
-      {featuredArticles.map((article, idx) => (
-        <a class="insight-row" href={article.href}>
-          <span class="insight-row__num">0{idx + 1}</span>
-          <div class="insight-row__main">
-            <span class="insight-row__tag">{article.tag}</span>
-            <h3>{article.title}</h3>
-            <p>{article.description}</p>
+  <!-- STAGE 3: OXFORD SAPPHIRE VAULT (OWNED DIGITAL ASSETS, MARQUEE & COLLABORATION) -->
+  <div class="sapphire-vault-stage">
+    <div class="stage-container">
+      <section class="section split-section" id="expertise">
+        <div class="section-ledger-head">
+          <div>
+            <p class="eyebrow">{ui.ownedLabel}</p>
+            <h2>{ui.ownedTitle}</h2>
           </div>
-          <span class="insight-row__cta">{blogMeta.read} <span aria-hidden="true">→</span></span>
-        </a>
-      ))}
-    </div>
-  </section>
-
-  <section class="section about" id="about">
-    <div class="about-copy">
-      <p class="eyebrow">{ui.aboutLabel}</p>
-      <h2>{ui.aboutTitle}</h2>
-      <p>{ui.aboutBody}</p>
-      <p class="about-thesis">{ui.aboutNote}</p>
-    </div>
-    <div class="about-portrait-frame">
-      <img
-        src={site.images.profile.path}
-        srcset={site.images.profile.srcset}
-        sizes="(max-width:900px) 88vw, 420px"
-        width={site.images.profile.width}
-        height={site.images.profile.height}
-        alt="Teyfik Gökdemir"
-        loading="lazy"
-      />
-    </div>
-  </section>
-
-  <section class="section contact" id="contact">
-    <div class="contact-ledger">
-      <div class="contact-intro">
-        <p class="eyebrow">{ui.contactLabel}</p>
-        <h2>{ui.contactTitle}</h2>
-        <p>{ui.contactBody}</p>
-        <div class="contact-primary-actions">
-          <a class="button primary" href={whatsappHref} target="_blank" rel="noopener noreferrer">{locale === 'tr' ? 'WhatsApp’tan yaz' : 'WhatsApp'}</a>
-          <a class="button ghost" href={emailHref}>{site.email}</a>
+          <p class="section-lead-note">{ui.ownedLead}</p>
         </div>
-        <div class="contact-links">
-          <a href={site.links.qctStudio} target="_blank" rel="noopener noreferrer">QCT Studio</a>
-          <a href={site.links.qctCommerce} target="_blank" rel="noopener noreferrer">QCT Commerce</a>
-          <a href={site.links.ctseg} target="_blank" rel="noopener noreferrer">CTSEG</a>
+        <div class="asset-stack">
+          <a class="asset-card" href="https://growth.teyfikgokdemir.com" target="_blank" rel="noopener noreferrer">
+            <div>
+              <div class="card-top-meta">
+                <span class="card-tag">{ui.privateLabel}</span>
+                <span class="card-domain">growth.teyfikgokdemir.com</span>
+              </div>
+              <h3>Growth OS</h3>
+              <p>{ui.growthDesc}</p>
+              <p class="asset-spec">{ui.growthSpec}</p>
+            </div>
+            <span>growth.teyfikgokdemir.com ↗</span>
+          </a>
+          <a class="asset-card" href={site.links.mythborn} target="_blank" rel="noopener noreferrer">
+            <div>
+              <div class="card-top-meta">
+                <span class="card-tag">{ui.mediaLabel}</span>
+                <span class="card-domain">mythborn.co</span>
+              </div>
+              <h3>Mythborn</h3>
+              <p>{ui.mythDesc}</p>
+              <p class="asset-spec">{ui.mythSpec}</p>
+            </div>
+            <span>mythborn.co ↗</span>
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <div class="gap-marquee" aria-label="Core operating themes">
+      <div class="gap-marquee-track">
+        <div class="gap-marquee-group">
+          {activeMarquee.map((item) => <><span>{item}</span><i>•</i></>)}
+        </div>
+        <div class="gap-marquee-group" aria-hidden="true">
+          {activeMarquee.map((item) => <><span>{item}</span><i>•</i></>)}
         </div>
       </div>
-
-      <form class="contact-form" data-contact-form data-intro-line={ui.form.introLine}>
-        <label>
-          <span>{ui.form.topicLabel}</span>
-          <select name="topic" required>
-            <option value="">{ui.form.selectPlaceholder}</option>
-            {ui.form.topics.map((topicOption) => <option>{topicOption}</option>)}
-          </select>
-        </label>
-        <label>
-          <span>{ui.form.companyLabel}</span>
-          <input name="company" autocomplete="organization" placeholder={ui.form.companyPlaceholder} />
-        </label>
-        <label class="contact-form-wide">
-          <span>{ui.form.messageLabel}</span>
-          <textarea name="message" rows="4" required placeholder={ui.form.messagePlaceholder}></textarea>
-        </label>
-        <button class="button primary contact-form-wide" type="submit">{ui.form.submit}</button>
-      </form>
     </div>
-  </section>
+
+    <div class="stage-container">
+      <section class="section collaboration">
+        <p class="eyebrow">{ui.collabLabel}</p>
+        <div class="collab-card">
+          <div>
+            <span class="card-tag">{ui.collaborationLabel}</span>
+            <h2>Olivon</h2>
+            <p>{ui.olivonDesc}</p>
+          </div>
+          <a class="button ghost" href="https://olivon.com.tr" target="_blank" rel="noopener noreferrer">olivon.com.tr ↗</a>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- STAGE 4: WARM ALABASTER EDITORIAL (OPERATING MODEL, FIELD NOTES & ABOUT) -->
+  <div class="alabaster-stage">
+    <div class="stage-container">
+      <section class="section method" id="journey">
+        <div class="section-ledger-head">
+          <div>
+            <p class="eyebrow">{ui.methodLabel}</p>
+            <h2>{ui.methodTitle}</h2>
+          </div>
+          <p class="section-lead-note">{ui.methodLead}</p>
+        </div>
+        <ol class="method-grid">
+          {ui.steps.map((step, index) => (
+            <li>
+              <strong>{step}</strong>
+              <p class="method-step-note">{ui.stepNotes[index]}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section class="section insights-section" id="insights">
+        <div class="section-ledger-head">
+          <div>
+            <p class="eyebrow">{ui.insightsLabel}</p>
+            <h2>{ui.insightsTitle}</h2>
+          </div>
+          <div class="insights-head-aside">
+            <p class="section-lead-note">{ui.insightsLead}</p>
+            <a class="insights-all-link" href={blogIndexUrl}>{ui.insightsAll} <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <div class="insights-ledger">
+          {featuredArticles.map((article) => (
+            <a class="insight-row" href={article.href}>
+              <div class="insight-row__main">
+                <span class="insight-row__tag">{article.tag}</span>
+                <h3>{article.title}</h3>
+                <p>{article.description}</p>
+              </div>
+              <span class="insight-row__cta">{blogMeta.read} <span aria-hidden="true">→</span></span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section class="section about" id="about">
+        <div class="about-copy">
+          <p class="eyebrow">{ui.aboutLabel}</p>
+          <h2>{ui.aboutTitle}</h2>
+          <p>{ui.aboutBody}</p>
+          <p class="about-thesis">{ui.aboutNote}</p>
+        </div>
+        <div class="about-portrait-frame">
+          <img
+            src={site.images.profile.path}
+            srcset={site.images.profile.srcset}
+            sizes="(max-width:900px) 88vw, 420px"
+            width={site.images.profile.width}
+            height={site.images.profile.height}
+            alt="Teyfik Gökdemir"
+            loading="lazy"
+          />
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- STAGE 5: MIDNIGHT SAPPHIRE FOUNDER DESK (CONTACT) -->
+  <div class="midnight-stage contact-stage">
+    <div class="stage-container">
+      <section class="section contact" id="contact">
+        <div class="contact-ledger">
+          <div class="contact-intro">
+            <p class="eyebrow">{ui.contactLabel}</p>
+            <h2>{ui.contactTitle}</h2>
+            <p>{ui.contactBody}</p>
+            <div class="contact-primary-actions">
+              <a class="button primary" href={whatsappHref} target="_blank" rel="noopener noreferrer">{locale === 'tr' ? 'WhatsApp’tan yaz' : 'WhatsApp'}</a>
+              <a class="button ghost" href={emailHref}>{site.email}</a>
+            </div>
+            <div class="contact-links">
+              <a href={site.links.qctStudio} target="_blank" rel="noopener noreferrer">QCT Studio</a>
+              <a href={site.links.qctCommerce} target="_blank" rel="noopener noreferrer">QCT Commerce</a>
+              <a href={site.links.ctseg} target="_blank" rel="noopener noreferrer">CTSEG</a>
+            </div>
+          </div>
+
+          <form class="contact-form" data-contact-form data-intro-line={ui.form.introLine}>
+            <label>
+              <span>{ui.form.topicLabel}</span>
+              <select name="topic" required>
+                <option value="">{ui.form.selectPlaceholder}</option>
+                {ui.form.topics.map((topicOption) => <option>{topicOption}</option>)}
+              </select>
+            </label>
+            <label>
+              <span>{ui.form.companyLabel}</span>
+              <input name="company" autocomplete="organization" placeholder={ui.form.companyPlaceholder} />
+            </label>
+            <label class="contact-form-wide">
+              <span>{ui.form.messageLabel}</span>
+              <textarea name="message" rows="4" required placeholder={ui.form.messagePlaceholder}></textarea>
+            </label>
+            <button class="button primary contact-form-wide" type="submit">{ui.form.submit}</button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </div>
 </main>
 <FloatingActions locale={locale} />
 
@@ -1175,54 +1191,83 @@ const intentCards: IntentItem[] = [
 
 <style>
   :global(body) {
-    background: #0c0b0a;
-    color: #f3ede2;
+    margin: 0;
+    background: #060b16;
+    color: #0e1628;
     line-height: 1.5;
   }
 
   .personal-home {
-    max-width: 1360px;
-    margin: 0 auto;
-    padding-inline: clamp(18px, 3vw, 40px);
-    color: #f3ede2;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
   }
 
-  /* Architectural Top Dossier Bar */
+  .stage-container {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding-inline: clamp(18px, 3.2vw, 44px);
+  }
+
+  /* ==========================================================================
+     ATMOSPHERE 1: MIDNIGHT SAPPHIRE STAGE (HERO & CONTACT)
+     Matches the studio navy backdrop and champagne-gold chronograph in portrait
+     ========================================================================== */
+  .midnight-stage {
+    background:
+      radial-gradient(ellipse 68% 58% at 74% 42%, rgba(21, 49, 102, 0.42), transparent 72%),
+      linear-gradient(180deg, #060b16 0%, #091224 100%);
+    color: #f6f3ec;
+    border-bottom: 1px solid #1a2944;
+  }
+
+  .contact-stage {
+    border-top: 1px solid #1a2944;
+    border-bottom: 0;
+  }
+
   .dossier-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
     padding: 14px 0;
-    border-bottom: 1px solid #26211c;
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
+    border-bottom: 1px solid rgba(212, 175, 106, 0.16);
+    font-size: 0.69rem;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #8f8578;
-    font-variant-numeric: tabular-nums;
+    color: #8fa0bc;
   }
 
   .dossier-bar__coord {
-    color: #c48845;
+    color: #d4af6a;
     font-weight: 600;
   }
 
-  /* Hero Section */
   .hero {
     display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+    grid-template-columns: minmax(0, 1.18fr) minmax(300px, 0.82fr);
     gap: clamp(36px, 5vw, 76px);
     align-items: center;
-    padding-block: clamp(40px, 6vh, 76px);
+    padding-block: clamp(44px, 6.5vh, 84px);
   }
 
   .eyebrow {
     margin: 0 0 14px;
-    color: #c48845;
     font-size: 0.72rem;
     letter-spacing: 0.16em;
     font-weight: 700;
     text-transform: uppercase;
+  }
+
+  .midnight-stage .eyebrow,
+  .sapphire-vault-stage .eyebrow {
+    color: #d4af6a;
+  }
+
+  .alabaster-stage .eyebrow {
+    color: #8c5e20;
   }
 
   .hero h1,
@@ -1231,22 +1276,22 @@ const intentCards: IntentItem[] = [
     font-family: Georgia, 'Times New Roman', serif;
     font-weight: 500;
     letter-spacing: -0.03em;
-    color: #f5efe6;
     text-wrap: balance;
     overflow-wrap: break-word;
   }
 
   .hero h1 {
-    font-size: clamp(2.4rem, 1.2rem + 3.8vw, 4.75rem);
+    font-size: clamp(2.45rem, 1.25rem + 3.8vw, 4.75rem);
     line-height: 0.98;
     max-width: 18ch;
     margin: 0;
+    color: #f8f5ef;
   }
 
   .lead {
-    font-size: clamp(1rem, 0.92rem + 0.35vw, 1.18rem);
+    font-size: clamp(1.02rem, 0.94rem + 0.35vw, 1.2rem);
     line-height: 1.68;
-    color: #b5aba0;
+    color: #b4c0d4;
     max-width: 62ch;
     margin: 24px 0 0;
     text-wrap: pretty;
@@ -1256,74 +1301,70 @@ const intentCards: IntentItem[] = [
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
-    margin-top: 28px;
+    margin-top: 30px;
   }
 
   .button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 46px;
-    padding: 0 22px;
-    border-radius: 4px;
+    min-height: 48px;
+    padding: 0 24px;
+    border-radius: 6px;
     text-decoration: none;
-    font-size: 0.86rem;
+    font-size: 0.87rem;
     font-weight: 600;
     letter-spacing: 0.02em;
-    transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+    transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
     cursor: pointer;
   }
 
   .button.primary {
-    background: #f0e7da;
-    color: #12100d;
-    border: 1px solid #f0e7da;
+    background: linear-gradient(135deg, #dfbe7f 0%, #c69c53 100%);
+    color: #070d19;
+    border: 1px solid #dfbe7f;
+    box-shadow: 0 10px 28px -10px rgba(212, 175, 106, 0.45);
   }
 
   .button.primary:hover {
-    background: #ffffff;
-    border-color: #ffffff;
+    background: linear-gradient(135deg, #ebd09a 0%, #d4ad66 100%);
+    border-color: #ebd09a;
+    transform: translateY(-1px);
   }
 
   .button.ghost {
-    background: transparent;
-    border: 1px solid #383028;
-    color: #ebe2d5;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(212, 175, 106, 0.32);
+    color: #f3efe6;
   }
 
   .button.ghost:hover {
-    border-color: #c48845;
-    color: #f5efe6;
+    border-color: #d4af6a;
+    background: rgba(212, 175, 106, 0.08);
+    color: #ffffff;
   }
 
-  /* Architectural Index Strip instead of floating pills */
   .signal-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 0;
+    gap: 8px;
     margin-top: 36px;
-    border-top: 1px solid #26211c;
-    border-bottom: 1px solid #26211c;
+    padding-top: 22px;
+    border-top: 1px solid rgba(143, 160, 188, 0.18);
   }
 
   .signal-row span {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    padding: 11px 16px 11px 0;
-    margin-inline-end: 16px;
-    font-size: 0.73rem;
+    padding: 7px 13px;
+    border-radius: 4px;
+    background: rgba(17, 31, 58, 0.72);
+    border: 1px solid rgba(143, 160, 188, 0.2);
+    font-size: 0.72rem;
+    font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #b5aba0;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .signal-row span i {
-    font-style: normal;
-    color: #c48845;
-    font-size: 0.66rem;
-    font-weight: 700;
+    color: #d0daea;
   }
 
   .hero-media {
@@ -1335,10 +1376,11 @@ const intentCards: IntentItem[] = [
   }
 
   .portrait-shell {
-    border: 1px solid #2c2620;
-    border-radius: 6px;
+    border: 1px solid rgba(212, 175, 106, 0.26);
+    border-radius: 10px;
     padding: 8px;
-    background: #12110e;
+    background: linear-gradient(180deg, rgba(16, 30, 56, 0.8), rgba(7, 13, 25, 0.95));
+    box-shadow: 0 28px 64px -20px rgba(0, 0, 0, 0.65);
   }
 
   .portrait-shell img {
@@ -1348,34 +1390,37 @@ const intentCards: IntentItem[] = [
     aspect-ratio: 3 / 4;
     object-fit: cover;
     object-position: 50% 18%;
-    border-radius: 3px;
+    border-radius: 6px;
   }
 
   .portrait-meta {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
     padding-top: 10px;
     font-size: 0.76rem;
-    color: #8c8275;
+    color: #8fa0bc;
   }
 
   .portrait-caption {
     margin: 0;
   }
 
-  .portrait-index {
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
-    color: #c48845;
-    font-variant-numeric: tabular-nums;
+  /* ==========================================================================
+     ATMOSPHERE 2: WARM ALABASTER GALLERY STAGE
+     Inviting, high-contrast museum stone & crisp navy ink where visitors stay
+     ========================================================================== */
+  .alabaster-stage {
+    background: #f4f1ea;
+    color: #0e1628;
   }
 
-  /* Section Architecture */
   .section {
-    padding-block: clamp(68px, 7vw, 108px);
-    border-top: 1px solid #26211c;
+    padding-block: clamp(68px, 7vw, 106px);
+  }
+
+  .alabaster-stage .section + .section {
+    border-top: 1px solid #dbd3c5;
   }
 
   .section-ledger-head {
@@ -1387,120 +1432,137 @@ const intentCards: IntentItem[] = [
   }
 
   .section h2 {
-    font-size: clamp(1.85rem, 1.1rem + 2.5vw, 3.35rem);
+    font-size: clamp(1.9rem, 1.15rem + 2.5vw, 3.35rem);
     line-height: 1.06;
     margin: 0;
   }
 
+  .alabaster-stage .section h2 {
+    color: #0b1324;
+  }
+
+  .sapphire-vault-stage .section h2,
+  .midnight-stage .section h2 {
+    color: #f7f4ed;
+  }
+
   .section-lead-note {
     margin: 0;
-    color: #a89f93;
-    font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.06rem);
-    line-height: 1.65;
+    font-size: clamp(0.96rem, 0.9rem + 0.25vw, 1.08rem);
+    line-height: 1.66;
     max-width: 58ch;
     text-wrap: pretty;
   }
 
-  /* Intent Routing Matrix */
+  .alabaster-stage .section-lead-note {
+    color: #465062;
+  }
+
+  .sapphire-vault-stage .section-lead-note {
+    color: #a9b6cc;
+  }
+
+  /* Intent Routing Matrix on Alabaster */
   .intent-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    border: 1px solid #2a241e;
-    background: #11100d;
+    gap: 16px;
   }
 
   .intent-card {
     padding: 26px 22px;
-    border-inline-end: 1px solid #2a241e;
-    color: inherit;
+    border: 1px solid #dad1c2;
+    border-radius: 8px;
+    background: #fbf9f5;
+    color: #0e1628;
     text-decoration: none;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     gap: 22px;
-    transition: background-color 0.18s ease;
-  }
-
-  .intent-card:last-child {
-    border-inline-end: 0;
+    box-shadow: 0 10px 26px -16px rgba(11, 19, 36, 0.08);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
   .intent-card:hover {
-    background: #171511;
+    transform: translateY(-3px);
+    border-color: #162b52;
+    box-shadow: 0 18px 36px -16px rgba(11, 19, 36, 0.14);
   }
 
   .card-tag {
-    display: block;
-    color: #c48845;
+    display: inline-block;
     font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    font-variant-numeric: tabular-nums;
+  }
+
+  .alabaster-stage .card-tag {
+    color: #8c5e20;
+  }
+
+  .sapphire-vault-stage .card-tag {
+    color: #d4af6a;
   }
 
   .intent-card h3 {
     font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(1.15rem, 1rem + 0.45vw, 1.38rem);
+    font-size: clamp(1.15rem, 1rem + 0.45vw, 1.36rem);
     font-weight: 500;
     line-height: 1.24;
     margin: 12px 0 10px;
-    color: #f5efe6;
+    color: #0b1324;
     text-wrap: balance;
   }
 
   .intent-card p {
     margin: 0;
-    color: #a39a8e;
-    font-size: 0.88rem;
+    color: #4a5466;
+    font-size: 0.89rem;
     line-height: 1.58;
     text-wrap: pretty;
   }
 
-  .card-link {
+  .alabaster-stage .card-link {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     padding-top: 14px;
-    border-top: 1px solid #24201a;
-    color: #e4c497;
-    font-size: 0.82rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
+    border-top: 1px solid #e6dfd2;
+    color: #112447;
+    font-size: 0.83rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
   }
 
-  /* Core Operating Ledger (3 Columns) */
+  /* Core Operating Companies (3 Columns on Warm Alabaster) */
   .core-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 18px;
+    gap: 20px;
     container-type: inline-size;
   }
 
-  .core-card,
-  .asset-card,
-  .collab-card {
-    border: 1px solid #2c2620;
-    background: #12110e;
-    border-radius: 6px;
-    color: inherit;
-    text-decoration: none;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
-  }
-
-  .core-card:hover,
-  .asset-card:hover,
-  .collab-card:hover {
-    border-color: #7c5b36;
-    background: #161410;
-  }
-
   .core-card {
-    padding: 28px;
+    padding: 30px;
+    border: 1px solid #d6cdbe;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #0e1628;
+    text-decoration: none;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     gap: 28px;
+    box-shadow: 0 14px 34px -18px rgba(11, 19, 36, 0.09);
+    transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+  }
+
+  .core-card:hover {
+    transform: translateY(-4px);
+    border-color: #13284c;
+    box-shadow: 0 22px 44px -18px rgba(11, 19, 36, 0.16);
   }
 
   .card-top-meta {
@@ -1510,43 +1572,33 @@ const intentCards: IntentItem[] = [
     gap: 12px;
     padding-bottom: 14px;
     margin-bottom: 14px;
-    border-bottom: 1px solid #24201a;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .card-index-code {
-    color: #c48845;
-    font-size: 0.74rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
+    border-bottom: 1px solid #e8e1d5;
   }
 
   .card-domain {
-    color: #8c8275;
     font-size: 0.74rem;
-    letter-spacing: 0.03em;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #5b667a;
   }
 
-  .core-card h3,
-  .asset-card h3 {
+  .core-card h3 {
     font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(1.5rem, 2.2vw, 1.95rem);
+    font-size: clamp(1.55rem, 2.2vw, 2rem);
     font-weight: 500;
-    margin: 10px 0 12px;
-    color: #f5efe6;
+    margin: 4px 0 12px;
+    color: #0b1324;
   }
 
   @supports (font-size: 1cqi) {
     .core-card h3 {
-      font-size: clamp(1.45rem, 2.2cqi, 1.95rem);
+      font-size: clamp(1.5rem, 2.2cqi, 2rem);
     }
   }
 
-  .core-card p,
-  .asset-card p,
-  .collab-card p {
+  .core-card p {
     margin: 0;
-    color: #a89f93;
+    color: #465062;
     font-size: 0.95rem;
     line-height: 1.65;
     max-width: 62ch;
@@ -1558,18 +1610,18 @@ const intentCards: IntentItem[] = [
     gap: 10px;
     margin: 22px 0 0;
     padding-top: 16px;
-    border-top: 1px solid #24201a;
+    border-top: 1px solid #e8e1d5;
   }
 
   .project-proof div {
     display: grid;
-    grid-template-columns: 72px 1fr;
+    grid-template-columns: 68px 1fr;
     gap: 10px;
     align-items: baseline;
   }
 
   .project-proof dt {
-    color: #857b6f;
+    color: #7b6b53;
     font-size: 0.68rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -1578,38 +1630,94 @@ const intentCards: IntentItem[] = [
 
   .project-proof dd {
     margin: 0;
-    color: #d6cec2;
-    font-size: 0.83rem;
+    color: #1e293b;
+    font-size: 0.84rem;
+    font-weight: 500;
     line-height: 1.48;
   }
 
-  /* Owned Digital Assets */
+  /* ==========================================================================
+     ATMOSPHERE 3: OXFORD SAPPHIRE VAULT (OWNED DIGITAL ASSETS & MARQUEE)
+     Rich architectural contrast for proprietary platforms Growth OS & Mythborn
+     ========================================================================== */
+  .sapphire-vault-stage {
+    background:
+      radial-gradient(ellipse 70% 50% at 25% 20%, rgba(26, 56, 112, 0.32), transparent 70%),
+      linear-gradient(180deg, #091224 0%, #070d1b 100%);
+    color: #f6f3ec;
+    border-top: 1px solid #1a2944;
+    border-bottom: 1px solid #1a2944;
+  }
+
   .asset-stack {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
+    gap: 20px;
+  }
+
+  .asset-card,
+  .collab-card {
+    border: 1px solid #1f3152;
+    background: rgba(16, 28, 52, 0.78);
+    border-radius: 10px;
+    color: #f6f3ec;
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .asset-card:hover,
+  .collab-card:hover {
+    transform: translateY(-3px);
+    border-color: #d4af6a;
+    background: rgba(21, 36, 66, 0.92);
   }
 
   .asset-card {
-    padding: 30px;
+    padding: 32px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     gap: 28px;
   }
 
+  .asset-card .card-top-meta {
+    border-bottom-color: rgba(143, 160, 188, 0.16);
+  }
+
+  .asset-card .card-domain {
+    color: #93a4c2;
+  }
+
+  .asset-card h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(1.65rem, 2.2vw, 2.1rem);
+    font-weight: 500;
+    margin: 4px 0 12px;
+    color: #f8f5ef;
+  }
+
+  .asset-card p,
+  .collab-card p {
+    margin: 0;
+    color: #b4c0d4;
+    font-size: 0.96rem;
+    line-height: 1.65;
+    max-width: 62ch;
+    text-wrap: pretty;
+  }
+
   .asset-spec {
-    margin-top: 14px !important;
-    padding-top: 12px;
-    border-top: 1px solid #24201a;
-    color: #d4c3aa !important;
-    font-size: 0.8rem !important;
+    margin-top: 16px !important;
+    padding-top: 14px;
+    border-top: 1px solid rgba(143, 160, 188, 0.16);
+    color: #e4c890 !important;
+    font-size: 0.81rem !important;
     letter-spacing: 0.04em;
   }
 
   .asset-card > span {
-    color: #e4c497;
-    font-size: 0.84rem;
+    color: #dfbe7f;
+    font-size: 0.85rem;
     font-weight: 600;
     overflow-wrap: anywhere;
   }
@@ -1620,8 +1728,9 @@ const intentCards: IntentItem[] = [
     display: flex;
     align-items: center;
     overflow: hidden;
-    border-top: 1px solid #26211c;
-    border-bottom: 1px solid #26211c;
+    border-top: 1px solid #1a2944;
+    border-bottom: 1px solid #1a2944;
+    background: rgba(6, 11, 22, 0.65);
     margin: 0;
   }
 
@@ -1641,15 +1750,15 @@ const intentCards: IntentItem[] = [
 
   .gap-marquee-group span {
     padding: 0 22px;
-    color: #c48845;
-    font-size: 0.7rem;
+    color: #d4af6a;
+    font-size: 0.71rem;
     font-weight: 700;
     letter-spacing: 0.14em;
   }
 
   .gap-marquee-group i {
     font-style: normal;
-    color: #594b3c;
+    color: #3d5278;
     font-size: 0.7rem;
   }
 
@@ -1669,13 +1778,12 @@ const intentCards: IntentItem[] = [
     animation-direction: reverse;
   }
 
-  /* Collaboration Section */
   .collaboration {
     padding-top: 56px;
   }
 
   .collab-card {
-    padding: clamp(26px, 3.5vw, 42px);
+    padding: clamp(28px, 3.5vw, 44px);
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 32px;
@@ -1685,53 +1793,46 @@ const intentCards: IntentItem[] = [
   .collab-card h2 {
     font-size: clamp(2rem, 3.2vw, 3rem);
     margin: 8px 0 10px;
+    color: #f8f5ef;
   }
 
-  /* Operating Methodology (4 Steps) */
+  /* ==========================================================================
+     OPERATING METHODOLOGY, FIELD NOTES & ABOUT (ON WARM ALABASTER)
+     ========================================================================== */
   .method-grid {
     list-style: none;
     padding: 0;
     margin: 0;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    border: 1px solid #2c2620;
-    background: #12110e;
+    gap: 16px;
   }
 
   .method-grid li {
     padding: 28px 24px;
-    border-inline-end: 1px solid #2c2620;
+    border: 1px solid #d8cfc0;
+    border-radius: 8px;
+    background: #fbf9f5;
+    border-top: 3px solid #122444;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     gap: 12px;
   }
 
-  .method-grid li:last-child {
-    border-inline-end: 0;
-  }
-
-  .method-step-index {
-    color: #c48845;
-    font-size: 0.74rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    font-variant-numeric: tabular-nums;
-  }
-
   .method-grid strong {
     font-family: Georgia, 'Times New Roman', serif;
-    font-size: 1.2rem;
+    font-size: 1.22rem;
     font-weight: 500;
     line-height: 1.25;
-    color: #f5efe6;
+    color: #0b1324;
   }
 
   .method-step-note {
     margin: 0;
-    color: #9e9589;
-    font-size: 0.86rem;
-    line-height: 1.58;
+    color: #4a5466;
+    font-size: 0.88rem;
+    line-height: 1.6;
     text-wrap: pretty;
   }
 
@@ -1744,51 +1845,47 @@ const intentCards: IntentItem[] = [
   }
 
   .insights-all-link {
-    color: #e4c497;
+    color: #112447;
     text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
+    font-size: 0.86rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    border-bottom: 1px solid #112447;
+    padding-bottom: 2px;
   }
 
   .insights-all-link:hover {
-    color: #ffffff;
+    color: #8c5e20;
+    border-bottom-color: #8c5e20;
   }
 
   .insights-ledger {
-    border-top: 1px solid #2c2620;
+    border-top: 1px solid #d6cdbe;
   }
 
   .insight-row {
     display: grid;
-    grid-template-columns: 52px minmax(0, 1fr) auto;
-    gap: 24px;
-    align-items: baseline;
-    padding: 24px 0;
-    border-bottom: 1px solid #26211c;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 28px;
+    align-items: center;
+    padding: 26px 18px;
+    border-bottom: 1px solid #d6cdbe;
     color: inherit;
     text-decoration: none;
-    transition: padding-inline-start 0.18s ease, background-color 0.18s ease;
+    border-radius: 6px;
+    transition: background-color 0.18s ease, padding-inline-start 0.18s ease;
   }
 
   .insight-row:hover {
-    background: rgba(255, 255, 255, 0.015);
-    padding-inline-start: 10px;
-  }
-
-  .insight-row__num {
-    color: #c48845;
-    font-size: 0.76rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    font-variant-numeric: tabular-nums;
+    background: #ebe5d9;
+    padding-inline-start: 24px;
   }
 
   .insight-row__tag {
     display: block;
-    color: #8c8275;
+    color: #8c5e20;
     font-size: 0.68rem;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     margin-bottom: 6px;
@@ -1796,26 +1893,26 @@ const intentCards: IntentItem[] = [
 
   .insight-row__main h3 {
     font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(1.2rem, 1.5vw, 1.5rem);
+    font-size: clamp(1.22rem, 1.5vw, 1.52rem);
     font-weight: 500;
-    color: #f5efe6;
+    color: #0b1324;
     margin: 0 0 8px;
     line-height: 1.25;
   }
 
   .insight-row__main p {
     margin: 0;
-    color: #a39a8e;
-    font-size: 0.9rem;
+    color: #4a5466;
+    font-size: 0.92rem;
     line-height: 1.58;
     max-width: 72ch;
     text-wrap: pretty;
   }
 
   .insight-row__cta {
-    color: #e4c497;
-    font-size: 0.82rem;
-    font-weight: 600;
+    color: #112447;
+    font-size: 0.84rem;
+    font-weight: 700;
     white-space: nowrap;
   }
 
@@ -1828,8 +1925,8 @@ const intentCards: IntentItem[] = [
   }
 
   .about-copy p {
-    color: #b5aba0;
-    font-size: clamp(0.98rem, 0.92rem + 0.25vw, 1.1rem);
+    color: #3e4859;
+    font-size: clamp(1rem, 0.94rem + 0.25vw, 1.12rem);
     line-height: 1.72;
     max-width: 62ch;
     margin: 20px 0 0;
@@ -1838,16 +1935,17 @@ const intentCards: IntentItem[] = [
 
   .about-thesis {
     padding-inline-start: 16px;
-    border-inline-start: 2px solid #c48845;
-    color: #e6ddd0 !important;
-    font-weight: 500;
+    border-inline-start: 3px solid #122444;
+    color: #0b1324 !important;
+    font-weight: 600;
   }
 
   .about-portrait-frame {
-    border: 1px solid #2c2620;
-    border-radius: 6px;
-    padding: 8px;
-    background: #12110e;
+    border: 1px solid #d4cab8;
+    border-radius: 10px;
+    padding: 10px;
+    background: #ffffff;
+    box-shadow: 0 20px 44px -20px rgba(11, 19, 36, 0.15);
     max-width: 420px;
     width: 100%;
     justify-self: end;
@@ -1859,10 +1957,12 @@ const intentCards: IntentItem[] = [
     height: auto;
     max-height: 560px;
     object-fit: cover;
-    border-radius: 3px;
+    border-radius: 6px;
   }
 
-  /* Contact Ledger & Form */
+  /* ==========================================================================
+     CONTACT LEDGER & FORM (ON MIDNIGHT SAPPHIRE STAGE)
+     ========================================================================== */
   .contact-ledger {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -1871,7 +1971,7 @@ const intentCards: IntentItem[] = [
   }
 
   .contact-intro p {
-    color: #a89f93;
+    color: #b4c0d4;
     font-size: 1rem;
     line-height: 1.68;
     max-width: 54ch;
@@ -1892,14 +1992,15 @@ const intentCards: IntentItem[] = [
     gap: 8px;
     margin-top: 24px;
     padding-top: 22px;
-    border-top: 1px solid #26211c;
+    border-top: 1px solid rgba(143, 160, 188, 0.18);
   }
 
   .contact-links a {
-    border: 1px solid #2e2821;
-    border-radius: 4px;
+    border: 1px solid #24375c;
+    border-radius: 6px;
+    background: rgba(16, 29, 54, 0.65);
     padding: 9px 14px;
-    color: #d8d0c4;
+    color: #dce4f2;
     text-decoration: none;
     font-size: 0.8rem;
     font-weight: 600;
@@ -1907,14 +2008,14 @@ const intentCards: IntentItem[] = [
   }
 
   .contact-links a:hover {
-    border-color: #c48845;
-    color: #f5efe6;
+    border-color: #d4af6a;
+    color: #ffffff;
   }
 
   .contact-form {
-    border: 1px solid #2c2620;
-    border-radius: 6px;
-    background: #12110e;
+    border: 1px solid #223559;
+    border-radius: 10px;
+    background: rgba(15, 27, 50, 0.82);
     padding: clamp(22px, 3vw, 32px);
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1927,7 +2028,7 @@ const intentCards: IntentItem[] = [
   }
 
   .contact-form label > span {
-    color: #a89f93;
+    color: #b4c0d4;
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -1939,10 +2040,10 @@ const intentCards: IntentItem[] = [
   .contact-form textarea {
     width: 100%;
     box-sizing: border-box;
-    border: 1px solid #2e2821;
-    border-radius: 4px;
-    background: #0c0b0a;
-    color: #f3ede2;
+    border: 1px solid #263b61;
+    border-radius: 6px;
+    background: #070d19;
+    color: #f6f3ec;
     padding: 12px 13px;
     font: inherit;
     font-size: 0.9rem;
@@ -1952,7 +2053,7 @@ const intentCards: IntentItem[] = [
   .contact-form select:focus,
   .contact-form textarea:focus {
     outline: none;
-    border-color: #c48845;
+    border-color: #d4af6a;
   }
 
   .contact-form textarea {
@@ -1976,22 +2077,7 @@ const intentCards: IntentItem[] = [
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .intent-card:nth-child(2),
-    .method-grid li:nth-child(2) {
-      border-inline-end: 0;
-    }
-
-    .intent-card:nth-child(1),
-    .intent-card:nth-child(2),
-    .method-grid li:nth-child(1),
-    .method-grid li:nth-child(2) {
-      border-bottom: 1px solid #2a241e;
-    }
-
-    .core-grid {
-      grid-template-columns: 1fr;
-    }
-
+    .core-grid,
     .asset-stack {
       grid-template-columns: 1fr;
     }
@@ -2034,21 +2120,10 @@ const intentCards: IntentItem[] = [
       grid-template-columns: 1fr;
     }
 
-    .intent-card,
-    .method-grid li {
-      border-inline-end: 0;
-      border-bottom: 1px solid #2a241e;
-    }
-
-    .intent-card:last-child,
-    .method-grid li:last-child {
-      border-bottom: 0;
-    }
-
     .insight-row {
       grid-template-columns: 1fr;
       gap: 8px;
-      padding: 20px 0;
+      padding: 20px 12px;
     }
 
     .contact-form {
