@@ -893,36 +893,47 @@ const intentCards: IntentItem[] = [
 
       <section class="hero" id="top">
         <div class="hero-copy">
-          <p class="eyebrow">{ui.eyebrow}</p>
-          <h1>{ui.title}</h1>
+          <div class="hero-status-pill">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span class="status-label">{ui.eyebrow}</span>
+          </div>
+          <h1 class="hero-title">{ui.title}</h1>
           <p class="lead">{ui.lead}</p>
           <div class="actions">
-            <a class="button primary" href="#ventures">{ui.primary}</a>
-            <a class="button ghost" href={whatsappHref} target="_blank" rel="noopener noreferrer">{ui.secondary}</a>
+            <a class="button primary hero-btn-primary" href="#ventures">
+              <span>{ui.primary}</span>
+              <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="button ghost hero-btn-ghost" href={whatsappHref} target="_blank" rel="noopener noreferrer">
+              <span>{ui.secondary}</span>
+            </a>
           </div>
           <div class="signal-row" aria-label="Focus areas">
-            <span>QCT Studio</span>
-            <span>QCT Commerce</span>
-            <span>CTSEG</span>
-            <span>Growth OS</span>
-            <span>Mythborn</span>
+            <a href="https://qctstudio.com" target="_blank" rel="noopener noreferrer">QCT Studio</a>
+            <a href="https://qctcommerce.com" target="_blank" rel="noopener noreferrer">QCT Commerce</a>
+            <a href="https://ctseg.com.tr" target="_blank" rel="noopener noreferrer">CTSEG</a>
+            <a href="https://growth.teyfikgokdemir.com" target="_blank" rel="noopener noreferrer">Growth OS</a>
+            <a href="https://mythborn.co" target="_blank" rel="noopener noreferrer">Mythborn</a>
           </div>
         </div>
         <div class="hero-media">
           <div class="portrait-shell">
-            <img
-              src={site.images.hero.path}
-              srcset={site.images.hero.srcset}
-              sizes="(max-width:900px) 84vw, 440px"
-              width={site.images.hero.width}
-              height={site.images.hero.height}
-              alt="Teyfik Gökdemir"
-              loading="eager"
-              fetchpriority="high"
-            />
-          </div>
-          <div class="portrait-meta">
-            <p class="portrait-caption">Teyfik Gökdemir · Founder / Operator</p>
+            <div class="portrait-frame">
+              <img
+                src={site.images.hero.path}
+                srcset={site.images.hero.srcset}
+                sizes="(max-width:900px) 84vw, 440px"
+                width={site.images.hero.width}
+                height={site.images.hero.height}
+                alt="Teyfik Gökdemir"
+                loading="eager"
+                fetchpriority="high"
+              />
+            </div>
+            <div class="portrait-badge">
+              <span class="badge-role">FOUNDER / OPERATOR</span>
+              <span class="badge-base">IST · BLK · GLOBAL</span>
+            </div>
           </div>
         </div>
       </section>
@@ -1246,11 +1257,64 @@ const intentCards: IntentItem[] = [
   }
 
   .hero {
+    position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1.18fr) minmax(300px, 0.82fr);
     gap: clamp(36px, 5vw, 76px);
     align-items: center;
-    padding-block: clamp(44px, 6.5vh, 84px);
+    padding-block: clamp(48px, 7vh, 88px);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: -60px auto auto -80px;
+    width: clamp(280px, 40vw, 540px);
+    height: clamp(280px, 40vw, 540px);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(30, 62, 122, 0.28) 0%, rgba(6, 11, 22, 0) 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero-copy,
+  .hero-media {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 6px 14px;
+    margin-bottom: 20px;
+    border-radius: 999px;
+    background: rgba(14, 25, 48, 0.75);
+    border: 1px solid rgba(212, 175, 106, 0.32);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #d4af6a;
+    box-shadow: 0 0 10px #d4af6a, 0 0 4px #e6ca92;
+    animation: statusPulse 2.8s infinite ease-in-out;
+  }
+
+  @keyframes statusPulse {
+    0%, 100% { opacity: 0.9; transform: scale(1); }
+    50% { opacity: 0.45; transform: scale(0.85); }
+  }
+
+  .status-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #dfbe7f;
   }
 
   .eyebrow {
@@ -1282,89 +1346,119 @@ const intentCards: IntentItem[] = [
 
   .hero h1 {
     font-size: clamp(2.45rem, 1.25rem + 3.8vw, 4.75rem);
-    line-height: 0.98;
+    line-height: 1.02;
     max-width: 18ch;
     margin: 0;
     color: #f8f5ef;
+    background: linear-gradient(135deg, #ffffff 45%, #f2e3c4 82%, #d4af6a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @supports not (-webkit-background-clip: text) {
+    .hero h1 {
+      color: #f8f5ef;
+    }
   }
 
   .lead {
     font-size: clamp(1.02rem, 0.94rem + 0.35vw, 1.2rem);
     line-height: 1.68;
     color: #b4c0d4;
-    max-width: 62ch;
+    max-width: 60ch;
     margin: 24px 0 0;
     text-wrap: pretty;
   }
 
   .actions {
     display: flex;
-    gap: 12px;
+    gap: 14px;
     flex-wrap: wrap;
-    margin-top: 30px;
+    margin-top: 32px;
   }
 
   .button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 48px;
-    padding: 0 24px;
-    border-radius: 6px;
+    gap: 10px;
+    min-height: 50px;
+    padding: 0 28px;
+    border-radius: 999px;
     text-decoration: none;
-    font-size: 0.87rem;
-    font-weight: 600;
+    font-size: 0.88rem;
+    font-weight: 700;
     letter-spacing: 0.02em;
-    transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
     cursor: pointer;
   }
 
   .button.primary {
     background: linear-gradient(135deg, #dfbe7f 0%, #c69c53 100%);
-    color: #070d19;
+    color: #060c18 !important;
     border: 1px solid #dfbe7f;
-    box-shadow: 0 10px 28px -10px rgba(212, 175, 106, 0.45);
+    box-shadow: 0 12px 32px -8px rgba(212, 175, 106, 0.45);
   }
 
   .button.primary:hover {
     background: linear-gradient(135deg, #ebd09a 0%, #d4ad66 100%);
     border-color: #ebd09a;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 36px -6px rgba(212, 175, 106, 0.6);
+  }
+
+  .button.primary svg {
+    transition: transform 0.2s ease;
+  }
+
+  .button.primary:hover svg {
+    transform: translateX(3px);
   }
 
   .button.ghost {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(212, 175, 106, 0.32);
-    color: #f3efe6;
+    background: rgba(14, 25, 48, 0.72);
+    border: 1px solid rgba(212, 175, 106, 0.38);
+    color: #f4f1ea;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   .button.ghost:hover {
-    border-color: #d4af6a;
-    background: rgba(212, 175, 106, 0.08);
+    border-color: #dfbe7f;
+    background: rgba(212, 175, 106, 0.12);
     color: #ffffff;
+    transform: translateY(-2px);
   }
 
   .signal-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 36px;
-    padding-top: 22px;
-    border-top: 1px solid rgba(143, 160, 188, 0.18);
+    gap: 9px;
+    margin-top: 38px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(143, 160, 188, 0.16);
   }
 
-  .signal-row span {
+  .signal-row a {
     display: inline-flex;
     align-items: center;
-    padding: 7px 13px;
-    border-radius: 4px;
-    background: rgba(17, 31, 58, 0.72);
-    border: 1px solid rgba(143, 160, 188, 0.2);
-    font-size: 0.72rem;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: rgba(15, 27, 52, 0.72);
+    border: 1px solid rgba(148, 176, 226, 0.18);
+    font-size: 0.73rem;
     font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #d0daea;
+    letter-spacing: 0.04em;
+    color: #cfd8ea;
+    text-decoration: none;
+    transition: border-color 0.18s ease, color 0.18s ease, transform 0.18s ease, background-color 0.18s ease;
+  }
+
+  .signal-row a:hover {
+    border-color: rgba(212, 175, 106, 0.55);
+    color: #f7f4ed;
+    background: rgba(24, 42, 80, 0.85);
+    transform: translateY(-1px);
   }
 
   .hero-media {
@@ -1376,11 +1470,19 @@ const intentCards: IntentItem[] = [
   }
 
   .portrait-shell {
-    border: 1px solid rgba(212, 175, 106, 0.26);
+    position: relative;
+    border: 1px solid rgba(212, 175, 106, 0.38);
+    border-radius: 16px;
+    padding: 10px;
+    background: linear-gradient(180deg, rgba(18, 34, 64, 0.85), rgba(7, 13, 25, 0.98));
+    box-shadow: 0 34px 80px -20px rgba(0, 0, 0, 0.8), 0 0 70px rgba(30, 62, 122, 0.3);
+  }
+
+  .portrait-frame {
+    position: relative;
+    overflow: hidden;
     border-radius: 10px;
-    padding: 8px;
-    background: linear-gradient(180deg, rgba(16, 30, 56, 0.8), rgba(7, 13, 25, 0.95));
-    box-shadow: 0 28px 64px -20px rgba(0, 0, 0, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .portrait-shell img {
@@ -1390,20 +1492,33 @@ const intentCards: IntentItem[] = [
     aspect-ratio: 3 / 4;
     object-fit: cover;
     object-position: 50% 18%;
-    border-radius: 6px;
+    border-radius: 10px;
+    transition: transform 0.4s ease;
   }
 
-  .portrait-meta {
+  .portrait-shell:hover img {
+    transform: scale(1.015);
+  }
+
+  .portrait-badge {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 10px;
-    font-size: 0.76rem;
-    color: #8fa0bc;
+    padding: 12px 14px 4px;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
-  .portrait-caption {
-    margin: 0;
+  .badge-role {
+    color: #dfbe7f;
+    font-weight: 700;
+  }
+
+  .badge-base {
+    color: #8fa0bc;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
   }
 
   /* ==========================================================================
