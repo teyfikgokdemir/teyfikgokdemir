@@ -425,47 +425,6 @@ const jsonLd = {
     transform: none;
   }
 
-  .site-header {
-    --text: #f3eee6;
-    --muted: #c9bfb2;
-    --line: #51483f;
-    --panel: #302a25;
-    color: var(--text);
-    position: sticky;
-    z-index: 50;
-    top: 0;
-    min-height: var(--header-height);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-    padding: .75rem max(1.25rem, calc((100vw - var(--max)) / 2));
-    border-bottom: 1px solid var(--line);
-    background: rgba(33, 28, 24, .97);
-    backdrop-filter: blur(10px);
-    transition:
-      border-color var(--motion-fast) ease,
-      background-color var(--motion-fast) ease,
-      box-shadow var(--motion-fast) ease;
-  }
-  .site-header.is-scrolled {
-    border-bottom-color: #67584b;
-    background: rgba(33, 28, 24, .985);
-    box-shadow: 0 12px 30px rgba(24, 20, 17, .16);
-  }
-  .brand { display: inline-flex; align-items: center; gap: .75rem; min-height: 48px; }
-  .brand span {
-    display: grid;
-    place-items: center;
-    width: 42px;
-    height: 42px;
-    border: 1px solid var(--accent);
-    border-radius: 50%;
-    color: var(--accent-soft);
-    font-size: .78rem;
-    letter-spacing: .08em;
-  }
-  .brand strong { font-size: .82rem; letter-spacing: .1em; text-transform: uppercase; }
   .header-panel { display: flex; align-items: center; gap: 1.5rem; }
   .header-panel nav { display: flex; align-items: center; gap: 1.25rem; }
   .header-panel nav a {
@@ -511,16 +470,6 @@ const jsonLd = {
     font-weight: 800;
   }
   .language-switcher a[aria-current="page"] { background: var(--bg-alt); color: var(--surface-dark); }
-  .menu-toggle {
-    display: none;
-    width: 48px;
-    height: 48px;
-    padding: 12px;
-    border: 1px solid var(--line);
-    border-radius: 50%;
-    background: var(--panel);
-  }
-  .menu-toggle span { display: block; height: 2px; margin: 5px 0; background: var(--text); }
 
   .hero {
     min-height: calc(100svh - var(--header-height));
@@ -944,7 +893,6 @@ const jsonLd = {
   }
 
   @media (max-width: 1024px) {
-    .site-header { padding-inline: 1.5rem; }
     .header-panel nav { gap: .75rem; }
     .header-panel nav a { font-size: .82rem; }
     .language-switcher a { min-width: 38px; }
@@ -953,7 +901,6 @@ const jsonLd = {
   }
 
   @media (max-width: 1100px) {
-    .menu-toggle { display: block; }
     .header-panel {
       position: absolute;
       top: calc(100% + 1px);
@@ -980,10 +927,6 @@ const jsonLd = {
     }
     .header-panel nav { display: grid; }
     .header-panel nav a { min-height: 48px; padding-inline: .5rem; }
-    .menu-toggle span { transition: transform 220ms ease, opacity 180ms ease; }
-    .menu-toggle[aria-expanded="true"] span:first-child { transform: translateY(7px) rotate(45deg); }
-    .menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
-    .menu-toggle[aria-expanded="true"] span:last-child { transform: translateY(-7px) rotate(-45deg); }
     .language-switcher { width: 100%; justify-content: space-between; }
     .language-switcher a { min-width: 44px; min-height: 44px; }
   }
@@ -1019,9 +962,6 @@ const jsonLd = {
       --tracking-heading: 0;
       --tracking-title: 0;
     }
-    .site-header { min-height: 70px; padding: .65rem 1rem; }
-    .brand strong { max-width: 9.5rem; font-size: .7rem; }
-    .brand span { width: 40px; height: 40px; }
     .section { padding-block: clamp(3.5rem, 10vw, 5rem); }
     .hero { padding-top: 1.5rem; }
     .hero h1 { font-size: clamp(2.2rem, 11.5vw, 3.6rem); }
