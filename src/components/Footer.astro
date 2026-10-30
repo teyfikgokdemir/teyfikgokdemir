@@ -37,69 +37,107 @@ const social = [['LinkedIn',site.links.linkedin],['Instagram',site.links.instagr
 const ecosystem = [
   ['QCT Studio',site.links.qctStudio],['QCT Commerce',site.links.qctCommerce],['CTSEG',ctseg],['Growth OS','https://growth.teyfikgokdemir.com'],['Mythborn',site.links.mythborn],['Olivon','https://olivon.com.tr']
 ] as const;
+const ctaCopy = ({
+  tr:{ title:'Bir sonraki sistemi birlikte kuralım.', sub:'Teknoloji, ticaret veya ortaklık: doğrudan benimle yazışın.' },
+  en:{ title:'Let’s build the next system together.', sub:'Technology, trade or partnership: write to me directly.' },
+  ru:{ title:'Построим следующую систему вместе.', sub:'Технологии, торговля или партнерство: пишите мне напрямую.' },
+  mk:{ title:'Да ја изградиме следната система заедно.', sub:'Технологија, трговија или партнерство: пишете ми директно.' },
+  sr:{ title:'Izgradimo sledeći sistem zajedno.', sub:'Tehnologija, trgovina ili partnerstvo: pišite mi direktno.' },
+  sq:{ title:'Le të ndërtojmë sistemin e radhës bashkë.', sub:'Teknologji, tregti apo partneritet: shkruani drejtpërdrejt.' },
+  fa:{ title:'سیستم بعدی را با هم بسازیم.', sub:'فناوری، تجارت یا مشارکت: مستقیم به من پیام دهید.' },
+  zh:{ title:'一起构建下一个系统。', sub:'技术、贸易或合作：欢迎直接联系我。' },
+  vi:{ title:'Cùng xây dựng hệ thống tiếp theo.', sub:'Công nghệ, thương mại hay hợp tác: hãy nhắn trực tiếp cho tôi.' },
+}[locale] ?? { title:'Let’s build the next system together.', sub:'Technology, trade or partnership: write to me directly.' });
+const arrow = '<svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 ---
 <SitewidePalette />
 <footer class="tg-footer">
-  <div class="footer-grid">
-    <div class="footer-intro">
-      <a href="#top" class="footer-brand" aria-label="Teyfik Gökdemir">
-        <picture><source srcset="/brand/teyfik-gokdemir-signature.webp" type="image/webp"/><img src="/brand/teyfik-gokdemir-signature.png" width="380" height="102" alt="Teyfik Gökdemir" loading="lazy" decoding="async"/></picture>
-      </a>
-      <p>{text.position}</p>
-      <a class="footer-cta" href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener noreferrer"><span>{text.contact}</span><svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  <div class="footer-shell">
+    <section class="footer-cta-band" aria-label={text.contact}>
+      <div class="footer-cta-copy">
+        <p class="footer-cta-kicker">{text.contact}</p>
+        <p class="footer-cta-title">{ctaCopy.title}</p>
+        <p class="footer-cta-sub">{ctaCopy.sub}</p>
+      </div>
+      <div class="footer-cta-actions">
+        <a class="footer-cta" href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener noreferrer"><span>WhatsApp</span><Fragment set:html={arrow} /></a>
+        <a class="footer-cta footer-cta--ghost" href={`mailto:${site.email}`}><span>{site.email}</span></a>
+      </div>
+    </section>
+
+    <div class="footer-grid">
+      <div class="footer-intro">
+        <a href="#top" class="footer-brand" aria-label="Teyfik Gökdemir">
+          <picture><source srcset="/brand/teyfik-gokdemir-signature.webp" type="image/webp"/><img src="/brand/teyfik-gokdemir-signature.png" width="380" height="102" alt="Teyfik Gökdemir" loading="lazy" decoding="async"/></picture>
+        </a>
+        <p>{text.position}</p>
+      </div>
+      <div class="footer-group">
+        <span class="footer-label">{text.connect}</span>
+        <nav aria-label={text.connect}><a href={blogUrl}><span>{text.blog}</span><span aria-hidden="true"></span></a>{social.map(([name,href]) => <a href={href} target="_blank" rel="noopener noreferrer"><span>{name}</span><span aria-hidden="true"></span></a>)}</nav>
+      </div>
+      <div class="footer-group footer-group--ecosystem">
+        <span class="footer-label">{text.ecosystem}</span>
+        <nav aria-label={text.ecosystem}>{ecosystem.map(([name,href]) => <a href={href} target="_blank" rel="noopener noreferrer"><span>{name}</span><span aria-hidden="true">↗</span></a>)}</nav>
+      </div>
+      <div class="footer-group footer-group--contact">
+        <span class="footer-label">{text.contact}</span>
+        <nav aria-label={text.contact}>
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+          <a href={`mailto:${site.directEmail}`}>{site.directEmail}</a>
+          <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener noreferrer"><span>WhatsApp</span><span aria-hidden="true"></span></a>
+        </nav>
+      </div>
     </div>
-    <div class="footer-group">
-      <span class="footer-label">{text.connect}</span>
-      <nav aria-label={text.connect}><a href={blogUrl}><span>{text.blog}</span><span aria-hidden="true"></span></a>{social.map(([name,href]) => <a href={href} target="_blank" rel="noopener noreferrer"><span>{name}</span><span aria-hidden="true"></span></a>)}</nav>
-    </div>
-    <div class="footer-group footer-group--ecosystem">
-      <span class="footer-label">{text.ecosystem}</span>
-      <nav aria-label={text.ecosystem}>{ecosystem.map(([name,href]) => <a href={href} target="_blank" rel="noopener noreferrer"><span>{name}</span><span aria-hidden="true"></span></a>)}</nav>
-    </div>
-    <div class="footer-group footer-group--contact">
-      <span class="footer-label">{text.contact}</span>
-      <nav aria-label={text.contact}>
-        <a href={`mailto:${site.email}`}>{site.email}</a>
-        <a href={`mailto:${site.directEmail}`}>{site.directEmail}</a>
-        <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener noreferrer"><span>WhatsApp</span><span aria-hidden="true"></span></a>
+
+    <div class="footer-bottom">
+      <span class="footer-rights">{legal.rights}</span>
+      <nav class="footer-legal" aria-label="Legal">
+        <a href={legalPrivacy}>{legal.privacy}</a>
+        <a href={legalCookie}>{legal.cookies}</a>
+        <a href={legalTerms}>{legal.terms}</a>
+        {locale === 'tr' && <a href="/kvkk/">{legal.kvkk}</a>}
       </nav>
     </div>
   </div>
-  <div class="footer-bottom">
-    <span class="footer-rights">{legal.rights}</span>
-    <nav class="footer-legal" aria-label="Legal">
-      <a href={legalPrivacy}>{legal.privacy}</a>
-      <a href={legalCookie}>{legal.cookies}</a>
-      <a href={legalTerms}>{legal.terms}</a>
-      {locale === 'tr' && <a href="/kvkk/">{legal.kvkk}</a>}
-    </nav>
-  </div>
+  <span class="footer-watermark" aria-hidden="true">TG</span>
 </footer>
 <style>
-.tg-footer{position:relative;border-top:1px solid rgba(212,175,106,.22);background:radial-gradient(70% 120% at 0% 0%,rgba(30,62,122,.28) 0%,rgba(6,11,22,0) 60%),#060b16;color:#f4f1ea;padding:clamp(56px,6vw,88px) 0 28px}
-.tg-footer::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,106,.7),transparent);opacity:.55}
-.footer-grid,.footer-bottom{max-width:1360px;margin-inline:auto;padding-inline:clamp(18px,3.2vw,44px)}
-.footer-grid{display:grid;grid-template-columns:minmax(260px,1.3fr) minmax(140px,.6fr) minmax(240px,1.1fr) minmax(200px,.9fr);gap:clamp(28px,4vw,64px);align-items:start}
-.footer-brand{display:block;width:min(300px,100%)}
+.tg-footer{position:relative;overflow:hidden;isolation:isolate;border-top:1px solid rgba(212,175,106,.22);background:radial-gradient(60% 80% at 0% 0%,rgba(30,62,122,.3) 0%,rgba(6,11,22,0) 60%),radial-gradient(50% 60% at 100% 100%,rgba(212,175,106,.08) 0%,rgba(6,11,22,0) 70%),#060b16;color:#f4f1ea;padding:clamp(48px,6vw,88px) 0 28px}
+.footer-shell{position:relative;z-index:1;max-width:1360px;margin-inline:auto;padding-inline:clamp(18px,3.2vw,44px)}
+.footer-watermark{position:absolute;z-index:0;inset-inline-end:-1.5%;bottom:-.16em;font:500 clamp(11rem,26vw,24rem)/.8 Georgia,'Times New Roman',serif;letter-spacing:-.06em;color:rgba(212,175,106,.055);pointer-events:none;user-select:none}
+.footer-cta-band{display:grid;grid-template-columns:minmax(0,1.5fr) auto;align-items:center;gap:clamp(24px,4vw,56px);margin-bottom:clamp(48px,6vw,84px);padding:clamp(26px,4vw,56px);border:1px solid rgba(212,175,106,.38);border-radius:clamp(20px,2.4vw,32px);background:linear-gradient(135deg,rgba(212,175,106,.2) 0%,rgba(18,34,64,.92) 48%,rgba(8,15,30,.96) 100%);box-shadow:0 30px 80px rgba(2,5,12,.5),inset 0 1px 0 rgba(255,255,255,.07)}
+.footer-cta-kicker{margin:0 0 14px;color:#e6ca92;font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+.footer-cta-title{margin:0;max-width:20ch;font:500 clamp(1.9rem,1.1rem + 2.8vw,3.4rem)/1.06 Georgia,'Times New Roman',serif;letter-spacing:-.025em;color:#f8f5ee;text-wrap:balance;overflow-wrap:break-word}
+.footer-cta-sub{margin:16px 0 0;max-width:46ch;color:#b4c2da;font-size:clamp(.95rem,.9rem + .2vw,1.06rem);line-height:1.6;text-wrap:pretty}
+.footer-cta-actions{display:flex;flex-direction:column;align-items:stretch;gap:12px;min-width:min(100%,260px)}
+.footer-cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 26px;border-radius:999px;background:linear-gradient(135deg,#e9cf9a 0%,#c79f56 100%);color:#060c18!important;font-weight:700;font-size:.92rem;letter-spacing:.01em;text-decoration:none;overflow-wrap:anywhere;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease,background-color .2s ease}
+.footer-cta:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(212,175,106,.32)}
+.footer-cta svg{flex:none;transition:transform .2s ease}.footer-cta:hover svg{transform:translateX(3px)}
+.footer-cta--ghost{background:rgba(6,11,22,.4);color:#f4f1ea!important;border:1px solid rgba(212,175,106,.5);font-weight:600}
+.footer-cta--ghost:hover{background:rgba(212,175,106,.12);box-shadow:none;border-color:#e6ca92}
+.footer-grid{display:grid;grid-template-columns:minmax(240px,1.1fr) minmax(130px,.55fr) minmax(280px,1.5fr) minmax(200px,.95fr);gap:clamp(28px,4vw,60px);align-items:start}
+.footer-brand{display:block;width:min(280px,100%)}
 .footer-brand picture,.footer-brand img{display:block;width:100%;height:auto}
-.footer-intro p{max-width:38ch;margin:20px 0 0;color:#9fb0cb;line-height:1.7;font-size:.96rem;text-wrap:pretty}
-.footer-cta{display:inline-flex;align-items:center;gap:10px;margin-top:26px;padding:12px 20px;border-radius:999px;background:linear-gradient(135deg,#e6ca92 0%,#c79f56 100%);color:#060c18!important;font-weight:700;font-size:.86rem;letter-spacing:.02em;text-decoration:none;transition:transform .2s ease,box-shadow .2s ease}
-.footer-cta:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(212,175,106,.28)}
-.footer-cta svg{transition:transform .2s ease}.footer-cta:hover svg{transform:translateX(3px)}
-.footer-label{display:block;color:#d4af6a;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;margin:0 0 20px;font-weight:700}
-.footer-group nav{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
-.footer-group a{position:relative;display:inline-flex;align-items:center;gap:9px;padding:5px 0;color:#d2dced;text-decoration:none;font-size:.92rem;line-height:1.4;overflow-wrap:anywhere;transition:color .18s ease,transform .18s ease}
+.footer-intro p{max-width:34ch;margin:20px 0 0;color:#9fb0cb;line-height:1.7;font-size:.96rem;text-wrap:pretty}
+.footer-label{display:block;color:#d4af6a;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;margin:0 0 18px;font-weight:700}
+.footer-group nav{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.footer-group a{display:inline-flex;align-items:center;gap:9px;padding:6px 0;color:#d2dced;text-decoration:none;font-size:.93rem;line-height:1.4;overflow-wrap:anywhere;transition:color .18s ease,transform .18s ease,border-color .18s ease,background-color .18s ease}
 .footer-group a:hover{color:#e6ca92;transform:translateX(3px)}
 .footer-group a span:last-child:empty{display:none}
-.footer-group--ecosystem nav{display:grid;grid-template-columns:1fr 1fr;gap:6px 24px}
-.footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px 32px;flex-wrap:wrap;margin-top:clamp(40px,5vw,64px);padding-block:22px 0;padding-inline-end:max(clamp(18px,3.2vw,44px),84px);position:relative;color:#8fa0bc;font-size:.78rem}
-.footer-bottom::before{content:"";position:absolute;top:0;inset-inline:clamp(18px,3.2vw,44px);height:1px;background:#17274a}
-.footer-rights{flex:0 1 auto}
+.footer-group--ecosystem nav{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.footer-group--ecosystem a{justify-content:space-between;padding:13px 16px;border:1px solid #1d3157;border-radius:14px;background:linear-gradient(180deg,rgba(18,32,60,.7),rgba(10,19,38,.7));font-weight:600;font-size:.9rem}
+.footer-group--ecosystem a:hover{transform:translateY(-2px);border-color:rgba(212,175,106,.6);background:linear-gradient(180deg,rgba(26,44,80,.85),rgba(12,22,44,.85))}
+.footer-group--ecosystem a span:last-child{color:#d4af6a;font-size:.85rem;transition:transform .2s ease}
+.footer-group--ecosystem a:hover span:last-child{transform:translate(2px,-2px)}
+.footer-bottom{position:relative;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px 32px;margin-top:clamp(40px,5vw,64px);padding:22px max(0px,72px) 0 0;color:#8fa0bc;font-size:.78rem}
+.footer-bottom::before{content:"";position:absolute;top:0;inset-inline:0;height:1px;background:linear-gradient(90deg,rgba(212,175,106,.45),#17274a 40%,transparent)}
 .footer-legal{display:flex;align-items:center;flex-wrap:wrap;gap:8px 22px}
 .footer-legal a{color:#b5c3db;text-decoration:none;transition:color .18s ease}
 .footer-legal a:hover{color:#e6ca92}
-@media(max-width:1024px){.footer-grid{grid-template-columns:1fr 1fr;gap:40px 32px}.footer-intro{grid-column:1/-1}.footer-intro p{max-width:56ch}.footer-group--ecosystem{grid-column:1/-1}.footer-group--ecosystem nav{grid-template-columns:repeat(3,minmax(0,1fr))}.footer-group--contact{grid-column:auto}}
-@media(max-width:680px){.tg-footer{padding-top:48px}.footer-grid{grid-template-columns:1fr 1fr;gap:34px 20px}.footer-group--ecosystem nav{grid-template-columns:1fr 1fr}.footer-group--contact{grid-column:1/-1}.footer-brand{width:240px}.footer-cta{width:100%;justify-content:center}.footer-bottom{flex-direction:column;align-items:flex-start;gap:12px;padding-inline-end:clamp(18px,3.2vw,44px);padding-bottom:88px}.footer-legal{gap:8px 18px}}
-@media(max-width:380px){.footer-grid{grid-template-columns:1fr}.footer-group--ecosystem nav{grid-template-columns:1fr 1fr}}
-@media(prefers-reduced-motion:reduce){.footer-group a,.footer-cta,.footer-cta svg{transition:none}.footer-group a:hover,.footer-cta:hover{transform:none}}
+@media(max-width:1100px){.footer-grid{grid-template-columns:1fr 1fr;gap:40px 32px}.footer-intro{grid-column:1/-1}.footer-intro p{max-width:56ch}.footer-group--ecosystem{grid-column:1/-1}.footer-group--ecosystem nav{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:860px){.footer-cta-band{grid-template-columns:1fr}.footer-cta-actions{flex-direction:row;flex-wrap:wrap}.footer-cta-actions .footer-cta{flex:1 1 220px}.footer-cta-title{max-width:none}}
+@media(max-width:680px){.tg-footer{padding-top:36px}.footer-grid{gap:34px 20px}.footer-group--ecosystem nav{grid-template-columns:1fr 1fr}.footer-group--contact{grid-column:1/-1}.footer-brand{width:230px}.footer-cta-actions{flex-direction:column}.footer-cta-actions .footer-cta{flex:0 0 auto}.footer-bottom{flex-direction:column;align-items:flex-start;padding:22px 0 88px}.footer-legal{gap:8px 18px}}
+@media(max-width:420px){.footer-grid{grid-template-columns:1fr}.footer-group--ecosystem nav{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.footer-group a,.footer-cta,.footer-cta svg,.footer-group--ecosystem a span:last-child{transition:none}.footer-group a:hover,.footer-cta:hover,.footer-group--ecosystem a:hover{transform:none}}
 </style>

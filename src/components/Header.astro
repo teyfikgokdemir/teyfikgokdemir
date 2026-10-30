@@ -155,6 +155,10 @@ const ecosystemLinks = [
   mobileMenu?.querySelector('[data-mobile-close]')?.addEventListener('click', () => setMenu(false));
   mobileMenu?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)));
 
+  const onScroll = () => header?.classList.toggle('is-scrolled', scrollY > 24);
+  onScroll();
+  addEventListener('scroll', onScroll, { passive: true });
+
   const setupPopover = (rootSelector, triggerSelector, panelSelector) => {
     const root = header?.querySelector(rootSelector);
     const trigger = root?.querySelector(triggerSelector);
@@ -218,9 +222,10 @@ const ecosystemLinks = [
 </script>
 
 <style>
-  .site-header{position:sticky;top:0;z-index:80;border-bottom:1px solid rgba(148,176,226,.12);background:linear-gradient(180deg,rgba(8,15,30,.94),rgba(6,11,22,.86));backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);box-shadow:0 1px 0 rgba(212,175,106,.08),0 10px 30px rgba(2,5,12,.28)}
-  .header-inner{width:100%;max-width:1360px;padding-inline:clamp(18px,3.2vw,44px);height:72px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:28px}
-  .brand{display:block;width:188px;line-height:0}.brand picture,.brand img{display:block;width:100%;height:auto}
+  .site-header{position:sticky;top:0;z-index:80;padding:12px clamp(10px,2vw,24px) 0;background:transparent;pointer-events:none}
+  .header-inner{pointer-events:auto;width:100%;max-width:1320px;height:68px;margin:0 auto;padding-inline:clamp(16px,2.4vw,30px) clamp(10px,1.4vw,14px);display:flex;align-items:center;justify-content:space-between;gap:28px;border:1px solid rgba(212,175,106,.24);border-radius:999px;background:linear-gradient(180deg,rgba(14,24,46,.94),rgba(7,13,26,.92));backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%);box-shadow:0 18px 50px rgba(2,5,12,.5),inset 0 1px 0 rgba(255,255,255,.06);transition:max-width .35s ease,height .35s ease,background-color .3s ease,box-shadow .3s ease,border-color .3s ease}
+  .site-header.is-scrolled .header-inner{max-width:1120px;height:58px;border-color:rgba(212,175,106,.4);box-shadow:0 22px 60px rgba(2,5,12,.65),inset 0 1px 0 rgba(255,255,255,.06)}
+  .brand{display:block;width:164px;line-height:0}.brand picture,.brand img{display:block;width:100%;height:auto}
   .desktop-nav{display:flex;align-items:center;gap:6px;margin-inline-start:auto}
   .desktop-nav>a,.nav-button{position:relative;color:#cad5e8;text-decoration:none;font:500 .87rem/1.2 system-ui,-apple-system,sans-serif;letter-spacing:.015em;background:none;border:0;padding:10px 14px;border-radius:999px;cursor:pointer;transition:color .18s ease,background-color .18s ease}.desktop-nav>a::after{content:'';position:absolute;inset-inline:14px;bottom:5px;height:1px;background:#d4af6a;transform:scaleX(0);transform-origin:left;transition:transform .22s ease}.desktop-nav>a:hover::after{transform:scaleX(1)}.desktop-nav>a:last-child{margin-inline-start:10px;padding:10px 20px;background:linear-gradient(135deg,#e6ca92 0%,#c79f56 100%);color:#060c18;font-weight:700}.desktop-nav>a:last-child::after{display:none}.desktop-nav>a:last-child:hover{color:#060c18;box-shadow:0 8px 24px rgba(212,175,106,.28)}
   .desktop-nav>a:hover,.nav-button:hover{color:#f5f2eb}.nav-button:hover,.nav-button[aria-expanded="true"]{background:rgba(148,176,226,.09)}
@@ -247,7 +252,9 @@ const ecosystemLinks = [
   .menu-open{overflow:hidden}
   @media(min-width:901px){.mobile-menu{display:none!important}}
   @media(max-width:900px){
-    .header-inner{height:64px;padding-inline:16px}
+    .site-header{padding:8px 10px 0}
+    .header-inner{height:56px;padding-inline:14px 8px;gap:12px}
+    .site-header.is-scrolled .header-inner{max-width:100%;height:52px}
     .brand{width:40px}
     .desktop-nav{display:none}
     .header-actions{gap:8px}
@@ -288,6 +295,7 @@ const ecosystemLinks = [
     }
     .menu-toggle[aria-expanded="true"]{opacity:0;pointer-events:none}
     .mobile-menu{
+      pointer-events:auto;
       position:fixed;
       inset:0;
       z-index:140;
