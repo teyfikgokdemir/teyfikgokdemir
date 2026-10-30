@@ -1,11 +1,12 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const SITE_ORIGIN = 'https://teyfikgokdemir.com';
 const DEFAULT_SITEMAP_URL = `${SITE_ORIGIN}/sitemap-index.xml`;
 const SITEMAP_URL = process.argv.find((arg) => arg.startsWith('http')) ?? DEFAULT_SITEMAP_URL;
 const API_URL = 'https://api.indexnow.org/indexnow';
-const KEY_DIR = resolve(new URL('../public/', import.meta.url).pathname);
+const KEY_DIR = fileURLToPath(new URL('../public/', import.meta.url));
 const DRY_RUN = process.argv.includes('--dry-run');
 const LOCAL_SITEMAP = process.argv.includes('--local');
 const BATCH_SIZE = 10_000;
@@ -27,7 +28,7 @@ function locs(xml) {
 async function findKey() {
   const keyFile = (await readdir(KEY_DIR)).find((name) =>
     name.endsWith('.txt') &&
-    !['robots.txt', 'sitemap.txt', 'llms.txt'].includes(name) &&
+    !['robots.txt', 'sitemap.txt', 'llms.txt', 'ai-fact-sheet.txt'].includes(name) &&
     /^[A-Za-z0-9-]+$/.test(name.slice(0, -4)) &&
     name.length >= 12
   );
