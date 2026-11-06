@@ -67,6 +67,7 @@
   };
 
   const post = async () => {
+    if (window.__qctAnalyticsConsent !== true) return false;
     if (alreadySent()) return true;
     const body = JSON.stringify(payload());
 

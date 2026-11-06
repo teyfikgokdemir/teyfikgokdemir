@@ -2,6 +2,7 @@
   const current = document.currentScript;
   const site = current?.dataset.site;
   if (!site) return;
+  if (window.__qctAnalyticsConsent !== true) return;
 
   // Guard against duplicate loader executions (e.g. framework double-mount) and duplicate Umami scripts.
   if (window.__cansuUmamiLoader) return;
@@ -69,6 +70,8 @@
       script.dataset.domains = config.domain || location.hostname;
       script.dataset.performance = config.performance ? 'true' : 'false';
       script.dataset.excludeHash = 'true';
+      window.cansuUmamiBeforeSend = (payload) => window.__qctAnalyticsConsent === true ? payload : null;
+      script.dataset.beforeSend = 'cansuUmamiBeforeSend';
       script.dataset.cansuUmamiLoaded = 'true';
       script.onload = () => report('ready');
       script.onerror = () => report('script-failed', 'script.js load failed: ' + config.scriptUrl);

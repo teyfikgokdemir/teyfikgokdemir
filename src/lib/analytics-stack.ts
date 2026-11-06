@@ -1,7 +1,7 @@
 /** QCT reference analytics runtime. GA remains site-owned; GTM must not duplicate GA/Clarity. */
 export type Params = Record<string, unknown>;
 type Consent = { analytics: boolean; marketing?: boolean; recording?: boolean };
-type Config = { hostname?: string; site: string; ga: string; gtm?: string; clarity?: string; advanced?: boolean; clarityCookieless?: boolean };
+type Config = { hostname?: string; site: string; ga: string; gtm?: string; clarity?: string; advanced?: boolean; clarityCookieless?: boolean; cansu?: boolean; cansuSite?: string };
 const names = new Set(('whatsapp_click phone_click email_click cta_click contact_click contact_cta_click outbound_click language_change service_view reference_view blog_view scroll_depth form_start form_submit contact_form_start contact_intent_toggle form_fallback_download contact_form_submit_attempt contact_form_success contact_form_error generate_lead email_draft_open pricing_start pricing_complete profit_calculator_complete product_quote_click catalog_download how_we_work_cta_click case_scenario_cta_click trade_intent_click direct_contact_click fa_landing_referral_click case_study_click service_detail_click').split(' '));
 const keys = new Set(('intent cta_type cta_location service platform product_scope form_name form_type trade_intent support_need trade_direction product_family contact_channel catalog_language target_locale page_type lead_source destination percent_scrolled pricing_value').split(' '));
 export function safeText(value: unknown): string {
@@ -20,14 +20,15 @@ export function createAnalytics(config: Config) {
 }
 function build(config: Config) {
   const w = window as any;
-  let consent: Consent = { analytics: true, marketing: false, recording: true };
-  let gaLoaded = false, extrasLoaded = false, clarityLoaded = false, lastPage = '', classifiedPage = '';
+  let consent: Consent = { analytics: false, marketing: false, recording: false };
+  let gaLoaded = false, extrasLoaded = false, clarityLoaded = false, cansuLoaded = false, lastPage = '', classifiedPage = '';
+  w.__qctAnalyticsConsent = false;
   let attribution: Params = {};
   const scrolls = new Set<number>();
   w.dataLayer = w.dataLayer || [];
   w.gtag = w.gtag || function () { w.dataLayer.push(arguments); };
   const googleConsent = (kind: string) => w.gtag('consent', kind, {
-    analytics_storage: 'granted',
+    analytics_storage: consent.analytics ? 'granted' : 'denied',
     ad_storage: consent.marketing ? 'granted' : 'denied',
     ad_user_data: consent.marketing ? 'granted' : 'denied',
     ad_personalization: consent.marketing ? 'granted' : 'denied',
@@ -38,6 +39,14 @@ function build(config: Config) {
     const s = document.createElement('script'); s.id = id; s.async = true; s.src = src;
     document.head.appendChild(s);
   };
+  function loadCansu() {
+    if (!consent.analytics || !config.cansu || cansuLoaded) return;
+    cansuLoaded = true;
+    const site = config.cansuSite || config.site;
+    const beacon = document.createElement('script'); beacon.id = 'qct-cansu-source-beacon'; beacon.src = 'https://teyfikgokdemir.com/cansu-source-beacon.js'; beacon.defer = true; beacon.dataset.site = site; document.head.appendChild(beacon);
+    const events = document.createElement('script'); events.id = 'qct-cansu-events'; events.src = '/cansu-events.js'; events.defer = true; events.dataset.site = site; document.head.appendChild(events);
+    const umami = document.createElement('script'); umami.id = 'qct-cansu-umami'; umami.src = 'https://teyfikgokdemir.com/cansu-umami-loader.js'; umami.defer = true; umami.dataset.site = site; document.head.appendChild(umami);
+  }
   function captureAttribution() {
     const key = config.site + '-analytics-attribution-v2';
     const allowed = ['utm_source', 'utm_medium', 'utm_campaign'];
@@ -63,7 +72,7 @@ function build(config: Config) {
     return { site_id: config.site, page_path: safePath(location.href), page_location: location.origin + safePath(location.href), page_referrer: (() => { try { return new URL(document.referrer).origin; } catch { return ''; } })(), language: safeText(document.documentElement.lang), ...attribution };
   }
   function loadGa() {
-    if (gaLoaded || !/^G-[A-Z0-9]+$/.test(config.ga)) return;
+    if (!consent.analytics || gaLoaded || !/^G-[A-Z0-9]+$/.test(config.ga)) return;
     gaLoaded = true;
     w.gtag('js', new Date());
     w.gtag('config', config.ga, { send_page_view: false, allow_google_signals: false, allow_ad_personalization_signals: false, ...context() });
@@ -71,12 +80,12 @@ function build(config: Config) {
   }
   function page() {
     const path = safePath(location.href);
-    if (path !== lastPage) {
+    if (consent.analytics && path !== lastPage) {
       lastPage = path; scrolls.clear();
       loadGa();
       w.gtag('event', 'page_view', context());
     }
-    if ((consent.analytics || config.advanced) && path !== classifiedPage) {
+    if (consent.analytics && path !== classifiedPage) {
       classifiedPage = path;
       if (/\/(blog|insights|icgoruler)\/.+/.test(path)) track('blog_view');
       else if (/\/(work|calismalar|referanslar|references|case-studies|referenzen|realisations|temsili-calisma-senaryolari)(\/|$)/.test(path)) track('reference_view');
@@ -84,13 +93,13 @@ function build(config: Config) {
     }
   }
   function extras() {
-    if (!extrasLoaded && /^GTM-[A-Z0-9]+$/.test(config.gtm || '')) {
+    if (consent.analytics && !extrasLoaded && /^GTM-[A-Z0-9]+$/.test(config.gtm || '')) {
       extrasLoaded = true;
       w.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
       load('qct-gtm', 'https://www.googletagmanager.com/gtm.js?id=' + config.gtm);
     }
     // Recording never starts on URLs containing potentially sensitive query/hash data.
-    if (!clarityLoaded && /^[a-z0-9]{5,20}$/.test(config.clarity || '') && !location.search && !location.hash) {
+    if (consent.analytics && consent.recording && !clarityLoaded && /^[a-z0-9]{5,20}$/.test(config.clarity || '') && !location.search && !location.hash) {
       clarityLoaded = true;
       w.clarity = w.clarity || function () { (w.clarity.q = w.clarity.q || []).push(arguments); };
       document.body.setAttribute('data-clarity-mask', 'true');
@@ -99,17 +108,28 @@ function build(config: Config) {
     }
   }
   function setConsent(next: Consent) {
-    consent = { analytics: true, marketing: next.marketing === true, recording: true };
+    const analyticsGranted = next.analytics === true;
+    consent = { analytics: analyticsGranted, marketing: next.marketing === true, recording: analyticsGranted && next.recording === true };
+    w.__qctAnalyticsConsent = analyticsGranted;
     googleConsent('update');
-    if (w.clarity) w.clarity('consentv2', { analytics_Storage: 'granted', ad_Storage: consent.marketing ? 'granted' : 'denied' });
-    captureAttribution();
-    w.__ctsegAttribution = { ...attribution };
-    loadGa();
-    extras();
+    if (w.clarity) w.clarity('consentv2', { analytics_Storage: consent.recording ? 'granted' : 'denied', ad_Storage: consent.marketing ? 'granted' : 'denied' });
+    if (analyticsGranted) {
+      captureAttribution();
+      w.__ctsegAttribution = { ...attribution };
+      loadGa();
+      extras();
+      loadCansu();
+    } else {
+      attribution = {};
+      w.__ctsegAttribution = {};
+      lastPage = '';
+      classifiedPage = '';
+      scrolls.clear();
+    }
     page();
   }
   function track(name: string, params: Params = {}) {
-    if (!names.has(name)) return false;
+    if (!consent.analytics || !names.has(name)) return false;
     const clean: Params = {};
     for (const [key, value] of Object.entries(params || {})) {
       if (!keys.has(key)) continue;
