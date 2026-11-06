@@ -21,6 +21,7 @@
   };
 
   const send = (eventType, extra = {}) => {
+    if (window.__qctAnalyticsConsent !== true) return false;
     const payload = JSON.stringify({ ...context(), ...extra, event_type: eventType });
     try {
       if (navigator.sendBeacon) {
