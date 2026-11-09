@@ -5,13 +5,28 @@ interface Env {
 const SITES = new Set(['teyfikgokdemir', 'ctseg', 'mythborn', 'qct-studio', 'qct-commerce-tr', 'qctone']);
 const ORIGINS = new Set([
   'https://teyfikgokdemir.com',
+  'https://www.teyfikgokdemir.com',
   'https://ctseg.com.tr',
+  'https://www.ctseg.com.tr',
   'https://mythborn.co',
+  'https://www.mythborn.co',
   'https://qctstudio.com',
+  'https://www.qctstudio.com',
   'https://qctcommerce.com',
+  'https://www.qctcommerce.com',
   'https://qctone.com',
   'https://www.qctone.com',
 ]);
+const SITE_ORIGINS: Record<string, string[]> = {
+  teyfikgokdemir: ['https://teyfikgokdemir.com', 'https://www.teyfikgokdemir.com'],
+  ctseg: ['https://ctseg.com.tr', 'https://www.ctseg.com.tr'],
+  mythborn: ['https://mythborn.co', 'https://www.mythborn.co'],
+  'qct-studio': ['https://qctstudio.com', 'https://www.qctstudio.com'],
+  'qct-commerce-tr': ['https://qctcommerce.com', 'https://www.qctcommerce.com'],
+  qctone: ['https://qctone.com', 'https://www.qctone.com'],
+};
+const BOT_UA = /bot|spider|crawl|slurp|headlesschrome|playwright|puppeteer|lighthouse|pagespeed/i;
+const RETENTION_DAYS = 90;
 
 const cors = (origin: string | null) => ({
   'access-control-allow-origin': origin && ORIGINS.has(origin) ? origin : 'null',
@@ -26,6 +41,14 @@ const response = (body: unknown, status: number, origin: string | null) => new R
 });
 
 const clean = (value: unknown, max: number) => String(value ?? '').trim().slice(0, max).replace(/[\u0000-\u001f\u007f]/g, '');
+
+const cleanPath = (value: unknown) => {
+  const raw = clean(value, 220).split(/[?#]/)[0].replace(/\/{2,}/g, '/');
+  const masked = raw
+    .replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '[email]')
+    .replace(/[0-9a-fA-F-]{24,}/g, '[id]');
+  return (masked.startsWith('/') ? masked : `/${masked || ''}`).slice(0, 180) || '/';
+};
 
 const allowedOrigin = (origin: string | null) => Boolean(origin && ORIGINS.has(origin));
 
@@ -100,15 +123,43 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   if (request.method === 'POST') {
     if (!allowedOrigin(origin)) return response({ ok: false, error: 'Origin not allowed' }, 403, origin);
     try {
-      const body = await request.json() as Record<string, unknown>;
+      const raw = await request.text();
+      if (new TextEncoder().encode(raw).byteLength > 1024) return response({ ok: false, error: 'Payload too large' }, 413, origin);
+      const body = JSON.parse(raw) as Record<string, unknown>;
       const site = clean(body.site, 40);
       if (!SITES.has(site)) return response({ ok: false, error: 'Unknown site' }, 400, origin);
-      const source = sourceName(body);
-      const path = clean(body.landing_path, 180) || '/';
+      const collectorVersion = clean(body.collector_version, 10);
+      if (collectorVersion === '5' && (!origin || !SITE_ORIGINS[site]?.includes(origin))) {
+        return response({ ok: false, error: 'Origin mismatch for site identifier' }, 403, origin);
+      }
+      const path = cleanPath(body.landing_path);
       const day = new Date().toISOString().slice(0, 10);
 
+      // Persistent consent-free aggregate: no IP, user agent, referrer, session or visitor identifier is stored.
+      if (collectorVersion === '5') {
+        const cf = (request as Request & { cf?: { botManagement?: { verifiedBot?: boolean; score?: number } } }).cf;
+        const userAgent = request.headers.get('user-agent') || '';
+        const isBot = BOT_UA.test(userAgent) || cf?.botManagement?.verifiedBot === true || (typeof cf?.botManagement?.score === 'number' && cf.botManagement.score < 30) ? 1 : 0;
+        await env.CANSU_ANALYTICS_DB.prepare(
+          `CREATE TABLE IF NOT EXISTS privacy_pageviews_daily (
+            site TEXT NOT NULL,
+            day TEXT NOT NULL,
+            path TEXT NOT NULL,
+            is_bot INTEGER NOT NULL DEFAULT 0,
+            views INTEGER NOT NULL DEFAULT 0,
+            PRIMARY KEY (site, day, path, is_bot)
+          )`
+        ).run();
+        const cutoff = new Date(Date.now() - RETENTION_DAYS * 86400000).toISOString().slice(0, 10);
+        await env.CANSU_ANALYTICS_DB.prepare('DELETE FROM privacy_pageviews_daily WHERE day < ?').bind(cutoff).run();
+        await env.CANSU_ANALYTICS_DB.prepare(
+          'INSERT INTO privacy_pageviews_daily (site, day, path, is_bot, views) VALUES (?, ?, ?, ?, 1) ON CONFLICT(site, day, path, is_bot) DO UPDATE SET views = views + 1'
+        ).bind(site, day, path, isBot).run();
+        return response({ ok: true, collector: 'privacy-pageviews-v5', retentionDays: RETENTION_DAYS }, 202, origin);
+      }
+
       // Consent-free QCTONE aggregate: no session ID, identity, referrer, geo or UTM is stored.
-      if (site === 'qctone' && clean(body.collector_version, 10) === '4') {
+      if (site === 'qctone' && collectorVersion === '4') {
         await env.CANSU_ANALYTICS_DB.prepare(
           `CREATE TABLE IF NOT EXISTS qctone_cookieless_daily (
             day TEXT NOT NULL,
@@ -123,7 +174,8 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
         return response({ ok: true, collector: 'qctone-anonymous-v4' }, 202, origin);
       }
 
-      if (clean(body.collector_version, 10) === '3') {
+      const source = sourceName(body);
+      if (collectorVersion === '3') {
         const sessionId = clean(body.session_id, 80);
         if (!/^[a-zA-Z0-9_-]{12,80}$/.test(sessionId)) return response({ ok: false, error: 'Invalid session id' }, 400, origin);
         await ensureFirstPartyV2(env);
@@ -151,15 +203,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
 
   if (request.method === 'GET') {
     const url = new URL(request.url);
-    if (url.searchParams.get('action') === 'clean_test') {
-      const testRows = await env.CANSU_ANALYTICS_DB.prepare(
-        "SELECT * FROM source_events WHERE source LIKE '%test%'"
-      ).all();
-      const deleteResult = await env.CANSU_ANALYTICS_DB.prepare(
-        "DELETE FROM source_events WHERE source LIKE '%test%'"
-      ).run();
-      return response({ ok: true, deletedRows: testRows.results ?? [], meta: deleteResult.meta }, 200, origin);
-    }
+    if (url.searchParams.get('action') === 'clean_test') return response({ ok: false, error: 'Maintenance action disabled' }, 405, origin);
     const eventSite = clean(url.searchParams.get('event_site'), 40);
     if (eventSite) {
       let refererOrigin = '';
@@ -184,22 +228,24 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
     const version = clean(url.searchParams.get('version'), 10).toLowerCase();
     const period = clean(url.searchParams.get('period'), 20).toLowerCase();
 
-    if (site === 'qctone' && version === 'anonymous') {
+    if (version === 'anonymous') {
       await env.CANSU_ANALYTICS_DB.prepare(
-        `CREATE TABLE IF NOT EXISTS qctone_cookieless_daily (
+        `CREATE TABLE IF NOT EXISTS privacy_pageviews_daily (
+          site TEXT NOT NULL,
           day TEXT NOT NULL,
           path TEXT NOT NULL,
+          is_bot INTEGER NOT NULL DEFAULT 0,
           views INTEGER NOT NULL DEFAULT 0,
-          PRIMARY KEY (day, path)
+          PRIMARY KEY (site, day, path, is_bot)
         )`
       ).run();
       const since = period === 'today'
         ? new Date().toISOString().slice(0, 10)
         : new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
       const totals = await env.CANSU_ANALYTICS_DB.prepare(
-        'SELECT SUM(views) AS views FROM qctone_cookieless_daily WHERE day >= ?'
-      ).bind(since).first<{ views: number | null }>();
-      return response({ ok: true, site, collector: 'anonymous-pageviews', period: period === 'today' ? 'today' : 'rolling-day-buckets', pageviews: Number(totals?.views || 0), uniqueVisitors: null, sessions: null }, 200, origin);
+        'SELECT SUM(views) AS views, SUM(CASE WHEN is_bot = 1 THEN views ELSE 0 END) AS bot_views FROM privacy_pageviews_daily WHERE site = ? AND day >= ?'
+      ).bind(site, since).first<{ views: number | null; bot_views: number | null }>();
+      return response({ ok: true, site, collector: 'anonymous-pageviews-v5', period: period === 'today' ? 'today' : 'rolling-day-buckets', retentionDays: RETENTION_DAYS, pageviews: Number(totals?.views || 0), botPageviews: Number(totals?.bot_views || 0), uniqueVisitors: null, sessions: null }, 200, origin);
     }
 
     if (version === 'v2') {

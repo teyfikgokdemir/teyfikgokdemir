@@ -20,23 +20,32 @@ globalThis.api = createAnalytics({site:'test',ga:'G-TEST',gtm:'GTM-TEST',clarity
 let checks = 0;
 const check = (name, fn) => { fn(); checks++; console.log('PASS ' + name); };
 
-check('no consent keeps vendors unloaded and blocks analytics events', () => {
-  const f = fixture(true);
+check('advanced mode sends one cookieless page view and loads limited vendors without consent', () => {
+  const f = fixture(true, '', false, true);
   assert.deepEqual(f.scripts.map(s => s.id), []);
   assert.equal(f.window.__qctAnalyticsConsent, false);
   f.api.setConsent({analytics:false,recording:false});
-  assert.deepEqual(f.scripts.map(s => s.id), []);
+  assert.deepEqual(f.scripts.map(s => s.id), ['qct-privacy-traffic','qct-cansu-umami','qct-ga4','qct-clarity']);
   assert.equal(f.window.__qctAnalyticsConsent, false);
   assert.equal(f.window.dataLayer[0][2].analytics_storage, 'denied');
-  assert.equal(f.events().filter(e => e[1] === 'page_view').length, 0);
+  assert.equal(f.events().filter(e => e[1] === 'page_view').length, 1);
+  assert.ok(f.window.clarity.q.some(args => args[0] === 'consentv2' && args[1].analytics_Storage === 'denied'));
   assert.equal(f.api.track('whatsapp_click'), false);
+});
+
+check('basic mode remains opt-in while anonymous first-party and Umami loaders stay active', () => {
+  const f = fixture(false);
+  f.api.setConsent({analytics:false,recording:false});
+  assert.deepEqual(f.scripts.map(s => s.id), ['qct-privacy-traffic','qct-cansu-umami']);
+  assert.equal(f.events().filter(e => e[1] === 'page_view').length, 0);
+  assert.equal(f.storage.size, 0);
 });
 
 check('accept loads only consented vendors and records a page view', () => {
   const f = fixture();
   f.api.setConsent({analytics:true,recording:true});
   assert.equal(f.window.__qctAnalyticsConsent, true);
-  assert.deepEqual(f.scripts.map(s => s.id), ['qct-ga4','qct-gtm','qct-clarity','qct-cansu-source-beacon','qct-cansu-events','qct-cansu-umami']);
+  assert.deepEqual(f.scripts.map(s => s.id), ['qct-privacy-traffic','qct-cansu-umami','qct-ga4','qct-gtm','qct-clarity','qct-cansu-source-beacon','qct-cansu-events']);
   assert.equal(f.window.__qctAnalyticsConsent, true);
   assert.equal(f.window.dataLayer[0][2].analytics_storage, 'denied');
   assert.equal(f.events().filter(e => e[1] === 'page_view').length, 1);
@@ -55,7 +64,7 @@ check('withdrawal updates consent and stops events without reloading vendors', (
   assert.ok(f.window.clarity.q.some(args => args[0] === 'consentv2' && args[1].analytics_Storage === 'denied'));
   f.api.setConsent({analytics:true,recording:true});
   assert.equal(f.window.__qctAnalyticsConsent, true);
-  assert.deepEqual(f.scripts.map(s => s.id), ['qct-ga4','qct-gtm','qct-clarity','qct-cansu-source-beacon','qct-cansu-events','qct-cansu-umami']);
+  assert.deepEqual(f.scripts.map(s => s.id), ['qct-privacy-traffic','qct-cansu-umami','qct-ga4','qct-gtm','qct-clarity','qct-cansu-source-beacon','qct-cansu-events']);
   assert.equal(f.events().filter(e => e[1] === 'page_view').length, 2);
 });
 
@@ -89,11 +98,11 @@ check('campaign attribution is captured only after consent and Clarity skips sen
   const f = fixture(false,'?utm_source=google&utm_medium=cpc&utm_campaign=spring&utm_term=private@example.com&gclid=secret');
   f.api.setConsent({analytics:false,recording:false});
   assert.equal(f.storage.size, 0);
-  assert.deepEqual(f.scripts.map(s => s.id), []);
+  assert.deepEqual(f.scripts.map(s => s.id), ['qct-privacy-traffic','qct-cansu-umami']);
   assert.equal(f.window.__qctAnalyticsConsent, false);
   f.api.setConsent({analytics:true,recording:true});
   assert.equal(f.window.__qctAnalyticsConsent, true);
-  assert.deepEqual(f.scripts.map(s => s.id), ['qct-ga4','qct-gtm','qct-cansu-source-beacon','qct-cansu-events','qct-cansu-umami']);
+  assert.deepEqual(f.scripts.map(s => s.id), ['qct-privacy-traffic','qct-cansu-umami','qct-ga4','qct-gtm','qct-cansu-source-beacon','qct-cansu-events']);
   const data = JSON.stringify(f.window.dataLayer);
   assert.ok(data.includes('spring'));
   assert.ok(!data.includes('private@example.com'));
@@ -103,17 +112,18 @@ check('campaign attribution is captured only after consent and Clarity skips sen
 check('blocked storage does not bypass explicit consent', () => {
   const f = fixture(false,'',true);
   f.api.setConsent({analytics:false,recording:false});
-  assert.equal(f.scripts.length, 0);
+  assert.deepEqual(f.scripts.map(s => s.id), ['qct-privacy-traffic','qct-cansu-umami']);
   f.api.setConsent({analytics:true,recording:false});
   assert.equal(f.api.track('email_click'), true);
 });
 
 check('wrong host never initializes measurement', () => {
   const f = fixture();
+  const baseline = f.scripts.length;
   f.context.window.__qctStack = undefined;
   vm.runInContext("globalThis.preview = createAnalytics({hostname:'production.example',site:'preview',ga:'G-TEST'});", f.context);
   f.context.preview.setConsent({analytics:true,recording:true});
-  assert.equal(f.scripts.length, 0);
+  assert.equal(f.scripts.length, baseline);
 });
 check('Cansu conversion events send only while consent is active', () => {
   const signals = { count: 0 };

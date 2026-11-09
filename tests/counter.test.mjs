@@ -4,6 +4,7 @@ import test from 'node:test';
 
 import { onRequest } from '../functions/api/counter.ts';
 import { onRequestGet as onClarityRequest } from '../functions/api/clarity.ts';
+import { onRequest as onSourcesRequest } from '../functions/api/sources.ts';
 
 const ACTIVE_TIME = Date.parse('2026-11-10T12:00:00Z');
 const EXPIRED_TIME = Date.parse('2026-11-16T00:00:00Z');
@@ -37,6 +38,11 @@ class FakeStatement {
   async all() {
     this.database.operations.push({ kind: 'all', sql: this.sql, params: this.params });
     return { results: [] };
+  }
+
+  async first() {
+    this.database.operations.push({ kind: 'first', sql: this.sql, params: this.params });
+    return { views: 7, bot_views: 2 };
   }
 }
 
@@ -72,6 +78,22 @@ const invoke = async ({
     request,
     env: { CANSU_ANALYTICS_DB: database, COUNTER_AUTH_SECRET: secret },
   });
+  return { response, database };
+};
+
+const invokeSources = async ({
+  method = 'POST',
+  origin = 'https://qctone.com',
+  body = JSON.stringify({ site: 'qctone', landing_path: '/', collector_version: '5' }),
+  url = 'https://teyfikgokdemir.com/api/sources',
+  headers = {},
+} = {}) => {
+  const database = new FakeDatabase();
+  const requestHeaders = new Headers(headers);
+  if (origin !== undefined) requestHeaders.set('origin', origin);
+  const request = new Request(url, { method, headers: requestHeaders, body: method === 'GET' || method === 'HEAD' ? undefined : body });
+  Object.defineProperty(request, 'cf', { value: { country: 'TR', botManagement: { verifiedBot: false, score: 90 } } });
+  const response = await onSourcesRequest({ request, env: { CANSU_ANALYTICS_DB: database } });
   return { response, database };
 };
 
@@ -205,6 +227,56 @@ test('client telemetry remains cookie-free and sends no credentials', async () =
   assert.match(source, /credentials:\s*['"]omit['"]/);
 });
 
+test('persistent anonymous aggregate accepts all six sites without session identity', async () => {
+  for (const [site, origin] of ACTIVE_SITES) {
+    const { response, database } = await invokeSources({ origin, body: JSON.stringify({ site, landing_path: '/safe', collector_version: '5' }) });
+    assert.equal(response.status, 202, site);
+    assert.equal((await response.json()).collector, 'privacy-pageviews-v5', site);
+    const insert = database.operations.find(({ sql }) => /INSERT INTO privacy_pageviews_daily/.test(sql));
+    assert.ok(insert, `${site} should insert a daily aggregate`);
+    assert.equal(insert.params[0], site);
+    assert.doesNotMatch(JSON.stringify(insert), /session|referrer|utm|email/i);
+  }
+});
+
+test('persistent anonymous aggregate rejects cross-site origin claims', async () => {
+  const { response, database } = await invokeSources({ origin: 'https://ctseg.com.tr', body: JSON.stringify({ site: 'qctone', landing_path: '/', collector_version: '5' }) });
+  assert.equal(response.status, 403);
+  assert.equal(database.operations.length, 0);
+});
+
+test('anonymous reporting returns aggregate pageviews without visitor or session claims', async () => {
+  for (const [site] of ACTIVE_SITES) {
+    const { response } = await invokeSources({ method: 'GET', origin: 'https://teyfikgokdemir.com', url: `https://teyfikgokdemir.com/api/sources?site=${site}&version=anonymous&period=today` });
+    assert.equal(response.status, 200, site);
+    const body = await response.json();
+    assert.equal(body.pageviews, 7);
+    assert.equal(body.botPageviews, 2);
+    assert.equal(body.uniqueVisitors, null);
+    assert.equal(body.sessions, null);
+  }
+});
+
+test('persistent privacy loader is cookie-free, credential-free and carries no durable identity', async () => {
+  const source = await readFile(new URL('../public/privacy-traffic.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(source, /document\.cookie|localStorage|sessionStorage|fingerprint|session[_-]?id|visitor[_-]?id/i);
+  assert.match(source, /credentials:\s*['"]omit['"]/);
+  assert.match(source, /collector_version:\s*['"]5['"]/);
+});
+
+test('Umami loader is consent-independent, DNT-aware and uses no distinct ID', async () => {
+  const source = await readFile(new URL('../public/cansu-umami-loader.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(source, /__qctAnalyticsConsent/);
+  assert.match(source, /doNotTrack/);
+  assert.doesNotMatch(source, /distinct[_-]?id|\.identify\(/i);
+});
+
+test('Cansu dashboard labels the six-site analytics scope', async () => {
+  const source = await readFile(new URL('../src/pages/cansu.astro', import.meta.url), 'utf8');
+  assert.match(source, /6 site · kaynak bazlı operasyon/);
+  assert.doesNotMatch(source, /7 site · kaynak bazlı operasyon/);
+});
+
 test('analytics infrastructure contains no Olivon tracking or reporting targets', async () => {
   const files = [
     '../functions/api/conversions.ts',
@@ -218,6 +290,7 @@ test('analytics infrastructure contains no Olivon tracking or reporting targets'
     '../functions/api/umami.ts',
     '../infra/umami/README.md',
     '../public/cansu-source-beacon.js',
+    '../public/privacy-traffic.js',
     '../public/traffic-counter.js',
     '../scripts/check-umami-cors.mjs',
     '../src/pages/cansu.astro',
