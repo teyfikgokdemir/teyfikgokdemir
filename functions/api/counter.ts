@@ -94,6 +94,18 @@ const sanitizePath = (raw: unknown): string => {
 
 const BOT_UA_REGEX = /bot|spider|crawl|slurp|googlebot|bingbot|yandex|duckduckbot|baiduspider|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest\/0\.|pinterestbot|slackbot|vkshare|w3c_validator|headlesschrome|playwright|puppeteer|lighthouse|pagespeed/i;
 
+const ensureAggregateTable = (database: D1Database) => database.prepare(
+  `CREATE TABLE IF NOT EXISTS privacy_traffic_7d (
+    site TEXT NOT NULL,
+    day TEXT NOT NULL,
+    path TEXT NOT NULL,
+    country TEXT NOT NULL,
+    is_bot INTEGER NOT NULL DEFAULT 0,
+    hits INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (site, day, path, country, is_bot)
+  )`
+).run();
+
 export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   const origin = request.headers.get('origin');
   const now = Date.now();
@@ -111,26 +123,8 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
     });
   }
 
-  // Ensure Database binding is present
-  if (!env.CANSU_ANALYTICS_DB) {
-    return jsonResponse({ ok: false, error: 'Database service unavailable' }, 503, origin);
-  }
-
-  // Ensure aggregate table exists
-  try {
-    await env.CANSU_ANALYTICS_DB.prepare(
-      `CREATE TABLE IF NOT EXISTS privacy_traffic_7d (
-        site TEXT NOT NULL,
-        day TEXT NOT NULL,
-        path TEXT NOT NULL,
-        country TEXT NOT NULL,
-        is_bot INTEGER NOT NULL DEFAULT 0,
-        hits INTEGER NOT NULL DEFAULT 0,
-        PRIMARY KEY (site, day, path, country, is_bot)
-      )`
-    ).run();
-  } catch {
-    return jsonResponse({ ok: false, error: 'Database initialisation error' }, 500, origin);
+  if (request.method !== 'POST' && request.method !== 'GET') {
+    return jsonResponse({ ok: false, error: 'Method not allowed' }, 405, origin, false);
   }
 
   // POST: Record aggregate count ping
@@ -140,20 +134,25 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
       return new Response(null, { status: 204, headers: getCorsHeaders(origin, false) });
     }
 
-    // Origin verification for browser requests
-    if (origin && !ALLOWED_COLLECTION_ORIGINS.has(origin)) {
+    // Browser telemetry must carry an allowlisted Origin. This is one abuse signal,
+    // not authentication; edge rate limiting provides an independent control.
+    if (!origin || !ALLOWED_COLLECTION_ORIGINS.has(origin)) {
       return jsonResponse({ ok: false, error: 'Origin not permitted' }, 403, origin, false);
     }
 
     // Payload size guard: Max 1024 bytes
     const contentLength = Number(request.headers.get('content-length') || 0);
-    if (contentLength > 1024) {
+    if (Number.isFinite(contentLength) && contentLength > 1024) {
       return jsonResponse({ ok: false, error: 'Payload too large' }, 413, origin, false);
     }
 
     let body: Record<string, unknown>;
     try {
-      body = (await request.json()) as Record<string, unknown>;
+      const rawBody = await request.text();
+      if (new TextEncoder().encode(rawBody).byteLength > 1024) {
+        return jsonResponse({ ok: false, error: 'Payload too large' }, 413, origin, false);
+      }
+      body = JSON.parse(rawBody) as Record<string, unknown>;
       if (!body || typeof body !== 'object' || Array.isArray(body)) {
         return jsonResponse({ ok: false, error: 'Invalid payload structure' }, 400, origin, false);
       }
@@ -193,6 +192,16 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
 
     const day = new Date(now).toISOString().slice(0, 10);
     const country = String(cf?.country || 'XX').slice(0, 4);
+
+    if (!env.CANSU_ANALYTICS_DB) {
+      return jsonResponse({ ok: false, error: 'Database service unavailable' }, 503, origin);
+    }
+
+    try {
+      await ensureAggregateTable(env.CANSU_ANALYTICS_DB);
+    } catch {
+      return jsonResponse({ ok: false, error: 'Database initialisation error' }, 500, origin);
+    }
 
     try {
       await env.CANSU_ANALYTICS_DB.prepare(
@@ -239,6 +248,16 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
 
     const detail = url.searchParams.get('detail') || '';
     const isExpired = now > MONITORING_EXPIRY;
+
+    if (!env.CANSU_ANALYTICS_DB) {
+      return jsonResponse({ ok: false, error: 'Database service unavailable' }, 503, origin, true);
+    }
+
+    try {
+      await ensureAggregateTable(env.CANSU_ANALYTICS_DB);
+    } catch {
+      return jsonResponse({ ok: false, error: 'Database initialisation error' }, 500, origin, true);
+    }
 
     try {
       if (detail === 'paths') {
@@ -295,5 +314,4 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
     }
   }
 
-  return jsonResponse({ ok: false, error: 'Method not allowed' }, 405, origin, false);
 };
