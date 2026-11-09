@@ -3,10 +3,19 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import { onRequest } from '../functions/api/counter.ts';
+import { onRequestGet as onClarityRequest } from '../functions/api/clarity.ts';
 
 const ACTIVE_TIME = Date.parse('2026-11-10T12:00:00Z');
 const EXPIRED_TIME = Date.parse('2026-11-16T00:00:00Z');
 const REAL_NOW = Date.now;
+const ACTIVE_SITES = [
+  ['ctseg', 'https://ctseg.com.tr'],
+  ['qct-commerce-tr', 'https://qctcommerce.com'],
+  ['qct-studio', 'https://qctstudio.com'],
+  ['teyfikgokdemir', 'https://teyfikgokdemir.com'],
+  ['mythborn', 'https://mythborn.co'],
+  ['qctone', 'https://qctone.com'],
+];
 
 class FakeStatement {
   constructor(database, sql) {
@@ -78,6 +87,48 @@ test('accepts normal browser telemetry for the matching site and origin', async 
   assert.equal(response.status, 200);
   assert.equal(response.headers.get('access-control-allow-origin'), 'https://qctone.com');
   assert.equal(database.operations.filter(({ sql }) => /INSERT INTO privacy_traffic_7d/.test(sql)).length, 1);
+});
+
+test('accepts telemetry for all six active analytics sites', async () => {
+  for (const [site, origin] of ACTIVE_SITES) {
+    const { response, database } = await invoke({
+      origin,
+      body: JSON.stringify({ site, path: '/' }),
+    });
+    assert.equal(response.status, 200, `${site} should be accepted`);
+    assert.equal(
+      database.operations.filter(({ sql }) => /INSERT INTO privacy_traffic_7d/.test(sql)).length,
+      1,
+      `${site} should write one aggregate row`,
+    );
+  }
+});
+
+test('rejects the retired Olivon site identifier before touching D1', async () => {
+  const { response, database } = await invoke({
+    origin: 'https://qctone.com',
+    body: JSON.stringify({ site: 'olivon-agency', path: '/' }),
+  });
+  assert.equal(response.status, 400);
+  assert.equal(database.operations.length, 0);
+});
+
+test('rejects the retired Olivon Origin before touching D1', async () => {
+  const { response, database } = await invoke({
+    origin: 'https://olivon.com.tr',
+    body: JSON.stringify({ site: 'olivon-agency', path: '/' }),
+  });
+  assert.equal(response.status, 403);
+  assert.equal(database.operations.length, 0);
+});
+
+test('rejects the retired Olivon site in analytics reporting APIs', async () => {
+  const response = await onClarityRequest({
+    request: new Request('https://teyfikgokdemir.com/api/clarity?site=olivon-agency'),
+    env: {},
+  });
+  assert.equal(response.status, 400);
+  assert.deepEqual(await response.json(), { ok: false, error: 'Unknown site' });
 });
 
 test('rejects a POST without Origin before touching D1', async () => {
@@ -152,4 +203,29 @@ test('client telemetry remains cookie-free and sends no credentials', async () =
   const source = await readFile(new URL('../public/traffic-counter.js', import.meta.url), 'utf8');
   assert.doesNotMatch(source, /document\.cookie|cookie\s*=/i);
   assert.match(source, /credentials:\s*['"]omit['"]/);
+});
+
+test('analytics infrastructure contains no Olivon tracking or reporting targets', async () => {
+  const files = [
+    '../functions/api/conversions.ts',
+    '../functions/api/clarity.ts',
+    '../functions/api/counter.ts',
+    '../functions/api/ga4.ts',
+    '../functions/api/gsc/seo.ts',
+    '../functions/api/overview.ts',
+    '../functions/api/sources.ts',
+    '../functions/api/umami-config.ts',
+    '../functions/api/umami.ts',
+    '../infra/umami/README.md',
+    '../public/cansu-source-beacon.js',
+    '../public/traffic-counter.js',
+    '../scripts/check-umami-cors.mjs',
+    '../src/pages/cansu.astro',
+    '../src/scripts/cansu-portfolio.js',
+  ];
+
+  for (const file of files) {
+    const source = await readFile(new URL(file, import.meta.url), 'utf8');
+    assert.doesNotMatch(source, /olivon(?:-agency|agency)?|olivon\.com\.tr|olivon\.agency/i, file);
+  }
 });

@@ -1,7 +1,7 @@
 interface Env { GSC_CLIENT_ID?: string; GSC_CLIENT_SECRET?: string; GA4_PROPERTY_QCTONE?: string; CANSU_GSC_TOKENS?: KVNamespace; }
 const sites = [
   ['qct-commerce-tr','QCT Commerce','537161539'], ['ctseg','CTSEG','547090229'],
-  ['qct-studio','QCT Studio','546070664'], ['olivon-agency','Olivon','553540693'],
+  ['qct-studio','QCT Studio','546070664'],
   ['teyfikgokdemir','Teyfik Gökdemir','546781081'], ['mythborn','Mythborn','533726221'],
 ];
 const json = (body: unknown, status=200) => new Response(JSON.stringify(body), {status, headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store'}});

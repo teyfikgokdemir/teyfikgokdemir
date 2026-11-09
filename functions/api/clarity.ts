@@ -3,6 +3,8 @@ interface Env {
   [key: string]: unknown;
 }
 
+const SITES = new Set(['teyfikgokdemir', 'ctseg', 'mythborn', 'qct-studio', 'qct-commerce-tr', 'qctone']);
+
 const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), {
   status,
   headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'public, max-age=300' },
@@ -11,6 +13,7 @@ const json = (body: unknown, status = 200) => new Response(JSON.stringify(body),
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   const params = new URL(request.url).searchParams;
   const site = params.get('site') || 'ctseg';
+  if (!SITES.has(site)) return json({ ok: false, error: 'Unknown site' }, 400);
   const secretName = site === 'ctseg' ? 'CLARITY_API_TOKEN' : `CLARITY_API_TOKEN_${site.replace(/[^a-z0-9]+/gi, '_').toUpperCase()}`;
   const token = env[secretName] as string | undefined;
   if (!token) return json({ ok: false, site, code: 'missing_token', reason: `${secretName} yapılandırılmamış` }, 503);

@@ -9,7 +9,6 @@ const HOSTS: Record<string, string> = {
   mythborn: 'mythborn.co',
   'qct-studio': 'qctstudio.com',
   'qct-commerce-tr': 'qctcommerce.com',
-  'olivon-agency': 'olivon.com.tr',
   qctone: 'qctone.com',
 };
 
@@ -20,7 +19,6 @@ const ORIGINS = new Set([
   'https://mythborn.co',
   'https://qctstudio.com',
   'https://qctcommerce.com',
-  'https://olivon.com.tr',
   'https://qctone.com',
 ]);
 

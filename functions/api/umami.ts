@@ -11,7 +11,6 @@ const PORTFOLIO: PortfolioSite[] = [
   { key: 'mythborn', host: 'mythborn.co', name: 'mythborn' },
   { key: 'qct-studio', host: 'qctstudio.com', name: 'qct-studio' },
   { key: 'qct-commerce-tr', host: 'qctcommerce.com', name: 'qct-commerce-tr' },
-  { key: 'olivon-agency', host: 'olivon.com.tr', name: 'olivon-agency' },
   { key: 'qctone', host: 'qctone.com', name: 'qctone' },
 ];
 
