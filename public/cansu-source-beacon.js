@@ -11,7 +11,6 @@
     'qct-studio': ['qctstudio.com', 'www.qctstudio.com'],
     'qct-commerce-tr': ['qctcommerce.com', 'www.qctcommerce.com'],
     qctone: ['qctone.com', 'www.qctone.com'],
-    'olivon-agency': ['olivon.com.tr', 'www.olivon.com.tr'],
   };
 
   const allowedHosts = HOSTS[site] || [];

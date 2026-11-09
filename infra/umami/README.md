@@ -25,7 +25,7 @@ This directory contains the production-oriented Docker Compose scaffold for the 
    - mythborn.co
    - qctstudio.com
    - qctcommerce.com
-   - olivon.com.tr
+   - qctone.com
 7. Create an Umami API key.
 8. Set these Cloudflare Pages secrets on the teyfikgokdemir project:
    - `UMAMI_BASE_URL=https://analytics.teyfikgokdemir.com`

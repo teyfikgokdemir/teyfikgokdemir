@@ -13,7 +13,7 @@ const clarityVisitors = document.getElementById('clarity-visitors');
 const claritySiteGrid = document.getElementById('clarity-site-grid');
 const claritySites = [
   ['qct-commerce-tr', 'QCT Commerce'], ['ctseg', 'CTSEG'], ['qct-studio', 'QCT Studio'],
-  ['olivon-agency', 'Olivon'], ['teyfikgokdemir', 'Kişisel site'], ['mythborn', 'Mythborn'], ['qctone', 'QCT One']
+  ['teyfikgokdemir', 'Kişisel site'], ['mythborn', 'Mythborn'], ['qctone', 'QCT One']
 ];
 const snapshots = {};
 const claritySnapshots = new Map();

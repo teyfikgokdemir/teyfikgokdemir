@@ -2,7 +2,7 @@ interface Env {
   CANSU_ANALYTICS_DB: D1Database;
 }
 
-const SITES = new Set(['teyfikgokdemir', 'ctseg', 'mythborn', 'qct-studio', 'qct-commerce-tr', 'olivon-agency', 'qctone']);
+const SITES = new Set(['teyfikgokdemir', 'ctseg', 'mythborn', 'qct-studio', 'qct-commerce-tr', 'qctone']);
 const EVENT_TYPES = new Set(['form_submit', 'rfq_submit', 'whatsapp_click', 'telegram_click', 'phone_click', 'email_click', 'purchase', 'lead']);
 const ORIGINS = new Set([
   'https://teyfikgokdemir.com',
@@ -10,10 +10,6 @@ const ORIGINS = new Set([
   'https://mythborn.co',
   'https://qctstudio.com',
   'https://qctcommerce.com',
-  'https://olivon.com.tr',
-  'https://olivonagency.com',
-  'https://olivon.agency',
-  'https://olivon-agency.pages.dev',
 ]);
 
 const clean = (value: unknown, max: number) =>

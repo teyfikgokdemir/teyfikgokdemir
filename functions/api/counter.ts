@@ -13,8 +13,7 @@ const SITES = new Set([
   'mythborn',
   'qct-studio',
   'qct-commerce-tr',
-  'qctone',
-  'olivon-agency'
+  'qctone'
 ]);
 
 // Whitelisted origins permitted to send analytics events
@@ -31,8 +30,6 @@ const ALLOWED_COLLECTION_ORIGINS = new Set([
   'https://www.qctcommerce.com',
   'https://qctone.com',
   'https://www.qctone.com',
-  'https://olivon.com.tr',
-  'https://www.olivon.com.tr',
 ]);
 
 // Independent site-to-origin mapping to prevent cross-site origin spoofing
@@ -43,7 +40,6 @@ const SITE_PERMITTED_ORIGINS: Record<string, string[]> = {
   'qct-studio': ['https://qctstudio.com', 'https://www.qctstudio.com'],
   'qct-commerce-tr': ['https://qctcommerce.com', 'https://www.qctcommerce.com'],
   'qctone': ['https://qctone.com', 'https://www.qctone.com'],
-  'olivon-agency': ['https://olivon.com.tr', 'https://www.olivon.com.tr'],
 };
 
 // Administrative origins allowed for reporting CORS (Never wildcard)

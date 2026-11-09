@@ -14,7 +14,7 @@ const request = (origin, method = 'GET', site = 'qct-commerce-tr', env = {}) => 
   }), env,
 });
 
-const existing = ['teyfikgokdemir.com', 'cansu.teyfikgokdemir.com', 'ctseg.com.tr', 'mythborn.co', 'qctstudio.com', 'qctcommerce.com', 'olivon.com.tr'];
+const existing = ['teyfikgokdemir.com', 'cansu.teyfikgokdemir.com', 'ctseg.com.tr', 'mythborn.co', 'qctstudio.com', 'qctcommerce.com', 'qctone.com'];
 const commerce = ['www.qctcommerce.com', 'qct-commerce-tr.pages.dev', 'ecdc0bff.qct-commerce-tr.pages.dev', 'fix-qct-commerce-p2-audit.qct-commerce-tr.pages.dev'];
 for (const host of [...existing, ...commerce]) {
   for (const method of ['GET', 'OPTIONS']) test(`${method} permits ${host}`, async () => {
@@ -51,7 +51,7 @@ test('enabled configuration and error responses retain CORS', async () => {
   assert.equal((await request('https://ctseg.com.tr', 'GET', 'unknown')).status, 400);
 });
 test('all existing site mappings retain enabled configurations', async () => {
-  const mappings = { teyfikgokdemir: 'teyfikgokdemir.com', ctseg: 'ctseg.com.tr', mythborn: 'mythborn.co', 'qct-studio': 'qctstudio.com', 'qct-commerce-tr': 'qctcommerce.com', 'olivon-agency': 'olivon.com.tr' };
+  const mappings = { teyfikgokdemir: 'teyfikgokdemir.com', ctseg: 'ctseg.com.tr', mythborn: 'mythborn.co', 'qct-studio': 'qctstudio.com', 'qct-commerce-tr': 'qctcommerce.com', qctone: 'qctone.com' };
   const original = context.fetch;
   try {
     context.fetch = async () => Response.json(Object.values(mappings).map(domain => ({ id: `test-${domain}`, domain })));
