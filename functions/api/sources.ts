@@ -27,6 +27,8 @@ const SITE_ORIGINS: Record<string, string[]> = {
 };
 const BOT_UA = /bot|spider|crawl|slurp|headlesschrome|playwright|puppeteer|lighthouse|pagespeed/i;
 const RETENTION_DAYS = 90;
+const SAFE_PATH_BUCKETS = new Set(['about', 'blog', 'contact', 'en', 'tr', 'de', 'it', 'fa', 'ru', 'zh', 'vi', 'uk', 'ro', 'bg', 'he', 'ar', 'sq', 'mk', 'sr', 'az', 'services', 'solutions', 'insights', 'work', 'markets', 'trade-products', 'privacy-policy', 'cookie-policy', 'terms', 'kvkk']);
+let retentionCleanupDay = '';
 
 const cors = (origin: string | null) => ({
   'access-control-allow-origin': origin && ORIGINS.has(origin) ? origin : 'null',
@@ -44,10 +46,8 @@ const clean = (value: unknown, max: number) => String(value ?? '').trim().slice(
 
 const cleanPath = (value: unknown) => {
   const raw = clean(value, 220).split(/[?#]/)[0].replace(/\/{2,}/g, '/');
-  const masked = raw
-    .replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '[email]')
-    .replace(/[0-9a-fA-F-]{24,}/g, '[id]');
-  return (masked.startsWith('/') ? masked : `/${masked || ''}`).slice(0, 180) || '/';
+  const first = raw.split('/').filter(Boolean)[0]?.toLowerCase() || '';
+  return first && SAFE_PATH_BUCKETS.has(first) ? `/${first}` : first ? '/other' : '/';
 };
 
 const allowedOrigin = (origin: string | null) => Boolean(origin && ORIGINS.has(origin));
@@ -128,10 +128,10 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
       const body = JSON.parse(raw) as Record<string, unknown>;
       const site = clean(body.site, 40);
       if (!SITES.has(site)) return response({ ok: false, error: 'Unknown site' }, 400, origin);
-      const collectorVersion = clean(body.collector_version, 10);
-      if (collectorVersion === '5' && (!origin || !SITE_ORIGINS[site]?.includes(origin))) {
+      if (!origin || !SITE_ORIGINS[site]?.includes(origin)) {
         return response({ ok: false, error: 'Origin mismatch for site identifier' }, 403, origin);
       }
+      const collectorVersion = clean(body.collector_version, 10);
       const path = cleanPath(body.landing_path);
       const day = new Date().toISOString().slice(0, 10);
 
@@ -140,18 +140,11 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
         const cf = (request as Request & { cf?: { botManagement?: { verifiedBot?: boolean; score?: number } } }).cf;
         const userAgent = request.headers.get('user-agent') || '';
         const isBot = BOT_UA.test(userAgent) || cf?.botManagement?.verifiedBot === true || (typeof cf?.botManagement?.score === 'number' && cf.botManagement.score < 30) ? 1 : 0;
-        await env.CANSU_ANALYTICS_DB.prepare(
-          `CREATE TABLE IF NOT EXISTS privacy_pageviews_daily (
-            site TEXT NOT NULL,
-            day TEXT NOT NULL,
-            path TEXT NOT NULL,
-            is_bot INTEGER NOT NULL DEFAULT 0,
-            views INTEGER NOT NULL DEFAULT 0,
-            PRIMARY KEY (site, day, path, is_bot)
-          )`
-        ).run();
-        const cutoff = new Date(Date.now() - RETENTION_DAYS * 86400000).toISOString().slice(0, 10);
-        await env.CANSU_ANALYTICS_DB.prepare('DELETE FROM privacy_pageviews_daily WHERE day < ?').bind(cutoff).run();
+        if (retentionCleanupDay !== day) {
+          retentionCleanupDay = day;
+          const cutoff = new Date(Date.now() - RETENTION_DAYS * 86400000).toISOString().slice(0, 10);
+          await env.CANSU_ANALYTICS_DB.prepare('DELETE FROM privacy_pageviews_daily WHERE day < ?').bind(cutoff).run();
+        }
         await env.CANSU_ANALYTICS_DB.prepare(
           'INSERT INTO privacy_pageviews_daily (site, day, path, is_bot, views) VALUES (?, ?, ?, ?, 1) ON CONFLICT(site, day, path, is_bot) DO UPDATE SET views = views + 1'
         ).bind(site, day, path, isBot).run();
@@ -229,16 +222,6 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
     const period = clean(url.searchParams.get('period'), 20).toLowerCase();
 
     if (version === 'anonymous') {
-      await env.CANSU_ANALYTICS_DB.prepare(
-        `CREATE TABLE IF NOT EXISTS privacy_pageviews_daily (
-          site TEXT NOT NULL,
-          day TEXT NOT NULL,
-          path TEXT NOT NULL,
-          is_bot INTEGER NOT NULL DEFAULT 0,
-          views INTEGER NOT NULL DEFAULT 0,
-          PRIMARY KEY (site, day, path, is_bot)
-        )`
-      ).run();
       const since = period === 'today'
         ? new Date().toISOString().slice(0, 10)
         : new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10);

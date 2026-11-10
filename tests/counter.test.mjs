@@ -235,12 +235,19 @@ test('persistent anonymous aggregate accepts all six sites without session ident
     const insert = database.operations.find(({ sql }) => /INSERT INTO privacy_pageviews_daily/.test(sql));
     assert.ok(insert, `${site} should insert a daily aggregate`);
     assert.equal(insert.params[0], site);
+    assert.equal(insert.params[2], '/other', 'unrecognized path segments must be bucketed instead of stored');
     assert.doesNotMatch(JSON.stringify(insert), /session|referrer|utm|email/i);
   }
 });
 
 test('persistent anonymous aggregate rejects cross-site origin claims', async () => {
   const { response, database } = await invokeSources({ origin: 'https://ctseg.com.tr', body: JSON.stringify({ site: 'qctone', landing_path: '/', collector_version: '5' }) });
+  assert.equal(response.status, 403);
+  assert.equal(database.operations.length, 0);
+});
+
+test('legacy collectors also reject cross-site origin claims', async () => {
+  const { response, database } = await invokeSources({ origin: 'https://ctseg.com.tr', body: JSON.stringify({ site: 'qctone', landing_path: '/', collector_version: '3', session_id: 'abcdefghijkl' }) });
   assert.equal(response.status, 403);
   assert.equal(database.operations.length, 0);
 });
@@ -275,6 +282,8 @@ test('Cansu dashboard labels the six-site analytics scope', async () => {
   const source = await readFile(new URL('../src/pages/cansu.astro', import.meta.url), 'utf8');
   assert.match(source, /6 site · kaynak bazlı operasyon/);
   assert.doesNotMatch(source, /7 site · kaynak bazlı operasyon/);
+  assert.match(source, /version=anonymous/);
+  assert.match(source, /anonim toplu sayfa görüntüleme/);
 });
 
 test('analytics infrastructure contains no Olivon tracking or reporting targets', async () => {
@@ -289,6 +298,7 @@ test('analytics infrastructure contains no Olivon tracking or reporting targets'
     '../functions/api/umami-config.ts',
     '../functions/api/umami.ts',
     '../infra/umami/README.md',
+    '../migrations/0004_privacy_pageviews_daily.sql',
     '../public/cansu-source-beacon.js',
     '../public/privacy-traffic.js',
     '../public/traffic-counter.js',

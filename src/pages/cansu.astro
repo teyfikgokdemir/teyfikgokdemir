@@ -1262,17 +1262,20 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
             ];
             try {
                 const results = await Promise.all(sites.map(async ([key,name]) => {
-                    const response = await fetch('/api/sources?site=' + encodeURIComponent(key) + '&period=today&version=v2', { cache: 'no-store' });
-                    const data = await response.json();
-                    if (!response.ok || !data.ok) throw new Error(data.error || key);
+                    const [response, anonymousResponse] = await Promise.all([
+                        fetch('/api/sources?site=' + encodeURIComponent(key) + '&period=today&version=v2', { cache: 'no-store' }),
+                        fetch('/api/sources?site=' + encodeURIComponent(key) + '&period=today&version=anonymous', { cache: 'no-store' }),
+                    ]);
+                    const [data, anonymous] = await Promise.all([response.json(), anonymousResponse.json()]);
+                    if (!response.ok || !data.ok || !anonymousResponse.ok || !anonymous.ok) throw new Error(data.error || anonymous.error || key);
                     const total = (data.sources || []).reduce((sum,item) => sum + Number(item.views || 0), 0);
-                    return { key, name, total, sources: data.sources || [] };
+                    return { key, name, total, sources: data.sources || [], pageviews: Number(anonymous.pageviews || 0), botPageviews: Number(anonymous.botPageviews || 0) };
                 }));
                 firstPartySourceGrid.innerHTML = results.map((site) => {
                     const rows = site.sources.slice(0,8).map((item) =>
                         `<div class="source-row"><div><div class="source-row__host">${escapeHtml(item.source || 'Bilinmiyor')}</div><div class="source-row__meta">first-party session source</div></div><strong class="source-row__value">${formatNumber(Number(item.views || 0))}</strong></div>`
                     ).join('');
-                    return `<article class="source-panel"><div class="source-panel__head"><div><div class="source-panel__name">${escapeHtml(site.name)}</div><div class="source-panel__summary">Bugün · ${formatNumber(site.total)} first-party oturum sinyali</div></div><span class="seo-panel__badge">FIRST-PARTY</span></div>${rows || '<div class="country-empty">Bugün henüz first-party oturum sinyali yok</div>'}</article>`;
+                    return `<article class="source-panel"><div class="source-panel__head"><div><div class="source-panel__name">${escapeHtml(site.name)}</div><div class="source-panel__summary">Bugün · ${formatNumber(site.pageviews)} anonim toplu sayfa görüntüleme · ${formatNumber(site.botPageviews)} bot işaretli · ${formatNumber(site.total)} onaylı first-party oturum sinyali</div></div><span class="seo-panel__badge">AGGREGATE</span></div>${rows || '<div class="country-empty">Bugün onaylı first-party kaynak sinyali yok; anonim toplu sayaç yukarıda ayrı gösterilir</div>'}</article>`;
                 }).join('');
             } catch (error) {
                 firstPartySourceGrid.innerHTML = '<div class="attention-card" style="border-color:rgba(251,191,36,.3)"><strong style="color:#fbbf24">First-party kaynak verisi alınamadı</strong><span>Source beacon deployu veya D1 endpointi kontrol edilmeli.</span></div>';
