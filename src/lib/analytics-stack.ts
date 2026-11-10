@@ -21,7 +21,7 @@ export function createAnalytics(config: Config) {
 function build(config: Config) {
   const w = window as any;
   let consent: Consent = { analytics: false, marketing: false, recording: false };
-  let gaLoaded = false, extrasLoaded = false, clarityLoaded = false, cansuLoaded = false, lastPage = '', classifiedPage = '';
+  let gaLoaded = false, extrasLoaded = false, clarityLoaded = false, alwaysOnLoaded = false, cansuLoaded = false, lastPage = '', classifiedPage = '';
   w.__qctAnalyticsConsent = false;
   let attribution: Params = {};
   const scrolls = new Set<number>();
@@ -39,13 +39,23 @@ function build(config: Config) {
     const s = document.createElement('script'); s.id = id; s.async = true; s.src = src;
     document.head.appendChild(s);
   };
-  function loadCansu() {
+  function loadAlwaysOn() {
+    if (!config.cansu || alwaysOnLoaded) return;
+    alwaysOnLoaded = true;
+    const site = config.cansuSite || config.site;
+    for (const [id, src] of [['qct-privacy-traffic', 'https://teyfikgokdemir.com/privacy-traffic.js'], ['qct-cansu-umami', 'https://teyfikgokdemir.com/cansu-umami-loader.js']]) {
+      if (document.getElementById(id)) continue;
+      const script = document.createElement('script'); script.id = id; script.defer = true; script.src = src; script.dataset.site = site; document.head.appendChild(script);
+    }
+  }
+  function loadConsentedCansu() {
     if (!consent.analytics || !config.cansu || cansuLoaded) return;
     cansuLoaded = true;
     const site = config.cansuSite || config.site;
-    const beacon = document.createElement('script'); beacon.id = 'qct-cansu-source-beacon'; beacon.src = 'https://teyfikgokdemir.com/cansu-source-beacon.js'; beacon.defer = true; beacon.dataset.site = site; document.head.appendChild(beacon);
-    const events = document.createElement('script'); events.id = 'qct-cansu-events'; events.src = '/cansu-events.js'; events.defer = true; events.dataset.site = site; document.head.appendChild(events);
-    const umami = document.createElement('script'); umami.id = 'qct-cansu-umami'; umami.src = 'https://teyfikgokdemir.com/cansu-umami-loader.js'; umami.defer = true; umami.dataset.site = site; document.head.appendChild(umami);
+    for (const [id, src] of [['qct-cansu-source-beacon', 'https://teyfikgokdemir.com/cansu-source-beacon.js'], ['qct-cansu-events', '/cansu-events.js']]) {
+      if (document.getElementById(id)) continue;
+      const script = document.createElement('script'); script.id = id; script.defer = true; script.src = src; script.dataset.site = site; document.head.appendChild(script);
+    }
   }
   function captureAttribution() {
     const key = config.site + '-analytics-attribution-v2';
@@ -72,7 +82,7 @@ function build(config: Config) {
     return { site_id: config.site, page_path: safePath(location.href), page_location: location.origin + safePath(location.href), page_referrer: (() => { try { return new URL(document.referrer).origin; } catch { return ''; } })(), language: safeText(document.documentElement.lang), ...attribution };
   }
   function loadGa() {
-    if (!consent.analytics || gaLoaded || !/^G-[A-Z0-9]+$/.test(config.ga)) return;
+    if ((!consent.analytics && !config.advanced) || gaLoaded || !/^G-[A-Z0-9]+$/.test(config.ga)) return;
     gaLoaded = true;
     w.gtag('js', new Date());
     w.gtag('config', config.ga, { send_page_view: false, allow_google_signals: false, allow_ad_personalization_signals: false, ...context() });
@@ -80,7 +90,7 @@ function build(config: Config) {
   }
   function page() {
     const path = safePath(location.href);
-    if (consent.analytics && path !== lastPage) {
+    if ((consent.analytics || config.advanced) && path !== lastPage) {
       lastPage = path; scrolls.clear();
       loadGa();
       w.gtag('event', 'page_view', context());
@@ -98,12 +108,16 @@ function build(config: Config) {
       w.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
       load('qct-gtm', 'https://www.googletagmanager.com/gtm.js?id=' + config.gtm);
     }
+    loadClarity();
+  }
+  function loadClarity() {
     // Recording never starts on URLs containing potentially sensitive query/hash data.
-    if (consent.analytics && consent.recording && !clarityLoaded && /^[a-z0-9]{5,20}$/.test(config.clarity || '') && !location.search && !location.hash) {
+    const allowed = (consent.analytics && consent.recording) || config.clarityCookieless;
+    if (allowed && !clarityLoaded && /^[a-z0-9]{5,20}$/.test(config.clarity || '') && !location.search && !location.hash) {
       clarityLoaded = true;
       w.clarity = w.clarity || function () { (w.clarity.q = w.clarity.q || []).push(arguments); };
       document.body.setAttribute('data-clarity-mask', 'true');
-      w.clarity('consentv2', { analytics_Storage: 'granted', ad_Storage: consent.marketing ? 'granted' : 'denied' });
+      w.clarity('consentv2', { analytics_Storage: consent.recording ? 'granted' : 'denied', ad_Storage: consent.marketing ? 'granted' : 'denied' });
       load('qct-clarity', 'https://www.clarity.ms/tag/' + config.clarity);
     }
   }
@@ -111,6 +125,7 @@ function build(config: Config) {
     const analyticsGranted = next.analytics === true;
     consent = { analytics: analyticsGranted, marketing: next.marketing === true, recording: analyticsGranted && next.recording === true };
     w.__qctAnalyticsConsent = analyticsGranted;
+    loadAlwaysOn();
     googleConsent('update');
     if (w.clarity) w.clarity('consentv2', { analytics_Storage: consent.recording ? 'granted' : 'denied', ad_Storage: consent.marketing ? 'granted' : 'denied' });
     if (analyticsGranted) {
@@ -118,11 +133,13 @@ function build(config: Config) {
       w.__ctsegAttribution = { ...attribution };
       loadGa();
       extras();
-      loadCansu();
+      loadConsentedCansu();
     } else {
+      loadGa();
+      loadClarity();
       attribution = {};
       w.__ctsegAttribution = {};
-      lastPage = '';
+      if (!config.advanced) lastPage = '';
       classifiedPage = '';
       scrolls.clear();
     }

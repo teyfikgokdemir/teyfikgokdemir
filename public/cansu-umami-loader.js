@@ -2,7 +2,6 @@
   const current = document.currentScript;
   const site = current?.dataset.site;
   if (!site) return;
-  if (window.__qctAnalyticsConsent !== true) return;
 
   // Guard against duplicate loader executions (e.g. framework double-mount) and duplicate Umami scripts.
   if (window.__cansuUmamiLoader) return;
@@ -69,8 +68,21 @@
       script.dataset.websiteId = config.websiteId;
       script.dataset.domains = config.domain || location.hostname;
       script.dataset.performance = config.performance ? 'true' : 'false';
+      script.dataset.excludeSearch = 'true';
       script.dataset.excludeHash = 'true';
-      window.cansuUmamiBeforeSend = (payload) => window.__qctAnalyticsConsent === true ? payload : null;
+      script.dataset.doNotTrack = 'true';
+      window.cansuUmamiBeforeSend = (_type, payload) => {
+        if (!payload || typeof payload !== 'object') return payload;
+        const sanitized = { ...payload };
+        try {
+          if (sanitized.url) sanitized.url = new URL(sanitized.url, location.origin).pathname;
+        } catch {
+          sanitized.url = location.pathname || '/';
+        }
+        sanitized.referrer = '';
+        delete sanitized.id;
+        return sanitized;
+      };
       script.dataset.beforeSend = 'cansuUmamiBeforeSend';
       script.dataset.cansuUmamiLoaded = 'true';
       script.onload = () => report('ready');
