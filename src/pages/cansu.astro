@@ -1020,10 +1020,8 @@ const canonical = 'https://cansu.teyfikgokdemir.com/';
                 
                 const sortedSites = sortOverviewSites(data.sites);
                 const metricCard = (site, label, value, detail) => `<article class="quality-card"><div class="quality-card__head"><div class="quality-card__name">${escapeHtml(site.name)}</div><span class="status-pill status-pill--good">CANLI</span></div><div class="quality-lines"><div class="quality-line"><span>${label}</span><strong>${formatNumber(value)}</strong></div><div class="quality-line"><span>Durum</span><strong>${detail}</strong></div></div></article>`;
-                const topCloudflare = [...data.sites].sort((a,b) => numericValue(b.cloudflare?.requests24h) - numericValue(a.cloudflare?.requests24h)).slice(0,3);
-                if (cloudflareOverviewGrid) cloudflareOverviewGrid.innerHTML = topCloudflare.map(site => metricCard(site, 'HTTP istekleri · 24s', numericValue(site.cloudflare?.requests24h), 'Cloudflare GraphQL')).join('') || '<div class="country-empty">Cloudflare verisi bekleniyor…</div>';
-                if (ga4OverviewGrid) ga4OverviewGrid.innerHTML = '<div class="country-empty">GA4 rapor bağlantısı kurulduğunda ilk 3 site burada görünecek.</div>';
-                if (clarityOverviewGrid) clarityOverviewGrid.innerHTML = '<div class="country-empty">Clarity ilk 3 sıralaması Clarity sekmesindeki ayrı site kartlarından yüklenir.</div>';
+                const topCloudflare = [...data.sites].filter((site) => site.cloudflare?.available).sort((a,b) => numericValue(b.cloudflare?.last24h?.requests) - numericValue(a.cloudflare?.last24h?.requests)).slice(0,3);
+                if (cloudflareOverviewGrid) cloudflareOverviewGrid.innerHTML = topCloudflare.map(site => metricCard(site, 'HTTP istekleri · 24s', numericValue(site.cloudflare?.last24h?.requests), 'Cloudflare GraphQL')).join('') || '<div class="country-empty">Cloudflare verisi bekleniyor…</div>';
                 renderAttention(sortedSites);
                 renderDataQuality(sortedSites, data.generatedAt);
                 summaryGrid.innerHTML = sortedSites.map((site) => card(site)).join('');

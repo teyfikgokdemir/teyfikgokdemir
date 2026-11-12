@@ -19,7 +19,7 @@
     "astro": "astro",
     "audit:trend-blog-parity": "node scripts/audit-trend-blog-parity.mjs",
     "check:blog-responsive": "node scripts/check-blog-responsive.mjs",
-    "check:analytics": "node scripts/check-analytics.mjs",
+    "check:analytics": "node scripts/check-analytics.mjs && node scripts/check-clarity-status.mjs",
     "test:counter": "node --experimental-strip-types --test tests/counter.test.mjs"
   },
   "dependencies": {

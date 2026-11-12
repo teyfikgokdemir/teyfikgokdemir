@@ -11,15 +11,42 @@ const clarityUpdated = document.getElementById('clarity-api-updated');
 const claritySessions = document.getElementById('clarity-sessions');
 const clarityVisitors = document.getElementById('clarity-visitors');
 const claritySiteGrid = document.getElementById('clarity-site-grid');
+const ga4OverviewGrid = document.getElementById('ga4-overview-grid');
+const clarityOverviewGrid = document.getElementById('clarity-overview-grid');
 const claritySites = [
   ['qct-commerce-tr', 'QCT Commerce'], ['ctseg', 'CTSEG'], ['qct-studio', 'QCT Studio'],
   ['teyfikgokdemir', 'Kişisel site'], ['mythborn', 'Mythborn'], ['qctone', 'QCT One']
 ];
 const snapshots = {};
-const claritySnapshots = new Map();
+let clarityLoadPromise;
 const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 const clarityFailureLabel = code => ({ missing_token: 'token bekleniyor', rate_limited: 'istek limiti aşıldı', auth_error: 'yetkilendirme hatası' }[code] || 'API kullanılamıyor');
 const number = value => new Intl.NumberFormat('tr-TR').format(value);
+const overviewCard = (name, label, value, detail) => `<article class="quality-card"><div class="quality-card__head"><div class="quality-card__name">${escapeHtml(name)}</div><span class="status-pill status-pill--good">CANLI</span></div><div class="quality-lines"><div class="quality-line"><span>${escapeHtml(label)}</span><strong>${number(value)}</strong></div><div class="quality-line"><span>Durum</span><strong>${escapeHtml(detail)}</strong></div></div></article>`;
+const renderGa4Overview = data => {
+  if (!ga4OverviewGrid) return;
+  const sites = (data?.sites || []).filter(site => site.connected).sort((a, b) => Number(b.periods?.sevenDays?.visits || 0) - Number(a.periods?.sevenDays?.visits || 0)).slice(0, 3);
+  ga4OverviewGrid.innerHTML = sites.map(site => overviewCard(site.name, 'Oturum · 7g', Number(site.periods?.sevenDays?.visits || 0), 'GA4 rapor verisi')).join('') || '<div class="country-empty">GA4 verisi bekleniyor…</div>';
+};
+const renderClarityOverview = results => {
+  if (!clarityOverviewGrid) return;
+  const trafficFor = result => result.payload.data?.find(item => item.metricName === 'Traffic')?.information || [];
+  const sites = results.filter(result => result.ok).map(result => ({ ...result, sessions: trafficFor(result).reduce((total, row) => total + Number(row.totalSessionCount || 0), 0) })).sort((a, b) => b.sessions - a.sessions).slice(0, 3);
+  clarityOverviewGrid.innerHTML = sites.map(site => overviewCard(site.name, 'Oturum · 24s', site.sessions, 'Clarity API verisi')).join('') || '<div class="country-empty">Clarity verisi bekleniyor…</div>';
+};
+const loadAllClaritySites = () => {
+  if (clarityLoadPromise) return clarityLoadPromise;
+  clarityLoadPromise = Promise.all(claritySites.map(async ([key, name]) => {
+    try {
+      const response = await fetch(`/api/clarity?numOfDays=1&site=${encodeURIComponent(key)}`, { signal: AbortSignal.timeout(15000) });
+      const payload = await response.json();
+      if (!payload.code && response.status === 429) payload.code = 'rate_limited';
+      return { key, name, payload, ok: response.ok && payload.ok };
+    }
+    catch (error) { return { key, name, payload: { reason: error instanceof Error ? error.message : 'API verisi alınamadı' }, ok: false }; }
+  }));
+  return clarityLoadPromise;
+};
 function render() {
   const isClarity = source.value === 'clarity';
   period.options[0].textContent = source.value === 'ga4' ? 'Bugün' : 'Son 24 saat';
@@ -61,20 +88,8 @@ async function loadClarity() {
   if (clarityState?.dataset.loading === 'true') return;
   if (clarityState) clarityState.dataset.loading = 'true';
   try {
-    const selected = search.value ? claritySites.filter(([key]) => key === search.value) : claritySites;
-    const results = await Promise.all(selected.map(async ([key, name]) => {
-      const cached = claritySnapshots.get(key);
-      if (cached && cached.expiresAt > Date.now()) return cached.result;
-      try {
-        const response = await fetch(`/api/clarity?numOfDays=1&site=${encodeURIComponent(key)}`, { signal: AbortSignal.timeout(15000) });
-        const payload = await response.json();
-        if (!payload.code && response.status === 429) payload.code = 'rate_limited';
-        const result = { key, name, payload, ok: response.ok && payload.ok };
-        claritySnapshots.set(key, { result, expiresAt: Date.now() + (result.ok ? 3600000 : 300000) });
-        return result;
-      }
-      catch (error) { return { key, name, payload: { reason: error instanceof Error ? error.message : 'API verisi alınamadı' }, ok: false }; }
-    }));
+    const allResults = await loadAllClaritySites();
+    const results = search.value ? allResults.filter(result => result.key === search.value) : allResults;
     const connected = results.filter(result => result.ok).length;
     const failed = results.filter(result => !result.ok);
     const failureLabel = failed.every(result => result.payload.code === failed[0]?.payload.code) ? clarityFailureLabel(failed[0]?.payload.code) : 'API bağlantıları kontrol edilmeli';
@@ -86,6 +101,7 @@ async function loadClarity() {
     const generatedAt = results.find(result => result.payload?.generatedAt)?.payload.generatedAt;
     if (clarityUpdated) clarityUpdated.textContent = generatedAt ? new Date(generatedAt).toLocaleString('tr-TR') : '—';
     const trafficFor = result => result.payload.data?.find(item => item.metricName === 'Traffic')?.information || [];
+    renderClarityOverview(allResults);
     const traffic = results.flatMap(trafficFor);
     const sum = key => traffic.reduce((total, row) => total + Number(row[key] || 0), 0);
     if (claritySessions) claritySessions.textContent = connected ? number(sum('totalSessionCount')) : '—';
@@ -105,6 +121,7 @@ async function loadGa4() {
     const response = await fetch('/api/ga4', {signal:AbortSignal.timeout(30000)});
     if (!response.ok) throw new Error('unavailable');
     snapshots.ga4 = {data:await response.json(),cached:false};
+    renderGa4Overview(snapshots.ga4.data);
   } catch { snapshots.ga4 = {data:{ok:false,reason:'GA4 verisi alınamadı; oturum ve bağlantı kontrol edilmeli'}}; }
   render();
 }

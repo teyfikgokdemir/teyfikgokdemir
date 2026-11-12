@@ -284,6 +284,9 @@ test('Cansu dashboard labels the six-site analytics scope', async () => {
   assert.doesNotMatch(source, /7 site · kaynak bazlı operasyon/);
   assert.match(source, /version=anonymous/);
   assert.match(source, /anonim toplu sayfa görüntüleme/);
+  assert.match(source, /site\.cloudflare\?\.last24h\?\.requests/);
+  assert.match(source, /topCloudflare = \[\.\.\.data\.sites\]\.filter\(\(site\) => site\.cloudflare\?\.available\)/);
+  assert.doesNotMatch(source, /cloudflare\?\.requests24h/);
 });
 
 test('analytics infrastructure contains no Olivon tracking or reporting targets', async () => {
