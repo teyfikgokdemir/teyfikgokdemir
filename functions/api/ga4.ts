@@ -36,16 +36,20 @@ export const onRequestGet: PagesFunction<Env> = async ({env}) => {
     const token = await fetchJson('https://oauth2.googleapis.com/token', {method:'POST', body:new URLSearchParams({client_id:env.GSC_CLIENT_ID, client_secret:env.GSC_CLIENT_SECRET, refresh_token:refresh, grant_type:'refresh_token'})});
     if (typeof token.access_token !== 'string') throw new Error('invalid_token');
     const allSites = [...sites, ['qctone','QCT One', env.GA4_PROPERTY_QCTONE || '']];
-    const results = await Promise.all(allSites.map(async ([key,name,property]) => {
-      if (!property) return {key,name,connected:false,reason:'QCT One GA4 property ID bekleniyor'};
-      try {
-        const periods = await runPeriods(property, token.access_token);
-        return {key,name,connected:true,property,periods};
-      } catch (error) {
-        const detail = error instanceof Error && /^(upstream_\d+|invalid_(response|reports|metrics))$/.test(error.message) ? error.message : 'timeout';
-        return {key,name,connected:false,reason:`GA4 rapor erişimi / API yapılandırması kontrol edilmeli (${detail})`};
-      }
-    }));
+    const results: Record<string, any>[] = [];
+    for (let index = 0; index < allSites.length; index += 2) {
+      const chunk = allSites.slice(index,index + 2);
+      results.push(...await Promise.all(chunk.map(async ([key,name,property]) => {
+        if (!property) return {key,name,connected:false,reason:'QCT One GA4 property ID bekleniyor'};
+        try {
+          const periods = await runPeriods(property, token.access_token);
+          return {key,name,connected:true,property,periods};
+        } catch (error) {
+          const detail = error instanceof Error && /^(upstream_\d+|invalid_(response|reports|metrics))$/.test(error.message) ? error.message : 'timeout';
+          return {key,name,connected:false,reason:`GA4 rapor erişimi / API yapılandırması kontrol edilmeli (${detail})`};
+        }
+      })));
+    }
     return json({ok:true,configured:true,source:'GA4',generatedAt:new Date().toISOString(),connectedCount:results.filter(s=>s.connected).length,sites:results});
   } catch { return json({ok:false,configured:true,source:'GA4',reason:'Google bağlantısı yenilenmeli veya API erişimi kontrol edilmeli'},502); }
 };
