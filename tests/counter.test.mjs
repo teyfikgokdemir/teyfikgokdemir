@@ -301,6 +301,12 @@ test('GA4 endpoint batches the three reporting periods per property', async () =
   assert.doesNotMatch(source, /:runReport/);
 });
 
+test('GA4 endpoint limits property report concurrency to two', async () => {
+  const source = await readFile(new URL('../functions/api/ga4.ts', import.meta.url), 'utf8');
+  assert.match(source, /index \+= 2/);
+  assert.match(source, /allSites\.slice\(index,index \+ 2\)/);
+});
+
 test('analytics infrastructure contains no Olivon tracking or reporting targets', async () => {
   const files = [
     '../functions/api/conversions.ts',
