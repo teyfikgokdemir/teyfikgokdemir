@@ -118,9 +118,19 @@ async function loadClarity() {
 }
 async function loadGa4() {
   try {
-    const response = await fetch('/api/ga4', {signal:AbortSignal.timeout(30000)});
-    if (!response.ok) throw new Error('unavailable');
-    snapshots.ga4 = {data:await response.json(),cached:false};
+    const sites = [];
+    for (const [key, name] of claritySites) {
+      try {
+        const response = await fetch(`/api/ga4?site=${encodeURIComponent(key)}`, {signal:AbortSignal.timeout(15000)});
+        if (!response.ok) throw new Error('unavailable');
+        const payload = await response.json();
+        sites.push(...(payload.sites || []));
+      } catch {
+        sites.push({key, name, connected:false, reason:'GA4 rapor isteği zaman aşımına uğradı'});
+      }
+    }
+    const data = {ok:true,configured:true,source:'GA4',generatedAt:new Date().toISOString(),connectedCount:sites.filter(site=>site.connected).length,sites};
+    snapshots.ga4 = {data,cached:false};
     renderGa4Overview(snapshots.ga4.data);
   } catch { snapshots.ga4 = {data:{ok:false,reason:'GA4 verisi alınamadı; oturum ve bağlantı kontrol edilmeli'}}; }
   render();
