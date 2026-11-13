@@ -295,6 +295,12 @@ test('Cansu dashboard always exposes a same-origin GA4 reconnect action', async 
   assert.match(source, /GA4 bağlantısını yenile<\/a>/);
 });
 
+test('GA4 endpoint batches the three reporting periods per property', async () => {
+  const source = await readFile(new URL('../functions/api/ga4.ts', import.meta.url), 'utf8');
+  assert.match(source, /:batchRunReports/);
+  assert.doesNotMatch(source, /:runReport/);
+});
+
 test('analytics infrastructure contains no Olivon tracking or reporting targets', async () => {
   const files = [
     '../functions/api/conversions.ts',
