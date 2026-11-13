@@ -14,7 +14,10 @@ function fixture(payloadFor, ga4Payload = { ok: false }, searchValue = '') {
   };
   let calls = 0;
   const context = vm.createContext({ document: { getElementById: node, querySelectorAll: () => [] }, window: { addEventListener() {} }, Intl, Date: FixtureDate, Map, AbortSignal, fetch: async url => {
-    if (url === '/api/ga4') return { ok: true, json: async () => ga4Payload };
+    if (url.startsWith('/api/ga4?site=')) {
+      const key = new URL(url, 'https://example.com').searchParams.get('site');
+      return { ok: true, json: async () => ({ ...ga4Payload, sites: (ga4Payload.sites || []).filter(site => site.key === key) }) };
+    }
     calls++;
     const payload = payloadFor(new URL(url, 'https://example.com').searchParams.get('site'));
     return { ok: payload.ok, status: payload.code === 'rate_limited' ? 429 : 200, json: async () => payload };

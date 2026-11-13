@@ -305,7 +305,14 @@ test('GA4 endpoint requests all three reporting periods once per property', asyn
 test('GA4 endpoint limits property report concurrency to two', async () => {
   const source = await readFile(new URL('../functions/api/ga4.ts', import.meta.url), 'utf8');
   assert.match(source, /index \+= 2/);
-  assert.match(source, /allSites\.slice\(index,index \+ 2\)/);
+  assert.match(source, /selectedSites\.slice\(index,index \+ 2\)/);
+});
+
+test('Cansu requests GA4 properties through isolated site endpoints', async () => {
+  const endpoint = await readFile(new URL('../functions/api/ga4.ts', import.meta.url), 'utf8');
+  const client = await readFile(new URL('../src/scripts/cansu-portfolio.js', import.meta.url), 'utf8');
+  assert.match(endpoint, /searchParams\.get\('site'\)/);
+  assert.match(client, /\/api\/ga4\?site=/);
 });
 
 test('analytics infrastructure contains no Olivon tracking or reporting targets', async () => {

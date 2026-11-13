@@ -40,16 +40,19 @@ async function runPeriods(property: string, accessToken: string) {
   }
   return periods;
 }
-export const onRequestGet: PagesFunction<Env> = async ({env}) => {
+export const onRequestGet: PagesFunction<Env> = async ({request,env}) => {
   const refresh = await env.CANSU_GSC_TOKENS?.get('ga4_refresh_token');
   if (!refresh || !env.GSC_CLIENT_ID || !env.GSC_CLIENT_SECRET) return json({ok:false, configured:false, source:'GA4', connectUrl:'/api/gsc/start?analytics=1', reason:'GA4 salt okunur Google bağlantısı gerekli'});
   try {
+    const allSites = [...sites, ['qctone','QCT One', env.GA4_PROPERTY_QCTONE || '']];
+    const requestedSite = new URL(request.url).searchParams.get('site');
+    const selectedSites = requestedSite ? allSites.filter(([key]) => key === requestedSite) : allSites;
+    if (requestedSite && selectedSites.length === 0) return json({ok:false, configured:true, source:'GA4', reason:'Geçersiz site'},400);
     const token = await fetchJson('https://oauth2.googleapis.com/token', {method:'POST', body:new URLSearchParams({client_id:env.GSC_CLIENT_ID, client_secret:env.GSC_CLIENT_SECRET, refresh_token:refresh, grant_type:'refresh_token'})});
     if (typeof token.access_token !== 'string') throw new Error('invalid_token');
-    const allSites = [...sites, ['qctone','QCT One', env.GA4_PROPERTY_QCTONE || '']];
     const results: Record<string, any>[] = [];
-    for (let index = 0; index < allSites.length; index += 2) {
-      const chunk = allSites.slice(index,index + 2);
+    for (let index = 0; index < selectedSites.length; index += 2) {
+      const chunk = selectedSites.slice(index,index + 2);
       results.push(...await Promise.all(chunk.map(async ([key,name,property]) => {
         if (!property) return {key,name,connected:false,reason:'QCT One GA4 property ID bekleniyor'};
         try {
