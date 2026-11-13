@@ -295,10 +295,11 @@ test('Cansu dashboard always exposes a same-origin GA4 reconnect action', async 
   assert.match(source, /GA4 bağlantısını yenile<\/a>/);
 });
 
-test('GA4 endpoint batches the three reporting periods per property', async () => {
+test('GA4 endpoint requests all three reporting periods once per property', async () => {
   const source = await readFile(new URL('../functions/api/ga4.ts', import.meta.url), 'utf8');
-  assert.match(source, /:batchRunReports/);
-  assert.doesNotMatch(source, /:runReport/);
+  assert.match(source, /:runReport/);
+  assert.doesNotMatch(source, /:batchRunReports/);
+  assert.match(source, /body:JSON\.stringify\(\{dateRanges,/);
 });
 
 test('GA4 endpoint limits property report concurrency to two', async () => {

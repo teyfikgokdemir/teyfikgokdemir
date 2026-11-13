@@ -13,21 +13,32 @@ async function fetchJson(url: string, init: RequestInit) {
   return body;
 }
 const metricNames = ['sessions','totalUsers','screenPageViews','averageSessionDuration','bounceRate'];
-const dateRanges = [['today','today'], ['6daysAgo','today'], ['29daysAgo','today']];
-function parsePeriod(report: Record<string, any>) {
-  const values = report.rows?.[0]?.metricValues?.map((v:any)=>Number(v.value)) || [0,0,0,0,0];
+const dateRanges = [
+  {name:'oneDay', startDate:'today', endDate:'today'},
+  {name:'sevenDays', startDate:'6daysAgo', endDate:'today'},
+  {name:'thirtyDays', startDate:'29daysAgo', endDate:'today'},
+];
+const emptyPeriod = () => ({visits:0, visitors:0, pageviews:0, totaltime:0, bounces:0});
+function parsePeriod(row: Record<string, any>) {
+  const values = row.metricValues?.map((v:any)=>Number(v.value)) || [0,0,0,0,0];
   if (values.length !== metricNames.length || values.some((v:number)=>!Number.isFinite(v))) throw new Error('invalid_metrics');
   return {visits:values[0], visitors:values[1], pageviews:values[2], totaltime:values[3]*values[0], bounces:values[4]*values[0]};
 }
 async function runPeriods(property: string, accessToken: string) {
-  const batch = await fetchJson(`https://analyticsdata.googleapis.com/v1beta/properties/${property}:batchRunReports`, {
+  const report = await fetchJson(`https://analyticsdata.googleapis.com/v1beta/properties/${property}:runReport`, {
     method:'POST',
     headers:{authorization:`Bearer ${accessToken}`,'content-type':'application/json'},
-    body:JSON.stringify({requests:dateRanges.map(([startDate,endDate])=>({dateRanges:[{startDate,endDate}],metrics:metricNames.map(name=>({name}))}))}),
+    body:JSON.stringify({dateRanges,metrics:metricNames.map(name=>({name}))}),
   });
-  if (!Array.isArray(batch.reports) || batch.reports.length !== dateRanges.length) throw new Error('invalid_reports');
-  const [oneDay, sevenDays, thirtyDays] = batch.reports.map(parsePeriod);
-  return {oneDay, sevenDays, thirtyDays};
+  if (report.rows && !Array.isArray(report.rows)) throw new Error('invalid_response');
+  const periods: Record<string, ReturnType<typeof emptyPeriod>> = {
+    oneDay:emptyPeriod(), sevenDays:emptyPeriod(), thirtyDays:emptyPeriod(),
+  };
+  for (const row of report.rows || []) {
+    const rangeName = row.dimensionValues?.at(-1)?.value;
+    if (typeof rangeName === 'string' && rangeName in periods) periods[rangeName] = parsePeriod(row);
+  }
+  return periods;
 }
 export const onRequestGet: PagesFunction<Env> = async ({env}) => {
   const refresh = await env.CANSU_GSC_TOKENS?.get('ga4_refresh_token');
