@@ -13,15 +13,21 @@ async function fetchJson(url: string, init: RequestInit) {
   return body;
 }
 const metricNames = ['sessions','totalUsers','screenPageViews','averageSessionDuration','bounceRate'];
-async function runPeriod(property: string, accessToken: string, startDate: string, endDate: string) {
-  const report = await fetchJson(`https://analyticsdata.googleapis.com/v1beta/properties/${property}:runReport`, {
-    method:'POST',
-    headers:{authorization:`Bearer ${accessToken}`,'content-type':'application/json'},
-    body:JSON.stringify({dateRanges:[{startDate,endDate}],metrics:metricNames.map(name=>({name}))}),
-  });
+const dateRanges = [['today','today'], ['6daysAgo','today'], ['29daysAgo','today']];
+function parsePeriod(report: Record<string, any>) {
   const values = report.rows?.[0]?.metricValues?.map((v:any)=>Number(v.value)) || [0,0,0,0,0];
   if (values.length !== metricNames.length || values.some((v:number)=>!Number.isFinite(v))) throw new Error('invalid_metrics');
   return {visits:values[0], visitors:values[1], pageviews:values[2], totaltime:values[3]*values[0], bounces:values[4]*values[0]};
+}
+async function runPeriods(property: string, accessToken: string) {
+  const batch = await fetchJson(`https://analyticsdata.googleapis.com/v1beta/properties/${property}:batchRunReports`, {
+    method:'POST',
+    headers:{authorization:`Bearer ${accessToken}`,'content-type':'application/json'},
+    body:JSON.stringify({requests:dateRanges.map(([startDate,endDate])=>({dateRanges:[{startDate,endDate}],metrics:metricNames.map(name=>({name}))}))}),
+  });
+  if (!Array.isArray(batch.reports) || batch.reports.length !== dateRanges.length) throw new Error('invalid_reports');
+  const [oneDay, sevenDays, thirtyDays] = batch.reports.map(parsePeriod);
+  return {oneDay, sevenDays, thirtyDays};
 }
 export const onRequestGet: PagesFunction<Env> = async ({env}) => {
   const refresh = await env.CANSU_GSC_TOKENS?.get('ga4_refresh_token');
@@ -33,14 +39,10 @@ export const onRequestGet: PagesFunction<Env> = async ({env}) => {
     const results = await Promise.all(allSites.map(async ([key,name,property]) => {
       if (!property) return {key,name,connected:false,reason:'QCT One GA4 property ID bekleniyor'};
       try {
-        const periods = {
-          oneDay: await runPeriod(property, token.access_token, 'today', 'today'),
-          sevenDays: await runPeriod(property, token.access_token, '6daysAgo', 'today'),
-          thirtyDays: await runPeriod(property, token.access_token, '29daysAgo', 'today'),
-        };
+        const periods = await runPeriods(property, token.access_token);
         return {key,name,connected:true,property,periods};
       } catch (error) {
-        const detail = error instanceof Error && /^upstream_\d+$/.test(error.message) ? error.message : 'unavailable';
+        const detail = error instanceof Error && /^(upstream_\d+|invalid_(response|reports|metrics))$/.test(error.message) ? error.message : 'timeout';
         return {key,name,connected:false,reason:`GA4 rapor erişimi / API yapılandırması kontrol edilmeli (${detail})`};
       }
     }));
