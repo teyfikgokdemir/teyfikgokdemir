@@ -289,6 +289,12 @@ test('Cansu dashboard labels the six-site analytics scope', async () => {
   assert.doesNotMatch(source, /cloudflare\?\.requests24h/);
 });
 
+test('Cansu dashboard always exposes a same-origin GA4 reconnect action', async () => {
+  const source = await readFile(new URL('../src/pages/cansu.astro', import.meta.url), 'utf8');
+  assert.match(source, /href=["']\/api\/gsc\/start\?analytics=1["']/);
+  assert.match(source, /GA4 bağlantısını yenile<\/a>/);
+});
+
 test('analytics infrastructure contains no Olivon tracking or reporting targets', async () => {
   const files = [
     '../functions/api/conversions.ts',
