@@ -61,13 +61,14 @@ function render() {
     state.textContent = data.reason || 'Veri kaynağı hazır değil';
     return;
   }
-  state.textContent = `${cached ? 'Önbellek' : 'Son alınan veri'} · ${data.connectedCount ?? 0}/${data.sites?.length ?? 7} site bağlı · ${data.generatedAt ? new Date(data.generatedAt).toLocaleString('tr-TR') : 'zaman bilgisi yok'}`;
+  const staleCount = (data.sites || []).filter(site => site.stale).length;
+  state.textContent = `${cached ? 'Önbellek' : 'Son alınan veri'} · ${data.connectedCount ?? 0}/${data.sites?.length ?? 6} site raporlu${staleCount ? ` · ${staleCount} son başarılı veri` : ''} · ${data.generatedAt ? new Date(data.generatedAt).toLocaleString('tr-TR') : 'zaman bilgisi yok'}`;
   const sites = (data.sites || []).filter(site => !search.value || site.key === search.value);
   sites.sort((a,b) => (b.periods?.[period.value]?.visits || 0) - (a.periods?.[period.value]?.visits || 0));
   for (const site of sites) {
     const metrics = site.periods?.[period.value];
     const visits = Number(metrics?.visits || 0);
-    const values = [site.name, metrics ? number(visits) : '—', metrics ? number(metrics.visitors) : '—', metrics ? number(metrics.pageviews) : '—', metrics && visits ? `${number(Math.round(metrics.totaltime / visits))} sn` : '—', metrics && visits ? `${number(Math.round(metrics.bounces / visits * 100))}%` : '—', site.connected ? (cached ? 'Önbellek' : 'Bağlı') : (site.reason || 'Veri yok')];
+    const values = [site.name, metrics ? number(visits) : '—', metrics ? number(metrics.visitors) : '—', metrics ? number(metrics.pageviews) : '—', metrics && visits ? `${number(Math.round(metrics.totaltime / visits))} sn` : '—', metrics && visits ? `${number(Math.round(metrics.bounces / visits * 100))}%` : '—', site.stale ? 'Son başarılı veri · Google yanıtı gecikti' : site.connected ? (cached ? 'Önbellek' : 'Bağlı') : (site.reason || 'Veri yok')];
     const row = document.createElement('tr');
     for (const value of values) {
       const cell = document.createElement('td');

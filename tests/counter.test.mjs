@@ -4,11 +4,14 @@ import test from 'node:test';
 
 import { onRequest } from '../functions/api/counter.ts';
 import { onRequestGet as onClarityRequest } from '../functions/api/clarity.ts';
+import { onRequestGet as onGa4Request } from '../functions/api/ga4.ts';
+import { onRequestGet as onSeoRequest } from '../functions/api/gsc/seo.ts';
 import { onRequest as onSourcesRequest } from '../functions/api/sources.ts';
 
 const ACTIVE_TIME = Date.parse('2026-11-10T12:00:00Z');
 const EXPIRED_TIME = Date.parse('2026-11-16T00:00:00Z');
 const REAL_NOW = Date.now;
+const REAL_FETCH = globalThis.fetch;
 const ACTIVE_SITES = [
   ['ctseg', 'https://ctseg.com.tr'],
   ['qct-commerce-tr', 'https://qctcommerce.com'],
@@ -51,6 +54,18 @@ class FakeDatabase {
 
   prepare(sql) {
     return new FakeStatement(this, sql);
+  }
+}
+
+class FakeKv {
+  values = new Map();
+
+  async get(key) {
+    return this.values.get(key) ?? null;
+  }
+
+  async put(key, value) {
+    this.values.set(key, value);
   }
 }
 
@@ -99,6 +114,7 @@ const invokeSources = async ({
 
 test.afterEach(() => {
   Date.now = REAL_NOW;
+  globalThis.fetch = REAL_FETCH;
 });
 
 test('accepts normal browser telemetry for the matching site and origin', async () => {
@@ -313,6 +329,66 @@ test('Cansu requests GA4 properties through isolated site endpoints', async () =
   const client = await readFile(new URL('../src/scripts/cansu-portfolio.js', import.meta.url), 'utf8');
   assert.match(endpoint, /searchParams\.get\('site'\)/);
   assert.match(client, /\/api\/ga4\?site=/);
+});
+
+test('GA4 endpoint serves the last successful site report when Google temporarily fails', async () => {
+  const kv = new FakeKv();
+  kv.values.set('ga4_refresh_token', 'refresh-token');
+  let reportShouldFail = false;
+  globalThis.fetch = async (url) => {
+    if (String(url).includes('oauth2.googleapis.com/token')) {
+      return new Response(JSON.stringify({ access_token: 'access-token' }), { status: 200 });
+    }
+    if (reportShouldFail) throw new Error('temporary Google timeout');
+    return new Response(JSON.stringify({
+      rows: [
+        { dimensionValues: [{ value: 'oneDay' }], metricValues: [{ value: '2' }, { value: '2' }, { value: '3' }, { value: '9' }, { value: '.5' }] },
+        { dimensionValues: [{ value: 'sevenDays' }], metricValues: [{ value: '8' }, { value: '7' }, { value: '11' }, { value: '12' }, { value: '.25' }] },
+        { dimensionValues: [{ value: 'thirtyDays' }], metricValues: [{ value: '20' }, { value: '18' }, { value: '31' }, { value: '15' }, { value: '.2' }] },
+      ],
+    }), { status: 200 });
+  };
+  const context = {
+    request: new Request('https://teyfikgokdemir.com/api/ga4?site=ctseg'),
+    env: { CANSU_GSC_TOKENS: kv, GSC_CLIENT_ID: 'client', GSC_CLIENT_SECRET: 'secret' },
+  };
+
+  const live = await onGa4Request(context);
+  const liveBody = await live.json();
+  assert.equal(liveBody.sites[0].periods.sevenDays.visits, 8);
+  assert.equal(liveBody.sites[0].stale, undefined);
+
+  reportShouldFail = true;
+  const cached = await onGa4Request(context);
+  const cachedBody = await cached.json();
+  assert.equal(cachedBody.connectedCount, 1);
+  assert.equal(cachedBody.sites[0].connected, true);
+  assert.equal(cachedBody.sites[0].stale, true);
+  assert.equal(cachedBody.sites[0].periods.sevenDays.visits, 8);
+});
+
+test('Search Console reports all six sites without the retired CTSEG Glass query', async () => {
+  const kv = new FakeKv();
+  kv.values.set('gsc_refresh_token', 'refresh-token');
+  const requestedDimensions = [];
+  globalThis.fetch = async (url, init = {}) => {
+    if (String(url).includes('oauth2.googleapis.com/token')) {
+      return new Response(JSON.stringify({ access_token: 'access-token' }), { status: 200 });
+    }
+    requestedDimensions.push(JSON.parse(String(init.body)).dimensions);
+    return new Response(JSON.stringify({ rows: [] }), { status: 200 });
+  };
+
+  const response = await onSeoRequest({
+    request: new Request('https://teyfikgokdemir.com/api/gsc/seo', { headers: { 'sec-fetch-site': 'same-origin' } }),
+    env: { CANSU_GSC_TOKENS: kv, GSC_CLIENT_ID: 'client', GSC_CLIENT_SECRET: 'secret' },
+  });
+  const body = await response.json();
+
+  assert.equal(body.sites.length, 6);
+  assert.ok(body.sites.some((site) => site.key === 'qctone' && site.property === 'sc-domain:qctone.com'));
+  assert.ok(requestedDimensions.every((dimensions) => dimensions.join(',') !== 'query,page'));
+  assert.ok(body.sites.every((site) => !('glassSeo' in site)));
 });
 
 test('analytics infrastructure contains no Olivon tracking or reporting targets', async () => {
