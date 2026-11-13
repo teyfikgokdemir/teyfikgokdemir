@@ -19,6 +19,20 @@ const dateRanges = [
   {name:'thirtyDays', startDate:'29daysAgo', endDate:'today'},
 ];
 const emptyPeriod = () => ({visits:0, visitors:0, pageviews:0, totaltime:0, bounces:0});
+const reportCacheKey = (siteKey: string) => `ga4_report:${siteKey}`;
+async function readCachedReport(env: Env, siteKey: string) {
+  try {
+    const raw = await env.CANSU_GSC_TOKENS?.get(reportCacheKey(siteKey));
+    if (!raw) return null;
+    const cached = JSON.parse(raw) as Record<string, any>;
+    return cached?.connected === true && cached?.periods && typeof cached.periods === 'object' ? cached : null;
+  } catch { return null; }
+}
+async function writeCachedReport(env: Env, siteKey: string, report: Record<string, any>) {
+  try {
+    await env.CANSU_GSC_TOKENS?.put(reportCacheKey(siteKey), JSON.stringify({...report,cachedAt:new Date().toISOString()}), {expirationTtl:60*60*24*7});
+  } catch { /* Reporting must not fail when the fallback cache is unavailable. */ }
+}
 function parsePeriod(row: Record<string, any>) {
   const values = row.metricValues?.map((v:any)=>Number(v.value)) || [0,0,0,0,0];
   if (values.length !== metricNames.length || values.some((v:number)=>!Number.isFinite(v))) throw new Error('invalid_metrics');
@@ -57,10 +71,19 @@ export const onRequestGet: PagesFunction<Env> = async ({request,env}) => {
         if (!property) return {key,name,connected:false,reason:'QCT One GA4 property ID bekleniyor'};
         try {
           const periods = await runPeriods(property, token.access_token);
-          return {key,name,connected:true,property,periods};
+          const report = {key,name,connected:true,property,periods};
+          await writeCachedReport(env, key, report);
+          return report;
         } catch (error) {
           const detail = error instanceof Error && /^(upstream_\d+|invalid_(response|reports|metrics))$/.test(error.message) ? error.message : 'timeout';
-          return {key,name,connected:false,reason:`GA4 rapor erişimi / API yapılandırması kontrol edilmeli (${detail})`};
+          const cached = await readCachedReport(env, key);
+          if (cached) return {...cached,key,name,property,connected:true,stale:true,reason:'Google Data API yanıtı gecikti; son başarılı rapor gösteriliyor'};
+          const reason = detail === 'timeout'
+            ? 'Google Data API yanıtı zaman aşımına uğradı'
+            : detail === 'upstream_403'
+              ? 'GA4 mülk görüntüleme yetkisi kontrol edilmeli (403)'
+              : `GA4 raporu alınamadı (${detail})`;
+          return {key,name,connected:false,reason};
         }
       })));
     }
