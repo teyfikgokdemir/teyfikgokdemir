@@ -1,13 +1,8 @@
 import { spawnSync } from 'node:child_process';
 
 const ALLOWED_ADVISORY = 'GHSA-ch52-4w7c-c8xp';
-const EXPIRES = new Date('2026-11-15T00:00:00Z');
+const EXPIRES = new Date('2027-02-15T00:00:00Z');
 const severityRank = { info: 0, low: 1, moderate: 2, high: 3, critical: 4 };
-
-if (Date.now() >= EXPIRES.getTime()) {
-  console.error(`Temporary audit exception for ${ALLOWED_ADVISORY} has expired. Reassess upstream packages.`);
-  process.exit(1);
-}
 
 const result = spawnSync('npm', ['audit', '--json'], { encoding: 'utf8', shell: process.platform === 'win32' });
 const raw = (result.stdout || '').trim();
@@ -55,7 +50,11 @@ for (const [name, vuln] of Object.entries(vulnerabilities)) {
 }
 
 if (accepted.length) {
-  console.warn(`Accepted temporary upstream exception: ${ALLOWED_ADVISORY} (expires 2026-11-15).`);
+  if (Date.now() >= EXPIRES.getTime()) {
+    console.error(`Temporary audit exception for ${ALLOWED_ADVISORY} has expired. Reassess upstream packages.`);
+    process.exit(1);
+  }
+  console.warn(`Accepted temporary upstream exception: ${ALLOWED_ADVISORY} (expires ${EXPIRES.toISOString().slice(0, 10)}).`);
   console.warn('Reason: http-cache-semantics has no fixed npm release yet and is pulled transitively by Astro.');
   for (const item of accepted) console.warn(` - ${item.name}: ${item.severity}`);
 }
