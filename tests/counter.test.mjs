@@ -254,6 +254,13 @@ test('persistent anonymous aggregate accepts all six sites without session ident
     assert.equal(insert.params[2], '/other', 'unrecognized path segments must be bucketed instead of stored');
     assert.doesNotMatch(JSON.stringify(insert), /session|referrer|utm|email/i);
   }
+  const granular = await invokeSources({
+    origin: 'https://qctcommerce.com',
+    body: JSON.stringify({ site: 'qct-commerce-tr', landing_path: '/en/amazon-turkiye-store-setup/', collector_version: '5' }),
+  });
+  assert.equal(granular.response.status, 202);
+  const granularInsert = granular.database.operations.find(({ sql }) => /INSERT INTO privacy_pageviews_daily/.test(sql));
+  assert.equal(granularInsert.params[2], '/en/amazon-turkiye-store-setup');
 });
 
 test('persistent anonymous aggregate rejects cross-site origin claims', async () => {

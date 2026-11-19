@@ -15,7 +15,13 @@
   if (!hosts[site]?.includes(location.hostname)) return;
 
   const ENDPOINT = 'https://cansu.teyfikgokdemir.com/api/sources';
-  const send = (payload) => {
+  const send = (payload, preferBeacon = false) => {
+    const body = JSON.stringify(payload);
+    if (preferBeacon && typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
+      try {
+        if (navigator.sendBeacon(ENDPOINT, body)) return;
+      } catch {}
+    }
     fetch(ENDPOINT, {
       method: 'POST',
       mode: 'cors',
@@ -23,8 +29,14 @@
       cache: 'no-store',
       keepalive: true,
       headers: { 'content-type': 'text/plain;charset=UTF-8' },
-      body: JSON.stringify(payload),
-    }).catch(() => {});
+      body,
+    }).catch(() => {
+      try {
+        if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
+          navigator.sendBeacon(ENDPOINT, body);
+        }
+      } catch {}
+    });
   };
 
   // 1. Always-on lossless cookieless pageview aggregate (runs regardless of banner decision)
@@ -35,10 +47,10 @@
   });
 
   // 2. Always-on anonymous cookie-banner decision aggregate (zero cookies, zero storage, zero identity)
-  const BANNER_SELECTOR = '[data-cookie-consent],[data-cookie-banner],[data-consent-banner],.consent-dialog,.qct-cookie-consent,.cookie-banner,.cookie-consent';
-  const ACCEPT_SELECTOR = '[data-cookie-accept],[data-consent-accept],[data-accept-cookies]';
-  const REJECT_SELECTOR = '[data-cookie-reject],[data-consent-reject],[data-reject-cookies]';
-  const DISMISS_SELECTOR = '[data-cookie-close],[data-consent-close],[data-cookie-dismiss],[data-consent-dismiss]';
+  const BANNER_SELECTOR = '[data-cookie-consent],[data-cookie-banner],[data-consent-banner],.consent-dialog,.qct-cookie-consent,.cookie-banner,.cookie-consent,#cookie';
+  const ACCEPT_SELECTOR = '[data-cookie-accept],[data-consent-accept],[data-accept-cookies],[data-analytics-consent="accept"]';
+  const REJECT_SELECTOR = '[data-cookie-reject],[data-consent-reject],[data-reject-cookies],[data-analytics-consent="reject"]';
+  const DISMISS_SELECTOR = '[data-cookie-close],[data-consent-close],[data-cookie-dismiss],[data-consent-dismiss],[data-analytics-consent="dismiss"]';
 
   let bannerShownSent = false;
   let decisionSent = false;
@@ -57,7 +69,7 @@
     return false;
   };
 
-  const emitConsentAction = (action) => {
+  const emitConsentAction = (action, preferBeacon = false) => {
     if (action === 'banner_shown') {
       if (bannerShownSent) return;
       bannerShownSent = true;
@@ -69,7 +81,7 @@
       site,
       action,
       collector_version: 'consent-v1',
-    });
+    }, preferBeacon);
   };
 
   const checkBanner = () => {
@@ -105,7 +117,12 @@
 
   window.addEventListener('pagehide', () => {
     if (bannerShownSent && !decisionSent) {
-      emitConsentAction('ignored');
+      emitConsentAction('ignored', true);
+    }
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden' && bannerShownSent && !decisionSent) {
+      emitConsentAction('ignored', true);
     }
   });
 
