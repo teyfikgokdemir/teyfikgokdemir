@@ -81,7 +81,7 @@ const privacyHref = locale === 'tr' ? '/privacy-policy/' : `/${locale}/privacy-p
 <aside class="cookie-banner" data-cookie-banner hidden aria-labelledby="cookie-title" aria-live="polite">
   <div class="cookie-copy">
     <strong id="cookie-title">{copy.title}</strong>
-    <p>{analyticsDisclosure[locale] || analyticsDisclosure.en} <a href={privacyHref}>{copy.privacy}</a></p>
+    <p>{copy.text} <a href={privacyHref}>{copy.privacy}</a></p>
   </div>
   <div class="cookie-actions">
     <button type="button" class="cookie-button secondary" data-cookie-reject>{copy.reject}</button>
