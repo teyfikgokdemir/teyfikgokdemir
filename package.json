@@ -23,7 +23,7 @@
     "test:counter": "node --experimental-strip-types --test tests/counter.test.mjs"
   },
   "dependencies": {
-    "astro": "7.4.11"
+    "astro": "7.4.12"
   },
   "devDependencies": {
     "playwright-core": "1.65.0",
