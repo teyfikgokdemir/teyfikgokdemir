@@ -6,10 +6,17 @@ const SITES = new Set(['teyfikgokdemir', 'ctseg', 'mythborn', 'qct-studio', 'qct
 const EVENT_TYPES = new Set(['form_submit', 'rfq_submit', 'whatsapp_click', 'telegram_click', 'phone_click', 'email_click', 'purchase', 'lead']);
 const ORIGINS = new Set([
   'https://teyfikgokdemir.com',
+  'https://www.teyfikgokdemir.com',
   'https://ctseg.com.tr',
+  'https://www.ctseg.com.tr',
   'https://mythborn.co',
+  'https://www.mythborn.co',
   'https://qctstudio.com',
+  'https://www.qctstudio.com',
   'https://qctcommerce.com',
+  'https://www.qctcommerce.com',
+  'https://qctone.com',
+  'https://www.qctone.com',
 ]);
 
 const clean = (value: unknown, max: number) =>

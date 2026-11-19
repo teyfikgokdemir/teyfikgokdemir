@@ -2,7 +2,16 @@ interface Env {
   CANSU_ANALYTICS_DB: D1Database;
 }
 
-const SITES = new Set(['teyfikgokdemir', 'ctseg', 'mythborn', 'qct-studio', 'qct-commerce-tr', 'qctone']);
+const SITE_ORDER = ['qct-commerce-tr', 'ctseg', 'qct-studio', 'teyfikgokdemir', 'mythborn', 'qctone'] as const;
+const SITES = new Set<string>(SITE_ORDER);
+const SITE_LABELS: Record<string, string> = {
+  'qct-commerce-tr': 'QCT Commerce',
+  ctseg: 'CTSEG',
+  'qct-studio': 'QCT Studio',
+  teyfikgokdemir: 'Teyfik Gökdemir',
+  mythborn: 'Mythborn',
+  qctone: 'QCT One',
+};
 const ORIGINS = new Set([
   'https://teyfikgokdemir.com',
   'https://www.teyfikgokdemir.com',
@@ -25,8 +34,10 @@ const SITE_ORIGINS: Record<string, string[]> = {
   'qct-commerce-tr': ['https://qctcommerce.com', 'https://www.qctcommerce.com'],
   qctone: ['https://qctone.com', 'https://www.qctone.com'],
 };
+const CONSENT_ACTIONS = new Set(['banner_shown', 'accept', 'reject', 'dismiss', 'ignored']);
 const BOT_UA = /bot|spider|crawl|slurp|headlesschrome|playwright|puppeteer|lighthouse|pagespeed/i;
-const RETENTION_DAYS = 90;
+const RETENTION_DAYS = 450; // Preserves lossless aggregate history well past 2027-01-01
+const TRACKING_UNTIL = '2027-01-01';
 const SAFE_PATH_BUCKETS = new Set(['about', 'blog', 'contact', 'en', 'tr', 'de', 'it', 'fa', 'ru', 'zh', 'vi', 'uk', 'ro', 'bg', 'he', 'ar', 'sq', 'mk', 'sr', 'az', 'services', 'solutions', 'insights', 'work', 'markets', 'trade-products', 'privacy-policy', 'cookie-policy', 'terms', 'kvkk']);
 let retentionCleanupDay = '';
 
@@ -64,6 +75,31 @@ const sourceName = (body: Record<string, unknown>) => {
   return referrer;
 };
 
+const ensureConsentTable = async (env: Env) => {
+  await env.CANSU_ANALYTICS_DB.prepare(
+    `CREATE TABLE IF NOT EXISTS consent_actions_daily (
+      site TEXT NOT NULL,
+      day TEXT NOT NULL,
+      action TEXT NOT NULL,
+      count INTEGER NOT NULL DEFAULT 0,
+      PRIMARY KEY (site, day, action)
+    )`
+  ).run();
+};
+
+const ensureCountryTable = async (env: Env) => {
+  await env.CANSU_ANALYTICS_DB.prepare(
+    `CREATE TABLE IF NOT EXISTS privacy_country_daily (
+      site TEXT NOT NULL,
+      day TEXT NOT NULL,
+      country TEXT NOT NULL,
+      is_bot INTEGER NOT NULL DEFAULT 0,
+      views INTEGER NOT NULL DEFAULT 0,
+      PRIMARY KEY (site, day, country, is_bot)
+    )`
+  ).run();
+};
+
 const ensureFirstPartyV2 = async (env: Env) => {
   await env.CANSU_ANALYTICS_DB.prepare(
     `CREATE TABLE IF NOT EXISTS first_party_sessions_v2 (
@@ -89,6 +125,7 @@ type RequestWithCf = Request & {
     country?: string;
     region?: string;
     city?: string;
+    botManagement?: { verifiedBot?: boolean; score?: number };
   };
 };
 
@@ -115,6 +152,15 @@ const recordGeo = async (env: Env, request: Request, site: string, day: string) 
   ).bind(site, day, country, region, city).run();
 };
 
+const periodSinceDay = (period: string): string => {
+  const now = Date.now();
+  if (period === 'today') return new Date(now).toISOString().slice(0, 10);
+  if (period === '7d' || period === 'sevendays') return new Date(now - 6 * 86400000).toISOString().slice(0, 10);
+  if (period === '30d' || period === 'thirtydays') return new Date(now - 29 * 86400000).toISOString().slice(0, 10);
+  if (period === 'all' || period === '2027') return '2026-01-01';
+  return new Date(now - 6 * 86400000).toISOString().slice(0, 10);
+};
+
 export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   const origin = request.headers.get('origin');
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors(origin) });
@@ -131,13 +177,25 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
       if (!origin || !SITE_ORIGINS[site]?.includes(origin)) {
         return response({ ok: false, error: 'Origin mismatch for site identifier' }, 403, origin);
       }
-      const collectorVersion = clean(body.collector_version, 10);
-      const path = cleanPath(body.landing_path);
+      const collectorVersion = clean(body.collector_version, 16);
       const day = new Date().toISOString().slice(0, 10);
+
+      // Anonymous cookie-banner decision counter: zero cookies, zero IP, zero identity.
+      if (collectorVersion === 'consent-v1') {
+        const action = clean(body.action, 20).toLowerCase();
+        if (!CONSENT_ACTIONS.has(action)) return response({ ok: false, error: 'Invalid consent action' }, 400, origin);
+        await ensureConsentTable(env);
+        await env.CANSU_ANALYTICS_DB.prepare(
+          'INSERT INTO consent_actions_daily (site, day, action, count) VALUES (?, ?, ?, 1) ON CONFLICT(site, day, action) DO UPDATE SET count = count + 1'
+        ).bind(site, day, action).run();
+        return response({ ok: true, collector: 'consent-actions-v1', trackingUntil: TRACKING_UNTIL }, 202, origin);
+      }
+
+      const path = cleanPath(body.landing_path);
 
       // Persistent consent-free aggregate: no IP, user agent, referrer, session or visitor identifier is stored.
       if (collectorVersion === '5') {
-        const cf = (request as Request & { cf?: { botManagement?: { verifiedBot?: boolean; score?: number } } }).cf;
+        const cf = (request as RequestWithCf).cf;
         const userAgent = request.headers.get('user-agent') || '';
         const isBot = BOT_UA.test(userAgent) || cf?.botManagement?.verifiedBot === true || (typeof cf?.botManagement?.score === 'number' && cf.botManagement.score < 30) ? 1 : 0;
         if (retentionCleanupDay !== day) {
@@ -148,7 +206,19 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
         await env.CANSU_ANALYTICS_DB.prepare(
           'INSERT INTO privacy_pageviews_daily (site, day, path, is_bot, views) VALUES (?, ?, ?, ?, 1) ON CONFLICT(site, day, path, is_bot) DO UPDATE SET views = views + 1'
         ).bind(site, day, path, isBot).run();
-        return response({ ok: true, collector: 'privacy-pageviews-v5', retentionDays: RETENTION_DAYS }, 202, origin);
+
+        // Anonymous aggregate country bucket (no IP or personal identifier stored)
+        const country = clean(cf?.country, 4).toUpperCase() || 'XX';
+        try {
+          await ensureCountryTable(env);
+          await env.CANSU_ANALYTICS_DB.prepare(
+            'INSERT INTO privacy_country_daily (site, day, country, is_bot, views) VALUES (?, ?, ?, ?, 1) ON CONFLICT(site, day, country, is_bot) DO UPDATE SET views = views + 1'
+          ).bind(site, day, country, isBot).run();
+        } catch {
+          /* Best-effort country aggregate must not block primary pageview recording */
+        }
+
+        return response({ ok: true, collector: 'privacy-pageviews-v5', retentionDays: RETENTION_DAYS, trackingUntil: TRACKING_UNTIL }, 202, origin);
       }
 
       // Consent-free QCTONE aggregate: no session ID, identity, referrer, geo or UTM is stored.
@@ -216,10 +286,206 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
       await recordGeo(env, request, eventSite, day);
       return response({ ok: true }, 202, origin);
     }
+
+    const version = clean(url.searchParams.get('version'), 16).toLowerCase();
+    const period = clean(url.searchParams.get('period'), 20).toLowerCase();
+
+    // Unified lossless 6-site summary for Cansu Operations Center (through 2027-01-01)
+    if (version === 'summary') {
+      const requestedSite = clean(url.searchParams.get('site'), 40);
+      if (requestedSite && !SITES.has(requestedSite)) return response({ ok: false, error: 'Unknown site' }, 400, origin);
+      const activePeriod = ['today', '7d', '30d', 'all'].includes(period) ? period : '7d';
+      const since = periodSinceDay(activePeriod);
+      const todayDay = new Date().toISOString().slice(0, 10);
+
+      await Promise.all([ensureConsentTable(env), ensureCountryTable(env)]).catch(() => {});
+
+      const siteFilterSql = requestedSite ? ' AND site = ?' : '';
+      const bindBase = requestedSite ? [since, requestedSite] : [since];
+
+      const [siteTotalsRes, allTimeTotalsRes, consentRes, dailyPvRes, dailyConsentRes, pathsRes, countriesRes] = await Promise.all([
+        env.CANSU_ANALYTICS_DB.prepare(
+          `SELECT site,
+                  SUM(CASE WHEN is_bot = 0 THEN views ELSE 0 END) AS human_views,
+                  SUM(CASE WHEN is_bot = 1 THEN views ELSE 0 END) AS bot_views,
+                  SUM(CASE WHEN day = ? AND is_bot = 0 THEN views ELSE 0 END) AS today_human,
+                  SUM(CASE WHEN day = ? AND is_bot = 1 THEN views ELSE 0 END) AS today_bot,
+                  MIN(day) AS first_day,
+                  MAX(day) AS last_day
+           FROM privacy_pageviews_daily
+           WHERE day >= ?${siteFilterSql}
+           GROUP BY site`
+        ).bind(todayDay, todayDay, ...bindBase).all<{ site: string; human_views: number; bot_views: number; today_human: number; today_bot: number; first_day: string; last_day: string }>(),
+
+        env.CANSU_ANALYTICS_DB.prepare(
+          `SELECT site,
+                  SUM(CASE WHEN is_bot = 0 THEN views ELSE 0 END) AS human_views,
+                  SUM(CASE WHEN is_bot = 1 THEN views ELSE 0 END) AS bot_views
+           FROM privacy_pageviews_daily
+           WHERE day >= '2026-01-01' AND day <= '${TRACKING_UNTIL}'${siteFilterSql}
+           GROUP BY site`
+        ).bind(...(requestedSite ? [requestedSite] : [])).all<{ site: string; human_views: number; bot_views: number }>(),
+
+        env.CANSU_ANALYTICS_DB.prepare(
+          `SELECT site, action, SUM(count) AS total
+           FROM consent_actions_daily
+           WHERE day >= ?${siteFilterSql}
+           GROUP BY site, action`
+        ).bind(...bindBase).all<{ site: string; action: string; total: number }>().catch(() => ({ results: [] })),
+
+        env.CANSU_ANALYTICS_DB.prepare(
+          `SELECT day,
+                  SUM(CASE WHEN is_bot = 0 THEN views ELSE 0 END) AS human_views,
+                  SUM(CASE WHEN is_bot = 1 THEN views ELSE 0 END) AS bot_views
+           FROM privacy_pageviews_daily
+           WHERE day >= ?${siteFilterSql}
+           GROUP BY day
+           ORDER BY day ASC`
+        ).bind(...bindBase).all<{ day: string; human_views: number; bot_views: number }>(),
+
+        env.CANSU_ANALYTICS_DB.prepare(
+          `SELECT day, action, SUM(count) AS total
+           FROM consent_actions_daily
+           WHERE day >= ?${siteFilterSql}
+           GROUP BY day, action
+           ORDER BY day ASC`
+        ).bind(...bindBase).all<{ day: string; action: string; total: number }>().catch(() => ({ results: [] })),
+
+        env.CANSU_ANALYTICS_DB.prepare(
+          `SELECT path,
+                  SUM(CASE WHEN is_bot = 0 THEN views ELSE 0 END) AS human_views,
+                  SUM(CASE WHEN is_bot = 1 THEN views ELSE 0 END) AS bot_views
+           FROM privacy_pageviews_daily
+           WHERE day >= ?${siteFilterSql}
+           GROUP BY path
+           ORDER BY human_views DESC, bot_views DESC
+           LIMIT 12`
+        ).bind(...bindBase).all<{ path: string; human_views: number; bot_views: number }>(),
+
+        env.CANSU_ANALYTICS_DB.prepare(
+          `SELECT country,
+                  SUM(CASE WHEN is_bot = 0 THEN views ELSE 0 END) AS human_views,
+                  SUM(CASE WHEN is_bot = 1 THEN views ELSE 0 END) AS bot_views
+           FROM privacy_country_daily
+           WHERE day >= ?${siteFilterSql}
+           GROUP BY country
+           ORDER BY human_views DESC, bot_views DESC
+           LIMIT 12`
+        ).bind(...bindBase).all<{ country: string; human_views: number; bot_views: number }>().catch(() => ({ results: [] })),
+      ]);
+
+      const siteMap = new Map((siteTotalsRes.results || []).map((r) => [r.site, r]));
+      const allTimeMap = new Map((allTimeTotalsRes.results || []).map((r) => [r.site, r]));
+      const consentMap = new Map<string, { banner_shown: number; accept: number; reject: number; dismiss: number; ignored: number }>();
+      for (const s of SITE_ORDER) consentMap.set(s, { banner_shown: 0, accept: 0, reject: 0, dismiss: 0, ignored: 0 });
+      for (const row of consentRes.results || []) {
+        const bucket = consentMap.get(row.site);
+        if (bucket && row.action in bucket) {
+          (bucket as Record<string, number>)[row.action] = Number(row.total || 0);
+        }
+      }
+
+      const targetSites = requestedSite ? [requestedSite] : [...SITE_ORDER];
+      const sites = targetSites.map((key) => {
+        const r = siteMap.get(key);
+        const allR = allTimeMap.get(key);
+        const c = consentMap.get(key) || { banner_shown: 0, accept: 0, reject: 0, dismiss: 0, ignored: 0 };
+        const humanViews = Number(r?.human_views || 0);
+        const botViews = Number(r?.bot_views || 0);
+        const decided = c.accept + c.reject + c.dismiss;
+        return {
+          key,
+          name: SITE_LABELS[key] || key,
+          humanViews,
+          botViews,
+          totalViews: humanViews + botViews,
+          todayHuman: Number(r?.today_human || 0),
+          todayBot: Number(r?.today_bot || 0),
+          allTimeHuman: Number(allR?.human_views || 0),
+          allTimeBot: Number(allR?.bot_views || 0),
+          firstDay: r?.first_day || null,
+          lastDay: r?.last_day || null,
+          consent: {
+            ...c,
+            decided,
+            acceptRate: decided > 0 ? Number(((c.accept / decided) * 100).toFixed(1)) : null,
+            rejectRate: decided > 0 ? Number(((c.reject / decided) * 100).toFixed(1)) : null,
+          },
+        };
+      });
+
+      const totals = sites.reduce((acc, s) => {
+        acc.humanViews += s.humanViews;
+        acc.botViews += s.botViews;
+        acc.totalViews += s.totalViews;
+        acc.allTimeHuman += s.allTimeHuman;
+        acc.allTimeBot += s.allTimeBot;
+        acc.consent.banner_shown += s.consent.banner_shown;
+        acc.consent.accept += s.consent.accept;
+        acc.consent.reject += s.consent.reject;
+        acc.consent.dismiss += s.consent.dismiss;
+        acc.consent.ignored += s.consent.ignored;
+        return acc;
+      }, {
+        humanViews: 0,
+        botViews: 0,
+        totalViews: 0,
+        allTimeHuman: 0,
+        allTimeBot: 0,
+        consent: { banner_shown: 0, accept: 0, reject: 0, dismiss: 0, ignored: 0 },
+      });
+      const totalDecided = totals.consent.accept + totals.consent.reject + totals.consent.dismiss;
+
+      const dailyConsentByDay = new Map<string, { accept: number; reject: number; dismiss: number; ignored: number }>();
+      for (const row of dailyConsentRes.results || []) {
+        const cur = dailyConsentByDay.get(row.day) || { accept: 0, reject: 0, dismiss: 0, ignored: 0 };
+        if (row.action in cur) (cur as Record<string, number>)[row.action] = Number(row.total || 0);
+        dailyConsentByDay.set(row.day, cur);
+      }
+      const dailySeries = (dailyPvRes.results || []).map((row) => {
+        const dc = dailyConsentByDay.get(row.day) || { accept: 0, reject: 0, dismiss: 0, ignored: 0 };
+        return {
+          day: row.day,
+          humanViews: Number(row.human_views || 0),
+          botViews: Number(row.bot_views || 0),
+          ...dc,
+        };
+      });
+
+      return response({
+        ok: true,
+        collector: 'lossless-summary-v5',
+        period: activePeriod,
+        since,
+        trackingUntil: TRACKING_UNTIL,
+        retentionDays: RETENTION_DAYS,
+        generatedAt: new Date().toISOString(),
+        totals: {
+          ...totals,
+          consent: {
+            ...totals.consent,
+            decided: totalDecided,
+            acceptRate: totalDecided > 0 ? Number(((totals.consent.accept / totalDecided) * 100).toFixed(1)) : null,
+            rejectRate: totalDecided > 0 ? Number(((totals.consent.reject / totalDecided) * 100).toFixed(1)) : null,
+          },
+        },
+        sites,
+        dailySeries,
+        topPaths: (pathsRes.results || []).map((r) => ({
+          path: r.path,
+          humanViews: Number(r.human_views || 0),
+          botViews: Number(r.bot_views || 0),
+        })),
+        topCountries: (countriesRes.results || []).map((r) => ({
+          country: r.country,
+          humanViews: Number(r.human_views || 0),
+          botViews: Number(r.bot_views || 0),
+        })),
+      }, 200, origin);
+    }
+
     const site = clean(url.searchParams.get('site'), 40);
     if (!SITES.has(site)) return response({ ok: false, error: 'Unknown site' }, 400, origin);
-    const version = clean(url.searchParams.get('version'), 10).toLowerCase();
-    const period = clean(url.searchParams.get('period'), 20).toLowerCase();
 
     if (version === 'anonymous') {
       const since = period === 'today'

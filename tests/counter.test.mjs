@@ -8,8 +8,8 @@ import { onRequestGet as onGa4Request } from '../functions/api/ga4.ts';
 import { onRequestGet as onSeoRequest } from '../functions/api/gsc/seo.ts';
 import { onRequest as onSourcesRequest } from '../functions/api/sources.ts';
 
-const ACTIVE_TIME = Date.parse('2026-11-10T12:00:00Z');
-const EXPIRED_TIME = Date.parse('2026-11-16T00:00:00Z');
+const ACTIVE_TIME = Date.parse('2026-12-15T12:00:00Z');
+const EXPIRED_TIME = Date.parse('2027-01-02T00:00:00Z');
 const REAL_NOW = Date.now;
 const REAL_FETCH = globalThis.fetch;
 const ACTIVE_SITES = [
@@ -303,6 +303,46 @@ test('Cansu dashboard labels the six-site analytics scope', async () => {
   assert.match(source, /site\.cloudflare\?\.last24h\?\.requests/);
   assert.match(source, /topCloudflare = \[\.\.\.data\.sites\]\.filter\(\(site\) => site\.cloudflare\?\.available\)/);
   assert.doesNotMatch(source, /cloudflare\?\.requests24h/);
+});
+
+test('consent-v1 records allowlisted cookie banner actions without storing identity', async () => {
+  for (const action of ['banner_shown', 'accept', 'reject', 'dismiss', 'ignored']) {
+    const { response, database } = await invokeSources({
+      origin: 'https://qctcommerce.com',
+      body: JSON.stringify({ site: 'qct-commerce-tr', action, collector_version: 'consent-v1' }),
+    });
+    assert.equal(response.status, 202, action);
+    const body = await response.json();
+    assert.equal(body.collector, 'consent-actions-v1');
+    assert.equal(body.trackingUntil, '2027-01-01');
+    assert.ok(database.operations.some(({ sql }) => /INSERT INTO consent_actions_daily/.test(sql)));
+  }
+
+  const invalid = await invokeSources({
+    origin: 'https://qctcommerce.com',
+    body: JSON.stringify({ site: 'qct-commerce-tr', action: 'evil_action', collector_version: 'consent-v1' }),
+  });
+  assert.equal(invalid.response.status, 400);
+
+  const spoofed = await invokeSources({
+    origin: 'https://ctseg.com.tr',
+    body: JSON.stringify({ site: 'qct-commerce-tr', action: 'accept', collector_version: 'consent-v1' }),
+  });
+  assert.equal(spoofed.response.status, 403);
+});
+
+test('lossless summary endpoint reports all six sites and 2027-01-01 tracking horizon', async () => {
+  const { response } = await invokeSources({
+    method: 'GET',
+    origin: 'https://teyfikgokdemir.com',
+    url: 'https://teyfikgokdemir.com/api/sources?version=summary&period=all',
+  });
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.equal(body.ok, true);
+  assert.equal(body.trackingUntil, '2027-01-01');
+  assert.equal(body.sites.length, 6);
+  assert.ok(body.sites.every((s) => s.consent && typeof s.consent.accept === 'number' && typeof s.consent.reject === 'number' && typeof s.consent.dismiss === 'number'));
 });
 
 test('Cansu dashboard always exposes a same-origin GA4 reconnect action', async () => {
