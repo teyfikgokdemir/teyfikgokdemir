@@ -38,7 +38,15 @@ const CONSENT_ACTIONS = new Set(['banner_shown', 'accept', 'reject', 'dismiss', 
 const BOT_UA = /bot|spider|crawl|slurp|headlesschrome|playwright|puppeteer|lighthouse|pagespeed/i;
 const RETENTION_DAYS = 450; // Preserves lossless aggregate history well past 2027-01-01
 const TRACKING_UNTIL = '2027-01-01';
-const SAFE_PATH_BUCKETS = new Set(['about', 'blog', 'contact', 'en', 'tr', 'de', 'it', 'fa', 'ru', 'zh', 'vi', 'uk', 'ro', 'bg', 'he', 'ar', 'sq', 'mk', 'sr', 'az', 'services', 'solutions', 'insights', 'work', 'markets', 'trade-products', 'privacy-policy', 'cookie-policy', 'terms', 'kvkk']);
+const SAFE_PATH_BUCKETS = new Set([
+  'about', 'blog', 'contact', 'en', 'tr', 'de', 'it', 'fa', 'ru', 'zh', 'vi', 'uk', 'ro', 'bg', 'he', 'ar', 'sq', 'mk', 'sr', 'az', 'gr', 'es', 'el',
+  'services', 'solutions', 'insights', 'work', 'markets', 'trade-products', 'privacy-policy', 'cookie-policy', 'terms', 'kvkk',
+  'tools', 'company', 'global-trade', 'technology', 'market-intelligence', 'ecosystem', 'sectors',
+  'hizmetler', 'iletisim', 'hakkimizda', 'yapay-zeka-arama-gorunurlugu', 'ai-search-visibility', 'instagram', 'stratejik-dijital-donusum-teklifi',
+  'cozumler', 'urunler', 'referanslar', 'sss', 'kariyer', 'case-studies', 'pricing', 'faq', 'portfolio', 'methodology',
+  'dogum-haritasi', 'burclar', 'gokyuzu-takvimi', 'transitler', 'sinastri', 'astroloji-sozlugu', 'yaklasim',
+  'birth-chart', 'zodiac-signs', 'sky-calendar', 'transits', 'astrology-glossary', 'approach', 'horoscopes', 'synastry', 'learning', 'retros', 'calendar', 'ebced',
+]);
 let retentionCleanupDay = '';
 
 const cors = (origin: string | null) => ({
@@ -57,8 +65,15 @@ const clean = (value: unknown, max: number) => String(value ?? '').trim().slice(
 
 const cleanPath = (value: unknown) => {
   const raw = clean(value, 220).split(/[?#]/)[0].replace(/\/{2,}/g, '/');
-  const first = raw.split('/').filter(Boolean)[0]?.toLowerCase() || '';
-  return first && SAFE_PATH_BUCKETS.has(first) ? `/${first}` : first ? '/other' : '/';
+  const segments = raw.split('/').filter(Boolean).map((s) => s.toLowerCase());
+  const first = segments[0] || '';
+  if (!first) return '/';
+  if (!SAFE_PATH_BUCKETS.has(first)) return '/other';
+  const second = segments[1] || '';
+  if (second && /^[a-z0-9-]{2,80}$/.test(second) && !/\d{6,}/.test(second)) {
+    return `/${first}/${second}`;
+  }
+  return `/${first}`;
 };
 
 const allowedOrigin = (origin: string | null) => Boolean(origin && ORIGINS.has(origin));
@@ -359,7 +374,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
            WHERE day >= ?${siteFilterSql}
            GROUP BY path
            ORDER BY human_views DESC, bot_views DESC
-           LIMIT 12`
+           LIMIT 20`
         ).bind(...bindBase).all<{ path: string; human_views: number; bot_views: number }>(),
 
         env.CANSU_ANALYTICS_DB.prepare(
@@ -370,7 +385,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
            WHERE day >= ?${siteFilterSql}
            GROUP BY country
            ORDER BY human_views DESC, bot_views DESC
-           LIMIT 12`
+           LIMIT 20`
         ).bind(...bindBase).all<{ country: string; human_views: number; bot_views: number }>().catch(() => ({ results: [] })),
       ]);
 
