@@ -3,9 +3,9 @@ interface Env {
   COUNTER_AUTH_SECRET?: string;
 }
 
-// 7-day monitoring window: 2026-11-09T00:00:00Z to 2026-11-15T23:59:59Z
+// Lossless aggregate monitoring window: 2026-11-09T00:00:00Z through 2027-01-01T23:59:59Z
 const MONITORING_START = 1794182400000; // 2026-11-09T00:00:00Z
-const MONITORING_EXPIRY = 1794787199000; // 2026-11-15T23:59:59Z
+const MONITORING_EXPIRY = 1798847999000; // 2027-01-01T23:59:59Z
 
 const SITES = new Set([
   'teyfikgokdemir',
