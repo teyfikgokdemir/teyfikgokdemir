@@ -934,32 +934,9 @@ const intentCards: IntentItem[] = [
     </div>
   </div>
 
-  <!-- STAGE 2: 2027 OBSIDIAN COMMAND MATRIX (INTENT ROUTING & CORE COMPANIES) -->
+  <!-- STAGE 2: QUIET-LUXURY ECOSYSTEM MATRIX (CORE OPERATING COMPANIES) -->
   <div class="alabaster-stage">
     <div class="stage-container">
-      <section class="section intent-routing" aria-labelledby="intent-routing-title">
-        <div class="section-ledger-head" data-reveal="section-head">
-          <p class="eyebrow">{ui.intentEyebrow}</p>
-          <h2 id="intent-routing-title">{ui.intentTitle}</h2>
-          <p class="section-lead-note">{ui.intentLead}</p>
-        </div>
-        <div class="intent-grid">
-          {intentCards.map((item, idx) => (
-            <a class="intent-card" href={item.href} target="_blank" rel="noopener noreferrer" data-reveal="card" style={`--reveal-order:${idx}`}>
-              <div class="intent-card-copy">
-                <div class="card-top-meta">
-                  <span class="card-tag">{item.label}</span>
-                  <span class="card-index">0{idx + 1}</span>
-                </div>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </div>
-              <span class="card-link">{item.action}<span aria-hidden="true"> ↗</span></span>
-            </a>
-          ))}
-        </div>
-      </section>
-
       <section class="section" id="ventures">
         <div class="section-ledger-head" data-reveal="section-head">
           <p class="eyebrow">{ui.coreLabel}</p>
@@ -968,7 +945,7 @@ const intentCards: IntentItem[] = [
         </div>
         <div class="grid core-grid">
           {core.map((item, idx) => (
-            <a class="card core-card" href={item.url} target="_blank" rel="noopener noreferrer" data-venture-link="true" data-reveal="card" style={`--reveal-order:${idx}`}>
+            <a class="card core-card" href={item.url} target="_blank" rel="noopener noreferrer" data-venture-link="true" data-spotlight data-reveal="card" style={`--reveal-order:${idx}`}>
               <div>
                 <div class="card-top-meta">
                   <span class="card-tag">{item.tag}</span>
@@ -995,7 +972,7 @@ const intentCards: IntentItem[] = [
     </div>
   </div>
 
-  <!-- STAGE 3: OXFORD SAPPHIRE VAULT (OWNED DIGITAL ASSETS, MARQUEE & COLLABORATION) -->
+  <!-- STAGE 3: PROPRIETARY VAULT (OWNED DIGITAL ASSETS, MARQUEE & COLLABORATION) -->
   <div class="sapphire-vault-stage">
     <div class="stage-container">
       <section class="section split-section" id="expertise">
@@ -1005,7 +982,7 @@ const intentCards: IntentItem[] = [
           <p class="section-lead-note">{ui.ownedLead}</p>
         </div>
         <div class="asset-stack">
-          <a class="asset-card" href="https://growth.teyfikgokdemir.com" target="_blank" rel="noopener noreferrer" data-reveal="card" style="--reveal-order:0">
+          <a class="asset-card" href="https://growth.teyfikgokdemir.com" target="_blank" rel="noopener noreferrer" data-spotlight data-reveal="card" style="--reveal-order:0">
             <div>
               <div class="card-top-meta">
                 <span class="card-tag">{ui.privateLabel}</span>
@@ -1017,7 +994,7 @@ const intentCards: IntentItem[] = [
             </div>
             <span class="card-link">growth.teyfikgokdemir.com ↗</span>
           </a>
-          <a class="asset-card" href={site.links.mythborn} target="_blank" rel="noopener noreferrer" data-reveal="card" style="--reveal-order:1">
+          <a class="asset-card" href={site.links.mythborn} target="_blank" rel="noopener noreferrer" data-spotlight data-reveal="card" style="--reveal-order:1">
             <div>
               <div class="card-top-meta">
                 <span class="card-tag">{ui.mediaLabel}</span>
@@ -1049,7 +1026,7 @@ const intentCards: IntentItem[] = [
         <div class="section-ledger-head section-ledger-head--compact" data-reveal="section-head">
           <p class="eyebrow">{ui.collabLabel}</p>
         </div>
-        <div class="collab-card" data-reveal="card">
+        <div class="collab-card" data-spotlight data-reveal="card">
           <div class="collab-copy">
             <span class="card-tag">{ui.collaborationLabel}</span>
             <h2>Olivon</h2>
@@ -1061,7 +1038,7 @@ const intentCards: IntentItem[] = [
     </div>
   </div>
 
-  <!-- STAGE 4: 2027 EXECUTIVE ARCHITECTURE (OPERATING MODEL, FIELD NOTES & ABOUT) -->
+  <!-- STAGE 4: OPERATING DISCIPLINE, FIELD NOTES & FOUNDER MANIFESTO -->
   <div class="alabaster-stage">
     <div class="stage-container">
       <section class="section method" id="journey">
@@ -1072,7 +1049,7 @@ const intentCards: IntentItem[] = [
         </div>
         <ol class="method-grid">
           {ui.steps.map((step, index) => (
-            <li data-reveal="card" style={`--reveal-order:${index}`}>
+            <li data-spotlight data-reveal="card" style={`--reveal-order:${index}`}>
               <span class="method-step-num">0{index + 1}</span>
               <strong>{step}</strong>
               <p class="method-step-note">{ui.stepNotes[index]}</p>
@@ -1092,7 +1069,7 @@ const intentCards: IntentItem[] = [
         </div>
         <div class="insights-ledger">
           {featuredArticles.map((article, idx) => (
-            <a class="insight-row" href={article.href} data-reveal="card" style={`--reveal-order:${idx}`}>
+            <a class="insight-row" href={article.href} data-spotlight data-reveal="card" style={`--reveal-order:${idx}`}>
               <div class="insight-row__main">
                 <span class="insight-row__tag">{article.tag}</span>
                 <h3>{article.title}</h3>
@@ -1110,7 +1087,7 @@ const intentCards: IntentItem[] = [
           <h2>{ui.aboutTitle}</h2>
           <p class="section-lead-note">{ui.aboutBody}</p>
         </div>
-        <div class="about-showcase" data-reveal="card">
+        <div class="about-showcase" data-spotlight data-reveal="card">
           <div class="about-copy">
             <span class="card-tag">{ui.eyebrow}</span>
             <p class="about-thesis">{ui.aboutNote}</p>
@@ -1126,7 +1103,7 @@ const intentCards: IntentItem[] = [
             <img
               src={site.images.profile.path}
               srcset={site.images.profile.srcset}
-              sizes="(max-width:900px) 88vw, 320px"
+              sizes="(max-width:900px) 88vw, 280px"
               width={site.images.profile.width}
               height={site.images.profile.height}
               alt="Teyfik Gökdemir"
@@ -1148,7 +1125,7 @@ const intentCards: IntentItem[] = [
           <p class="section-lead-note">{ui.contactBody}</p>
         </div>
         <div class="contact-ledger">
-          <div class="contact-intro" data-reveal="card" style="--reveal-order:0">
+          <div class="contact-intro" data-spotlight data-reveal="card" style="--reveal-order:0">
             <span class="card-tag">{locale === 'tr' ? 'DOĞRUDAN KANALLAR' : 'DIRECT CHANNELS'}</span>
             <p class="contact-intro-note">{ui.eyebrow}</p>
             <div class="contact-primary-actions">
@@ -1162,7 +1139,7 @@ const intentCards: IntentItem[] = [
             </div>
           </div>
 
-          <form class="contact-form" data-contact-form data-intro-line={ui.form.introLine} data-reveal="card" style="--reveal-order:1">
+          <form class="contact-form" data-spotlight data-contact-form data-intro-line={ui.form.introLine} data-reveal="card" style="--reveal-order:1">
             <label>
               <span>{ui.form.topicLabel}</span>
               <select name="topic" required>
@@ -1204,14 +1181,24 @@ const intentCards: IntentItem[] = [
       window.open('https://wa.me/' + whatsappNumber + '?text=' + encodeURIComponent(lines.join('\n')), '_blank', 'noopener,noreferrer');
     });
   });
+
+  if (window.matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference)').matches) {
+    document.querySelectorAll('[data-spotlight]').forEach((card) => {
+      card.addEventListener('pointermove', (event) => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mx', `${event.clientX - rect.left}px`);
+        card.style.setProperty('--my', `${event.clientY - rect.top}px`);
+      }, { passive: true });
+    });
+  }
 </script>
 
 <style>
   :global(body) {
     margin: 0;
-    background: #040814;
-    color: #f8fafc;
-    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #050507;
+    color: #f5f5f7;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
@@ -1221,83 +1208,66 @@ const intentCards: IntentItem[] = [
     max-width: none;
     margin: 0;
     padding: 0;
-    background: #040814;
-    color: #f8fafc;
+    background: #050507;
+    color: #f5f5f7;
   }
 
   .stage-container {
-    max-width: 1360px;
+    max-width: 1320px;
     margin: 0 auto;
     padding-inline: clamp(18px, 3vw, 40px);
   }
 
   /* ==========================================================================
-     2027 OBSIDIAN & ELECTRIC SAPPHIRE COMMAND STAGES
-     Unified ultra-executive dark glass architecture — no beige/cream break
+     QUIET LUXURY: PURE MATTE CARBON, BRUSHED PLATINUM & MICRO CHAMPAGNE
+     Private Family Office / Founder Authority aesthetic — zero SaaS blue
      ========================================================================== */
   .midnight-stage {
     position: relative;
     overflow: hidden;
     background:
-      radial-gradient(ellipse 65% 55% at 76% 38%, rgba(37, 99, 235, 0.24), transparent 72%),
-      radial-gradient(ellipse 50% 45% at 15% 15%, rgba(56, 189, 248, 0.14), transparent 68%),
-      linear-gradient(180deg, #040814 0%, #070e20 100%);
-    color: #f8fafc;
-    border-bottom: 1px solid rgba(56, 189, 248, 0.14);
+      radial-gradient(ellipse 56% 52% at 74% 46%, rgba(212, 180, 117, 0.08), transparent 72%),
+      radial-gradient(ellipse 48% 40% at 14% 12%, rgba(255, 255, 255, 0.03), transparent 68%),
+      #050507;
+    color: #f5f5f7;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   }
 
   .alabaster-stage {
     position: relative;
     background:
-      radial-gradient(ellipse 70% 50% at 50% 0%, rgba(37, 99, 235, 0.12), transparent 70%),
-      linear-gradient(180deg, #060c1b 0%, #050a17 100%);
-    color: #f8fafc;
+      radial-gradient(ellipse 64% 40% at 50% 0%, rgba(255, 255, 255, 0.024), transparent 70%),
+      #050507;
+    color: #f5f5f7;
   }
 
   .sapphire-vault-stage {
     position: relative;
     background:
-      radial-gradient(ellipse 72% 55% at 50% 25%, rgba(56, 189, 248, 0.15), transparent 72%),
-      linear-gradient(180deg, #071024 0%, #040814 100%);
-    color: #f8fafc;
-    border-top: 1px solid rgba(56, 189, 248, 0.15);
-    border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+      radial-gradient(ellipse 64% 50% at 50% 25%, rgba(212, 180, 117, 0.05), transparent 72%),
+      #07070a;
+    color: #f5f5f7;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   }
 
   .contact-stage {
-    border-top: 1px solid rgba(56, 189, 248, 0.16);
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
     border-bottom: 0;
   }
 
   /* ==========================================================================
-     HERO STAGE (SINGLE-VIEWPORT KINETIC EXECUTIVE FRAME)
+     SCENE 1: FRAMELESS CINEMATIC STUDIO HERO
+     Studio portrait melts seamlessly into pure carbon canvas
      ========================================================================== */
   .hero {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1.22fr) minmax(290px, 0.78fr);
-    gap: clamp(28px, 4vw, 60px);
+    grid-template-columns: minmax(0, 1.18fr) minmax(300px, 0.82fr);
+    gap: clamp(24px, 4vw, 56px);
     align-items: center;
-    min-height: min(calc(100dvh - 86px), 760px);
-    padding-block: clamp(28px, 4.2vh, 52px);
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: -80px auto auto -100px;
-    width: clamp(320px, 42vw, 580px);
-    height: clamp(320px, 42vw, 580px);
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(37, 99, 235, 0.24) 0%, rgba(56, 189, 248, 0.08) 42%, rgba(4, 8, 20, 0) 72%);
-    pointer-events: none;
-    z-index: 0;
-    animation: heroAuraFloat 10s ease-in-out infinite alternate;
-  }
-
-  @keyframes heroAuraFloat {
-    0% { transform: translate3d(0, 0, 0) scale(1); }
-    100% { transform: translate3d(24px, 14px, 0) scale(1.06); }
+    min-height: min(calc(100dvh - 82px), 780px);
+    padding-block: clamp(20px, 3vh, 42px);
   }
 
   .hero-copy,
@@ -1309,65 +1279,58 @@ const intentCards: IntentItem[] = [
   .hero-status-pill {
     display: inline-flex;
     align-items: center;
-    gap: 9px;
-    padding: 7px 15px;
-    margin-bottom: 18px;
+    gap: 10px;
+    padding: 6px 14px;
+    margin-bottom: 22px;
     border-radius: 999px;
-    background: rgba(11, 22, 44, 0.78);
-    border: 1px solid rgba(56, 189, 248, 0.34);
-    box-shadow: 0 8px 24px rgba(2, 6, 18, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.09);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
 
   .status-dot {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    background: #38bdf8;
-    box-shadow: 0 0 12px #38bdf8, 0 0 4px #7dd3fc;
-    animation: statusPulse 2.4s infinite ease-in-out;
+    background: #d4b475;
+    box-shadow: 0 0 10px rgba(212, 180, 117, 0.85);
+    animation: statusPulse 3.2s infinite ease-in-out;
   }
 
   @keyframes statusPulse {
     0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.45; transform: scale(0.82); }
+    50% { opacity: 0.4; transform: scale(0.82); }
   }
 
   .status-label {
-    font-size: 0.71rem;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.67rem;
     letter-spacing: 0.16em;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
-    color: #bae6fd;
+    color: #c8c8d0;
   }
 
   .hero h1,
   .section h2,
   .collab-card h2 {
-    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-weight: 800;
-    letter-spacing: -0.036em;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.04em;
     overflow-wrap: break-word;
   }
 
   .hero h1 {
-    font-size: clamp(2.25rem, 1.15rem + 3.1vw, 4.15rem);
-    line-height: 1.05;
-    max-width: 19ch;
+    font-size: clamp(2.35rem, 1.25rem + 3.2vw, 4.35rem);
+    line-height: 1.04;
+    max-width: 17ch;
     margin: 0;
     color: #ffffff;
-    background: linear-gradient(135deg, #ffffff 30%, #e0f2fe 68%, #38bdf8 90%, #e2b86b 100%);
-    background-size: 200% auto;
+    background: linear-gradient(180deg, #ffffff 30%, #d4d4dc 85%, #a1a1aa 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: titleFlow 8s ease-in-out infinite alternate;
     text-wrap: balance;
-  }
-
-  @keyframes titleFlow {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
   }
 
   @supports not (-webkit-background-clip: text) {
@@ -1377,19 +1340,20 @@ const intentCards: IntentItem[] = [
   }
 
   .lead {
-    font-size: clamp(0.98rem, 0.92rem + 0.28vw, 1.12rem);
-    line-height: 1.64;
-    color: #94a3b8;
-    max-width: 58ch;
-    margin: 18px 0 0;
+    font-size: clamp(0.98rem, 0.92rem + 0.25vw, 1.12rem);
+    line-height: 1.66;
+    color: #a1a1aa;
+    max-width: 56ch;
+    margin: 20px 0 0;
+    font-weight: 400;
     text-wrap: pretty;
   }
 
   .actions {
     display: flex;
-    gap: 14px;
+    gap: 12px;
     flex-wrap: wrap;
-    margin-top: 26px;
+    margin-top: 28px;
   }
 
   .button {
@@ -1403,42 +1367,25 @@ const intentCards: IntentItem[] = [
     padding: 0 26px;
     border-radius: 999px;
     text-decoration: none;
-    font-size: 0.87rem;
-    font-weight: 700;
-    letter-spacing: 0.015em;
-    transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.24s ease, background-color 0.24s ease, border-color 0.24s ease;
+    font-size: 0.86rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.24s ease, background-color 0.24s ease, border-color 0.24s ease, color 0.24s ease;
     cursor: pointer;
   }
 
   .button.primary {
-    background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 55%, #38bdf8 100%);
-    color: #ffffff !important;
-    border: 1px solid rgba(125, 211, 252, 0.45);
-    box-shadow: 0 14px 34px -8px rgba(14, 165, 233, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.28);
-  }
-
-  .button.primary::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -120%;
-    width: 65%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
-    transform: skewX(-20deg);
-    animation: btnShimmer 4.5s infinite;
-    pointer-events: none;
-  }
-
-  @keyframes btnShimmer {
-    0% { left: -120%; }
-    35%, 100% { left: 160%; }
+    background: #f5f5f7;
+    color: #050507 !important;
+    border: 1px solid #f5f5f7;
+    box-shadow: 0 12px 32px -10px rgba(255, 255, 255, 0.28);
   }
 
   .button.primary:hover {
+    background: #ffffff;
+    border-color: #ffffff;
     transform: translateY(-2px);
-    box-shadow: 0 18px 40px -6px rgba(56, 189, 248, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.35);
-    border-color: #bae6fd;
+    box-shadow: 0 16px 38px -8px rgba(255, 255, 255, 0.4);
   }
 
   .button.primary svg {
@@ -1450,122 +1397,107 @@ const intentCards: IntentItem[] = [
   }
 
   .button.ghost {
-    background: rgba(12, 23, 46, 0.72);
-    border: 1px solid rgba(56, 189, 248, 0.3);
-    color: #f1f5f9;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: #e4e4e7;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   .button.ghost:hover {
-    border-color: #38bdf8;
-    background: rgba(56, 189, 248, 0.14);
+    border-color: rgba(212, 180, 117, 0.55);
+    background: rgba(212, 180, 117, 0.07);
     color: #ffffff;
     transform: translateY(-2px);
-    box-shadow: 0 12px 28px -10px rgba(56, 189, 248, 0.35);
   }
 
   .signal-row {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-top: 26px;
-    padding-top: 18px;
-    border-top: 1px solid rgba(148, 163, 184, 0.14);
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
   }
 
   .signal-row a {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 14px;
+    padding: 6px 13px;
     border-radius: 999px;
-    background: rgba(11, 22, 44, 0.75);
-    border: 1px solid rgba(56, 189, 248, 0.2);
-    font-size: 0.73rem;
-    font-weight: 600;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
     letter-spacing: 0.03em;
-    color: #cbd5e1;
+    color: #a1a1aa;
     text-decoration: none;
-    transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .signal-row a::before {
-    content: '';
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: #38bdf8;
-    opacity: 0.75;
+    transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
   }
 
   .signal-row a:hover {
-    border-color: rgba(56, 189, 248, 0.55);
-    color: #ffffff;
-    background: rgba(20, 38, 74, 0.9);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px -6px rgba(56, 189, 248, 0.35);
+    border-color: rgba(212, 180, 117, 0.45);
+    color: #f5f5f7;
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-1px);
   }
 
   @keyframes heroFadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .hero-copy {
-    animation: heroFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: heroFadeIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
+  /* FRAMELESS MELTED STUDIO PORTRAIT */
   .hero-media {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    max-width: 380px;
+    max-width: 450px;
     width: 100%;
     justify-self: end;
-    animation: heroFadeIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
-    animation-delay: 0.1s;
+    animation: heroFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 0.08s;
+  }
+
+  .hero-media::before {
+    content: '';
+    position: absolute;
+    inset: 8% 10%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 180, 117, 0.16) 0%, rgba(255, 255, 255, 0.04) 45%, transparent 72%);
+    filter: blur(36px);
+    pointer-events: none;
+    z-index: 0;
   }
 
   .portrait-shell {
     position: relative;
+    z-index: 1;
     width: 100%;
-    border: 1px solid rgba(56, 189, 248, 0.34);
-    border-radius: 24px;
-    padding: 10px;
-    background: radial-gradient(85% 100% at 50% 0%, rgba(37, 99, 235, 0.38) 0%, rgba(11, 22, 44, 0.88) 60%, rgba(5, 10, 22, 0.98) 100%);
-    box-shadow: 0 32px 80px -16px rgba(0, 0, 0, 0.88), 0 0 60px rgba(37, 99, 235, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.14);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.4s ease;
-  }
-
-  .portrait-shell::before {
-    content: '';
-    position: absolute;
-    top: -1px;
-    inset-inline: 18%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #38bdf8, #e2b86b, transparent);
-    border-radius: 999px;
-  }
-
-  .portrait-shell:hover {
-    transform: translateY(-4px);
-    border-color: rgba(56, 189, 248, 0.65);
-    box-shadow: 0 40px 92px -16px rgba(0, 0, 0, 0.92), 0 0 84px rgba(56, 189, 248, 0.3);
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
   }
 
   .portrait-frame {
     position: relative;
     overflow: hidden;
-    border-radius: 17px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: #071022;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    -webkit-mask-image:
+      radial-gradient(ellipse 76% 78% at 50% 42%, #000 54%, rgba(0, 0, 0, 0.7) 74%, transparent 98%);
+    mask-image:
+      radial-gradient(ellipse 76% 78% at 50% 42%, #000 54%, rgba(0, 0, 0, 0.7) 74%, transparent 98%);
   }
 
   .portrait-frame img,
@@ -1573,30 +1505,30 @@ const intentCards: IntentItem[] = [
     display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: 3 / 3.7;
-    max-height: 460px;
+    aspect-ratio: 3 / 3.8;
+    max-height: 540px;
     object-fit: cover;
-    object-position: 50% 16%;
-    border-radius: 15px;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    object-position: 50% 14%;
+    border-radius: 0;
+    filter: contrast(1.06) brightness(0.96);
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
   }
 
   .portrait-shell:hover img {
-    transform: scale(1.028);
+    transform: scale(1.022);
+    filter: contrast(1.08) brightness(1);
   }
 
   /* ==========================================================================
-     SINGLE-SCROLL SECTION CADENCE & CENTERED SINGLE-LINE HEADINGS
-     Every section fits comfortably in 1 viewport scroll;
-     Every title + description is centered and single-line on desktop.
+     SINGLE-SCROLL SECTION CADENCE & CENTERED HEADINGS
      ========================================================================== */
   .section {
-    padding-block: clamp(34px, 4.2vh, 52px);
+    padding-block: clamp(36px, 4.4vh, 56px);
     scroll-margin-top: 74px;
   }
 
   .alabaster-stage .section + .section {
-    border-top: 1px solid rgba(148, 163, 184, 0.12);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
   }
 
   .section-ledger-head {
@@ -1605,8 +1537,8 @@ const intentCards: IntentItem[] = [
     align-items: center;
     justify-content: center;
     text-align: center;
-    gap: 8px;
-    margin: 0 auto clamp(20px, 2.5vh, 28px);
+    gap: 9px;
+    margin: 0 auto clamp(22px, 2.8vh, 32px);
     max-width: 100%;
   }
 
@@ -1620,24 +1552,26 @@ const intentCards: IntentItem[] = [
     justify-content: center;
     gap: 8px;
     margin: 0;
-    padding: 4px 13px;
+    padding: 4px 12px;
     border-radius: 999px;
-    background: rgba(14, 28, 56, 0.78);
-    border: 1px solid rgba(56, 189, 248, 0.26);
-    font-size: 0.68rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.65rem;
     letter-spacing: 0.16em;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
-    color: #38bdf8;
+    color: #d4b475;
   }
 
-  .section h2 {
+  .section h2,
+  .personal-home #ventures h2 {
     margin: 0;
     width: 100%;
     max-width: 100%;
-    font-size: clamp(1.3rem, 1.7vw, 1.96rem);
+    font-size: clamp(1.32rem, 1.78vw, 2.05rem);
     line-height: 1.16;
-    color: #f8fafc;
+    color: #ffffff;
     text-align: center;
     text-wrap: balance;
   }
@@ -1645,18 +1579,18 @@ const intentCards: IntentItem[] = [
   .section-lead-note {
     margin: 0;
     width: 100%;
-    max-width: min(100%, 1080px);
-    font-size: clamp(0.84rem, 0.92vw, 0.95rem);
-    line-height: 1.5;
-    color: #94a3b8;
+    max-width: min(100%, 1060px);
+    font-size: clamp(0.84rem, 0.92vw, 0.96rem);
+    line-height: 1.54;
+    color: #9898a3;
     text-align: center;
     text-wrap: balance;
   }
 
   /* ==========================================================================
-     BENTO GLASS CARDS & LASER TOP ACCENTS (SHARED ARCHITECTURE)
+     SMOKED TITANIUM GLASS & MOUSE-TRACKING SPOTLIGHT SURFACES
+     Quiet luxury: razor-thin 1px border, spotlight sheen only on hover
      ========================================================================== */
-  .intent-card,
   .core-card,
   .asset-card,
   .collab-card,
@@ -1667,59 +1601,54 @@ const intentCards: IntentItem[] = [
   .contact-form {
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(148, 163, 184, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 18px;
-    background: linear-gradient(180deg, rgba(13, 24, 48, 0.82) 0%, rgba(7, 14, 29, 0.9) 100%);
-    box-shadow: 0 20px 44px -18px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.032) 0%, rgba(255, 255, 255, 0.012) 100%);
+    box-shadow: 0 24px 54px -26px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease, box-shadow 0.28s ease, background-color 0.28s ease;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .intent-card::before,
-  .core-card::before,
-  .asset-card::before,
-  .collab-card::before,
-  .method-grid li::before,
-  .insight-row::before {
+  [data-spotlight]::after {
     content: '';
     position: absolute;
-    top: 0;
-    inset-inline: 0;
-    height: 2px;
-    background: linear-gradient(90deg, rgba(37, 99, 235, 0.2), #38bdf8, #e2b86b, rgba(37, 99, 235, 0.2));
-    opacity: 0.75;
-    transition: opacity 0.28s ease;
+    inset: 0;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), rgba(212, 180, 117, 0.09), transparent 55%);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+    z-index: 0;
   }
 
-  .intent-card:hover,
+  [data-spotlight]:hover::after {
+    opacity: 1;
+  }
+
+  [data-spotlight] > * {
+    position: relative;
+    z-index: 1;
+  }
+
   .core-card:hover,
   .asset-card:hover,
   .collab-card:hover,
   .method-grid li:hover,
   .insight-row:hover {
-    transform: translateY(-4px);
-    border-color: rgba(56, 189, 248, 0.48);
-    box-shadow: 0 26px 56px -16px rgba(2, 8, 23, 0.85), 0 0 32px rgba(37, 99, 235, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  }
-
-  .intent-card:hover::before,
-  .core-card:hover::before,
-  .asset-card:hover::before,
-  .collab-card:hover::before,
-  .method-grid li:hover::before,
-  .insight-row:hover::before {
-    opacity: 1;
+    transform: translateY(-3px);
+    border-color: rgba(212, 180, 117, 0.34);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.045) 0%, rgba(255, 255, 255, 0.018) 100%);
+    box-shadow: 0 28px 64px -22px rgba(0, 0, 0, 0.92), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
   /* Scroll Reveal Motion System */
   :global(.motion-ready) .personal-home [data-reveal] {
     opacity: 0;
-    transform: translate3d(0, 18px, 0);
+    transform: translate3d(0, 16px, 0);
     transition:
-      opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-    transition-delay: calc(var(--reveal-order, 0) * 70ms);
+      opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: calc(var(--reveal-order, 0) * 65ms);
   }
 
   :global(.motion-ready) .personal-home [data-reveal].is-visible {
@@ -1729,19 +1658,12 @@ const intentCards: IntentItem[] = [
 
   .card-tag {
     display: inline-block;
-    font-size: 0.66rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.13em;
     text-transform: uppercase;
-    color: #38bdf8;
-  }
-
-  .card-index {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: #e2b86b;
-    opacity: 0.85;
+    color: #d4b475;
   }
 
   .card-top-meta {
@@ -1749,16 +1671,16 @@ const intentCards: IntentItem[] = [
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+    padding-bottom: 11px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   }
 
   .card-domain {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 0.71rem;
-    font-weight: 600;
-    color: #94a3b8;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.69rem;
+    font-weight: 500;
+    color: #71717a;
   }
 
   .card-link {
@@ -1766,50 +1688,21 @@ const intentCards: IntentItem[] = [
     align-items: center;
     justify-content: space-between;
     gap: 6px;
-    padding-top: 11px;
-    border-top: 1px solid rgba(148, 163, 184, 0.14);
-    color: #e2b86b;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    color: #f5f5f7;
     font-size: 0.81rem;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 0.01em;
+    transition: color 0.2s ease;
   }
 
-  /* 1. Intent Routing Matrix (4 Columns) */
-  .intent-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
+  .core-card:hover .card-link,
+  .asset-card:hover .card-link {
+    color: #d4b475;
   }
 
-  .intent-card {
-    padding: 20px 18px;
-    color: #f8fafc;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 14px;
-  }
-
-  .intent-card h3 {
-    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: clamp(1rem, 1.1vw, 1.14rem);
-    font-weight: 700;
-    line-height: 1.3;
-    letter-spacing: -0.02em;
-    margin: 4px 0 8px;
-    color: #ffffff;
-    text-wrap: balance;
-  }
-
-  .intent-card p {
-    margin: 0;
-    color: #94a3b8;
-    font-size: 0.84rem;
-    line-height: 1.52;
-  }
-
-  /* 2. Core Operating Companies (3 Columns) */
+  /* 1. Core Operating Companies (3 Columns) */
   .core-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1818,39 +1711,38 @@ const intentCards: IntentItem[] = [
   }
 
   .core-card {
-    padding: 22px 20px;
-    color: #f8fafc;
+    padding: 24px 22px;
+    color: #f5f5f7;
     text-decoration: none;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 16px;
+    gap: 18px;
   }
 
   .core-card h3 {
-    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: clamp(1.32rem, 1.7vw, 1.62rem);
-    font-weight: 800;
-    letter-spacing: -0.028em;
+    font-size: clamp(1.36rem, 1.75vw, 1.68rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
     margin: 2px 0 8px;
     color: #ffffff;
   }
 
   .core-card p {
     margin: 0;
-    color: #94a3b8;
-    font-size: 0.87rem;
-    line-height: 1.54;
+    color: #a1a1aa;
+    font-size: 0.88rem;
+    line-height: 1.56;
   }
 
   .project-proof {
     display: grid;
-    gap: 7px;
-    margin: 14px 0 0;
-    padding: 11px 12px;
+    gap: 8px;
+    margin: 16px 0 0;
+    padding: 12px 14px;
     border-radius: 12px;
-    background: rgba(4, 9, 20, 0.55);
-    border: 1px solid rgba(56, 189, 248, 0.14);
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.06);
   }
 
   .project-proof div {
@@ -1861,24 +1753,25 @@ const intentCards: IntentItem[] = [
   }
 
   .project-proof dt {
-    color: #38bdf8;
-    font-size: 0.65rem;
-    font-weight: 700;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    color: #d4b475;
+    font-size: 0.62rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.09em;
   }
 
   .project-proof dd {
     margin: 0;
-    color: #cbd5e1;
-    font-size: 0.79rem;
-    font-weight: 500;
-    line-height: 1.42;
+    color: #d4d4d8;
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.44;
   }
 
-  /* 3. Owned Digital Assets + Marquee + Collaboration (Combined Single Scroll) */
+  /* 2. Owned Digital Assets + Marquee + Collaboration (Single Scroll) */
   .split-section {
-    padding-block: clamp(26px, 3.2vh, 38px) 20px;
+    padding-block: clamp(28px, 3.4vh, 42px) 22px;
   }
 
   .asset-stack {
@@ -1888,8 +1781,8 @@ const intentCards: IntentItem[] = [
   }
 
   .asset-card {
-    padding: 20px 22px;
-    color: #f8fafc;
+    padding: 22px 24px;
+    color: #f5f5f7;
     text-decoration: none;
     display: flex;
     flex-direction: column;
@@ -1898,10 +1791,9 @@ const intentCards: IntentItem[] = [
   }
 
   .asset-card h3 {
-    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: clamp(1.3rem, 1.6vw, 1.58rem);
-    font-weight: 800;
-    letter-spacing: -0.025em;
+    font-size: clamp(1.32rem, 1.65vw, 1.6rem);
+    font-weight: 700;
+    letter-spacing: -0.028em;
     margin: 2px 0 6px;
     color: #ffffff;
   }
@@ -1909,18 +1801,19 @@ const intentCards: IntentItem[] = [
   .asset-card p,
   .collab-card p {
     margin: 0;
-    color: #94a3b8;
-    font-size: 0.86rem;
-    line-height: 1.52;
+    color: #a1a1aa;
+    font-size: 0.87rem;
+    line-height: 1.54;
   }
 
   .asset-spec {
-    margin-top: 10px !important;
+    margin-top: 12px !important;
     padding-top: 10px;
-    border-top: 1px solid rgba(148, 163, 184, 0.14);
-    color: #e2b86b !important;
-    font-size: 0.78rem !important;
-    font-weight: 600;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    color: #d4b475 !important;
+    font-size: 0.72rem !important;
+    font-weight: 500;
     letter-spacing: 0.03em;
   }
 
@@ -1930,9 +1823,9 @@ const intentCards: IntentItem[] = [
     display: flex;
     align-items: center;
     overflow: hidden;
-    border-top: 1px solid rgba(56, 189, 248, 0.16);
-    border-bottom: 1px solid rgba(56, 189, 248, 0.16);
-    background: rgba(4, 8, 20, 0.8);
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    background: #050507;
     margin: 0;
   }
 
@@ -1952,22 +1845,21 @@ const intentCards: IntentItem[] = [
 
   .gap-marquee-group span {
     padding: 0 22px;
-    color: #38bdf8;
-    font-size: 0.69rem;
-    font-weight: 700;
-    letter-spacing: 0.15em;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    color: #a1a1aa;
+    font-size: 0.67rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
   }
 
   .gap-marquee-group i {
     font-style: normal;
-    color: #e2b86b;
-    font-size: 0.7rem;
+    color: #d4b475;
+    font-size: 0.65rem;
   }
 
   @keyframes gapMarquee {
-    to {
-      transform: translate3d(-50%, 0, 0);
-    }
+    to { transform: translate3d(-50%, 0, 0); }
   }
 
   :global(html[dir='rtl']) .gap-marquee-track {
@@ -1975,11 +1867,11 @@ const intentCards: IntentItem[] = [
   }
 
   .collaboration {
-    padding-block: 18px clamp(26px, 3.2vh, 38px);
+    padding-block: 20px clamp(28px, 3.4vh, 42px);
   }
 
   .collab-card {
-    padding: 18px 24px;
+    padding: 20px 26px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1991,13 +1883,13 @@ const intentCards: IntentItem[] = [
   }
 
   .collab-card h2 {
-    font-size: clamp(1.35rem, 1.8vw, 1.75rem);
+    font-size: clamp(1.38rem, 1.8vw, 1.76rem);
     margin: 4px 0 4px;
     color: #ffffff;
     text-align: start;
   }
 
-  /* 4. Operating Model (4 Horizontal Bento Steps) */
+  /* 3. Operating Model (4 Horizontal Bento Steps) */
   .method-grid {
     list-style: none;
     padding: 0;
@@ -2008,7 +1900,7 @@ const intentCards: IntentItem[] = [
   }
 
   .method-grid li {
-    padding: 20px 18px;
+    padding: 22px 20px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -2021,32 +1913,31 @@ const intentCards: IntentItem[] = [
     justify-content: center;
     width: 32px;
     height: 32px;
-    border-radius: 10px;
-    background: rgba(56, 189, 248, 0.12);
-    border: 1px solid rgba(56, 189, 248, 0.3);
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #38bdf8;
+    border-radius: 9px;
+    background: rgba(212, 180, 117, 0.08);
+    border: 1px solid rgba(212, 180, 117, 0.25);
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #d4b475;
   }
 
   .method-grid strong {
-    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 1.04rem;
     font-weight: 700;
     line-height: 1.28;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.02em;
     color: #ffffff;
   }
 
   .method-step-note {
     margin: 0;
-    color: #94a3b8;
+    color: #a1a1aa;
     font-size: 0.84rem;
-    line-height: 1.54;
+    line-height: 1.56;
   }
 
-  /* 5. Field Notes & Insights (3-Column Horizontal Bento Grid) */
+  /* 4. Field Notes & Insights (3-Column Editorial Bento) */
   .insights-head-aside {
     display: flex;
     justify-content: center;
@@ -2059,19 +1950,19 @@ const intentCards: IntentItem[] = [
     gap: 6px;
     padding: 5px 14px;
     border-radius: 999px;
-    background: rgba(56, 189, 248, 0.1);
-    border: 1px solid rgba(56, 189, 248, 0.28);
-    color: #38bdf8;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #e4e4e7;
     text-decoration: none;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
+    font-size: 0.77rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   }
 
   .insights-all-link:hover {
-    background: rgba(56, 189, 248, 0.2);
-    border-color: #38bdf8;
+    background: rgba(212, 180, 117, 0.09);
+    border-color: rgba(212, 180, 117, 0.45);
     color: #ffffff;
   }
 
@@ -2086,36 +1977,36 @@ const intentCards: IntentItem[] = [
     flex-direction: column;
     justify-content: space-between;
     gap: 16px;
-    padding: 20px 18px;
-    color: #f8fafc;
+    padding: 22px 20px;
+    color: #f5f5f7;
     text-decoration: none;
   }
 
   .insight-row__tag {
     display: inline-block;
-    color: #38bdf8;
-    font-size: 0.66rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    color: #d4b475;
+    font-size: 0.63rem;
+    font-weight: 600;
+    letter-spacing: 0.13em;
     text-transform: uppercase;
     margin-bottom: 8px;
   }
 
   .insight-row__main h3 {
-    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: clamp(1.02rem, 1.2vw, 1.18rem);
     font-weight: 700;
     color: #ffffff;
     margin: 0 0 8px;
     line-height: 1.32;
-    letter-spacing: -0.018em;
+    letter-spacing: -0.02em;
   }
 
   .insight-row__main p {
     margin: 0;
-    color: #94a3b8;
+    color: #a1a1aa;
     font-size: 0.84rem;
-    line-height: 1.54;
+    line-height: 1.56;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -2126,21 +2017,26 @@ const intentCards: IntentItem[] = [
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding-top: 11px;
-    border-top: 1px solid rgba(148, 163, 184, 0.14);
-    color: #e2b86b;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    color: #e4e4e7;
     font-size: 0.8rem;
-    font-weight: 700;
+    font-weight: 600;
     white-space: nowrap;
+    transition: color 0.2s ease;
   }
 
-  /* 6. About Showcase (Compact Centered Single-Viewport Card) */
+  .insight-row:hover .insight-row__cta {
+    color: #d4b475;
+  }
+
+  /* 5. Founder Manifesto / About Showcase */
   .about-showcase {
     display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(220px, 280px);
+    grid-template-columns: minmax(0, 1.32fr) minmax(220px, 270px);
     gap: clamp(24px, 3.5vw, 44px);
     align-items: center;
-    padding: clamp(22px, 2.8vw, 32px);
+    padding: clamp(24px, 3vw, 36px);
   }
 
   .about-copy {
@@ -2151,12 +2047,12 @@ const intentCards: IntentItem[] = [
 
   .about-thesis {
     margin: 0;
-    padding-inline-start: 16px;
-    border-inline-start: 3px solid #38bdf8;
-    color: #f1f5f9;
-    font-size: clamp(0.98rem, 1.15vw, 1.14rem);
-    font-weight: 600;
-    line-height: 1.62;
+    padding-inline-start: 18px;
+    border-inline-start: 2px solid #d4b475;
+    color: #f5f5f7;
+    font-size: clamp(1rem, 1.18vw, 1.18rem);
+    font-weight: 500;
+    line-height: 1.64;
   }
 
   .about-pillars {
@@ -2169,19 +2065,20 @@ const intentCards: IntentItem[] = [
   .about-pillars span {
     padding: 5px 12px;
     border-radius: 999px;
-    background: rgba(56, 189, 248, 0.1);
-    border: 1px solid rgba(56, 189, 248, 0.24);
-    color: #bae6fd;
-    font-size: 0.73rem;
-    font-weight: 600;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    color: #c8c8d0;
+    font-size: 0.69rem;
+    font-weight: 500;
   }
 
   .about-portrait-frame {
-    border: 1px solid rgba(56, 189, 248, 0.3);
-    border-radius: 16px;
-    padding: 7px;
-    background: rgba(7, 14, 29, 0.9);
-    max-width: 280px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 14px;
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.02);
+    max-width: 270px;
     width: 100%;
     justify-self: end;
   }
@@ -2190,40 +2087,35 @@ const intentCards: IntentItem[] = [
     display: block;
     width: 100%;
     height: auto;
-    max-height: 260px;
+    max-height: 250px;
     object-fit: cover;
     object-position: 50% 18%;
-    border-radius: 11px;
+    border-radius: 10px;
+    filter: contrast(1.04);
   }
 
-  /* 7. Contact Command Console (Compact 2-Column Single-Viewport Layout) */
+  /* 6. Private Founder Desk (Contact) */
   .contact-ledger {
     display: grid;
-    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-    gap: 20px;
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    gap: 18px;
     align-items: stretch;
   }
 
   .contact-intro {
-    padding: clamp(20px, 2.4vw, 28px);
+    padding: clamp(22px, 2.6vw, 30px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 14px;
+    gap: 16px;
   }
 
-  .contact-intro h3 {
-    margin: 0;
-    font-size: clamp(1.15rem, 1.4vw, 1.38rem);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: #ffffff;
-  }
-
-  .contact-intro p {
-    color: #94a3b8;
-    font-size: 0.88rem;
-    line-height: 1.56;
+  .contact-intro-note {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    color: #a1a1aa;
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+    line-height: 1.6;
     margin: 0;
   }
 
@@ -2231,37 +2123,38 @@ const intentCards: IntentItem[] = [
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
-    margin-top: 4px;
+    margin-top: 2px;
   }
 
   .contact-links {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    padding-top: 14px;
-    border-top: 1px solid rgba(148, 163, 184, 0.14);
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
   }
 
   .contact-links a {
-    border: 1px solid rgba(56, 189, 248, 0.24);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 999px;
-    background: rgba(11, 22, 44, 0.75);
+    background: rgba(255, 255, 255, 0.025);
     padding: 7px 14px;
-    color: #e2e8f0;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    color: #d4d4d8;
     text-decoration: none;
-    font-size: 0.76rem;
-    font-weight: 600;
-    transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
+    font-size: 0.72rem;
+    font-weight: 500;
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
   }
 
   .contact-links a:hover {
-    border-color: #38bdf8;
-    background: rgba(56, 189, 248, 0.15);
+    border-color: rgba(212, 180, 117, 0.45);
+    background: rgba(212, 180, 117, 0.07);
     color: #ffffff;
   }
 
   .contact-form {
-    padding: clamp(20px, 2.4vw, 28px);
+    padding: clamp(22px, 2.6vw, 30px);
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
@@ -2274,10 +2167,11 @@ const intentCards: IntentItem[] = [
   }
 
   .contact-form label > span {
-    color: #94a3b8;
-    font-size: 0.69rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    color: #a1a1aa;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
@@ -2286,22 +2180,22 @@ const intentCards: IntentItem[] = [
   .contact-form textarea {
     width: 100%;
     box-sizing: border-box;
-    border: 1px solid rgba(148, 163, 184, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    background: rgba(4, 8, 20, 0.85);
-    color: #f8fafc;
+    background: rgba(5, 5, 7, 0.85);
+    color: #f5f5f7;
     padding: 10px 12px;
     font: inherit;
     font-size: 0.86rem;
-    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
   .contact-form input:focus,
   .contact-form select:focus,
   .contact-form textarea:focus {
     outline: none;
-    border-color: #38bdf8;
-    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.16);
+    border-color: rgba(212, 180, 117, 0.65);
+    box-shadow: 0 0 0 3px rgba(212, 180, 117, 0.12);
   }
 
   .contact-form textarea {
@@ -2318,23 +2212,17 @@ const intentCards: IntentItem[] = [
     text-align: right;
   }
 
-  /* Centered section headers remain centered in all directions (LTR & RTL) */
   :global(html[dir='rtl']) .section-ledger-head {
     text-align: center;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero::before,
-    .hero h1,
     .status-dot,
-    .button.primary::after,
     .hero-copy,
     .hero-media,
-    .portrait-shell,
     .portrait-shell img,
     .core-card,
     .asset-card,
-    .intent-card,
     .collab-card,
     .method-grid li,
     .insight-row,
@@ -2352,7 +2240,6 @@ const intentCards: IntentItem[] = [
   }
 
   @media (max-width: 1080px) {
-    .intent-grid,
     .method-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -2378,22 +2265,21 @@ const intentCards: IntentItem[] = [
 
     .hero {
       min-height: auto;
-      padding-block: 24px 36px;
-      gap: 24px;
+      padding-block: 20px 32px;
+      gap: 20px;
     }
 
     .hero h1 {
-      font-size: clamp(1.95rem, 7.6vw, 3rem);
+      font-size: clamp(2rem, 7.8vw, 3.1rem);
       max-width: 100%;
     }
 
     .hero-media,
     .about-portrait-frame {
       justify-self: center;
-      max-width: 360px;
+      max-width: 340px;
     }
 
-    .intent-grid,
     .method-grid {
       grid-template-columns: 1fr;
     }
