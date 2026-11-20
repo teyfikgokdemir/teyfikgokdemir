@@ -1129,7 +1129,7 @@ const intentCards: IntentItem[] = [
             <span class="card-tag">{locale === 'tr' ? 'DOĞRUDAN KANALLAR' : 'DIRECT CHANNELS'}</span>
             <p class="contact-intro-note">{ui.eyebrow}</p>
             <div class="contact-primary-actions">
-              <a class="button primary" href={whatsappHref} target="_blank" rel="noopener noreferrer">{locale === 'tr' ? 'WhatsApp’tan yaz' : 'WhatsApp'}</a>
+              <a class="button ghost" href={whatsappHref} target="_blank" rel="noopener noreferrer">{locale === 'tr' ? 'WhatsApp’tan yaz' : 'WhatsApp'}</a>
               <a class="button ghost" href={emailHref}>{site.email}</a>
             </div>
             <div class="contact-links">
@@ -1378,14 +1378,14 @@ const intentCards: IntentItem[] = [
     background: #f5f5f7;
     color: #050507 !important;
     border: 1px solid #f5f5f7;
-    box-shadow: 0 12px 32px -10px rgba(255, 255, 255, 0.28);
+    box-shadow: none;
   }
 
   .button.primary:hover {
     background: #ffffff;
     border-color: #ffffff;
     transform: translateY(-2px);
-    box-shadow: 0 16px 38px -8px rgba(255, 255, 255, 0.4);
+    box-shadow: 0 10px 24px -10px rgba(255, 255, 255, 0.22);
   }
 
   .button.primary svg {
@@ -2199,7 +2199,7 @@ const intentCards: IntentItem[] = [
   }
 
   .contact-form textarea {
-    resize: vertical;
+    resize: none;
   }
 
   .contact-form-wide {
