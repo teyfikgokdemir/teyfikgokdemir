@@ -114,27 +114,27 @@ const privacyHref = locale === 'tr' ? '/privacy-policy/' : `/${locale}/privacy-p
 
 <style>
   .cookie-banner {
-    --text: #f3eee6;
-    --muted: #c9bfb2;
-    --accent-soft: #d78263;
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --accent-soft: #38bdf8;
     position: fixed;
     z-index: 120;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
-    width: 100%;
+    gap: 1.15rem;
+    width: min(1140px, calc(100vw - 32px));
     margin: 0;
-    padding: .48rem clamp(1rem, 3vw, 2rem);
-    border: 0;
-    border-top: 1px solid #51483f;
-    border-radius: 0;
-    background: rgba(22, 18, 15, .98);
-    box-shadow: 0 -10px 30px rgba(0, 0, 0, .28);
-    backdrop-filter: blur(14px);
+    padding: 0.72rem 1.25rem;
+    border: 1px solid rgba(56, 189, 248, 0.28);
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(11, 21, 42, 0.94) 0%, rgba(5, 10, 22, 0.96) 100%);
+    box-shadow: 0 24px 60px rgba(2, 5, 14, 0.75), 0 0 32px rgba(37, 99, 235, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
   }
   .cookie-banner[hidden] { display: none; }
   .cookie-copy {
@@ -145,45 +145,50 @@ const privacyHref = locale === 'tr' ? '/privacy-policy/' : `/${locale}/privacy-p
     gap: .85rem;
     white-space: nowrap;
   }
-  .cookie-copy strong { flex: 0 0 auto; display: inline; margin: 0; color: #fffaf3; font-size: .76rem; }
-  .cookie-copy p { min-width: 0; margin: 0; color: var(--muted); font-size: .75rem; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; }
-  .cookie-copy a { color: var(--accent-soft); text-decoration: underline; text-underline-offset: 3px; }
+  .cookie-copy strong { flex: 0 0 auto; display: inline; margin: 0; color: #ffffff; font-size: .78rem; font-weight: 700; letter-spacing: .02em; }
+  .cookie-copy p { min-width: 0; margin: 0; color: var(--muted); font-size: .76rem; line-height: 1.35; overflow: hidden; text-overflow: ellipsis; }
+  .cookie-copy a { color: var(--accent-soft); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
   .cookie-actions { display: flex; flex: 0 0 auto; gap: .5rem; }
   .cookie-button {
-    min-height: 32px;
-    padding: .38rem .78rem;
-    border: 1px solid var(--line-strong);
+    min-height: 34px;
+    padding: .38rem .95rem;
+    border: 1px solid rgba(148, 163, 184, 0.28);
     border-radius: 999px;
     color: var(--text);
-    background: transparent;
+    background: rgba(15, 27, 52, 0.72);
     cursor: pointer;
-    font-size: .82rem;
-    font-weight: 800;
+    font-size: .79rem;
+    font-weight: 700;
+    transition: transform .18s ease, border-color .18s ease, background-color .18s ease, box-shadow .18s ease;
   }
   .cookie-button.primary {
-    border-color: #763821;
-    background: #763821;
-    color: #fffaf3;
+    border-color: rgba(125, 211, 252, 0.48);
+    background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 55%, #38bdf8 100%);
+    color: #ffffff;
+    box-shadow: 0 8px 20px -6px rgba(14, 165, 233, 0.5);
   }
   .cookie-button:focus-visible {
-    outline: 3px solid #ffffff;
-    outline-offset: 3px;
+    outline: 2px solid #38bdf8;
+    outline-offset: 2px;
   }
-  .cookie-button:hover { border-color: var(--accent-soft); }
+  .cookie-button:hover { border-color: var(--accent-soft); transform: translateY(-1px); }
   @media (max-width: 720px) {
     .cookie-banner {
+      bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+      width: calc(100vw - 24px);
       align-items: stretch;
       flex-direction: column;
-      gap: .55rem;
-      padding: .58rem .7rem;
+      gap: .6rem;
+      padding: .75rem .9rem;
+      border-radius: 16px;
     }
     .cookie-copy {
       display: block;
       white-space: normal;
     }
-    .cookie-copy strong { display: block; margin-bottom: .18rem; font-size: .86rem; }
-    .cookie-copy p { overflow: visible; text-overflow: clip; font-size: .76rem; line-height: 1.35; }
-    .cookie-actions { width: 100%; gap: .45rem; }
-    .cookie-button { flex: 1; min-height: 34px; padding: .42rem .65rem; font-size: .8rem; }
+    .cookie-copy strong { display: block; margin-bottom: .2rem; font-size: .84rem; }
+    .cookie-copy p { overflow: visible; text-overflow: clip; font-size: .76rem; line-height: 1.4; }
+    .cookie-actions { width: 100%; gap: .5rem; }
+    .cookie-button { flex: 1; min-height: 36px; padding: .44rem .7rem; font-size: .8rem; }
   }
 </style>
