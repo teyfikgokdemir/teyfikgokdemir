@@ -1050,7 +1050,6 @@ const intentCards: IntentItem[] = [
         <ol class="method-grid">
           {ui.steps.map((step, index) => (
             <li data-spotlight data-reveal="card" style={`--reveal-order:${index}`}>
-              <span class="method-step-num">0{index + 1}</span>
               <strong>{step}</strong>
               <p class="method-step-note">{ui.stepNotes[index]}</p>
             </li>
